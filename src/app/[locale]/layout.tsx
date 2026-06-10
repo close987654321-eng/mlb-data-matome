@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { useTranslations, useLocale } from 'next-intl';
@@ -8,9 +9,32 @@ import { locales } from '@/lib/i18n';
 import { SPORTS, SPORT_INFO } from '@/lib/sports';
 import '../globals.css';
 
+const SITE_URL = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mlb-data-matome.vercel.app'
+).replace(/\/$/, '');
+
+const TITLE = '海外の反応 — MLB / ボクシング / UFC';
+const DESCRIPTION =
+  'MLB・ボクシング・UFC の海外掲示板（Reddit）スレを、現地の生の反応つきで日本語まとめ';
+
 export const metadata: Metadata = {
-  title: '海外の反応 — MLB / ボクシング / UFC',
-  description: 'MLB・ボクシング・UFC の海外掲示板（Reddit）スレを、現地の生の反応つきで日本語まとめ',
+  metadataBase: new URL(SITE_URL),
+  title: TITLE,
+  description: DESCRIPTION,
+  // OG/Twitter カードにブランドロゴを表示（SNS 送客時の見栄え）
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    siteName: 'OVERSEAS REACTIONS',
+    type: 'website',
+    images: [{ url: '/og.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+    images: ['/og.png'],
+  },
 };
 
 export function generateStaticParams() {
@@ -47,11 +71,15 @@ function SiteHeader() {
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-paper/85 backdrop-blur">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
-        <Link href="/" className="flex items-baseline gap-1.5">
-          <span className="text-xl font-bold tracking-tight text-ink">
-            {t('site.title')}
-          </span>
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+        <Link href="/" className="flex items-center" aria-label={t('site.title')}>
+          <Image
+            src="/logo.png"
+            alt={t('site.title')}
+            width={1358}
+            height={428}
+            priority
+            className="h-7 w-auto sm:h-8"
+          />
         </Link>
         <nav className="hidden items-center gap-5 text-sm text-ink-soft sm:flex">
           <Link href="/" className="transition-colors hover:text-ink">

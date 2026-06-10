@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import ThreadCard from '@/components/ThreadCard';
@@ -13,6 +14,15 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   return (
     <div className="space-y-12">
       <section className="border-b border-line pb-8">
+        {/* メインビジュアル（ブランドのキービジュアル） */}
+        <Image
+          src="/logo.png"
+          alt={t('site.title')}
+          width={1358}
+          height={428}
+          priority
+          className="mb-7 h-auto w-full max-w-xl"
+        />
         <h1 className="text-3xl font-bold leading-tight text-ink sm:text-5xl">
           {t('home.heroTitle')}
         </h1>
