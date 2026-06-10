@@ -1,27 +1,27 @@
-# MLB Data Site — Claude 向けプロジェクトガイド
+# 海外の反応まとめ — Claude 向けプロジェクトガイド
 
-このリポジトリは「日本人向け MLB データまとめサイト」です。WAR 以外の現代的な指標
-（wRC+, xwOBA, Barrel%, FIP, Stuff+, OAA など）に基づいて、選手・チームを
-ランキング表示することを目的としています。参考サイト: <https://nobita-retire.com/2026-mlb-war/>
+このリポジトリは「**海外の反応まとめサイト**」です。**MLB・ボクシング・UFC** の海外掲示板
+（主に Reddit）で盛り上がったスレッドを、現地ファンの生のコメントつきで日本語まとめ
+（5ch まとめ風＝コメント翻訳中心）にして、英語が読めない日本のファンに届けます。
 
-ユーザーは Claude にデータ更新と機能追加の両方を依頼します。本ドキュメントは
-Claude がこのリポジトリで作業するための運用ルールです。
+> 沿革: 元は「MLB データまとめ（指標ランキング）」だったが、2026-06 に「MLB・ボクシング・
+> UFC の海外の反応まとめ」へ方向転換。旧来の打者/投手/チーム/指標ページとデータは撤去済み。
 
 ---
 
 ## 1. 技術スタック
 
-| 項目          | 採用                              |
-| ------------- | --------------------------------- |
-| Framework     | Next.js 15 (App Router)           |
-| Language      | TypeScript (strict)               |
-| Styling       | Tailwind CSS                      |
-| i18n          | next-intl (日本語=デフォルト/英語) |
-| Data Storage  | `data/` 配下の静的 JSON ファイル  |
-| Hosting       | Vercel                            |
+| 項目         | 採用                              |
+| ------------ | --------------------------------- |
+| Framework    | Next.js 15 (App Router)           |
+| Language     | TypeScript (strict)               |
+| Styling      | Tailwind CSS                      |
+| i18n         | next-intl（日本語=デフォルト / 英語） |
+| Data Storage | `data/threads/` 配下の静的 JSON   |
+| Hosting      | Vercel                            |
 
-データベースは使いません。ランキング元データは JSON として `data/` にコミット
-し、ビルド時に読み込んで SSG します。
+データベースは使いません。まとめは JSON として `data/` にコミットし、ビルド時に読み込んで
+SSG します。
 
 ---
 
@@ -29,150 +29,107 @@ Claude がこのリポジトリで作業するための運用ルールです。
 
 ```
 .
-├── CLAUDE.md                # 本ファイル
-├── README.md                # 人間向けの簡易説明
+├── CLAUDE.md
+├── README.md
 ├── data/
-│   ├── season-{YYYY}/
-│   │   ├── batters.json     # 打者ランキング元データ
-│   │   ├── pitchers.json    # 投手ランキング元データ
-│   │   ├── teams.json       # チームランキング元データ
-│   │   └── meta.json        # 各データの取得日時・ソースURL
-│   └── japanese-players/
-│       └── {YYYY}.json      # 日本人選手特集用
-├── messages/
-│   ├── ja.json              # 日本語翻訳
-│   └── en.json              # 英語翻訳
+│   └── threads/
+│       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
+│       ├── boxing/{id}.json     # ボクシング
+│       └── ufc/{id}.json        # UFC
+├── messages/{ja,en}.json        # i18n
 ├── src/
-│   ├── app/[locale]/        # i18n ルーティング配下
+│   ├── app/[locale]/
 │   │   ├── layout.tsx
-│   │   ├── page.tsx         # トップ
-│   │   ├── batters/page.tsx
-│   │   ├── pitchers/page.tsx
-│   │   ├── teams/page.tsx
-│   │   ├── japanese/page.tsx
-│   │   └── stats/[metric]/page.tsx   # 指標別解説+ランキング
+│   │   ├── page.tsx                 # 新着（全競技横断）
+│   │   ├── [sport]/page.tsx         # 競技ごとの一覧
+│   │   └── [sport]/[id]/page.tsx    # まとめ個別
 │   ├── components/
+│   │   ├── ThreadCard.tsx
+│   │   └── LocaleSwitcher.tsx
 │   ├── lib/
-│   │   ├── data.ts          # JSON 読み込みヘルパ
-│   │   └── metrics.ts       # 指標メタ情報（意味・出典・単位）
+│   │   ├── data.ts              # JSON 読み込みヘルパ
+│   │   └── sports.ts            # 競技カタログ（ラベル・subreddit・絵文字）
 │   └── types/
-│       └── mlb.ts           # 共通型
+│       ├── thread.ts           # まとめの型
+│       └── common.ts
 └── scripts/
-    └── update-data.md       # データ更新の手順メモ
+    ├── fetch-reddit.mjs        # Reddit OAuth 取得スクリプト
+    └── threads-update.md       # 更新手順
 ```
 
 ---
 
-## 3. データ更新プロトコル（Claude 向け）
+## 3. 競技（カテゴリ）
 
-ユーザーが「データを更新して」「最新の打者ランキングに直して」等と依頼した場合、
-以下の手順で実施します。
+`src/lib/sports.ts` が唯一の正。競技を増減するときは必ずここから。
 
-### 3.1 ソース優先順位
+| sport    | ラベル       | 取得元 subreddit     |
+| -------- | ------------ | -------------------- |
+| `mlb`    | MLB          | r/baseball, r/mlb    |
+| `boxing` | ボクシング   | r/Boxing             |
+| `ufc`    | UFC          | r/MMA, r/ufc         |
 
-1. **FanGraphs Leaders** (`https://www.fangraphs.com/leaders/...`)
-   — fWAR, wRC+, wOBA, xwOBA, Barrel%, FIP, xFIP, SIERA, Stuff+, Location+, BsR
-   — 静的取得できる view: `type=8` (Dashboard), `type=24` (Statcast), `type=36` (Stuff+)
-   — `team=0,ts` を付けるとチームレベルの集計 (`stats=bat/pit/fld`)
-2. **FanGraphs 個別選手ページ** (`https://www.fangraphs.com/players/{slug}/{id}/stats/{batting|pitching}`)
-   — 重要: leaderboard が JS-only の view でも、個別ページの Standard 統計テーブルは
-     静的 HTML で返る。日本人選手など特定選手の取得はこちら経由が確実。
-3. **ESPN Standings** (`https://www.espn.com/mlb/standings/_/season/YYYY`)
-   — チーム W/L/RunDiff
-4. **Baseball-Reference** (`https://www.baseball-reference.com/leaders/`)
-   — bWAR (rWAR)。ただし 403 が返るケースが多い (UA制限)
-5. **Baseball Savant** (`https://baseballsavant.mlb.com/leaderboard/...`)
-   — OAA, Sprint Speed (の予定だが) leaderboard は全て JS-only で WebFetch では取れない
+---
 
-#### 既知の落とし穴
-- FG Leaders で `type=14` を指定しても **Pitch Value / 100** が返り、WPA/Clutch は出ない
-- Savant の leaderboard は CSV/JSON エンドポイント込みで JS から fetch する設計のため、
-  静的 HTML には player rows が一切含まれない
-- bWAR は B-Ref の leaderboard が UA ブロックされるため、現状は取得不可
+## 4. まとめ更新プロトコル（Claude 向け）
 
-### 3.2 出力フォーマット
+まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳）は **`matome` スキル**
+（`.claude/skills/matome/SKILL.md`）が正。「まとめ作って」等で発動する。
+データ形式・運用の詳細は [`scripts/threads-update.md`](./scripts/threads-update.md)。要点:
 
-`data/season-{YYYY}/batters.json` の例:
+### 4.1 データ取得
+
+- ソースは Reddit。**未認証の `.json` / `api.reddit.com` / 公開ミラーはこの環境の IP から
+  403 で全滅**（WebFetch も reddit.com 拒否）。確実なのは公式 OAuth（`scripts/fetch-reddit.mjs`）。
+- ただし **Reddit API は 2025/11 から事前承認制**で、承認が下りるまでは取得できない。
+  → 当面は **手動運用**（ユーザーがスレ URL とコメントを貼り、Claude が翻訳・整形）。
+
+### 4.2 出力フォーマット
+
+`data/threads/{sport}/{id}.json`（型は `src/types/thread.ts` の `Thread`）:
 
 ```json
 {
-  "season": 2026,
-  "updatedAt": "2026-05-25T00:00:00+09:00",
-  "players": [
-    {
-      "id": "judge-aaron",
-      "name": { "en": "Aaron Judge", "ja": "アーロン・ジャッジ" },
-      "team": "NYY",
-      "position": "RF",
-      "stats": {
-        "fWAR": 4.2,
-        "bWAR": 4.1,
-        "wRC+": 185,
-        "wOBA": 0.435,
-        "xwOBA": 0.418,
-        "Barrel%": 22.1,
-        "HardHit%": 58.3,
-        "OPS": 1.012
-      }
-    }
+  "id": "2026-06-10-why-no-second-ohtani",
+  "sport": "mlb",
+  "subreddit": "r/baseball",
+  "sourceUrl": "https://www.reddit.com/r/baseball/comments/.../",
+  "fetchedAt": "2026-06-10T12:00:00+09:00",
+  "title": { "en": "...", "ja": "..." },
+  "summaryJa": "スレの流れ・論点の要約",
+  "flair": "Discussion",
+  "totalComments": 147,
+  "tags": ["大谷翔平", "二刀流"],
+  "comments": [
+    { "author": "user", "score": 87, "bodyEn": "...", "bodyJa": "...", "isHighlight": true }
   ]
 }
 ```
 
-`meta.json` は必ず以下のキーを含めること:
+### 4.3 更新時に必ずやること
 
-```json
-{
-  "updatedAt": "ISO8601",
-  "sources": {
-    "fWAR":   { "url": "...", "fetchedAt": "ISO8601" },
-    "wRC+":   { "url": "...", "fetchedAt": "ISO8601" },
-    "xwOBA":  { "url": "...", "fetchedAt": "ISO8601" }
-  },
-  "notes": "JSレンダリングのためfangraphs leadersは取れず baseball-reference にフォールバック等"
-}
-```
+- [ ] `sport` はフォルダと一致（`data/threads/{sport}/`）
+- [ ] `id` は `{YYYY-MM-DD}-{英語スラッグ}` の kebab-case
+- [ ] `sourceUrl` は実在する元スレ URL（**必ず送客**＝引用要件）
+- [ ] コメントは**抜粋**（全件転載しない）。`bodyEn` 原文と `bodyJa` 訳を両方入れる
+- [ ] 良いコメントに `isHighlight: true`
+- [ ] `fetchedAt` は JST（ISO8601）
 
-### 3.3 更新時に必ずやること
+### 4.4 やってはいけないこと
 
-- [ ] `updatedAt` を JST で更新
-- [ ] 取得ソース URL を `meta.json` に記録（フォールバックも含めて）
-- [ ] 既存の指標キーを変更する場合は `src/lib/metrics.ts` も合わせて更新
-- [ ] 新しい選手 ID は `lastname-firstname` の kebab-case で統一
-- [ ] 日本人選手は `name.ja` を「カタカナ姓・名」形式で（例: "オオタニ・ショウヘイ"）
-- [ ] スクレイプに失敗 / 取得不能だった指標は `null` を入れて欠損を明示する
-      （0 や空文字を入れてはいけない）
-
-### 3.4 やってはいけないこと
-
-- データを「推測」「補完」で埋める（実測値が取れない場合は `null`）
-- 既存の JSON を一括で書き換える前に diff を見ずに上書きする
-- 著作権上問題になり得る画像・ロゴをコミットする
-
----
-
-## 4. 指標カタログ
-
-`src/lib/metrics.ts` に各指標のメタ情報（意味・単位・出典・「高いほど良いか」）を
-一元管理します。新しい指標を追加するときは必ずここから始めること。UI 側はこの
-カタログを参照して説明文・並び順・矢印を出します。
-
-中心指標:
-
-- **WAR 系**: fWAR / bWAR / rWAR
-- **打撃**: wRC+ / wOBA / xwOBA / Barrel% / HardHit% / OPS+
-- **投球**: FIP / xFIP / SIERA / Stuff+ / Location+ / K-BB%
-- **守備・走塁**: OAA / DRS / UZR / BsR / Sprint Speed
-- **勝負強さ**: Clutch / WPA
+- コメントを「推測」「捏造」で埋める（実在する発言だけを訳す）
+- 全文転載・全コメント網羅（著作権配慮。抜粋＋翻訳＋送客の編集物にする）
+- 画像・ロゴをコミットする
+- Reddit データを AI/ML 学習に使う（Reddit の規約・申請内容に反する）
 
 ---
 
 ## 5. i18n ルール
 
-- デフォルトロケールは `ja`
-- すべてのユーザー可視文字列は `messages/{locale}.json` に置く
-- 選手名はデータ側 (`name.en` / `name.ja`) に持たせ、コンポーネントで切替
-- チーム略称（NYY 等）は翻訳しない（共通表記）
+- デフォルトロケールは `ja`、英語は `en`
+- ユーザー可視文字列は `messages/{locale}.json`
+- まとめ本文（タイトル訳・要約・コメント訳）はデータ側（JSON）に持つ
+- 競技ラベルは `src/lib/sports.ts`（`labelJa` / `labelEn`）
 
 ---
 
@@ -181,26 +138,25 @@ Claude がこのリポジトリで作業するための運用ルールです。
 - TypeScript strict
 - サーバーコンポーネントをデフォルトに、クライアント化は最小限
 - データ読み込みは `src/lib/data.ts` 経由（`fs.readFile` を直接呼ばない）
-- Tailwind ユーティリティで完結させる。`*.module.css` は原則作らない
-- コメントは「なぜ」だけ書く（何をしているかは識別子で示す）
+- Tailwind ユーティリティで完結。`*.module.css` は作らない
+- コメントは「なぜ」を書く
 
 ---
 
 ## 7. よくある依頼パターン
 
-| ユーザー依頼例                      | Claude のアクション                                  |
-| ----------------------------------- | ---------------------------------------------------- |
-| 「データを最新にして」              | §3 の手順で各 JSON を更新                           |
-| 「日本人選手ページに〇〇を追加」    | `data/japanese-players/{YYYY}.json` を更新           |
-| 「Stuff+ ランキングのページ作って」 | `src/lib/metrics.ts` に登録 → `/stats/stuff-plus` 追加 |
-| 「英語版の文言がおかしい」          | `messages/en.json` を修正                            |
-| 「Vercel にデプロイしたい」         | README のデプロイ手順を参照 / 不足あれば追記         |
+| ユーザー依頼例                        | Claude のアクション                                       |
+| ------------------------------------- | -------------------------------------------------------- |
+| 「このスレでまとめ作って」＋URL＋コメント | §4 の手順で `data/threads/{sport}/{id}.json` を作成       |
+| 「ボクシングのまとめ追加して」        | `data/threads/boxing/` に追加                            |
+| 「競技を追加したい（例: NBA）」       | `src/lib/sports.ts` に追加 → `data/threads/{sport}/` を作る |
+| 「英語版の文言がおかしい」            | `messages/en.json` を修正                                |
 
 ---
 
 ## 8. 将来やる予定（メモ）
 
-- GitHub Actions による日次自動更新（現状は手動）
-- 個別選手詳細ページ
-- 過去シーズン比較ビュー
-- Recharts によるグラフ可視化
+- Reddit API 承認後、`scripts/fetch-reddit.mjs` で取得を半自動化
+- 競技の追加（NBA / サッカー 等）
+- 画像なしでの OGP・カード見栄え改善
+- 過去まとめのアーカイブ / タグ一覧ページ

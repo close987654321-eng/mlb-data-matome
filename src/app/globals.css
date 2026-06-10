@@ -1,8 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-  background-color: #f6f7fb;
-  color: #111827;
+@layer base {
+  html,
+  body {
+    @apply bg-paper text-ink;
+    font-feature-settings: 'palt'; /* 日本語の約物詰め（上質に見える） */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: #C8102E;
+    color: #fff;
+  }
 }

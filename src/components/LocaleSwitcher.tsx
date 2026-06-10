@@ -15,18 +15,20 @@ export default function LocaleSwitcher() {
   }
 
   return (
-    <div className="flex items-center gap-1 text-xs">
-      {locales.map((l) => (
-        <button
-          key={l}
-          type="button"
-          onClick={() => switchTo(l)}
-          className={`rounded px-2 py-1 ${
-            l === locale ? 'bg-white text-mlbnavy' : 'text-white/70 hover:text-white'
-          }`}
-        >
-          {l.toUpperCase()}
-        </button>
+    <div className="flex items-center gap-0.5 text-xs">
+      {locales.map((l, i) => (
+        <span key={l} className="flex items-center">
+          {i > 0 && <span className="mx-1 text-line">/</span>}
+          <button
+            type="button"
+            onClick={() => switchTo(l)}
+            className={`transition-colors ${
+              l === locale ? 'font-semibold text-ink' : 'text-ink-soft hover:text-ink'
+            }`}
+          >
+            {l.toUpperCase()}
+          </button>
+        </span>
       ))}
     </div>
   );

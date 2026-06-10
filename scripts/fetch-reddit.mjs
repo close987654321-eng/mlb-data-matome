@@ -1,5 +1,11 @@
 #!/usr/bin/env node
-// Reddit から「海外の反応」まとめの元データを取得する。
+// Reddit から「海外の反応」まとめの元データを取得する（MLB / ボクシング / UFC）。
+//
+// 競技ごとの取得元 subreddit:
+//   MLB     : r/baseball, r/mlb
+//   Boxing  : r/Boxing
+//   UFC     : r/MMA, r/ufc
+// 取得した内容を data/threads/{sport}/{id}.json（src/types/thread.ts の Thread 形式）へ。
 //
 // 未認証の www.reddit.com/.json は IP ブロックで 403 になるため、必ず公式 OAuth
 // （script アプリの password grant）を使う。これはブロックを受けない。
@@ -12,7 +18,9 @@
 //        REDDIT_USER_AGENT  (例: "mlb-matome/0.1 by /u/yourname")
 //
 // 使い方:
-//   node scripts/fetch-reddit.mjs list r/baseball week 8     # 人気スレ一覧
+//   node scripts/fetch-reddit.mjs list r/baseball week 8     # 人気スレ一覧（MLB）
+//   node scripts/fetch-reddit.mjs list r/Boxing week 8       # 〃（ボクシング）
+//   node scripts/fetch-reddit.mjs list r/MMA week 8          # 〃（UFC/MMA）
 //   node scripts/fetch-reddit.mjs thread <permalink|url> 40  # スレ本文+上位コメント
 //
 // 出力は生 JSON（整形済み）。これを Claude に渡して data/threads/{season}/{id}.json

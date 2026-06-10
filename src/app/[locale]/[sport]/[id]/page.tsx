@@ -1,0 +1,119 @@
+import { notFound } from 'next/navigation';
+import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { getThread, getThreadsBySport } from '@/lib/data';
+import { formatUpdatedAt } from '@/lib/format';
+import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
+import ArticleCover from '@/components/ArticleCover';
+import { locales, type Locale } from '@/lib/i18n';
+
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const lists = await Promise.all(SPORTS.map((sport) => getThreadsBySport(sport)));
+  return lists.flat().flatMap((thread) =>
+    locales.map((locale) => ({ locale, sport: thread.sport, id: thread.id })),
+  );
+}
+
+export default async function ThreadDetailPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale; sport: string; id: string }>;
+}) {
+  const { locale, sport, id } = await params;
+  unstable_setRequestLocale(locale);
+  if (!isSport(sport)) notFound();
+  const t = await getTranslations();
+  const thread = await getThread(sport, id);
+  if (!thread) notFound();
+
+  const info = SPORT_INFO[sport];
+  const title = locale === 'ja' ? thread.title.ja : thread.title.en;
+  const subtitle = locale === 'ja' ? thread.title.en : thread.title.ja;
+  // フック引用は冒頭に大きく掲げ、本文リストからは外す（重複を避ける）。
+  const hook = thread.comments.find((c) => c.isHook);
+  // JSON の配列順 = 編集した「会話の流れ」順をそのまま表示する（スコア順に並べ替えない）。
+  // 最後がオチになるよう matome スキルの R1/R2 に従って並べてある前提。
+  const comments = thread.comments.filter((c) => !c.isHook);
+
+  return (
+    <article className="mx-auto max-w-prose">
+      <ArticleCover sport={sport} locale={locale} title={title} variant="hero" />
+
+      <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
+        <span className="font-medium uppercase tracking-wider text-accent">
+          {locale === 'ja' ? info.labelJa : info.labelEn}
+        </span>
+        <span>{thread.subreddit}</span>
+        {thread.flair && <span>{thread.flair}</span>}
+        {thread.isSample && (
+          <span className="rounded bg-amber-100 px-1.5 py-0.5 font-medium text-amber-700">
+            {t('threads.sampleBadge')}
+          </span>
+        )}
+        <span className="ml-auto">{formatUpdatedAt(thread.fetchedAt, locale)}</span>
+      </div>
+
+      <p className="mt-2 text-sm text-ink-soft">{subtitle}</p>
+
+      {thread.tags && thread.tags.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {thread.tags.map((tag) => (
+            <span key={tag} className="rounded-full border border-line px-2.5 py-0.5 text-xs text-ink-soft">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {hook && (
+        <figure className="mt-8 border-l-4 border-accent pl-5">
+          <blockquote className="text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug">
+            “{hook.bodyJa}”
+          </blockquote>
+          <figcaption className="mt-2 text-sm text-ink-soft">— u/{hook.author}</figcaption>
+        </figure>
+      )}
+
+      <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
+
+      <section className="mt-10">
+        <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
+          <span className="h-3 w-1 rounded-full bg-accent" />
+          {t('threads.pickedComments', { total: thread.totalComments })}
+        </h2>
+        <ul className="space-y-5">
+          {comments.map((c, i) => (
+            <li
+              key={i}
+              className={`rounded-xl border p-5 ${
+                c.isHighlight ? 'border-accent/30 bg-accent/[0.04]' : 'border-line bg-surface'
+              }`}
+            >
+              <div className="flex items-center justify-between text-xs text-ink-soft">
+                <span className="font-medium">u/{c.author}</span>
+                <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>
+              </div>
+              <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
+              <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">
+                {c.bodyEn}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <footer className="mt-10 border-t border-line pt-5">
+        <a
+          href={thread.sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-accent"
+        >
+          {t('threads.viewSource')}
+          <span aria-hidden>→</span>
+        </a>
+      </footer>
+    </article>
+  );
+}
