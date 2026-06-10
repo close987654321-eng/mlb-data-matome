@@ -1,0 +1,14 @@
+node_modules
+.next
+out
+.env*
+.vercel
+.DS_Store
+*.log
+next-env.d.ts
+
+# TypeScript build cache
+tsconfig.tsbuildinfo
+
+# Local Claude Code settings (may contain secrets)
+.claude/

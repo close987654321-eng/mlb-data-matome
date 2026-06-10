@@ -1,0 +1,200 @@
+[
+  {
+    "id": "01-fangraphs-batting-dashboard",
+    "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&type=8&season=2025&month=0&team=0&ind=0",
+    "title": "Major League Leaderboards - 2025 to 2026 - Batting | FanGraphs Baseball",
+    "ok": true
+  },
+  {
+    "id": "02-fangraphs-batting-statcast",
+    "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&type=24&season=2025&month=0&team=0&ind=0",
+    "title": "Major League Leaderboards - 2025 to 2026 - Batting | FanGraphs Baseball",
+    "ok": true
+  },
+  {
+    "id": "03-fangraphs-pitching-dashboard",
+    "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=pit&lg=all&type=8&season=2025&month=0&team=0&ind=0",
+    "title": "Major League Leaderboards - 2025 to 2026 - Pitching | FanGraphs Baseball",
+    "ok": true
+  },
+  {
+    "id": "04-fangraphs-pitching-stuffplus",
+    "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=pit&lg=all&type=36&season=2025&month=0&team=0&ind=0",
+    "title": "Major League Leaderboards - 2025 to 2026 - Pitching | FanGraphs Baseball",
+    "ok": true
+  },
+  {
+    "id": "05-fangraphs-team-batting",
+    "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&type=8&season=2025&month=0&team=0,ts&ind=0",
+    "title": "Major League Leaderboards - 2025 to 2026 - Batting | FanGraphs Baseball",
+    "ok": true
+  },
+  {
+    "id": "06-savant-expected-stats",
+    "url": "https://baseballsavant.mlb.com/leaderboard/expected_statistics",
+    "title": "Statcast Expected wOBA, xBA, xSLG | baseballsavant.com",
+    "ok": true
+  },
+  {
+    "id": "07-savant-statcast-home",
+    "url": "https://baseballsavant.mlb.com/statcast_leaderboard",
+    "title": "Statcast Leaderboard | baseballsavant.com",
+    "ok": true
+  },
+  {
+    "id": "08-savant-outs-above-avg",
+    "url": "https://baseballsavant.mlb.com/leaderboard/outs_above_average",
+    "title": "Statcast Outs Above Average Leaderboard | baseballsavant.com",
+    "ok": true
+  },
+  {
+    "id": "09-savant-barrels",
+    "url": "https://baseballsavant.mlb.com/leaderboard/statcast?type=batter",
+    "title": "Statcast Leaderboard | baseballsavant.com",
+    "ok": true
+  },
+  {
+    "id": "10-bbref-standings",
+    "url": "https://www.baseball-reference.com/leagues/majors/2025-standings.shtml",
+    "title": "Just a moment...",
+    "ok": false
+  },
+  {
+    "id": "11-bbref-war-batting",
+    "url": "https://www.baseball-reference.com/leaders/WAR_bat.shtml",
+    "title": "Just a moment...",
+    "ok": false
+  },
+  {
+    "id": "12-espn-mlb-stats",
+    "url": "https://www.espn.com/mlb/stats",
+    "title": "MLB Player Stat Leaders, 2026 Regular Season - ESPN",
+    "ok": true
+  },
+  {
+    "id": "13-espn-standings",
+    "url": "https://www.espn.com/mlb/standings",
+    "title": "MLB Standings - 2026 season - ESPN",
+    "ok": true
+  },
+  {
+    "id": "14-mlb-stats",
+    "url": "https://www.mlb.com/stats/",
+    "title": "2026 MLB Player Hitting Stat Leaders | MLB.com",
+    "ok": true
+  },
+  {
+    "id": "15-mlb-standings",
+    "url": "https://www.mlb.com/standings/",
+    "title": "2026 MLB Standings and Records: Regular Season | MLB.com",
+    "ok": true
+  },
+  {
+    "id": "20-nba-bbref-leaders",
+    "url": "https://www.basketball-reference.com/leagues/NBA_2025_leaders.html",
+    "title": "2024-25 NBA Leaders | Basketball-Reference.com",
+    "ok": true
+  },
+  {
+    "id": "21-nba-bbref-perposs",
+    "url": "https://www.basketball-reference.com/leagues/NBA_2025_per_poss.html",
+    "title": "2024-25 NBA Player Stats: Per 100 Possessions | Basketball-Reference.com",
+    "ok": true
+  },
+  {
+    "id": "22-nba-com-stats",
+    "url": "https://www.nba.com/stats/leaders",
+    "title": "Season Leaders | Stats | NBA.com",
+    "ok": true
+  },
+  {
+    "id": "23-nba-espn-stats",
+    "url": "https://www.espn.com/nba/stats",
+    "title": "NBA Player Stat Leaders, 2025-26 Postseason - ESPN",
+    "ok": true
+  },
+  {
+    "id": "24-nba-espn-standings",
+    "url": "https://www.espn.com/nba/standings",
+    "title": "NBA Standings - 2025-26 season - ESPN",
+    "ok": true
+  },
+  {
+    "id": "30-nfl-pfr-passing",
+    "url": "https://www.pro-football-reference.com/years/2024/passing.htm",
+    "title": "Just a moment...",
+    "ok": false
+  },
+  {
+    "id": "31-nfl-pfr-advanced",
+    "url": "https://www.pro-football-reference.com/years/2024/passing_advanced.htm",
+    "title": "Just a moment...",
+    "ok": false
+  },
+  {
+    "id": "32-nfl-espn-stats",
+    "url": "https://www.espn.com/nfl/stats",
+    "title": "NFL Player Stat Leaders, 2025 Regular Season - ESPN",
+    "ok": true
+  },
+  {
+    "id": "33-nfl-com-stats",
+    "url": "https://www.nfl.com/stats/player-stats/",
+    "title": "NFL 2026 Player Stats | passing Stats | NFL.com",
+    "ok": true
+  },
+  {
+    "id": "40-soccer-fbref-stats",
+    "url": "https://fbref.com/en/comps/9/stats/Premier-League-Stats",
+    "title": "Just a moment...",
+    "ok": false
+  },
+  {
+    "id": "41-soccer-understat",
+    "url": "https://understat.com/league/EPL",
+    "title": "EPL xG Table and Scorers for the 2025/2026 season | Understat.com",
+    "ok": true
+  },
+  {
+    "id": "42-soccer-whoscored",
+    "url": "https://www.whoscored.com/Regions/252/Tournaments/2/England-Premier-League",
+    "title": "Premier League Scores",
+    "ok": true
+  },
+  {
+    "id": "43-soccer-espn-stats",
+    "url": "https://www.espn.com/soccer/stats/_/league/eng.1",
+    "title": "English Premier League Stats, 2025-26 Season - ESPN",
+    "ok": true
+  },
+  {
+    "id": "44-soccer-transfermarkt",
+    "url": "https://www.transfermarkt.com/premier-league/torschuetzenliste/wettbewerb/GB1",
+    "title": "Premier League - List of goalscorers 25/26 | Transfermarkt",
+    "ok": true
+  },
+  {
+    "id": "50-nhl-hockeyref-skaters",
+    "url": "https://www.hockey-reference.com/leagues/NHL_2025_skaters.html",
+    "title": "2024-25 NHL Skater Statistics | Hockey-Reference.com",
+    "ok": true
+  },
+  {
+    "id": "51-nhl-naturalstattrick",
+    "url": "https://www.naturalstattrick.com/playerteams.php",
+    "title": "Just a moment...",
+    "ok": false
+  },
+  {
+    "id": "52-nhl-com-stats",
+    "url": "https://www.nhl.com/stats/skaters",
+    "title": "NHL Stats | NHL.com",
+    "ok": true
+  },
+  {
+    "id": "53-nhl-espn-stats",
+    "url": "https://www.espn.com/nhl/stats",
+    "title": "NHL Player Stat Leaders, 2025-26 Postseason - ESPN",
+    "ok": true
+  }
+]

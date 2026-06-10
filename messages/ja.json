@@ -1,0 +1,63 @@
+{
+  "site": {
+    "title": "MLB データまとめ",
+    "tagline": "WARだけじゃない、現代MLB指標で見る選手・チームランキング",
+    "footer": "データ出典: FanGraphs / Baseball-Reference / Baseball Savant / ESPN"
+  },
+  "nav": {
+    "home": "ホーム",
+    "batters": "打者",
+    "pitchers": "投手",
+    "teams": "チーム",
+    "japanese": "日本人選手",
+    "stats": "指標一覧",
+    "threads": "海外の反応"
+  },
+  "threads": {
+    "lead": "海外掲示板（Reddit）の盛り上がったスレを、現地の生の反応つきで日本語まとめ。",
+    "empty": "まだまとめがありません。Claudeにスレまとめを依頼してください。",
+    "sampleBadge": "サンプル",
+    "commentCount": "コメント {count} 件",
+    "pickedComments": "ピックアップコメント（全 {total} 件から抜粋）",
+    "viewSource": "元スレを見る（Reddit）"
+  },
+  "home": {
+    "heroTitle": "MLBを「新しい指標」で読み解く",
+    "heroBody": "fWAR・wRC+・xwOBA・FIP・Stuff+・OAA…現代のMLBは数えきれない指標で選手を評価します。本サイトは日本のファン向けに、それらの指標とランキングを日本語でまとめます。",
+    "sectionRankings": "ランキング",
+    "sectionMetrics": "指標解説",
+    "lastUpdated": "最終更新",
+    "topBattersBy": "打者 TOP10 — {metric} 基準",
+    "topPitchersBy": "投手 TOP10 — {metric} 基準"
+  },
+  "ranking": {
+    "rank": "順位",
+    "player": "選手",
+    "team": "チーム",
+    "position": "守備",
+    "noData": "データがまだありません。Claudeにデータ更新を依頼してください。"
+  },
+  "metric": {
+    "higherIsBetter": "高いほど良い",
+    "lowerIsBetter": "低いほど良い",
+    "source": "出典",
+    "what": "意味",
+    "rankingByThis": "この指標のランキング"
+  },
+  "teams": {
+    "team": "チーム",
+    "league": {
+      "AL": "アメリカン・リーグ",
+      "NL": "ナショナル・リーグ"
+    },
+    "division": {
+      "East": "東地区",
+      "Central": "中地区",
+      "West": "西地区"
+    }
+  },
+  "japanese": {
+    "batters": "打者",
+    "pitchers": "投手"
+  }
+}

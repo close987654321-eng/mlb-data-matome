@@ -1,0 +1,21 @@
+{
+  "updatedAt": "2026-05-25T09:00:00+09:00",
+  "sources": {
+    "fWAR":      { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=8", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "wRC+":      { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=8", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "wOBA":      { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=8", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "OPS":       { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=8", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "BsR":       { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=8", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "xwOBA":     { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=24", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "Barrel%":   { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=24", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "HardHit%":  { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=bat&lg=all&qual=y&season=2026&type=24", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "FIP":       { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=pit&lg=all&qual=y&season=2026&type=8", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "xFIP":      { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=pit&lg=all&qual=y&season=2026&type=8", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "Stuff+":    { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=pit&lg=all&qual=y&season=2026&type=36", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "Location+": { "url": "https://www.fangraphs.com/leaders/major-league?pos=all&stats=pit&lg=all&qual=y&season=2026&type=36", "fetchedAt": "2026-05-25T09:00:00+09:00" },
+    "OAA":       { "url": "https://www.fangraphs.com/leaders/major-league?team=0,ts&type=1&pos=all&stats=fld&qual=y&season=2026", "fetchedAt": "2026-05-25T09:00:00+09:00", "notes": "team-level only; player-level OAA on Baseball Savant is JS-rendered and unavailable via static fetch" },
+    "DRS":       { "url": "https://www.fangraphs.com/leaders/major-league?team=0,ts&type=1&pos=all&stats=fld&qual=y&season=2026", "fetchedAt": "2026-05-25T09:00:00+09:00", "notes": "team-level only" }
+  },
+  "notes": "3回目の取り込み (2026-05-25)。\n• 大きな発見: FanGraphs の **個別選手ページ** (https://www.fangraphs.com/players/{slug}/{id}/stats/{batting|pitching}) は静的HTMLで Standard 統計テーブルを返すため、leaderboard の type=8 が JS依存でも個別取得が可能。日本人選手10名全員の fWAR/FIP/xFIP/wRC+/wOBA を補充できた。\n• 二刀流データ: Ohtani は打 fWAR 1.5 + 投 fWAR 1.8 = **合計 3.3 fWAR**。投手として ERA 0.73 / FIP 2.40 / 49 IP の異次元成績。\n• チームレベル指標: FanGraphs Team Fielding/Batting/Pitching の team=0,ts ビュー (静的取得可能)。\n• 取れなかった (継続課題): 選手レベル OAA/DRS/Sprint Speed (Savant leaderboard は全て JS-only)、選手レベル Clutch/WPA (FG leaders で WP ビュー指定不能)、bWAR (B-Ref 403)、Statcast の打者拡張 (top30外)、Darvish (UCL surgery で全休)、Matsui (IL)、Ogasawara (AAA)。",
+  "japanesePlayersNote": "Ogasawara (WSN) は AAA 降格中のため未収録。Darvish/Matsui は IL タグ付きで掲載 (data は null)。Ohtani は二刀流のため打者・投手両セクションに表示される。"
+}

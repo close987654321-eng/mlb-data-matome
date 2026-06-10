@@ -1,0 +1,41 @@
+{
+  "_comment": "実データのフォーマット例。実体ファイルではないため src/lib/data.ts からは読まれない。Claudeが新しいシーズンを追加するときの参考。",
+  "season": 2026,
+  "updatedAt": "2026-05-25T09:00:00+09:00",
+  "players": [
+    {
+      "id": "judge-aaron",
+      "name": { "en": "Aaron Judge", "ja": "アーロン・ジャッジ" },
+      "team": "NYY",
+      "position": "RF",
+      "stats": {
+        "fWAR": 4.2,
+        "bWAR": 4.1,
+        "wRC+": 185,
+        "wOBA": 0.435,
+        "xwOBA": 0.418,
+        "Barrel%": 22.1,
+        "HardHit%": 58.3,
+        "OPS": 1.012,
+        "BsR": 0.4
+      }
+    },
+    {
+      "id": "ohtani-shohei",
+      "name": { "en": "Shohei Ohtani", "ja": "オオタニ・ショウヘイ" },
+      "team": "LAD",
+      "position": "DH",
+      "stats": {
+        "fWAR": 5.1,
+        "bWAR": 5.0,
+        "wRC+": 178,
+        "wOBA": 0.420,
+        "xwOBA": 0.405,
+        "Barrel%": 20.8,
+        "HardHit%": 55.6,
+        "OPS": 0.998,
+        "BsR": 2.1
+      }
+    }
+  ]
+}

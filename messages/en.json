@@ -1,0 +1,63 @@
+{
+  "site": {
+    "title": "MLB Data Hub",
+    "tagline": "Beyond WAR — modern MLB metrics for ranking players and teams",
+    "footer": "Sources: FanGraphs / Baseball-Reference / Baseball Savant / ESPN"
+  },
+  "nav": {
+    "home": "Home",
+    "batters": "Batters",
+    "pitchers": "Pitchers",
+    "teams": "Teams",
+    "japanese": "Japanese Players",
+    "stats": "Metrics",
+    "threads": "Overseas Buzz"
+  },
+  "threads": {
+    "lead": "Japanese digests of buzzing overseas (Reddit) threads, with the locals' raw reactions.",
+    "empty": "No digests yet. Ask Claude to summarize a thread.",
+    "sampleBadge": "Sample",
+    "commentCount": "{count} comments",
+    "pickedComments": "Picked comments (excerpted from {total})",
+    "viewSource": "View source thread (Reddit)"
+  },
+  "home": {
+    "heroTitle": "Read MLB through modern metrics",
+    "heroBody": "fWAR, wRC+, xwOBA, FIP, Stuff+, OAA — modern baseball evaluates players through dozens of metrics. This site curates them in Japanese for fans in Japan.",
+    "sectionRankings": "Rankings",
+    "sectionMetrics": "Metric Guide",
+    "lastUpdated": "Last updated",
+    "topBattersBy": "Top 10 Batters by {metric}",
+    "topPitchersBy": "Top 10 Pitchers by {metric}"
+  },
+  "ranking": {
+    "rank": "#",
+    "player": "Player",
+    "team": "Team",
+    "position": "Pos",
+    "noData": "No data yet. Ask Claude to refresh the rankings."
+  },
+  "metric": {
+    "higherIsBetter": "Higher is better",
+    "lowerIsBetter": "Lower is better",
+    "source": "Source",
+    "what": "What it measures",
+    "rankingByThis": "Ranking by this metric"
+  },
+  "teams": {
+    "team": "Team",
+    "league": {
+      "AL": "American League",
+      "NL": "National League"
+    },
+    "division": {
+      "East": "East",
+      "Central": "Central",
+      "West": "West"
+    }
+  },
+  "japanese": {
+    "batters": "Batters",
+    "pitchers": "Pitchers"
+  }
+}

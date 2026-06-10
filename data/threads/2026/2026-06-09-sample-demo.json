@@ -1,0 +1,36 @@
+{
+  "id": "2026-06-09-sample-demo",
+  "subreddit": "r/baseball",
+  "sourceUrl": "https://www.reddit.com/r/baseball/",
+  "fetchedAt": "2026-06-09T12:00:00+09:00",
+  "title": {
+    "en": "[SAMPLE] This is a layout-demo thread, not a real scraped post",
+    "ja": "【サンプル】これはレイアウト確認用のダミースレです（実データではありません）"
+  },
+  "summaryJa": "これは threads 機能の表示確認用に手で作ったダミーです。Reddit OAuth を設定して scripts/fetch-reddit.mjs を回すと、本物のスレに置き換わります。本物が入ったらこのファイルは削除してください。",
+  "flair": "Game Thread",
+  "totalComments": 1234,
+  "tags": ["サンプル", "デモ"],
+  "isSample": true,
+  "comments": [
+    {
+      "author": "demo_user_1",
+      "score": 4821,
+      "bodyEn": "What a finish. I have no words.",
+      "bodyJa": "なんて幕切れだ。言葉も出ない。",
+      "isHighlight": true
+    },
+    {
+      "author": "demo_user_2",
+      "score": 2110,
+      "bodyEn": "This is what makes baseball the best sport.",
+      "bodyJa": "これだから野球は最高なんだよ。"
+    },
+    {
+      "author": "demo_user_3",
+      "score": 987,
+      "bodyEn": "I am going to remember this game for a long time.",
+      "bodyJa": "この試合は長いこと忘れられないわ。"
+    }
+  ]
+}
