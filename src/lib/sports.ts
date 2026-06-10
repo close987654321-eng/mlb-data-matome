@@ -8,14 +8,12 @@ export type SportInfo = {
   emoji: string;
   // 取得元の subreddit（手動・API どちらの運用でも参照する）
   subreddits: string[];
-  // 生成カバー用のアクセント色（濃→淡のグラデにする）
-  accent: string;
-  accentDark: string;
-  // カテゴリページのヘッダー写真（Unsplash ライセンス: 商用可・帰属不要）
-  heroImage: string;
+  // 競技ごとのキービジュアル写真プール（Unsplash ライセンス: 商用可・帰属不要）。
+  // カード／記事見出し／カテゴリヘッダーの背景に使う。記事ごとに pickImage で振り分ける。
+  heroImages: string[];
 };
 
-const UNSPLASH = (id: string, w = 1600) =>
+const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/photo-${id}?w=${w}&q=70&auto=format&fit=crop`;
 
 export const SPORT_INFO: Record<Sport, SportInfo> = {
@@ -25,9 +23,10 @@ export const SPORT_INFO: Record<Sport, SportInfo> = {
     labelEn: 'MLB',
     emoji: '⚾️',
     subreddits: ['r/baseball', 'r/mlb'],
-    accent: '#14507A',
-    accentDark: '#0C3552',
-    heroImage: UNSPLASH('1471295253337-3ceaaedca402'), // 野球場の空撮（夜）
+    heroImages: [
+      U('1471295253337-3ceaaedca402'), // 野球場の空撮（夜）
+      U('1508344928928-7165b67de128'), // バッター
+    ],
   },
   boxing: {
     slug: 'boxing',
@@ -35,9 +34,11 @@ export const SPORT_INFO: Record<Sport, SportInfo> = {
     labelEn: 'Boxing',
     emoji: '🥊',
     subreddits: ['r/Boxing'],
-    accent: '#9A1B22',
-    accentDark: '#6B1217',
-    heroImage: UNSPLASH('1552072092-7f9b8d63efcb'), // リング入場のシルエット
+    heroImages: [
+      U('1552072092-7f9b8d63efcb'), // リング入場のシルエット
+      U('1591117207239-788bf8de6c3b'), // モノクロのパンチ
+      U('1622599511051-16f55a1234d0'), // ネオン光のボクサー
+    ],
   },
   ufc: {
     slug: 'ufc',
@@ -45,12 +46,20 @@ export const SPORT_INFO: Record<Sport, SportInfo> = {
     labelEn: 'UFC',
     emoji: '🥋',
     subreddits: ['r/MMA', 'r/ufc'],
-    accent: '#B07A1E',
-    accentDark: '#7C5512',
-    heroImage: UNSPLASH('1615117972428-28de67cda58e'), // マットでのグラップリング
+    heroImages: [
+      U('1615117972428-28de67cda58e'), // マットでのグラップリング
+    ],
   },
 };
 
 export function isSport(value: string): value is Sport {
   return (SPORTS as readonly string[]).includes(value);
+}
+
+/** seed（記事 id など）から、その競技の写真プールを決定論的に1枚選ぶ（同じ写真の連発を防ぐ） */
+export function pickImage(sport: Sport, seed: string): string {
+  const imgs = SPORT_INFO[sport].heroImages;
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return imgs[h % imgs.length];
 }

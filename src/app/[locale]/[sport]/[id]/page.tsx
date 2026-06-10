@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThread, getThreadsBySport } from '@/lib/data';
 import { formatUpdatedAt } from '@/lib/format';
-import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
+import { SPORTS, SPORT_INFO, isSport, pickImage } from '@/lib/sports';
 import ArticleCover from '@/components/ArticleCover';
 import { locales, type Locale } from '@/lib/i18n';
 
@@ -38,7 +38,13 @@ export default async function ThreadDetailPage({
 
   return (
     <article className="mx-auto max-w-prose">
-      <ArticleCover sport={sport} locale={locale} title={title} variant="hero" />
+      <ArticleCover
+        sport={sport}
+        locale={locale}
+        imageUrl={pickImage(sport, thread.id)}
+        title={title}
+        variant="hero"
+      />
 
       <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
         <span className="font-medium uppercase tracking-wider text-accent">

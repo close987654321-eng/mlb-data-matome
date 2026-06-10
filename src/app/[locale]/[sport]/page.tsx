@@ -28,7 +28,7 @@ export default async function SportPage({
     <div className="space-y-10">
       <section className="relative overflow-hidden rounded-2xl">
         <Image
-          src={info.heroImage}
+          src={info.heroImages[0]}
           alt=""
           width={1600}
           height={600}
