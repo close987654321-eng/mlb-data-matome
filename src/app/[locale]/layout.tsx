@@ -107,9 +107,6 @@ function SiteHeader() {
               {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
             </Link>
           ))}
-          <Link href="/columns" className="transition-colors hover:text-ink">
-            {t('nav.columns')}
-          </Link>
         </nav>
         <LocaleSwitcher />
       </div>
@@ -123,9 +120,6 @@ function SiteHeader() {
             {SPORT_INFO[s].emoji} {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
           </Link>
         ))}
-        <Link href="/columns" className="whitespace-nowrap">
-          {t('nav.columns')}
-        </Link>
       </nav>
     </header>
   );

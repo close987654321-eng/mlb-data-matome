@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return entry(`/${sport}`, newestInSport);
     }),
     ...threads.map((t) => entry(`/${t.sport}/${t.id}`, t.fetchedAt)),
-    entry('/columns', columns[0]?.publishedAt), // コラム一覧
+    // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
   ];
 }

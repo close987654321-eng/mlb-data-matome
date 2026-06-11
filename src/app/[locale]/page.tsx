@@ -2,10 +2,9 @@ import Image from 'next/image';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads, getThread } from '@/lib/data';
 import { getAllColumns, getColumn } from '@/lib/columns';
-import ThreadCard from '@/components/ThreadCard';
-import ColumnCard from '@/components/ColumnCard';
+import { buildFeed, feedKey } from '@/lib/feed';
+import FeedCard from '@/components/FeedCard';
 import PickupSection from '@/components/PickupSection';
-import { Link } from '@/lib/navigation';
 import type { Locale } from '@/lib/i18n';
 
 // TOP に大きく出す「ピックアップ」。手動キュレーション（id 指定）。
@@ -25,7 +24,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     Promise.all(PICKUP_THREADS.map((p) => getThread(p.sport, p.id))),
     Promise.all(PICKUP_COLUMNS.map((id) => getColumn(id))),
   ]);
-  const [featured, ...rest] = threads;
+  // 新着は反応まとめとコラムを横断で混ぜ、日付順で出す（コラム専用ページは廃止）。
+  const feed = buildFeed(threads, columns);
+  const [featured, ...rest] = feed;
   // 取得できなかった id（リネーム等）は黙って除外する。
   const pickedThreads = pickThreads.filter((x): x is NonNullable<typeof x> => x != null);
   const pickedColumns = pickColumns.filter((x): x is NonNullable<typeof x> => x != null);
@@ -55,7 +56,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <PickupSection threads={pickedThreads} columns={pickedColumns} locale={locale} />
       )}
 
-      {threads.length === 0 ? (
+      {feed.length === 0 ? (
         <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">
           {t('threads.empty')}
         </p>
@@ -68,41 +69,17 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             </h2>
           </div>
 
-          {featured && <ThreadCard thread={featured} locale={locale} featured />}
+          {featured && <FeedCard item={featured} locale={locale} featured />}
 
           {rest.length > 0 && (
             <ul className="grid gap-x-8 gap-y-10 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-3">
-              {rest.map((thread) => (
-                <li key={`${thread.sport}/${thread.id}`}>
-                  <ThreadCard thread={thread} locale={locale} />
+              {rest.map((item) => (
+                <li key={feedKey(item)}>
+                  <FeedCard item={item} locale={locale} />
                 </li>
               ))}
             </ul>
           )}
-        </section>
-      )}
-
-      {columns.length > 0 && (
-        <section className="space-y-8">
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-3">
-              <span className="h-4 w-1 rounded-full bg-accent" />
-              <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">
-                {t('columns.sectionTitle')}
-              </h2>
-            </div>
-            <Link href="/columns" className="text-xs text-ink-soft transition-colors hover:text-ink">
-              {t('columns.viewAll')} →
-            </Link>
-          </div>
-
-          <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {columns.slice(0, 3).map((column) => (
-              <li key={column.id}>
-                <ColumnCard column={column} locale={locale} />
-              </li>
-            ))}
-          </ul>
         </section>
       )}
     </div>

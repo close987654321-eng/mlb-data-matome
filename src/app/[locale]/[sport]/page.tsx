@@ -2,8 +2,10 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThreadsBySport } from '@/lib/data';
+import { getColumnsBySport } from '@/lib/columns';
+import { buildFeed, feedKey } from '@/lib/feed';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
-import ThreadCard from '@/components/ThreadCard';
+import FeedCard from '@/components/FeedCard';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -22,7 +24,12 @@ export default async function SportPage({
   if (!isSport(sport)) notFound();
   const t = await getTranslations();
   const info = SPORT_INFO[sport];
-  const threads = await getThreadsBySport(sport);
+  // 反応まとめとコラム／インタビューを競技ごとに統合し、新着順で1グリッドに出す。
+  const [threads, columns] = await Promise.all([
+    getThreadsBySport(sport),
+    getColumnsBySport(sport),
+  ]);
+  const feed = buildFeed(threads, columns);
 
   return (
     <div className="space-y-10">
@@ -47,15 +54,15 @@ export default async function SportPage({
         </div>
       </section>
 
-      {threads.length === 0 ? (
+      {feed.length === 0 ? (
         <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">
           {t('threads.empty')}
         </p>
       ) : (
         <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {threads.map((thread) => (
-            <li key={thread.id}>
-              <ThreadCard thread={thread} locale={locale} showSport={false} />
+          {feed.map((item) => (
+            <li key={feedKey(item)}>
+              <FeedCard item={item} locale={locale} showSport={false} />
             </li>
           ))}
         </ul>

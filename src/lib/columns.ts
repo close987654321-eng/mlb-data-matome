@@ -35,6 +35,12 @@ export async function getAllColumns(): Promise<Column[]> {
   return columns.filter((c): c is Column => c != null).sort(byNewest);
 }
 
+/** 指定競技のコラム／インタビューを新着順で返す（競技ページで反応まとめと混在表示する） */
+export async function getColumnsBySport(sport: Column['sport']): Promise<Column[]> {
+  const all = await getAllColumns();
+  return all.filter((c) => c.sport === sport);
+}
+
 export async function getColumn(id: string): Promise<Column | null> {
   return readJsonSafe<Column>(path.join(COLUMNS_DIR, `${id}.json`));
 }
