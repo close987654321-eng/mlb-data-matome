@@ -11,9 +11,6 @@ import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
 
-// 動画をピン留めしてコメントだけ流す「watch-along」レイアウトを使う記事（個別指定）。
-const WATCH_ALONG_IDS = new Set(['2021-07-02-ohtani-29-30-walsh-walkoff']);
-
 export async function generateStaticParams() {
   const lists = await Promise.all(SPORTS.map((sport) => getThreadsBySport(sport)));
   return lists.flat().flatMap((thread) =>
@@ -41,7 +38,8 @@ export default async function ThreadDetailPage({
   // JSON の配列順 = 編集した「会話の流れ」順をそのまま表示する（スコア順に並べ替えない）。
   // 最後がオチになるよう matome スキルの R1/R2 に従って並べてある前提。
   const comments = thread.comments.filter((c) => !c.isHook);
-  const isWatchAlong = WATCH_ALONG_IDS.has(thread.id) && thread.media?.kind === 'video';
+  // 動画つきの記事は「動画ピン留め＋コメントが裏を流れる」watch-along をデフォルトにする。
+  const isWatchAlong = thread.media?.kind === 'video';
 
   return (
     <article className="mx-auto max-w-prose">

@@ -6,6 +6,7 @@ import { SPORT_INFO } from '@/lib/sports';
 import { columnCover } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
+import StickyVideo from '@/components/StickyVideo';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -31,6 +32,10 @@ export default async function ColumnDetailPage({
   const kindLabel = t(`columns.kind.${column.kind}`);
   const title = locale === 'ja' ? column.title.ja : column.title.en;
   const subtitle = locale === 'ja' ? column.title.en : column.title.ja;
+  // 動画つきコラムは記事と同じ「動画ピン留め＋本文が裏を流れる」形にする。
+  // 最初の動画ブロックを上部に固定し、本文中では二重表示しないようそのブロックは飛ばす。
+  const pinnedVideoIndex = column.blocks.findIndex((block) => block.type === 'video');
+  const pinnedVideo = pinnedVideoIndex >= 0 ? column.blocks[pinnedVideoIndex] : undefined;
 
   return (
     <article className="mx-auto max-w-prose">
@@ -77,8 +82,17 @@ export default async function ColumnDetailPage({
 
       <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{column.lead}</p>
 
+      {/* 動画は本文と同じ親の中に置いて sticky を成立させる（本文が動画の裏を流れる）。 */}
       <div className="mt-8 space-y-6">
+        {pinnedVideo?.type === 'video' && (
+          <StickyVideo
+            media={pinnedVideo.media}
+            sourceUrl={column.sourceUrl ?? ''}
+            hintLabel={t('threads.watchAlongHint')}
+          />
+        )}
         {column.blocks.map((block, i) => {
+          if (i === pinnedVideoIndex) return null; // 上部にピン留め済みなので本文では飛ばす
           if (block.type === 'heading') {
             return (
               <h2
