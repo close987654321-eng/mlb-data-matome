@@ -4,6 +4,7 @@ import { getAllThreads, getThread } from '@/lib/data';
 import { getAllColumns, getColumn } from '@/lib/columns';
 import ThreadCard from '@/components/ThreadCard';
 import ColumnCard from '@/components/ColumnCard';
+import PickupSection from '@/components/PickupSection';
 import { Link } from '@/lib/navigation';
 import type { Locale } from '@/lib/i18n';
 
@@ -51,28 +52,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       </section>
 
       {hasPickup && (
-        <section className="rounded-2xl border border-accent/30 bg-accent/[0.05] p-6 sm:p-8">
-          <div className="mb-6 flex items-center gap-2">
-            <span aria-hidden className="text-accent">
-              ★
-            </span>
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-accent">
-              {t('home.pickup')}
-            </h2>
-          </div>
-          <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-            {pickedThreads.map((thread) => (
-              <li key={`${thread.sport}/${thread.id}`}>
-                <ThreadCard thread={thread} locale={locale} />
-              </li>
-            ))}
-            {pickedColumns.map((column) => (
-              <li key={`col/${column.id}`}>
-                <ColumnCard column={column} locale={locale} />
-              </li>
-            ))}
-          </ul>
-        </section>
+        <PickupSection threads={pickedThreads} columns={pickedColumns} locale={locale} />
       )}
 
       {threads.length === 0 ? (
