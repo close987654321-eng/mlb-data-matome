@@ -6,9 +6,13 @@ import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { coverImage } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
+import WatchAlong from '@/components/WatchAlong';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
+
+// 動画をピン留めしてコメントだけ流す「watch-along」レイアウトを使う記事（個別指定）。
+const WATCH_ALONG_IDS = new Set(['2021-07-02-ohtani-29-30-walsh-walkoff']);
 
 export async function generateStaticParams() {
   const lists = await Promise.all(SPORTS.map((sport) => getThreadsBySport(sport)));
@@ -37,6 +41,7 @@ export default async function ThreadDetailPage({
   // JSON の配列順 = 編集した「会話の流れ」順をそのまま表示する（スコア順に並べ替えない）。
   // 最後がオチになるよう matome スキルの R1/R2 に従って並べてある前提。
   const comments = thread.comments.filter((c) => !c.isHook);
+  const isWatchAlong = WATCH_ALONG_IDS.has(thread.id) && thread.media?.kind === 'video';
 
   return (
     <article className="mx-auto max-w-prose">
@@ -86,41 +91,53 @@ export default async function ThreadDetailPage({
 
       <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
 
-      {/* 動画は本文に埋め込む（hero は再生できないため）。画像は hero で見せ済みなので重複させない。 */}
-      {thread.media?.kind === 'video' && (
-        <MediaEmbed media={thread.media} sourceUrl={thread.sourceUrl} />
-      )}
+      {isWatchAlong ? (
+        // この記事だけ：動画をピン留めし、その裏をコメントが試合の時系列順に流れる。
+        <WatchAlong
+          thread={thread}
+          comments={comments}
+          pickedLabel={t('threads.pickedComments', { total: thread.totalComments })}
+          hintLabel={t('threads.watchAlongHint')}
+        />
+      ) : (
+        <>
+          {/* 動画は本文に埋め込む（hero は再生できないため）。画像は hero で見せ済みなので重複させない。 */}
+          {thread.media?.kind === 'video' && (
+            <MediaEmbed media={thread.media} sourceUrl={thread.sourceUrl} />
+          )}
 
-      {/* 追加メディア（連続フレーム等）は本文に順に差し込む。 */}
-      {thread.gallery?.map((m, i) => (
-        <MediaEmbed key={i} media={m} sourceUrl={thread.sourceUrl} />
-      ))}
-
-      <section className="mt-10">
-        <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-          <span className="h-3 w-1 rounded-full bg-accent" />
-          {t('threads.pickedComments', { total: thread.totalComments })}
-        </h2>
-        <ul className="space-y-5">
-          {comments.map((c, i) => (
-            <li
-              key={i}
-              className={`rounded-xl border p-5 ${
-                c.isHighlight ? 'border-accent/30 bg-accent/[0.04]' : 'border-line bg-surface'
-              }`}
-            >
-              <div className="flex items-center justify-between text-xs text-ink-soft">
-                <span className="font-medium">u/{c.author}</span>
-                <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>
-              </div>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
-              <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">
-                {c.bodyEn}
-              </p>
-            </li>
+          {/* 追加メディア（連続フレーム等）は本文に順に差し込む。 */}
+          {thread.gallery?.map((m, i) => (
+            <MediaEmbed key={i} media={m} sourceUrl={thread.sourceUrl} />
           ))}
-        </ul>
-      </section>
+
+          <section className="mt-10">
+            <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
+              <span className="h-3 w-1 rounded-full bg-accent" />
+              {t('threads.pickedComments', { total: thread.totalComments })}
+            </h2>
+            <ul className="space-y-5">
+              {comments.map((c, i) => (
+                <li
+                  key={i}
+                  className={`rounded-xl border p-5 ${
+                    c.isHighlight ? 'border-accent/30 bg-accent/[0.04]' : 'border-line bg-surface'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs text-ink-soft">
+                    <span className="font-medium">u/{c.author}</span>
+                    <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>
+                  </div>
+                  <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
+                  <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">
+                    {c.bodyEn}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
 
       <footer className="mt-10 border-t border-line pt-5">
         <a
