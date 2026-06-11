@@ -11,7 +11,24 @@ type Props = {
   /** 競技ラベルの代わりに出す上部の小見出し（例: "インタビュー · MLB"）。コラム用。 */
   eyebrow?: string;
   variant?: 'card' | 'hero';
+  /** カバーが動画サムネのとき、再生アイコンを重ねて「動画あり」を示す。 */
+  hasVideo?: boolean;
+  /** hero でカバー画像の出典・帰属を小さく添える（引用配慮）。 */
+  credit?: string;
 };
+
+// 動画サムネに重ねる再生バッジ。実写写真と区別がつき「動画あり」が一目で分かる。
+function PlayBadge() {
+  return (
+    <span className="absolute inset-0 flex items-center justify-center">
+      <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black/55 backdrop-blur-sm">
+        <svg viewBox="0 0 24 24" className="ml-0.5 h-6 w-6 fill-white" aria-hidden>
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </span>
+    </span>
+  );
+}
 
 /**
  * 記事のキービジュアル。競技ごとの実写写真を背景に、テキスト（競技ラベル／タイトル）を載せる。
@@ -24,6 +41,8 @@ export default function ArticleCover({
   title,
   eyebrow,
   variant = 'card',
+  hasVideo = false,
+  credit,
 }: Props) {
   const info = SPORT_INFO[sport];
   const label = eyebrow ?? `${info.emoji} ${locale === 'ja' ? info.labelJa : info.labelEn}`;
@@ -40,6 +59,10 @@ export default function ArticleCover({
           className="h-64 w-full object-cover sm:h-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
+        {hasVideo && <PlayBadge />}
+        {credit && (
+          <span className="absolute bottom-2 right-3 text-[10px] text-white/60">{credit}</span>
+        )}
         <div className="absolute bottom-0 left-0 p-6 sm:p-10">
           <span className="text-xs font-medium uppercase tracking-[0.2em] text-white/85">
             {label}
@@ -64,6 +87,7 @@ export default function ArticleCover({
         className="object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
+      {hasVideo && <PlayBadge />}
       <span className="absolute left-3 top-3 text-[11px] font-medium uppercase tracking-[0.18em] text-white/90 drop-shadow">
         {label}
       </span>

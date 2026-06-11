@@ -46,6 +46,23 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
 - オチ（R2 の最後のコメント）とは別にする（オチは末尾で取っておく）
 - 長すぎる説明調より、短く言い切る系が映える
 
+### R5. メディアを1点添える（サムネ差別化）
+元スレに画像／動画があれば `media` に入れる。これがカードのサムネ＆記事内表示になり、
+「サムネが全部同じ」を防ぐ。**ファイルはコミットせず URL 参照**（CLAUDE.md §4.4）。
+- `kind: "image"` … 画像の**直リンク**を `url` に（`i.redd.it` / `i.imgur.com` のみ可。
+  `preview.redd.it` は署名付きで弾かれるので使わない）。記事では hero に表示される。
+- `kind: "video"` … 視聴 URL を `url` に。**YouTube / Streamable は自動で iframe 埋め込み**
+  になる。それ以外（`v.redd.it` 等）は埋め込めないので、可能なら外部ミラー(YouTube等)の
+  URL を優先。サムネは `thumbUrl`（無ければ YouTube は自動取得、それも無ければストック）。
+- `credit` は必ず添える（例: `"u/foo · r/baseball"`）。`caption` は任意の日本語説明。
+- URL が分からない／無いときは `media` を**省略**（ストック写真にフォールバックする）。捏造しない。
+- 直リンク画像のホストを増やすときは `next.config.mjs` の `remotePatterns` に追加が必要。
+
+```json
+"media": { "kind": "video", "url": "https://youtu.be/XXXXXXXXXXX", "credit": "u/foo · r/baseball" }
+"media": { "kind": "image", "url": "https://i.redd.it/xxxx.jpg", "caption": "問題の絵", "credit": "u/foo · r/baseball" }
+```
+
 ### 既存ルール（維持）
 - 抜粋のみ。全文転載しない。`bodyEn`（原文）と `bodyJa`（訳）を両方入れる
 - 象徴的／特に良いコメントに `isHighlight: true`（数個に絞る）
@@ -61,7 +78,7 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
 1. 競技・`id` を決める
 2. 貼られたコメントから **R1（繋がり）→ R3（15〜30 件）→ R2（最後オチ）** を意識して抜粋・配列
 3. 各コメントを翻訳（`bodyEn` / `bodyJa`）、`isHighlight` 付与
-4. `title`(en/ja)・`summaryJa`・`tags` を作る
+4. `title`(en/ja)・`summaryJa`・`tags`・`media`（R5・あれば）を作る
 5. `data/threads/{sport}/{id}.json` に保存
 6. `npm run build` で確認（任意）
 
@@ -70,3 +87,5 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
   コメントをスコア順ソートから「配列順そのまま」表示に変更（R1/R2 を効かせるため）。
 - 2026-06-10: R4（フック引用）追加。`isHook: true` のコメントを冒頭に大きく掲げる
   「読みたくなる」導入に。本文リストからは除外される。
+- 2026-06-11: R5（メディア）追加。`media`（画像直リンク / 動画埋め込み）で記事ごとに
+  固有のサムネ＆記事内表示。「サムネが全部同じ」対策。画像=hero、動画=本文に iframe 埋め込み。

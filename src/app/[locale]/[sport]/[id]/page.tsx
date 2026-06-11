@@ -2,8 +2,10 @@ import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThread, getThreadsBySport } from '@/lib/data';
 import { formatUpdatedAt } from '@/lib/format';
-import { SPORTS, SPORT_INFO, isSport, pickImage } from '@/lib/sports';
+import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
+import { coverImage } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
+import MediaEmbed from '@/components/MediaEmbed';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -41,9 +43,10 @@ export default async function ThreadDetailPage({
       <ArticleCover
         sport={sport}
         locale={locale}
-        imageUrl={pickImage(sport, thread.id)}
+        imageUrl={coverImage(thread)}
         title={title}
         variant="hero"
+        credit={thread.media?.kind === 'image' ? thread.media.credit : undefined}
       />
 
       <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
@@ -82,6 +85,11 @@ export default async function ThreadDetailPage({
       )}
 
       <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
+
+      {/* 動画は本文に埋め込む（hero は再生できないため）。画像は hero で見せ済みなので重複させない。 */}
+      {thread.media?.kind === 'video' && (
+        <MediaEmbed media={thread.media} sourceUrl={thread.sourceUrl} />
+      )}
 
       <section className="mt-10">
         <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">

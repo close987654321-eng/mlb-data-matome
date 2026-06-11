@@ -1,7 +1,8 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/navigation';
 import { formatUpdatedAt } from '@/lib/format';
-import { SPORT_INFO, pickImage } from '@/lib/sports';
+import { SPORT_INFO } from '@/lib/sports';
+import { coverImage } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import type { Thread } from '@/types/thread';
 import type { Locale } from '@/lib/i18n';
@@ -29,7 +30,8 @@ export default function ThreadCard({ thread, locale, showSport = true, featured 
             <ArticleCover
               sport={thread.sport}
               locale={locale}
-              imageUrl={pickImage(thread.sport, thread.id)}
+              imageUrl={coverImage(thread)}
+              hasVideo={thread.media?.kind === 'video'}
             />
           </div>
         </div>

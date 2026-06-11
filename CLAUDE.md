@@ -99,6 +99,7 @@ SSG します。
   "summaryJa": "スレの流れ・論点の要約",
   "flair": "Discussion",
   "totalComments": 147,
+  "media": { "kind": "image", "url": "https://i.redd.it/xxxx.jpg", "credit": "u/foo · r/baseball" },
   "tags": ["大谷翔平", "二刀流"],
   "comments": [
     { "author": "user", "score": 87, "bodyEn": "...", "bodyJa": "...", "isHighlight": true }
@@ -113,6 +114,7 @@ SSG します。
 - [ ] `sourceUrl` は実在する元スレ URL（**必ず送客**＝引用要件）
 - [ ] コメントは**抜粋**（全件転載しない）。`bodyEn` 原文と `bodyJa` 訳を両方入れる
 - [ ] 良いコメントに `isHighlight: true`
+- [ ] 画像／動画があれば `media`（URL 参照・`credit` 必須。ファイルはコミットしない）
 - [ ] `fetchedAt` は JST（ISO8601）
 
 ### 4.4 やってはいけないこと

@@ -11,6 +11,20 @@ export type ThreadComment = {
   isHook?: boolean; // 冒頭に大きく掲げる「フック引用」（記事につき1つ）
 };
 
+/**
+ * 元スレに紐づくメディア 1 点。ファイルはコミットせず URL 参照で持つ（CLAUDE.md §4.4）。
+ * - image: 画像の直リンク（i.redd.it / i.imgur.com など、ホットリンク可能なもの）
+ * - video: 動画の視聴 URL（YouTube / Streamable 等）。公式 iframe で埋め込む＝送客になる。
+ *   v.redd.it は <video> 直貼り不可なので、外部ミラーの URL があればそれを使う。
+ */
+export type ThreadMedia = {
+  kind: 'image' | 'video';
+  url: string; // image=画像URL / video=視聴URL（埋め込みURLへは自動変換する）
+  thumbUrl?: string; // video のカード/見出し用サムネ。無ければ自動取得かストックに退避
+  caption?: string; // 日本語キャプション（任意）
+  credit?: string; // 出典・帰属（例: "u/foo · r/baseball"）。必ず添える
+};
+
 /** 海外掲示板スレッドの日本語まとめ 1 件 */
 export type Thread = {
   id: string; // "2026-06-09-judge-walkoff" のような日付プレフィックス付き kebab-case
@@ -23,6 +37,7 @@ export type Thread = {
   flair?: string; // "Game Thread" などの Reddit フレア
   totalComments: number; // 元スレの総コメント数（抜粋元の規模を示す）
   comments: ThreadComment[]; // 抜粋・翻訳済みコメント
+  media?: ThreadMedia; // 元スレの代表メディア（あればサムネ＆記事内に表示）
   tags?: string[]; // 日本語タグ（選手名・話題）
   isSample?: boolean; // 開発用ダミーであることを明示するフラグ
 };
