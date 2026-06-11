@@ -25,6 +25,18 @@ export type ThreadMedia = {
   credit?: string; // 出典・帰属（例: "u/foo · r/baseball"）。必ず添える
 };
 
+/**
+ * 「海外ニキと見る」シリーズ（看板の watch-along 企画）に属する記事のメタ情報。
+ * これが付いた記事はタイトルを定型で自動生成し（src/lib/series.ts の seriesTitle）、
+ * カード/記事にシリーズバッジを出し、/watch ハブにも載る。
+ * シリーズ名・自軍名・接頭辞は data ではなく src/lib/series.ts のカタログが正。
+ */
+export type ThreadSeries = {
+  id: string; // series カタログのキー（例: "dodgers"）。src/lib/series.ts の SERIES と一致させる
+  date: string; // 試合日 "2026-06-10"（YYYY-MM-DD・JST）。タイトルの日付に使う
+  opponent: LocalizedName; // 対戦相手名（vs の右）。例: { ja: "パイレーツ", en: "Pirates" }
+};
+
 /** 海外掲示板スレッドの日本語まとめ 1 件 */
 export type Thread = {
   id: string; // "2026-06-09-judge-walkoff" のような日付プレフィックス付き kebab-case
@@ -40,6 +52,7 @@ export type Thread = {
   media?: ThreadMedia; // 代表メディア（カードサムネ＆記事 hero に使う）
   gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）
   tags?: string[]; // 日本語タグ（選手名・話題）
+  series?: ThreadSeries; // 「海外ニキと見る」シリーズ記事ならその情報（タイトル定型化＋バッジ＋/watch掲載）
   isSample?: boolean; // 開発用ダミーであることを明示するフラグ
 };
 

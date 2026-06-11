@@ -102,6 +102,9 @@ function SiteHeader() {
           <Link href="/" className="transition-colors hover:text-ink">
             {t('nav.home')}
           </Link>
+          <Link href="/watch" className="font-medium text-accent transition-colors hover:text-ink">
+            {t('nav.watch')}
+          </Link>
           {SPORTS.map((s) => (
             <Link key={s} href={`/${s}`} className="transition-colors hover:text-ink">
               {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
@@ -114,6 +117,9 @@ function SiteHeader() {
       <nav className="flex items-center gap-4 overflow-x-auto border-t border-line px-5 py-2 text-sm text-ink-soft sm:hidden">
         <Link href="/" className="whitespace-nowrap">
           {t('nav.home')}
+        </Link>
+        <Link href="/watch" className="whitespace-nowrap font-medium text-accent">
+          ▶ {t('nav.watch')}
         </Link>
         {SPORTS.map((s) => (
           <Link key={s} href={`/${s}`} className="whitespace-nowrap">

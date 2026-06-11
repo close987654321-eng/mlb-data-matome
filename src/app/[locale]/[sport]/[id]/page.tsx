@@ -3,9 +3,11 @@ import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThread, getThreadsBySport } from '@/lib/data';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
+import { threadTitle, seriesTitle } from '@/lib/series';
 import { coverImage } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
+import SeriesBadge from '@/components/SeriesBadge';
 import WatchAlong from '@/components/WatchAlong';
 import { locales, type Locale } from '@/lib/i18n';
 
@@ -31,8 +33,12 @@ export default async function ThreadDetailPage({
   if (!thread) notFound();
 
   const info = SPORT_INFO[sport];
-  const title = locale === 'ja' ? thread.title.ja : thread.title.en;
-  const subtitle = locale === 'ja' ? thread.title.en : thread.title.ja;
+  const otherLocale = locale === 'ja' ? 'en' : 'ja';
+  // シリーズ記事はタイトルを定型で自動生成し、副題も反対ロケールの定型タイトルにする。
+  const title = threadTitle(thread, locale);
+  const subtitle = thread.series
+    ? seriesTitle(thread.series, otherLocale)
+    : thread.title[otherLocale];
   // フック引用は冒頭に大きく掲げ、本文リストからは外す（重複を避ける）。
   const hook = thread.comments.find((c) => c.isHook);
   // JSON の配列順 = 編集した「会話の流れ」順をそのまま表示する（スコア順に並べ替えない）。
@@ -51,6 +57,12 @@ export default async function ThreadDetailPage({
         variant="hero"
         credit={thread.media?.kind === 'image' ? thread.media.credit : undefined}
       />
+
+      {thread.series && (
+        <div className="mt-6">
+          <SeriesBadge series={thread.series} locale={locale} />
+        </div>
+      )}
 
       <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
         <span className="font-medium uppercase tracking-wider text-accent">

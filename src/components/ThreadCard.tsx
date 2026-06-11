@@ -2,8 +2,10 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/navigation';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORT_INFO } from '@/lib/sports';
+import { threadTitle } from '@/lib/series';
 import { coverImage } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
+import SeriesBadge from '@/components/SeriesBadge';
 import type { Thread } from '@/types/thread';
 import type { Locale } from '@/lib/i18n';
 
@@ -20,7 +22,7 @@ export default function ThreadCard({ thread, locale, showSport = true, featured 
   const t = useTranslations();
   const info = SPORT_INFO[thread.sport];
   const sportLabel = locale === 'ja' ? info.labelJa : info.labelEn;
-  const title = locale === 'ja' ? thread.title.ja : thread.title.en;
+  const title = threadTitle(thread, locale);
 
   return (
     <Link href={`/${thread.sport}/${thread.id}`} className="group block">
@@ -37,6 +39,12 @@ export default function ThreadCard({ thread, locale, showSport = true, featured 
         </div>
 
         <div className={featured ? '' : 'pt-3'}>
+          {thread.series && (
+            <div className="mb-2">
+              <SeriesBadge series={thread.series} locale={locale} />
+            </div>
+          )}
+
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
             {showSport && (
               <span className="font-medium uppercase tracking-wider text-accent">{sportLabel}</span>

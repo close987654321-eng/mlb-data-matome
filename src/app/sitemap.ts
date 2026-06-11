@@ -32,8 +32,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [threads, columns] = await Promise.all([getAllThreads(), getAllColumns()]);
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
 
+  const latestSeries = threads.find((t) => t.series != null)?.fetchedAt;
+
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
+    entry('/watch', latestSeries), // 「海外ニキと見る」ハブ
     ...SPORTS.map((sport) => {
       const newestInSport = threads.find((t) => t.sport === sport)?.fetchedAt;
       return entry(`/${sport}`, newestInSport);
