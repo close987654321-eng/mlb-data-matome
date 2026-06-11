@@ -4,6 +4,7 @@ import { getAllColumns, getColumn } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORT_INFO, pickImage } from '@/lib/sports';
 import ArticleCover from '@/components/ArticleCover';
+import MediaEmbed from '@/components/MediaEmbed';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -101,6 +102,10 @@ export default async function ColumnDetailPage({
                 )}
               </figure>
             );
+          }
+          if (block.type === 'video') {
+            // 出典クリップは送客にもなるので、本文と同じ流れで埋め込む
+            return <MediaEmbed key={i} media={block.media} sourceUrl={column.sourceUrl ?? ''} />;
           }
           return (
             <p key={i} className="text-[15px] leading-relaxed text-ink">

@@ -1,5 +1,6 @@
 import type { LocalizedName } from './common';
 import type { Sport } from '@/lib/sports';
+import type { ThreadMedia } from './thread';
 
 /** 引用（インタビューの発言・名言）。cite は発言者・出典の補足。 */
 export type Quote = {
@@ -15,7 +16,8 @@ export type Quote = {
 export type ColumnBlock =
   | { type: 'heading'; text: string }
   | { type: 'paragraph'; text: string }
-  | { type: 'quote'; quote: Quote };
+  | { type: 'quote'; quote: Quote }
+  | { type: 'video'; media: ThreadMedia }; // 本文に挿し込む動画（YouTube 等の視聴 URL）
 
 /** インタビュー／コラム記事 1 件 */
 export type Column = {
