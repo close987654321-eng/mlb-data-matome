@@ -37,7 +37,8 @@ export type Thread = {
   flair?: string; // "Game Thread" などの Reddit フレア
   totalComments: number; // 元スレの総コメント数（抜粋元の規模を示す）
   comments: ThreadComment[]; // 抜粋・翻訳済みコメント
-  media?: ThreadMedia; // 元スレの代表メディア（あればサムネ＆記事内に表示）
+  media?: ThreadMedia; // 代表メディア（カードサムネ＆記事 hero に使う）
+  gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）
   tags?: string[]; // 日本語タグ（選手名・話題）
   isSample?: boolean; // 開発用ダミーであることを明示するフラグ
 };

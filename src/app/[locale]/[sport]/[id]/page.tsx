@@ -91,6 +91,11 @@ export default async function ThreadDetailPage({
         <MediaEmbed media={thread.media} sourceUrl={thread.sourceUrl} />
       )}
 
+      {/* 追加メディア（連続フレーム等）は本文に順に差し込む。 */}
+      {thread.gallery?.map((m, i) => (
+        <MediaEmbed key={i} media={m} sourceUrl={thread.sourceUrl} />
+      ))}
+
       <section className="mt-10">
         <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
           <span className="h-3 w-1 rounded-full bg-accent" />
