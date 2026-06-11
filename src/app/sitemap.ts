@@ -32,11 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [threads, columns] = await Promise.all([getAllThreads(), getAllColumns()]);
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
 
-  const latestSeries = threads.find((t) => t.series != null)?.fetchedAt;
+  // /watch は動画つき記事のハブ。最新の動画記事の日時を lastModified にする。
+  const latestWatch = threads.find((t) => t.media?.kind === 'video')?.fetchedAt;
 
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
-    entry('/watch', latestSeries), // 「海外ニキと見る」ハブ
+    entry('/watch', latestWatch), // 「海外ニキと見る」ハブ
     ...SPORTS.map((sport) => {
       const newestInSport = threads.find((t) => t.sport === sport)?.fetchedAt;
       return entry(`/${sport}`, newestInSport);

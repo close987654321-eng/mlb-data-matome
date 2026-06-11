@@ -51,9 +51,12 @@ export async function getThreadsBySport(sport: Sport): Promise<Thread[]> {
   return (await loadSport(sport)).sort(byNewest);
 }
 
-/** 「海外ニキと見る」シリーズに属する記事を全競技横断で新着順に返す（/watch ハブ用） */
-export async function getSeriesThreads(): Promise<Thread[]> {
-  return (await getAllThreads()).filter((t) => t.series != null);
+/**
+ * 「海外ニキと見る」ハブ（/watch）に載せる記事＝動画つき watch-along 記事を
+ * 全競技横断で新着順に返す。固定シリーズ（series 付き）も単発の動画まとめも含む。
+ */
+export async function getWatchAlongThreads(): Promise<Thread[]> {
+  return (await getAllThreads()).filter((t) => t.media?.kind === 'video');
 }
 
 export async function getThread(sport: Sport, id: string): Promise<Thread | null> {
