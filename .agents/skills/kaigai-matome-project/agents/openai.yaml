@@ -1,0 +1,7 @@
+interface:
+  display_name: "海外反応まとめ Project"
+  short_description: "海外反応まとめサイトの開発・運用規約"
+  default_prompt: "Use $kaigai-matome-project to update this overseas fan reaction summary site safely."
+
+policy:
+  allow_implicit_invocation: true

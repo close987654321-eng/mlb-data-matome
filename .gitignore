@@ -13,3 +13,6 @@ tsconfig.tsbuildinfo
 # Local Claude Code settings (may contain secrets) — skills 等は追跡する
 .claude/settings.json
 .claude/settings.local.json
+
+# ローカル退避用（コミットしない作業ファイル置き場）
+_local/

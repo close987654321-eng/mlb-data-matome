@@ -1,0 +1,7 @@
+interface:
+  display_name: "MLB Thread Hunter"
+  short_description: "MLB人気スレを選定して日本語まとめ化"
+  default_prompt: "Use $mlb-thread-hunter to find a Japanese-reader-friendly MLB Reddit thread and turn it into a digest."
+
+policy:
+  allow_implicit_invocation: true

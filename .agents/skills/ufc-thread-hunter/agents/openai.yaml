@@ -1,0 +1,7 @@
+interface:
+  display_name: "UFC Thread Hunter"
+  short_description: "UFC/MMA人気スレを選定して日本語まとめ化"
+  default_prompt: "Use $ufc-thread-hunter to find a Japanese-reader-friendly UFC/MMA Reddit thread and turn it into a digest."
+
+policy:
+  allow_implicit_invocation: true
