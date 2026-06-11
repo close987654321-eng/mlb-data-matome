@@ -6,7 +6,8 @@
   },
   "nav": {
     "home": "Latest",
-    "reactions": "Overseas Reactions"
+    "reactions": "Overseas Reactions",
+    "columns": "Interviews / Columns"
   },
   "home": {
     "heroTitle": "Overseas Reactions — MLB / Boxing / UFC",
@@ -20,5 +21,17 @@
     "commentCount": "{count} comments",
     "pickedComments": "Picked comments (excerpted from {total})",
     "viewSource": "View source thread (Reddit)"
+  },
+  "columns": {
+    "eyebrow": "Long read",
+    "sectionTitle": "Interviews / Columns",
+    "lead": "Overseas interviews and stories, retold in Japanese in the athletes' own words.",
+    "empty": "No articles yet.",
+    "viewAll": "View all",
+    "viewSource": "View source",
+    "kind": {
+      "interview": "Interview",
+      "column": "Column"
+    }
   }
 }

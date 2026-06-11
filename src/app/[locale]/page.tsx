@@ -1,14 +1,17 @@
 import Image from 'next/image';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
+import { getAllColumns } from '@/lib/columns';
 import ThreadCard from '@/components/ThreadCard';
+import ColumnCard from '@/components/ColumnCard';
+import { Link } from '@/lib/navigation';
 import type { Locale } from '@/lib/i18n';
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   unstable_setRequestLocale(locale);
   const t = await getTranslations();
-  const threads = await getAllThreads();
+  const [threads, columns] = await Promise.all([getAllThreads(), getAllColumns()]);
   const [featured, ...rest] = threads;
 
   return (
@@ -55,6 +58,30 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
               ))}
             </ul>
           )}
+        </section>
+      )}
+
+      {columns.length > 0 && (
+        <section className="space-y-8">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <span className="h-4 w-1 rounded-full bg-accent" />
+              <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">
+                {t('columns.sectionTitle')}
+              </h2>
+            </div>
+            <Link href="/columns" className="text-xs text-ink-soft transition-colors hover:text-ink">
+              {t('columns.viewAll')} →
+            </Link>
+          </div>
+
+          <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {columns.slice(0, 3).map((column) => (
+              <li key={column.id}>
+                <ColumnCard column={column} locale={locale} />
+              </li>
+            ))}
+          </ul>
         </section>
       )}
     </div>

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { getAllThreads } from '@/lib/data';
+import { getAllColumns } from '@/lib/columns';
 import { SPORTS } from '@/lib/sports';
 import { locales, defaultLocale } from '@/lib/i18n';
 
@@ -28,7 +29,7 @@ function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitema
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const threads = await getAllThreads();
+  const [threads, columns] = await Promise.all([getAllThreads(), getAllColumns()]);
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
 
   return [
@@ -38,5 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return entry(`/${sport}`, newestInSport);
     }),
     ...threads.map((t) => entry(`/${t.sport}/${t.id}`, t.fetchedAt)),
+    entry('/columns', columns[0]?.publishedAt), // コラム一覧
+    ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
   ];
 }
