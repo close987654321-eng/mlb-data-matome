@@ -40,6 +40,24 @@ export default function MediaEmbed({ media, sourceUrl }: Props) {
     );
   }
 
+  // 自前ホストの動画ファイル（public/media の .mp4 等）は <video> で直接再生できる。
+  // 期限切れする署名 URL ではなくローカル保存なので、これが一番確実。
+  if (/\.(mp4|webm|mov)$/i.test(media.url)) {
+    return (
+      <figure className="mt-8">
+        <video
+          src={media.url}
+          poster={media.thumbUrl}
+          controls
+          playsInline
+          preload="metadata"
+          className="aspect-video w-full rounded-xl bg-black"
+        />
+        <Caption media={media} />
+      </figure>
+    );
+  }
+
   const embed = toEmbedUrl(media.url);
   if (embed) {
     return (
