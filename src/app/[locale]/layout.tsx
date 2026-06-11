@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Script from 'next/script';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { useTranslations, useLocale } from 'next-intl';
@@ -12,6 +13,9 @@ import '../globals.css';
 const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mlb-data-matome.vercel.app'
 ).replace(/\/$/, '');
+
+// Google Analytics（GA4）測定 ID
+const GA_ID = 'G-XSL1S5LQH0';
 
 const TITLE = '海外の反応 — MLB / ボクシング / UFC';
 const DESCRIPTION =
@@ -55,6 +59,19 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className="flex min-h-screen flex-col font-sans">
+        {/* Google Analytics（GA4）。全ページで読み込む。 */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SiteHeader />
           <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-10 sm:py-14">{children}</main>

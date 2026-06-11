@@ -1,18 +1,34 @@
 import Image from 'next/image';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
-import { getAllThreads } from '@/lib/data';
-import { getAllColumns } from '@/lib/columns';
+import { getAllThreads, getThread } from '@/lib/data';
+import { getAllColumns, getColumn } from '@/lib/columns';
 import ThreadCard from '@/components/ThreadCard';
 import ColumnCard from '@/components/ColumnCard';
 import { Link } from '@/lib/navigation';
 import type { Locale } from '@/lib/i18n';
 
+// TOP に大きく出す「ピックアップ」。手動キュレーション（id 指定）。
+const PICKUP_THREADS: { sport: 'mlb'; id: string }[] = [
+  { sport: 'mlb', id: '2021-07-02-ohtani-29-30-walsh-walkoff' },
+  { sport: 'mlb', id: '2026-06-10-why-no-second-ohtani' },
+];
+const PICKUP_COLUMNS = ['2026-06-11-freddie-freeman-2500-hits'];
+
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
   unstable_setRequestLocale(locale);
   const t = await getTranslations();
-  const [threads, columns] = await Promise.all([getAllThreads(), getAllColumns()]);
+  const [threads, columns, pickThreads, pickColumns] = await Promise.all([
+    getAllThreads(),
+    getAllColumns(),
+    Promise.all(PICKUP_THREADS.map((p) => getThread(p.sport, p.id))),
+    Promise.all(PICKUP_COLUMNS.map((id) => getColumn(id))),
+  ]);
   const [featured, ...rest] = threads;
+  // 取得できなかった id（リネーム等）は黙って除外する。
+  const pickedThreads = pickThreads.filter((x): x is NonNullable<typeof x> => x != null);
+  const pickedColumns = pickColumns.filter((x): x is NonNullable<typeof x> => x != null);
+  const hasPickup = pickedThreads.length + pickedColumns.length > 0;
 
   return (
     <div className="space-y-12">
@@ -33,6 +49,31 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           {t('home.heroBody')}
         </p>
       </section>
+
+      {hasPickup && (
+        <section className="rounded-2xl border border-accent/30 bg-accent/[0.05] p-6 sm:p-8">
+          <div className="mb-6 flex items-center gap-2">
+            <span aria-hidden className="text-accent">
+              ★
+            </span>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-accent">
+              {t('home.pickup')}
+            </h2>
+          </div>
+          <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {pickedThreads.map((thread) => (
+              <li key={`${thread.sport}/${thread.id}`}>
+                <ThreadCard thread={thread} locale={locale} />
+              </li>
+            ))}
+            {pickedColumns.map((column) => (
+              <li key={`col/${column.id}`}>
+                <ColumnCard column={column} locale={locale} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       {threads.length === 0 ? (
         <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">
