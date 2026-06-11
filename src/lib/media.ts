@@ -1,5 +1,6 @@
 import { pickImage } from '@/lib/sports';
-import type { Thread } from '@/types/thread';
+import type { Thread, ThreadMedia } from '@/types/thread';
+import type { Column } from '@/types/column';
 
 // 視聴 URL から動画 ID を取り出す（YouTube / Streamable のみ既知。他は埋め込み非対応）。
 function youTubeId(url: string): string | null {
@@ -40,4 +41,22 @@ export function coverImage(thread: Thread): string {
   if (m?.kind === 'image') return m.url;
   if (m?.kind === 'video') return videoThumb(m.url, m.thumbUrl) ?? pickImage(thread.sport, thread.id);
   return pickImage(thread.sport, thread.id);
+}
+
+function mediaThumb(m: ThreadMedia): string | null {
+  return m.kind === 'image' ? m.url : videoThumb(m.url, m.thumbUrl);
+}
+
+/**
+ * コラムのカバー。本文の最初のメディアブロック（動画サムネ等）を使い、無ければストックへ退避。
+ * 球場のストック写真より、出演クリップのサムネの方が「読みたくなる」ため。
+ */
+export function columnCover(column: Column): { url: string; isVideo: boolean } {
+  for (const b of column.blocks) {
+    if (b.type === 'video') {
+      const u = mediaThumb(b.media);
+      if (u) return { url: u, isVideo: b.media.kind === 'video' };
+    }
+  }
+  return { url: pickImage(column.sport, column.id), isVideo: false };
 }

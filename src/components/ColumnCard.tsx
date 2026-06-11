@@ -1,7 +1,8 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/navigation';
 import { formatUpdatedAt } from '@/lib/format';
-import { SPORT_INFO, pickImage } from '@/lib/sports';
+import { SPORT_INFO } from '@/lib/sports';
+import { columnCover } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import type { Column } from '@/types/column';
 import type { Locale } from '@/lib/i18n';
@@ -19,6 +20,7 @@ export default function ColumnCard({ column, locale, featured = false }: Props) 
   const sportLabel = locale === 'ja' ? info.labelJa : info.labelEn;
   const kindLabel = t(`columns.kind.${column.kind}`);
   const title = locale === 'ja' ? column.title.ja : column.title.en;
+  const cover = columnCover(column);
 
   return (
     <Link href={`/columns/${column.id}`} className="group block">
@@ -28,7 +30,8 @@ export default function ColumnCard({ column, locale, featured = false }: Props) 
             <ArticleCover
               sport={column.sport}
               locale={locale}
-              imageUrl={pickImage(column.sport, column.id)}
+              imageUrl={cover.url}
+              hasVideo={cover.isVideo}
               eyebrow={`${kindLabel} · ${sportLabel}`}
             />
           </div>

@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllColumns, getColumn } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
-import { SPORT_INFO, pickImage } from '@/lib/sports';
+import { SPORT_INFO } from '@/lib/sports';
+import { columnCover } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import { locales, type Locale } from '@/lib/i18n';
@@ -36,7 +37,7 @@ export default async function ColumnDetailPage({
       <ArticleCover
         sport={column.sport}
         locale={locale}
-        imageUrl={pickImage(column.sport, column.id)}
+        imageUrl={columnCover(column).url}
         title={title}
         eyebrow={`${kindLabel} · ${sportLabel}`}
         variant="hero"
