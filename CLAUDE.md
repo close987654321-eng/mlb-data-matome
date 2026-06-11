@@ -121,8 +121,22 @@ SSG します。
 
 - コメントを「推測」「捏造」で埋める（実在する発言だけを訳す）
 - 全文転載・全コメント網羅（著作権配慮。抜粋＋翻訳＋送客の編集物にする）
-- 画像・ロゴをコミットする
 - Reddit データを AI/ML 学習に使う（Reddit の規約・申請内容に反する）
+
+### 4.5 メディア（画像・動画）の扱い
+
+サムネ差別化のため記事ごとに `media`（`src/types/thread.ts` の `ThreadMedia`）を1点添える。
+優先順位は **恒久URL ＞ ローカルコミット**：
+
+- **動画**: YouTube / Streamable の**視聴URL**を `kind:"video"` で。自動で公式 iframe 埋め込みになる。
+  期限つきの署名URL（`packaged-media.redd.it` / `preview.redd.it` 等）は**失効するので使わない**。
+- **画像（URL）**: `i.redd.it` / `i.imgur.com` の**直リンク**を `kind:"image"` で。ホストを増やすときは
+  `next.config.mjs` の `remotePatterns` に追加。
+- **画像（ローカル）**: 恒久URLが無い場合のみ `public/media/{id}-{slug}.{png,jpg}` に置き、
+  `url:"/media/..."` で参照する（`remotePatterns` 不要）。← §4.4 の旧「画像コミット禁止」を緩和。
+  - ⚠️ ファイルは **`public/media/` だけ**。`data/` 配下にはコミットしない。
+  - `credit`（出典）を必ず添える。中継フレーム/報道写真は著作権に配慮し、引用の範囲＋送客で運用。
+  - 巨大ファイルを置かない（適度に圧縮）。ロゴ等のサイト素材は従来どおり `public/` 直下。
 
 ---
 
