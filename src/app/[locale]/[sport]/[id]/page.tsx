@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThread, getThreadsBySport } from '@/lib/data';
@@ -18,6 +19,42 @@ export async function generateStaticParams() {
   return lists.flat().flatMap((thread) =>
     locales.map((locale) => ({ locale, sport: thread.sport, id: thread.id })),
   );
+}
+
+// 記事ごとに OG/Twitter カードを出し分ける。これが無いと layout の固定 OGP（ロゴ）を
+// 全記事が継いでしまい、X 等で共有するとどの記事もロゴ画像になる。
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale; sport: string; id: string }>;
+}): Promise<Metadata> {
+  const { locale, sport, id } = await params;
+  if (!isSport(sport)) return {};
+  const thread = await getThread(sport, id);
+  if (!thread) return {};
+
+  const title = threadTitle(thread, locale);
+  const description = thread.summaryJa;
+  // coverImage は外部絶対URL（i.redd.it / i.ytimg.com / Unsplash）かローカル相対パス。
+  // 相対パスは layout の metadataBase で絶対化される。
+  const image = coverImage(thread);
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      images: [{ url: image }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+  };
 }
 
 export default async function ThreadDetailPage({

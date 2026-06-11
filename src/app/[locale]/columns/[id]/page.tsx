@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllColumns, getColumn } from '@/lib/columns';
@@ -14,6 +15,38 @@ export const dynamicParams = false;
 export async function generateStaticParams() {
   const columns = await getAllColumns();
   return columns.flatMap((column) => locales.map((locale) => ({ locale, id: column.id })));
+}
+
+// 記事と同様、コラムも個別の OG/Twitter カードを出す（無いと layout のロゴ固定になる）。
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale; id: string }>;
+}): Promise<Metadata> {
+  const { locale, id } = await params;
+  const column = await getColumn(id);
+  if (!column) return {};
+
+  const title = locale === 'ja' ? column.title.ja : column.title.en;
+  const description = column.lead;
+  const image = columnCover(column).url;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      images: [{ url: image }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
+  };
 }
 
 export default async function ColumnDetailPage({
