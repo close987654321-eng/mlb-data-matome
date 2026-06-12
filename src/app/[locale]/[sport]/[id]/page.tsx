@@ -91,6 +91,8 @@ export default async function ThreadDetailPage({
   const comments = thread.comments.filter((c) => !c.isHook);
   // 動画つきの記事は「動画ピン留め＋コメントが裏を流れる」watch-along をデフォルトにする。
   const isWatchAlong = thread.media?.kind === 'video';
+  // インタビュー記事は reddit ではないので u/接頭辞・▲スコアを出さない（選手の発言として見せる）。
+  const isInterview = thread.format === 'interview';
 
   return (
     <article className="mx-auto max-w-prose">
@@ -132,7 +134,9 @@ export default async function ThreadDetailPage({
           <blockquote className="text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug">
             “{hook.bodyJa}”
           </blockquote>
-          <figcaption className="mt-2 text-sm text-ink-soft">— u/{hook.author}</figcaption>
+          <figcaption className="mt-2 text-sm text-ink-soft">
+            — {isInterview ? hook.author : `u/${hook.author}`}
+          </figcaption>
         </figure>
       )}
 
@@ -172,8 +176,10 @@ export default async function ThreadDetailPage({
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs text-ink-soft">
-                    <span className="font-medium">u/{c.author}</span>
-                    <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>
+                    <span className="font-medium">{isInterview ? c.author : `u/${c.author}`}</span>
+                    {!isInterview && (
+                      <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>
+                    )}
                   </div>
                   <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
                   <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">

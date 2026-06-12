@@ -13,6 +13,8 @@ type Props = {
  * 動画とコメントを同じ親（この section）の直下に縦並びで置くことで sticky を成立させる。
  */
 export default function WatchAlong({ thread, comments, pickedLabel, hintLabel }: Props) {
+  // インタビュー記事は reddit ではないので u/接頭辞・▲スコアを出さない（選手の発言として見せる）。
+  const isInterview = thread.format === 'interview';
   return (
     <section className="mt-8">
       {thread.media && (
@@ -32,8 +34,8 @@ export default function WatchAlong({ thread, comments, pickedLabel, hintLabel }:
             }`}
           >
             <div className="flex items-center justify-between text-xs text-ink-soft">
-              <span className="font-medium">u/{c.author}</span>
-              <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>
+              <span className="font-medium">{isInterview ? c.author : `u/${c.author}`}</span>
+              {!isInterview && <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>}
             </div>
             <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
             <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">

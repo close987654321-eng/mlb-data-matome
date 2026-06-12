@@ -42,6 +42,7 @@ export type Thread = {
   id: string; // "2026-06-09-judge-walkoff" のような日付プレフィックス付き kebab-case
   sport: Sport; // どの競技か（data/threads/{sport}/ のフォルダから決まる）
   subreddit: string; // "r/baseball" など、転載元コミュニティの表示名
+  format?: 'reddit' | 'interview'; // コメントの出所。'interview'=選手/監督インタビュー（u/接頭辞と▲スコアを出さない）。既定は 'reddit'
   sourceUrl: string; // 元スレ URL。引用要件を満たすため必須・必ず送客する
   fetchedAt: string; // ISO8601（JST）
   title: LocalizedName; // スレタイの原文(en)と訳(ja)
