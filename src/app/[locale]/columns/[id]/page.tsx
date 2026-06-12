@@ -10,6 +10,9 @@ import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import StickyVideo from '@/components/StickyVideo';
 import RelatedArticles from '@/components/RelatedArticles';
+import TagList from '@/components/TagList';
+import ShareButtons from '@/components/ShareButtons';
+import { absoluteUrl } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -94,18 +97,7 @@ export default async function ColumnDetailPage({
 
       <p className="mt-2 text-sm text-ink-soft">{subtitle}</p>
 
-      {column.tags && column.tags.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {column.tags.map((tag) => (
-            <span
-              key={tag}
-              className="rounded-full border border-line px-2.5 py-0.5 text-xs text-ink-soft"
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
+      {column.tags && <TagList tags={column.tags} />}
 
       {column.heroQuote && (
         <figure className="mt-8 border-l-4 border-accent pl-5">
@@ -168,8 +160,8 @@ export default async function ColumnDetailPage({
         })}
       </div>
 
-      {column.sourceUrl && (
-        <footer className="mt-10 border-t border-line pt-5">
+      <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
+        {column.sourceUrl && (
           <a
             href={column.sourceUrl}
             target="_blank"
@@ -179,8 +171,9 @@ export default async function ColumnDetailPage({
             {t('columns.viewSource')}
             <span aria-hidden>→</span>
           </a>
-        </footer>
-      )}
+        )}
+        <ShareButtons url={absoluteUrl(locale, `/columns/${column.id}`)} title={title} />
+      </footer>
 
       <RelatedArticles
         threads={allThreads}

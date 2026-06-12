@@ -2,8 +2,9 @@ import Image from 'next/image';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads, getThread } from '@/lib/data';
 import { getAllColumns, getColumn } from '@/lib/columns';
-import { buildFeed, feedKey } from '@/lib/feed';
+import { buildFeed } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
+import LoadMoreFeed from '@/components/LoadMoreFeed';
 import PickupSection from '@/components/PickupSection';
 import type { Locale } from '@/lib/i18n';
 
@@ -72,13 +73,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
           {featured && <FeedCard item={featured} locale={locale} featured />}
 
           {rest.length > 0 && (
-            <ul className="grid gap-x-8 gap-y-10 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-3">
-              {rest.map((item) => (
-                <li key={feedKey(item)}>
-                  <FeedCard item={item} locale={locale} />
-                </li>
-              ))}
-            </ul>
+            <div className="border-t border-line pt-10">
+              <LoadMoreFeed items={rest} locale={locale} />
+            </div>
           )}
         </section>
       )}

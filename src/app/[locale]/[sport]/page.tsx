@@ -3,9 +3,9 @@ import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThreadsBySport } from '@/lib/data';
 import { getColumnsBySport } from '@/lib/columns';
-import { buildFeed, feedKey } from '@/lib/feed';
+import { buildFeed } from '@/lib/feed';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
-import FeedCard from '@/components/FeedCard';
+import LoadMoreFeed from '@/components/LoadMoreFeed';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -59,13 +59,7 @@ export default async function SportPage({
           {t('threads.empty')}
         </p>
       ) : (
-        <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {feed.map((item) => (
-            <li key={feedKey(item)}>
-              <FeedCard item={item} locale={locale} showSport={false} />
-            </li>
-          ))}
-        </ul>
+        <LoadMoreFeed items={feed} locale={locale} showSport={false} />
       )}
     </div>
   );

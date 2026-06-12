@@ -12,6 +12,9 @@ import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
+import TagList from '@/components/TagList';
+import ShareButtons from '@/components/ShareButtons';
+import { absoluteUrl } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -122,15 +125,7 @@ export default async function ThreadDetailPage({
 
       <p className="mt-2 text-sm text-ink-soft">{subtitle}</p>
 
-      {thread.tags && thread.tags.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {thread.tags.map((tag) => (
-            <span key={tag} className="rounded-full border border-line px-2.5 py-0.5 text-xs text-ink-soft">
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
+      {thread.tags && <TagList tags={thread.tags} />}
 
       {hook && (
         <figure className="mt-8 border-l-4 border-accent pl-5">
@@ -191,7 +186,7 @@ export default async function ThreadDetailPage({
         </>
       )}
 
-      <footer className="mt-10 border-t border-line pt-5">
+      <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         <a
           href={thread.sourceUrl}
           target="_blank"
@@ -201,6 +196,7 @@ export default async function ThreadDetailPage({
           {t('threads.viewSource')}
           <span aria-hidden>→</span>
         </a>
+        <ShareButtons url={absoluteUrl(locale, `/${sport}/${thread.id}`)} title={title} />
       </footer>
 
       <RelatedArticles

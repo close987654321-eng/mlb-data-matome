@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
+import { getAllTags } from '@/lib/tags';
 import { SPORTS } from '@/lib/sports';
 import { locales, defaultLocale } from '@/lib/i18n';
 
@@ -29,7 +30,11 @@ function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitema
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [threads, columns] = await Promise.all([getAllThreads(), getAllColumns()]);
+  const [threads, columns, tags] = await Promise.all([
+    getAllThreads(),
+    getAllColumns(),
+    getAllTags(),
+  ]);
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
 
   // /watch は動画つき記事のハブ。最新の動画記事の日時を lastModified にする。
@@ -45,5 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...threads.map((t) => entry(`/${t.sport}/${t.id}`, t.fetchedAt)),
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
+    // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。
+    ...tags.map(({ tag }) => entry(`/tag/${encodeURIComponent(tag)}`)),
   ];
 }

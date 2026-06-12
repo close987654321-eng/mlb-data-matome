@@ -5,14 +5,12 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { useTranslations, useLocale } from 'next-intl';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
+import ScrollToTop from '@/components/ScrollToTop';
 import { Link } from '@/lib/navigation';
 import { locales } from '@/lib/i18n';
 import { SPORTS, SPORT_INFO } from '@/lib/sports';
+import { SITE_URL } from '@/lib/site';
 import '../globals.css';
-
-const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mlb-data-matome.vercel.app'
-).replace(/\/$/, '');
 
 // Google Analytics（GA4）測定 ID
 const GA_ID = 'G-XSL1S5LQH0';
@@ -29,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: TITLE,
     description: DESCRIPTION,
-    siteName: 'OVERSEAS REACTIONS',
+    siteName: '海外の反応',
     type: 'website',
     images: [{ url: '/og.png', width: 1200, height: 630 }],
   },
@@ -76,6 +74,7 @@ export default async function LocaleLayout({
           <SiteHeader />
           <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-10 sm:py-14">{children}</main>
           <SiteFooter />
+          <ScrollToTop />
         </NextIntlClientProvider>
       </body>
     </html>
@@ -133,11 +132,30 @@ function SiteHeader() {
 
 function SiteFooter() {
   const t = useTranslations();
+  const locale = useLocale();
   return (
     <footer className="mt-16 border-t border-line">
-      <div className="mx-auto max-w-5xl px-5 py-8">
-        <p className="text-lg font-bold text-ink">{t('site.title')}</p>
-        <p className="mt-2 max-w-prose text-xs leading-relaxed text-ink-soft">{t('site.footer')}</p>
+      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-5 py-8 sm:flex-row sm:justify-between">
+        <div>
+          <p className="text-lg font-bold text-ink">{t('site.title')}</p>
+          <p className="mt-2 max-w-prose text-xs leading-relaxed text-ink-soft">
+            {t('site.footer')}
+          </p>
+        </div>
+        {/* フッターにも回遊ナビを置く（記事を読み終えた読者の次の一歩） */}
+        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-soft">
+          <Link href="/" className="transition-colors hover:text-ink">
+            {t('nav.home')}
+          </Link>
+          <Link href="/watch" className="font-medium text-accent transition-colors hover:text-ink">
+            {t('nav.watch')}
+          </Link>
+          {SPORTS.map((s) => (
+            <Link key={s} href={`/${s}`} className="whitespace-nowrap transition-colors hover:text-ink">
+              {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
+            </Link>
+          ))}
+        </nav>
       </div>
     </footer>
   );

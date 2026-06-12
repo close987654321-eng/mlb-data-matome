@@ -48,5 +48,20 @@
   },
   "related": {
     "title": "More to read"
+  },
+  "feed": {
+    "loadMore": "Load more ({count} left)"
+  },
+  "share": {
+    "label": "Share",
+    "copy": "Copy link",
+    "copied": "Copied"
+  },
+  "scrollTop": "Back to top",
+  "tag": {
+    "eyebrow": "Tag",
+    "heading": "Posts tagged “{tag}”",
+    "lead": "Overseas reaction digests and columns about “{tag}”.",
+    "count": "{count} posts"
   }
 }
