@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllColumns, getColumn } from '@/lib/columns';
+import { getAllThreads } from '@/lib/data';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORT_INFO } from '@/lib/sports';
 import { columnCover } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import StickyVideo from '@/components/StickyVideo';
+import RelatedArticles from '@/components/RelatedArticles';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -59,6 +61,9 @@ export default async function ColumnDetailPage({
   const t = await getTranslations();
   const column = await getColumn(id);
   if (!column) notFound();
+
+  // 回遊導線（記事末尾）用に全記事を読む。SSG なのでビルド時のみ走る。
+  const [allThreads, allColumns] = await Promise.all([getAllThreads(), getAllColumns()]);
 
   const info = SPORT_INFO[column.sport];
   const sportLabel = locale === 'ja' ? info.labelJa : info.labelEn;
@@ -176,6 +181,15 @@ export default async function ColumnDetailPage({
           </a>
         </footer>
       )}
+
+      <RelatedArticles
+        threads={allThreads}
+        columns={allColumns}
+        currentKey={`column/${column.id}`}
+        sport={column.sport}
+        currentTags={column.tags}
+        locale={locale}
+      />
     </article>
   );
 }

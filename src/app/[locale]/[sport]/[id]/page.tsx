@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
-import { getThread, getThreadsBySport } from '@/lib/data';
+import { getThread, getThreadsBySport, getAllThreads } from '@/lib/data';
+import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle } from '@/lib/series';
@@ -10,6 +11,7 @@ import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
 import WatchAlong from '@/components/WatchAlong';
+import RelatedArticles from '@/components/RelatedArticles';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -68,6 +70,9 @@ export default async function ThreadDetailPage({
   const t = await getTranslations();
   const thread = await getThread(sport, id);
   if (!thread) notFound();
+
+  // 回遊導線（記事末尾）用に全記事を読む。SSG なのでビルド時のみ走る。
+  const [allThreads, allColumns] = await Promise.all([getAllThreads(), getAllColumns()]);
 
   const info = SPORT_INFO[sport];
   const otherLocale = locale === 'ja' ? 'en' : 'ja';
@@ -197,6 +202,15 @@ export default async function ThreadDetailPage({
           <span aria-hidden>→</span>
         </a>
       </footer>
+
+      <RelatedArticles
+        threads={allThreads}
+        columns={allColumns}
+        currentKey={`thread/${sport}/${thread.id}`}
+        sport={sport}
+        currentTags={thread.tags}
+        locale={locale}
+      />
     </article>
   );
 }
