@@ -21,6 +21,12 @@ export const SERIES: Record<string, SeriesInfo> = {
     titlePrefix: { ja: '海外ドジャースニキと見る', en: 'Watch w/ overseas Dodgers fans' },
     badge: { ja: '海外ドジャースニキと見る', en: 'Dodgers Watch-Along' },
   },
+  cubs: {
+    id: 'cubs',
+    team: { ja: 'カブス', en: 'Cubs' },
+    titlePrefix: { ja: '海外カブスニキと見る', en: 'Watch w/ overseas Cubs fans' },
+    badge: { ja: '海外カブスニキと見る', en: 'Cubs Watch-Along' },
+  },
 };
 
 export function getSeries(id: string): SeriesInfo | null {
