@@ -30,7 +30,9 @@ SSG します。
 ```
 .
 ├── CLAUDE.md
+├── AGENTS.md                    # 他エージェント向けの薄いポインタ（内容はここに複製しない）
 ├── README.md
+├── .claude/skills/matome/       # まとめ記事の編集ルール（SKILL.md + references/feedback-log.md）
 ├── data/
 │   └── threads/
 │       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
@@ -73,7 +75,8 @@ SSG します。
 
 ## 4. まとめ更新プロトコル（Claude 向け）
 
-まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳）は **`matome` スキル**
+まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約 = **R1〜R9**）と
+**ネタ選定の比重**（MLB 7 : ボクシング 2.5 : UFC 0.5）は **`matome` スキル**
 （`.claude/skills/matome/SKILL.md`）が正。「まとめ作って」等で発動する。
 データ形式・運用の詳細は [`scripts/threads-update.md`](./scripts/threads-update.md)。要点:
 
@@ -114,7 +117,7 @@ SSG します。
 - [ ] `sourceUrl` は実在する元スレ URL（**必ず送客**＝引用要件）
 - [ ] コメントは**抜粋**（全件転載しない）。`bodyEn` 原文と `bodyJa` 訳を両方入れる
 - [ ] 良いコメントに `isHighlight: true`
-- [ ] 画像／動画があれば `media`（URL 参照・`credit` 必須。ファイルはコミットしない）
+- [ ] 画像／動画があれば `media`（恒久 URL 参照が原則・`credit` 必須。ローカルは §4.5 の条件で `public/media/` のみ）
 - [ ] `fetchedAt` は JST（ISO8601）
 
 ### 4.4 やってはいけないこと
@@ -192,9 +195,26 @@ SSG します。
 
 ---
 
-## 8. 将来やる予定（メモ）
+## 8. 収益化ロードマップ（2026-06-13 合意・実装は順次）
+
+方針: **AdSense（土台）＋ VOD アフィリエイト（ブースター）**。流入の主戦場は検索より
+**Google Discover**（高頻度更新・1200px 以上の画像・独自ドメインが条件）。
+
+実装待ちタスク（優先順）:
+
+1. **独自ドメイン取得 → Vercel 接続**（最優先。vercel.app のままでは AdSense 審査に
+   出せず、Discover にもほぼ載らない）
+2. sitemap.ts / RSS フィード / タグページ（RSS はブログ村・アンテナサイト登録にも使う）
+3. プライバシーポリシー・運営者情報・問い合わせページ（AdSense 審査要件）
+4. 記事下の sport 別 VOD CTA コンポーネント（ASP 提携確定後にリンク差し込み）
+5. 自動化スキル: matome 拡張（X 下書き・タグ正規化・関連リンク同時生成）→ kpi-weekly →
+   neta-radar → money-page（興行の「視聴方法×海外の反応」成約ページ）
+
+---
+
+## 9. 将来やる予定（メモ）
 
 - Reddit API 承認後、`scripts/fetch-reddit.mjs` で取得を半自動化
 - 競技の追加（NBA / サッカー 等）
 - 画像なしでの OGP・カード見栄え改善
-- 過去まとめのアーカイブ / タグ一覧ページ
+- 過去まとめのアーカイブページ

@@ -19,7 +19,7 @@ Reddit の盛り上がったスレを日本語まとめ（5ch まとめ風＝コ
 - **未認証の `www.reddit.com/.json` / `api.reddit.com` / 公開ミラーはこの環境の IP から
   403 で全滅する**。WebFetch も reddit.com は拒否。
 - 確実に取れるのは公式 OAuth（script アプリ）だけ = `scripts/fetch-reddit.mjs`。
-  ただし **Reddit API は 2025/11 から事前承認制**（[[reddit-api-approval-gate]]）。承認が
+  ただし **Reddit API は 2025/11 から事前承認制**。承認が
   下りるまでは「ユーザーがスレ本文・コメントをコピペ → Claude が翻訳・整形」の**手動運用**。
 
 ## 手順（API 承認後）
@@ -34,9 +34,11 @@ node scripts/fetch-reddit.mjs thread <permalink-or-url> 40
 
 ## 手順（手動運用・当面こちら）
 
-> 記事の編集ルール（コメントの抜粋・並べ方・翻訳）は **`matome` スキル**
+> 記事の編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約）は **`matome` スキル**
 > （`.claude/skills/matome/SKILL.md`）が正。要点: R1 繋がりを持たせて並べる /
-> R2 最後はオチ / R3 抜粋は 15〜30 件。記事ページは配列順そのまま表示する。
+> R2 最後はオチ / R3 抜粋は 15〜30 件 / R4 フック引用 / R5 メディア1点 /
+> R6 シリーズ / R7 インタビュー / R8 タイトル / R9 要約。記事ページは配列順そのまま表示する。
+> ネタ選定の比重（MLB 7 : ボクシング 2.5 : UFC 0.5）もスキル側に記載。
 
 1. ユーザーが Reddit のスレ URL とコメント（人気順で数件）を貼る。
 2. Claude が `matome` スキルに従って `Thread` 形式へ翻訳・編集して保存:
@@ -51,4 +53,5 @@ node scripts/fetch-reddit.mjs thread <permalink-or-url> 40
 
 - 全コメント網羅・全文転載はしない。**抜粋 + 翻訳 + 元スレ送客**の編集物にする。
 - 原文 `bodyEn` を併記して翻訳の透明性を保つ。
-- 画像・ロゴはコミットしない。
+- メディアは恒久 URL 参照が原則。ローカルに置くのは恒久 URL が無い場合のみ、
+  **`public/media/` 限定＋ `credit` 必須**（CLAUDE.md §4.5）。`data/` 配下にはコミットしない。

@@ -16,6 +16,8 @@ npm run dev
 ## まとめの追加・更新
 
 Claude に依頼してください（例: 「このスレでまとめ作って」＋ Reddit のスレURL）。
+記事の編集ルール（抜粋・並べ方・翻訳・タイトル・要約）は
+[.claude/skills/matome/SKILL.md](./.claude/skills/matome/SKILL.md)、
 更新ロジックと手順は [scripts/threads-update.md](./scripts/threads-update.md)、
 出力フォーマットの型は [src/types/thread.ts](./src/types/thread.ts) を参照。
 
