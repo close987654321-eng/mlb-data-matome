@@ -14,6 +14,7 @@ import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
 import ShareButtons from '@/components/ShareButtons';
+import VodCta from '@/components/VodCta';
 import { absoluteUrl } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
@@ -209,6 +210,15 @@ export default async function ThreadDetailPage({
         </a>
         <ShareButtons url={absoluteUrl(locale, `/${sport}/${thread.id}`)} title={title} />
       </footer>
+
+      {/* 記事下 VOD CTA（収益化の器②）。競技ごとの視聴サービスを案内。提携前は公式URL、確定後にアフィリンクへ差し替え。 */}
+      <VodCta
+        sport={sport}
+        locale={locale}
+        heading={t('vod.heading', { sport: locale === 'ja' ? info.labelJa : info.labelEn })}
+        prLabel={t('vod.pr')}
+        watchLabel={t('vod.watch')}
+      />
 
       <RelatedArticles
         threads={allThreads}
