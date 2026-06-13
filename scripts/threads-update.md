@@ -66,3 +66,16 @@ node scripts/fetch-reddit.mjs thread <permalink-or-url> 40
 - 原文 `bodyEn` を併記して翻訳の透明性を保つ。
 - メディアは恒久 URL 参照が原則。ローカルに置くのは恒久 URL が無い場合のみ、
   **`public/media/` 限定＋ `credit` 必須**（CLAUDE.md §4.5）。`data/` 配下にはコミットしない。
+
+## 公開後（にほんブログ村へ更新 Ping）
+
+記事をコミット → push → Vercel デプロイが**完了してから**、新着一覧へ即反映させるため
+Ping を送る（静的サイトなので自動では飛ばない）。
+
+```bash
+node scripts/ping-blogmura.mjs
+```
+
+- 前提: ブログ村マイページで「Ping送信/記事反映」を有効化＋RSS(`feed.xml`)登録済み。
+- `BLOGMURA_PING_URL`（あなた専用・非公開）は `.env.local` に置く。`.env*` は gitignore 済み。
+- デプロイ前に叩くと古い内容を取りに来るので、**必ずデプロイ完了後**に送る。
