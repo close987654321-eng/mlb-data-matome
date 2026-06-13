@@ -194,6 +194,33 @@ function SiteFooter() {
           </nav>
         </div>
       </div>
+      {/* ブログランキング参加中。バナーのクリックが順位＝送客に効くため設置（各社固有の投票リンク）。
+          rel は noopener のみ（noreferrer を付けると参照元が消え、クリックを自サイト発と判定できなくなる）。 */}
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-4 gap-y-3 border-t border-line px-5 py-4">
+        <span className="text-xs text-ink-soft">ブログランキング参加中:</span>
+        <a
+          href="https://news.blogmura.com/news_sports/ranking/in?p_cid=11215687"
+          target="_blank"
+          rel="noopener"
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element -- 外部ランキングの固定バナー(88x31)。最適化不要 */}
+          <img
+            src="https://b.blogmura.com/news/news_sports/88_31.gif"
+            width={88}
+            height={31}
+            loading="lazy"
+            alt="にほんブログ村 ニュースブログ スポーツニュースへ"
+          />
+        </a>
+        <a
+          href="https://blog.with2.net/link/?id=2140920"
+          target="_blank"
+          rel="noopener"
+          className="text-xs text-ink-soft underline transition-colors hover:text-ink"
+        >
+          人気ブログランキング
+        </a>
+      </div>
     </footer>
   );
 }
