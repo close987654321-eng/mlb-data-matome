@@ -1,11 +1,14 @@
 # 海外の反応まとめ — Claude 向けプロジェクトガイド
 
-このリポジトリは「**海外の反応まとめサイト**」です。**MLB・ボクシング・UFC** の海外掲示板
-（主に Reddit）で盛り上がったスレッドを、現地ファンの生のコメントつきで日本語まとめ
-（5ch まとめ風＝コメント翻訳中心）にして、英語が読めない日本のファンに届けます。
+このリポジトリは「**海外の反応まとめサイト**」です。**MLB・ボクシング・MMA（UFC・RIZIN）**
+の海外掲示板（Reddit）や YouTube で盛り上がったスレ・動画を、現地ファンの生のコメントつきで
+日本語まとめ（5ch まとめ風＝コメント翻訳中心）にして、英語が読めない日本のファンに届けます。
 
-> 沿革: 元は「MLB データまとめ（指標ランキング）」だったが、2026-06 に「MLB・ボクシング・
-> UFC の海外の反応まとめ」へ方向転換。旧来の打者/投手/チーム/指標ページとデータは撤去済み。
+> 沿革: 元は「MLB データまとめ（指標ランキング）」だったが、2026-06 に「海外の反応まとめ」へ
+> 方向転換。旧来の打者/投手/チーム/指標ページとデータは撤去済み。2026-06-13 にカテゴリ
+> `ufc` → `mma` へ改名（RIZIN を扱うため。旧 `/ufc` URL は next.config.mjs で 301 転送）。
+> 同日、2号店（matome-anime）で実証済みの YouTube 運用（fetch-youtube.mjs ＋
+> `format:"youtube"`）を移植。
 
 ---
 
@@ -37,7 +40,7 @@ SSG します。
 │   └── threads/
 │       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
 │       ├── boxing/{id}.json     # ボクシング
-│       └── ufc/{id}.json        # UFC
+│       └── mma/{id}.json        # MMA（UFC・RIZIN）
 ├── messages/{ja,en}.json        # i18n
 ├── src/
 │   ├── app/[locale]/
@@ -55,7 +58,8 @@ SSG します。
 │       ├── thread.ts           # まとめの型
 │       └── common.ts
 └── scripts/
-    ├── fetch-reddit.mjs        # Reddit OAuth 取得スクリプト
+    ├── fetch-youtube.mjs       # YouTube コメント取得（要 YOUTUBE_API_KEY・2号店から移植）
+    ├── fetch-reddit.mjs        # Reddit OAuth 取得スクリプト（承認待ち）
     └── threads-update.md       # 更新手順
 ```
 
@@ -65,26 +69,30 @@ SSG します。
 
 `src/lib/sports.ts` が唯一の正。競技を増減するときは必ずここから。
 
-| sport    | ラベル       | 取得元 subreddit     |
-| -------- | ------------ | -------------------- |
-| `mlb`    | MLB          | r/baseball, r/mlb    |
-| `boxing` | ボクシング   | r/Boxing             |
-| `ufc`    | UFC          | r/MMA, r/ufc         |
+| sport    | ラベル       | 主な取得元                                  |
+| -------- | ------------ | ------------------------------------------- |
+| `mlb`    | MLB          | r/baseball, r/mlb, YouTube（MLB 公式）      |
+| `boxing` | ボクシング   | r/Boxing                                    |
+| `mma`    | MMA          | r/MMA, r/ufc, YouTube（RIZIN 公式・人気枠） |
 
 ---
 
 ## 4. まとめ更新プロトコル（Claude 向け）
 
 まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約 = **R1〜R9**）と
-**ネタ選定の比重**（MLB 7 : ボクシング 2.5 : UFC 0.5）は **`matome` スキル**
+**ネタ選定の比重**（MLB 7 : ボクシング 2.5 : MMA 0.5）は **`matome` スキル**
 （`.claude/skills/matome/SKILL.md`）が正。「まとめ作って」等で発動する。
 データ形式・運用の詳細は [`scripts/threads-update.md`](./scripts/threads-update.md)。要点:
 
 ### 4.1 データ取得
 
-- ソースは Reddit。**未認証の `.json` / `api.reddit.com` / 公開ミラーはこの環境の IP から
-  403 で全滅**（WebFetch も reddit.com 拒否）。確実なのは公式 OAuth（`scripts/fetch-reddit.mjs`）。
-- ただし **Reddit API は 2025/11 から事前承認制**で、承認が下りるまでは取得できない。
+- **YouTube（自動化済み）**: `node scripts/fetch-youtube.mjs comments <動画URL>` で人気順
+  コメントを取得（要 `YOUTUBE_API_KEY`、`.env.local` に置く。API は無料枠で足りる）。
+  生の取得 JSON は `_local/queue/` に置き、**コミットしない**（YouTube API 規約のデータ保存
+  制限。記事に残すのは抜粋のみ）。MLB 公式ハイライト・RIZIN 公式が主用途。
+- **Reddit（手動）**: 未認証の `.json` / `api.reddit.com` / 公開ミラーはこの環境の IP から
+  403 で全滅（WebFetch も reddit.com 拒否）。公式 OAuth（`scripts/fetch-reddit.mjs`）は
+  **2025/11 から事前承認制**で承認待ち。
   → 当面は **手動運用**（ユーザーがスレ URL とコメントを貼り、Claude が翻訳・整形）。
 
 ### 4.2 出力フォーマット
@@ -109,6 +117,9 @@ SSG します。
   ]
 }
 ```
+
+- `format`: `"reddit"`（既定・u/＋▲）/ `"interview"`（名前のみ）/ `"youtube"`（動画コメント・
+  author そのまま＋👍）。`score` は Reddit=upvote、YouTube=likeCount（**捏造しない**）
 
 ### 4.3 更新時に必ずやること
 
@@ -202,10 +213,18 @@ SSG します。
 
 実装待ちタスク（優先順）:
 
-1. **独自ドメイン取得 → Vercel 接続**（最優先。vercel.app のままでは AdSense 審査に
-   出せず、Discover にもほぼ載らない）
-2. sitemap.ts / RSS フィード / タグページ（RSS はブログ村・アンテナサイト登録にも使う）
-3. プライバシーポリシー・運営者情報・問い合わせページ（AdSense 審査要件）
+1. 独自ドメイン: **`matome-mlb-kaigai.jp` 取得済み（2026-06-13）**。コード側の正規 URL は
+   このドメインに更新済み（`src/lib/site.ts`・`sitemap.ts`・`robots.ts` のフォールバック）。
+   残: **Vercel ダッシュボードでドメイン接続＋DNS 設定**（apex/www の振り分けは Vercel 側で）。
+   接続後、Vercel に `NEXT_PUBLIC_SITE_URL=https://matome-mlb-kaigai.jp` を設定すると確実。
+   商用＝広告掲載のため Vercel は厳密には Pro が必要。
+2. ~~sitemap.ts / RSS フィード / タグページ~~ ✅ **実装済み（2026-06-13）**。`src/app/sitemap.ts`・
+   `src/app/feed.xml/route.ts`（RSS 2.0・直近50件・ブログ村/アンテナ登録用）・
+   `src/app/[locale]/tag/[tag]/page.tsx`。RSS 自動検出は layout の metadata.alternates。
+3. ~~プライバシーポリシー・運営者情報・問い合わせページ~~ ✅ **実装済み（2026-06-13）**。
+   `/about`・`/privacy`・`/contact`（`src/lib/legal.ts` がコンテンツの正・`LegalArticle` で描画）。
+   ⚠️ **公開前に2点差し替え**: `CONTACT_FORM_URL`（Google フォーム URL）と、必要なら
+   `OPERATOR_NAME`。フッターに運営者情報/プライバシー/問い合わせ/RSS のリンクを設置済み。
 4. 記事下の sport 別 VOD CTA コンポーネント（ASP 提携確定後にリンク差し込み）
 5. 自動化スキル: matome 拡張（X 下書き・タグ正規化・関連リンク同時生成）→ kpi-weekly →
    neta-radar → money-page（興行の「視聴方法×海外の反応」成約ページ）

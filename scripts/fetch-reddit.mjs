@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Reddit から「海外の反応」まとめの元データを取得する（MLB / ボクシング / UFC）。
+// Reddit から「海外の反応」まとめの元データを取得する（MLB / ボクシング / MMA）。
 //
 // 競技ごとの取得元 subreddit:
 //   MLB     : r/baseball, r/mlb

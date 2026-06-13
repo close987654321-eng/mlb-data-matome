@@ -2,7 +2,7 @@ import { defaultLocale, type Locale } from '@/lib/i18n';
 
 /** 本番の絶対 URL（末尾スラッシュなし）。OGP やシェアの絶対 URL 生成に使う。 */
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mlb-data-matome.vercel.app'
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://matome-mlb-kaigai.jp'
 ).replace(/\/$/, '');
 
 /**

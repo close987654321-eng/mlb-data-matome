@@ -1,6 +1,6 @@
 ---
 name: matome
-description: 海外の反応まとめ記事を作成・編集する。Reddit のスレ URL ＋ 貼り付けたコメントから data/threads/{sport}/{id}.json（src/types/thread.ts の Thread 形式）を生成する。コメントの抜粋・並べ方・翻訳ルールを定義。「まとめ作って」「このスレでまとめ」「記事化して」「海外の反応まとめ」「まとめ記事」などで発動。
+description: 海外の反応まとめ記事を作成・編集する。Reddit のスレ URL ＋ 貼り付けたコメント、または YouTube 動画のコメント（fetch-youtube.mjs の出力）から data/threads/{sport}/{id}.json（src/types/thread.ts の Thread 形式）を生成する。コメントの抜粋・並べ方・翻訳ルールを定義。「まとめ作って」「このスレでまとめ」「この動画でまとめ」「記事化して」「海外の反応まとめ」「まとめ記事」などで発動。
 ---
 
 # 海外の反応まとめ 作成スキル
@@ -11,13 +11,16 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
 ## 入力
 - スレ URL（→ `sourceUrl`・必須・必ず送客）
 - コメント群（英語原文で貼られる。人気順のことが多い）
-- 競技（`mlb` / `boxing` / `ufc`）— URL や subreddit から判断
+- **YouTube**: 動画 URL。`node scripts/fetch-youtube.mjs comments <URL>` でコメント上位を
+  取得できる（要 `YOUTUBE_API_KEY`）。取得 JSON から抜粋・翻訳する（→ R7+）。
+  MLB 公式ハイライト（海外ニキと見る）と RIZIN 公式ハイライトが主用途。
+- 競技（`mlb` / `boxing` / `mma`）— URL や subreddit から判断
 
 ## ネタ選定の比重（2026-06-13 方針）
-投入時間の配分は **MLB 7 : ボクシング 2.5 : UFC 0.5**。
+投入時間の配分は **MLB 7 : ボクシング 2.5 : MMA 0.5**。
 - MLB（大谷・日本人選手）が日次更新エンジン。「海外ニキと見る」もここ。
 - ボクシングは平常時ゼロでよく、井上戦など興行の前後2〜3週間に全振りする波乗り運用。
-- UFC は大型の祭りネタのときだけ。
+- MMA は UFC の大型の祭りネタと、RIZIN（公式 YouTube のハイライト＋海外コメント。人気枠）。
 - 優先するネタ: ①日本人選手×海外の評価 ②試合直後の感情ネタ（24h以内） ③珍プレー・ほっこり系。
   海外文脈の前提知識が要る内輪ネタ（地区再編論など）は避ける。
 
@@ -104,6 +107,16 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
 - 件数は reddit の R3（15〜30）に縛られない。インタビューは Q&A の実数（10 前後でも可）。
 - 例: `data/threads/mlb/2026-06-12-callihan-first-homer-off-ohtani.json`。
 
+### R7+. YouTube コメント記事
+YouTube のコメント欄をソースにした記事は `format: "youtube"` を付ける（2号店で実証済みの運用）。
+- 表示: `author` はそのまま（@ハンドル）、スコアは `👍`（= likeCount）になる
+- `score` = コメントの likeCount（捏造しない）
+- `sourceUrl` = 元動画 URL、`subreddit` = `"YouTube"`、`totalComments` = 動画のコメント総数
+- `media` = 元動画（R5）。原則 watch-along 表示になる
+- 取得は `scripts/fetch-youtube.mjs`（実在コメントのみ。要約・創作で埋めない）。
+  生の取得 JSON は `_local/queue/` に置き**コミットしない**（YouTube API 規約のデータ保存制限）
+- 抜粋数は 25〜40 件目安（1〜2行の短文主体なので R3 より多めでも間延びしない）
+
 ### R8. タイトル（title.ja）
 検索流入はこのジャンルでは「{選手名} 海外の反応」クエリで起きる。タイトルはそれに合わせる。
 - **固有名詞（選手・チーム・出来事）を先頭12字以内**に置く。全長は**全角28〜38字**
@@ -171,3 +184,6 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
   タイトルは「固有名詞先頭＋【海外の反応】末尾＋3型」、要約は「3部構成・オチ非引用・
   メタ評価禁止・冒頭SEO」。既存記事の実例レビュー（大谷7億ドル＝オチ全文引用、
   村上ビデ＝編集メモ混入、白ソックス＝指示語タイトル）から導出。
+- 2026-06-13: カテゴリ `ufc` → `mma` に改名（RIZIN を扱うため）。R7+（YouTube コメント記事・
+  `format:"youtube"`）を2号店から移植。`fetch-youtube.mjs` で MLB 公式ハイライト／RIZIN 公式の
+  コメントを取得できるように。

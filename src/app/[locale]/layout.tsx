@@ -15,9 +15,9 @@ import '../globals.css';
 // Google Analytics（GA4）測定 ID
 const GA_ID = 'G-XSL1S5LQH0';
 
-const TITLE = '海外の反応 — MLB / ボクシング / UFC';
+const TITLE = '海外の反応 — MLB / ボクシング / MMA';
 const DESCRIPTION =
-  'MLB・ボクシング・UFC の海外掲示板（Reddit）スレを、現地の生の反応つきで日本語まとめ';
+  'MLB・ボクシング・MMA（UFC・RIZIN）の海外掲示板や YouTube の反応を、現地の生のコメントつきで日本語まとめ';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -36,6 +36,10 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     images: ['/og.png'],
+  },
+  // RSS 自動検出（リーダー・アンテナサイトがフィードを見つけられるように）
+  alternates: {
+    types: { 'application/rss+xml': [{ url: '/feed.xml', title: TITLE }] },
   },
 };
 
@@ -143,19 +147,36 @@ function SiteFooter() {
           </p>
         </div>
         {/* フッターにも回遊ナビを置く（記事を読み終えた読者の次の一歩） */}
-        <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-soft">
-          <Link href="/" className="transition-colors hover:text-ink">
-            {t('nav.home')}
-          </Link>
-          <Link href="/watch" className="font-medium text-accent transition-colors hover:text-ink">
-            {t('nav.watch')}
-          </Link>
-          {SPORTS.map((s) => (
-            <Link key={s} href={`/${s}`} className="whitespace-nowrap transition-colors hover:text-ink">
-              {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
+        <div className="flex flex-col gap-3">
+          <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink-soft">
+            <Link href="/" className="transition-colors hover:text-ink">
+              {t('nav.home')}
             </Link>
-          ))}
-        </nav>
+            <Link href="/watch" className="font-medium text-accent transition-colors hover:text-ink">
+              {t('nav.watch')}
+            </Link>
+            {SPORTS.map((s) => (
+              <Link key={s} href={`/${s}`} className="whitespace-nowrap transition-colors hover:text-ink">
+                {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
+              </Link>
+            ))}
+          </nav>
+          {/* 運営者情報・規約系リンク（AdSense 審査要件・サイトの信頼性） */}
+          <nav className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-ink-soft">
+            <Link href="/about" className="transition-colors hover:text-ink">
+              {t('nav.about')}
+            </Link>
+            <Link href="/privacy" className="transition-colors hover:text-ink">
+              {t('nav.privacy')}
+            </Link>
+            <Link href="/contact" className="transition-colors hover:text-ink">
+              {t('nav.contact')}
+            </Link>
+            <a href="/feed.xml" className="transition-colors hover:text-ink">
+              RSS
+            </a>
+          </nav>
+        </div>
       </div>
     </footer>
   );

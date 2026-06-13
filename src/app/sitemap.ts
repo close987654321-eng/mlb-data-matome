@@ -6,7 +6,7 @@ import { SPORTS } from '@/lib/sports';
 import { locales, defaultLocale } from '@/lib/i18n';
 
 // 本番ドメイン。プレビュー等で差し替えたい場合は NEXT_PUBLIC_SITE_URL で上書きする。
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mlb-data-matome.vercel.app').replace(
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://matome-mlb-kaigai.jp').replace(
   /\/$/,
   '',
 );
@@ -43,6 +43,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
     entry('/watch', latestWatch), // 「海外ニキと見る」ハブ
+    // 運営者情報・規約系（AdSense 審査要件・更新頻度は低いので lastModified なし）
+    entry('/about'),
+    entry('/privacy'),
+    entry('/contact'),
     ...SPORTS.map((sport) => {
       const newestInSport = threads.find((t) => t.sport === sport)?.fetchedAt;
       return entry(`/${sport}`, newestInSport);

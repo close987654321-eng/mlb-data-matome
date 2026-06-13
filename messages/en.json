@@ -1,14 +1,23 @@
 {
   "site": {
     "title": "Overseas Reactions",
-    "tagline": "MLB, Boxing & UFC — the overseas buzz, in Japanese",
-    "footer": "Sources: Reddit (r/baseball, r/Boxing, r/MMA, etc.). Each digest is an excerpt + translation with a link back to the source thread."
+    "tagline": "MLB, Boxing & MMA — the overseas buzz, in Japanese",
+    "footer": "Sources: Reddit (r/baseball, r/Boxing, r/MMA, etc.) and YouTube. Each digest is an excerpt + translation with a link back to the source."
   },
   "nav": {
     "home": "Latest",
     "watch": "Watch-Along",
     "reactions": "Overseas Reactions",
-    "columns": "Interviews / Columns"
+    "columns": "Interviews / Columns",
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "contact": "Contact"
+  },
+  "legal": {
+    "updated": "Last updated"
+  },
+  "contact": {
+    "openForm": "Open the contact form"
   },
   "watch": {
     "eyebrow": "WATCH-ALONG",
@@ -19,7 +28,7 @@
     "count": "{count} episodes"
   },
   "home": {
-    "heroTitle": "Overseas Reactions — MLB / Boxing / UFC",
+    "heroTitle": "Overseas Reactions — MLB / Boxing / MMA",
     "heroBody": "No English needed. Japanese digests of buzzing overseas (Reddit) threads, with the locals' raw comments — the hype, the trash talk, and the jokes, all of it.",
     "latest": "Latest digests",
     "pickup": "Pick up",

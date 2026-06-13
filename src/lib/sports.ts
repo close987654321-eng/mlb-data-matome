@@ -1,4 +1,4 @@
-export const SPORTS = ['mlb', 'boxing', 'ufc'] as const;
+export const SPORTS = ['mlb', 'boxing', 'mma'] as const;
 export type Sport = (typeof SPORTS)[number];
 
 export type SportInfo = {
@@ -40,10 +40,11 @@ export const SPORT_INFO: Record<Sport, SportInfo> = {
       U('1622599511051-16f55a1234d0'), // ネオン光のボクサー
     ],
   },
-  ufc: {
-    slug: 'ufc',
-    labelJa: 'UFC',
-    labelEn: 'UFC',
+  // UFC に加えて RIZIN（公式 YouTube のハイライト＋コメント欄）も扱うため UFC→MMA に拡張（2026-06-13）
+  mma: {
+    slug: 'mma',
+    labelJa: 'MMA',
+    labelEn: 'MMA',
     emoji: '🥋',
     subreddits: ['r/MMA', 'r/ufc'],
     heroImages: [

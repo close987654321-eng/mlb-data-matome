@@ -91,8 +91,11 @@ export default async function ThreadDetailPage({
   const comments = thread.comments.filter((c) => !c.isHook);
   // 動画つきの記事は「動画ピン留め＋コメントが裏を流れる」watch-along をデフォルトにする。
   const isWatchAlong = thread.media?.kind === 'video';
-  // インタビュー記事は reddit ではないので u/接頭辞・▲スコアを出さない（選手の発言として見せる）。
+  // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+👍
   const isInterview = thread.format === 'interview';
+  const isYoutube = thread.format === 'youtube';
+  const authorLabel = (a: string) => (isInterview || isYoutube ? a : `u/${a}`);
+  const scoreMark = isYoutube ? '👍' : '▲';
 
   return (
     <article className="mx-auto max-w-prose">
@@ -135,7 +138,7 @@ export default async function ThreadDetailPage({
             “{hook.bodyJa}”
           </blockquote>
           <figcaption className="mt-2 text-sm text-ink-soft">
-            — {isInterview ? hook.author : `u/${hook.author}`}
+            — {authorLabel(hook.author)}
           </figcaption>
         </figure>
       )}
@@ -176,9 +179,11 @@ export default async function ThreadDetailPage({
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs text-ink-soft">
-                    <span className="font-medium">{isInterview ? c.author : `u/${c.author}`}</span>
+                    <span className="font-medium">{authorLabel(c.author)}</span>
                     {!isInterview && (
-                      <span className="tabular-nums">▲ {c.score.toLocaleString()}</span>
+                      <span className="tabular-nums">
+                        {scoreMark} {c.score.toLocaleString()}
+                      </span>
                     )}
                   </div>
                   <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>

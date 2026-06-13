@@ -1,14 +1,23 @@
 {
   "site": {
     "title": "海外の反応",
-    "tagline": "MLB・ボクシング・UFC の海外の盛り上がりを日本語で",
-    "footer": "出典: Reddit（r/baseball, r/Boxing, r/MMA ほか）。各まとめは元スレへのリンク付きの抜粋・翻訳です。"
+    "tagline": "MLB・ボクシング・MMA の海外の盛り上がりを日本語で",
+    "footer": "出典: Reddit（r/baseball, r/Boxing, r/MMA ほか）・YouTube。各まとめは元スレ・元動画へのリンク付きの抜粋・翻訳です。"
   },
   "nav": {
     "home": "新着",
     "watch": "海外ニキと見る",
     "reactions": "海外の反応",
-    "columns": "インタビュー / コラム"
+    "columns": "インタビュー / コラム",
+    "about": "運営者情報",
+    "privacy": "プライバシーポリシー",
+    "contact": "お問い合わせ"
+  },
+  "legal": {
+    "updated": "最終更新日"
+  },
+  "contact": {
+    "openForm": "お問い合わせフォームを開く"
   },
   "watch": {
     "eyebrow": "WATCH-ALONG",
@@ -19,7 +28,7 @@
     "count": "{count} 本"
   },
   "home": {
-    "heroTitle": "海外の反応 — MLB / ボクシング / UFC",
+    "heroTitle": "海外の反応 — MLB / ボクシング / MMA",
     "heroBody": "英語が読めなくても大丈夫。海外掲示板（Reddit）で盛り上がったスレを、現地ファンの生のコメントつきで日本語まとめ。試合の熱狂も、煽りも、ジョークもそのまま。",
     "latest": "新着まとめ",
     "pickup": "ピックアップ",

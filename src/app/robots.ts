@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://mlb-data-matome.vercel.app').replace(
+const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://matome-mlb-kaigai.jp').replace(
   /\/$/,
   '',
 );
