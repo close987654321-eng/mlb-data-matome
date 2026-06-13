@@ -14,8 +14,17 @@ const nextConfig = {
     ],
   },
   async redirects() {
-    // 2026-06-13 にカテゴリを ufc → mma へ改名。既に共有済みの旧 URL を恒久転送する。
     return [
+      // 本番の vercel.app は独自ドメインと重複コンテンツになるため、apex（正規）へ恒久転送して
+      // SEO を一本化する。host 条件付きなのでプレビューデプロイの個別 URL には影響しない。
+      // ドメイン正規化を先に効かせる（その後 ufc→mma は新ドメイン側で適用される）。
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'mlb-data-matome.vercel.app' }],
+        destination: 'https://matome-mlb-kaigai.jp/:path*',
+        permanent: true,
+      },
+      // 2026-06-13 にカテゴリを ufc → mma へ改名。既に共有済みの旧 URL を恒久転送する。
       { source: '/ufc', destination: '/mma', permanent: true },
       { source: '/ufc/:path*', destination: '/mma/:path*', permanent: true },
       { source: '/en/ufc', destination: '/en/mma', permanent: true },
