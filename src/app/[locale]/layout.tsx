@@ -15,6 +15,10 @@ import '../globals.css';
 // Google Analytics（GA4）測定 ID
 const GA_ID = 'G-XSL1S5LQH0';
 
+// Google AdSense パブリッシャー ID（審査・広告配信用）。公開値なので秘匿不要。
+// 認証は public/ads.txt（google.com, pub-..., DIRECT, ...）と対で必要。
+const ADSENSE_CLIENT = 'ca-pub-9743394669085618';
+
 const TITLE = '海外の反応 — MLB / ボクシング / MMA';
 const DESCRIPTION =
   'MLB・ボクシング・MMA（UFC・RIZIN）の海外掲示板や YouTube の反応を、現地の生のコメントつきで日本語まとめ';
@@ -74,6 +78,13 @@ export default async function LocaleLayout({
             gtag('config', '${GA_ID}');
           `}
         </Script>
+        {/* Google AdSense。審査・広告配信のため全ページで読み込む。 */}
+        <Script
+          id="adsbygoogle-init"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
+          strategy="afterInteractive"
+          crossOrigin="anonymous"
+        />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SiteHeader />
           <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-10 sm:py-14">{children}</main>
