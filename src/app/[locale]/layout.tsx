@@ -45,6 +45,11 @@ export const metadata: Metadata = {
   alternates: {
     types: { 'application/rss+xml': [{ url: '/feed.xml', title: TITLE }] },
   },
+  // AdSense 所有権確認（公式メタタグ方式）。afterInteractive のスクリプトは
+  // 生 HTML にタグとして出ずクローラが拾えないため、SSR される meta で確実に確認させる。
+  other: {
+    'google-adsense-account': ADSENSE_CLIENT,
+  },
 };
 
 export function generateStaticParams() {
