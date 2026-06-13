@@ -213,11 +213,10 @@ SSG します。
 
 実装待ちタスク（優先順）:
 
-1. 独自ドメイン: **`matome-mlb-kaigai.jp` 取得済み（2026-06-13）**。コード側の正規 URL は
-   このドメインに更新済み（`src/lib/site.ts`・`sitemap.ts`・`robots.ts` のフォールバック）。
-   残: **Vercel ダッシュボードでドメイン接続＋DNS 設定**（apex/www の振り分けは Vercel 側で）。
-   接続後、Vercel に `NEXT_PUBLIC_SITE_URL=https://matome-mlb-kaigai.jp` を設定すると確実。
-   商用＝広告掲載のため Vercel は厳密には Pro が必要。
+1. ~~独自ドメイン取得 → Vercel 接続~~ ✅ **完了（2026-06-13）**。`matome-mlb-kaigai.jp` を
+   お名前.com で取得 → dnsv.jp ネームサーバー＋A レコード（216.198.79.1）で Vercel に接続、
+   https 自動発行まで確認済み。コード側の正規 URL もこのドメイン（`src/lib/site.ts`・
+   `sitemap.ts`・`robots.ts`）。残: 商用＝広告掲載のため Vercel は厳密には Pro が必要。
 2. ~~sitemap.ts / RSS フィード / タグページ~~ ✅ **実装済み（2026-06-13）**。`src/app/sitemap.ts`・
    `src/app/feed.xml/route.ts`（RSS 2.0・直近50件・ブログ村/アンテナ登録用）・
    `src/app/[locale]/tag/[tag]/page.tsx`。RSS 自動検出は layout の metadata.alternates。
