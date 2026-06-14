@@ -1,4 +1,5 @@
 import StickyVideo from './StickyVideo';
+import Transcript from './Transcript';
 import type { Thread, ThreadComment } from '@/types/thread';
 
 type Props = {
@@ -6,13 +7,20 @@ type Props = {
   comments: ThreadComment[]; // フック除外済み・配列順
   pickedLabel: string; // 「○○件から抜粋」の見出し
   hintLabel: string; // 動画下のスクロール案内
+  transcriptLabel: string; // 番組トークの見出し（あるときだけ使う）
 };
 
 /**
  * 動画つき記事のデフォルト表示：動画を上部にピン留めし、その裏をコメントが流れていく。
  * 動画とコメントを同じ親（この section）の直下に縦並びで置くことで sticky を成立させる。
  */
-export default function WatchAlong({ thread, comments, pickedLabel, hintLabel }: Props) {
+export default function WatchAlong({
+  thread,
+  comments,
+  pickedLabel,
+  hintLabel,
+  transcriptLabel,
+}: Props) {
   // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+👍
   const isInterview = thread.format === 'interview';
   const isYoutube = thread.format === 'youtube';
@@ -22,6 +30,11 @@ export default function WatchAlong({ thread, comments, pickedLabel, hintLabel }:
     <section className="mt-8">
       {thread.media && (
         <StickyVideo media={thread.media} sourceUrl={thread.sourceUrl} hintLabel={hintLabel} />
+      )}
+
+      {/* 番組トーク（あれば）を動画とコメントの間に挟む。海外ニキのコメントに入る前の文脈。 */}
+      {thread.transcript && thread.transcript.length > 0 && (
+        <Transcript segments={thread.transcript} heading={transcriptLabel} />
       )}
 
       <h2 className="mb-4 mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">

@@ -26,6 +26,17 @@ export type ThreadMedia = {
 };
 
 /**
+ * 動画内のキャスター/解説者の会話（文字起こし＋日本語訳）。動画とコメントの間に差し込む。
+ * MLB Network 等の番組セグメントを記事化するときに使う。発言者が特定できる場合のみ speaker を付ける。
+ * 英語原文（en）はあれば添える。無ければ ja だけでよい（捏造しない）。
+ */
+export type ThreadTranscript = {
+  speaker?: string; // 発言者名（分かる場合のみ）。例: "Mark DeRosa"
+  ja: string; // 日本語訳（必須）
+  en?: string; // 原文（あれば。無ければ省略）
+};
+
+/**
  * 「海外ニキと見る」シリーズ（看板の watch-along 企画）に属する記事のメタ情報。
  * これが付いた記事はタイトルを定型で自動生成し（src/lib/series.ts の seriesTitle）、
  * カード/記事にシリーズバッジを出し、/watch ハブにも載る。
@@ -49,6 +60,7 @@ export type Thread = {
   summaryJa: string; // スレの流れ・論点の日本語要約（導入文）
   flair?: string; // "Game Thread" などの Reddit フレア
   totalComments: number; // 元スレの総コメント数（抜粋元の規模を示す）
+  transcript?: ThreadTranscript[]; // 動画内の番組トーク（あれば動画とコメントの間に表示）
   comments: ThreadComment[]; // 抜粋・翻訳済みコメント
   media?: ThreadMedia; // 代表メディア（カードサムネ＆記事 hero に使う）
   gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）

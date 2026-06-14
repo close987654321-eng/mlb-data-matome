@@ -10,6 +10,7 @@ import { coverImage } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
+import Transcript from '@/components/Transcript';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
@@ -153,12 +154,18 @@ export default async function ThreadDetailPage({
           comments={comments}
           pickedLabel={t('threads.pickedComments', { total: thread.totalComments })}
           hintLabel={t('threads.watchAlongHint')}
+          transcriptLabel={t('threads.transcript')}
         />
       ) : (
         <>
           {/* 動画は本文に埋め込む（hero は再生できないため）。画像は hero で見せ済みなので重複させない。 */}
           {thread.media?.kind === 'video' && (
             <MediaEmbed media={thread.media} sourceUrl={thread.sourceUrl} />
+          )}
+
+          {/* 番組トーク（あれば）を動画とコメントの間に挟む。 */}
+          {thread.transcript && thread.transcript.length > 0 && (
+            <Transcript segments={thread.transcript} heading={t('threads.transcript')} />
           )}
 
           {/* 追加メディア（連続フレーム等）は本文に順に差し込む。 */}
