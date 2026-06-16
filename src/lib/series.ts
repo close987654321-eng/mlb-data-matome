@@ -27,6 +27,13 @@ export const SERIES: Record<string, SeriesInfo> = {
     titlePrefix: { ja: '海外カブスニキと見る', en: 'Watch w/ overseas Cubs fans' },
     badge: { ja: '海外カブスニキと見る', en: 'Cubs Watch-Along' },
   },
+  // ヌートバー（日系・WBC で日本でも人気）の所属チーム。日本人ファン向けの看板枠。
+  cardinals: {
+    id: 'cardinals',
+    team: { ja: 'カージナルス', en: 'Cardinals' },
+    titlePrefix: { ja: '海外カージナルスニキと見る', en: 'Watch w/ overseas Cardinals fans' },
+    badge: { ja: '海外カージナルスニキと見る', en: 'Cardinals Watch-Along' },
+  },
 };
 
 export function getSeries(id: string): SeriesInfo | null {
