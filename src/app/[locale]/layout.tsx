@@ -25,7 +25,9 @@ const DESCRIPTION =
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
+  // 子ページのタイトルにブランドを自動接尾（ブランド想起・Discover/検索の一貫性）。
+  // トップは default をそのまま使い二重ブランドを避ける（template は子ページにだけ効く）。
+  title: { default: TITLE, template: '%s｜海外の反応' },
   description: DESCRIPTION,
   // OG/Twitter カードにブランドロゴを表示（SNS 送客時の見栄え）
   openGraph: {

@@ -40,7 +40,7 @@ export async function generateMetadata({
   const info = SPORT_INFO[sport];
   const label = locale === 'ja' ? info.labelJa : info.labelEn;
   return {
-    title: `${label} の海外の反応（${page}）`,
+    title: `${label}（${page}）`,
     alternates: localeAlternates(locale, `/${sport}/p/${page}`),
   };
 }

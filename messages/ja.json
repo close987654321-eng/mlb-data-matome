@@ -72,6 +72,15 @@
   "popularTags": {
     "heading": "人気のタグ"
   },
+  "search": {
+    "heading": "サイト内検索",
+    "placeholder": "キーワードで探す（例: 大谷、井上尚弥）",
+    "button": "検索",
+    "results": "「{q}」の検索結果",
+    "count": "{count} 件",
+    "empty": "該当する記事が見つかりませんでした。",
+    "prompt": "キーワードを入力して検索してください。"
+  },
   "share": {
     "label": "シェア",
     "copy": "リンクをコピー",

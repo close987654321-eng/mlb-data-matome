@@ -120,7 +120,7 @@ export default async function ThreadDetailPage({
         publisher: {
           '@type': 'Organization',
           name: '海外の反応',
-          logo: { '@type': 'ImageObject', url: `${SITE_URL}/og.png`, width: 1200, height: 630 },
+          logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png`, width: 1358, height: 428 },
         },
         mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
       },

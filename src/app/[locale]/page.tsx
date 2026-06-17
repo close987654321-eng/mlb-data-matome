@@ -8,7 +8,7 @@ import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
 import PickupSection from '@/components/PickupSection';
-import { localeAlternates } from '@/lib/site';
+import { localeAlternates, absoluteUrl, SITE_URL } from '@/lib/site';
 import type { Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
 
@@ -49,8 +49,46 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const pickedColumns = pickColumns.filter((x): x is NonNullable<typeof x> => x != null);
   const hasPickup = pickedThreads.length + pickedColumns.length > 0;
 
+  // サイト全体の構造化データ（JSON-LD）。Organization=ブランド実体（ロゴ・公式X）、
+  // WebSite=サイト内検索ボックス（SearchAction）。検索のサイトリンク／ブランド表示に効く。
+  // SearchAction の遷移先は実在する /search（無いと無効マークアップになる）。
+  const siteLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': `${SITE_URL}/#website`,
+        url: absoluteUrl(locale, ''),
+        name: '海外の反応',
+        alternateName: '海外の反応 — MLB / ボクシング / MMA',
+        inLanguage: locale,
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: `${absoluteUrl(locale, '/search')}?q={search_term_string}`,
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        name: '海外の反応',
+        url: SITE_URL,
+        logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png`, width: 1358, height: 428 },
+        sameAs: ['https://x.com/gogogo123ka'],
+      },
+    ],
+  };
+
   return (
     <div className="space-y-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteLd) }}
+      />
       <section className="border-b border-line pb-8">
         {/* メインビジュアル（ブランドのキービジュアル） */}
         <Image

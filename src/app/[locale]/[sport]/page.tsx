@@ -28,7 +28,8 @@ export async function generateMetadata({
   const info = SPORT_INFO[sport];
   const label = locale === 'ja' ? info.labelJa : info.labelEn;
   return {
-    title: `${label} の海外の反応`,
+    // title.template が「｜海外の反応」を付けるので、ここでは競技名だけ（二重ブランド回避）。
+    title: label,
     alternates: localeAlternates(locale, `/${sport}`),
   };
 }

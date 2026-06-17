@@ -72,6 +72,15 @@
   "popularTags": {
     "heading": "Popular tags"
   },
+  "search": {
+    "heading": "Search",
+    "placeholder": "Search by keyword",
+    "button": "Search",
+    "results": "Results for “{q}”",
+    "count": "{count} hits",
+    "empty": "No matching articles found.",
+    "prompt": "Enter a keyword to search."
+  },
   "share": {
     "label": "Share",
     "copy": "Copy link",
