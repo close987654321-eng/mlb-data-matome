@@ -6,7 +6,19 @@ import { buildFeed } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
 import LoadMoreFeed from '@/components/LoadMoreFeed';
 import PickupSection from '@/components/PickupSection';
+import { localeAlternates } from '@/lib/site';
 import type { Locale } from '@/lib/i18n';
+import type { Metadata } from 'next';
+
+// トップは canonical/hreflang のみ補う（title/description は layout の既定を継ぐ）。
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return { alternates: localeAlternates(locale, '') };
+}
 
 // TOP に大きく出す「ピックアップ」。手動キュレーション（id 指定）。
 const PICKUP_THREADS: { sport: 'mlb'; id: string }[] = [

@@ -25,10 +25,42 @@ export function toEmbedUrl(url: string): string | null {
 }
 
 // 動画のサムネ。明示指定 > YouTube 自動 > なし（呼び出し側でストックに退避）。
+// サイト内のカード/ヒーロー表示用。確実に存在する hqdefault(480px) でよい。
 function videoThumb(url: string, explicit?: string): string | null {
   if (explicit) return explicit;
   const yt = youTubeId(url);
   return yt ? `https://i.ytimg.com/vi/${yt}/hqdefault.jpg` : null;
+}
+
+/**
+ * OGP/Discover 用の「大きい」カバー画像を解決する（width/height 付き）。
+ * Google Discover と X の summary_large_image は 1200px 幅以上を要求するため、
+ * YouTube 動画は maxresdefault(1280x720) を優先する。maxres は元動画が 720p+ の
+ * ときだけ存在するので、HEAD で存在確認し、無ければ hqdefault(480x360) に倒す。
+ * 画像メディア・ストック写真は元から大きいので寸法指定なしでそのまま使う。
+ * async（ビルド時に HEAD を1回叩く。同一 URL は fetch キャッシュで共有される）。
+ */
+export async function ogCover(
+  thread: Thread,
+): Promise<{ url: string; width?: number; height?: number }> {
+  const m = thread.media;
+  if (m?.kind === 'image') return { url: m.url };
+  if (m?.kind === 'video') {
+    if (m.thumbUrl) return { url: m.thumbUrl };
+    const yt = youTubeId(m.url);
+    if (yt) {
+      const maxres = `https://i.ytimg.com/vi/${yt}/maxresdefault.jpg`;
+      try {
+        const res = await fetch(maxres, { method: 'HEAD', next: { revalidate: false } });
+        if (res.ok) return { url: maxres, width: 1280, height: 720 };
+      } catch {
+        // ネットワーク不通時は hqdefault に倒す（ビルドを止めない）
+      }
+      return { url: `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`, width: 480, height: 360 };
+    }
+  }
+  // ストック（Unsplash・?w=1600 付き）は十分大きい
+  return { url: pickImage(thread.sport, thread.id), width: 1600, height: 900 };
 }
 
 /**

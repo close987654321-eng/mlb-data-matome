@@ -6,7 +6,7 @@ import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle } from '@/lib/series';
-import { coverImage } from '@/lib/media';
+import { coverImage, ogCover } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
@@ -16,7 +16,7 @@ import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
 import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
-import { absoluteUrl } from '@/lib/site';
+import { absoluteUrl, SITE_URL, localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -42,24 +42,25 @@ export async function generateMetadata({
 
   const title = threadTitle(thread, locale);
   const description = thread.summaryJa;
-  // coverImage は外部絶対URL（i.redd.it / i.ytimg.com / Unsplash）かローカル相対パス。
-  // 相対パスは layout の metadataBase で絶対化される。
-  const image = coverImage(thread);
+  // OGP/Discover は 1200px 幅以上を要求するので、動画は maxresdefault(1280x720) を優先する
+  // 大きいカバーを使う（カード表示の coverImage=hqdefault とは別物）。
+  const cover = await ogCover(thread);
 
   return {
     title,
     description,
+    alternates: localeAlternates(locale, `/${sport}/${id}`),
     openGraph: {
       title,
       description,
       type: 'article',
-      images: [{ url: image }],
+      images: [{ url: cover.url, width: cover.width, height: cover.height }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [image],
+      images: [cover.url],
     },
   };
 }
@@ -99,8 +100,52 @@ export default async function ThreadDetailPage({
   const authorLabel = (a: string) => (isInterview || isYoutube ? a : `u/${a}`);
   const scoreMark = isYoutube ? '👍' : '▲';
 
+  // 構造化データ（JSON-LD）。Discover/検索のリッチリザルト＝パンくず表示・記事カードに効く。
+  // VideoObject は動画公開日(uploadDate)が必須だが手元に無いので入れない（捏造しない）。
+  const articleUrl = absoluteUrl(locale, `/${sport}/${id}`);
+  const cover = await ogCover(thread);
+  const categoryLabel = locale === 'ja' ? info.labelJa : info.labelEn;
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'BlogPosting',
+        headline: title,
+        description: thread.summaryJa.slice(0, 200),
+        image: [cover.url],
+        datePublished: thread.fetchedAt,
+        dateModified: thread.fetchedAt,
+        inLanguage: locale,
+        author: { '@type': 'Organization', name: '海外の反応', url: SITE_URL },
+        publisher: {
+          '@type': 'Organization',
+          name: '海外の反応',
+          logo: { '@type': 'ImageObject', url: `${SITE_URL}/og.png`, width: 1200, height: 630 },
+        },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: t('nav.home'), item: absoluteUrl(locale, '') },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: categoryLabel,
+            item: absoluteUrl(locale, `/${sport}`),
+          },
+          { '@type': 'ListItem', position: 3, name: title },
+        ],
+      },
+    ],
+  };
+
   return (
     <article className="mx-auto max-w-prose">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ArticleCover
         sport={sport}
         locale={locale}

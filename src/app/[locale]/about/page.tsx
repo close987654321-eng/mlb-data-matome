@@ -3,6 +3,7 @@ import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import LegalArticle from '@/components/LegalArticle';
 import { Link } from '@/lib/navigation';
 import { getAboutDoc } from '@/lib/legal';
+import { localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -18,7 +19,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const doc = getAboutDoc(locale);
-  return { title: doc.title, description: doc.sections[1]?.paragraphs?.[0] };
+  return {
+    title: doc.title,
+    description: doc.sections[1]?.paragraphs?.[0],
+    alternates: localeAlternates(locale, '/about'),
+  };
 }
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: Locale }> }) {

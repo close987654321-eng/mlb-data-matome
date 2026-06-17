@@ -6,12 +6,29 @@ import { getColumnsBySport } from '@/lib/columns';
 import { buildFeed } from '@/lib/feed';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import LoadMoreFeed from '@/components/LoadMoreFeed';
+import { localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
+import type { Metadata } from 'next';
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
   return locales.flatMap((locale) => SPORTS.map((sport) => ({ locale, sport })));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale; sport: string }>;
+}): Promise<Metadata> {
+  const { locale, sport } = await params;
+  if (!isSport(sport)) return {};
+  const info = SPORT_INFO[sport];
+  const label = locale === 'ja' ? info.labelJa : info.labelEn;
+  return {
+    title: `${label} の海外の反応`,
+    alternates: localeAlternates(locale, `/${sport}`),
+  };
 }
 
 export default async function SportPage({

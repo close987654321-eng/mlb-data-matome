@@ -4,6 +4,7 @@ import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { feedKey } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
+import { localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -23,7 +24,11 @@ export async function generateMetadata({
   const decoded = decodeURIComponent(tag);
   const t = await getTranslations({ locale });
   const title = t('tag.heading', { tag: decoded });
-  return { title, description: t('tag.lead', { tag: decoded }) };
+  return {
+    title,
+    description: t('tag.lead', { tag: decoded }),
+    alternates: localeAlternates(locale, `/tag/${encodeURIComponent(decoded)}`),
+  };
 }
 
 export default async function TagPage({

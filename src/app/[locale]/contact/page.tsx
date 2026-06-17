@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import LegalArticle from '@/components/LegalArticle';
 import { getContactDoc, CONTACT_FORM_URL } from '@/lib/legal';
+import { localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -17,7 +18,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const doc = getContactDoc(locale);
-  return { title: doc.title, description: doc.intro };
+  return {
+    title: doc.title,
+    description: doc.intro,
+    alternates: localeAlternates(locale, '/contact'),
+  };
 }
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: Locale }> }) {

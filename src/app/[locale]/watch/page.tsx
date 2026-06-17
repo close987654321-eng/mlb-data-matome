@@ -2,12 +2,28 @@ import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getWatchAlongThreads } from '@/lib/data';
 import { SERIES, getSeries } from '@/lib/series';
 import ThreadCard from '@/components/ThreadCard';
+import { localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
+import type { Metadata } from 'next';
 
 export const dynamicParams = false;
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale });
+  return {
+    title: t('watch.title'),
+    description: t('watch.lead'),
+    alternates: localeAlternates(locale, '/watch'),
+  };
 }
 
 /**

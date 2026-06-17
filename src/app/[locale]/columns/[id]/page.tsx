@@ -12,7 +12,7 @@ import StickyVideo from '@/components/StickyVideo';
 import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
 import ShareButtons from '@/components/ShareButtons';
-import { absoluteUrl } from '@/lib/site';
+import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -39,6 +39,7 @@ export async function generateMetadata({
   return {
     title,
     description,
+    alternates: localeAlternates(locale, `/columns/${id}`),
     openGraph: {
       title,
       description,
