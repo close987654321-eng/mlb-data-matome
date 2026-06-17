@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:images": "node scripts/check-discover-images.mjs",
+    "ping": "node scripts/ping-indexnow.mjs"
   },
   "dependencies": {
     "next": "^15.0.0",
