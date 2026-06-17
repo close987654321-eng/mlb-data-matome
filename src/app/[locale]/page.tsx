@@ -2,9 +2,11 @@ import Image from 'next/image';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads, getThread } from '@/lib/data';
 import { getAllColumns, getColumn } from '@/lib/columns';
-import { buildFeed } from '@/lib/feed';
+import { buildFeed, paginate } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
-import LoadMoreFeed from '@/components/LoadMoreFeed';
+import FeedGrid from '@/components/FeedGrid';
+import Pagination from '@/components/Pagination';
+import PopularTags from '@/components/PopularTags';
 import PickupSection from '@/components/PickupSection';
 import { localeAlternates } from '@/lib/site';
 import type { Locale } from '@/lib/i18n';
@@ -38,8 +40,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     Promise.all(PICKUP_COLUMNS.map((id) => getColumn(id))),
   ]);
   // 新着は反応まとめとコラムを横断で混ぜ、日付順で出す（コラム専用ページは廃止）。
+  // 1ページ目だけ先頭を大カードにし、残りはグリッド。2ページ目以降は /p/N（実 URL）。
   const feed = buildFeed(threads, columns);
-  const [featured, ...rest] = feed;
+  const paged = paginate(feed, 1);
+  const [featured, ...rest] = paged.items;
   // 取得できなかった id（リネーム等）は黙って除外する。
   const pickedThreads = pickThreads.filter((x): x is NonNullable<typeof x> => x != null);
   const pickedColumns = pickColumns.filter((x): x is NonNullable<typeof x> => x != null);
@@ -69,6 +73,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         <PickupSection threads={pickedThreads} columns={pickedColumns} locale={locale} />
       )}
 
+      <PopularTags />
+
       {feed.length === 0 ? (
         <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">
           {t('threads.empty')}
@@ -86,9 +92,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
           {rest.length > 0 && (
             <div className="border-t border-line pt-10">
-              <LoadMoreFeed items={rest} locale={locale} />
+              <FeedGrid items={rest} locale={locale} />
             </div>
           )}
+
+          <Pagination basePath="" page={1} totalPages={paged.totalPages} />
         </section>
       )}
     </div>

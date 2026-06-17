@@ -1,56 +1,68 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThreadsBySport } from '@/lib/data';
 import { getColumnsBySport } from '@/lib/columns';
-import { buildFeed, paginate } from '@/lib/feed';
+import { buildFeed, paginate, FEED_PER_PAGE } from '@/lib/feed';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
 import { localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
-import type { Metadata } from 'next';
 
 export const dynamicParams = false;
 
-export function generateStaticParams() {
-  return locales.flatMap((locale) => SPORTS.map((sport) => ({ locale, sport })));
+// カテゴリ一覧の 2 ページ目以降（/mlb/p/2 …）。1 ページ目は /mlb。
+export async function generateStaticParams() {
+  const params: { locale: string; sport: string; page: string }[] = [];
+  for (const sport of SPORTS) {
+    const [threads, columns] = await Promise.all([
+      getThreadsBySport(sport),
+      getColumnsBySport(sport),
+    ]);
+    const totalPages = Math.max(1, Math.ceil(buildFeed(threads, columns).length / FEED_PER_PAGE));
+    for (const locale of locales) {
+      for (let p = 2; p <= totalPages; p++) params.push({ locale, sport, page: String(p) });
+    }
+  }
+  return params;
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Locale; sport: string }>;
+  params: Promise<{ locale: Locale; sport: string; page: string }>;
 }): Promise<Metadata> {
-  const { locale, sport } = await params;
+  const { locale, sport, page } = await params;
   if (!isSport(sport)) return {};
   const info = SPORT_INFO[sport];
   const label = locale === 'ja' ? info.labelJa : info.labelEn;
   return {
-    title: `${label} の海外の反応`,
-    alternates: localeAlternates(locale, `/${sport}`),
+    title: `${label} の海外の反応（${page}）`,
+    alternates: localeAlternates(locale, `/${sport}/p/${page}`),
   };
 }
 
-export default async function SportPage({
+export default async function SportFeedPage({
   params,
 }: {
-  params: Promise<{ locale: Locale; sport: string }>;
+  params: Promise<{ locale: Locale; sport: string; page: string }>;
 }) {
-  const { locale, sport } = await params;
+  const { locale, sport, page } = await params;
   unstable_setRequestLocale(locale);
   if (!isSport(sport)) notFound();
+  const pageNum = Number(page);
+  if (!Number.isInteger(pageNum) || pageNum < 2) notFound();
   const t = await getTranslations();
   const info = SPORT_INFO[sport];
-  // 反応まとめとコラム／インタビューを競技ごとに統合し、新着順で1グリッドに出す。
   const [threads, columns] = await Promise.all([
     getThreadsBySport(sport),
     getColumnsBySport(sport),
   ]);
-  // 1ページ目。2ページ目以降は /{sport}/p/N（実 URL）でクロール可能にする。
-  const feed = buildFeed(threads, columns);
-  const paged = paginate(feed, 1);
+  const paged = paginate(buildFeed(threads, columns), pageNum);
+  if (pageNum > paged.totalPages) notFound();
 
   return (
     <div className="space-y-10">
@@ -76,17 +88,8 @@ export default async function SportPage({
       </section>
 
       <PopularTags />
-
-      {feed.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">
-          {t('threads.empty')}
-        </p>
-      ) : (
-        <>
-          <FeedGrid items={paged.items} locale={locale} showSport={false} />
-          <Pagination basePath={`/${sport}`} page={1} totalPages={paged.totalPages} />
-        </>
-      )}
+      <FeedGrid items={paged.items} locale={locale} showSport={false} />
+      <Pagination basePath={`/${sport}`} page={paged.page} totalPages={paged.totalPages} />
     </div>
   );
 }

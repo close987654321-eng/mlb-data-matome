@@ -64,8 +64,13 @@
   "related": {
     "title": "More to read"
   },
-  "feed": {
-    "loadMore": "Load more ({count} left)"
+  "pagination": {
+    "label": "Pagination",
+    "prev": "Prev",
+    "next": "Next"
+  },
+  "popularTags": {
+    "heading": "Popular tags"
   },
   "share": {
     "label": "Share",

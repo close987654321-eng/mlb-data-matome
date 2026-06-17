@@ -64,8 +64,13 @@
   "related": {
     "title": "ほかのまとめも読む"
   },
-  "feed": {
-    "loadMore": "もっと見る（残り {count} 件）"
+  "pagination": {
+    "label": "ページ送り",
+    "prev": "前へ",
+    "next": "次へ"
+  },
+  "popularTags": {
+    "heading": "人気のタグ"
   },
   "share": {
     "label": "シェア",

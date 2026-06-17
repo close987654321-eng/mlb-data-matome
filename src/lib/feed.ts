@@ -23,3 +23,20 @@ export function feedKey(item: FeedItem): string {
     ? `thread/${item.thread.sport}/${item.thread.id}`
     : `column/${item.column.id}`;
 }
+
+/** 一覧1ページあたりの件数（実 URL ページ送りの単位＝3カラム×4行）。 */
+export const FEED_PER_PAGE = 12;
+
+export type PagedFeed = { items: FeedItem[]; page: number; totalPages: number };
+
+/**
+ * フィードを FEED_PER_PAGE 件ずつのページに切り出す（page は 1 始まり）。
+ * page は 1〜totalPages にクランプし、totalPages は空フィードでも最低 1 を返す。
+ * 呼び出し側は paged.totalPages で範囲外（404）を判定する。
+ */
+export function paginate(feed: FeedItem[], page: number): PagedFeed {
+  const totalPages = Math.max(1, Math.ceil(feed.length / FEED_PER_PAGE));
+  const current = Math.min(Math.max(1, Math.floor(page)), totalPages);
+  const start = (current - 1) * FEED_PER_PAGE;
+  return { items: feed.slice(start, start + FEED_PER_PAGE), page: current, totalPages };
+}
