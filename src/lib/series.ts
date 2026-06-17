@@ -34,6 +34,13 @@ export const SERIES: Record<string, SeriesInfo> = {
     titlePrefix: { ja: '海外カージナルスニキと見る', en: 'Watch w/ overseas Cardinals fans' },
     badge: { ja: '海外カージナルスニキと見る', en: 'Cardinals Watch-Along' },
   },
+  // 村上宗隆の所属チーム。2026 年に史上最弱から快進撃で日本でも注目の看板枠。
+  whitesox: {
+    id: 'whitesox',
+    team: { ja: 'ホワイトソックス', en: 'White Sox' },
+    titlePrefix: { ja: '海外ホワイトソックスニキと見る', en: 'Watch w/ overseas White Sox fans' },
+    badge: { ja: '海外ホワイトソックスニキと見る', en: 'White Sox Watch-Along' },
+  },
 };
 
 export function getSeries(id: string): SeriesInfo | null {
