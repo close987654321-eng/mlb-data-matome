@@ -66,6 +66,7 @@ export type Thread = {
   gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）
   tags?: string[]; // 日本語タグ（選手名・話題）
   series?: ThreadSeries; // 「海外ニキと見る」シリーズ記事ならその情報（タイトル定型化＋バッジ＋/watch掲載）
+  hideFromWatch?: boolean; // 動画つきでも /watch ハブ（注目の試合）に載せない。スタジオ解説/番組セグメント等、watch-along に馴染まない動画記事向け
   isSample?: boolean; // 開発用ダミーであることを明示するフラグ
 };
 
