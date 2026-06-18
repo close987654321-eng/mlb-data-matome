@@ -41,6 +41,13 @@ export const SERIES: Record<string, SeriesInfo> = {
     titlePrefix: { ja: '海外ホワイトソックスニキと見る', en: 'Watch w/ overseas White Sox fans' },
     badge: { ja: '海外ホワイトソックスニキと見る', en: 'White Sox Watch-Along' },
   },
+  // 岡本（強肩の三塁守備が現地で評価）の所属チーム。日本人ファン向けの看板枠。
+  bluejays: {
+    id: 'bluejays',
+    team: { ja: 'ブルージェイズ', en: 'Blue Jays' },
+    titlePrefix: { ja: '海外ブルージェイズニキと見る', en: 'Watch w/ overseas Blue Jays fans' },
+    badge: { ja: '海外ブルージェイズニキと見る', en: 'Blue Jays Watch-Along' },
+  },
 };
 
 export function getSeries(id: string): SeriesInfo | null {
