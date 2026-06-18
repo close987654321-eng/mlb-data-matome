@@ -8,10 +8,24 @@ import { SITE_URL } from '@/lib/site';
 const FEED_TITLE = '海外の反応 — MLB / ボクシング / MMA';
 const FEED_DESCRIPTION =
   'MLB・ボクシング・MMA（UFC・RIZIN）の海外掲示板や YouTube の反応を、現地の生のコメントつきで日本語まとめ。';
-const MAX_ITEMS = 50; // 直近のみ配信すれば十分（アンテナ・リーダー用途）
+const MAX_ITEMS = 30; // 直近のみ配信すれば十分（アンテナ・リーダー用途）
+
+// description はこの文字数で抜粋に切り詰める。
+// 理由: 人気ブログランキング等の RSS 取り込みは PHP の mb_ereg（Oniguruma）で本文を
+// 正規表現処理しており、長い description を渡すとバックトラッキングの再試行上限
+// （mbstring.regex_retry_limit・既定100万）を超えて
+// "mb_ereg_search(): ... retry-limit-in-match over" となり Ping が失敗する。
+// アンテナ・リーダー用途では抜粋で十分なので短く配信する（WordPress の「全文→抜粋」と同じ対処）。
+const DESCRIPTION_MAX = 120;
 
 // 1時間ごとに再生成（記事追加はビルドで入るが、ISR で取りこぼしを防ぐ）。
 export const revalidate = 3600;
+
+/** RSS の description 用に本文を抜粋へ短縮する（改行・タブは空白に均す）。 */
+function excerpt(s: string): string {
+  const t = s.replace(/[\r\n\t]+/g, ' ').trim();
+  return t.length > DESCRIPTION_MAX ? t.slice(0, DESCRIPTION_MAX).trimEnd() + '…' : t;
+}
 
 function escapeXml(s: string): string {
   return s
@@ -53,7 +67,7 @@ export async function GET(): Promise<Response> {
         `      <link>${escapeXml(link)}</link>`,
         `      <guid isPermaLink="true">${escapeXml(link)}</guid>`,
         `      <pubDate>${new Date(item.date).toUTCString()}</pubDate>`,
-        `      <description>${escapeXml(description)}</description>`,
+        `      <description>${escapeXml(excerpt(description))}</description>`,
         '    </item>',
       ].join('\n');
     })
