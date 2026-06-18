@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 type Props = {
@@ -11,15 +11,39 @@ type Props = {
 };
 
 /**
- * 記事の二次拡散を促すシェアボタン。X / LINE（日本のまとめは LINE 送客が強い）/ URL コピー。
+ * 記事の二次拡散を促すシェアボタン。X / はてブ / LINE（日本のまとめは LINE 送客が強い）/ URL コピー。
  * 集客が手動 X 運用頼りなので、読者がワンタップで拡散できる導線を記事下に置く。
+ * はてブは「3 ユーザーで新着→人気エントリー」で瞬発力が大きいので数も見せて 2・3 人目を呼ぶ。
  */
 export default function ShareButtons({ url, title }: Props) {
   const t = useTranslations();
   const [copied, setCopied] = useState(false);
+  const [hatenaCount, setHatenaCount] = useState<number | null>(null);
   const enc = encodeURIComponent;
   const xUrl = `https://twitter.com/intent/tweet?text=${enc(title)}&url=${enc(url)}`;
   const lineUrl = `https://social-plugins.line.me/lineit/share?url=${enc(url)}`;
+  // はてブのエントリーページ（ここから 1 クリックでブックマーク）。https は /entry/s/。
+  const hatenaUrl = `https://b.hatena.ne.jp/entry/s/${url.replace(/^https?:\/\//, '')}`;
+
+  // ブクマ数はカウント API が CORS 非対応なので JSONP で取得（静的ページでも実数が出る）。
+  // 0 件のときはバッジを出さない（新規記事に「0」を並べると逆に弱く見えるため）。
+  useEffect(() => {
+    const cb = `__hbcount_${Math.random().toString(36).slice(2)}`;
+    const w = window as unknown as Record<string, unknown>;
+    const script = document.createElement('script');
+    const cleanup = () => {
+      delete w[cb];
+      script.remove();
+    };
+    w[cb] = (data: { count?: number }) => {
+      if (typeof data?.count === 'number' && data.count > 0) setHatenaCount(data.count);
+      cleanup();
+    };
+    script.src = `https://b.hatena.ne.jp/entry/jsonlite/?url=${encodeURIComponent(url)}&callback=${cb}`;
+    script.onerror = cleanup;
+    document.body.appendChild(script);
+    return cleanup;
+  }, [url]);
 
   const copy = async () => {
     try {
@@ -44,6 +68,23 @@ export default function ShareButtons({ url, title }: Props) {
           <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.657l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
         X
+      </a>
+      <a
+        href={hatenaUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={btn}
+        aria-label="はてなブックマークに追加"
+      >
+        <span aria-hidden className="text-[13px] font-extrabold leading-none">
+          B!
+        </span>
+        はてブ
+        {hatenaCount !== null && (
+          <span className="ml-0.5 rounded-full bg-accent/10 px-1.5 text-[11px] font-bold text-accent">
+            {hatenaCount}
+          </span>
+        )}
       </a>
       <a href={lineUrl} target="_blank" rel="noopener noreferrer" className={btn} aria-label="LINE">
         <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current" aria-hidden>
