@@ -67,10 +67,25 @@ node scripts/fetch-reddit.mjs thread <permalink-or-url> 40
 - メディアは恒久 URL 参照が原則。ローカルに置くのは恒久 URL が無い場合のみ、
   **`public/media/` 限定＋ `credit` 必須**（CLAUDE.md §4.5）。`data/` 配下にはコミットしない。
 
-## 公開後（にほんブログ村へ更新 Ping）
+## 公開後（更新 Ping ＝ 2 本）
 
-記事をコミット → push → Vercel デプロイが**完了してから**、新着一覧へ即反映させるため
-Ping を送る（静的サイトなので自動では飛ばない）。
+記事をコミット → push → Vercel デプロイが**完了してから**、新着一覧・検索エンジンへ
+即反映させるため Ping を送る（静的サイトなので自動では飛ばない）。**デプロイ完了後に**叩く
+（前に叩くと古い内容を取りに来る）。
+
+### 1. 検索エンジンへ即インデックス通知（IndexNow）
+
+```bash
+node scripts/ping-indexnow.mjs --latest 3   # 直近で公開した本数を指定
+```
+
+- Bing / Yandex / Naver ほかへ「今すぐクロールして」と通知（**Google は IndexNow 非対応**＝
+  Google には効かない。Google は sitemap＋GSC で拾うのを待つ）。新記事の発見を早める最大の一手。
+- 鍵は `public/27fa7757849be83b905ec59e275d4e5e.txt`（公開トークン・本番200で検証済み）。設定不要で動く。
+- `--latest N`＝直近N記事＋その競技一覧＋トップ / `--all`＝全件（初回一括投入用）/ パス・URL 直指定も可 / `--dry`＝送信せず確認。
+- 受理は HTTP 200/202。送りすぎは不要なので、その回に公開した本数だけ `--latest` で送る。
+
+### 2. ブログランキングへ更新 Ping（にほんブログ村ほか）
 
 ```bash
 node scripts/ping-blogmura.mjs
@@ -78,4 +93,3 @@ node scripts/ping-blogmura.mjs
 
 - 前提: ブログ村マイページで「Ping送信/記事反映」を有効化＋RSS(`feed.xml`)登録済み。
 - `BLOGMURA_PING_URL`（あなた専用・非公開）は `.env.local` に置く。`.env*` は gitignore 済み。
-- デプロイ前に叩くと古い内容を取りに来るので、**必ずデプロイ完了後**に送る。
