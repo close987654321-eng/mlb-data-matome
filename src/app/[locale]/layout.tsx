@@ -72,6 +72,17 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className="flex min-h-screen flex-col font-sans">
+        {/* 日本語フォント。CSS の @import（レンダリングをブロックし、発見も遅い）をやめ、
+            head で preconnect ＋ display:swap で読み込む。Google Fonts は CJK を
+            unicode-range で分割配信するため、ページに出る字だけ落ちてくる（self-host より軽い）。
+            太さは実使用ぶんだけ（font-semibold=600 は最も近い 700 にフォールバックするので未ロードでよく、
+            900 は全く使っていないので外した）。 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
         {/* Google Analytics（GA4）。全ページで読み込む。 */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
@@ -85,11 +96,13 @@ export default async function LocaleLayout({
             gtag('config', '${GA_ID}');
           `}
         </Script>
-        {/* Google AdSense。審査・広告配信のため全ページで読み込む。 */}
+        {/* Google AdSense。審査・広告配信のため全ページで読み込む。
+            最も重いサードパーティなので lazyOnload（アイドル時に最後に読む）で描画を妨げない。
+            審査・広告配信にはスクリプトの存在で足り、読み込みタイミングは問われない。 */}
         <Script
           id="adsbygoogle-init"
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           crossOrigin="anonymous"
         />
         <NextIntlClientProvider locale={locale} messages={messages}>
