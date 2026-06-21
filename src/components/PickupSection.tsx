@@ -99,6 +99,10 @@ export default function PickupSection({ threads, columns, locale }: Props) {
               width={1200}
               height={750}
               priority
+              // priority だけだと Next 15 は preload link は出すが <img> 自体への
+              // fetchpriority=high 打刻が抜け、PSI「LCPリクエストの検出」が未最適化と判定する。
+              // 明示指定で <img>・preload 双方に乗せる（本番HTMLで欠落を実証済み）。
+              fetchPriority="high"
               className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent" />

@@ -17,6 +17,15 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4",
+    "ios_saf >= 16.4",
+    "and_chr >= 111",
+    "samsung >= 21"
+  ],
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",

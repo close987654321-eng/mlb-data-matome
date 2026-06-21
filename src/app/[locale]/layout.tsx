@@ -121,6 +121,9 @@ function SiteHeader() {
             width={1358}
             height={428}
             priority
+            // ヘッダロゴは h-7/h-8 + w-auto で実幅 ~89-101px。sizes 未指定だと
+            // 3840 版を配信していた。実幅を渡し小さい候補（DPR2≈202px→256版）を選ばせる。
+            sizes="101px"
             className="h-7 w-auto sm:h-8"
           />
         </Link>
