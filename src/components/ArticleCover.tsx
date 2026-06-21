@@ -59,6 +59,9 @@ export default function ArticleCover({
           width={1600}
           height={800}
           priority
+          // priority だけだと Next 15 は preload link は出すが <img> への fetchpriority=high
+          // 打刻が抜け、PSI「LCPリクエストの検出」が未最適化と判定する（記事ヒーロー＝LCP）。明示する。
+          fetchPriority="high"
           className="h-64 w-full object-cover sm:h-80"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />

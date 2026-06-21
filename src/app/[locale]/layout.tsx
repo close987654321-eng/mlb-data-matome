@@ -75,12 +75,15 @@ export default async function LocaleLayout({
         {/* 本文フォントは OS 同梱のゴシック（tailwind.config の font-sans）で Web フォントを
             ダウンロードしない。日本語 Noto は漢字サブセットが woff2 60本超・計1MB+ になり、
             モバイルのクリティカルパス・font swap の強制リフロー・LCP 遅延の主因だったため撤去。 */}
-        {/* Google Analytics（GA4）。全ページで読み込む。 */}
+        {/* Google Analytics（GA4）。全ページで読み込む。
+            lazyOnload（アイドル時）で初期描画・TBT と競合させない。GA4 の pageview は
+            アイドル発火でもほぼ全セッションで計測される（極端に速い離脱のみ取りこぼす可能性）。
+            計測精度に問題が出たら afterInteractive へ戻す。 */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="gtag-init" strategy="afterInteractive">
+        <Script id="gtag-init" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
