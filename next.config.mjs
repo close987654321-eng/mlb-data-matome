@@ -5,6 +5,12 @@ const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // CSS を <style> で HTML にインライン化し、描画をブロックする外部 CSS <link> を無くす
+  // （Next 15.2+ 第一者機能。critters/optimizeCss と違い追加依存なし）。本サイトは Discover
+  // 由来のワンショット流入が主で回遊が少ないため、ページ毎インラインの欠点が出にくく FCP/LCP に効く。
+  experimental: {
+    inlineCss: true,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' }, // 競技ストック写真
