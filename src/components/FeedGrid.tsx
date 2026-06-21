@@ -17,9 +17,10 @@ export default function FeedGrid({
 }) {
   return (
     <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-      {items.map((item) => (
+      {items.map((item, i) => (
         <li key={feedKey(item)}>
-          <FeedCard item={item} locale={locale} showSport={showSport} />
+          {/* 先頭カードだけ画像を LCP として先取り（競技/タグ/ページ送りでは先頭が最上部＝LCP）。 */}
+          <FeedCard item={item} locale={locale} showSport={showSport} priority={i === 0} />
         </li>
       ))}
     </ul>

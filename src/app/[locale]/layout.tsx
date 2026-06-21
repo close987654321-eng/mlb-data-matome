@@ -72,17 +72,9 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className="flex min-h-screen flex-col font-sans">
-        {/* 日本語フォント。CSS の @import（レンダリングをブロックし、発見も遅い）をやめ、
-            head で preconnect ＋ display:swap で読み込む。Google Fonts は CJK を
-            unicode-range で分割配信するため、ページに出る字だけ落ちてくる（self-host より軽い）。
-            太さは実使用ぶんだけ（font-semibold=600 は最も近い 700 にフォールバックするので未ロードでよく、
-            900 は全く使っていないので外した）。 */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
+        {/* 本文フォントは OS 同梱のゴシック（tailwind.config の font-sans）で Web フォントを
+            ダウンロードしない。日本語 Noto は漢字サブセットが woff2 60本超・計1MB+ になり、
+            モバイルのクリティカルパス・font swap の強制リフロー・LCP 遅延の主因だったため撤去。 */}
         {/* Google Analytics（GA4）。全ページで読み込む。 */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}

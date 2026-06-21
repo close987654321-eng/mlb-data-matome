@@ -54,9 +54,10 @@ export default async function TagPage({
       </section>
 
       <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-        {feed.map((item) => (
+        {feed.map((item, i) => (
           <li key={feedKey(item)}>
-            <FeedCard item={item} locale={locale} />
+            {/* 先頭カードだけ画像を LCP として先取り。 */}
+            <FeedCard item={item} locale={locale} priority={i === 0} />
           </li>
         ))}
       </ul>

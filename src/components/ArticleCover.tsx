@@ -13,6 +13,8 @@ type Props = {
   variant?: 'card' | 'hero';
   /** カバーが動画サムネのとき、再生アイコンを重ねて「動画あり」を示す。 */
   hasVideo?: boolean;
+  /** 一覧で最上部に来るカードだけ true。LCP 画像を遅延読み込みせず fetchpriority=high で先取りする。 */
+  priority?: boolean;
   /** hero でカバー画像の出典・帰属を小さく添える（引用配慮）。 */
   credit?: string;
 };
@@ -42,6 +44,7 @@ export default function ArticleCover({
   eyebrow,
   variant = 'card',
   hasVideo = false,
+  priority = false,
   credit,
 }: Props) {
   const info = SPORT_INFO[sport];
@@ -83,6 +86,7 @@ export default function ArticleCover({
         src={imageUrl}
         alt=""
         fill
+        priority={priority}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         className="object-cover"
       />

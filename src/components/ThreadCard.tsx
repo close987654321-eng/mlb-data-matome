@@ -16,9 +16,17 @@ type Props = {
   showSport?: boolean;
   /** 注目記事を大きく見せる */
   featured?: boolean;
+  /** 一覧で最上部のカードだけ true。カバー画像を LCP として先取りする。 */
+  priority?: boolean;
 };
 
-export default function ThreadCard({ thread, locale, showSport = true, featured = false }: Props) {
+export default function ThreadCard({
+  thread,
+  locale,
+  showSport = true,
+  featured = false,
+  priority = false,
+}: Props) {
   const t = useTranslations();
   const info = SPORT_INFO[thread.sport];
   const sportLabel = locale === 'ja' ? info.labelJa : info.labelEn;
@@ -34,6 +42,7 @@ export default function ThreadCard({ thread, locale, showSport = true, featured 
               locale={locale}
               imageUrl={coverImage(thread)}
               hasVideo={thread.media?.kind === 'video'}
+              priority={priority}
             />
           </div>
         </div>

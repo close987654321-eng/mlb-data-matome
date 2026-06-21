@@ -12,9 +12,11 @@ type Props = {
   locale: Locale;
   /** 注目記事を大きく見せる */
   featured?: boolean;
+  /** 一覧で最上部のカードだけ true。カバー画像を LCP として先取りする。 */
+  priority?: boolean;
 };
 
-export default function ColumnCard({ column, locale, featured = false }: Props) {
+export default function ColumnCard({ column, locale, featured = false, priority = false }: Props) {
   const t = useTranslations();
   const info = SPORT_INFO[column.sport];
   const sportLabel = locale === 'ja' ? info.labelJa : info.labelEn;
@@ -33,6 +35,7 @@ export default function ColumnCard({ column, locale, featured = false }: Props) 
               imageUrl={cover.url}
               hasVideo={cover.isVideo}
               eyebrow={`${kindLabel} · ${sportLabel}`}
+              priority={priority}
             />
           </div>
         </div>
