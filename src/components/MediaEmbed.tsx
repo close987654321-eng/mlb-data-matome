@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { toEmbedUrl } from '@/lib/media';
+import { toEmbedUrl, videoPoster } from '@/lib/media';
+import LiteVideo from './LiteVideo';
 import type { ThreadMedia } from '@/types/thread';
 
 type Props = {
@@ -60,16 +61,15 @@ export default function MediaEmbed({ media, sourceUrl }: Props) {
 
   const embed = toEmbedUrl(media.url);
   if (embed) {
+    // ファサードで埋め込む。sticky 動画は初期ビューポート内なので loading="lazy" が効かず、
+    // プレイヤー一式(~0.9MB)を即ロードしていた。クリックされるまで iframe を作らない。
     return (
       <figure className="mt-8">
         <div className="relative aspect-video overflow-hidden rounded-xl bg-black">
-          <iframe
-            src={embed}
+          <LiteVideo
+            embedUrl={embed}
+            thumbUrl={videoPoster(media) ?? ''}
             title={media.caption ?? 'video'}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            loading="lazy"
-            className="absolute inset-0 h-full w-full"
           />
         </div>
         <Caption media={media} />

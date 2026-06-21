@@ -79,6 +79,12 @@ function mediaThumb(m: ThreadMedia): string | null {
   return m.kind === 'image' ? m.url : videoThumb(m.url, m.thumbUrl);
 }
 
+// 動画ファサード（クリックで読み込む埋め込み）のポスター画像。サイト内の他サムネと同じ解決。
+export function videoPoster(media: ThreadMedia): string | null {
+  if (media.kind !== 'video') return null;
+  return videoThumb(media.url, media.thumbUrl);
+}
+
 /**
  * コラムのカバー。本文の最初のメディアブロック（動画サムネ等）を使い、無ければストックへ退避。
  * 球場のストック写真より、出演クリップのサムネの方が「読みたくなる」ため。
