@@ -92,7 +92,8 @@ async function resolveCover(t) {
       if (yt) {
         const maxres = `https://i.ytimg.com/vi/${yt}/maxresdefault.jpg`;
         if (await headOk(maxres)) return { url: maxres, width: 1280, source: 'yt-maxres' };
-        return { url: `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`, width: 480, source: 'yt-hqdefault' };
+        // maxres 不在 → ogCover はストック(1600px)に倒す（hqdefault 480px は使わない）。
+        return { url: '(stock w=1600)', width: 1600, source: 'yt-fallback-stock' };
       }
       return { url: '(stock w=1600)', width: 1600, source: 'stock' }; // streamable 等は ogCover でストックに倒れる
     }

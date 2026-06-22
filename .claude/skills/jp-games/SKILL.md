@@ -98,7 +98,19 @@ node scripts/fetch-mlb-stats.mjs jp <etDate> --json        # その日の全出�
 - `stats` … `jp <etDate> --json` の出力から、**この試合の `jpPlayers` に一致する選手だけ**を残す（無関係な選手は削る）。
   WAR は全選手必須・投手は WHIP 必須（matome R10）。
 - `media` … `{ "kind": "video", "url": <動画URL>, "credit": "MLB（YouTube公式ハイライト）" }`（R5）。
+  - **Discover 画像（1200px 足切り）**: 公式ハイライトに `maxresdefault`（1280px）があれば
+    `media.thumbUrl` に `https://i.ytimg.com/vi/<videoId>/maxresdefault.jpg` を**明示**する（実サムネ＝
+    クリックされやすい）。maxres が無い動画（720p 未満）は **thumbUrl を付けない**——`ogCover` が
+    自動で 1600px の競技ストックに倒し Discover 適格を保つ（`src/lib/media.ts`。480px の hqdefault には
+    倒さない）。maxres の有無は `node -e` で実寸確認するか、`fetch-youtube search` 後に判定する。
 - コメント抜粋・並べ・翻訳・`isHook`・`summaryJa`・`title` は **matome の R1〜R10 をそのまま適用**。
+
+### Step 4 — X 集客の下書きを出す（流入の生命線＝仕組み化）
+記事を作ったら**そのつど** X（@アカウント）用のポスト下書きを `_local/x-posts.md` に貯める（現在の流入の
+6〜7割が X。新記事ごとに必ず1ポスト）。送客あり版＝**本文（中の人の声でネタバレしない掴み1行）＋改行＋
+記事URL** `https://matome-mlb-kaigai.jp/mlb/{id}`。声の作り方は `x-post` スキル（固定キャラ「中の人」）に従う。
+- 日次でまとめて投げる運用なら「今日の日本人選手の結果＋海外の反応」を1本に束ねてもよい。
+- `_local/` は gitignore 済み＝コミットしない（下書き置き場）。
 
 作成後は matome と同じ運用（任意で `npm run build` 確認 → コミット → デプロイ後 ping。手順は `scripts/threads-update.md`）。
 

@@ -65,6 +65,10 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
 - `kind: "video"` … 視聴 URL を `url` に。**YouTube / Streamable は自動で iframe 埋め込み**
   になる。それ以外（`v.redd.it` 等）は埋め込めないので、可能なら外部ミラー(YouTube等)の
   URL を優先。サムネは `thumbUrl`（無ければ YouTube は自動取得、それも無ければストック）。
+  - **Discover 画像（1200px 足切り）**: YouTube 動画で `maxresdefault`（1280px）が存在するなら
+    `thumbUrl` に `https://i.ytimg.com/vi/<videoId>/maxresdefault.jpg` を明示する。maxres が無い動画は
+    `thumbUrl` を付けない＝`ogCover`（`src/lib/media.ts`）が 1600px の競技ストックに倒して適格を保つ
+    （480px の hqdefault には倒さない）。サイト内カード表示は hqdefault のままで可（OGP/Discover だけ大きく要る）。
 - `credit` は必ず添える（例: `"u/foo · r/baseball"`）。`caption` は任意の日本語説明。
 - URL が分からない／無いときは `media` を**省略**（ストック写真にフォールバックする）。捏造しない。
 - 直リンク画像のホストを増やすときは `next.config.mjs` の `remotePatterns` に追加が必要。

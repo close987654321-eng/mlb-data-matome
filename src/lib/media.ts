@@ -54,9 +54,11 @@ export async function ogCover(
         const res = await fetch(maxres, { method: 'HEAD', next: { revalidate: false } });
         if (res.ok) return { url: maxres, width: 1280, height: 720 };
       } catch {
-        // ネットワーク不通時は hqdefault に倒す（ビルドを止めない）
+        // 不通時は下のストックへ（ビルドを止めない）
       }
-      return { url: `https://i.ytimg.com/vi/${yt}/hqdefault.jpg`, width: 480, height: 360 };
+      // maxres が無い動画（元動画が 720p 未満）は hqdefault が 480px ＝ Discover/OGP の
+      // 1200px 足切りに引っかかる。480px を返すより競技ストック(1600px・適格)に倒すほうが
+      // 「Discover に出る」点で有利（実サムネを使いたい記事は media.thumbUrl で明示）。
     }
   }
   // ストック（Unsplash・?w=1600 付き）は十分大きい
