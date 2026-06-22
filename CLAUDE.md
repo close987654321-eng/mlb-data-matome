@@ -94,6 +94,11 @@ SSG します。
   403 で全滅（WebFetch も reddit.com 拒否）。公式 OAuth（`scripts/fetch-reddit.mjs`）は
   **2025/11 から事前承認制**で承認待ち。
   → 当面は **手動運用**（ユーザーがスレ URL とコメントを貼り、Claude が翻訳・整形）。
+- **MLB 成績（編集時の味付け用）**: `node scripts/fetch-mlb-stats.mjs jp <ETの試合日> --json` で
+  日本人 MLB 選手の成績を `Thread.stats` 配列として取得（MLB公式 Stats API・キー不要）。記事は
+  `summaryJa` 直下の専用ボックス（`StatBox`）で「この試合／今季／節目」を表示（matome R10）。日付は
+  現地(ET)基準＝JST と1日ズレることあり。⚠️ **サイト本体は叩かず編集時取得のみ**＝API規約は「個人・非商用」
+  なので恒常データ源にはしない。記事に残すのは**数値だけ**（公知の事実）。ロゴ/写真/中継/表組みは転載しない。
 
 ### 4.2 出力フォーマット
 

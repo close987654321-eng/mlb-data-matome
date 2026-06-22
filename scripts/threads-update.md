@@ -33,6 +33,21 @@ node scripts/fetch-youtube.mjs comments <動画URL>
 - 記事は `format: "youtube"` を付ける（表示が author そのまま＋👍 likeCount になる）。
   詳細は matome スキル R7+。
 
+## 手順（MLB 成績を記事にそえる・編集時の味付け）
+
+```sh
+node scripts/fetch-mlb-stats.mjs jp 2026-06-19 --json  # 指定日(ET)に出場した日本人選手 → Thread.stats 配列
+node scripts/fetch-mlb-stats.mjs player 大谷 --json     # 1 選手だけ（"大谷"/"Ohtani"/660271）
+node scripts/fetch-mlb-stats.mjs jp                     # 今季ダッシュボード（人が読む形・節目チェック）
+```
+
+- MLB公式 Stats API（キー不要・無料）から取得。`--json` の出力を記事の `Thread.stats` にそのまま貼ると、
+  `summaryJa` 直下の専用ボックス（この試合／今季／節目バッジ）で表示される（matome スキル **R10**）。
+  MLB の試合まとめ・「海外ニキと見る」で効く。⚠️ 日付は**現地(ET)基準**＝JST の試合日と1日ズレることあり。
+- ⚠️ **サイト本体（SSG）はこの API を叩かない**。規約が「個人・非商用・非バルク」なので恒常データ源には
+  しない＝あくまで編集時取得。記事に残すのは**成績の数値だけ**（公知の事実で著作権の対象外）。
+  MLB のロゴ・選手写真・中継映像・成績表の丸ごと転載はしない。取得できなければ省略（捏造しない）。
+
 ## 手順（Reddit・API 承認後）
 
 ```sh

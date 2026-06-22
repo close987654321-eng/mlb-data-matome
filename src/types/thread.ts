@@ -48,6 +48,20 @@ export type ThreadSeries = {
   opponent: LocalizedName; // 対戦相手名（vs の右）。例: { ja: "パイレーツ", en: "Pirates" }
 };
 
+/**
+ * 記事にそえる「日本人選手の成績」1 件（matome R10）。summaryJa の下に専用ボックスで表示する。
+ * 値は MLB公式 Stats API 由来の数値だけ（打率・本塁打・防御率＝公知の事実で著作権の対象外）。
+ * scripts/fetch-mlb-stats.mjs で編集時に取得して書き込む（サイト本体は API を叩かない）。
+ * MLB のロゴ・選手写真・成績表の丸ごと転載はしない（CLAUDE.md §4.5 / SKILL.md R10）。
+ */
+export type PlayerStat = {
+  player: string; // 日本語表記（例: "大谷翔平"）
+  team?: string; // 短い日本語のチーム名（例: "ドジャース"）
+  today?: string; // その試合の成績（例: "2打数1安打1四球" / 二刀流は "投 6.0回… / 打 …"）
+  season?: string; // 今季成績（例: "打率.297 16本 43打点 OPS.969"）
+  note?: string; // 節目など強調したい一言（例: "今季16号"）。アクセント色のバッジで出る
+};
+
 /** 海外掲示板スレッドの日本語まとめ 1 件 */
 export type Thread = {
   id: string; // "2026-06-09-judge-walkoff" のような日付プレフィックス付き kebab-case
@@ -64,6 +78,7 @@ export type Thread = {
   comments: ThreadComment[]; // 抜粋・翻訳済みコメント
   media?: ThreadMedia; // 代表メディア（カードサムネ＆記事 hero に使う）
   gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）
+  stats?: PlayerStat[]; // 日本人選手の成績ボックス（R10・MLB記事のみ）。summaryJa の直下に表示
   tags?: string[]; // 日本語タグ（選手名・話題）
   series?: ThreadSeries; // 「海外ニキと見る」シリーズ記事ならその情報（タイトル定型化＋バッジ＋/watch掲載）
   hideFromWatch?: boolean; // 動画つきでも /watch ハブ（注目の試合）に載せない。スタジオ解説/番組セグメント等、watch-along に馴染まない動画記事向け

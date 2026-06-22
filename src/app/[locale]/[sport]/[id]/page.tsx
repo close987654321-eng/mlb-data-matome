@@ -11,6 +11,7 @@ import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
 import Transcript from '@/components/Transcript';
+import StatBox from '@/components/StatBox';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
@@ -191,6 +192,17 @@ export default async function ThreadDetailPage({
       )}
 
       <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
+
+      {/* 日本人選手の成績ボックス（R10）。MLB の試合まとめで summaryJa の直下に出す。数値は編集時に
+          fetch-mlb-stats.mjs で取得した公知の事実のみ（サイト本体は API を叩かない）。 */}
+      {thread.stats && thread.stats.length > 0 && (
+        <StatBox
+          stats={thread.stats}
+          heading={t('threads.statsHeading')}
+          todayLabel={t('threads.statToday')}
+          seasonLabel={t('threads.statSeason')}
+        />
+      )}
 
       {isWatchAlong ? (
         // この記事だけ：動画をピン留めし、その裏をコメントが試合の時系列順に流れる。
