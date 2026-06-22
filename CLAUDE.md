@@ -103,6 +103,10 @@ SSG します。
     自動取得→変化があればコミット（Vercel 自動デプロイ）。これは編集時取得の延長＝**サイト本体ではなく CI が叩く**運用。
     API規約「個人・非商用・非バルク」を踏まえ、デッドな時間帯は回さず低頻度に抑える（恒常的な全時間データ源にはしない）。
     取得失敗・名簿異常時は書かずに失敗（既存JSONを保持）。手動更新は `node scripts/fetch-mlb-stats.mjs snapshot`。
+  - **守備＋走力（Statcast / Baseball Savant）**: snapshot は statsapi の伝統的守備に加え、`baseballsavant.mlb.com`
+    のリーダーボード CSV から **OAA（守備範囲）・守備run（FRV相当）・送球 最速mph・走力 ft/s** を取得（MLB公式・
+    キー不要）。OAA等は守備位置に就く野手のみ＝投手/DH には付かない（大谷は走力のみ）。Savant 取得が失敗しても
+    コア（statsapi）スナップショットは壊さずその指標だけ欠落させて続行。法務 posture は statsapi と同じ（公知の数値だけ）。
 
 ### 4.2 出力フォーマット
 

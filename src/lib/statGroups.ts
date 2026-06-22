@@ -52,6 +52,33 @@ export const FIELD_LABELS: [string, string][] = [
   ['doublePlays', '併殺'],
 ];
 
+// ── Statcast 先進指標のフォーマッタ（数値→表示文字列。値が無ければ null＝行を出さない＝捏造しない）──
+const toNumOrNaN = (v?: number | string): number =>
+  typeof v === 'number' ? v : v != null && v !== '' ? Number(v) : NaN;
+/** 平均より上(+)/下(−)を符号で示す（OAA・守備run）。0 は "0"、負は "−3"（U+2212）。 */
+export const signedInt = (v?: number | string): string | null => {
+  const n = toNumOrNaN(v);
+  if (!Number.isFinite(n)) return null;
+  return n > 0 ? `+${n}` : n < 0 ? `−${Math.abs(n)}` : '0';
+};
+/** 小数1桁（送球 mph・走力 ft/s）。 */
+export const oneDecimal = (v?: number | string): string | null => {
+  const n = toNumOrNaN(v);
+  return Number.isFinite(n) ? n.toFixed(1) : null;
+};
+
+/**
+ * 守備ブロックに足す Statcast 先進守備（順位は付かない）。守備位置に就く野手のみ値を持つ。
+ * OAA=守備範囲（プレー数換算・符号付き）、守備run=同ラン換算（FRV相当）、送球=最速 mph。
+ */
+export const ADV_FIELD: { key: string; label: string; fmt: (v?: number | string) => string | null }[] = [
+  { key: 'oaa', label: 'OAA', fmt: signedInt },
+  { key: 'runsPrevented', label: '守備run', fmt: signedInt },
+  { key: 'arm', label: '送球 最速mph', fmt: oneDecimal },
+];
+/** 走力（Sprint speed・ft/s）。守備位置を問わず出る＝DH の選手にも出せる唯一の身体能力指標。 */
+export const SPEED_FIELD = { key: 'sprintSpeed', label: 'トップスピード ft/s', fmt: oneDecimal } as const;
+
 /** StatField を表示文字列に解決する（無ければ null＝行を出さない）。 */
 export function resolveStatValue(
   field: StatField,

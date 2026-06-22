@@ -48,12 +48,16 @@ export default function PlayerStickyBar({
 
   return (
     <>
-      <div ref={sentinel} aria-hidden="true" className="h-px w-full" />
+      <div ref={sentinel} aria-hidden="true" className="h-px w-full !mt-0" />
       <div
         aria-hidden="true"
         data-stuck={stuck ? 'true' : 'false'}
         style={top != null ? { top } : undefined}
-        className="fixed inset-x-0 top-[96px] z-10 border-b border-line bg-paper/90 backdrop-blur transition-[opacity,transform] duration-200 motion-reduce:transition-none data-[stuck=false]:pointer-events-none data-[stuck=false]:-translate-y-1 data-[stuck=false]:opacity-0 data-[stuck=true]:translate-y-0 data-[stuck=true]:opacity-100 sm:top-16"
+        /* !mt-0 が要点: このバーは親 <div className="space-y-8"> の子で、space-y は子に
+           margin-top:2rem を足す。position:fixed の top はマージン辺を基準に置くため、その 2rem が
+           バーをヘッダ下端からちょうど 32px 押し下げ＝隙間の正体だった（top の実測値は正しかった）。
+           important で space-y のマージンだけ打ち消し、ヘッダ下端にピタリ吸着させる。 */
+        className="fixed inset-x-0 top-[96px] z-10 !mt-0 border-b border-line bg-paper/90 backdrop-blur transition-[opacity,transform] duration-200 motion-reduce:transition-none data-[stuck=false]:pointer-events-none data-[stuck=false]:-translate-y-1 data-[stuck=false]:opacity-0 data-[stuck=true]:translate-y-0 data-[stuck=true]:opacity-100 sm:top-16"
       >
         <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-5">
           <div className="flex min-w-0 items-center gap-2">

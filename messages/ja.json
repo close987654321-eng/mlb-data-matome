@@ -57,7 +57,7 @@
     "indexLead": "メジャーでプレーする日本人選手の今季成績を一覧・比較。列の見出しをタップで並び替え、行をタップで個別ページへ。",
     "asOf": "{date} 時点",
     "statsTitle": "今季成績（詳細）",
-    "statsNote": "出典: MLB公式 Stats API（数値は公知の事実）。編集時に取得したスナップショットで、リアルタイム更新ではありません。",
+    "statsNote": "出典: MLB公式 Stats API（数値は公知の事実）。守備範囲(OAA)・送球・走力は Statcast（Baseball Savant）。編集時に取得したスナップショットで、リアルタイム更新ではありません。",
     "swipeHint": "→ 横にスクロールで全項目",
     "highlights": "注目の成績",
     "rankMlb": "MLB",
@@ -89,6 +89,7 @@
     "grpPitK": "奪三振・制球",
     "grpPitRuns": "失点・WAR",
     "grpFielding": "守備",
+    "grpSpeed": "走力",
     "hubCta": "{name}の今季成績",
     "latestGame": "直近の試合まとめを見る"
   },

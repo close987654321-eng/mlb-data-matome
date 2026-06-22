@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import type { PlayerSeason, Rank, League } from '@/lib/playerStats';
 import type { Hero } from '@/lib/playerHero';
 import type { RankLabels } from '@/components/RankBadges';
-import { HIT_GROUPS, PIT_GROUPS, FIELD_LABELS, resolveStatValue, type StatGroup } from '@/lib/statGroups';
+import { HIT_GROUPS, PIT_GROUPS, FIELD_LABELS, ADV_FIELD, SPEED_FIELD, resolveStatValue, type StatGroup } from '@/lib/statGroups';
 import StatRail, { type RailRow } from './StatRail';
 
 /**
@@ -79,12 +79,22 @@ export default async function PlayerDetail({
   const twoWay = hasBat && hasPit;
 
   const fielding = season.fielding;
+  // 伝統的守備（刺殺〜併殺）＋ Statcast 先進守備（OAA/守備run/送球）を同じレールに。
+  // 先進指標は守備位置に就く野手だけが値を持つ＝無ければ行を出さない（投手/DH に 0 を捏造しない）。
   const fieldRows: RailRow[] = fielding
-    ? FIELD_LABELS.flatMap(([key, label]) => {
-        const v = fielding[key];
-        return v == null || v === '' ? [] : [{ label, value: String(v) }];
-      })
+    ? [
+        ...FIELD_LABELS.flatMap(([key, label]) => {
+          const v = fielding[key];
+          return v == null || v === '' ? [] : [{ label, value: String(v) }];
+        }),
+        ...ADV_FIELD.flatMap(({ key, label, fmt }) => {
+          const s = fmt(fielding[key] as number | string | undefined);
+          return s == null ? [] : [{ label, value: s }];
+        }),
+      ]
     : [];
+  // 走力は守備位置を問わず出る＝守備ブロックが無い選手（DH）にも独立して見せる。
+  const speedValue = SPEED_FIELD.fmt(season.sprintSpeed ?? undefined);
 
   const batPanel = hasBat && (
     <RoleGroups groups={HIT_GROUPS} rec={season.hitting} ranks={season.ranks?.hitting} saber={season.saber} league={season.league} labels={labels} titleOf={titleOf} />
@@ -129,6 +139,17 @@ export default async function PlayerDetail({
                 {t('grpFielding')}（{season.fielding.position}）
               </h3>
               <StatRail rows={fieldRows} league={season.league} labels={labels} dense />
+            </div>
+          )}
+
+          {/* 走力（Sprint speed）。守備に就かない DH（大谷ら）にも出せる唯一の身体能力指標なので独立表示。 */}
+          {speedValue && (
+            <div className="mt-6">
+              <h3 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
+                <span className="h-3 w-1 rounded-full bg-accent" />
+                {t('grpSpeed')}
+              </h3>
+              <StatRail rows={[{ label: SPEED_FIELD.label, value: speedValue }]} league={season.league} labels={labels} dense />
             </div>
           )}
 

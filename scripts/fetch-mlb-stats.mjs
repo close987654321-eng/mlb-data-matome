@@ -220,6 +220,103 @@ async function fetchFielding(ids, season) {
   return map;
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Statcast（Baseball Savant）守備＋走力。statsapi の伝統的守備に、OAA/守備run/送球/走力を足す。
+// savant も MLB 公式（Statcast）・キー不要。法務の posture は statsapi と同じ＝公知の数値だけ、
+// バルク常用しない・サイト本体は叩かない（CI/編集時の取得のみ）。CSV リーダーボードを読む。
+// ⚠️ fielder_name 等にカンマ入りの値があるので、素朴な split ではなく引用符対応の簡易 CSV パーサで読む。
+// ─────────────────────────────────────────────────────────────────────────────
+const SAVANT = 'https://baseballsavant.mlb.com/leaderboard';
+
+/** 1行を引用符（""エスケープ）対応で分割。 */
+function parseCsvLine(line) {
+  const out = [];
+  let cur = '';
+  let q = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (q) {
+      if (c === '"') {
+        if (line[i + 1] === '"') { cur += '"'; i++; } else q = false;
+      } else cur += c;
+    } else if (c === '"') q = true;
+    else if (c === ',') { out.push(cur); cur = ''; }
+    else cur += c;
+  }
+  out.push(cur);
+  return out;
+}
+/** CSV テキスト → 連想配列の配列（先頭行をキー・BOM 除去）。 */
+function parseCsv(text) {
+  const lines = text.split(/\r?\n/).filter((l) => l.length);
+  if (!lines.length) return [];
+  const header = parseCsvLine(lines[0]).map((h) => h.replace(/^﻿/, '').trim());
+  return lines.slice(1).map((l) => {
+    const cells = parseCsvLine(l);
+    return Object.fromEntries(header.map((h, i) => [h, cells[i]]));
+  });
+}
+async function getCsv(url) {
+  const res = await fetch(url, { headers: { 'User-Agent': 'matome-mlb-kaigai/editor' } });
+  if (!res.ok) throw new Error(`Savant ${res.status}: ${url}`);
+  return parseCsv(await res.text());
+}
+const toNum = (v) => {
+  if (v == null || v === '') return null;
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? n : null;
+};
+
+/**
+ * Statcast の守備・走力を personId 別に返す。
+ *  - oaa:   { oaa（守備範囲・符号付き）, runsPrevented（ラン換算＝FRV相当） } … 守備位置に就く野手のみ（内野・外野とも）
+ *  - arm:   送球 最速 mph（内野 type=if ＋外野 type=of を統合） … 該当ポジションのみ
+ *  - sprint: 走力 ft/s … 守備位置を問わず出る＝DH の大谷にも付く唯一の身体能力指標
+ * 失敗してもコア（statsapi）スナップショットは壊さない＝その指標だけ欠落させて続行（CI の毎時実行を堅牢に）。
+ */
+async function fetchSavant(season) {
+  const oaa = new Map();
+  const arm = new Map();
+  const sprint = new Map();
+  try {
+    const rows = await getCsv(
+      `${SAVANT}/outs_above_average?type=Fielder&startYear=${season}&endYear=${season}&split=no&team=&range=year&min=1&pos=&roleKey=&csv=true`,
+    );
+    for (const r of rows) {
+      const id = Number(r.player_id);
+      const o = toNum(r.outs_above_average);
+      const rp = toNum(r.fielding_runs_prevented);
+      if (id && (o != null || rp != null)) oaa.set(id, { oaa: o, runsPrevented: rp });
+    }
+  } catch (e) {
+    console.warn(`OAA取得スキップ（コアは継続）: ${e.message}`);
+  }
+  // 送球は内野(if)・外野(of)で別リーダーボード。両方読んで統合（選手は主ポジ1つなのでどちらかに載る）。
+  for (const type of ['if', 'of']) {
+    try {
+      const rows = await getCsv(`${SAVANT}/arm-strength?type=${type}&year=${season}&csv=true`);
+      for (const r of rows) {
+        const id = Number(r.player_id);
+        const v = toNum(r.max_arm_strength);
+        if (id && v != null && !arm.has(id)) arm.set(id, v);
+      }
+    } catch (e) {
+      console.warn(`送球(${type})取得スキップ（コアは継続）: ${e.message}`);
+    }
+  }
+  try {
+    const rows = await getCsv(`${SAVANT}/sprint_speed?attempts=5&year=${season}&csv=true`);
+    for (const r of rows) {
+      const id = Number(r.player_id);
+      const v = toNum(r.sprint_speed);
+      if (id && v != null) sprint.set(id, v);
+    }
+  } catch (e) {
+    console.warn(`走力取得スキップ（コアは継続）: ${e.message}`);
+  }
+  return { oaa, arm, sprint };
+}
+
 /** 各指標の MLB 順位表（personId → rank）。本塁打／防御率（規定到達）／奪三振。 */
 async function fetchRanks(season) {
   const one = async (category, statGroup) => {
@@ -542,11 +639,12 @@ async function runSnapshot(season, asOf) {
     process.exit(1);
   }
   const ids = [...new Set([...jpIds, ...EXTRA_IDS])];
-  const [seasonPeople, saberMap, ranksMap, fieldingMap] = await Promise.all([
+  const [seasonPeople, saberMap, ranksMap, fieldingMap, savant] = await Promise.all([
     fetchStats(ids, season),
     fetchWar(ids, season),
     fetchRanksFull(season),
     fetchFielding(ids, season),
+    fetchSavant(season),
   ]);
   const players = {};
   for (const p of seasonPeople) {
@@ -557,9 +655,21 @@ async function runSnapshot(season, asOf) {
     if (h && h.gamesPlayed && r && Object.keys(r.hitting).length) ranks.hitting = r.hitting;
     if (pi && pi.gamesPlayed && r && Object.keys(r.pitching).length) ranks.pitching = r.pitching;
     const f = fieldingMap.get(p.id);
+    // Statcast 守備（OAA/守備run/送球）は「守備位置に就く野手」のみ。投手の fielding 枠（大谷=投手）には
+    // OAA 等が付かない＝savant 側に居ないので自然に省かれる（捏造しない）。
+    const oaaRec = savant.oaa.get(p.id);
+    const armV = savant.arm.get(p.id);
     const fielding = f
-      ? { position: POS_JA[f.position?.abbreviation] ?? f.position?.abbreviation ?? '', ...pick(f, FIELD_FIELDS) }
+      ? {
+          position: POS_JA[f.position?.abbreviation] ?? f.position?.abbreviation ?? '',
+          ...pick(f, FIELD_FIELDS),
+          ...(oaaRec?.oaa != null ? { oaa: oaaRec.oaa } : {}),
+          ...(oaaRec?.runsPrevented != null ? { runsPrevented: oaaRec.runsPrevented } : {}),
+          ...(armV != null ? { arm: armV } : {}),
+        }
       : null;
+    // 走力は守備に就かない選手（DH の大谷）にも出るので player 直下に持つ。
+    const sprintSpeed = savant.sprint.get(p.id);
     players[p.id] = {
       team: teamJa(p),
       league: LEAGUE_BY_TEAM[p.currentTeam?.name] ?? null,
@@ -567,6 +677,7 @@ async function runSnapshot(season, asOf) {
       pitching: pi && pi.gamesPlayed ? pick(pi, PIT_FIELDS) : null,
       saber: saberMap.get(p.id) ?? null,
       ...(fielding ? { fielding } : {}),
+      ...(sprintSpeed != null ? { sprintSpeed } : {}),
       ...(Object.keys(ranks).length ? { ranks } : {}),
     };
   }

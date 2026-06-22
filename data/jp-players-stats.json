@@ -239,6 +239,7 @@
         "woba": 0.410378,
         "wrcplus": 163.774
       },
+      "sprintSpeed": 27.5,
       "team": "ドジャース"
     },
     "663457": {
@@ -250,8 +251,10 @@
         "gamesPlayed": 11,
         "gamesStarted": 10,
         "innings": "89.0",
+        "oaa": 1,
         "position": "左翼",
-        "putOuts": 25
+        "putOuts": 25,
+        "runsPrevented": 1
       },
       "hitting": {
         "atBats": 50,
@@ -279,10 +282,12 @@
         "woba": 0.345675,
         "wrcplus": 121.426
       },
+      "sprintSpeed": 27.4,
       "team": "カージナルス"
     },
     "672960": {
       "fielding": {
+        "arm": 82.4,
         "assists": 113,
         "doublePlays": 7,
         "errors": 7,
@@ -290,8 +295,10 @@
         "gamesPlayed": 73,
         "gamesStarted": 72,
         "innings": "635.0",
+        "oaa": -1,
         "position": "三塁",
-        "putOuts": 45
+        "putOuts": 45,
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 271,
@@ -360,6 +367,7 @@
         "woba": 0.329546,
         "wrcplus": 108.679
       },
+      "sprintSpeed": 26.3,
       "team": "ブルージェイズ"
     },
     "673513": {
@@ -448,6 +456,7 @@
     },
     "673548": {
       "fielding": {
+        "arm": 94.5,
         "assists": 5,
         "doublePlays": 0,
         "errors": 0,
@@ -455,8 +464,10 @@
         "gamesPlayed": 50,
         "gamesStarted": 50,
         "innings": "438.2",
+        "oaa": 2,
         "position": "右翼",
-        "putOuts": 102
+        "putOuts": 102,
+        "runsPrevented": 2
       },
       "hitting": {
         "atBats": 227,
@@ -525,6 +536,7 @@
         "woba": 0.350819,
         "wrcplus": 124.566
       },
+      "sprintSpeed": 27.8,
       "team": "カブス"
     },
     "684007": {
@@ -593,7 +605,7 @@
         }
       },
       "saber": {
-        "pit": 0.870454
+        "pit": 0.876998
       },
       "team": "カブス"
     },
@@ -606,8 +618,10 @@
         "gamesPlayed": 11,
         "gamesStarted": 9,
         "innings": "69.0",
+        "oaa": -1,
         "position": "右翼",
-        "putOuts": 22
+        "putOuts": 22,
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 29,
@@ -635,6 +649,7 @@
         "woba": 0.215438,
         "wrcplus": 30.1151
       },
+      "sprintSpeed": 28,
       "team": "Charlotte Knights"
     },
     "807799": {
@@ -646,8 +661,10 @@
         "gamesPlayed": 6,
         "gamesStarted": 5,
         "innings": "44.0",
+        "oaa": -3,
         "position": "左翼",
-        "putOuts": 8
+        "putOuts": 8,
+        "runsPrevented": -2
       },
       "hitting": {
         "atBats": 146,
@@ -685,10 +702,12 @@
         "woba": 0.30061,
         "wrcplus": 84.1824
       },
+      "sprintSpeed": 26.2,
       "team": "レッドソックス"
     },
     "808959": {
       "fielding": {
+        "arm": 76,
         "assists": 26,
         "doublePlays": 33,
         "errors": 2,
@@ -696,8 +715,10 @@
         "gamesPlayed": 52,
         "gamesStarted": 51,
         "innings": "445.0",
+        "oaa": 0,
         "position": "一塁",
-        "putOuts": 392
+        "putOuts": 392,
+        "runsPrevented": 0
       },
       "hitting": {
         "atBats": 200,
@@ -763,6 +784,7 @@
         "woba": 0.397787,
         "wrcplus": 154.29
       },
+      "sprintSpeed": 27.2,
       "team": "ホワイトソックス"
     },
     "808963": {

@@ -57,7 +57,7 @@
     "indexLead": "Season stats for Japanese players in MLB, all in one place. Tap a column header to sort; tap a row for the player's page.",
     "asOf": "As of {date}",
     "statsTitle": "Season stats (detailed)",
-    "statsNote": "Source: MLB official Stats API (stats are public facts). An edit-time snapshot, not real-time.",
+    "statsNote": "Source: MLB official Stats API (stats are public facts). Range (OAA), arm, and sprint speed are Statcast (Baseball Savant). An edit-time snapshot, not real-time.",
     "swipeHint": "→ Swipe to see all columns",
     "highlights": "At a glance",
     "rankMlb": "MLB",
@@ -89,6 +89,7 @@
     "grpPitK": "K / Control",
     "grpPitRuns": "Runs / WAR",
     "grpFielding": "Fielding",
+    "grpSpeed": "Speed",
     "hubCta": "{name}'s season stats",
     "latestGame": "See the latest game recap"
   },

@@ -22,6 +22,8 @@ export type PlayerSeason = {
   pitching: StatRecord | null;
   saber: Saber | null;
   fielding?: FieldingRecord | null;
+  /** 走力（Statcast スプリント速度・ft/s）。守備位置を問わず付く＝DH の選手にも出る。 */
+  sprintSpeed?: number | null;
   ranks?: Ranks;
 };
 export type PlayersSnapshot = {
