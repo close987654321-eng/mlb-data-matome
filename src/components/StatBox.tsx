@@ -1,4 +1,6 @@
 import type { PlayerStat } from '@/types/thread';
+import { playerSlugByJaName } from '@/lib/players';
+import { Link } from '@/lib/navigation';
 
 type Props = {
   stats: PlayerStat[];
@@ -35,7 +37,17 @@ export default function StatBox({
           <div key={i} className={i > 0 ? 'border-t border-line/70 pt-4' : ''}>
             <div className="flex items-baseline justify-between gap-2">
               <p className="font-bold text-ink">
-                {s.player}
+                {/* 選手ハブがある選手は名前から個別ページへ内部リンク（クラスタ強化） */}
+                {(() => {
+                  const slug = playerSlugByJaName(s.player);
+                  return slug ? (
+                    <Link href={`/player/${slug}`} className="hover:text-accent hover:underline">
+                      {s.player}
+                    </Link>
+                  ) : (
+                    s.player
+                  );
+                })()}
                 {s.team && (
                   <span className="ml-2 text-xs font-normal text-ink-soft">{s.team}</span>
                 )}

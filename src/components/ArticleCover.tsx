@@ -49,13 +49,17 @@ export default function ArticleCover({
 }: Props) {
   const info = SPORT_INFO[sport];
   const label = eyebrow ?? `${info.emoji} ${locale === 'ja' ? info.labelJa : info.labelEn}`;
+  // 画像 SEO（代表画像の文脈シグナル）のため空 alt をやめる。記事タイトルがあればそれを、
+  // 無ければ競技名ベースの説明を入れる（写真自体は競技の雰囲気カットなので汎用説明で可）。
+  const altText =
+    title ?? (locale === 'ja' ? `${info.labelJa}の海外の反応` : `${info.labelEn} overseas reactions`);
 
   if (variant === 'hero') {
     return (
       <div className="relative overflow-hidden rounded-2xl">
         <Image
           src={imageUrl}
-          alt=""
+          alt={altText}
           width={1600}
           height={800}
           priority
@@ -87,7 +91,7 @@ export default function ArticleCover({
     <div className="relative aspect-[16/10] overflow-hidden rounded-lg">
       <Image
         src={imageUrl}
-        alt=""
+        alt={altText}
         fill
         priority={priority}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

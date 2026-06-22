@@ -27,6 +27,9 @@
  *   node scripts/fetch-mlb-stats.mjs player 大谷 --json
  */
 
+import { writeFileSync } from 'node:fs';
+import path from 'node:path';
+
 const BASE = 'https://statsapi.mlb.com/api/v1';
 
 /** 当年（JST）。season 省略時のデフォルト。 */
@@ -137,7 +140,7 @@ async function fetchStats(ids, season, { date, start, end } = {}) {
 }
 
 /**
- * WAR（sabermetrics）を personId → {hit, pit} で返す。
+ * sabermetrics を personId → {hit, pit, woba, wrcplus} で返す（hit/pit は WAR）。
  * ⚠️ MLB API の sabermetrics は startDate/endDate を無視し「今季累計」しか返さない。
  *    ＝ WAR の「試合ごとの増減（前回比）」は取得できない。表示するのは今季の値のみ。
  */
@@ -146,7 +149,8 @@ async function fetchWar(ids, season) {
   const data = await getJson(`${BASE}/people?personIds=${ids.join(',')}&hydrate=${hydrate}`);
   const map = new Map();
   for (const p of data.people ?? []) {
-    map.set(p.id, { hit: pickSplit(p, 'hitting')?.war, pit: pickSplit(p, 'pitching')?.war });
+    const h = pickSplit(p, 'hitting');
+    map.set(p.id, { hit: h?.war, pit: pickSplit(p, 'pitching')?.war, woba: h?.woba, wrcplus: h?.wRcPlus });
   }
   return map;
 }
@@ -399,6 +403,37 @@ async function runPlayer(query, season, { asJson } = {}) {
   recs.forEach(printRecord);
 }
 
+// 選手ハブ /player の詳細テーブル＆比較表が読む“今季成績スナップショット”に残す項目（公知の事実のみ）。
+const HIT_FIELDS = ['gamesPlayed', 'plateAppearances', 'atBats', 'runs', 'hits', 'doubles', 'triples', 'homeRuns', 'rbi', 'stolenBases', 'baseOnBalls', 'strikeOuts', 'avg', 'obp', 'slg', 'ops', 'babip'];
+const PIT_FIELDS = ['gamesPlayed', 'gamesStarted', 'wins', 'losses', 'saves', 'holds', 'inningsPitched', 'hits', 'runs', 'earnedRuns', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'era', 'whip', 'avg', 'strikeoutsPer9Inn', 'walksPer9Inn', 'strikeoutWalkRatio', 'homeRunsPer9', 'winPercentage'];
+const pick = (obj, fields) => Object.fromEntries(fields.filter((f) => obj[f] != null).map((f) => [f, obj[f]]));
+
+/**
+ * 全日本人選手の今季成績を data/jp-players-stats.json に書き出す（選手ハブの詳細/比較表のデータ源）。
+ * これは編集時取得のスナップショット。サイト本体はこの静的JSONを読むだけで API を叩かない。
+ * 残すのは成績の数値（公知の事実）のみ。`asOf`（JSTの取得日）も保存し、ハブに「○月○日時点」と出す。
+ */
+async function runSnapshot(season, asOf) {
+  const ids = await fetchJapanesePlayers(season);
+  if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
+  const [seasonPeople, saberMap] = await Promise.all([fetchStats(ids, season), fetchWar(ids, season)]);
+  const players = {};
+  for (const p of seasonPeople) {
+    const h = pickSplit(p, 'hitting');
+    const pi = pickSplit(p, 'pitching');
+    players[p.id] = {
+      team: teamJa(p),
+      hitting: h && h.gamesPlayed ? pick(h, HIT_FIELDS) : null,
+      pitching: pi && pi.gamesPlayed ? pick(pi, PIT_FIELDS) : null,
+      saber: saberMap.get(p.id) ?? null,
+    };
+  }
+  const out = { asOf, season, players };
+  const file = path.join(process.cwd(), 'data', 'jp-players-stats.json');
+  writeFileSync(file, JSON.stringify(out, null, 2) + '\n');
+  console.log(`snapshot 書き出し: ${Object.keys(players).length}名 / asOf ${asOf} → ${file}`);
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -421,6 +456,11 @@ async function main() {
     }
   } else if (cmd === 'player' && arg) {
     await runPlayer(arg, arg2 ? Number(arg2) : defaultSeason(), { asJson });
+  } else if (cmd === 'snapshot') {
+    // snapshot [YYYY-MM-DD(=asOf)] [season]
+    const asOf = arg && /^\d{4}-\d{2}-\d{2}$/.test(arg) ? arg : new Date().toISOString().slice(0, 10);
+    const season = arg2 && /^\d{4}$/.test(arg2) ? Number(arg2) : defaultSeason();
+    await runSnapshot(season, asOf);
   } else {
     console.error(
       [
@@ -428,6 +468,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs jp [season]        # 日本人選手の今季成績一覧',
         '  node scripts/fetch-mlb-stats.mjs jp YYYY-MM-DD      # 指定日(ET)の各選手の成績',
         '  node scripts/fetch-mlb-stats.mjs player <名前|ID> [season]',
+        '  node scripts/fetch-mlb-stats.mjs snapshot [YYYY-MM-DD] # 選手ハブ用に全選手の今季成績を data/jp-players-stats.json へ',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
     );

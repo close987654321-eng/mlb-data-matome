@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { getAllTags } from '@/lib/tags';
+import { PLAYERS } from '@/lib/players';
 import { SPORTS } from '@/lib/sports';
 import { locales, defaultLocale } from '@/lib/i18n';
 
@@ -52,6 +53,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return entry(`/${sport}`, newestInSport);
     }),
     ...threads.map((t) => entry(`/${t.sport}/${t.id}`, t.fetchedAt)),
+    // 選手ハブ（トピッククラスタのピラー）。記事が1本以上ある選手だけ。lastModified=その選手の最新記事。
+    entry('/player', latest),
+    ...PLAYERS.map((p) => {
+      const hubThreads = threads.filter(
+        (t) =>
+          (t.tags ?? []).includes(p.nameJa) ||
+          (t.stats ?? []).some((s) => s.player === p.nameJa),
+      );
+      return hubThreads.length > 0 ? entry(`/player/${p.slug}`, hubThreads[0]?.fetchedAt) : null;
+    }).filter((e): e is NonNullable<typeof e> => e != null),
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
     // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。

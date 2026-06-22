@@ -1,0 +1,79 @@
+/**
+ * 日本人 MLB 選手カタログ（選手ハブ /player/[slug] とエンティティ紐付けの唯一の正）。
+ * 「誰が現役か」は本来 MLB API（birthCountry==='Japan'）が最新だが、サイト本体は API を叩かない
+ * 方針（CLAUDE.md・[[mlb-stats-enrichment-decision]]）なので、ハブ対象はここで静的に持つ。
+ * 新しい日本人選手が記事に登場したら 1 行足す。所属チーム・成績は記事側の stats（編集時取得の事実）
+ * から引くので、ここには持たない（古くなる情報を二重管理しない）。
+ *
+ * sameAs: エンティティSEO（Knowledge Graph 照合）用の外部権威URL。MLB.com は slug-id が正規形、
+ * Wikipedia(日本語) は実在確認済みのものだけ入れる（404 を埋め込まない）。
+ * mlbId は fetch-mlb-stats.mjs の JP_NAMES と一致させる。
+ */
+export type Player = {
+  slug: string; // URL用の英字スラッグ（例: "shohei-ohtani"）
+  nameJa: string; // 日本語表記。記事の tags / stats[].player と突き合わせるキー
+  nameEn: string;
+  mlbId: number;
+  bio: string; // E-E-A-T／独自性のための短い紹介（事実のみ・所属は書かない＝古くなるため）
+  sameAs: string[]; // 外部権威URL（エンティティ照合）
+};
+
+const mlb = (slug: string, id: number) => `https://www.mlb.com/player/${slug}-${id}`;
+const wiki = (nameJa: string) => `https://ja.wikipedia.org/wiki/${encodeURIComponent(nameJa)}`;
+
+export const PLAYERS: Player[] = [
+  { slug: 'shohei-ohtani', nameJa: '大谷翔平', nameEn: 'Shohei Ohtani', mlbId: 660271,
+    bio: '投打二刀流でMLBを代表するスーパースター。先発登板と本塁打を同時にこなす。',
+    sameAs: [mlb('shohei-ohtani', 660271), wiki('大谷翔平')] },
+  { slug: 'yoshinobu-yamamoto', nameJa: '山本由伸', nameEn: 'Yoshinobu Yamamoto', mlbId: 808967,
+    bio: '日本球界からMLBに渡った先発右腕のエース格。多彩な変化球と制球が武器。',
+    sameAs: [mlb('yoshinobu-yamamoto', 808967), wiki('山本由伸_(野球)')] },
+  { slug: 'roki-sasaki', nameJa: '佐々木朗希', nameEn: 'Roki Sasaki', mlbId: 808963,
+    bio: '「令和の怪物」と呼ばれる剛速球右腕。',
+    sameAs: [mlb('roki-sasaki', 808963), wiki('佐々木朗希')] },
+  { slug: 'shota-imanaga', nameJa: '今永昇太', nameEn: 'Shota Imanaga', mlbId: 684007,
+    bio: '緩急と制球を武器にする先発左腕。',
+    sameAs: [mlb('shota-imanaga', 684007), wiki('今永昇太')] },
+  { slug: 'kodai-senga', nameJa: '千賀滉大', nameEn: 'Kodai Senga', mlbId: 673540,
+    bio: '「お化けフォーク」を操る先発右腕。',
+    sameAs: [mlb('kodai-senga', 673540), wiki('千賀滉大')] },
+  { slug: 'seiya-suzuki', nameJa: '鈴木誠也', nameEn: 'Seiya Suzuki', mlbId: 673548,
+    bio: '長打力のある右の外野手。',
+    sameAs: [mlb('seiya-suzuki', 673548), wiki('鈴木誠也')] },
+  { slug: 'masataka-yoshida', nameJa: '吉田正尚', nameEn: 'Masataka Yoshida', mlbId: 807799,
+    bio: 'コンタクト力に優れた外野手／DH。',
+    sameAs: [mlb('masataka-yoshida', 807799), wiki('吉田正尚')] },
+  { slug: 'yusei-kikuchi', nameJa: '菊池雄星', nameEn: 'Yusei Kikuchi', mlbId: 579328,
+    bio: '力のある速球を投げる先発左腕。',
+    sameAs: [mlb('yusei-kikuchi', 579328), wiki('菊池雄星')] },
+  { slug: 'yuki-matsui', nameJa: '松井裕樹', nameEn: 'Yuki Matsui', mlbId: 673513,
+    bio: '三振を奪うリリーフ左腕。',
+    sameAs: [mlb('yuki-matsui', 673513), wiki('松井裕樹')] },
+  { slug: 'tomoyuki-sugano', nameJa: '菅野智之', nameEn: 'Tomoyuki Sugano', mlbId: 608372,
+    bio: '日本球界で多くのタイトルを獲った実績を持つ先発右腕。',
+    sameAs: [mlb('tomoyuki-sugano', 608372), wiki('菅野智之')] },
+  { slug: 'kazuma-okamoto', nameJa: '岡本和真', nameEn: 'Kazuma Okamoto', mlbId: 672960,
+    bio: '長距離砲の内野手。',
+    sameAs: [mlb('kazuma-okamoto', 672960), wiki('岡本和真')] },
+  { slug: 'munetaka-murakami', nameJa: '村上宗隆', nameEn: 'Munetaka Murakami', mlbId: 808959,
+    bio: '日本で本塁打記録を打ち立てた強打の内野手。',
+    sameAs: [mlb('munetaka-murakami', 808959), wiki('村上宗隆')] },
+  { slug: 'tatsuya-imai', nameJa: '今井達也', nameEn: 'Tatsuya Imai', mlbId: 837227,
+    bio: '日本球界出身の先発右腕。',
+    sameAs: [mlb('tatsuya-imai', 837227), wiki('今井達也')] },
+  { slug: 'rikuu-nishida', nameJa: '西田陸羽', nameEn: 'Rikuu Nishida', mlbId: 807747,
+    bio: 'MLB組織に所属する日本人選手。',
+    sameAs: [mlb('rikuu-nishida', 807747)] },
+];
+
+const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));
+const BY_JA = new Map(PLAYERS.map((p) => [p.nameJa, p]));
+
+export function getPlayer(slug: string): Player | undefined {
+  return BY_SLUG.get(slug);
+}
+
+/** 日本語名（記事 tags / stats[].player の値）→ ハブ slug。StatBox の選手名リンクに使う。 */
+export function playerSlugByJaName(nameJa: string): string | undefined {
+  return BY_JA.get(nameJa)?.slug;
+}

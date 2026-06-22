@@ -7,6 +7,7 @@
   "nav": {
     "home": "新着",
     "watch": "海外ニキと見る",
+    "players": "選手成績",
     "reactions": "海外の反応",
     "columns": "インタビュー / コラム",
     "about": "運営者情報",
@@ -49,6 +50,17 @@
     "statDelta": "前回比",
     "statRank": "ランク",
     "viewSource": "元スレを見る（Reddit）"
+  },
+  "player": {
+    "eyebrow": "日本人選手",
+    "indexTitle": "日本人MLB選手 成績まとめ・比較",
+    "indexLead": "メジャーでプレーする日本人選手の今季成績を一覧・比較。列をタップで並び替え、選手名から個別ページへ。",
+    "asOf": "{date} 時点",
+    "statsTitle": "今季成績（詳細）",
+    "statsNote": "出典: MLB公式 Stats API（数値は公知の事実）。編集時に取得したスナップショットで、リアルタイム更新ではありません。",
+    "articles": "{name}の海外の反応（{count}本）",
+    "batting": "打者 比較",
+    "pitching": "投手 比較"
   },
   "columns": {
     "eyebrow": "読み物",

@@ -18,6 +18,7 @@ import TagList from '@/components/TagList';
 import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
 import { absoluteUrl, SITE_URL, localeAlternates } from '@/lib/site';
+import { PLAYERS } from '@/lib/players';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -106,14 +107,20 @@ export default async function ThreadDetailPage({
   const articleUrl = absoluteUrl(locale, `/${sport}/${id}`);
   const cover = await ogCover(thread);
   const categoryLabel = locale === 'ja' ? info.labelJa : info.labelEn;
+  // 記事をエンティティ（選手）に接続する。tags の選手名から選手カタログを引き、Person(sameAs) で
+  // Knowledge Graph に紐づけ、選手ハブ(url)へも結ぶ＝Discover/エンティティ理解の地ならし。
+  const taggedPlayers = (thread.tags ?? [])
+    .map((tag) => PLAYERS.find((p) => p.nameJa === tag))
+    .filter((p): p is NonNullable<typeof p> => p != null);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
-        '@type': 'BlogPosting',
+        // 試合直後の反応まとめ＝時事コンテンツなので NewsArticle（Top Stories/News 適格の鍵）。
+        '@type': 'NewsArticle',
         headline: title,
         description: thread.summaryJa.slice(0, 200),
-        image: [cover.url],
+        image: { '@type': 'ImageObject', url: cover.url, width: cover.width, height: cover.height },
         datePublished: thread.fetchedAt,
         dateModified: thread.fetchedAt,
         inLanguage: locale,
@@ -124,6 +131,17 @@ export default async function ThreadDetailPage({
           logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png`, width: 1358, height: 428 },
         },
         mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+        ...(taggedPlayers.length
+          ? {
+              about: taggedPlayers.map((p) => ({
+                '@type': 'Person',
+                name: p.nameJa,
+                alternateName: p.nameEn,
+                url: absoluteUrl(locale, `/player/${p.slug}`),
+                ...(p.sameAs.length ? { sameAs: p.sameAs } : {}),
+              })),
+            }
+          : {}),
       },
       {
         '@type': 'BreadcrumbList',
