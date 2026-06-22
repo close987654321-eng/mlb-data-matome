@@ -12,13 +12,18 @@ const nextConfig = {
     inlineCss: true,
   },
   images: {
-    // Vercel は画像1枚を「横幅 × 形式」の組み合わせ単位で変換し、その個数を課金カウント
-    // （無料枠=5,000/月）する。デフォルトは横幅8段階×小サイズ8段階で1枚あたりの変換数が多く、
-    // 更新頻度の高い本サイトでは枠をすぐ使い切る。Discover 用の 1200px 画質は残しつつ刻みを間引いて
-    // 1枚あたりの変換数を半分以下に抑える（見た目はほぼ変わらない）。
+    // Vercel の画像最適化(/_next/image)は無料枠=5,000変換/月で、更新頻度の高い本サイトでは
+    // すぐ使い切る。枠が尽きると optimizer が 402(OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED)を
+    // 返し、サムネ・カード・ロゴまでサイト全体の画像が一斉に壊れる（2026-06 に発生）。
+    // → カスタムローダで Vercel を通さず各CDN直配信に切替（恒久無料・枠なし）。Unsplash は
+    //   自前CDNでリサイズ、YouTube/redd/imgur/ローカルは直リンク（src/lib/imageLoader.js）。
+    loader: 'custom',
+    loaderFile: './src/lib/imageLoader.js',
+    // ↓ deviceSizes/imageSizes はカスタムローダが srcset を作る際の要求幅として今も有効
+    //   （Unsplash の w= リサイズに効く）。formats/remotePatterns は Vercel optimizer 用なので
+    //   カスタムローダでは未使用だが、許可ホストの記録として残す。
     deviceSizes: [640, 828, 1200, 1920], // モバイル / タブレット / Discover(1200px) / デスクトップ高DPI
-    imageSizes: [128, 256], // サムネ・アバター等の小画像用（既定の極小サイズは未使用）
-    formats: ['image/webp'], // AVIF を足すと変換数が倍になるので webp のみに固定
+    imageSizes: [128, 256], // サムネ・アバター等の小画像用
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' }, // 競技ストック写真
       { protocol: 'https', hostname: 'i.redd.it' }, // Reddit 直リンク画像
