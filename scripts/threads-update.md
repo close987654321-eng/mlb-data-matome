@@ -32,6 +32,19 @@ node scripts/fetch-youtube.mjs comments <動画URL>
 - 生の取得 JSON は `_local/queue/` に置き**コミットしない**（YouTube API 規約のデータ保存制限）。
 - 記事は `format: "youtube"` を付ける（表示が author そのまま＋👍 likeCount になる）。
   詳細は matome スキル R7+。
+- 動画検索: `node scripts/fetch-youtube.mjs search "<クエリ>" [本数] --channel <ID>`（試合ハイライトの同定）。
+
+## 手順（日本人選手の出場試合を漏れなく＝jp-games スキル）
+
+```sh
+node scripts/fetch-mlb-stats.mjs games                       # 既定=直近に終わった ET の slate
+node scripts/fetch-mlb-stats.mjs games 2026-06-21 --json     # 指定日(ET)の出場試合＋記事化済みか（機械処理用）
+node scripts/fetch-mlb-stats.mjs games 2026-06-15 2026-06-21 # 期間でバックフィル（漏れの遡及埋め）
+```
+
+- 日本人選手が出場した全試合を列挙し、各試合が**記事化済みか**（`existingArticle`）を返す。`null` が未記事化＝対象。
+- そこから先（公式ハイライトを日付一致で同定→videoId で二重作成ガード→matome 委譲）は **`jp-games` スキル**が正。
+  狙いは選手ハブ /player の充実（記事の選手名タグで各選手ページに自動で集まる）。
 
 ## 手順（MLB 成績を記事にそえる・編集時の味付け）
 

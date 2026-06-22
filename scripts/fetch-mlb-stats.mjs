@@ -27,7 +27,7 @@
  *   node scripts/fetch-mlb-stats.mjs player 大谷 --json
  */
 
-import { writeFileSync } from 'node:fs';
+import { writeFileSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
 const BASE = 'https://statsapi.mlb.com/api/v1';
@@ -108,6 +108,27 @@ const TEAM_JA = {
   'Texas Rangers': 'レンジャーズ',
   'Toronto Blue Jays': 'ブルージェイズ',
   'Washington Nationals': 'ナショナルズ',
+};
+
+/** 30球団の英語名 → 記事 id 用の英語スラッグ（既存記事の id と揃える。例: 2026-06-22-dodgers-vs-orioles）。 */
+const TEAM_SLUG = {
+  'Arizona Diamondbacks': 'dbacks', 'Atlanta Braves': 'braves', 'Baltimore Orioles': 'orioles',
+  'Boston Red Sox': 'redsox', 'Chicago Cubs': 'cubs', 'Chicago White Sox': 'whitesox',
+  'Cincinnati Reds': 'reds', 'Cleveland Guardians': 'guardians', 'Colorado Rockies': 'rockies',
+  'Detroit Tigers': 'tigers', 'Houston Astros': 'astros', 'Kansas City Royals': 'royals',
+  'Los Angeles Angels': 'angels', 'Los Angeles Dodgers': 'dodgers', 'Miami Marlins': 'marlins',
+  'Milwaukee Brewers': 'brewers', 'Minnesota Twins': 'twins', 'New York Mets': 'mets',
+  'New York Yankees': 'yankees', 'Oakland Athletics': 'athletics', Athletics: 'athletics',
+  'Philadelphia Phillies': 'phillies', 'Pittsburgh Pirates': 'pirates', 'San Diego Padres': 'padres',
+  'San Francisco Giants': 'giants', 'Seattle Mariners': 'mariners', 'St. Louis Cardinals': 'cardinals',
+  'Tampa Bay Rays': 'rays', 'Texas Rangers': 'rangers', 'Toronto Blue Jays': 'bluejays',
+  'Washington Nationals': 'nationals',
+};
+
+/** 看板 watch-along シリーズを持つチーム（英語名 → series.id）。src/lib/series.ts の SERIES と揃える。 */
+const TEAM_SERIES = {
+  'Los Angeles Dodgers': 'dodgers', 'Chicago Cubs': 'cubs', 'St. Louis Cardinals': 'cardinals',
+  'Chicago White Sox': 'whitesox', 'Toronto Blue Jays': 'bluejays',
 };
 
 /** 30球団の英語名 → リーグ（AL=アメリカン / NL=ナショナル）。選手ハブの「リーグ○位」表示用。 */
@@ -619,6 +640,167 @@ async function runPlayer(query, season, { asJson } = {}) {
   recs.forEach(printRecord);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// games … 指定日(ET)に「日本人選手が出場した試合」を漏れなく列挙する（jp-games スキルの土台）。
+// 日本人選手の成績ページ（/player）を充実させるため、出場試合のハイライト動画を漏らさず記事化する
+// のが目的。ここは MLB公式スケジュールAPI（試合・スコア）＋出場判定（その日の打席/登板記録）＋
+// 既存記事の突き合わせ（重複検知）まで。YouTube 検索は scripts/fetch-youtube.mjs search が担当（鍵の
+// 関心を分ける）。法務 posture は他コマンドと同じ＝公知の数値だけ・サイト本体は叩かない（編集時取得）。
+// ─────────────────────────────────────────────────────────────────────────────
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+/** "2026-06-21" を n 日ずらす。Date は正午UTC固定で TZ 事故を避ける。 */
+function addDays(dateStr, n) {
+  const d = new Date(`${dateStr}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+/** 今日(ET)。既定日（直近に終わった slate = ET 昨日）の算出に使う。 */
+function etToday() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
+}
+/** start..end の日付配列（両端含む・上限40日で暴走防止）。 */
+function enumerateDates(start, end) {
+  const out = [];
+  let cur = start;
+  for (let i = 0; i < 40 && cur <= end; i++) {
+    out.push(cur);
+    cur = addDays(cur, 1);
+  }
+  return out;
+}
+/** "2026-06-21" → "6/21/26"（MLB公式ハイライトのタイトル中の日付＝YouTube動画の同定に使う）。 */
+function titleDateUS(etDate) {
+  const [y, m, d] = etDate.split('-');
+  return `${Number(m)}/${Number(d)}/${y.slice(2)}`;
+}
+
+/** 指定日(ET)の全試合（チーム・スコア・状態）。officialDate が ET の試合日。 */
+async function fetchSchedule(date) {
+  const data = await getJson(`${BASE}/schedule?sportId=1&date=${date}`);
+  const games = (data.dates ?? []).flatMap((d) => d.games ?? []);
+  return games.map((g) => ({
+    etDate: g.officialDate,
+    status: g.status?.detailedState ?? g.status?.abstractGameState ?? '',
+    doubleHeader: g.doubleHeader === 'Y',
+    gameNumber: g.gameNumber,
+    away: g.teams?.away?.team?.name,
+    home: g.teams?.home?.team?.name,
+    awayScore: g.teams?.away?.score ?? null,
+    homeScore: g.teams?.home?.score ?? null,
+  }));
+}
+
+const TEAM_JA_SET = new Set(Object.values(TEAM_JA));
+/**
+ * 既存の MLB 記事を {id, date, teamTags} で読む（重複検知用）。
+ * date は series.date（JST）優先・無ければ id 先頭の YYYY-MM-DD。teamTags は tags のうちチーム名だけ。
+ */
+function loadExistingArticles() {
+  const dir = path.join(process.cwd(), 'data', 'threads', 'mlb');
+  let files = [];
+  try {
+    files = readdirSync(dir).filter((f) => f.endsWith('.json'));
+  } catch {
+    return [];
+  }
+  const out = [];
+  for (const f of files) {
+    try {
+      const t = JSON.parse(readFileSync(path.join(dir, f), 'utf8'));
+      out.push({
+        id: t.id ?? f.replace(/\.json$/, ''),
+        date: t.series?.date ?? (t.id ?? '').slice(0, 10),
+        teamTags: (t.tags ?? []).filter((x) => TEAM_JA_SET.has(x)),
+      });
+    } catch {
+      /* 壊れた JSON はスキップ */
+    }
+  }
+  return out;
+}
+
+/** 指定日(ET)に出場した日本人選手の試合を列挙（1試合=1行・両チームの日本人を集約）。 */
+async function gamesForDate(season, date, ids, existing, { team } = {}) {
+  const [games, appeared] = await Promise.all([
+    fetchSchedule(date),
+    fetchStats(ids, season, { date }),
+  ]);
+  // 出場した日本人選手を所属チーム（英語名）別にまとめる。打席 or 登板記録があれば「出場」。
+  const byTeam = new Map();
+  for (const p of appeared) {
+    const h = pickSplit(p, 'hitting');
+    const pi = pickSplit(p, 'pitching');
+    if (!((h && h.gamesPlayed) || (pi && pi.gamesPlayed))) continue;
+    const teamEn = p.currentTeam?.name;
+    if (!teamEn) continue;
+    if (!byTeam.has(teamEn)) byTeam.set(teamEn, []);
+    byTeam.get(teamEn).push({ player: jpName(p), team: teamJa(p), today: dayLine(p) });
+  }
+  const rows = [];
+  for (const g of games) {
+    const jpPlayers = [...(byTeam.get(g.away) ?? []), ...(byTeam.get(g.home) ?? [])];
+    if (!jpPlayers.length) continue; // 日本人が出ていない試合は対象外
+    if (team && !jpPlayers.some((x) => x.team.includes(team))) continue;
+    const awayJa = TEAM_JA[g.away] ?? g.away;
+    const homeJa = TEAM_JA[g.home] ?? g.home;
+    const gameDateJst = addDays(g.etDate, 1); // ET の試合は必ず翌日のJST（記事 id / series.date は JST）
+    // 記事の左側（自軍）は watch-along シリーズを持つチームを優先、無ければ日本人が出た側。
+    const jpTeamsEn = [g.away, g.home].filter((tn) => byTeam.get(tn)?.length);
+    const leftEn = jpTeamsEn.find((tn) => TEAM_SERIES[tn]) ?? jpTeamsEn[0];
+    const rightEn = leftEn === g.away ? g.home : g.away;
+    const match = existing.find(
+      (e) => e.date === gameDateJst && e.teamTags.includes(awayJa) && e.teamTags.includes(homeJa),
+    );
+    rows.push({
+      etDate: g.etDate,
+      gameDateJst,
+      status: g.status,
+      ...(g.doubleHeader ? { doubleHeader: true, gameNumber: g.gameNumber } : {}),
+      matchup: `${awayJa}${g.awayScore != null ? ` ${g.awayScore}` : ''} - ${g.homeScore != null ? `${g.homeScore} ` : ''}${homeJa}`,
+      away: { en: g.away, ja: awayJa, score: g.awayScore },
+      home: { en: g.home, ja: homeJa, score: g.homeScore },
+      jpPlayers,
+      seriesId: TEAM_SERIES[leftEn] ?? null,
+      selfTeamJa: TEAM_JA[leftEn] ?? leftEn,
+      opponentJa: TEAM_JA[rightEn] ?? rightEn,
+      suggestedId: `${gameDateJst}-${TEAM_SLUG[leftEn] ?? 'team'}-vs-${TEAM_SLUG[rightEn] ?? 'team'}`,
+      searchQuery: `${g.away} vs. ${g.home} Game Highlights`,
+      titleDateUS: titleDateUS(g.etDate),
+      existingArticle: match ? match.id : null,
+    });
+  }
+  return rows;
+}
+
+async function runGames(dates, { asJson, team } = {}) {
+  const existing = loadExistingArticles();
+  const all = [];
+  for (const date of dates) {
+    const season = Number(date.slice(0, 4));
+    const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS])];
+    all.push(...(await gamesForDate(season, date, ids, existing, { team })));
+  }
+  if (asJson) return console.log(JSON.stringify(all, null, 2));
+  const span = dates.length === 1 ? `${dates[0]}(ET)` : `${dates[0]}〜${dates[dates.length - 1]}(ET)`;
+  const todo = all.filter((g) => !g.existingArticle);
+  console.log(`【日本人選手の出場試合】${span}：${all.length}試合（未記事化 ${todo.length}）${team ? `／${team}` : ''}`);
+  console.log(HEADER_NOTE + '\n');
+  if (!all.length) return console.log('（この期間に日本人選手の出場試合は確認できず）');
+  for (const g of all) {
+    const mark = g.existingArticle ? `✓ ${g.existingArticle}` : '▶ 未記事化';
+    console.log(`${mark}  [${g.titleDateUS}] ${g.matchup}${g.doubleHeader ? `（DH第${g.gameNumber}試合）` : ''}`);
+    console.log(`    出場: ${g.jpPlayers.map((p) => `${p.player}（${p.today || '出場'}）`).join(' / ')}`);
+    if (!g.existingArticle) {
+      console.log(`    候補id: ${g.suggestedId}${g.seriesId ? ` / series:${g.seriesId}` : ''}`);
+      console.log(`    検索: node scripts/fetch-youtube.mjs search "${g.searchQuery}" 5 --channel ${MLB_YT_CHANNEL}`);
+    }
+  }
+}
+
+// MLB公式 YouTube チャンネル（"Full Game Highlights (M/D/YY)" を投稿する正規の出どころ）。
+const MLB_YT_CHANNEL = 'UCoLrcjPV5PbUrUyXq5mjc_A';
+
 // 選手ハブ /player の詳細テーブル＆比較表が読む“今季成績スナップショット”に残す項目（公知の事実のみ）。
 const HIT_FIELDS = ['gamesPlayed', 'plateAppearances', 'atBats', 'runs', 'hits', 'doubles', 'triples', 'homeRuns', 'rbi', 'stolenBases', 'baseOnBalls', 'strikeOuts', 'avg', 'obp', 'slg', 'ops', 'babip'];
 const PIT_FIELDS = ['gamesPlayed', 'gamesStarted', 'wins', 'losses', 'saves', 'holds', 'inningsPitched', 'hits', 'runs', 'earnedRuns', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'era', 'whip', 'avg', 'strikeoutsPer9Inn', 'walksPer9Inn', 'strikeoutWalkRatio', 'homeRunsPer9', 'winPercentage'];
@@ -710,6 +892,17 @@ async function main() {
     }
   } else if (cmd === 'player' && arg) {
     await runPlayer(arg, arg2 ? Number(arg2) : defaultSeason(), { asJson });
+  } else if (cmd === 'games') {
+    // games [YYYY-MM-DD] [YYYY-MM-DD]：日本人選手の出場試合を列挙（既定=直近に終わった ET の slate）
+    let dates;
+    if (arg && DATE_RE.test(arg) && arg2 && DATE_RE.test(arg2)) {
+      dates = enumerateDates(arg, arg2);
+    } else if (arg && DATE_RE.test(arg)) {
+      dates = [arg];
+    } else {
+      dates = [addDays(etToday(), -1)];
+    }
+    await runGames(dates, { asJson, team });
   } else if (cmd === 'snapshot') {
     // snapshot [YYYY-MM-DD(=asOf)] [season]
     const asOf = arg && /^\d{4}-\d{2}-\d{2}$/.test(arg) ? arg : new Date().toISOString().slice(0, 10);
@@ -722,6 +915,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs jp [season]        # 日本人選手の今季成績一覧',
         '  node scripts/fetch-mlb-stats.mjs jp YYYY-MM-DD      # 指定日(ET)の各選手の成績',
         '  node scripts/fetch-mlb-stats.mjs player <名前|ID> [season]',
+        '  node scripts/fetch-mlb-stats.mjs games [YYYY-MM-DD] [YYYY-MM-DD] # 日本人選手の出場試合を列挙（既定=ET昨日／重複検知つき）',
         '  node scripts/fetch-mlb-stats.mjs snapshot [YYYY-MM-DD] # 選手ハブ用に全選手の今季成績を data/jp-players-stats.json へ',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),

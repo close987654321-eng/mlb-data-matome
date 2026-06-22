@@ -82,6 +82,9 @@ SSG します。
 まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約 = **R1〜R9**）と
 **ネタ選定の比重**（MLB 7 : ボクシング 2.5 : MMA 0.5）は **`matome` スキル**
 （`.claude/skills/matome/SKILL.md`）が正。「まとめ作って」等で発動する。
+日本人選手の**出場試合を漏れなく**記事化する段取り（出場試合の洗い出し→公式ハイライト同定→重複検知→
+matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md`）。「今日の日本人選手の試合
+まとめて」等で発動し、選手ハブ /player を出場試合の動画記事で充実させる。
 データ形式・運用の詳細は [`scripts/threads-update.md`](./scripts/threads-update.md)。要点:
 
 ### 4.1 データ取得
@@ -89,7 +92,12 @@ SSG します。
 - **YouTube（自動化済み）**: `node scripts/fetch-youtube.mjs comments <動画URL>` で人気順
   コメントを取得（要 `YOUTUBE_API_KEY`、`.env.local` に置く。API は無料枠で足りる）。
   生の取得 JSON は `_local/queue/` に置き、**コミットしない**（YouTube API 規約のデータ保存
-  制限。記事に残すのは抜粋のみ）。MLB 公式ハイライト・RIZIN 公式が主用途。
+  制限。記事に残すのは抜粋のみ）。MLB 公式ハイライト・RIZIN 公式が主用途。`search "<クエリ>" [本数]
+  --channel <ID>` で動画検索もできる（試合ハイライトの同定＝`jp-games` スキルが使う）。
+- **日本人選手の出場試合レーダー（jp-games）**: `node scripts/fetch-mlb-stats.mjs games [ETの試合日]
+  [--json]` で「日本人選手が出場した全試合」と**記事化済みか**を列挙（既定=ET昨日／期間指定でバックフィル）。
+  `existingArticle:null` が未記事化＝作成対象。詳細は `jp-games` スキル（公式ハイライトの日付一致同定・
+  重複検知・matome 委譲まで）。
 - **Reddit（手動）**: 未認証の `.json` / `api.reddit.com` / 公開ミラーはこの環境の IP から
   403 で全滅（WebFetch も reddit.com 拒否）。公式 OAuth（`scripts/fetch-reddit.mjs`）は
   **2025/11 から事前承認制**で承認待ち。

@@ -10,6 +10,10 @@
  *     → 動画情報＋人気順コメントを JSON で標準出力（matome スキルがこれを読む）
  *   node scripts/fetch-youtube.mjs latest <チャンネルID> [本数=10]
  *     → チャンネルの新着動画一覧（ネタ探し用。コメント数つき）
+ *   node scripts/fetch-youtube.mjs search "<クエリ>" [本数=5] [--channel <ID>]
+ *     → 動画を検索（jp-games スキルが試合ハイライト動画を探すのに使う）。--channel で
+ *       特定チャンネルに限定（MLB公式 = UCoLrcjPV5PbUrUyXq5mjc_A）。結果に channelTitle と
+ *       publishedAt を含むので、呼び出し側でタイトル中の日付 (M/D/YY) と突き合わせて確定する。
  *
  * 注意:
  *   - 取得したコメントは記事に「抜粋＋翻訳＋元動画への送客」で使う（全文転載しない）。
@@ -144,8 +148,36 @@ async function fetchLatest(key, channelId, count) {
   }));
 }
 
+/** 動画検索（試合ハイライトを探す用）。type=video で関連順。channelId で絞り込み可。 */
+async function searchVideos(key, query, max, channelId) {
+  const data = await api(key, 'search', {
+    part: 'snippet',
+    q: query,
+    type: 'video',
+    order: 'relevance',
+    maxResults: Math.min(50, max),
+    ...(channelId ? { channelId } : {}),
+  });
+  return (data.items ?? []).map((it) => ({
+    videoId: it.id.videoId,
+    url: `https://www.youtube.com/watch?v=${it.id.videoId}`,
+    title: it.snippet.title,
+    channel: it.snippet.channelTitle,
+    channelId: it.snippet.channelId,
+    publishedAt: it.snippet.publishedAt,
+  }));
+}
+
 async function main() {
-  const [cmd, target, n] = process.argv.slice(2);
+  // --channel <ID> を抜き出してから位置引数を取る（既存の comments/latest はそのまま動く）。
+  const argv = process.argv.slice(2);
+  let channelId = null;
+  const ci = argv.indexOf('--channel');
+  if (ci !== -1) {
+    channelId = argv[ci + 1];
+    argv.splice(ci, 2);
+  }
+  const [cmd, target, n] = argv;
   const key = loadApiKey();
   if (!key) {
     console.error('YOUTUBE_API_KEY が未設定。 .env.local に YOUTUBE_API_KEY=... を書く。');
@@ -159,9 +191,12 @@ async function main() {
   } else if (cmd === 'latest' && target) {
     const videos = await fetchLatest(key, target, Number(n ?? 10));
     console.log(JSON.stringify({ fetchedAt: new Date().toISOString(), videos }, null, 2));
+  } else if (cmd === 'search' && target) {
+    const results = await searchVideos(key, target, Number(n ?? 5), channelId);
+    console.log(JSON.stringify({ fetchedAt: new Date().toISOString(), query: target, results }, null, 2));
   } else {
     console.error(
-      '使い方:\n  node scripts/fetch-youtube.mjs comments <動画URL|ID> [件数=60]\n  node scripts/fetch-youtube.mjs latest <チャンネルID> [本数=10]',
+      '使い方:\n  node scripts/fetch-youtube.mjs comments <動画URL|ID> [件数=60]\n  node scripts/fetch-youtube.mjs latest <チャンネルID> [本数=10]\n  node scripts/fetch-youtube.mjs search "<クエリ>" [本数=5] [--channel <ID>]',
     );
     process.exit(1);
   }
