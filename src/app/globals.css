@@ -16,3 +16,18 @@
     color: #fff;
   }
 }
+
+/* 選手ハブの軽量モーション。休止(rest)状態＝最終表示なので、アニメ非対応や reduced-motion でも
+   コンテンツは即可視（空白トラップなし）。各要素は motion-safe: でのみ animation を付与し、
+   キーフレームは from のみ指定して 100% を要素自身の計算値（＝最終表示）へ解決させる。 */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes meter {
+  from {
+    transform: scaleX(0);
+  }
+}
