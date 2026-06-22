@@ -9,11 +9,17 @@ import path from 'node:path';
  */
 export type Saber = { hit?: number; pit?: number; woba?: number; wrcplus?: number };
 export type StatRecord = Record<string, string | number>;
+/** 指標ごとの順位（MLB全体＝mlb / 所属リーグ＝lg）。スナップショットが持つ公知の事実。 */
+export type Rank = { mlb?: number; lg?: number };
+export type Ranks = { hitting?: Record<string, Rank>; pitching?: Record<string, Rank> };
+export type League = 'AL' | 'NL';
 export type PlayerSeason = {
   team?: string;
+  league?: League | null;
   hitting: StatRecord | null;
   pitching: StatRecord | null;
   saber: Saber | null;
+  ranks?: Ranks;
 };
 export type PlayersSnapshot = {
   asOf: string;

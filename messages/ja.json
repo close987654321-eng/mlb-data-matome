@@ -54,10 +54,17 @@
   "player": {
     "eyebrow": "日本人選手",
     "indexTitle": "日本人MLB選手 成績まとめ・比較",
-    "indexLead": "メジャーでプレーする日本人選手の今季成績を一覧・比較。列をタップで並び替え、選手名から個別ページへ。",
+    "indexLead": "メジャーでプレーする日本人選手の今季成績を一覧・比較。列の見出しをタップで並び替え、行をタップで個別ページへ。",
     "asOf": "{date} 時点",
     "statsTitle": "今季成績（詳細）",
     "statsNote": "出典: MLB公式 Stats API（数値は公知の事実）。編集時に取得したスナップショットで、リアルタイム更新ではありません。",
+    "highlights": "注目の成績",
+    "roleBat": "打者として",
+    "rolePit": "投手として",
+    "rankMlb": "MLB",
+    "lgAL": "ア・リーグ",
+    "lgNL": "ナ・リーグ",
+    "rankUnit": "位",
     "articles": "{name}の海外の反応（{count}本）",
     "batting": "打者 比較",
     "pitching": "投手 比較"

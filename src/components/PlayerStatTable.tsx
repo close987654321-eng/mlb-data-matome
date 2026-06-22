@@ -1,4 +1,5 @@
-import type { StatRecord, Saber } from '@/lib/playerStats';
+import type { StatRecord, Saber, Rank, League } from '@/lib/playerStats';
+import RankBadges, { type RankLabels } from './RankBadges';
 
 // 「細かい項目まで極限まで」見せる詳細成績。表示順＝日本人ファンが見たい順。
 const HIT_LABELS: [string, string][] = [
@@ -48,12 +49,29 @@ const war1 = (v?: number) => (typeof v === 'number' ? v.toFixed(1) : null);
 const woba3 = (v?: number) => (typeof v === 'number' ? v.toFixed(3).replace(/^0/, '') : null);
 const wrc = (v?: number) => (typeof v === 'number' ? String(Math.round(v)) : null);
 
-function Cell({ label, value }: { label: string; value: string | number | null }) {
+function Cell({
+  label,
+  value,
+  rank,
+  league,
+  labels,
+}: {
+  label: string;
+  value: string | number | null;
+  rank?: Rank;
+  league?: League | null;
+  labels: RankLabels;
+}) {
   if (value == null || value === '') return null;
   return (
     <div className="rounded-lg border border-line bg-surface px-3 py-2">
       <div className="text-[11px] font-medium text-ink-soft">{label}</div>
       <div className="mt-0.5 text-base font-bold tabular-nums text-ink">{value}</div>
+      {rank && (
+        <div className="mt-1">
+          <RankBadges rank={rank} league={league} labels={labels} maxMlb={20} maxLg={10} />
+        </div>
+      )}
     </div>
   );
 }
@@ -62,11 +80,17 @@ function Grid({
   heading,
   fields,
   rec,
+  ranks,
+  league,
+  labels,
   extras,
 }: {
   heading: string;
   fields: [string, string][];
   rec: StatRecord;
+  ranks?: Record<string, Rank>;
+  league?: League | null;
+  labels: RankLabels;
   extras: { label: string; value: string | null }[];
 }) {
   return (
@@ -77,10 +101,17 @@ function Grid({
       </h2>
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
         {fields.map(([key, label]) => (
-          <Cell key={key} label={label} value={rec[key] ?? null} />
+          <Cell
+            key={key}
+            label={label}
+            value={rec[key] ?? null}
+            rank={ranks?.[key]}
+            league={league}
+            labels={labels}
+          />
         ))}
         {extras.map((e) => (
-          <Cell key={e.label} label={e.label} value={e.value} />
+          <Cell key={e.label} label={e.label} value={e.value} labels={labels} />
         ))}
       </div>
     </section>
@@ -92,10 +123,16 @@ export default function PlayerStatTable({
   hitting,
   pitching,
   saber,
+  ranks,
+  league,
+  labels,
 }: {
   hitting: StatRecord | null;
   pitching: StatRecord | null;
   saber: Saber | null;
+  ranks?: { hitting?: Record<string, Rank>; pitching?: Record<string, Rank> };
+  league?: League | null;
+  labels: RankLabels;
 }) {
   return (
     <>
@@ -104,6 +141,9 @@ export default function PlayerStatTable({
           heading="打撃成績"
           fields={HIT_LABELS}
           rec={hitting}
+          ranks={ranks?.hitting}
+          league={league}
+          labels={labels}
           extras={[
             { label: 'wOBA', value: woba3(saber?.woba) },
             { label: 'wRC+', value: wrc(saber?.wrcplus) },
@@ -116,6 +156,9 @@ export default function PlayerStatTable({
           heading="投球成績"
           fields={PIT_LABELS}
           rec={pitching}
+          ranks={ranks?.pitching}
+          league={league}
+          labels={labels}
           extras={[{ label: 'WAR(投)', value: war1(saber?.pit) }]}
         />
       )}

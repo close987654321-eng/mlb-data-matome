@@ -54,10 +54,17 @@
   "player": {
     "eyebrow": "Japanese players",
     "indexTitle": "Japanese MLB Players — Stats & Comparison",
-    "indexLead": "Season stats for Japanese players in MLB, all in one place. Tap a column to sort; tap a name for their page.",
+    "indexLead": "Season stats for Japanese players in MLB, all in one place. Tap a column header to sort; tap a row for the player's page.",
     "asOf": "As of {date}",
     "statsTitle": "Season stats (detailed)",
     "statsNote": "Source: MLB official Stats API (stats are public facts). An edit-time snapshot, not real-time.",
+    "highlights": "At a glance",
+    "roleBat": "As a batter",
+    "rolePit": "As a pitcher",
+    "rankMlb": "MLB",
+    "lgAL": "AL",
+    "lgNL": "NL",
+    "rankUnit": "",
     "articles": "{name} — overseas reactions ({count})",
     "batting": "Batters",
     "pitching": "Pitchers"

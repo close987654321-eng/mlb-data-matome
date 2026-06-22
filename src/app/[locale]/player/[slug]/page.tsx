@@ -7,6 +7,8 @@ import { getPlayerSeason, getPlayersSnapshot } from '@/lib/playerStats';
 import { buildFeed, feedKey } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
 import PlayerStatTable from '@/components/PlayerStatTable';
+import PlayerStatHighlights from '@/components/PlayerStatHighlights';
+import type { RankLabels } from '@/components/RankBadges';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
@@ -63,6 +65,14 @@ export default async function PlayerHubPage({
   const [season, snap] = await Promise.all([getPlayerSeason(player.mlbId), getPlayersSnapshot()]);
   const feed = buildFeed(threads, []);
 
+  const rankLabels: RankLabels = {
+    mlb: t('player.rankMlb'),
+    al: t('player.lgAL'),
+    nl: t('player.lgNL'),
+    unit: t('player.rankUnit'),
+  };
+  const hasStats = Boolean(season && (season.hitting || season.pitching));
+
   const hubUrl = absoluteUrl(locale, `/player/${slug}`);
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -98,11 +108,22 @@ export default async function PlayerHubPage({
         </span>
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">
           {player.nameJa}
-          <span className="ml-2 text-base font-normal text-ink-soft">
-            {player.nameEn}
-            {season?.team ? ` · ${season.team}` : ''}
-          </span>
+          <span className="ml-2 text-base font-normal text-ink-soft">{player.nameEn}</span>
         </h1>
+        {(season?.team || season?.league) && (
+          <p className="mt-2 flex flex-wrap items-center gap-1.5">
+            {season?.team && (
+              <span className="rounded-full bg-surface px-2.5 py-0.5 text-xs font-semibold text-ink ring-1 ring-line">
+                {season.team}
+              </span>
+            )}
+            {season?.league && (
+              <span className="rounded-full bg-surface px-2.5 py-0.5 text-xs font-semibold text-ink-soft ring-1 ring-line">
+                {season.league === 'AL' ? t('player.lgAL') : t('player.lgNL')}
+              </span>
+            )}
+          </p>
+        )}
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">{player.bio}</p>
         {player.sameAs.length > 0 && (
           <p className="mt-2 flex flex-wrap gap-x-3 text-xs text-ink-soft">
@@ -115,18 +136,42 @@ export default async function PlayerHubPage({
         )}
       </section>
 
-      {/* 詳細成績（極限まで）。データが無ければ記事クラスタだけ出す。 */}
-      {season && (season.hitting || season.pitching) ? (
-        <section>
-          <div className="flex items-baseline justify-between">
+      {/* マーキー成績（パッと見て分かる代表指標＋順位）。データが無ければ記事クラスタだけ出す。 */}
+      {hasStats && season ? (
+        <>
+          <section>
+            <div className="mb-4 flex items-baseline justify-between">
+              <h2 className="text-lg font-bold text-ink">{t('player.highlights')}</h2>
+              {snap.asOf && (
+                <span className="text-xs text-ink-soft">{t('player.asOf', { date: snap.asOf })}</span>
+              )}
+            </div>
+            <PlayerStatHighlights
+              hitting={season.hitting}
+              pitching={season.pitching}
+              saber={season.saber}
+              ranks={season.ranks}
+              league={season.league}
+              labels={rankLabels}
+              roleBat={t('player.roleBat')}
+              rolePit={t('player.rolePit')}
+            />
+          </section>
+
+          {/* 詳細成績（極限まで）。順位はセル下に小さく添える。 */}
+          <section>
             <h2 className="text-lg font-bold text-ink">{t('player.statsTitle')}</h2>
-            {snap.asOf && (
-              <span className="text-xs text-ink-soft">{t('player.asOf', { date: snap.asOf })}</span>
-            )}
-          </div>
-          <PlayerStatTable hitting={season.hitting} pitching={season.pitching} saber={season.saber} />
-          <p className="mt-3 text-[11px] text-ink-soft">{t('player.statsNote')}</p>
-        </section>
+            <PlayerStatTable
+              hitting={season.hitting}
+              pitching={season.pitching}
+              saber={season.saber}
+              ranks={season.ranks}
+              league={season.league}
+              labels={rankLabels}
+            />
+            <p className="mt-3 text-[11px] text-ink-soft">{t('player.statsNote')}</p>
+          </section>
+        </>
       ) : null}
 
       <section>

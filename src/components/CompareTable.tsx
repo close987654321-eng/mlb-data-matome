@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Link } from '@/lib/navigation';
+import { Link, useRouter } from '@/lib/navigation';
 
 // 見比べ用のソート可能な比較表。列ヘッダクリックで並び替え（数値）。サーバーで全行を
 // 渡すので HTML にデータは載る（クローラ可）＋クライアントでソートだけ足す。
@@ -27,6 +27,7 @@ export default function CompareTable({
   cols: CompareCol[];
   defaultKey: string;
 }) {
+  const router = useRouter();
   const [sortKey, setSortKey] = useState(defaultKey);
   const [dir, setDir] = useState<'asc' | 'desc'>(
     cols.find((c) => c.key === defaultKey)?.better === 'low' ? 'asc' : 'desc',
@@ -74,12 +75,27 @@ export default function CompareTable({
         </thead>
         <tbody>
           {sorted.map((r) => (
-            <tr key={r.slug} className="border-b border-line/60 hover:bg-surface">
-              <td className="sticky left-0 bg-paper px-2 py-2 text-left">
-                <Link href={`/player/${r.slug}`} className="font-medium text-ink hover:text-accent">
-                  {r.name}
-                </Link>
-                {r.team && <span className="ml-1 text-[11px] text-ink-soft">{r.team}</span>}
+            // 行ぜんぶをクリック可能に（選手名だけだと分かりづらいため）。名前は実リンクのまま
+            // 残してSEO・キーボード操作を担保し、行クリックはマウス操作の利便性として足す。
+            <tr
+              key={r.slug}
+              onClick={() => router.push(`/player/${r.slug}`)}
+              className="group cursor-pointer border-b border-line/60 hover:bg-surface"
+            >
+              <td className="sticky left-0 bg-paper px-2 py-2 text-left group-hover:bg-surface">
+                <span className="inline-flex items-center gap-1">
+                  <Link
+                    href={`/player/${r.slug}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="font-medium text-ink group-hover:text-accent"
+                  >
+                    {r.name}
+                  </Link>
+                  {r.team && <span className="text-[11px] text-ink-soft">{r.team}</span>}
+                  <span aria-hidden className="text-ink-soft transition-colors group-hover:text-accent">
+                    ›
+                  </span>
+                </span>
               </td>
               {cols.map((c) => (
                 <td key={c.key} className="px-2 py-2 text-right tabular-nums text-ink">

@@ -103,6 +103,20 @@ const TEAM_JA = {
   'Washington Nationals': 'ナショナルズ',
 };
 
+/** 30球団の英語名 → リーグ（AL=アメリカン / NL=ナショナル）。選手ハブの「リーグ○位」表示用。 */
+const LEAGUE_BY_TEAM = {
+  'Baltimore Orioles': 'AL', 'Boston Red Sox': 'AL', 'New York Yankees': 'AL',
+  'Tampa Bay Rays': 'AL', 'Toronto Blue Jays': 'AL', 'Chicago White Sox': 'AL',
+  'Cleveland Guardians': 'AL', 'Detroit Tigers': 'AL', 'Kansas City Royals': 'AL',
+  'Minnesota Twins': 'AL', 'Houston Astros': 'AL', 'Los Angeles Angels': 'AL',
+  'Oakland Athletics': 'AL', Athletics: 'AL', 'Seattle Mariners': 'AL', 'Texas Rangers': 'AL',
+  'Atlanta Braves': 'NL', 'Miami Marlins': 'NL', 'New York Mets': 'NL',
+  'Philadelphia Phillies': 'NL', 'Washington Nationals': 'NL', 'Chicago Cubs': 'NL',
+  'Cincinnati Reds': 'NL', 'Milwaukee Brewers': 'NL', 'Pittsburgh Pirates': 'NL',
+  'St. Louis Cardinals': 'NL', 'Arizona Diamondbacks': 'NL', 'Colorado Rockies': 'NL',
+  'Los Angeles Dodgers': 'NL', 'San Diego Padres': 'NL', 'San Francisco Giants': 'NL',
+};
+
 const RANK_MAX = 30; // この順位以内のときだけ「MLB○位」を出す（下位の順位はノイズなので出さない）
 
 async function getJson(url) {
@@ -169,6 +183,60 @@ async function fetchRanks(season) {
     one('strikeouts', 'pitching'),
   ]);
   return { hr, era, k };
+}
+
+// 選手ハブの詳細順位（指標ごとに MLB全体順位＋リーグ順位）。API が返す leaderCategory 名 → 表示キー。
+const HIT_RANK_CATS =
+  'battingAverage,homeRuns,runsBattedIn,runs,hits,doubles,triples,stolenBases,walks,onBasePercentage,sluggingPercentage,onBasePlusSlugging';
+const PIT_RANK_CATS =
+  'earnedRunAverage,walksAndHitsPerInningPitched,wins,strikeouts,inningsPitched,saves,winningPercentage';
+const HIT_CAT_KEY = {
+  battingAverage: 'avg', homeRuns: 'homeRuns', runsBattedIn: 'rbi', runs: 'runs', hits: 'hits',
+  doubles: 'doubles', triples: 'triples', stolenBases: 'stolenBases', walks: 'baseOnBalls',
+  onBasePercentage: 'obp', sluggingPercentage: 'slg', onBasePlusSlugging: 'ops',
+};
+const PIT_CAT_KEY = {
+  earnedRunAverage: 'era', walksAndHitsPerInningPitched: 'whip', wins: 'wins', strikeouts: 'strikeOuts',
+  inningsPitched: 'inningsPitched', saves: 'saves', winPercentage: 'winPercentage',
+};
+
+/**
+ * 指標ごとの順位を personId → {hitting:{key:{mlb,lg}}, pitching:{...}} で返す（選手ハブ用）。
+ * MLB全体（sportId=1）と各リーグ（leagueId=103 AL / 104 NL）を別々に取り、選手が載っている方の
+ * リーグ順位を採用。leagueId はカンマ区切り不可なので AL/NL を個別に叩く（計6リクエスト）。
+ */
+async function fetchRanksFull(season) {
+  const call = async (cats, statGroup, lg) => {
+    const scope = lg ? `&leagueId=${lg}` : '';
+    const url = `${BASE}/stats/leaders?leaderCategories=${cats}&statGroup=${statGroup}&sportId=1${scope}&season=${season}&limit=300`;
+    return (await getJson(url)).leagueLeaders ?? [];
+  };
+  const [hMlb, hAl, hNl, pMlb, pAl, pNl] = await Promise.all([
+    call(HIT_RANK_CATS, 'hitting', null), call(HIT_RANK_CATS, 'hitting', 103), call(HIT_RANK_CATS, 'hitting', 104),
+    call(PIT_RANK_CATS, 'pitching', null), call(PIT_RANK_CATS, 'pitching', 103), call(PIT_RANK_CATS, 'pitching', 104),
+  ]);
+  const out = new Map();
+  const ensure = (id) => {
+    if (!out.has(id)) out.set(id, { hitting: {}, pitching: {} });
+    return out.get(id);
+  };
+  const ingest = (groups, catKey, group, field) => {
+    for (const L of groups) {
+      const key = catKey[L.leaderCategory];
+      if (!key) continue;
+      for (const x of L.leaders) {
+        const slot = ensure(x.person.id)[group];
+        (slot[key] ??= {})[field] = Number(x.rank);
+      }
+    }
+  };
+  ingest(hMlb, HIT_CAT_KEY, 'hitting', 'mlb');
+  ingest(hAl, HIT_CAT_KEY, 'hitting', 'lg');
+  ingest(hNl, HIT_CAT_KEY, 'hitting', 'lg');
+  ingest(pMlb, PIT_CAT_KEY, 'pitching', 'mlb');
+  ingest(pAl, PIT_CAT_KEY, 'pitching', 'lg');
+  ingest(pNl, PIT_CAT_KEY, 'pitching', 'lg');
+  return out;
 }
 
 const jpName = (p) => JP_NAMES[p.id] ?? p.fullName;
@@ -416,16 +484,26 @@ const pick = (obj, fields) => Object.fromEntries(fields.filter((f) => obj[f] != 
 async function runSnapshot(season, asOf) {
   const ids = await fetchJapanesePlayers(season);
   if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
-  const [seasonPeople, saberMap] = await Promise.all([fetchStats(ids, season), fetchWar(ids, season)]);
+  const [seasonPeople, saberMap, ranksMap] = await Promise.all([
+    fetchStats(ids, season),
+    fetchWar(ids, season),
+    fetchRanksFull(season),
+  ]);
   const players = {};
   for (const p of seasonPeople) {
     const h = pickSplit(p, 'hitting');
     const pi = pickSplit(p, 'pitching');
+    const r = ranksMap.get(p.id);
+    const ranks = {};
+    if (h && h.gamesPlayed && r && Object.keys(r.hitting).length) ranks.hitting = r.hitting;
+    if (pi && pi.gamesPlayed && r && Object.keys(r.pitching).length) ranks.pitching = r.pitching;
     players[p.id] = {
       team: teamJa(p),
+      league: LEAGUE_BY_TEAM[p.currentTeam?.name] ?? null,
       hitting: h && h.gamesPlayed ? pick(h, HIT_FIELDS) : null,
       pitching: pi && pi.gamesPlayed ? pick(pi, PIT_FIELDS) : null,
       saber: saberMap.get(p.id) ?? null,
+      ...(Object.keys(ranks).length ? { ranks } : {}),
     };
   }
   const out = { asOf, season, players };
