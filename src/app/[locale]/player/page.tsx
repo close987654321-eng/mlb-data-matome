@@ -61,8 +61,24 @@ export default async function PlayerIndexPage({
     (x) => x.s && x.s.league,
   );
 
+  // 投手1行ぶんの値（日本人投手表とサイヤング争いブロックで共用）。
+  const pitValues = (s: PlayerSeason) => {
+    const pi = s.pitching!;
+    const sb = s.saber;
+    return {
+      era: num(pi.era),
+      wins: num(pi.wins),
+      losses: num(pi.losses),
+      inningsPitched: num(pi.inningsPitched),
+      strikeOuts: num(pi.strikeOuts),
+      whip: num(pi.whip),
+      war: num(sb?.pit, sb?.pit != null ? sb.pit.toFixed(1) : undefined),
+    };
+  };
+
+  // 日本人の比較表。ライバル（非日本人）は混ぜず、専用ブロックに出す（rival を除外）。
   const batRows: CompareRow[] = withStats
-    .filter((x) => x.s!.hitting)
+    .filter((x) => x.s!.hitting && !x.p.rival)
     .map(({ p, s }) => {
       const h = s!.hitting!;
       const sb = s!.saber;
@@ -83,25 +99,13 @@ export default async function PlayerIndexPage({
     });
 
   const pitRows: CompareRow[] = withStats
-    .filter((x) => x.s!.pitching)
-    .map(({ p, s }) => {
-      const pi = s!.pitching!;
-      const sb = s!.saber;
-      return {
-        slug: p.slug,
-        name: p.nameJa,
-        team: s!.team,
-        values: {
-          era: num(pi.era),
-          wins: num(pi.wins),
-          losses: num(pi.losses),
-          inningsPitched: num(pi.inningsPitched),
-          strikeOuts: num(pi.strikeOuts),
-          whip: num(pi.whip),
-          war: num(sb?.pit, sb?.pit != null ? sb.pit.toFixed(1) : undefined),
-        },
-      };
-    });
+    .filter((x) => x.s!.pitching && !x.p.rival)
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: pitValues(s!) }));
+
+  // サイヤング争い：大谷＋ライバル投手（rival）。大谷の対抗馬を1つの表で見比べる。
+  const cyRows: CompareRow[] = withStats
+    .filter((x) => x.s!.pitching && (x.p.rival || x.p.slug === 'shohei-ohtani'))
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: pitValues(s!) }));
 
   return (
     <div className="space-y-10">
@@ -115,6 +119,14 @@ export default async function PlayerIndexPage({
           <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: snap.asOf })}</p>
         )}
       </section>
+
+      {cyRows.length > 0 && (
+        <section>
+          <h2 className="mb-1 text-lg font-bold text-ink">{t('player.cyYoung')}</h2>
+          <p className="mb-3 max-w-prose text-sm text-ink-soft">{t('player.cyYoungLead')}</p>
+          <CompareTable rows={cyRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+        </section>
+      )}
 
       {batRows.length > 0 && (
         <section>

@@ -19,6 +19,8 @@ export type Player = {
   mlbId: number;
   bio: string; // E-E-A-T／独自性のための短い紹介（事実のみ・所属は書かない＝古くなるため）
   sameAs: string[]; // 外部権威URL（エンティティ照合）
+  rival?: boolean; // 非日本人だが比較用に載せる選手（大谷のサイ・ヤング賞争いのライバル等）。
+  // 一覧（/player）では日本人の比較表に混ぜず「サイヤング争い」専用ブロックに出す。詳細ページは通常どおり生成。
 };
 
 const mlb = (slug: string, id: number) => `https://www.mlb.com/player/${slug}-${id}`;
@@ -71,6 +73,24 @@ export const PLAYERS: Player[] = [
   { slug: 'lars-nootbaar', nameJa: 'ヌートバー', nameEn: 'Lars Nootbaar', mlbId: 663457,
     bio: '母が日本人の外野手。2023年WBCの侍ジャパンで活躍し、日本でも高い人気を集める。出塁能力と勝負強さが持ち味。',
     sameAs: [mlb('lars-nootbaar', 663457), wiki('ラーズ・ヌートバー')] },
+
+  // ───── サイ・ヤング賞争いのライバル（rival）。大谷の対抗馬として一覧の専用ブロックに出す。
+  // nameJa は既存記事のタグ表記に合わせて hub に記事が紐づくようにしている（threadsOf）。
+  { slug: 'paul-skenes', nameJa: 'ポール・スキーンズ', nameEn: 'Paul Skenes', mlbId: 694973, rival: true,
+    bio: '豪速球とスプリットで球界を席巻するパイレーツの右腕。新人離れした支配力でサイ・ヤング賞争いの中心にいる。',
+    sameAs: [mlb('paul-skenes', 694973)] },
+  { slug: 'cristopher-sanchez', nameJa: 'クリストファー・サンチェス', nameEn: 'Cristopher Sánchez', mlbId: 650911, rival: true,
+    bio: '鋭いチェンジアップを武器にするフィリーズの左腕先発。安定した防御率でナ・リーグの上位に名を連ねる。',
+    sameAs: [mlb('cristopher-sanchez', 650911)] },
+  { slug: 'jacob-misiorowski', nameJa: 'ミシオロウスキー', nameEn: 'Jacob Misiorowski', mlbId: 694819, rival: true,
+    bio: '100マイル超の速球を投げ込むブルワーズの右腕。圧倒的な奪三振力で「歩くビデオゲーム」と称される剛腕。',
+    sameAs: [mlb('jacob-misiorowski', 694819)] },
+  { slug: 'chris-sale', nameJa: 'クリス・セール', nameEn: 'Chris Sale', mlbId: 519242, rival: true,
+    bio: '長いキャリアで何度もサイ・ヤング賞争いに名を連ねるブレーブスの左腕エース。健康なら球界屈指の支配力を誇る。',
+    sameAs: [mlb('chris-sale', 519242)] },
+  { slug: 'mason-miller', nameJa: 'メイソン・ミラー', nameEn: 'Mason Miller', mlbId: 695243, rival: true,
+    bio: '100マイル超を投げ込むアスレチックスの守護神。圧巻の奪三振率でリリーフながら大きな注目を集める右腕。',
+    sameAs: [mlb('mason-miller', 695243)] },
 ];
 
 const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));

@@ -75,6 +75,13 @@ const JP_NAMES = {
  */
 const EXTRA_IDS = [663457];
 
+/**
+ * サイ・ヤング賞争いのライバル（非日本人投手）。選手ハブ /player と一覧の「サイヤング争い」比較ブロック用に
+ * スナップショットへ明示で含める。jp（日本人成績）コマンドや today モードには出さず、snapshot だけが拾う。
+ * src/lib/players.ts の rival:true エントリと ID を一致させる。
+ */
+const RIVAL_IDS = [694973, 650911, 694819, 519242, 695243]; // Skenes / C.Sánchez / Misiorowski / Sale / M.Miller
+
 /** MLB 30 球団の英語名 → 短い日本語名。マイナー球団など未収録は英語名のまま返す。 */
 const TEAM_JA = {
   'Arizona Diamondbacks': 'ダイヤモンドバックス',
@@ -820,7 +827,7 @@ async function runSnapshot(season, asOf) {
     console.error(`日本人選手の取得数が異常 (${jpIds.length})。API不調とみなし中断＝既存JSONは保持。`);
     process.exit(1);
   }
-  const ids = [...new Set([...jpIds, ...EXTRA_IDS])];
+  const ids = [...new Set([...jpIds, ...EXTRA_IDS, ...RIVAL_IDS])];
   const [seasonPeople, saberMap, ranksMap, fieldingMap, savant] = await Promise.all([
     fetchStats(ids, season),
     fetchWar(ids, season),
