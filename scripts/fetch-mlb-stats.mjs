@@ -136,6 +136,21 @@ async function fetchStats(ids, season, { date, start, end } = {}) {
   return data.people ?? [];
 }
 
+/**
+ * WAR（sabermetrics）を personId → {hit, pit} で返す。
+ * ⚠️ MLB API の sabermetrics は startDate/endDate を無視し「今季累計」しか返さない。
+ *    ＝ WAR の「試合ごとの増減（前回比）」は取得できない。表示するのは今季の値のみ。
+ */
+async function fetchWar(ids, season) {
+  const hydrate = `stats(group=%5Bhitting,pitching%5D,type=sabermetrics,season=${season})`;
+  const data = await getJson(`${BASE}/people?personIds=${ids.join(',')}&hydrate=${hydrate}`);
+  const map = new Map();
+  for (const p of data.people ?? []) {
+    map.set(p.id, { hit: pickSplit(p, 'hitting')?.war, pit: pickSplit(p, 'pitching')?.war });
+  }
+  return map;
+}
+
 /** 各指標の MLB 順位表（personId → rank）。本塁打／防御率（規定到達）／奪三振。 */
 async function fetchRanks(season) {
   const one = async (category, statGroup) => {
@@ -234,6 +249,23 @@ function deltaString(cumPerson, prevPerson, datePerson) {
   return parts.join(' / ');
 }
 
+/** 今季 WAR（二刀流は投＋打の合計＋内訳）。役割は出場記録から判定。 */
+function warStringFor(person, saber) {
+  if (!saber) return '';
+  const isHit = pickSplit(person, 'hitting')?.gamesPlayed;
+  const isPit = pickSplit(person, 'pitching')?.gamesPlayed;
+  // 表示は小数1桁。二刀流の合計は「先に各桁を丸めてから足す」＝内訳と合計を必ず一致させる
+  const r1 = (v) => Math.round(v * 10) / 10;
+  const hw = typeof saber.hit === 'number' ? r1(saber.hit) : null;
+  const pw = typeof saber.pit === 'number' ? r1(saber.pit) : null;
+  if (isHit && isPit && hw != null && pw != null) {
+    return `${(hw + pw).toFixed(1)}（投${pw.toFixed(1)} / 打${hw.toFixed(1)}）`;
+  }
+  if (isPit && pw != null) return pw.toFixed(1);
+  if (isHit && hw != null) return hw.toFixed(1);
+  return '';
+}
+
 /** MLB 順位（RANK_MAX 位以内のみ）。打者=本塁打、投手=防御率(規定到達)→無ければ奪三振。 */
 function rankString(person, ranks) {
   if (!ranks) return '';
@@ -266,7 +298,7 @@ const HEADER_NOTE = [
  * opts.datePerson/prevPerson … 指定日モードのその日 / 前日まで累計（today・note・delta 用）
  * opts.ranks … 順位表
  */
-function toStatRecord(seasonPerson, { datePerson, prevPerson, ranks } = {}) {
+function toStatRecord(seasonPerson, { datePerson, prevPerson, ranks, saber } = {}) {
   const rec = { player: jpName(seasonPerson), team: teamJa(seasonPerson) };
   if (datePerson) {
     const today = dayLine(datePerson);
@@ -277,6 +309,8 @@ function toStatRecord(seasonPerson, { datePerson, prevPerson, ranks } = {}) {
   }
   const season = seasonLine(seasonPerson);
   if (season) rec.season = season;
+  const war = warStringFor(seasonPerson, saber);
+  if (war) rec.war = war;
   if (datePerson && prevPerson) {
     const d = deltaString(seasonPerson, prevPerson, datePerson);
     if (d) rec.delta = d;
@@ -295,6 +329,7 @@ function printRecord(rec) {
   console.log(`${rec.player}（${rec.team}）${rec.note ? ` ★${rec.note}` : ''}`);
   if (rec.today) console.log(`  この試合: ${rec.today}`);
   if (rec.season) console.log(`  今季: ${rec.season}`);
+  if (rec.war) console.log(`  WAR: ${rec.war}`);
   if (rec.delta) console.log(`  前回比: ${rec.delta}`);
   if (rec.rank) console.log(`  ランク: ${rec.rank}`);
 }
@@ -302,7 +337,7 @@ function printRecord(rec) {
 async function runJp(season, { date, asJson, team } = {}) {
   const ids = await fetchJapanesePlayers(season);
   if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
-  const ranks = await fetchRanks(season);
+  const [ranks, saberMap] = await Promise.all([fetchRanks(season), fetchWar(ids, season)]);
 
   if (date) {
     const [todayPeople, cumPeople, prevPeople] = await Promise.all([
@@ -320,6 +355,7 @@ async function runJp(season, { date, asJson, team } = {}) {
         datePerson: dp,
         prevPerson: prevById.get(dp.id),
         ranks,
+        saber: saberMap.get(dp.id),
       }),
     );
     if (asJson) return console.log(JSON.stringify(recs, null, 2));
@@ -332,7 +368,7 @@ async function runJp(season, { date, asJson, team } = {}) {
 
   // 今季ダッシュボード
   const seasonPeople = (await fetchStats(ids, season)).filter((p) => matchesTeam(p, team));
-  const recs = seasonPeople.map((sp) => toStatRecord(sp, { ranks }));
+  const recs = seasonPeople.map((sp) => toStatRecord(sp, { ranks, saber: saberMap.get(sp.id) }));
   if (asJson) return console.log(JSON.stringify(recs, null, 2));
   console.log(`【日本人MLB選手 今季成績】${season}シーズン（${recs.length}名）`);
   console.log(HEADER_NOTE + '\n');
@@ -353,9 +389,9 @@ async function runPlayer(query, season, { asJson } = {}) {
       if (!ids.length) return console.error(`選手が見つからない: ${query}`);
     }
   }
-  const ranks = await fetchRanks(season);
+  const [ranks, saberMap] = await Promise.all([fetchRanks(season), fetchWar(ids, season)]);
   const people = await fetchStats(ids, season);
-  const recs = people.map((p) => toStatRecord(p, { ranks }));
+  const recs = people.map((p) => toStatRecord(p, { ranks, saber: saberMap.get(p.id) }));
   if (asJson) return console.log(JSON.stringify(recs, null, 2));
   console.log(HEADER_NOTE + '\n');
   recs.forEach(printRecord);

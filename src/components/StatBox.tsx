@@ -5,6 +5,7 @@ type Props = {
   heading: string; // ローカライズ済み見出し（例: 「🇯🇵 日本人選手の成績」）
   todayLabel: string; // その試合の行ラベル（例: 「この試合」）
   seasonLabel: string; // 今季の行ラベル（例: 「今季」）
+  warLabel: string; // WAR の行ラベル（例: 「WAR」）
   deltaLabel: string; // 前回比の行ラベル（例: 「前回比」）
   rankLabel: string; // 順位の行ラベル（例: 「ランク」）
 };
@@ -19,6 +20,7 @@ export default function StatBox({
   heading,
   todayLabel,
   seasonLabel,
+  warLabel,
   deltaLabel,
   rankLabel,
 }: Props) {
@@ -58,6 +60,14 @@ export default function StatBox({
                   {seasonLabel}
                 </span>
                 <span className="tabular-nums">{s.season}</span>
+              </p>
+            )}
+            {s.war && (
+              <p className="mt-1 flex gap-2 text-sm text-ink-soft">
+                <span className="w-14 shrink-0 text-xs font-medium leading-relaxed">
+                  {warLabel}
+                </span>
+                <span className="font-medium tabular-nums text-ink">{s.war}</span>
               </p>
             )}
             {s.delta && (
