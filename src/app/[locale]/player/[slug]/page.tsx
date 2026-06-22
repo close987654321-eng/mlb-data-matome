@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
-import { getPlayer, PLAYERS, threadsOf, hubEligible } from '@/lib/players';
+import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot } from '@/lib/playerStats';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { buildFeed, feedKey } from '@/lib/feed';
@@ -74,7 +74,8 @@ export default async function PlayerHubPage({
     nl: t('player.lgNL'),
     unit: t('player.rankUnit'),
   };
-  const hasStats = Boolean(season && (season.hitting || season.pitching));
+  // MLBロースター級の今季成績がある時だけ成績UIを出す（league=null=AAA等は除外＝hubEligible と整合）。
+  const hasStats = hasMlbStats(season);
 
   const hubUrl = absoluteUrl(locale, `/player/${slug}`);
   const jsonLd = {
@@ -142,7 +143,9 @@ export default async function PlayerHubPage({
               href={`/${latestGame.sport}/${latestGame.id}`}
               className="flex items-center justify-between rounded-xl bg-surface px-4 py-3.5 text-sm font-semibold text-accent ring-1 ring-line transition-colors hover:bg-paper"
             >
-              <span>▶ {t('player.latestGame')}</span>
+              <span>
+                <span aria-hidden="true">▶</span> {t('player.latestGame')}
+              </span>
               <span aria-hidden="true">→</span>
             </Link>
           )}

@@ -226,8 +226,8 @@ export default async function ThreadDetailPage({
         />
       )}
 
-      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。 */}
-      {taggedPlayers.length > 0 && (
+      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。選手ハブは MLB のみ。 */}
+      {sport === 'mlb' && taggedPlayers.length > 0 && (
         <p className="mt-4 flex flex-wrap gap-2">
           {taggedPlayers.map((p) => (
             <Link
@@ -235,7 +235,9 @@ export default async function ThreadDetailPage({
               href={`/player/${p.slug}`}
               className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-surface px-4 text-sm font-medium text-accent ring-1 ring-line transition-colors hover:bg-paper"
             >
-              📊 {t('player.hubCta', { name: p.nameJa })} →
+              <span aria-hidden="true">📊</span>
+              {t('player.hubCta', { name: p.nameJa })}
+              <span aria-hidden="true">→</span>
             </Link>
           ))}
         </p>

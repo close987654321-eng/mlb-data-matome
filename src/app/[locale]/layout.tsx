@@ -144,7 +144,9 @@ function SiteHeader() {
           <NavLink href="/" exact>
             {t('nav.home')}
           </NavLink>
-          <NavLink href="/watch">▶ {t('nav.watch')}</NavLink>
+          <NavLink href="/watch">
+            <span aria-hidden="true">▶</span> {t('nav.watch')}
+          </NavLink>
           <NavLink href="/player">{t('nav.players')}</NavLink>
           {SPORTS.map((s) => (
             <NavLink key={s} href={`/${s}`}>
@@ -155,19 +157,20 @@ function SiteHeader() {
         <LocaleSwitcher />
       </div>
       {/* スマホ用ナビ */}
-      <nav className="flex items-center gap-4 overflow-x-auto border-t border-line px-5 py-2 text-sm sm:hidden">
-        <NavLink href="/" exact className="whitespace-nowrap">
+      <nav className="flex items-center gap-4 overflow-x-auto border-t border-line px-5 text-sm sm:hidden">
+        <NavLink href="/" exact className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.home')}
         </NavLink>
-        <NavLink href="/watch" className="whitespace-nowrap">
-          ▶ {t('nav.watch')}
+        <NavLink href="/watch" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
+          <span aria-hidden="true">▶</span>&nbsp;{t('nav.watch')}
         </NavLink>
-        <NavLink href="/player" className="whitespace-nowrap">
-          📊 {t('nav.players')}
+        <NavLink href="/player" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
+          <span aria-hidden="true">📊</span>&nbsp;{t('nav.players')}
         </NavLink>
         {SPORTS.map((s) => (
-          <NavLink key={s} href={`/${s}`} className="whitespace-nowrap">
-            {SPORT_INFO[s].emoji} {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
+          <NavLink key={s} href={`/${s}`} className="inline-flex min-h-[44px] items-center whitespace-nowrap">
+            <span aria-hidden="true">{SPORT_INFO[s].emoji}</span>&nbsp;
+            {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
           </NavLink>
         ))}
       </nav>

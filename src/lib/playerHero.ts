@@ -115,16 +115,18 @@ export function playerShareText(nameJa: string, season: PlayerSeason, hero: Hero
   const h = season.hitting;
   const p = season.pitching;
   const parts: string[] = [];
-  if (hero.role === 'two-way') {
+  // WAR を出すのは hero.value が確かに合計WARの時(kind==='warTotal')だけ。role だけで判定すると
+  // セイバー片側欠損の二刀流で「WAR(防御率の値)」のような捏造ラベルになる（PlayerHero と同じ kind 基準に揃える）。
+  if (hero.kind === 'warTotal') {
     parts.push(`WAR${hero.value}`);
     if (h?.avg != null) parts.push(`打率${h.avg}`);
     if (h?.homeRuns != null) parts.push(`${h.homeRuns}本`);
     if (p?.era != null) parts.push(`防御率${p.era}`);
-  } else if (hero.role === 'batter') {
-    if (h?.avg != null) parts.push(`打率${h.avg}`);
-    if (h?.homeRuns != null) parts.push(`${h.homeRuns}本`);
-    if (h?.rbi != null) parts.push(`${h.rbi}打点`);
-    if (h?.ops != null) parts.push(`OPS${h.ops}`);
+  } else if (h && !p) {
+    if (h.avg != null) parts.push(`打率${h.avg}`);
+    if (h.homeRuns != null) parts.push(`${h.homeRuns}本`);
+    if (h.rbi != null) parts.push(`${h.rbi}打点`);
+    if (h.ops != null) parts.push(`OPS${h.ops}`);
   } else {
     if (p?.era != null) parts.push(`防御率${p.era}`);
     if (p?.wins != null) parts.push(`${p.wins}勝`);
@@ -165,11 +167,15 @@ export function pickHero(season: PlayerSeason): Hero {
     // 総合WARは「打・投の実数が両方ある時だけ」合算する。片側欠損(異常データ)を 0 と数えて
     // “持っていない値”を捏造しない（現データは hitting/pitching と saber.hit/pit が対で来るので未到達の保険）。
     if (typeof bat === 'number' && typeof pit === 'number') {
+      // 「先に各桁を丸めてから足す」＝内訳(打/投)と合計が必ず一致し、記事の StatBox とも揃う
+      // （sum-then-round だと 2.9+2.5 の表示が合計5.3と食い違って見える）。
+      const hw = Math.round(bat * 10) / 10;
+      const pw = Math.round(pit * 10) / 10;
       return {
         ...base,
         kind: 'warTotal',
-        value: (bat + pit).toFixed(1),
-        warSplit: { bat: war1(bat) ?? '—', pit: war1(pit) ?? '—' },
+        value: (hw + pw).toFixed(1),
+        warSplit: { bat: hw.toFixed(1), pit: pw.toFixed(1) },
         caption: pickBestRankCaption(season),
         noRankReason: null, // 二刀流はキャプションで凄さを出すので注記は不要
       };

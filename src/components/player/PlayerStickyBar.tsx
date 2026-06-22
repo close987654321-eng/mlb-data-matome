@@ -26,10 +26,13 @@ export default function PlayerStickyBar({
 
   useEffect(() => {
     const header = document.querySelector('header');
-    const measure = () => header && setTop(Math.round(header.getBoundingClientRect().height));
+    if (!header) return;
+    const measure = () => setTop(Math.round(header.getBoundingClientRect().height));
     measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
+    // ResizeObserver でヘッダ高の変化に追従（リサイズだけでなくフォント反映・URLバー伸縮等でも合わせる）。
+    const ro = new ResizeObserver(measure);
+    ro.observe(header);
+    return () => ro.disconnect();
   }, []);
 
   useEffect(() => {
