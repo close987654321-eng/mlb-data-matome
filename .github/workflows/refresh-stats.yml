@@ -1,0 +1,52 @@
+name: 選手成績スナップショット自動更新
+
+# MLB公式 Stats API から日本人選手の今季成績＋順位を取り直し、変化があれば
+# data/jp-players-stats.json をコミット→push（Vercel が自動デプロイ）。
+# サイト本体は API を叩かない方針のまま、編集時取得をCIで「試合がある時間帯だけ毎時」実行して
+# 鮮度を上げる（規約§4.1：恒常データ源にしない＝デッドな時間帯は回さない）。
+# 値が変わらなければ no-op でコミットしない（スナップショットは安定ソートで byte 一致）。
+
+on:
+  schedule:
+    # 試合がある時間帯(JST 01:00〜17:00頃＝UTC 16:00〜08:00)だけ毎時。:17 は最混雑の毎時0分を避けるため。
+    # GitHubのcronはUTC・ベストエフォート（多少遅れることがある）。デッドな時間帯(US午前)は回さない。
+    - cron: '17 0-8,16-23 * * *'
+  workflow_dispatch: {} # 手動実行も可（オフ時間に即更新したいとき）
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-stats
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22 # スクリプトは Node 組み込み(fs/path)＋global fetch のみ。依存インストール不要
+
+      - name: スナップショット取得（asOf/シーズンは JST 基準）
+        run: |
+          set -euo pipefail
+          ASOF=$(TZ=Asia/Tokyo date +%F)
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          # pipefail で node の失敗が tail に飲まれず赤くなる（取得失敗を no-op と誤認しない）
+          node scripts/fetch-mlb-stats.mjs snapshot "$ASOF" "$SEASON" | tail -3
+
+      - name: 変化があればコミット＆push
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/jp-players-stats.json; then
+            echo "変化なし＝コミットしない（no-op）"
+            exit 0
+          fi
+          git config user.name "stats-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/jp-players-stats.json
+          git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
+          git push

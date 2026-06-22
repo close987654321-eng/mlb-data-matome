@@ -126,6 +126,26 @@ const LEAGUE_BY_TEAM = {
 
 const RANK_MAX = 30; // この順位以内のときだけ「MLB○位」を出す（下位の順位はノイズなので出さない）
 
+/**
+ * キーを再帰的にソートして安定した JSON 文字列にする（配列順は保持）。
+ * MLB API は順位オブジェクト等のキー順を呼び出しごとに変えるため、そのまま書くと
+ * 値が同じでも差分が出て、毎時 cron が無駄なコミット/デプロイを量産する。決定的に直す。
+ */
+function stableStringify(value, indent = 2) {
+  const norm = (v) => {
+    if (Array.isArray(v)) return v.map(norm);
+    if (v && typeof v === 'object') {
+      return Object.fromEntries(
+        Object.keys(v)
+          .sort()
+          .map((k) => [k, norm(v[k])]),
+      );
+    }
+    return v;
+  };
+  return JSON.stringify(norm(value), null, indent);
+}
+
 async function getJson(url) {
   const res = await fetch(url, { headers: { 'User-Agent': 'matome-mlb-kaigai/editor' } });
   if (!res.ok) throw new Error(`MLB API ${res.status}: ${url}`);
@@ -489,8 +509,14 @@ const pick = (obj, fields) => Object.fromEntries(fields.filter((f) => obj[f] != 
  * 残すのは成績の数値（公知の事実）のみ。`asOf`（JSTの取得日）も保存し、ハブに「○月○日時点」と出す。
  */
 async function runSnapshot(season, asOf) {
-  const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS])];
-  if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
+  const jpIds = await fetchJapanesePlayers(season);
+  // 取得数が異常に少なければ API の不調とみなし、書き込まず非ゼロ終了（毎時 cron が
+  // 既存の良いスナップショットを 1 名などに上書きする事故を防ぐ）。通常は十数名いる。
+  if (jpIds.length < 8) {
+    console.error(`日本人選手の取得数が異常 (${jpIds.length})。API不調とみなし中断＝既存JSONは保持。`);
+    process.exit(1);
+  }
+  const ids = [...new Set([...jpIds, ...EXTRA_IDS])];
   const [seasonPeople, saberMap, ranksMap] = await Promise.all([
     fetchStats(ids, season),
     fetchWar(ids, season),
@@ -515,7 +541,8 @@ async function runSnapshot(season, asOf) {
   }
   const out = { asOf, season, players };
   const file = path.join(process.cwd(), 'data', 'jp-players-stats.json');
-  writeFileSync(file, JSON.stringify(out, null, 2) + '\n');
+  // 安定ソートで書く＝値が同じなら毎回バイト一致（毎時 cron の無駄コミットを防ぐ）
+  writeFileSync(file, stableStringify(out) + '\n');
   console.log(`snapshot 書き出し: ${Object.keys(players).length}名 / asOf ${asOf} → ${file}`);
 }
 

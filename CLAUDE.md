@@ -97,8 +97,12 @@ SSG します。
 - **MLB 成績（編集時の味付け用）**: `node scripts/fetch-mlb-stats.mjs jp <ETの試合日> --json` で
   日本人 MLB 選手の成績を `Thread.stats` 配列として取得（MLB公式 Stats API・キー不要）。記事は
   `summaryJa` 直下の専用ボックス（`StatBox`）で「この試合／今季／節目」を表示（matome R10）。日付は
-  現地(ET)基準＝JST と1日ズレることあり。⚠️ **サイト本体は叩かず編集時取得のみ**＝API規約は「個人・非商用」
-  なので恒常データ源にはしない。記事に残すのは**数値だけ**（公知の事実）。ロゴ/写真/中継/表組みは転載しない。
+  現地(ET)基準＝JST と1日ズレることあり。⚠️ **サイト本体（Next.js ランタイム）は API を叩かない**＝
+  読むのは静的JSON（`data/jp-players-stats.json`）だけ。記事に残すのは**数値だけ**（公知の事実）。ロゴ/写真/中継/表組みは転載しない。
+  - 選手ハブ /player 用の `snapshot` は **GitHub Actions（`.github/workflows/refresh-stats.yml`）で「試合がある時間帯だけ毎時」**
+    自動取得→変化があればコミット（Vercel 自動デプロイ）。これは編集時取得の延長＝**サイト本体ではなく CI が叩く**運用。
+    API規約「個人・非商用・非バルク」を踏まえ、デッドな時間帯は回さず低頻度に抑える（恒常的な全時間データ源にはしない）。
+    取得失敗・名簿異常時は書かずに失敗（既存JSONを保持）。手動更新は `node scripts/fetch-mlb-stats.mjs snapshot`。
 
 ### 4.2 出力フォーマット
 
