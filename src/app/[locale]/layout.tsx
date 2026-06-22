@@ -29,6 +29,15 @@ export const metadata: Metadata = {
   // トップは default をそのまま使い二重ブランドを避ける（template は子ページにだけ効く）。
   title: { default: TITLE, template: '%s｜海外の反応' },
   description: DESCRIPTION,
+  // Discover の大画像カード（高CTR枠）に載るための前提。これが無いと Google は大サムネを出さない。
+  // 全ページの既定。検索ページ等の noindex は各ページ側の robots で個別に上書きする。
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+    'max-snippet': -1,
+    'max-video-preview': -1,
+  },
   // OG/Twitter カードにブランドロゴを表示（SNS 送客時の見栄え）
   openGraph: {
     title: TITLE,
