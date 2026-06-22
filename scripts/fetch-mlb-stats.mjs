@@ -180,7 +180,7 @@ function hitterSeason(s) {
   return `打率${s.avg} ${s.homeRuns}本 ${s.rbi}打点 OPS${s.ops}（${s.gamesPlayed}試合）`;
 }
 function pitcherSeason(s) {
-  return `${s.wins}勝${s.losses}敗 防御率${s.era} ${s.strikeOuts}奪三振（${s.inningsPitched}回）`;
+  return `${s.wins}勝${s.losses}敗 防御率${s.era} WHIP${s.whip} ${s.strikeOuts}奪三振（${s.inningsPitched}回）`;
 }
 /** その日 1 試合分の打者ライン（"4打数2安打1本塁打1打点"） */
 function hitterDay(s) {
@@ -245,6 +245,8 @@ function deltaString(cumPerson, prevPerson, datePerson) {
     const a = pickSplit(cumPerson, 'pitching');
     const b = pickSplit(prevPerson, 'pitching');
     if (a?.era && b?.era) parts.push(`防御率 ${signedEra(a.era, b.era)}`);
+    // WHIP も前回比を出す（WAR と違い WHIP は byDateRange で日付が効く＝差分が取れる）
+    if (a?.whip && b?.whip) parts.push(`WHIP ${signedEra(a.whip, b.whip)}`);
   }
   return parts.join(' / ');
 }
