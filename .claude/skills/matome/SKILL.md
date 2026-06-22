@@ -162,9 +162,10 @@ MLB の試合まとめ（特に「海外ニキと見る」R6 や日本人選手�
   - **watch-along（海外ニキと見る）は `--team <チーム名>` で自軍の日本人選手だけに絞る**
     （例: `jp <ETの試合日> --team ドジャース --json` → 大谷＋山本＋佐々木…をまとめて並べる）。
   - `--json` なしは人が読む形（ネタ選び・節目チェック用）。`jp` 単体で今季ダッシュボード。
-  - ⚠️ `jp` / `--team` の名簿は `birthCountry==='Japan'` 判定なので**ヌートバー（日系）は出てこない**。
-    `cardinals` シリーズ等で主役にするときは `player Nootbaar --json` で別取りして並べる。`today`(その試合)
-    は box score から手で作る（player モードは今季ダッシュボード＝`today` を返さない）。
+  - ℹ️ `jp` / `--team` / `snapshot` の名簿は `birthCountry==='Japan'` 判定だが、**ヌートバー（日系・米国出身）は
+    スクリプトの `EXTRA_IDS` に明示追加済み＝jp/snapshot にも自動で出る**（選手ハブ /player にも載る）。
+    ただし `jp <ETの試合日>` のその日モードで `today` を出すには出場が要る。別の名簿外選手を主役にするときは
+    `player <名前> --json` で取り、`today`(その試合) は box score から手で作る（player モードは `today` を返さない）。
 - **⚠️ 日付は現地(ET)基準**。MLB API は試合を現地日で集計する＝日本の夜は現地の午前。JST の試合日
   そのままだと出てこないことがある（例: JST 6/20 朝の試合 = ET 6/19）。**出場者が 0／想定と違うときは
   前日(ET)を叩く**。`fetchedAt`(JST) とも `series.date`(JST) とも別物。

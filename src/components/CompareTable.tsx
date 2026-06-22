@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useRouter } from '@/lib/navigation';
 
 // 見比べ用のソート可能な比較表。列ヘッダクリックで並び替え（数値）。サーバーで全行を
@@ -22,16 +22,38 @@ export default function CompareTable({
   rows,
   cols,
   defaultKey,
+  hint,
 }: {
   rows: CompareRow[];
   cols: CompareCol[];
   defaultKey: string;
+  hint?: string;
 }) {
   const router = useRouter();
   const [sortKey, setSortKey] = useState(defaultKey);
   const [dir, setDir] = useState<'asc' | 'desc'>(
     cols.find((c) => c.key === defaultKey)?.better === 'low' ? 'asc' : 'desc',
   );
+
+  // 横スクロールの「まだ続きがある」を端のフェードで示す（スマホで見やすく）。
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [edge, setEdge] = useState({ l: false, r: false });
+  const onScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setEdge({
+      l: el.scrollLeft > 4,
+      r: el.scrollLeft + el.clientWidth < el.scrollWidth - 4,
+    });
+  };
+  useEffect(() => {
+    onScroll();
+    const el = scrollRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(onScroll);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const sorted = [...rows].sort((a, b) => {
     const av = a.values[sortKey]?.v;
@@ -52,60 +74,78 @@ export default function CompareTable({
   };
 
   return (
-    <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-      <table className="w-full min-w-[640px] border-collapse text-sm">
-        <thead>
-          <tr className="border-b border-line text-ink-soft">
-            <th className="sticky left-0 bg-paper px-2 py-2 text-left font-semibold">選手</th>
-            {cols.map((c) => (
-              <th key={c.key} className="px-2 py-2 text-right font-semibold">
-                <button
-                  type="button"
-                  onClick={() => onSort(c)}
-                  className={`inline-flex items-center gap-0.5 transition-colors hover:text-ink ${
-                    c.key === sortKey ? 'text-accent' : ''
-                  }`}
-                >
-                  {c.label}
-                  {c.key === sortKey && <span aria-hidden>{dir === 'asc' ? '▲' : '▼'}</span>}
-                </button>
+    <div className="relative -mx-5 sm:mx-0">
+      {hint && edge.r && (
+        <p className="mb-1.5 px-5 text-[11px] text-ink-soft sm:hidden">{hint}</p>
+      )}
+      {/* 端のフェード（続きがある側だけ出す）。スクロール領域に被せるだけでクリックは透過。 */}
+      <div
+        className={`pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r from-paper to-transparent transition-opacity ${
+          edge.l ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+      <div
+        className={`pointer-events-none absolute inset-y-0 right-0 z-10 w-8 bg-gradient-to-l from-paper to-transparent transition-opacity ${
+          edge.r ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+      <div ref={scrollRef} onScroll={onScroll} className="overflow-x-auto px-5 sm:px-0">
+        <table className="w-full min-w-[560px] border-collapse text-sm">
+          <thead>
+            <tr className="border-b border-line text-ink-soft">
+              <th className="sticky left-0 z-20 border-r border-line bg-paper px-2.5 py-2.5 text-left font-semibold">
+                選手
               </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {sorted.map((r) => (
-            // 行ぜんぶをクリック可能に（選手名だけだと分かりづらいため）。名前は実リンクのまま
-            // 残してSEO・キーボード操作を担保し、行クリックはマウス操作の利便性として足す。
-            <tr
-              key={r.slug}
-              onClick={() => router.push(`/player/${r.slug}`)}
-              className="group cursor-pointer border-b border-line/60 hover:bg-surface"
-            >
-              <td className="sticky left-0 bg-paper px-2 py-2 text-left group-hover:bg-surface">
-                <span className="inline-flex items-center gap-1">
-                  <Link
-                    href={`/player/${r.slug}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="font-medium text-ink group-hover:text-accent"
-                  >
-                    {r.name}
-                  </Link>
-                  {r.team && <span className="text-[11px] text-ink-soft">{r.team}</span>}
-                  <span aria-hidden className="text-ink-soft transition-colors group-hover:text-accent">
-                    ›
-                  </span>
-                </span>
-              </td>
               {cols.map((c) => (
-                <td key={c.key} className="px-2 py-2 text-right tabular-nums text-ink">
-                  {r.values[c.key]?.d ?? '—'}
-                </td>
+                <th key={c.key} className="whitespace-nowrap px-2.5 py-2.5 text-right text-xs font-semibold">
+                  <button
+                    type="button"
+                    onClick={() => onSort(c)}
+                    className={`inline-flex items-center gap-0.5 transition-colors hover:text-ink ${
+                      c.key === sortKey ? 'text-accent' : ''
+                    }`}
+                  >
+                    {c.label}
+                    {c.key === sortKey && <span aria-hidden>{dir === 'asc' ? '▲' : '▼'}</span>}
+                  </button>
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sorted.map((r) => (
+              // 行ぜんぶをクリック可能に（選手名だけだと分かりづらいため）。名前は実リンクのまま
+              // 残してSEO・キーボード操作を担保し、行クリックはマウス操作の利便性として足す。
+              <tr
+                key={r.slug}
+                onClick={() => router.push(`/player/${r.slug}`)}
+                className="group cursor-pointer border-b border-line/60 hover:bg-surface"
+              >
+                <td className="sticky left-0 z-20 border-r border-line bg-paper px-2.5 py-3 text-left group-hover:bg-surface">
+                  <span className="flex items-center gap-1">
+                    <Link
+                      href={`/player/${r.slug}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="font-medium text-ink group-hover:text-accent"
+                    >
+                      {r.name}
+                    </Link>
+                    {r.team && <span className="text-[11px] text-ink-soft">{r.team}</span>}
+                    <span aria-hidden className="ml-auto text-ink-soft transition-colors group-hover:text-accent">
+                      ›
+                    </span>
+                  </span>
+                </td>
+                {cols.map((c) => (
+                  <td key={c.key} className="whitespace-nowrap px-2.5 py-3 text-right tabular-nums text-ink">
+                    {r.values[c.key]?.d ?? '—'}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

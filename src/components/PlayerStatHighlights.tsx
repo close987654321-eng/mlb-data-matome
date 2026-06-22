@@ -30,6 +30,13 @@ function Card({
   );
 }
 
+// 項目数に応じて大画面の列数を合わせる（5個=5列 / 6個=6列）。中途半端な空セルを作らない。
+const LG_COLS: Record<number, string> = {
+  4: 'lg:grid-cols-4',
+  5: 'lg:grid-cols-5',
+  6: 'lg:grid-cols-6',
+};
+
 function Group({
   heading,
   items,
@@ -41,6 +48,7 @@ function Group({
   league?: League | null;
   labels: RankLabels;
 }) {
+  const lg = LG_COLS[items.length] ?? 'lg:grid-cols-5';
   return (
     <div>
       {heading && (
@@ -49,7 +57,7 @@ function Group({
           {heading}
         </div>
       )}
-      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-5">
+      <div className={`grid grid-cols-2 gap-2.5 sm:grid-cols-3 ${lg}`}>
         {items.map((it) => (
           <Card key={it.label} item={it} league={league} labels={labels} />
         ))}
@@ -86,6 +94,7 @@ export default function PlayerStatHighlights({
         { label: '打点', value: hitting.rbi ?? null, rank: ranks?.hitting?.rbi },
         { label: 'OPS', value: hitting.ops ?? null, rank: ranks?.hitting?.ops },
         { label: 'wRC+', value: wrc(saber?.wrcplus) },
+        { label: twoWay ? 'WAR(打)' : 'WAR', value: war1(saber?.hit) },
       ]
     : [];
 

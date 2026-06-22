@@ -9,6 +9,9 @@
  * Wikipedia(日本語) は実在確認済みのものだけ入れる（404 を埋め込まない）。
  * mlbId は fetch-mlb-stats.mjs の JP_NAMES と一致させる。
  */
+import type { Thread } from '@/types/thread';
+import type { PlayerSeason } from './playerStats'; // 型のみ（fs 依存は持ち込まない）
+
 export type Player = {
   slug: string; // URL用の英字スラッグ（例: "shohei-ohtani"）
   nameJa: string; // 日本語表記。記事の tags / stats[].player と突き合わせるキー
@@ -64,6 +67,10 @@ export const PLAYERS: Player[] = [
   { slug: 'rikuu-nishida', nameJa: '西田陸羽', nameEn: 'Rikuu Nishida', mlbId: 807747,
     bio: 'MLB組織に所属する日本人選手。',
     sameAs: [mlb('rikuu-nishida', 807747)] },
+  // 日系（母が日本人）。birthCountry は米国なので jp 名簿の自動抽出には載らない＝明示で追加。
+  { slug: 'lars-nootbaar', nameJa: 'ヌートバー', nameEn: 'Lars Nootbaar', mlbId: 663457,
+    bio: '母が日本人の外野手。2023年WBCの侍ジャパンで活躍し、日本でも高い人気を集める。出塁能力と勝負強さが持ち味。',
+    sameAs: [mlb('lars-nootbaar', 663457), wiki('ラーズ・ヌートバー')] },
 ];
 
 const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));
@@ -76,4 +83,23 @@ export function getPlayer(slug: string): Player | undefined {
 /** 日本語名（記事 tags / stats[].player の値）→ ハブ slug。StatBox の選手名リンクに使う。 */
 export function playerSlugByJaName(nameJa: string): string | undefined {
   return BY_JA.get(nameJa)?.slug;
+}
+
+/** その選手の記事（タグ or 成績ボックスに名前がある記事）。ハブのクラスタ・対象判定で使う。 */
+export function threadsOf(player: Player, all: Thread[]): Thread[] {
+  return all.filter(
+    (t) =>
+      (t.tags ?? []).includes(player.nameJa) ||
+      (t.stats ?? []).some((s) => s.player === player.nameJa),
+  );
+}
+
+/** スナップショットに MLBロースター級の今季成績があるか（hitting/pitching＋所属リーグ確定）。AAA等は league=null で除外。 */
+export function hasMlbStats(season?: PlayerSeason | null): boolean {
+  return Boolean(season && (season.hitting || season.pitching) && season.league);
+}
+
+/** ハブ /player/[slug] を作る対象か＝記事がある or MLBの今季成績がある（成績つきなら“薄いページ”ではない）。 */
+export function hubEligible(player: Player, all: Thread[], season?: PlayerSeason | null): boolean {
+  return threadsOf(player, all).length > 0 || hasMlbStats(season);
 }

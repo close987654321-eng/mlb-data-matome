@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
-import { getPlayer, PLAYERS, type Player } from '@/lib/players';
+import { getPlayer, PLAYERS, threadsOf, hubEligible } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot } from '@/lib/playerStats';
 import { buildFeed, feedKey } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
@@ -12,24 +12,15 @@ import type { RankLabels } from '@/components/RankBadges';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
-import type { Thread } from '@/types/thread';
 
 export const dynamicParams = false;
 
-/** その選手の記事（タグ or 成績ボックスに名前がある記事）を新着順で。 */
-function threadsOf(player: Player, all: Thread[]): Thread[] {
-  return all.filter(
-    (t) =>
-      (t.tags ?? []).includes(player.nameJa) ||
-      (t.stats ?? []).some((s) => s.player === player.nameJa),
-  );
-}
-
 export async function generateStaticParams() {
-  const all = await getAllThreads();
-  // 記事が1本以上ある選手だけハブを作る（空ハブ＝薄いページを作らない）
-  const withArticles = PLAYERS.filter((p) => threadsOf(p, all).length > 0);
-  return locales.flatMap((locale) => withArticles.map((p) => ({ locale, slug: p.slug })));
+  const [all, snap] = await Promise.all([getAllThreads(), getPlayersSnapshot()]);
+  // 記事がある or MLBの今季成績がある選手のハブを作る（成績つきなら薄くない＝松井・千賀のように
+  // 記事がまだ無い現役選手にも成績ハブを用意する）。AAA等(league=null)は対象外。
+  const withHub = PLAYERS.filter((p) => hubEligible(p, all, snap.players[String(p.mlbId)]));
+  return locales.flatMap((locale) => withHub.map((p) => ({ locale, slug: p.slug })));
 }
 
 export async function generateMetadata({
@@ -60,9 +51,10 @@ export default async function PlayerHubPage({
   const t = await getTranslations();
 
   const all = await getAllThreads();
-  const threads = threadsOf(player, all);
-  if (threads.length === 0) notFound();
   const [season, snap] = await Promise.all([getPlayerSeason(player.mlbId), getPlayersSnapshot()]);
+  const threads = threadsOf(player, all);
+  // 記事も成績も無ければハブを作らない（dynamicParams=false なので通常ここには来ないが保険）
+  if (!hubEligible(player, all, season)) notFound();
   const feed = buildFeed(threads, []);
 
   const rankLabels: RankLabels = {
@@ -174,18 +166,20 @@ export default async function PlayerHubPage({
         </>
       ) : null}
 
-      <section>
-        <h2 className="mb-5 text-lg font-bold text-ink">
-          {t('player.articles', { name: player.nameJa, count: threads.length })}
-        </h2>
-        <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {feed.map((item, i) => (
-            <li key={feedKey(item)}>
-              <FeedCard item={item} locale={locale} priority={i === 0} />
-            </li>
-          ))}
-        </ul>
-      </section>
+      {threads.length > 0 && (
+        <section>
+          <h2 className="mb-5 text-lg font-bold text-ink">
+            {t('player.articles', { name: player.nameJa, count: threads.length })}
+          </h2>
+          <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+            {feed.map((item, i) => (
+              <li key={feedKey(item)}>
+                <FeedCard item={item} locale={locale} priority={i === 0} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <p className="text-sm">
         <Link href="/player" className="text-accent hover:underline">

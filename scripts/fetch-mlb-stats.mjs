@@ -66,7 +66,14 @@ const JP_NAMES = {
   808959: '村上宗隆',
   837227: '今井達也',
   807747: '西田陸羽',
+  663457: 'ヌートバー',
 };
+
+/**
+ * 日系だが birthCountry が日本でない選手（jp 名簿の自動抽出に載らない）を、ハブ/スナップショット/
+ * 一覧に必ず含めるための明示ID。今は L.ヌートバー（母が日本人・米国出身）。
+ */
+const EXTRA_IDS = [663457];
 
 /** MLB 30 球団の英語名 → 短い日本語名。マイナー球団など未収録は英語名のまま返す。 */
 const TEAM_JA = {
@@ -409,7 +416,7 @@ function printRecord(rec) {
 }
 
 async function runJp(season, { date, asJson, team } = {}) {
-  const ids = await fetchJapanesePlayers(season);
+  const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS])];
   if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
   const [ranks, saberMap] = await Promise.all([fetchRanks(season), fetchWar(ids, season)]);
 
@@ -482,7 +489,7 @@ const pick = (obj, fields) => Object.fromEntries(fields.filter((f) => obj[f] != 
  * 残すのは成績の数値（公知の事実）のみ。`asOf`（JSTの取得日）も保存し、ハブに「○月○日時点」と出す。
  */
 async function runSnapshot(season, asOf) {
-  const ids = await fetchJapanesePlayers(season);
+  const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS])];
   if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
   const [seasonPeople, saberMap, ranksMap] = await Promise.all([
     fetchStats(ids, season),

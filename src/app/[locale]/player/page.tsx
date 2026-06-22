@@ -55,8 +55,10 @@ export default async function PlayerIndexPage({
   const t = await getTranslations();
   const snap = await getPlayersSnapshot();
 
+  // 比較に出すのは MLBロースターで今季成績がある選手（＝ハブが必ず存在＝行クリックが必ず有効）。
+  // AAA等（league=null）は MLB比較に混ぜない。
   const withStats = PLAYERS.map((p) => ({ p, s: snap.players[String(p.mlbId)] as PlayerSeason | undefined })).filter(
-    (x) => x.s,
+    (x) => x.s && x.s.league,
   );
 
   const batRows: CompareRow[] = withStats
@@ -117,14 +119,14 @@ export default async function PlayerIndexPage({
       {batRows.length > 0 && (
         <section>
           <h2 className="mb-3 text-lg font-bold text-ink">{t('player.batting')}</h2>
-          <CompareTable rows={batRows} cols={BAT_COLS} defaultKey="war" />
+          <CompareTable rows={batRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 
       {pitRows.length > 0 && (
         <section>
           <h2 className="mb-3 text-lg font-bold text-ink">{t('player.pitching')}</h2>
-          <CompareTable rows={pitRows} cols={PIT_COLS} defaultKey="war" />
+          <CompareTable rows={pitRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 

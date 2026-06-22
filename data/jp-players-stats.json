@@ -172,13 +172,13 @@
             "mlb": 6,
             "lg": 3
           },
-          "rbi": {
-            "mlb": 35,
-            "lg": 19
-          },
           "triples": {
             "mlb": 17,
             "lg": 13
+          },
+          "rbi": {
+            "mlb": 35,
+            "lg": 19
           },
           "runs": {
             "mlb": 8,
@@ -207,6 +207,35 @@
             "lg": 12
           }
         }
+      }
+    },
+    "663457": {
+      "team": "カージナルス",
+      "league": "NL",
+      "hitting": {
+        "gamesPlayed": 14,
+        "plateAppearances": 58,
+        "atBats": 50,
+        "runs": 9,
+        "hits": 14,
+        "doubles": 3,
+        "triples": 0,
+        "homeRuns": 2,
+        "rbi": 7,
+        "stolenBases": 0,
+        "baseOnBalls": 7,
+        "strikeOuts": 13,
+        "avg": ".280",
+        "obp": ".362",
+        "slg": ".460",
+        "ops": ".822",
+        "babip": ".333"
+      },
+      "pitching": null,
+      "saber": {
+        "hit": 0.47068,
+        "woba": 0.345675,
+        "wrcplus": 121.426
       }
     },
     "672960": {
@@ -270,11 +299,11 @@
           "avg": {
             "lg": 56
           },
-          "doubles": {
-            "lg": 71
-          },
           "obp": {
             "lg": 53
+          },
+          "doubles": {
+            "lg": 71
           }
         }
       }
