@@ -9,6 +9,8 @@ import path from 'node:path';
  */
 export type Saber = { hit?: number; pit?: number; woba?: number; wrcplus?: number };
 export type StatRecord = Record<string, string | number>;
+/** 主ポジションの守備成績（公知の事実）。position は日本語表記、他は刺殺・補殺・失策・守備率など。 */
+export type FieldingRecord = { position: string } & Record<string, string | number>;
 /** 指標ごとの順位（MLB全体＝mlb / 所属リーグ＝lg）。スナップショットが持つ公知の事実。 */
 export type Rank = { mlb?: number; lg?: number };
 export type Ranks = { hitting?: Record<string, Rank>; pitching?: Record<string, Rank> };
@@ -19,6 +21,7 @@ export type PlayerSeason = {
   hitting: StatRecord | null;
   pitching: StatRecord | null;
   saber: Saber | null;
+  fielding?: FieldingRecord | null;
   ranks?: Ranks;
 };
 export type PlayersSnapshot = {

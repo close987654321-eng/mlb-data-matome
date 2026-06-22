@@ -4,9 +4,10 @@ import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getPlayer, PLAYERS, threadsOf, hubEligible } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot } from '@/lib/playerStats';
-import { pickHero } from '@/lib/playerHero';
+import { pickHero, playerShareText } from '@/lib/playerHero';
 import { buildFeed, feedKey } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
+import ShareButtons from '@/components/ShareButtons';
 import PlayerHero from '@/components/player/PlayerHero';
 import PlayerMarquee from '@/components/player/PlayerMarquee';
 import PlayerDetail from '@/components/player/PlayerDetail';
@@ -34,11 +35,18 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const player = getPlayer(slug);
   if (!player) return {};
-  const snap = await getPlayersSnapshot();
+  const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(player.mlbId)]);
+  // シェア文に今季の主要数値を載せる（リンクカードのタイトルが選手別＝“いい感じ”に拡散）。
+  const statLine = season ? playerShareText(player.nameJa, season, pickHero(season)).split('｜')[1] : '';
+  const title = `${player.nameJa}（${player.nameEn}）今季成績・現地の評判`;
+  const description = `${player.nameJa}の今季成績${statLine ? `（${statLine}）` : '（打率・本塁打・防御率・WHIP・WAR ほか）'}と、海外の反応まとめ記事を一覧。${snap.asOf ? `${snap.asOf}時点。` : ''}`;
   return {
-    title: `${player.nameJa}（${player.nameEn}）今季成績・現地の評判`,
-    description: `${player.nameJa}の今季成績（打率・本塁打・防御率・WHIP・WAR ほか）と、海外の反応まとめ記事を一覧。${snap.asOf ? `${snap.asOf}時点。` : ''}`,
+    title,
+    description,
     alternates: localeAlternates(locale, `/player/${slug}`),
+    // 選手別の OG/Twitter カード。画像は同階層の opengraph-image が自動で差し込む。
+    openGraph: { title, description, type: 'profile', url: absoluteUrl(locale, `/player/${slug}`) },
+    twitter: { card: 'summary_large_image', title, description },
   };
 }
 
@@ -94,6 +102,11 @@ export default async function PlayerHubPage({
   };
 
   const hero = hasStats && season ? pickHero(season) : null;
+  // 直近の「試合」まとめ＝動画つき or シリーズ(watch-along)記事の最新（id 先頭の日付で新しい順）。
+  // 試合性のある記事だけを対象にする（ただの議論スレを「試合」と誤ラベルしない＝誠実）。
+  const latestGame = [...threads]
+    .filter((th) => th.media?.kind === 'video' || th.series)
+    .sort((a, b) => b.id.localeCompare(a.id))[0];
   // スティッキー・ミニヘッダ用の短いラベル（クライアント島には解決済み文字列を渡す）。
   const stickyLabel = hero
     ? hero.kind === 'warTotal'
@@ -117,7 +130,22 @@ export default async function PlayerHubPage({
             dotAccent={hero.role === 'two-way'}
           />
           <PlayerMarquee season={season} hero={hero} labels={rankLabels} />
+
+          {/* 成績の二次拡散導線。シェア文に今季の主要数値を載せて“いい感じ”に拡散させる。 */}
+          <ShareButtons url={hubUrl} title={playerShareText(player.nameJa, season, hero)} />
+
           <PlayerDetail season={season} hero={hero} labels={rankLabels} />
+
+          {/* 成績詳細 → 直近の試合まとめへの導線（相互リンク／回遊）。 */}
+          {latestGame && (
+            <Link
+              href={`/${latestGame.sport}/${latestGame.id}`}
+              className="flex items-center justify-between rounded-xl bg-surface px-4 py-3.5 text-sm font-semibold text-accent ring-1 ring-line transition-colors hover:bg-paper"
+            >
+              <span>▶ {t('player.latestGame')}</span>
+              <span aria-hidden="true">→</span>
+            </Link>
+          )}
 
           {/* 経歴・外部権威URL（E-E-A-T テキストは DOM に残しつつ低優先で畳む）。 */}
           <details className="group border-t border-line pt-2">

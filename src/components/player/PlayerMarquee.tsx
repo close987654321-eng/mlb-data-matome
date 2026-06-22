@@ -77,13 +77,13 @@ export default async function PlayerMarquee({
       <div className="space-y-5">
         {batRows.length > 0 && (
           <div>
-            {twoWay && tick(t('roleBat'))}
+            {twoWay && tick(t('roleBatter'))}
             <StatRail rows={batRows} league={season.league} labels={labels} />
           </div>
         )}
         {pitRows.length > 0 && (
           <div>
-            {twoWay && tick(t('rolePit'))}
+            {twoWay && tick(t('rolePitcher'))}
             <StatRail rows={pitRows} league={season.league} labels={labels} />
           </div>
         )}

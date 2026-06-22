@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import type { PlayerSeason, Rank, League } from '@/lib/playerStats';
 import type { Hero } from '@/lib/playerHero';
 import type { RankLabels } from '@/components/RankBadges';
-import { HIT_GROUPS, PIT_GROUPS, resolveStatValue, type StatGroup } from '@/lib/statGroups';
+import { HIT_GROUPS, PIT_GROUPS, FIELD_LABELS, resolveStatValue, type StatGroup } from '@/lib/statGroups';
 import StatRail, { type RailRow } from './StatRail';
 
 /**
@@ -78,6 +78,14 @@ export default async function PlayerDetail({
   const hasPit = Boolean(season.pitching);
   const twoWay = hasBat && hasPit;
 
+  const fielding = season.fielding;
+  const fieldRows: RailRow[] = fielding
+    ? FIELD_LABELS.flatMap(([key, label]) => {
+        const v = fielding[key];
+        return v == null || v === '' ? [] : [{ label, value: String(v) }];
+      })
+    : [];
+
   const batPanel = hasBat && (
     <RoleGroups groups={HIT_GROUPS} rec={season.hitting} ranks={season.ranks?.hitting} saber={season.saber} league={season.league} labels={labels} titleOf={titleOf} />
   );
@@ -112,6 +120,16 @@ export default async function PlayerDetail({
             </div>
           ) : (
             <div>{hasBat ? batPanel : pitPanel}</div>
+          )}
+
+          {fieldRows.length > 0 && season.fielding && (
+            <div className="mt-6">
+              <h3 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
+                <span className="h-3 w-1 rounded-full bg-accent" />
+                {t('grpFielding')}（{season.fielding.position}）
+              </h3>
+              <StatRail rows={fieldRows} league={season.league} labels={labels} dense />
+            </div>
           )}
 
           <p className="mt-5 text-[11px] leading-relaxed text-ink-soft">{t('statsNote')}</p>

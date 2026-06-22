@@ -6,6 +6,7 @@ import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { useTranslations, useLocale } from 'next-intl';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
 import ScrollToTop from '@/components/ScrollToTop';
+import NavLink from '@/components/NavLink';
 import { Link } from '@/lib/navigation';
 import { locales } from '@/lib/i18n';
 import { SPORTS, SPORT_INFO } from '@/lib/sports';
@@ -139,39 +140,35 @@ function SiteHeader() {
             className="h-7 w-auto sm:h-8"
           />
         </Link>
-        <nav className="hidden items-center gap-5 text-sm text-ink-soft sm:flex">
-          <Link href="/" className="transition-colors hover:text-ink">
+        <nav className="hidden items-center gap-5 text-sm sm:flex">
+          <NavLink href="/" exact>
             {t('nav.home')}
-          </Link>
-          <Link href="/watch" className="font-medium text-accent transition-colors hover:text-ink">
-            {t('nav.watch')}
-          </Link>
-          <Link href="/player" className="transition-colors hover:text-ink">
-            {t('nav.players')}
-          </Link>
+          </NavLink>
+          <NavLink href="/watch">▶ {t('nav.watch')}</NavLink>
+          <NavLink href="/player">{t('nav.players')}</NavLink>
           {SPORTS.map((s) => (
-            <Link key={s} href={`/${s}`} className="transition-colors hover:text-ink">
+            <NavLink key={s} href={`/${s}`}>
               {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
-            </Link>
+            </NavLink>
           ))}
         </nav>
         <LocaleSwitcher />
       </div>
       {/* スマホ用ナビ */}
-      <nav className="flex items-center gap-4 overflow-x-auto border-t border-line px-5 py-2 text-sm text-ink-soft sm:hidden">
-        <Link href="/" className="whitespace-nowrap">
+      <nav className="flex items-center gap-4 overflow-x-auto border-t border-line px-5 py-2 text-sm sm:hidden">
+        <NavLink href="/" exact className="whitespace-nowrap">
           {t('nav.home')}
-        </Link>
-        <Link href="/watch" className="whitespace-nowrap font-medium text-accent">
+        </NavLink>
+        <NavLink href="/watch" className="whitespace-nowrap">
           ▶ {t('nav.watch')}
-        </Link>
-        <Link href="/player" className="whitespace-nowrap">
+        </NavLink>
+        <NavLink href="/player" className="whitespace-nowrap">
           📊 {t('nav.players')}
-        </Link>
+        </NavLink>
         {SPORTS.map((s) => (
-          <Link key={s} href={`/${s}`} className="whitespace-nowrap">
+          <NavLink key={s} href={`/${s}`} className="whitespace-nowrap">
             {SPORT_INFO[s].emoji} {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
-          </Link>
+          </NavLink>
         ))}
       </nav>
     </header>

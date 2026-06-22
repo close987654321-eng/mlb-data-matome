@@ -110,6 +110,31 @@ function isFlattering(metric: 'era' | 'whip', value: number, rank?: Rank): boole
   return value <= 1.3;
 }
 
+/** SNSシェア用の成績入りテキスト（日本のSNS=JP固定）。事実の数値だけを並べる（捏造しない）。 */
+export function playerShareText(nameJa: string, season: PlayerSeason, hero: Hero): string {
+  const h = season.hitting;
+  const p = season.pitching;
+  const parts: string[] = [];
+  if (hero.role === 'two-way') {
+    parts.push(`WAR${hero.value}`);
+    if (h?.avg != null) parts.push(`打率${h.avg}`);
+    if (h?.homeRuns != null) parts.push(`${h.homeRuns}本`);
+    if (p?.era != null) parts.push(`防御率${p.era}`);
+  } else if (hero.role === 'batter') {
+    if (h?.avg != null) parts.push(`打率${h.avg}`);
+    if (h?.homeRuns != null) parts.push(`${h.homeRuns}本`);
+    if (h?.rbi != null) parts.push(`${h.rbi}打点`);
+    if (h?.ops != null) parts.push(`OPS${h.ops}`);
+  } else {
+    if (p?.era != null) parts.push(`防御率${p.era}`);
+    if (p?.wins != null) parts.push(`${p.wins}勝`);
+    if (p?.strikeOuts != null) parts.push(`${p.strikeOuts}奪三振`);
+    if (p?.whip != null) parts.push(`WHIP${p.whip}`);
+  }
+  const stat = parts.length ? `｜${parts.join('・')}` : '';
+  return `${nameJa} 今季成績${stat}`;
+}
+
 const BAT_HERO_ORDER: Array<[string, string]> = [
   ['homeRuns', '本塁打'],
   ['ops', 'OPS'],

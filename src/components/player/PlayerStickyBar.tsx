@@ -20,6 +20,17 @@ export default function PlayerStickyBar({
 }) {
   const sentinel = useRef<HTMLDivElement>(null);
   const [stuck, setStuck] = useState(false);
+  // サイトヘッダの実寸に合わせて top を動的に決める。固定の top-[96px] だとヘッダ高が端末/言語で
+  // ズレた時にヘッダとの間に隙間が出るため、実際のヘッダ下端にピッタリ吸着させる。
+  const [top, setTop] = useState<number | null>(null);
+
+  useEffect(() => {
+    const header = document.querySelector('header');
+    const measure = () => header && setTop(Math.round(header.getBoundingClientRect().height));
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
 
   useEffect(() => {
     const el = sentinel.current;
@@ -38,6 +49,7 @@ export default function PlayerStickyBar({
       <div
         aria-hidden="true"
         data-stuck={stuck ? 'true' : 'false'}
+        style={top != null ? { top } : undefined}
         className="fixed inset-x-0 top-[96px] z-10 border-b border-line bg-paper/90 backdrop-blur transition-[opacity,transform] duration-200 motion-reduce:transition-none data-[stuck=false]:pointer-events-none data-[stuck=false]:-translate-y-1 data-[stuck=false]:opacity-0 data-[stuck=true]:translate-y-0 data-[stuck=true]:opacity-100 sm:top-16"
       >
         <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-5">

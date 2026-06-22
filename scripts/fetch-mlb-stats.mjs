@@ -196,6 +196,30 @@ async function fetchWar(ids, season) {
   return map;
 }
 
+// ポジション略号 → 日本語（守備指標の見出し用）。
+const POS_JA = { P: '投手', C: '捕手', '1B': '一塁', '2B': '二塁', '3B': '三塁', SS: '遊撃', LF: '左翼', CF: '中堅', RF: '右翼', OF: '外野' };
+
+/**
+ * 守備成績を personId → 主ポジションの守備スタッツで返す（選手ハブの詳細“守備”用）。
+ * 1選手が複数ポジションを守るので、守備イニング最多＝主ポジションを採用。DH(守備なし)は除外。
+ * 公知の事実（刺殺・補殺・失策・守備率・併殺など）だけを残す。
+ */
+async function fetchFielding(ids, season) {
+  const hydrate = `stats(group=fielding,type=season,season=${season})`;
+  const data = await getJson(`${BASE}/people?personIds=${ids.join(',')}&hydrate=${hydrate}`);
+  const map = new Map();
+  for (const p of data.people ?? []) {
+    const block = (p.stats ?? []).find((s) => s.group?.displayName === 'fielding');
+    const splits = (block?.splits ?? [])
+      .map((s) => s.stat)
+      .filter((st) => st && st.position?.abbreviation !== 'DH' && (parseFloat(st.innings) > 0 || st.gamesPlayed > 0));
+    if (!splits.length) continue;
+    splits.sort((a, b) => (parseFloat(b.innings) || b.gamesPlayed || 0) - (parseFloat(a.innings) || a.gamesPlayed || 0));
+    map.set(p.id, splits[0]);
+  }
+  return map;
+}
+
 /** 各指標の MLB 順位表（personId → rank）。本塁打／防御率（規定到達）／奪三振。 */
 async function fetchRanks(season) {
   const one = async (category, statGroup) => {
@@ -501,6 +525,7 @@ async function runPlayer(query, season, { asJson } = {}) {
 // 選手ハブ /player の詳細テーブル＆比較表が読む“今季成績スナップショット”に残す項目（公知の事実のみ）。
 const HIT_FIELDS = ['gamesPlayed', 'plateAppearances', 'atBats', 'runs', 'hits', 'doubles', 'triples', 'homeRuns', 'rbi', 'stolenBases', 'baseOnBalls', 'strikeOuts', 'avg', 'obp', 'slg', 'ops', 'babip'];
 const PIT_FIELDS = ['gamesPlayed', 'gamesStarted', 'wins', 'losses', 'saves', 'holds', 'inningsPitched', 'hits', 'runs', 'earnedRuns', 'homeRuns', 'baseOnBalls', 'strikeOuts', 'era', 'whip', 'avg', 'strikeoutsPer9Inn', 'walksPer9Inn', 'strikeoutWalkRatio', 'homeRunsPer9', 'winPercentage'];
+const FIELD_FIELDS = ['gamesPlayed', 'gamesStarted', 'innings', 'putOuts', 'assists', 'errors', 'fielding', 'doublePlays'];
 const pick = (obj, fields) => Object.fromEntries(fields.filter((f) => obj[f] != null).map((f) => [f, obj[f]]));
 
 /**
@@ -517,10 +542,11 @@ async function runSnapshot(season, asOf) {
     process.exit(1);
   }
   const ids = [...new Set([...jpIds, ...EXTRA_IDS])];
-  const [seasonPeople, saberMap, ranksMap] = await Promise.all([
+  const [seasonPeople, saberMap, ranksMap, fieldingMap] = await Promise.all([
     fetchStats(ids, season),
     fetchWar(ids, season),
     fetchRanksFull(season),
+    fetchFielding(ids, season),
   ]);
   const players = {};
   for (const p of seasonPeople) {
@@ -530,12 +556,17 @@ async function runSnapshot(season, asOf) {
     const ranks = {};
     if (h && h.gamesPlayed && r && Object.keys(r.hitting).length) ranks.hitting = r.hitting;
     if (pi && pi.gamesPlayed && r && Object.keys(r.pitching).length) ranks.pitching = r.pitching;
+    const f = fieldingMap.get(p.id);
+    const fielding = f
+      ? { position: POS_JA[f.position?.abbreviation] ?? f.position?.abbreviation ?? '', ...pick(f, FIELD_FIELDS) }
+      : null;
     players[p.id] = {
       team: teamJa(p),
       league: LEAGUE_BY_TEAM[p.currentTeam?.name] ?? null,
       hitting: h && h.gamesPlayed ? pick(h, HIT_FIELDS) : null,
       pitching: pi && pi.gamesPlayed ? pick(pi, PIT_FIELDS) : null,
       saber: saberMap.get(p.id) ?? null,
+      ...(fielding ? { fielding } : {}),
       ...(Object.keys(ranks).length ? { ranks } : {}),
     };
   }

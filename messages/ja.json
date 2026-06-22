@@ -83,13 +83,16 @@
     "noRankNoteReliever": "規定投球回・順位対象前のため、順位は表示していません。",
     "noRankNoteThreshold": "今のところ目立った順位はありません。",
     "grpBatBasic": "基本",
-    "grpBatRate": "率",
-    "grpBatPower": "一発・走",
-    "grpBatValue": "選球・総合",
+    "grpBatRate": "打率・出塁率・OPS",
+    "grpBatPower": "本塁打・打点・走塁",
+    "grpBatValue": "四球・三振・WAR",
     "grpPitBasic": "基本",
-    "grpPitStability": "安定感",
+    "grpPitStability": "防御率・WHIP",
     "grpPitK": "奪三振・制球",
-    "grpPitRuns": "失点・総合"
+    "grpPitRuns": "失点・WAR",
+    "grpFielding": "守備",
+    "hubCta": "{name}の今季成績",
+    "latestGame": "直近の試合まとめを見る"
   },
   "columns": {
     "eyebrow": "読み物",

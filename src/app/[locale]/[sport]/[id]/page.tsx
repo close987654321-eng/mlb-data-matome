@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Link } from '@/lib/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThread, getThreadsBySport, getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
@@ -223,6 +224,21 @@ export default async function ThreadDetailPage({
           deltaLabel={t('threads.statDelta')}
           rankLabel={t('threads.statRank')}
         />
+      )}
+
+      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。 */}
+      {taggedPlayers.length > 0 && (
+        <p className="mt-4 flex flex-wrap gap-2">
+          {taggedPlayers.map((p) => (
+            <Link
+              key={p.slug}
+              href={`/player/${p.slug}`}
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-surface px-4 text-sm font-medium text-accent ring-1 ring-line transition-colors hover:bg-paper"
+            >
+              📊 {t('player.hubCta', { name: p.nameJa })} →
+            </Link>
+          ))}
+        </p>
       )}
 
       {isWatchAlong ? (

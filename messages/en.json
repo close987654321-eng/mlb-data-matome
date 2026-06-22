@@ -83,13 +83,16 @@
     "noRankNoteReliever": "Ranks not shown (below qualification innings).",
     "noRankNoteThreshold": "No notable rankings yet.",
     "grpBatBasic": "Basics",
-    "grpBatRate": "Rates",
-    "grpBatPower": "Power & speed",
-    "grpBatValue": "Discipline & value",
+    "grpBatRate": "AVG / OBP / OPS",
+    "grpBatPower": "HR / RBI / SB",
+    "grpBatValue": "BB / SO / WAR",
     "grpPitBasic": "Basics",
-    "grpPitStability": "Run prevention",
-    "grpPitK": "Strikeouts & control",
-    "grpPitRuns": "Runs & value"
+    "grpPitStability": "ERA / WHIP",
+    "grpPitK": "K / Control",
+    "grpPitRuns": "Runs / WAR",
+    "grpFielding": "Fielding",
+    "hubCta": "{name}'s season stats",
+    "latestGame": "See the latest game recap"
   },
   "columns": {
     "eyebrow": "Long read",

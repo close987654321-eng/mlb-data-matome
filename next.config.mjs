@@ -12,6 +12,13 @@ const nextConfig = {
     inlineCss: true,
   },
   images: {
+    // Vercel は画像1枚を「横幅 × 形式」の組み合わせ単位で変換し、その個数を課金カウント
+    // （無料枠=5,000/月）する。デフォルトは横幅8段階×小サイズ8段階で1枚あたりの変換数が多く、
+    // 更新頻度の高い本サイトでは枠をすぐ使い切る。Discover 用の 1200px 画質は残しつつ刻みを間引いて
+    // 1枚あたりの変換数を半分以下に抑える（見た目はほぼ変わらない）。
+    deviceSizes: [640, 828, 1200, 1920], // モバイル / タブレット / Discover(1200px) / デスクトップ高DPI
+    imageSizes: [128, 256], // サムネ・アバター等の小画像用（既定の極小サイズは未使用）
+    formats: ['image/webp'], // AVIF を足すと変換数が倍になるので webp のみに固定
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' }, // 競技ストック写真
       { protocol: 'https', hostname: 'i.redd.it' }, // Reddit 直リンク画像

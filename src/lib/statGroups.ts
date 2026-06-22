@@ -41,6 +41,17 @@ export const PIT_GROUPS: StatGroup[] = [
   { id: 'runs', titleKey: 'player.grpPitRuns', fields: [f('hits', '被安打'), f('homeRuns', '被本塁打'), f('earnedRuns', '自責'), f('runs', '失点'), f('homeRunsPer9', '被HR/9'), sb('pit', 'WAR(投)')] },
 ];
 
+/** 守備（主ポジション）の表示項目。順位は付かない（守備順位はデータに無い）。 */
+export const FIELD_LABELS: [string, string][] = [
+  ['gamesPlayed', '試合'],
+  ['gamesStarted', '先発'],
+  ['putOuts', '刺殺'],
+  ['assists', '補殺'],
+  ['errors', '失策'],
+  ['fielding', '守備率'],
+  ['doublePlays', '併殺'],
+];
+
 /** StatField を表示文字列に解決する（無ければ null＝行を出さない）。 */
 export function resolveStatValue(
   field: StatField,
