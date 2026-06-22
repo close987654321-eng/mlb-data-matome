@@ -5,6 +5,8 @@ type Props = {
   heading: string; // ローカライズ済み見出し（例: 「🇯🇵 日本人選手の成績」）
   todayLabel: string; // その試合の行ラベル（例: 「この試合」）
   seasonLabel: string; // 今季の行ラベル（例: 「今季」）
+  deltaLabel: string; // 前回比の行ラベル（例: 「前回比」）
+  rankLabel: string; // 順位の行ラベル（例: 「ランク」）
 };
 
 /**
@@ -12,7 +14,14 @@ type Props = {
  * 1 点そえて差別化する。値は MLB公式 Stats API 由来の数値のみ（公知の事実）で、ロゴ/写真/表組みは持たない。
  * 数値は編集時に scripts/fetch-mlb-stats.mjs で取得して JSON に書き込む（サイト本体は API を叩かない）。
  */
-export default function StatBox({ stats, heading, todayLabel, seasonLabel }: Props) {
+export default function StatBox({
+  stats,
+  heading,
+  todayLabel,
+  seasonLabel,
+  deltaLabel,
+  rankLabel,
+}: Props) {
   return (
     <section className="mt-8">
       <h2 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
@@ -49,6 +58,22 @@ export default function StatBox({ stats, heading, todayLabel, seasonLabel }: Pro
                   {seasonLabel}
                 </span>
                 <span className="tabular-nums">{s.season}</span>
+              </p>
+            )}
+            {s.delta && (
+              <p className="mt-1 flex gap-2 text-sm text-ink-soft">
+                <span className="w-14 shrink-0 text-xs font-medium leading-relaxed">
+                  {deltaLabel}
+                </span>
+                <span className="font-medium tabular-nums text-ink">{s.delta}</span>
+              </p>
+            )}
+            {s.rank && (
+              <p className="mt-1 flex gap-2 text-sm text-ink-soft">
+                <span className="w-14 shrink-0 text-xs font-medium leading-relaxed">
+                  {rankLabel}
+                </span>
+                <span className="tabular-nums">{s.rank}</span>
               </p>
             )}
           </div>

@@ -201,6 +201,8 @@ export default async function ThreadDetailPage({
           heading={t('threads.statsHeading')}
           todayLabel={t('threads.statToday')}
           seasonLabel={t('threads.statSeason')}
+          deltaLabel={t('threads.statDelta')}
+          rankLabel={t('threads.statRank')}
         />
       )}
 

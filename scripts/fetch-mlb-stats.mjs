@@ -16,23 +16,31 @@
  *   - 数値を「推測」で埋めない。取得できなければその選手の成績は省略する（捏造禁止＝CLAUDE.md §4.4）。
  *
  * 使い方:
- *   node scripts/fetch-mlb-stats.mjs jp [season]               # 日本人選手ぜんぶの今季成績＋所属
- *   node scripts/fetch-mlb-stats.mjs jp YYYY-MM-DD             # 指定日に出場した選手の成績（その日＋今季）
+ *   node scripts/fetch-mlb-stats.mjs jp [season]               # 日本人選手ぜんぶの今季成績＋順位
+ *   node scripts/fetch-mlb-stats.mjs jp YYYY-MM-DD             # 指定日(ET)に出場した選手の成績（この試合＋今季＋前回比＋順位）
  *   node scripts/fetch-mlb-stats.mjs player <名前 or ID> [season]
- *   …いずれも末尾に --json を付けると Thread.stats にそのまま貼れる JSON 配列で出力。
+ *   …共通オプション: --json（Thread.stats 用 JSON 配列で出力） / --team <名前>（所属で絞る・watch-along 用）
  *
  * 例:
- *   node scripts/fetch-mlb-stats.mjs jp 2026-06-21            # 6/21 の各選手（人が読む形）
- *   node scripts/fetch-mlb-stats.mjs jp 2026-06-21 --json     # 6/21 のボックス用 JSON
+ *   node scripts/fetch-mlb-stats.mjs jp 2026-06-20 --json                  # 6/20 のボックス用 JSON
+ *   node scripts/fetch-mlb-stats.mjs jp 2026-06-20 --team ドジャース --json  # ドジャースの日本人だけ（watch-along）
  *   node scripts/fetch-mlb-stats.mjs player 大谷 --json
  */
 
 const BASE = 'https://statsapi.mlb.com/api/v1';
 
-/** 当年（JST）。season 省略時のデフォルト。Date を使うのは引数省略時のフォールバックだけ。 */
+/** 当年（JST）。season 省略時のデフォルト。 */
 function defaultSeason() {
   return new Date().getFullYear();
 }
+/** 指定日(YYYY-MM-DD)の前日を返す。前回比の基準（試合前日までの累計）に使う。 */
+function prevDay(dateStr) {
+  const d = new Date(`${dateStr}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  return d.toISOString().slice(0, 10);
+}
+/** その年の累計を取る byDateRange の開始日（開幕より前＝レギュラーシーズン全体を拾う）。 */
+const seasonStart = (season) => `${season}-03-01`;
 
 /**
  * API は日本語名を返さないため、ID → 日本語表記の対応表を手元に持つ（唯一のローカル知識）。
@@ -92,6 +100,8 @@ const TEAM_JA = {
   'Washington Nationals': 'ナショナルズ',
 };
 
+const RANK_MAX = 30; // この順位以内のときだけ「MLB○位」を出す（下位の順位はノイズなので出さない）
+
 async function getJson(url) {
   const res = await fetch(url, { headers: { 'User-Agent': 'matome-mlb-kaigai/editor' } });
   if (!res.ok) throw new Error(`MLB API ${res.status}: ${url}`);
@@ -106,15 +116,40 @@ async function fetchJapanesePlayers(season) {
 
 /**
  * 指定 ID 群の成績を 1 リクエストでまとめ取得。
- * type='season'（今季累計）/ 'byDateRange'（date 指定日のみ）。
+ * - {date}        … その1日（byDateRange の単日）
+ * - {start,end}   … 期間累計（前回比の基準＝開幕〜前日 などに使う）
+ * - 省略          … 今季累計（type=season）
  * 角括弧は %5B/%5D に必ずエンコードする（生 [] だと API が空応答を返す）。
  */
-async function fetchStats(ids, season, { date } = {}) {
-  const type = date ? 'byDateRange' : 'season';
-  const range = date ? `startDate=${date},endDate=${date},` : '';
+async function fetchStats(ids, season, { date, start, end } = {}) {
+  let type = 'season';
+  let range = '';
+  if (date) {
+    type = 'byDateRange';
+    range = `startDate=${date},endDate=${date},`;
+  } else if (start && end) {
+    type = 'byDateRange';
+    range = `startDate=${start},endDate=${end},`;
+  }
   const hydrate = `currentTeam,stats(group=%5Bhitting,pitching%5D,type=${type},${range}season=${season})`;
   const data = await getJson(`${BASE}/people?personIds=${ids.join(',')}&hydrate=${hydrate}`);
   return data.people ?? [];
+}
+
+/** 各指標の MLB 順位表（personId → rank）。本塁打／防御率（規定到達）／奪三振。 */
+async function fetchRanks(season) {
+  const one = async (category, statGroup) => {
+    const url = `${BASE}/stats/leaders?leaderCategories=${category}&statGroup=${statGroup}&sportId=1&season=${season}&limit=60`;
+    const d = await getJson(url);
+    const leaders = d.leagueLeaders?.[0]?.leaders ?? [];
+    return new Map(leaders.map((x) => [x.person.id, Number(x.rank)]));
+  };
+  const [hr, era, k] = await Promise.all([
+    one('homeRuns', 'hitting'),
+    one('earnedRunAverage', 'pitching'),
+    one('strikeouts', 'pitching'),
+  ]);
+  return { hr, era, k };
 }
 
 const jpName = (p) => JP_NAMES[p.id] ?? p.fullName;
@@ -170,65 +205,138 @@ function dayLine(person) {
   return pit ?? hit ?? '';
 }
 
+/** ".963"→".969" の差を "+.006" 形式（先頭の0を落とす・3桁）にする。OPS/打率など率指標用。 */
+function signedRate(curr, prev) {
+  const diff = Number(curr) - Number(prev);
+  return (diff >= 0 ? '+' : '-') + Math.abs(diff).toFixed(3).replace(/^0/, '');
+}
+/** 防御率の差。"+0.13" / "-0.02"（先頭桁は残す・2桁）。 */
+function signedEra(curr, prev) {
+  const diff = Number(curr) - Number(prev);
+  return (diff >= 0 ? '+' : '-') + Math.abs(diff).toFixed(2);
+}
+
+/** 前回比＝この試合で今季成績がどれだけ動いたか（試合当日までの累計 − 前日までの累計）。 */
+function deltaString(cumPerson, prevPerson, datePerson) {
+  const parts = [];
+  const dh = pickSplit(datePerson, 'hitting');
+  const dp = pickSplit(datePerson, 'pitching');
+  if (dh) {
+    const a = pickSplit(cumPerson, 'hitting');
+    const b = pickSplit(prevPerson, 'hitting');
+    if (a?.ops && b?.ops) parts.push(`OPS ${signedRate(a.ops, b.ops)}`);
+  }
+  if (dp) {
+    const a = pickSplit(cumPerson, 'pitching');
+    const b = pickSplit(prevPerson, 'pitching');
+    if (a?.era && b?.era) parts.push(`防御率 ${signedEra(a.era, b.era)}`);
+  }
+  return parts.join(' / ');
+}
+
+/** MLB 順位（RANK_MAX 位以内のみ）。打者=本塁打、投手=防御率(規定到達)→無ければ奪三振。 */
+function rankString(person, ranks) {
+  if (!ranks) return '';
+  const parts = [];
+  const h = pickSplit(person, 'hitting');
+  const p = pickSplit(person, 'pitching');
+  if (h?.gamesPlayed) {
+    const r = ranks.hr.get(person.id);
+    if (r && r <= RANK_MAX) parts.push(`本塁打 MLB${r}位`);
+  }
+  if (p?.gamesPlayed) {
+    const re = ranks.era.get(person.id);
+    if (re && re <= RANK_MAX) parts.push(`防御率 MLB${re}位`);
+    else {
+      const rk = ranks.k.get(person.id);
+      if (rk && rk <= RANK_MAX) parts.push(`奪三振 MLB${rk}位`);
+    }
+  }
+  return parts.join(' / ');
+}
+
 const HEADER_NOTE = [
   '※ 出典: MLB公式 Stats API。数値は公知の事実（著作権の対象外）。',
   '※ 記事に書くのは数値だけ。MLBのロゴ/写真/中継映像/表組みの転載はしない。サイト本体はAPIを叩かない（編集時取得）。',
 ].join('\n');
 
-/** Thread.stats に貼れる 1 レコードを組み立てる。datePerson があれば today＋節目を付ける。 */
-function toStatRecord(seasonPerson, datePerson) {
+/**
+ * Thread.stats に貼れる 1 レコードを組み立てる。
+ * seasonPerson … 表示する今季成績（指定日モードでは「その試合終了時点までの累計」）
+ * opts.datePerson/prevPerson … 指定日モードのその日 / 前日まで累計（today・note・delta 用）
+ * opts.ranks … 順位表
+ */
+function toStatRecord(seasonPerson, { datePerson, prevPerson, ranks } = {}) {
   const rec = { player: jpName(seasonPerson), team: teamJa(seasonPerson) };
   if (datePerson) {
     const today = dayLine(datePerson);
     if (today) rec.today = today;
-    // その日に本塁打を打っていれば「今季N号」を節目として添える（季の通算HRから）
     const dh = pickSplit(datePerson, 'hitting');
     const sh = pickSplit(seasonPerson, 'hitting');
     if (dh && dh.homeRuns && sh && sh.homeRuns) rec.note = `今季${sh.homeRuns}号`;
   }
   const season = seasonLine(seasonPerson);
   if (season) rec.season = season;
+  if (datePerson && prevPerson) {
+    const d = deltaString(seasonPerson, prevPerson, datePerson);
+    if (d) rec.delta = d;
+  }
+  const rank = rankString(seasonPerson, ranks);
+  if (rank) rec.rank = rank;
   return rec;
 }
 
-async function runJp(season, { date, asJson } = {}) {
+const matchesTeam = (person, q) =>
+  !q ||
+  teamJa(person).includes(q) ||
+  (person.currentTeam?.name ?? '').toLowerCase().includes(q.toLowerCase());
+
+function printRecord(rec) {
+  console.log(`${rec.player}（${rec.team}）${rec.note ? ` ★${rec.note}` : ''}`);
+  if (rec.today) console.log(`  この試合: ${rec.today}`);
+  if (rec.season) console.log(`  今季: ${rec.season}`);
+  if (rec.delta) console.log(`  前回比: ${rec.delta}`);
+  if (rec.rank) console.log(`  ランク: ${rec.rank}`);
+}
+
+async function runJp(season, { date, asJson, team } = {}) {
   const ids = await fetchJapanesePlayers(season);
   if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
-  const seasonPeople = await fetchStats(ids, season);
-  const byId = new Map(seasonPeople.map((p) => [p.id, p]));
+  const ranks = await fetchRanks(season);
 
   if (date) {
-    const datePeople = await fetchStats(ids, season, { date });
-    const played = datePeople.filter((p) => pickSplit(p, 'hitting') || pickSplit(p, 'pitching'));
-    if (asJson) {
-      const recs = played.map((dp) => toStatRecord(byId.get(dp.id) ?? dp, dp));
-      return console.log(JSON.stringify(recs, null, 2));
-    }
-    console.log(`【${date} の成績】日本人MLB選手 ${played.length}名が出場`);
+    const [todayPeople, cumPeople, prevPeople] = await Promise.all([
+      fetchStats(ids, season, { date }),
+      fetchStats(ids, season, { start: seasonStart(season), end: date }),
+      fetchStats(ids, season, { start: seasonStart(season), end: prevDay(date) }),
+    ]);
+    const cumById = new Map(cumPeople.map((p) => [p.id, p]));
+    const prevById = new Map(prevPeople.map((p) => [p.id, p]));
+    const played = todayPeople
+      .filter((p) => pickSplit(p, 'hitting') || pickSplit(p, 'pitching'))
+      .filter((p) => matchesTeam(cumById.get(p.id) ?? p, team));
+    const recs = played.map((dp) =>
+      toStatRecord(cumById.get(dp.id) ?? dp, {
+        datePerson: dp,
+        prevPerson: prevById.get(dp.id),
+        ranks,
+      }),
+    );
+    if (asJson) return console.log(JSON.stringify(recs, null, 2));
+    console.log(`【${date}(ET) の成績】日本人MLB選手 ${recs.length}名${team ? `（${team}）` : ''}が出場`);
     console.log(HEADER_NOTE + '\n');
-    if (!played.length) return console.log('（この日に出場した日本人選手は確認できず）');
-    for (const dp of played) {
-      const sp = byId.get(dp.id) ?? dp;
-      console.log(`${jpName(sp)}（${teamJa(sp)}）`);
-      console.log(`  この試合: ${dayLine(dp)}`);
-      const s = seasonLine(sp);
-      if (s) console.log(`  今季: ${s}`);
-    }
+    if (!recs.length) return console.log('（この日に出場した日本人選手は確認できず）');
+    recs.forEach(printRecord);
     return;
   }
 
   // 今季ダッシュボード
-  if (asJson) {
-    const recs = seasonPeople.map((sp) => toStatRecord(sp));
-    return console.log(JSON.stringify(recs, null, 2));
-  }
-  console.log(`【日本人MLB選手 今季成績】${season}シーズン（${seasonPeople.length}名）`);
+  const seasonPeople = (await fetchStats(ids, season)).filter((p) => matchesTeam(p, team));
+  const recs = seasonPeople.map((sp) => toStatRecord(sp, { ranks }));
+  if (asJson) return console.log(JSON.stringify(recs, null, 2));
+  console.log(`【日本人MLB選手 今季成績】${season}シーズン（${recs.length}名）`);
   console.log(HEADER_NOTE + '\n');
-  for (const sp of seasonPeople) {
-    const s = seasonLine(sp);
-    console.log(`${jpName(sp)} ─ ${teamJa(sp)}`);
-    console.log(`  ${s || '（今季出場記録なし）'}`);
-  }
+  recs.forEach(printRecord);
 }
 
 async function runPlayer(query, season, { asJson } = {}) {
@@ -245,26 +353,33 @@ async function runPlayer(query, season, { asJson } = {}) {
       if (!ids.length) return console.error(`選手が見つからない: ${query}`);
     }
   }
+  const ranks = await fetchRanks(season);
   const people = await fetchStats(ids, season);
-  if (asJson) {
-    return console.log(JSON.stringify(people.map((p) => toStatRecord(p)), null, 2));
-  }
+  const recs = people.map((p) => toStatRecord(p, { ranks }));
+  if (asJson) return console.log(JSON.stringify(recs, null, 2));
   console.log(HEADER_NOTE + '\n');
-  for (const p of people) {
-    console.log(`${jpName(p)} ─ ${teamJa(p)}`);
-    console.log(`  ${seasonLine(p) || '（今季出場記録なし）'}`);
-  }
+  recs.forEach(printRecord);
 }
 
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
-  const [cmd, arg, arg2] = raw.filter((a) => a !== '--json');
+  let team = null;
+  const pos = [];
+  for (let i = 0; i < raw.length; i++) {
+    if (raw[i] === '--json') continue;
+    if (raw[i] === '--team') {
+      team = raw[++i];
+      continue;
+    }
+    pos.push(raw[i]);
+  }
+  const [cmd, arg, arg2] = pos;
   if (cmd === 'jp') {
     if (arg && /^\d{4}-\d{2}-\d{2}$/.test(arg)) {
-      await runJp(Number(arg.slice(0, 4)), { date: arg, asJson });
+      await runJp(Number(arg.slice(0, 4)), { date: arg, asJson, team });
     } else {
-      await runJp(arg ? Number(arg) : defaultSeason(), { asJson });
+      await runJp(arg ? Number(arg) : defaultSeason(), { asJson, team });
     }
   } else if (cmd === 'player' && arg) {
     await runPlayer(arg, arg2 ? Number(arg2) : defaultSeason(), { asJson });
@@ -273,9 +388,9 @@ async function main() {
       [
         '使い方:',
         '  node scripts/fetch-mlb-stats.mjs jp [season]        # 日本人選手の今季成績一覧',
-        '  node scripts/fetch-mlb-stats.mjs jp YYYY-MM-DD      # 指定日の各選手の成績',
+        '  node scripts/fetch-mlb-stats.mjs jp YYYY-MM-DD      # 指定日(ET)の各選手の成績',
         '  node scripts/fetch-mlb-stats.mjs player <名前|ID> [season]',
-        '  （末尾に --json で Thread.stats 用の JSON 配列を出力）',
+        '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
     );
     process.exit(1);
