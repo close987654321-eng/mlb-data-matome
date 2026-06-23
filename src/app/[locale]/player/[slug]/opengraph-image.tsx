@@ -8,6 +8,7 @@ import { pickHero, pickBestRankCaption, type Hero } from '@/lib/playerHero';
 import { wrc, signedInt, oneDecimal } from '@/lib/statGroups';
 import { getTeamColor, ACCENT } from '@/lib/teamColors';
 import { locales, type Locale } from '@/lib/i18n';
+import type { ReactElement } from 'react';
 
 /**
  * 選手別の OG カード「THE COLUMN／海外の反応・紙面」。X 拡散時の見栄え＝各選手の成績シェアの
@@ -35,6 +36,26 @@ const CREAM = '#FAF8F4';
 const MUTED = '#9b958c';
 const FAINT = '#6f6a62';
 const RULE = '#2b2620';
+
+// ── 背景: ぼかした観客（球場の空撮スタンド）を一度だけ読んで data URI 化しメモ化 ──
+// Satori は filter:blur() 非対応なので src/assets/og/*.jpg にブラーを焼き込んである。
+// 暗さ（黒レイヤー）はライブの overlay 側で乗せる＝アセットを焼き直さず濃さを調整できる。
+let bgPromise: Promise<string | null> | null = null;
+function loadBg() {
+  if (!bgPromise) {
+    bgPromise = (async () => {
+      try {
+        const variant = process.env.OG_BG === 'full' ? 'crowd-blur' : 'crowd-blur-stands';
+        const file = path.join(process.cwd(), 'src', 'assets', 'og', `${variant}.jpg`);
+        const data = await fs.readFile(file);
+        return `data:image/jpeg;base64,${data.toString('base64')}`;
+      } catch {
+        return null; // 未配置なら背景なし＝従来の単色 BG に縮退
+      }
+    })();
+  }
+  return bgPromise;
+}
 
 // ── 同梱フォントを一度だけ読んでメモ化。失敗(未生成)なら null＝英字フォールバック ──
 type FontDef = { name: string; data: Buffer; weight: 400 | 700 | 900; style: 'normal' };
@@ -121,14 +142,27 @@ function footerTokens(season: PlayerSeason, hero: Hero): Tok[] {
     .slice(0, 4);
 }
 
+// ── 黒レイヤーの濃さ（上→下）。観客を残しつつ文字を読ませる縦グラデ。0.40→0.74 は
+//    「観客を強めに見せる（雰囲気寄り）」採用値（レビュー合意）。warm near-black で既存
+//    トーン(#16130F)に馴染ませる。OG_OVERLAY="0.40,0.74" で振れる（味見用）。 ──
+function overlayAlphas(): [number, number] {
+  const env = process.env.OG_OVERLAY;
+  if (env) {
+    const [a, b] = env.split(',').map(Number);
+    if (Number.isFinite(a) && Number.isFinite(b)) return [a, b];
+  }
+  return [0.4, 0.74];
+}
+
+// 内側コンテンツ枠（背景の上に乗る層）。padding と flex はここが持つ＝背景/黒レイヤーは全面。
 function containerStyle() {
   return {
+    position: 'relative' as const,
     width: '100%',
     height: '100%',
     display: 'flex',
     flexDirection: 'column' as const,
     justifyContent: 'space-between' as const,
-    background: BG,
     color: CREAM,
     // 下を厚めに空ける: 一部の SNS/アプリは共有時に画像下へ og:title の白帯を重ねるので、
     // 成績フッターをその帯の上へ逃がす（被って成績が読めなくなるのを防ぐ）。左右60/上60。
@@ -137,9 +171,41 @@ function containerStyle() {
   };
 }
 
+// ── 3層フレーム: ①ぼかし観客（全面・cover）②半透明の黒レイヤー（縦グラデ）③コンテンツ。
+//    背景未配置(bg=null)なら従来の単色 BG に静かに縮退する。 ──
+function frame(bg: string | null, inner: ReactElement) {
+  const [ovTop, ovBot] = overlayAlphas();
+  const ovMid = (ovTop + ovBot) / 2 + 0.03;
+  return (
+    <div style={{ position: 'relative', display: 'flex', width: '100%', height: '100%', background: BG }}>
+      {bg ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={bg}
+          width={size.width}
+          height={size.height}
+          style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      ) : null}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          background: `linear-gradient(180deg, rgba(14,11,8,${ovTop}) 0%, rgba(14,11,8,${ovMid}) 56%, rgba(14,11,8,${ovBot}) 100%)`,
+        }}
+      />
+      {inner}
+    </div>
+  );
+}
+
 export default async function Image({ params }: { params: { locale: Locale; slug: string } }) {
   const { slug } = params;
-  const fonts = await loadFonts();
+  const [fonts, bg] = await Promise.all([loadFonts(), loadBg()]);
   const hasJp = fonts != null;
   const JP = hasJp ? 'NotoJP' : undefined; // 和文ノードの fontFamily（未生成なら undefined＝既定フォント）
   const DISP = hasJp ? 'Anton' : undefined; // 巨大数字/英字名
@@ -211,7 +277,8 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   // ── 縮退カード: 媒体面＋名前＋ドメインだけ（成績ブロックを出さない）──
   if (degraded) {
     return new ImageResponse(
-      (
+      frame(
+        bg,
         <div style={containerStyle()}>
           {header}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -223,7 +290,7 @@ export default async function Image({ params }: { params: { locale: Locale; slug
             ) : null}
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>{domain}</div>
-        </div>
+        </div>,
       ),
       { ...size, ...(fonts ? { fonts } : {}) },
     );
@@ -246,7 +313,8 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   const tokens = footerTokens(season!, hero!);
 
   return new ImageResponse(
-    (
+    frame(
+      bg,
       <div style={containerStyle()}>
         {header}
 
@@ -288,7 +356,7 @@ export default async function Image({ params }: { params: { locale: Locale; slug
             {domain}
           </div>
         </div>
-      </div>
+      </div>,
     ),
     { ...size, ...(fonts ? { fonts } : {}) },
   );
