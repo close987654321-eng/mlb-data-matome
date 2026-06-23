@@ -91,27 +91,30 @@ export default async function PlayerIndexPage({
     };
   };
 
+  // 打者1行ぶんの値（日本人打者表とスター野手比較ブロックで共用）。
+  const batValues = (s: PlayerSeason) => {
+    const h = s.hitting!;
+    const sb = s.saber;
+    return {
+      avg: num(h.avg),
+      homeRuns: num(h.homeRuns),
+      rbi: num(h.rbi),
+      stolenBases: num(h.stolenBases),
+      ops: num(h.ops),
+      wrcplus: num(sb?.wrcplus, sb?.wrcplus != null ? String(Math.round(sb.wrcplus)) : undefined),
+      war: num(sb?.hit, sb?.hit != null ? sb.hit.toFixed(1) : undefined),
+    };
+  };
+
   // 日本人の比較表。ライバル（非日本人）は混ぜず、専用ブロックに出す（rival を除外）。
   const batRows: CompareRow[] = withStats
     .filter((x) => x.s!.hitting && !x.p.rival)
-    .map(({ p, s }) => {
-      const h = s!.hitting!;
-      const sb = s!.saber;
-      return {
-        slug: p.slug,
-        name: p.nameJa,
-        team: s!.team,
-        values: {
-          avg: num(h.avg),
-          homeRuns: num(h.homeRuns),
-          rbi: num(h.rbi),
-          stolenBases: num(h.stolenBases),
-          ops: num(h.ops),
-          wrcplus: num(sb?.wrcplus, sb?.wrcplus != null ? String(Math.round(sb.wrcplus)) : undefined),
-          war: num(sb?.hit, sb?.hit != null ? sb.hit.toFixed(1) : undefined),
-        },
-      };
-    });
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: batValues(s!) }));
+
+  // 今季のスター野手（大谷と比較）＝大谷＋強打者ライバル（野手 rival）。リーグ横断（AL/NL）で打WAR降順に見比べる。
+  const mvpRows: CompareRow[] = withStats
+    .filter((x) => x.s!.hitting && (x.p.rival || x.p.slug === 'shohei-ohtani'))
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: batValues(s!) }));
 
   const pitRows: CompareRow[] = withStats
     .filter((x) => x.s!.pitching && !x.p.rival)
@@ -126,7 +129,7 @@ export default async function PlayerIndexPage({
   // ピラー（/player）から全ハブへ内部リンクを閉じる。比較表に出ない（MLB今季成績が無い）が記事のある
   // 選手（村上・岡本・ヌートバー等）への入口を一覧に持たせ、子ハブに評価・回遊を届ける。
   const hubPlayers = PLAYERS.filter((p) => hubEligible(p, all, snap.players[String(p.mlbId)]));
-  const tableSlugs = new Set([...batRows, ...pitRows, ...cyRows].map((r) => r.slug));
+  const tableSlugs = new Set([...batRows, ...pitRows, ...cyRows, ...mvpRows].map((r) => r.slug));
   const moreHubs = hubPlayers.filter((p) => !tableSlugs.has(p.slug));
 
   // 一覧（GA4最強回遊面）の構造化データ。CollectionPage＋ItemList（全ハブを列挙）＋パンくず。
@@ -181,6 +184,14 @@ export default async function PlayerIndexPage({
           <h2 className="mb-1 text-lg font-bold text-ink">{t('player.cyYoung')}</h2>
           <p className="mb-3 max-w-prose text-sm text-ink-soft">{t('player.cyYoungLead')}</p>
           <CompareTable rows={cyRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+        </section>
+      )}
+
+      {mvpRows.length > 0 && (
+        <section>
+          <h2 className="mb-1 text-lg font-bold text-ink">{t('player.mvpRace')}</h2>
+          <p className="mb-3 max-w-prose text-sm text-ink-soft">{t('player.mvpRaceLead')}</p>
+          <CompareTable rows={mvpRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 

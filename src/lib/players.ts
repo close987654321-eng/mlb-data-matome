@@ -93,6 +93,40 @@ export const PLAYERS: Player[] = [
   { slug: 'mason-miller', nameJa: 'メイソン・ミラー', nameEn: 'Mason Miller', mlbId: 695243, rival: true,
     bio: '100マイル超の速球を投げ込む右の守護神。圧巻の奪三振率でリリーフながら大きな注目を集める。',
     sameAs: [mlb('mason-miller', 695243)] },
+
+  // ───── 強打者ライバル（rival・野手）。大谷の打撃（MVP級）と並べる比較用。NL=MVP争い／AL=別リーグの注目スラッガー。
+  // nameJa は RIVAL_NAMES（scripts/fetch-mlb-stats.mjs）と一致させる＝記事タグ→ハブの threadsOf 紐付けキー。
+  { slug: 'pete-crow-armstrong', nameJa: 'ピート・クロウアームストロング', nameEn: 'Pete Crow-Armstrong', mlbId: 691718, rival: true,
+    bio: '卓越した中堅守備と走力で台頭した若手外野手。長打力も伸ばし、MVP争いの中心に立つ。',
+    sameAs: [mlb('pete-crow-armstrong', 691718)] },
+  { slug: 'corbin-carroll', nameJa: 'コービン・キャロル', nameEn: 'Corbin Carroll', mlbId: 682998, rival: true,
+    bio: '走攻守すべてに優れたスピードスター外野手。新人王に輝いた経歴を持つ。',
+    sameAs: [mlb('corbin-carroll', 682998)] },
+  { slug: 'james-wood', nameJa: 'ジェームズ・ウッド', nameEn: 'James Wood', mlbId: 695578, rival: true,
+    bio: '長身から打球を飛ばす大型外野手。今季ブレイク中の長距離砲。',
+    sameAs: [mlb('james-wood', 695578)] },
+  { slug: 'matt-olson', nameJa: 'マット・オルソン', nameEn: 'Matt Olson', mlbId: 621566, rival: true,
+    bio: '安定した長打力と出塁能力を備える一塁手。',
+    sameAs: [mlb('matt-olson', 621566)] },
+  { slug: 'cj-abrams', nameJa: 'CJ・エイブラムス', nameEn: 'CJ Abrams', mlbId: 682928, rival: true,
+    bio: '打撃と走塁に秀でた遊撃手。',
+    sameAs: [mlb('cj-abrams', 682928)] },
+  { slug: 'kyle-schwarber', nameJa: 'カイル・シュワーバー', nameEn: 'Kyle Schwarber', mlbId: 656941, rival: true,
+    bio: '豪快な本塁打が魅力の左の主砲。リーグ屈指のスラッガー。',
+    sameAs: [mlb('kyle-schwarber', 656941)] },
+  { slug: 'juan-soto', nameJa: 'フアン・ソト', nameEn: 'Juan Soto', mlbId: 665742, rival: true,
+    bio: '球界屈指の選球眼と打力を誇る外野手。',
+    sameAs: [mlb('juan-soto', 665742)] },
+  // ───── AL の注目スラッガー（別リーグ＝大谷の MVP 争いではないが、今季の打撃を比較する横断枠）。
+  { slug: 'bobby-witt-jr', nameJa: 'ボビー・ウィットJr.', nameEn: 'Bobby Witt Jr.', mlbId: 677951, rival: true,
+    bio: '走攻守すべてトップクラスのMVP級遊撃手。',
+    sameAs: [mlb('bobby-witt-jr', 677951)] },
+  { slug: 'nick-kurtz', nameJa: 'ニック・カーツ', nameEn: 'Nick Kurtz', mlbId: 701762, rival: true,
+    bio: '規格外の打力で新人ながらリーグを席巻する一塁手。',
+    sameAs: [mlb('nick-kurtz', 701762)] },
+  { slug: 'aaron-judge', nameJa: 'アーロン・ジャッジ', nameEn: 'Aaron Judge', mlbId: 592450, rival: true,
+    bio: '球界を代表する右の大砲。圧倒的な長打力で知られる。',
+    sameAs: [mlb('aaron-judge', 592450)] },
 ];
 
 const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));

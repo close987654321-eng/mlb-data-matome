@@ -97,6 +97,17 @@ const RIVAL_NAMES = {
   694819: 'ミシオロウスキー', // Misiorowski
   519242: 'クリス・セール', // Sale
   695243: 'メイソン・ミラー', // M.Miller
+  // 強打者ライバル（野手）。大谷の打撃比較用。NL=MVP争い／AL=別リーグの注目スラッガー。
+  691718: 'ピート・クロウアームストロング', // Crow-Armstrong (NL)
+  682998: 'コービン・キャロル', // Carroll (NL)
+  695578: 'ジェームズ・ウッド', // Wood (NL)
+  621566: 'マット・オルソン', // Olson (NL)
+  682928: 'CJ・エイブラムス', // Abrams (NL)
+  656941: 'カイル・シュワーバー', // Schwarber (NL)
+  665742: 'フアン・ソト', // Soto (NL)
+  677951: 'ボビー・ウィットJr.', // Witt Jr. (AL)
+  701762: 'ニック・カーツ', // Kurtz (AL)
+  592450: 'アーロン・ジャッジ', // Judge (AL)
 };
 const RIVAL_IDS = Object.keys(RIVAL_NAMES).map(Number);
 
