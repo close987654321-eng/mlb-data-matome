@@ -32,6 +32,24 @@ export type PlayersSnapshot = {
   players: Record<string, PlayerSeason>;
 };
 
+/**
+ * 表示するシーズン年の単一ソース。スナップショットの season を正とし、未生成（season=0）の時だけ
+ * このフォールバック定数を使う。タイトル・地の文・構造化データで年をベタ書きしないための一箇所。
+ * 年が変わったらスナップショットが自動で追従するので、フォールバックの更新は基本不要。
+ */
+export const FALLBACK_SEASON = 2026;
+export function seasonYear(snap?: { season?: number } | null): number {
+  return snap?.season && snap.season > 0 ? snap.season : FALLBACK_SEASON;
+}
+
+/** asOf（"YYYY-MM-DD HH:MM" JST）を schema.org 用の妥当な ISO8601 に直す。日付のみ・空にも耐える。 */
+export function asOfIso(asOf?: string): string | undefined {
+  if (!asOf) return undefined;
+  const m = asOf.match(/^(\d{4}-\d{2}-\d{2})(?:[ T](\d{2}:\d{2}))?/);
+  if (!m) return undefined;
+  return m[2] ? `${m[1]}T${m[2]}:00+09:00` : m[1];
+}
+
 const FILE = path.join(process.cwd(), 'data', 'jp-players-stats.json');
 
 let cache: PlayersSnapshot | null = null;

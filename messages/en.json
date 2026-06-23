@@ -54,7 +54,12 @@
   "player": {
     "eyebrow": "Japanese players",
     "indexTitle": "Japanese MLB Players — Stats & Comparison",
+    "indexTitleYear": "Japanese MLB Players — {year} Stats & Comparison",
     "indexLead": "Season stats for Japanese players in MLB, all in one place. Tap a column header to sort; tap a row for the player's page.",
+    "hubH1Sub": "{year} Season Stats & Fan Reactions",
+    "marqueeHeading": "{name} — season highlights",
+    "moreTitle": "More players",
+    "relatedTitle": "Related players",
     "asOf": "As of {date}",
     "statsTitle": "Season stats (detailed)",
     "statsNote": "Source: MLB official Stats API (stats are public facts). Range (OAA), arm, and sprint speed are Statcast (Baseball Savant). An edit-time snapshot, not real-time.",

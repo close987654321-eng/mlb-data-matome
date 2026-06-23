@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { getAllTags } from '@/lib/tags';
-import { PLAYERS, threadsOf, hubEligible } from '@/lib/players';
+import { PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { SPORTS } from '@/lib/sports';
 import { locales, defaultLocale } from '@/lib/i18n';
@@ -43,6 +43,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /watch は動画つき記事のハブ。最新の動画記事の日時を lastModified にする。
   const latestWatch = threads.find((t) => t.media?.kind === 'video')?.fetchedAt;
 
+  // 選手ハブの lastmod。個別＝最新記事 or 成績更新(asOf)の新しい方。/player ピラーはそれら個別の最新を採用し、
+  // 無関係な競技（ボクシング/MMA）の更新で /player が動かないようにする（lastmod の信頼を保つ）。
+  const statDate = snap.asOf ? snap.asOf.slice(0, 10) : undefined;
+  // 文字列日付（ISO）の最大＝最新。空なら undefined（Array.prototype.at の lib 依存を避けて index 参照）。
+  const maxDate = (arr: string[]): string | undefined =>
+    arr.length ? [...arr].sort()[arr.length - 1] : undefined;
+  const playerEntries = PLAYERS.map((p) => {
+    const season = snap.players[String(p.mlbId)];
+    if (!hubEligible(p, threads, season)) return null;
+    const articleDate = threadsOf(p, threads)[0]?.fetchedAt;
+    const dates = [articleDate, hasMlbStats(season) ? statDate : undefined].filter(Boolean) as string[];
+    return entry(`/player/${p.slug}`, maxDate(dates));
+  }).filter((e): e is NonNullable<typeof e> => e != null);
+  const playerHubLatest = maxDate(
+    playerEntries.map((e) => e.lastModified).filter(Boolean).map(String),
+  );
+
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
     entry('/watch', latestWatch), // 「海外ニキと見る」ハブ
@@ -55,16 +72,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       return entry(`/${sport}`, newestInSport);
     }),
     ...threads.map((t) => entry(`/${t.sport}/${t.id}`, t.fetchedAt)),
-    // 選手ハブ（トピッククラスタのピラー）。記事がある or MLB今季成績がある選手。
-    // lastModified=その選手の最新記事、無ければ成績スナップショットの取得日。
-    entry('/player', latest),
-    ...PLAYERS.map((p) => {
-      const season = snap.players[String(p.mlbId)];
-      if (!hubEligible(p, threads, season)) return null;
-      const hubThreads = threadsOf(p, threads);
-      // sitemap の lastmod は日付のみ（asOf は "YYYY-MM-DD HH:MM" 形式なので日付部分に切る＝妥当なISO）。
-      return entry(`/player/${p.slug}`, hubThreads[0]?.fetchedAt ?? (snap.asOf ? snap.asOf.slice(0, 10) : undefined));
-    }).filter((e): e is NonNullable<typeof e> => e != null),
+    // 選手ハブ（トピッククラスタのピラー）。lastmod は上で算出済み
+    // （/player ピラー＝選手ハブ群の最新／個別＝最新記事 or 成績更新の新しい方）。
+    entry('/player', playerHubLatest),
+    ...playerEntries,
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
     // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。

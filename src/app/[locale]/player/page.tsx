@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
-import { PLAYERS } from '@/lib/players';
-import { getPlayersSnapshot, type PlayerSeason } from '@/lib/playerStats';
+import { getAllThreads } from '@/lib/data';
+import { PLAYERS, hubEligible } from '@/lib/players';
+import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import CompareTable, { type CompareCol, type CompareRow } from '@/components/CompareTable';
-import { localeAlternates } from '@/lib/site';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import { Link } from '@/lib/navigation';
+import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { type Locale } from '@/lib/i18n';
 
 export async function generateMetadata({
@@ -13,9 +16,20 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale });
+  const snap = await getPlayersSnapshot();
+  const year = seasonYear(snap);
+  const en = locale === 'en';
+  // 指名検索のロングテール（「大谷 山本 成績」等）を拾うため代表選手名を description 末尾へ。
+  const names = PLAYERS.filter((p) => !p.rival)
+    .slice(0, 4)
+    .map((p) => (en ? p.nameEn : p.nameJa));
+  const description = en
+    ? `${t('player.indexLead')} Featuring ${names.join(', ')} and more.`
+    : `${t('player.indexLead')} ${names.join('・')}ほか。`;
   return {
-    title: t('player.indexTitle'),
-    description: t('player.indexLead'),
+    // 年は文字列で渡す（ICU 数値引数の桁区切り「2,026」を避ける）。
+    title: t('player.indexTitleYear', { year: String(year) }),
+    description,
     alternates: localeAlternates(locale, '/player'),
   };
 }
@@ -53,7 +67,8 @@ export default async function PlayerIndexPage({
   const { locale } = await params;
   unstable_setRequestLocale(locale);
   const t = await getTranslations();
-  const snap = await getPlayersSnapshot();
+  const [snap, all] = await Promise.all([getPlayersSnapshot(), getAllThreads()]);
+  const year = seasonYear(snap);
 
   // 比較に出すのは MLBロースターで今季成績がある選手（＝ハブが必ず存在＝行クリックが必ず有効）。
   // AAA等（league=null）は MLB比較に混ぜない。
@@ -108,8 +123,48 @@ export default async function PlayerIndexPage({
     .filter((x) => x.s!.pitching && (x.p.rival || cyJpSlugs.has(x.p.slug)))
     .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: pitValues(s!) }));
 
+  // ピラー（/player）から全ハブへ内部リンクを閉じる。比較表に出ない（MLB今季成績が無い）が記事のある
+  // 選手（村上・岡本・ヌートバー等）への入口を一覧に持たせ、子ハブに評価・回遊を届ける。
+  const hubPlayers = PLAYERS.filter((p) => hubEligible(p, all, snap.players[String(p.mlbId)]));
+  const tableSlugs = new Set([...batRows, ...pitRows, ...cyRows].map((r) => r.slug));
+  const moreHubs = hubPlayers.filter((p) => !tableSlugs.has(p.slug));
+
+  // 一覧（GA4最強回遊面）の構造化データ。CollectionPage＋ItemList（全ハブを列挙）＋パンくず。
+  const indexTitle = t('player.indexTitleYear', { year: String(year) });
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'CollectionPage',
+        name: indexTitle,
+        description: t('player.indexLead'),
+        url: absoluteUrl(locale, '/player'),
+      },
+      {
+        '@type': 'ItemList',
+        itemListElement: hubPlayers.map((p, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: locale === 'en' ? p.nameEn : p.nameJa,
+          url: absoluteUrl(locale, `/player/${p.slug}`),
+        })),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: t('nav.home'), item: absoluteUrl(locale, '') },
+          { '@type': 'ListItem', position: 2, name: t('player.indexTitle'), item: absoluteUrl(locale, '/player') },
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="space-y-10">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: t('player.indexTitle') }]} />
+
       <section className="border-b border-line pb-6">
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
           {t('player.eyebrow')}
@@ -140,6 +195,24 @@ export default async function PlayerIndexPage({
         <section>
           <h2 className="mb-3 text-lg font-bold text-ink">{t('player.pitching')}</h2>
           <CompareTable rows={pitRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+        </section>
+      )}
+
+      {moreHubs.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-lg font-bold text-ink">{t('player.moreTitle')}</h2>
+          <div className="flex flex-wrap gap-2">
+            {moreHubs.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/player/${p.slug}`}
+                className="inline-flex items-center gap-1 rounded-full bg-surface px-3.5 py-1.5 text-sm text-accent ring-1 ring-line transition-colors hover:bg-paper"
+              >
+                <span aria-hidden="true">📊</span>
+                {locale === 'en' ? p.nameEn : p.nameJa}
+              </Link>
+            ))}
+          </div>
         </section>
       )}
 

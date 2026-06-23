@@ -16,10 +16,11 @@ import StatBox from '@/components/StatBox';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
 import { absoluteUrl, SITE_URL, localeAlternates } from '@/lib/site';
-import { PLAYERS } from '@/lib/players';
+import { getPlayerByJaName } from '@/lib/players';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -111,8 +112,10 @@ export default async function ThreadDetailPage({
   // 記事をエンティティ（選手）に接続する。tags の選手名から選手カタログを引き、Person(sameAs) で
   // Knowledge Graph に紐づけ、選手ハブ(url)へも結ぶ＝Discover/エンティティ理解の地ならし。
   const taggedPlayers = (thread.tags ?? [])
-    .map((tag) => PLAYERS.find((p) => p.nameJa === tag))
-    .filter((p): p is NonNullable<typeof p> => p != null);
+    .map((tag) => getPlayerByJaName(tag)) // nameJa＋エイリアスで解決（表記ゆれ吸収）
+    .filter((p): p is NonNullable<typeof p> => p != null)
+    // 同一選手が nameJa とエイリアスで二重に出ないよう slug で重複排除。
+    .filter((p, i, arr) => arr.findIndex((x) => x.slug === p.slug) === i);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -166,6 +169,15 @@ export default async function ThreadDetailPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <div className="mb-4">
+        <Breadcrumbs
+          items={[
+            { name: t('nav.home'), href: '/' },
+            { name: categoryLabel, href: `/${sport}` },
+            { name: title },
+          ]}
+        />
+      </div>
       <ArticleCover
         sport={sport}
         locale={locale}

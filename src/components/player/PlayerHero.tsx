@@ -15,12 +15,17 @@ export default async function PlayerHero({
   hero,
   labels,
   asOf,
+  year,
+  lede,
 }: {
   player: Player;
   season: PlayerSeason;
   hero: Hero;
   labels: RankLabels;
   asOf: string;
+  year: number;
+  /** H1 直下に出す「今季の地の文」（playerLede 生成・実在値のみ）。薄ページ回避＋クエリ面拡大。 */
+  lede?: string;
 }) {
   const t = await getTranslations('player');
 
@@ -54,9 +59,16 @@ export default async function PlayerHero({
         <span className="ml-2 align-baseline text-base font-normal text-ink-soft">{player.nameEn}</span>
       </h1>
 
+      {/* H1 直下に成績キーワードを可視化（「{選手}＋今季成績」の検索適合を底上げ）。
+          年は文字列で渡す（ICU の数値引数が桁区切りで「2,026」になるのを防ぐ）。 */}
+      <p className="mt-1 text-sm font-semibold text-ink-soft">{t('hubH1Sub', { year: String(year) })}</p>
+
       {metaParts.length > 0 && (
         <p className="mt-2 text-xs text-ink-soft">{metaParts.join(' · ')}</p>
       )}
+
+      {/* 今季の地の文（独自散文）。数値表の外に選手別テキストを置き“薄ページ”を脱する。 */}
+      {lede && <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">{lede}</p>}
 
       {/* ヒーロー指標 */}
       <div className="mt-5">

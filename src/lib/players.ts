@@ -21,6 +21,7 @@ export type Player = {
   sameAs: string[]; // 外部権威URL（エンティティ照合）
   rival?: boolean; // 非日本人だが比較用に載せる選手（大谷のサイ・ヤング賞争いのライバル等）。
   // 一覧（/player）では日本人の比較表に混ぜず「サイヤング争い」専用ブロックに出す。詳細ページは通常どおり生成。
+  aliases?: string[]; // 記事タグの表記ゆれ吸収（例: フルネーム表記）。threadsOf / タグのハブ振り分けで nameJa と同じ扱い。
 };
 
 const mlb = (slug: string, id: number) => `https://www.mlb.com/player/${slug}-${id}`;
@@ -72,6 +73,7 @@ export const PLAYERS: Player[] = [
   // 日系（母が日本人）。birthCountry は米国なので jp 名簿の自動抽出には載らない＝明示で追加。
   { slug: 'lars-nootbaar', nameJa: 'ヌートバー', nameEn: 'Lars Nootbaar', mlbId: 663457,
     bio: '母が日本人の外野手。2023年WBCの侍ジャパンで活躍し、日本でも高い人気を集める。出塁能力と勝負強さが持ち味。',
+    aliases: ['ラーズ・ヌートバー'],
     sameAs: [mlb('lars-nootbaar', 663457), wiki('ラーズ・ヌートバー')] },
 
   // ───── サイ・ヤング賞争いのライバル（rival）。大谷の対抗馬として一覧の専用ブロックに出す。
@@ -94,22 +96,34 @@ export const PLAYERS: Player[] = [
 ];
 
 const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));
-const BY_JA = new Map(PLAYERS.map((p) => [p.nameJa, p]));
+// nameJa とエイリアスの両方を引けるようにする（記事タグの表記ゆれ吸収）。
+// playerSlugByJaName / threadsOf を同じキー集合で一致させ、「タグが解決できる＝ハブが必ずある」を担保する。
+const BY_JA = new Map<string, Player>();
+for (const p of PLAYERS) {
+  BY_JA.set(p.nameJa, p);
+  for (const a of p.aliases ?? []) BY_JA.set(a, p);
+}
 
 export function getPlayer(slug: string): Player | undefined {
   return BY_SLUG.get(slug);
 }
 
-/** 日本語名（記事 tags / stats[].player の値）→ ハブ slug。StatBox の選手名リンクに使う。 */
+/** 日本語名 or エイリアス（記事 tags / stats[].player の値）→ 選手。タグのハブ振り分け・エンティティ紐付けに使う。 */
+export function getPlayerByJaName(nameJa: string): Player | undefined {
+  return BY_JA.get(nameJa);
+}
+
+/** 日本語名 or エイリアス → ハブ slug。StatBox・TagList の選手名リンクに使う。 */
 export function playerSlugByJaName(nameJa: string): string | undefined {
   return BY_JA.get(nameJa)?.slug;
 }
 
-/** その選手の記事（タグ or 成績ボックスに名前がある記事）。ハブのクラスタ・対象判定で使う。 */
+/** その選手の記事（タグ or 成績ボックスに名前がある記事）。ハブのクラスタ・対象判定で使う。エイリアス表記も拾う。 */
 export function threadsOf(player: Player, all: Thread[]): Thread[] {
+  const names = new Set([player.nameJa, ...(player.aliases ?? [])]);
   return all.filter(
     (t) =>
-      (t.tags ?? []).includes(player.nameJa) ||
+      (t.tags ?? []).some((tag) => names.has(tag)) ||
       (t.stats ?? []).some((s) => s.player === player.nameJa),
   );
 }

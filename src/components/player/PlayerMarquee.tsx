@@ -24,10 +24,13 @@ export default async function PlayerMarquee({
   season,
   hero,
   labels,
+  name,
 }: {
   season: PlayerSeason;
   hero: Hero;
   labels: RankLabels;
+  /** 可視 H2 を「{選手名} 今季の注目成績」にして“選手名＋成績”の検索適合を上げる。 */
+  name: string;
 }) {
   const t = await getTranslations('player');
   const twoWay = hero.role === 'two-way';
@@ -73,7 +76,7 @@ export default async function PlayerMarquee({
 
   return (
     <section className="motion-safe:animate-[rise_.32s_ease-out_60ms_both]">
-      <h2 className="mb-4 text-lg font-bold text-ink">{t('highlights')}</h2>
+      <h2 className="mb-4 text-lg font-bold text-ink">{t('marqueeHeading', { name })}</h2>
       <div className="space-y-5">
         {batRows.length > 0 && (
           <div>

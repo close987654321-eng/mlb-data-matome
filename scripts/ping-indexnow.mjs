@@ -28,6 +28,22 @@ const THREADS_DIR = join(ROOT, 'data/threads');
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://matome-mlb-kaigai.jp').replace(/\/$/, '');
 const ENDPOINT = 'https://api.indexnow.org/indexnow';
 
+/**
+ * 記事タグ（選手名）→ ハブ slug の対応。src/lib/players.ts を正として軽くパースし二重管理を避ける
+ * （node からは TS を import できないため）。新記事で言及された選手ハブを即時再クロールさせるのに使う。
+ */
+function loadPlayerSlugs() {
+  const map = new Map();
+  try {
+    const src = readFileSync(join(ROOT, 'src/lib/players.ts'), 'utf8');
+    for (const m of src.matchAll(/slug:\s*'([^']+)',\s*nameJa:\s*'([^']+)'/g)) map.set(m[2], m[1]);
+  } catch {
+    /* players.ts が読めなくても致命ではない（選手URLを足さないだけ） */
+  }
+  return map;
+}
+const SLUG_BY_NAME = loadPlayerSlugs();
+
 /** .env.local から 1 つの値を拾う（fetch-youtube / ping-blogmura と同方式・依存を増やさない）。 */
 function loadEnv(key) {
   if (process.env[key]) return process.env[key];
@@ -55,24 +71,33 @@ function resolveKey() {
   return undefined;
 }
 
-/** mtime 降順で新しい記事ファイルを集める（{sport, id}）。 */
+/** mtime 降順で新しい記事ファイルを集める（{sport, id, tags}）。tags は選手ハブ通知の逆引き用。 */
 async function newestThreads(limit) {
   const out = [];
   for (const sport of await readdir(THREADS_DIR)) {
     let files;
     try { files = await readdir(join(THREADS_DIR, sport)); } catch { continue; }
     for (const f of files.filter((x) => x.endsWith('.json'))) {
-      const s = await stat(join(THREADS_DIR, sport, f));
-      out.push({ sport, id: f.slice(0, -5), mtime: s.mtimeMs });
+      const full = join(THREADS_DIR, sport, f);
+      const s = await stat(full);
+      let tags = [];
+      try { tags = JSON.parse(await readFile(full, 'utf8')).tags ?? []; } catch { /* タグ無しでも続行 */ }
+      out.push({ sport, id: f.slice(0, -5), mtime: s.mtimeMs, tags });
     }
   }
   out.sort((a, b) => b.mtime - a.mtime);
   return limit ? out.slice(0, limit) : out;
 }
 
-/** 記事 1 本が変える URL（記事本体＋その競技一覧＋トップ）。ja は接頭辞なしが正規。 */
-function urlsForThread({ sport, id }) {
-  return [`${SITE_URL}/${sport}/${id}`, `${SITE_URL}/${sport}`, `${SITE_URL}/`];
+/** 記事 1 本が変える URL（記事本体＋競技一覧＋トップ＋言及された選手ハブ＋選手ピラー）。ja は接頭辞なしが正規。 */
+function urlsForThread({ sport, id, tags }) {
+  const urls = [`${SITE_URL}/${sport}/${id}`, `${SITE_URL}/${sport}`, `${SITE_URL}/`];
+  const slugs = [...new Set((tags ?? []).map((t) => SLUG_BY_NAME.get(t)).filter(Boolean))];
+  if (slugs.length) {
+    urls.push(`${SITE_URL}/player`); // 選手ピラーも再クロール対象に
+    for (const s of slugs) urls.push(`${SITE_URL}/player/${s}`);
+  }
+  return urls;
 }
 
 function toAbsolute(arg) {

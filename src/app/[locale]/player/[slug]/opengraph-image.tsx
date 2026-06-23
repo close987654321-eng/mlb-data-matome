@@ -21,7 +21,7 @@ import { locales, type Locale } from '@/lib/i18n';
  */
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = 'MLB season stats';
+export const alt = 'MLB日本人選手の今季成績カード｜海外の反応';
 
 export async function generateStaticParams() {
   const [all, snap] = await Promise.all([getAllThreads(), getPlayersSnapshot()]);
@@ -156,6 +156,7 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   const degraded = !season || !hero || hero.value === '—' || !hasJp;
 
   const teamColor = getTeamColor(season?.team);
+  const yr = snap.season || 2026; // 年はスナップショット由来（ベタ書きしない）。未生成のみ 2026 フォールバック。
 
   // 選手名: 和名は6字までが主役映え。長いカタカナ中黒名（ライバル等）や和フォント未生成は英字へ。
   const nameJa = player?.nameJa ?? '';
@@ -173,7 +174,7 @@ export default async function Image({ params }: { params: { locale: Locale; slug
         {hasJp ? '海外の反応' : 'MLB SEASON STATS'}
       </div>
       <div style={{ display: 'flex', fontFamily: DISP, fontSize: 23, letterSpacing: 4, color: MUTED, marginLeft: 22 }}>
-        MLB 2026
+        {`MLB ${yr}`}
       </div>
       {!degraded && hero ? (
         <div
@@ -241,7 +242,7 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   const capText = caption ? `${capLabel}${capScopeJa}${caption.rank}位` : '';
   const capThick = caption ? (caption.scope === 'lg' ? caption.rank <= 5 : caption.rank <= 10) : false;
 
-  const metaLine = [season!.team, season!.league, '2026'].filter(Boolean).join('  ・  ');
+  const metaLine = [season!.team, season!.league, String(yr)].filter(Boolean).join('  ・  ');
   const tokens = footerTokens(season!, hero!);
 
   return new ImageResponse(

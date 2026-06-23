@@ -3,8 +3,9 @@ import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
-import { getPlayerSeason, getPlayersSnapshot } from '@/lib/playerStats';
+import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/playerStats';
 import { pickHero, playerShareText } from '@/lib/playerHero';
+import { playerLede } from '@/lib/playerLede';
 import { buildFeed, feedKey } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
 import ShareButtons from '@/components/ShareButtons';
@@ -12,6 +13,7 @@ import PlayerHero from '@/components/player/PlayerHero';
 import PlayerMarquee from '@/components/player/PlayerMarquee';
 import PlayerDetail from '@/components/player/PlayerDetail';
 import PlayerStickyBar from '@/components/player/PlayerStickyBar';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import type { RankLabels } from '@/components/RankBadges';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -36,10 +38,18 @@ export async function generateMetadata({
   const player = getPlayer(slug);
   if (!player) return {};
   const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(player.mlbId)]);
-  // シェア文に今季の主要数値を載せる（リンクカードのタイトルが選手別＝“いい感じ”に拡散）。
-  const statLine = season ? playerShareText(player.nameJa, season, pickHero(season)).split('｜')[1] : '';
-  const title = `${player.nameJa}（${player.nameEn}）今季成績・現地の評判`;
-  const description = `${player.nameJa}の今季成績${statLine ? `（${statLine}）` : '（打率・本塁打・防御率・WHIP・WAR ほか）'}と、海外の反応まとめ記事を一覧。${snap.asOf ? `${snap.asOf}時点。` : ''}`;
+  const year = seasonYear(snap);
+  const en = locale === 'en';
+  // シェア文の今季主要数値（JP整形）は ja の description にだけ使う（英語ページに和文を混ぜない）。
+  const statLine = !en && season ? playerShareText(player.nameJa, season, pickHero(season)).split('｜')[1] : '';
+  // 年号＋最重要KW「成績」を前方に（成績検索の定番『{選手} 成績 2026』に当てる）。英名は description 側へ。
+  const title = en
+    ? `${player.nameEn} — ${year} Stats & Fan Reactions`
+    : `${player.nameJa} ${year}年 成績・現地の評判`;
+  const teamCtx = season?.team ? `${season.team}・` : '';
+  const description = en
+    ? `${player.nameEn}'s ${year} MLB season stats${season?.team ? ` (${season.team})` : ''} and what overseas fans are saying — Japanese digests of reactions from abroad.`
+    : `${player.nameJa}（${player.nameEn}）の${year}年MLB成績${statLine ? `（${statLine}）` : `（${teamCtx}打率・本塁打・防御率・WAR ほか）`}と、海外の反応まとめ記事を一覧。${snap.asOf ? `${snap.asOf}時点。` : ''}`;
   return {
     title,
     description,
@@ -76,20 +86,37 @@ export default async function PlayerHubPage({
   };
   // MLBロースター級の今季成績がある時だけ成績UIを出す（league=null=AAA等は除外＝hubEligible と整合）。
   const hasStats = hasMlbStats(season);
+  const year = seasonYear(snap);
+  // H1 直下の「今季の地の文」（成績がある選手のみ・実在値だけで生成＝薄ページ回避）。
+  const lede = hasStats && season ? playerLede(player, season, year, locale) : undefined;
 
   const hubUrl = absoluteUrl(locale, `/player/${slug}`);
+  const dateModified = asOfIso(snap.asOf);
+  // Person を Athlete に格上げ（sport/所属/自URL/画像）。数値・所属は snapshot の実在値のみ（捏造しない）。
+  const person = {
+    '@type': ['Person', 'Athlete'],
+    '@id': `${hubUrl}#person`,
+    name: player.nameJa,
+    alternateName: player.nameEn,
+    jobTitle: '野球選手',
+    sport: 'Baseball',
+    url: hubUrl,
+    image: absoluteUrl(locale, `/player/${slug}/opengraph-image`),
+    ...(player.bio ? { description: player.bio } : {}),
+    ...(hasStats && season?.team ? { memberOf: { '@type': 'SportsTeam', name: season.team } } : {}),
+    ...(player.sameAs.length ? { sameAs: player.sameAs } : {}),
+  };
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'ProfilePage',
-        mainEntity: {
-          '@type': 'Person',
-          name: player.nameJa,
-          alternateName: player.nameEn,
-          jobTitle: '野球選手',
-          ...(player.sameAs.length ? { sameAs: player.sameAs } : {}),
-        },
+        // 成績スナップショットの更新時刻＝毎時CI更新の鮮度シグナル（記事側 about:Person と双方向化）。
+        ...(dateModified ? { dateModified } : {}),
+        mainEntity: person,
+        ...(threads.length
+          ? { relatedLink: threads.slice(0, 25).map((th) => absoluteUrl(locale, `/${th.sport}/${th.id}`)) }
+          : {}),
       },
       {
         '@type': 'BreadcrumbList',
@@ -117,20 +144,41 @@ export default async function PlayerHubPage({
         : hero.statLabel ?? ''
     : '';
 
+  // 関連選手（同チーム優先 → ライバル/サイヤング文脈 → その他）。他ハブへ横リンクし回遊とトピッククラスタを強める。
+  const myTeam = hasStats ? season?.team : undefined;
+  const related = PLAYERS.filter((p) => p.slug !== slug && hubEligible(p, all, snap.players[String(p.mlbId)]))
+    .map((p) => {
+      const ps = snap.players[String(p.mlbId)];
+      const sameTeam = myTeam && ps?.team === myTeam;
+      const rivalLink = Boolean(p.rival || player.rival); // サイヤング/ライバル文脈の数珠つなぎ
+      return { p, score: sameTeam ? 0 : rivalLink ? 1 : 2 };
+    })
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 6)
+    .map((x) => x.p);
+
   return (
     <div className="space-y-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
+      <Breadcrumbs
+        items={[
+          { name: t('nav.home'), href: '/' },
+          { name: t('player.indexTitle'), href: '/player' },
+          { name: player.nameJa },
+        ]}
+      />
+
       {hasStats && season && hero ? (
         <>
-          <PlayerHero player={player} season={season} hero={hero} labels={rankLabels} asOf={snap.asOf} />
+          <PlayerHero player={player} season={season} hero={hero} labels={rankLabels} asOf={snap.asOf} year={year} lede={lede} />
           <PlayerStickyBar
             name={player.nameJa}
             heroLabel={stickyLabel}
             heroValue={hero.value}
             dotAccent={hero.role === 'two-way'}
           />
-          <PlayerMarquee season={season} hero={hero} labels={rankLabels} />
+          <PlayerMarquee season={season} hero={hero} labels={rankLabels} name={locale === 'en' ? player.nameEn : player.nameJa} />
 
           {/* 成績の二次拡散導線。シェア文に今季の主要数値を載せて“いい感じ”に拡散させる。 */}
           <ShareButtons url={hubUrl} title={playerShareText(player.nameJa, season, hero)} />
@@ -201,6 +249,24 @@ export default async function PlayerHubPage({
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {related.length > 0 && (
+        <section className="border-t border-line pt-6">
+          <h2 className="mb-3 text-sm font-bold text-ink">{t('player.relatedTitle')}</h2>
+          <div className="flex flex-wrap gap-2">
+            {related.map((rp) => (
+              <Link
+                key={rp.slug}
+                href={`/player/${rp.slug}`}
+                className="inline-flex items-center gap-1 rounded-full bg-surface px-3.5 py-1.5 text-sm text-accent ring-1 ring-line transition-colors hover:bg-paper"
+              >
+                <span aria-hidden="true">📊</span>
+                {locale === 'en' ? rp.nameEn : rp.nameJa}
+              </Link>
+            ))}
+          </div>
         </section>
       )}
 
