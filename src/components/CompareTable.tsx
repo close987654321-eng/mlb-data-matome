@@ -93,8 +93,17 @@ export default function CompareTable({
 
   return (
     <div className="relative -mx-5 sm:mx-0">
-      {hint && edge.r && (
-        <p className="mb-1.5 px-5 text-[11px] text-ink-soft sm:hidden">{hint}</p>
+      {hint && (
+        // 右端に達すると edge.r が false になる。ここを出し入れすると行が詰まって表が上にズレるので、
+        // 消さずに opacity だけ切り替えて高さを保つ（レイアウトシフト防止）。
+        <p
+          aria-hidden={!edge.r}
+          className={`mb-1.5 px-5 text-[11px] text-ink-soft transition-opacity sm:hidden ${
+            edge.r ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          {hint}
+        </p>
       )}
       {/* 端のフェード（続きがある側だけ出す）。スクロール領域に被せるだけでクリックは透過。 */}
       <div
