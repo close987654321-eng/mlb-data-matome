@@ -165,6 +165,11 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
 
 - **動画**: YouTube / Streamable の**視聴URL**を `kind:"video"` で。自動で公式 iframe 埋め込みになる。
   期限つきの署名URL（`packaged-media.redd.it` / `preview.redd.it` 等）は**失効するので使わない**。
+  - **OG/Discover 画像**: 動画記事の OG は `ogCover`（`src/lib/media.ts`）が `maxresdefault`(1280px) を使うが、
+    MLB公式でも稀に maxres が無く、その時ストック写真（球場）に倒れて「OGだけ球場」になる。記事保存後に
+    `node scripts/og-thumb.mjs <id>` を走らせると、公式サムネ中央16:9を切り出した 1280×720 のローカル OG を
+    `public/media/{id}-og.jpg` に作り `thumbUrl` を入れる（matome R5）。`--all` で全記事の取りこぼしを一括修正、
+    `node scripts/check-discover-images.mjs` で 1200px 基準を監査できる。
 - **画像（URL）**: `i.redd.it` / `i.imgur.com` の**直リンク**を `kind:"image"` で。ホストを増やすときは
   `next.config.mjs` の `remotePatterns` に追加。
 - **画像（ローカル）**: 恒久URLが無い場合のみ `public/media/{id}-{slug}.{png,jpg}` に置き、

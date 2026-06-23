@@ -14,6 +14,7 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=fa_BJ6klA9s",
+    "thumbUrl": "/media/2026-06-17-bluejays-vs-redsox-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
   "stats": [
@@ -35,11 +36,23 @@
       "delta": "OPS -.009"
     }
   ],
-  "tags": ["ブルージェイズ", "レッドソックス", "岡本和真", "吉田正尚", "スプリンガー", "デービス・シュナイダー", "ブラディ・ゲレーロJr", "海外の反応"],
+  "tags": [
+    "ブルージェイズ",
+    "レッドソックス",
+    "岡本和真",
+    "吉田正尚",
+    "スプリンガー",
+    "デービス・シュナイダー",
+    "ブラディ・ゲレーロJr",
+    "海外の反応"
+  ],
   "series": {
     "id": "bluejays",
     "date": "2026-06-17",
-    "opponent": { "ja": "レッドソックス", "en": "Boston Red Sox" }
+    "opponent": {
+      "ja": "レッドソックス",
+      "en": "Boston Red Sox"
+    }
   },
   "comments": [
     {

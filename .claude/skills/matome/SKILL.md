@@ -66,9 +66,13 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit の
   になる。それ以外（`v.redd.it` 等）は埋め込めないので、可能なら外部ミラー(YouTube等)の
   URL を優先。サムネは `thumbUrl`（無ければ YouTube は自動取得、それも無ければストック）。
   - **Discover 画像（1200px 足切り）**: YouTube 動画で `maxresdefault`（1280px）が存在するなら
-    `thumbUrl` に `https://i.ytimg.com/vi/<videoId>/maxresdefault.jpg` を明示する。maxres が無い動画は
-    `thumbUrl` を付けない＝`ogCover`（`src/lib/media.ts`）が 1600px の競技ストックに倒して適格を保つ
-    （480px の hqdefault には倒さない）。サイト内カード表示は hqdefault のままで可（OGP/Discover だけ大きく要る）。
+    `thumbUrl` に `https://i.ytimg.com/vi/<videoId>/maxresdefault.jpg` を明示する。**maxres が無い動画**
+    （MLB公式でも稀にある）は、記事を保存したあと **`node scripts/og-thumb.mjs <id>` を必ず走らせる**
+    ＝公式サムネ(sddefault)の中央16:9を切り出して 1280×720 のローカル OG を `public/media/{id}-og.jpg`
+    に作り、`thumbUrl` を自動で挿入する。これで「実際の試合サムネ」かつ「Discover 1200px 基準クリア」を
+    両立する（旧方針＝maxres 無しは球場ストックに倒す、は廃止。**OG だけ球場になる症状**を断つため）。
+    `--all` で全記事の取りこぼしを一括修正、`--all --dry` で下見もできる。`node scripts/check-discover-images.mjs`
+    で基準未満が残っていないか検証する。サイト内カード表示も同じ `thumbUrl` を使う。
 - `credit` は必ず添える（例: `"u/foo · r/baseball"`）。`caption` は任意の日本語説明。
 - URL が分からない／無いときは `media` を**省略**（ストック写真にフォールバックする）。捏造しない。
 - 直リンク画像のホストを増やすときは `next.config.mjs` の `remotePatterns` に追加が必要。
@@ -211,6 +215,8 @@ MLB の試合まとめ（特に「海外ニキと見る」R6 や日本人選手�
 3. 各コメントを翻訳（`bodyEn` / `bodyJa`）、`isHighlight` 付与
 4. `title`(en/ja) は **R8**、`summaryJa` は **R9** に従って作る。`tags`・`media`（R5・あれば）も
 5. `data/threads/{sport}/{id}.json` に保存
+5b. **動画記事は OG 画像を担保**：`media.kind:"video"` なら `node scripts/og-thumb.mjs <id>` を走らせる。
+   maxres があれば何もしない（`skip:maxres-ok`）、無ければローカル OG を生成して `thumbUrl` を入れる（R5）。
 6. `npm run build` で確認（任意）
 7. **フィードバックを蓄積する（育つ構造）**：村山が「この抜粋要らない」「並べ方」「訳が堅い」等の
    指摘を出したら `references/feedback-log.md` の該当セクションに「ダメ→直し方」で1行追記する。
@@ -241,3 +247,8 @@ MLB の試合まとめ（特に「海外ニキと見る」R6 や日本人選手�
   成績データAPI調査の結論（①公式APIは無料で理想的だが規約は非商用のみ ②数値自体は公知の事実で引用可
   ③成績検索の正面突破はレッドオーシャン）から、「サイト本体は叩かず編集時に数値だけ引用・海外の反応の
   味付けに留める」方針で導入。日付は現地(ET)基準＝JST の試合日と1日ズレることがある点に注意。
+- 2026-06-23: R5 更新＋`scripts/og-thumb.mjs` 追加。`maxresdefault` が無い動画記事の OG が球場ストックに
+  倒れる症状（ページ本体は実サムネなのに共有プレビューだけ球場）を解消。公式サムネの中央16:9を切り出し
+  1280×720 のローカル OG を生成して `thumbUrl` で明示する。動画記事保存後に走らせる（手順 5b）。既存12件は
+  `--all` で一括修正済み。あわせて選手 OG（opengraph-image.tsx）の下部余白を厚くし、共有時に重なる og:title
+  の白帯で成績が隠れないようフッターを持ち上げた。
