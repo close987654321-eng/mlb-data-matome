@@ -110,7 +110,10 @@ export default function CompareTable({
       <div
         ref={scrollRef}
         onScroll={onScroll}
-        className="overflow-x-auto overscroll-x-contain px-5 sm:px-0"
+        // will-change-scroll で合成レイヤーに保ち固定列ごと滑らかに。スクロールバーは細く控えめに
+        // （位置が連続して見える＝指に追従して見える）。iOS の -webkit-overflow-scrolling:touch は
+        // sticky を壊す既知バグなので入れない。
+        className="overflow-x-auto overscroll-x-contain px-5 will-change-scroll [scrollbar-color:theme(colors.line)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-line [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5 sm:px-0"
       >
         <table className="w-full min-w-[560px] table-fixed border-collapse text-sm">
           <colgroup>
