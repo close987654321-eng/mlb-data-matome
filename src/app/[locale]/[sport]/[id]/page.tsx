@@ -303,9 +303,13 @@ export default async function ThreadDetailPage({
                     )}
                   </div>
                   <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
-                  <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">
-                    {c.bodyEn}
-                  </p>
+                  {/* 原文（英語）の併記。日本語ソース（Netflix Japan 等の日本語コメント）では原文＝訳で
+                      重複するので bodyEn を空にして併記を省く */}
+                  {c.bodyEn && (
+                    <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">
+                      {c.bodyEn}
+                    </p>
+                  )}
                 </li>
               ))}
             </ul>
