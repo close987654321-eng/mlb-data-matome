@@ -85,11 +85,23 @@ const JP_NAMES = {
 const EXTRA_IDS = [663457];
 
 /**
- * サイ・ヤング賞争いのライバル（非日本人投手）。選手ハブ /player と一覧の「サイヤング争い」比較ブロック用に
- * スナップショットへ明示で含める。jp（日本人成績）コマンドや today モードには出さず、snapshot だけが拾う。
- * src/lib/players.ts の rival:true エントリと ID を一致させる。
+ * サイ・ヤング賞争いのライバル等（非日本人）。選手ハブ /player と一覧の「サイヤング争い」比較ブロック用に
+ * スナップショットへ含める。さらに 2026-06-23（村山決定）からは games レーダー／jp 成績にも含める＝
+ * 「一覧（/player）に出ている選手全員の出場試合を漏れなく記事化する」ため（旧来は snapshot だけが拾った）。
+ * 日本語表記（RIVAL_NAMES）は src/lib/players.ts の rival エントリの nameJa と一致させる
+ * ＝記事タグ→選手ハブの threadsOf 紐付けキーなので、ズレるとハブに記事が載らない。
  */
-const RIVAL_IDS = [694973, 650911, 694819, 519242, 695243]; // Skenes / C.Sánchez / Misiorowski / Sale / M.Miller
+const RIVAL_NAMES = {
+  694973: 'ポール・スキーンズ', // Skenes
+  650911: 'クリストファー・サンチェス', // C.Sánchez
+  694819: 'ミシオロウスキー', // Misiorowski
+  519242: 'クリス・セール', // Sale
+  695243: 'メイソン・ミラー', // M.Miller
+};
+const RIVAL_IDS = Object.keys(RIVAL_NAMES).map(Number);
+
+// 表示名の唯一の引き当て表（日本人＋ライバル）。API は英語名しか返さないので id→日本語をここで解決。
+const DISPLAY_NAMES = { ...JP_NAMES, ...RIVAL_NAMES };
 
 /** MLB 30 球団の英語名 → 短い日本語名。マイナー球団など未収録は英語名のまま返す。 */
 const TEAM_JA = {
@@ -424,7 +436,7 @@ async function fetchRanksFull(season) {
   return out;
 }
 
-const jpName = (p) => JP_NAMES[p.id] ?? p.fullName;
+const jpName = (p) => DISPLAY_NAMES[p.id] ?? p.fullName;
 const teamJa = (p) => TEAM_JA[p.currentTeam?.name] ?? p.currentTeam?.name ?? '';
 
 /** stats 配列から hitting / pitching の split（その粒度の1件）を取り出す */
@@ -594,8 +606,9 @@ function printRecord(rec) {
 }
 
 async function runJp(season, { date, asJson, team } = {}) {
-  const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS])];
-  if (!ids.length) return console.error(`${season} の日本人選手が見つからない`);
+  // 一覧に出ている選手全員（日本人＋ライバル）を対象＝rival のみの試合でも成績ボックスを作れる。
+  const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS, ...RIVAL_IDS])];
+  if (!ids.length) return console.error(`${season} の対象選手が見つからない`);
   const [ranks, saberMap] = await Promise.all([fetchRanks(season), fetchWar(ids, season)]);
 
   if (date) {
@@ -639,7 +652,7 @@ async function runPlayer(query, season, { asJson } = {}) {
   if (/^\d+$/.test(query)) {
     ids = [Number(query)];
   } else {
-    const jpHit = Object.entries(JP_NAMES).find(([, ja]) => ja.includes(query));
+    const jpHit = Object.entries(DISPLAY_NAMES).find(([, ja]) => ja.includes(query));
     if (jpHit) {
       ids = [Number(jpHit[0])];
     } else {
@@ -794,13 +807,14 @@ async function runGames(dates, { asJson, team } = {}) {
   const all = [];
   for (const date of dates) {
     const season = Number(date.slice(0, 4));
-    const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS])];
+    // 一覧に出ている選手全員（日本人＋ライバル）の出場試合を漏れなく拾う＝レーダーの対象を /player と一致させる。
+    const ids = [...new Set([...(await fetchJapanesePlayers(season)), ...EXTRA_IDS, ...RIVAL_IDS])];
     all.push(...(await gamesForDate(season, date, ids, existing, { team })));
   }
   if (asJson) return console.log(JSON.stringify(all, null, 2));
   const span = dates.length === 1 ? `${dates[0]}(ET)` : `${dates[0]}〜${dates[dates.length - 1]}(ET)`;
   const todo = all.filter((g) => !g.existingArticle);
-  console.log(`【日本人選手の出場試合】${span}：${all.length}試合（未記事化 ${todo.length}）${team ? `／${team}` : ''}`);
+  console.log(`【対象選手の出場試合】${span}：${all.length}試合（未記事化 ${todo.length}）${team ? `／${team}` : ''}`);
   console.log(HEADER_NOTE + '\n');
   if (!all.length) return console.log('（この期間に日本人選手の出場試合は確認できず）');
   for (const g of all) {
