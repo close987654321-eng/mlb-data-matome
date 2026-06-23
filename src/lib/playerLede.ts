@@ -61,7 +61,7 @@ export function playerLede(player: Player, season: PlayerSeason, year: number, l
       const scope = cap.scope === 'lg' ? leagueJaOf(season.league) : 'MLB';
       sentences.push(`${cap.label}は${scope}${cap.rank}位につけている。`);
     }
-    sentences.push(`このページでは${name}の今季成績（打撃・投球・守備）と、現地ファンの「海外の反応」まとめ記事をまとめている。`);
+    sentences.push(`このページでは${name}の今季成績（打撃・投球・守備）と、海外の反応などをまとめている。`);
     return sentences.join('');
   }
 
