@@ -26,10 +26,16 @@ export async function generateMetadata({
   const description = en
     ? `${t('player.indexLead')} Featuring ${names.join(', ')} and more.`
     : `${t('player.indexLead')} ${names.join('・')}ほか。`;
+  // 年は文字列で渡す（ICU 数値引数の桁区切り「2,026」を避ける）。
+  const title = t('player.indexTitleYear', { year: String(year) });
   return {
-    // 年は文字列で渡す（ICU 数値引数の桁区切り「2,026」を避ける）。
-    title: t('player.indexTitleYear', { year: String(year) }),
+    title,
     description,
+    // openGraph/twitter を「ここで」定義する＝親(layout)の twitter.images:/og.png を外し、
+    // ファイルベースの opengraph-image.tsx（ハブ専用カード）を og と twitter の両方に充当させる。
+    // images は敢えて指定しない（指定すると規約画像が固定され opengraph-image が効かなくなる）。
+    openGraph: { title, description, type: 'website', url: absoluteUrl(locale, '/player') },
+    twitter: { card: 'summary_large_image', title, description },
     alternates: localeAlternates(locale, '/player'),
   };
 }
