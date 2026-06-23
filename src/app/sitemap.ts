@@ -62,7 +62,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const season = snap.players[String(p.mlbId)];
       if (!hubEligible(p, threads, season)) return null;
       const hubThreads = threadsOf(p, threads);
-      return entry(`/player/${p.slug}`, hubThreads[0]?.fetchedAt ?? snap.asOf ?? undefined);
+      // sitemap の lastmod は日付のみ（asOf は "YYYY-MM-DD HH:MM" 形式なので日付部分に切る＝妥当なISO）。
+      return entry(`/player/${p.slug}`, hubThreads[0]?.fetchedAt ?? (snap.asOf ? snap.asOf.slice(0, 10) : undefined));
     }).filter((e): e is NonNullable<typeof e> => e != null),
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),

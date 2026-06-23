@@ -36,6 +36,15 @@ const BASE = 'https://statsapi.mlb.com/api/v1';
 function defaultSeason() {
   return new Date().getFullYear();
 }
+/** 現在の JST を "YYYY-MM-DD HH:MM" で返す（CI が UTC でも Asia/Tokyo 基準）。snapshot の asOf 用。 */
+function jstStamp() {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const g = (t) => parts.find((x) => x.type === t).value;
+  return `${g('year')}-${g('month')}-${g('day')} ${g('hour')}:${g('minute')}`;
+}
 /** 指定日(YYYY-MM-DD)の前日を返す。前回比の基準（試合前日までの累計）に使う。 */
 function prevDay(dateStr) {
   const d = new Date(`${dateStr}T12:00:00Z`);
@@ -870,11 +879,20 @@ async function runSnapshot(season, asOf) {
       ...(Object.keys(ranks).length ? { ranks } : {}),
     };
   }
-  const out = { asOf, season, players };
   const file = path.join(process.cwd(), 'data', 'jp-players-stats.json');
+  // 時刻つき asOf でも「中身が変わった時だけ」更新する：既存と players が一致するなら前回の asOf を据え置き、
+  // ファイルをバイト一致のままにして毎時 cron の無駄コミット/デプロイを防ぐ（時刻が毎時動いても中身が同じなら no-op）。
+  let stampedAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    if (stableStringify(prev.players ?? {}) === stableStringify(players)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 既存スナップショットが無ければ新規作成 */
+  }
+  const out = { asOf: stampedAsOf, season, players };
   // 安定ソートで書く＝値が同じなら毎回バイト一致（毎時 cron の無駄コミットを防ぐ）
   writeFileSync(file, stableStringify(out) + '\n');
-  console.log(`snapshot 書き出し: ${Object.keys(players).length}名 / asOf ${asOf} → ${file}`);
+  console.log(`snapshot 書き出し: ${Object.keys(players).length}名 / asOf ${stampedAsOf} → ${file}`);
 }
 
 async function main() {
@@ -911,8 +929,8 @@ async function main() {
     }
     await runGames(dates, { asJson, team });
   } else if (cmd === 'snapshot') {
-    // snapshot [YYYY-MM-DD(=asOf)] [season]
-    const asOf = arg && /^\d{4}-\d{2}-\d{2}$/.test(arg) ? arg : new Date().toISOString().slice(0, 10);
+    // snapshot ["YYYY-MM-DD HH:MM"(=asOf)] [season]。asOf 省略時は現在のJST（分まで）。
+    const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
     const season = arg2 && /^\d{4}$/.test(arg2) ? Number(arg2) : defaultSeason();
     await runSnapshot(season, asOf);
   } else {

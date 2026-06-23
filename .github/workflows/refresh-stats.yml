@@ -33,7 +33,7 @@ jobs:
       - name: スナップショット取得（asOf/シーズンは JST 基準）
         run: |
           set -euo pipefail
-          ASOF=$(TZ=Asia/Tokyo date +%F)
+          ASOF=$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')
           SEASON=$(TZ=Asia/Tokyo date +%Y)
           # pipefail で node の失敗が tail に飲まれず赤くなる（取得失敗を no-op と誤認しない）
           node scripts/fetch-mlb-stats.mjs snapshot "$ASOF" "$SEASON" | tail -3
