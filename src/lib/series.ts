@@ -48,6 +48,13 @@ export const SERIES: Record<string, SeriesInfo> = {
     titlePrefix: { ja: '海外ブルージェイズニキと見る', en: 'Watch w/ overseas Blue Jays fans' },
     badge: { ja: '海外ブルージェイズニキと見る', en: 'Blue Jays Watch-Along' },
   },
+  // メイソン・ミラー（100マイル超の守護神／選手ハブの注目枠）の所属チーム。剛腕クローザー目当ての看板枠。
+  padres: {
+    id: 'padres',
+    team: { ja: 'パドレス', en: 'Padres' },
+    titlePrefix: { ja: '海外パドレスニキと見る', en: 'Watch w/ overseas Padres fans' },
+    badge: { ja: '海外パドレスニキと見る', en: 'Padres Watch-Along' },
+  },
 };
 
 export function getSeries(id: string): SeriesInfo | null {

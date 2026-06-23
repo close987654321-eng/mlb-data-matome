@@ -89,7 +89,7 @@ export const PLAYERS: Player[] = [
     bio: '長いキャリアで何度もサイ・ヤング賞争いに名を連ねるブレーブスの左腕エース。健康なら球界屈指の支配力を誇る。',
     sameAs: [mlb('chris-sale', 519242)] },
   { slug: 'mason-miller', nameJa: 'メイソン・ミラー', nameEn: 'Mason Miller', mlbId: 695243, rival: true,
-    bio: '100マイル超を投げ込むアスレチックスの守護神。圧巻の奪三振率でリリーフながら大きな注目を集める右腕。',
+    bio: '100マイル超の速球を投げ込む右の守護神。圧巻の奪三振率でリリーフながら大きな注目を集める。',
     sameAs: [mlb('mason-miller', 695243)] },
 ];
 
