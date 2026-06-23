@@ -102,9 +102,10 @@ export default async function PlayerIndexPage({
     .filter((x) => x.s!.pitching && !x.p.rival)
     .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: pitValues(s!) }));
 
-  // サイヤング争い：大谷＋ライバル投手（rival）。大谷の対抗馬を1つの表で見比べる。
+  // サイヤング争い：日本人の候補（大谷・山本）＋ライバル投手（rival）を1つの表で見比べる。
+  const cyJpSlugs = new Set(['shohei-ohtani', 'yoshinobu-yamamoto']);
   const cyRows: CompareRow[] = withStats
-    .filter((x) => x.s!.pitching && (x.p.rival || x.p.slug === 'shohei-ohtani'))
+    .filter((x) => x.s!.pitching && (x.p.rival || cyJpSlugs.has(x.p.slug)))
     .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: pitValues(s!) }));
 
   return (
