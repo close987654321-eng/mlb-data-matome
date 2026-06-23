@@ -149,14 +149,17 @@ export default function CompareTable({
               >
                 <td className="sticky left-0 z-20 border-r border-line bg-paper px-2.5 py-3 text-left group-hover:bg-surface">
                   <span className="flex items-center gap-1">
-                    <Link
-                      href={`/player/${r.slug}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="min-w-0 font-medium leading-tight text-ink group-hover:text-accent"
-                    >
-                      {r.name}
-                    </Link>
-                    {r.team && <span className="shrink-0 text-[10px] text-ink-soft">{r.team}</span>}
+                    {/* 名前（上段）＋チーム名（下段）の2段。横並びだと長い名前が窮屈なので縦に積む。 */}
+                    <span className="flex min-w-0 flex-col leading-tight">
+                      <Link
+                        href={`/player/${r.slug}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="font-medium text-ink group-hover:text-accent"
+                      >
+                        {r.name}
+                      </Link>
+                      {r.team && <span className="text-[10px] text-ink-soft">{r.team}</span>}
+                    </span>
                     <span aria-hidden className="ml-auto shrink-0 text-xs text-ink-soft transition-colors group-hover:text-accent">
                       ›
                     </span>
