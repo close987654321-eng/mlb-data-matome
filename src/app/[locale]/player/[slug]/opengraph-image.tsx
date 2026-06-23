@@ -130,7 +130,9 @@ function containerStyle() {
     justifyContent: 'space-between' as const,
     background: BG,
     color: CREAM,
-    padding: '60px 72px',
+    // 下を厚めに空ける: 一部の SNS/アプリは共有時に画像下へ og:title の白帯を重ねるので、
+    // 成績フッターをその帯の上へ逃がす（被って成績が読めなくなるのを防ぐ）。左右60/上60。
+    padding: '60px 72px 132px 72px',
     fontFamily: 'sans-serif',
   };
 }
