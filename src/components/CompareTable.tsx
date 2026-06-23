@@ -36,23 +36,41 @@ export default function CompareTable({
   );
 
   // 横スクロールの「まだ続きがある」を端のフェードで示す（スマホで見やすく）。
+  // スクロール中の再描画はジャンクの元。rAF で 1 フレーム 1 回に間引き、かつ端の状態が
+  // 実際に変わったときだけ setState する（毎フレーム全行を作り直さない＝なめらかに保つ）。
   const scrollRef = useRef<HTMLDivElement>(null);
+  const edgeRef = useRef({ l: false, r: false });
+  const rafRef = useRef(0);
   const [edge, setEdge] = useState({ l: false, r: false });
-  const onScroll = () => {
+
+  const measure = () => {
     const el = scrollRef.current;
     if (!el) return;
-    setEdge({
-      l: el.scrollLeft > 4,
-      r: el.scrollLeft + el.clientWidth < el.scrollWidth - 4,
+    const l = el.scrollLeft > 4;
+    const r = el.scrollLeft + el.clientWidth < el.scrollWidth - 4;
+    if (l === edgeRef.current.l && r === edgeRef.current.r) return; // 変化なし＝再描画しない
+    edgeRef.current = { l, r };
+    setEdge({ l, r });
+  };
+
+  const onScroll = () => {
+    if (rafRef.current) return; // 次フレームの計測が予約済みなら何もしない
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = 0;
+      measure();
     });
   };
+
   useEffect(() => {
-    onScroll();
+    measure();
     const el = scrollRef.current;
     if (!el) return;
-    const ro = new ResizeObserver(onScroll);
+    const ro = new ResizeObserver(measure);
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => {
+      ro.disconnect();
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
   const sorted = [...rows].sort((a, b) => {
@@ -89,8 +107,16 @@ export default function CompareTable({
           edge.r ? 'opacity-100' : 'opacity-0'
         }`}
       />
-      <div ref={scrollRef} onScroll={onScroll} className="overflow-x-auto px-5 sm:px-0">
-        <table className="w-full min-w-[560px] border-collapse text-sm">
+      <div
+        ref={scrollRef}
+        onScroll={onScroll}
+        className="overflow-x-auto overscroll-x-contain px-5 sm:px-0"
+      >
+        <table className="w-full min-w-[560px] table-fixed border-collapse text-sm">
+          <colgroup>
+            {/* 固定する選手名列を圧縮（従来は余白を吸って肥大していた）。残りの数値列は均等割り。 */}
+            <col className="w-[116px] sm:w-[132px]" />
+          </colgroup>
           <thead>
             <tr className="border-b border-line text-ink-soft">
               <th className="sticky left-0 z-20 border-r border-line bg-paper px-2.5 py-2.5 text-left font-semibold">
@@ -126,12 +152,12 @@ export default function CompareTable({
                     <Link
                       href={`/player/${r.slug}`}
                       onClick={(e) => e.stopPropagation()}
-                      className="font-medium text-ink group-hover:text-accent"
+                      className="min-w-0 font-medium leading-tight text-ink group-hover:text-accent"
                     >
                       {r.name}
                     </Link>
-                    {r.team && <span className="text-[11px] text-ink-soft">{r.team}</span>}
-                    <span aria-hidden className="ml-auto text-ink-soft transition-colors group-hover:text-accent">
+                    {r.team && <span className="shrink-0 text-[10px] text-ink-soft">{r.team}</span>}
+                    <span aria-hidden className="ml-auto shrink-0 text-xs text-ink-soft transition-colors group-hover:text-accent">
                       ›
                     </span>
                   </span>
