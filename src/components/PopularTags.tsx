@@ -18,7 +18,7 @@ export default async function PopularTags({ limit = 12 }: { limit?: number }) {
         <span className="h-3 w-1 rounded-full bg-accent" />
         {t('popularTags.heading')}
       </h2>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         {tags.map(({ tag, count }) => (
           <Link
             key={tag}
@@ -29,6 +29,13 @@ export default async function PopularTags({ limit = 12 }: { limit?: number }) {
             <span className="text-xs text-ink-soft">{count}</span>
           </Link>
         ))}
+        {/* ロングテール（13位以下・1件タグ）への到達経路。これが無いと人気タグが行き止まりになる。 */}
+        <Link
+          href="/tags"
+          className="inline-flex items-center rounded-full px-2 py-1 text-sm font-medium text-accent transition-colors hover:text-accent-ink"
+        >
+          {t('tags.viewAll')} →
+        </Link>
       </div>
     </section>
   );

@@ -32,7 +32,7 @@ export default function WatchAlong({
         <StickyVideo media={thread.media} sourceUrl={thread.sourceUrl} hintLabel={hintLabel} />
       )}
 
-      {/* 番組トーク（あれば）を動画とコメントの間に挟む。海外ニキのコメントに入る前の文脈。 */}
+      {/* 番組トーク（あれば）を動画とコメントの間に挟む。海外ファンのコメントに入る前の文脈。 */}
       {thread.transcript && thread.transcript.length > 0 && (
         <Transcript segments={thread.transcript} heading={transcriptLabel} />
       )}

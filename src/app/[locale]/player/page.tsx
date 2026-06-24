@@ -223,7 +223,7 @@ export default async function PlayerIndexPage({
               <Link
                 key={p.slug}
                 href={`/player/${p.slug}`}
-                className="inline-flex items-center gap-1 rounded-full bg-surface px-3.5 py-1.5 text-sm text-accent ring-1 ring-line transition-colors hover:bg-paper"
+                className="inline-flex items-center gap-1 rounded-full border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
               >
                 <span aria-hidden="true">📊</span>
                 {locale === 'en' ? p.nameEn : p.nameJa}

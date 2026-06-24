@@ -2,7 +2,7 @@ import { getSeries } from '@/lib/series';
 import type { ThreadSeries } from '@/types/thread';
 import type { Locale } from '@/lib/i18n';
 
-/** 「海外ニキと見る」シリーズ記事に出す看板バッジ。未知の series.id なら何も出さない。 */
+/** 「海外ファンと見る」シリーズ記事に出す看板バッジ。未知の series.id なら何も出さない。 */
 export default function SeriesBadge({
   series,
   locale,

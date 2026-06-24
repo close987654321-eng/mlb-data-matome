@@ -108,7 +108,7 @@ export default async function PlayerDetail({
       {/* 詳細ブロックの見出し（視覚は summary が担うので SR 向けに sr-only）。見出しナビの h2→h3 の階層を保つ。 */}
       <h2 className="sr-only">{t('statsTitle')}</h2>
       <details className="group">
-        <summary className="flex w-full cursor-pointer list-none items-center justify-between rounded-xl bg-surface px-4 py-3 text-sm font-semibold text-ink ring-1 ring-line transition-colors hover:bg-paper [&::-webkit-details-marker]:hidden">
+        <summary className="flex w-full cursor-pointer list-none items-center justify-between border-y border-line py-3 text-sm font-semibold text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
           {t('detailToggle')}
           <span aria-hidden="true" className="text-ink-soft transition-transform group-open:rotate-180">▾</span>
         </summary>
