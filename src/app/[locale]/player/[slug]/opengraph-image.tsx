@@ -28,6 +28,39 @@ export async function generateStaticParams() {
   return locales.flatMap((locale) => withHub.map((p) => ({ locale, slug: p.slug })));
 }
 
+/**
+ * OG 画像 URL に「成績の版数(id)」を埋め込む。Next のファイル規約が自動で付けるクエリは
+ * ソースファイル基準＝数値が動いても変わらないため、SNS スクレイパー/CDN が古い画像を
+ * 出し続ける。ここで id をその選手の実成績ハッシュにすると、数字が動いた時だけ URL が変わり
+ * （= ビルドキャッシュは新パスでミス→最新で再生成・スクレイパーは再取得）、ページの数字と必ず一致する。
+ * 数字が動かない選手の URL は変わらない＝不要な再生成・再取得は起こさない。
+ */
+function ogVersion(season: PlayerSeason | null): string {
+  const basis = season
+    ? JSON.stringify([
+        season.team,
+        season.league,
+        season.hitting,
+        season.pitching,
+        season.fielding,
+        season.saber,
+        season.sprintSpeed,
+      ])
+    : 'degraded';
+  let h = 0x811c9dc5; // FNV-1a（依存を増やさない小さなハッシュ。衝突は実用上問題にならない）
+  for (let i = 0; i < basis.length; i++) {
+    h ^= basis.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
+
+export async function generateImageMetadata({ params }: { params: { locale: Locale; slug: string } }) {
+  const player = getPlayer(params.slug);
+  const season = player ? await getPlayerSeason(player.mlbId) : null;
+  return [{ id: ogVersion(season), size, contentType, alt }];
+}
+
 const ROLE_JA: Record<Hero['role'], string> = { 'two-way': '二刀流', batter: '打者', pitcher: '投手' };
 const ROLE_EN: Record<Hero['role'], string> = { 'two-way': 'TWO-WAY', batter: 'HITTER', pitcher: 'PITCHER' };
 const leagueJa = (l?: string | null) => (l === 'AL' ? 'ア・リーグ' : l === 'NL' ? 'ナ・リーグ' : '');
