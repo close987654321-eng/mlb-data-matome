@@ -5,6 +5,14 @@ const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // 選手別 OG 画像（[slug]/opengraph-image）は generateImageMetadata 由来で動的レンダリングになる
+  // （ハブ OG と違い prerender されない）。実行時に satori 用フォント・背景・成績JSON を
+  // process.cwd() 経由で fs 読みするが、このパスは静的解析できず @vercel/nft がトレースしないため、
+  // Vercel のサーバーレス関数バンドルに同梱されず実行時 500 になる（ローカルは cwd に実在し 200）。
+  // → 該当ファイルを明示同梱して「ローカルで動く＝Vercel でも動く」状態に揃える。
+  outputFileTracingIncludes: {
+    '/**': ['./src/assets/fonts/*.ttf', './src/assets/og/*.jpg', './data/jp-players-stats.json'],
+  },
   // CSS を <style> で HTML にインライン化し、描画をブロックする外部 CSS <link> を無くす
   // （Next 15.2+ 第一者機能。critters/optimizeCss と違い追加依存なし）。本サイトは Discover
   // 由来のワンショット流入が主で回遊が少ないため、ページ毎インラインの欠点が出にくく FCP/LCP に効く。
