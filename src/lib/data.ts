@@ -2,6 +2,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { Thread } from '@/types/thread';
 import { SPORTS, type Sport } from '@/lib/sports';
+import { getSeries } from '@/lib/series';
 
 const DATA_ROOT = path.join(process.cwd(), 'data');
 
@@ -52,12 +53,20 @@ export async function getThreadsBySport(sport: Sport): Promise<Thread[]> {
 }
 
 /**
- * 「海外ニキと見る」ハブ（/watch）に載せる記事＝動画つき watch-along 記事を
+ * 「海外ファンと見る」ハブ（/watch）に載せる記事＝動画つき watch-along 記事を
  * 全競技横断で新着順に返す。固定シリーズ（series 付き）も単発の動画まとめも含む。
  * hideFromWatch を立てた記事（スタジオ解説等、watch-along に馴染まない動画）は除外する。
  */
 export async function getWatchAlongThreads(): Promise<Thread[]> {
   return (await getAllThreads()).filter((t) => t.media?.kind === 'video' && !t.hideFromWatch);
+}
+
+/**
+ * /watch の「注目の試合（単発）」＝動画つきだが登録シリーズに属さない watch-along 記事。新着順。
+ * 固定シリーズ（series.ts に登録ありの series.id）はシリーズ棚に出すのでここから除く。
+ */
+export async function getWatchSingles(): Promise<Thread[]> {
+  return (await getWatchAlongThreads()).filter((t) => !t.series || !getSeries(t.series.id));
 }
 
 export async function getThread(sport: Sport, id: string): Promise<Thread | null> {

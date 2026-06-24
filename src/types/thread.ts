@@ -37,7 +37,7 @@ export type ThreadTranscript = {
 };
 
 /**
- * 「海外ニキと見る」シリーズ（看板の watch-along 企画）に属する記事のメタ情報。
+ * 「海外ファンと見る」シリーズ（看板の watch-along 企画）に属する記事のメタ情報。
  * これが付いた記事はタイトルを定型で自動生成し（src/lib/series.ts の seriesTitle）、
  * カード/記事にシリーズバッジを出し、/watch ハブにも載る。
  * シリーズ名・自軍名・接頭辞は data ではなく src/lib/series.ts のカタログが正。
@@ -83,8 +83,9 @@ export type Thread = {
   gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）
   stats?: PlayerStat[]; // 日本人選手の成績ボックス（R10・MLB記事のみ）。summaryJa の直下に表示
   tags?: string[]; // 日本語タグ（選手名・話題）
-  series?: ThreadSeries; // 「海外ニキと見る」シリーズ記事ならその情報（タイトル定型化＋バッジ＋/watch掲載）
+  series?: ThreadSeries; // 「海外ファンと見る」シリーズ記事ならその情報（タイトル定型化＋バッジ＋/watch掲載）
   hideFromWatch?: boolean; // 動画つきでも /watch ハブ（注目の試合）に載せない。スタジオ解説/番組セグメント等、watch-along に馴染まない動画記事向け
+  editorPick?: number; // トップ「本日の一面／編集部ピック」の優先度（小さいほど上位）。任意の手動キュレーション用。立っていない記事は自動フォールバック（直近×コメント数）で補う＝src/lib/frontpage.ts。JSONフラグだけで運用しSSGを保つ
   isSample?: boolean; // 開発用ダミーであることを明示するフラグ
 };
 

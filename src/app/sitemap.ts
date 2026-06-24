@@ -62,7 +62,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
-    entry('/watch', latestWatch), // 「海外ニキと見る」ハブ
+    entry('/watch', latestWatch), // 「海外ファンと見る」ハブ
     // 運営者情報・規約系（AdSense 審査要件・更新頻度は低いので lastModified なし）
     entry('/about'),
     entry('/privacy'),

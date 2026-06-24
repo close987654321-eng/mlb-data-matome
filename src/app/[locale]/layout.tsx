@@ -6,6 +6,7 @@ import { getMessages, unstable_setRequestLocale } from 'next-intl/server';
 import { useTranslations, useLocale } from 'next-intl';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
 import ScrollToTop from '@/components/ScrollToTop';
+import SearchPill from '@/components/home/SearchPill';
 import NavLink from '@/components/NavLink';
 import { Link } from '@/lib/navigation';
 import { locales } from '@/lib/i18n';
@@ -112,7 +113,8 @@ export default async function LocaleLayout({
         />
         <NextIntlClientProvider locale={locale} messages={messages}>
           <SiteHeader />
-          <main className="mx-auto w-full max-w-5xl flex-1 px-5 py-10 sm:py-14">{children}</main>
+          {/* モバイルは題字とヘッダータブの隙間を詰める（pt-5）。デスクトップは従来どおり余白を取る。 */}
+          <main className="mx-auto w-full max-w-5xl flex-1 px-5 pt-5 pb-10 sm:py-14">{children}</main>
           <SiteFooter />
           <ScrollToTop />
         </NextIntlClientProvider>
@@ -154,7 +156,11 @@ function SiteHeader() {
             </NavLink>
           ))}
         </nav>
-        <LocaleSwitcher />
+        {/* 検索はサイト最大の探索アフォーダンス。全ページのヘッダーに常設して 1 タップで /search へ。 */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <SearchPill />
+          <LocaleSwitcher />
+        </div>
       </div>
       {/* スマホ用ナビ */}
       <nav className="flex items-center gap-4 overflow-x-auto border-t border-line px-5 text-sm sm:hidden">

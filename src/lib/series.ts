@@ -3,14 +3,14 @@ import type { Thread, ThreadSeries } from '@/types/thread';
 import type { Locale } from './i18n';
 
 /**
- * 「海外ニキと見る」シリーズ（watch-along 看板企画）のカタログ。
- * これが唯一の正。新しいシリーズ（ヤンキースニキと見る等）を増やすときはここに足す。
+ * 「海外ファンと見る」シリーズ（watch-along 看板企画）のカタログ。
+ * これが唯一の正。新しいシリーズ（ヤンキースファンと見る等）を増やすときはここに足す。
  * 記事側（data/threads/.../*.json）は series.id でここを参照するだけ。
  */
 export type SeriesInfo = {
   id: string;
   team: LocalizedName; // 自軍名（タイトルの "vs" の左）。例: ドジャース
-  titlePrefix: LocalizedName; // タイトル接頭辞。例: 「海外ドジャースニキと見る」
+  titlePrefix: LocalizedName; // タイトル接頭辞。例: 「海外ドジャースファンと見る」
   badge: LocalizedName; // カード/記事に出すシリーズバッジ表示
 };
 
@@ -18,42 +18,42 @@ export const SERIES: Record<string, SeriesInfo> = {
   dodgers: {
     id: 'dodgers',
     team: { ja: 'ドジャース', en: 'Dodgers' },
-    titlePrefix: { ja: '海外ドジャースニキと見る', en: 'Watch w/ overseas Dodgers fans' },
-    badge: { ja: '海外ドジャースニキと見る', en: 'Dodgers Watch-Along' },
+    titlePrefix: { ja: '海外ドジャースファンと見る', en: 'Watch w/ overseas Dodgers fans' },
+    badge: { ja: '海外ドジャースファンと見る', en: 'Dodgers Watch-Along' },
   },
   cubs: {
     id: 'cubs',
     team: { ja: 'カブス', en: 'Cubs' },
-    titlePrefix: { ja: '海外カブスニキと見る', en: 'Watch w/ overseas Cubs fans' },
-    badge: { ja: '海外カブスニキと見る', en: 'Cubs Watch-Along' },
+    titlePrefix: { ja: '海外カブスファンと見る', en: 'Watch w/ overseas Cubs fans' },
+    badge: { ja: '海外カブスファンと見る', en: 'Cubs Watch-Along' },
   },
   // ヌートバー（日系・WBC で日本でも人気）の所属チーム。日本人ファン向けの看板枠。
   cardinals: {
     id: 'cardinals',
     team: { ja: 'カージナルス', en: 'Cardinals' },
-    titlePrefix: { ja: '海外カージナルスニキと見る', en: 'Watch w/ overseas Cardinals fans' },
-    badge: { ja: '海外カージナルスニキと見る', en: 'Cardinals Watch-Along' },
+    titlePrefix: { ja: '海外カージナルスファンと見る', en: 'Watch w/ overseas Cardinals fans' },
+    badge: { ja: '海外カージナルスファンと見る', en: 'Cardinals Watch-Along' },
   },
   // 村上宗隆の所属チーム。2026 年に史上最弱から快進撃で日本でも注目の看板枠。
   whitesox: {
     id: 'whitesox',
     team: { ja: 'ホワイトソックス', en: 'White Sox' },
-    titlePrefix: { ja: '海外ホワイトソックスニキと見る', en: 'Watch w/ overseas White Sox fans' },
-    badge: { ja: '海外ホワイトソックスニキと見る', en: 'White Sox Watch-Along' },
+    titlePrefix: { ja: '海外ホワイトソックスファンと見る', en: 'Watch w/ overseas White Sox fans' },
+    badge: { ja: '海外ホワイトソックスファンと見る', en: 'White Sox Watch-Along' },
   },
   // 岡本（強肩の三塁守備が現地で評価）の所属チーム。日本人ファン向けの看板枠。
   bluejays: {
     id: 'bluejays',
     team: { ja: 'ブルージェイズ', en: 'Blue Jays' },
-    titlePrefix: { ja: '海外ブルージェイズニキと見る', en: 'Watch w/ overseas Blue Jays fans' },
-    badge: { ja: '海外ブルージェイズニキと見る', en: 'Blue Jays Watch-Along' },
+    titlePrefix: { ja: '海外ブルージェイズファンと見る', en: 'Watch w/ overseas Blue Jays fans' },
+    badge: { ja: '海外ブルージェイズファンと見る', en: 'Blue Jays Watch-Along' },
   },
   // メイソン・ミラー（100マイル超の守護神／選手ハブの注目枠）の所属チーム。剛腕クローザー目当ての看板枠。
   padres: {
     id: 'padres',
     team: { ja: 'パドレス', en: 'Padres' },
-    titlePrefix: { ja: '海外パドレスニキと見る', en: 'Watch w/ overseas Padres fans' },
-    badge: { ja: '海外パドレスニキと見る', en: 'Padres Watch-Along' },
+    titlePrefix: { ja: '海外パドレスファンと見る', en: 'Watch w/ overseas Padres fans' },
+    badge: { ja: '海外パドレスファンと見る', en: 'Padres Watch-Along' },
   },
 };
 

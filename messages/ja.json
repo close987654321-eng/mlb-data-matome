@@ -6,10 +6,11 @@
   },
   "nav": {
     "home": "新着",
-    "watch": "海外ニキと見る",
+    "watch": "海外ファンと見る",
     "players": "選手成績",
     "reactions": "海外の反応",
     "columns": "インタビュー / コラム",
+    "search": "検索",
     "about": "運営者情報",
     "privacy": "プライバシーポリシー",
     "contact": "お問い合わせ"
@@ -22,18 +23,30 @@
   },
   "watch": {
     "eyebrow": "WATCH-ALONG",
-    "title": "海外ニキと見る",
+    "title": "海外ファンと見る",
     "lead": "試合のハイライト動画を、ファンのコメントと一緒に。動画を見ながら現地の歓喜も嘆きもジョークもスクロールで追える看板企画。",
     "empty": "まだ動画まとめがありません。",
+    "tonight": "最新の試合",
+    "totalCount": "動画まとめ {count} 本",
     "singlesTitle": "注目の試合",
+    "singlesLead": "シリーズに属さない単発の試合ハイライトを新着順で。",
     "count": "{count} 本"
   },
   "home": {
-    "heroTitle": "海外の反応 — MLB / ボクシング / MMA",
-    "heroBody": "MLBの日本人選手を中心に、現地ファンのコメントつき動画や試合のハイライト、選手成績をリアルタイムでまとめています。",
+    "heroTitle": "海外のファンと観る、MLB・ボクシング・MMA。",
+    "heroBody": "大谷や井上尚弥の試合を、海外ファンの生の歓声ごと。ハイライト動画にコメントを重ね、選手の今季成績まで一気に追える。",
     "latest": "新着まとめ",
     "pickup": "ピックアップ",
-    "pickupLead": "編集部が選ぶ注目のまとめ"
+    "pickupLead": "編集部が選ぶ注目のまとめ",
+    "updated": "更新",
+    "todays": "本日の一面",
+    "more": "新着のつづき",
+    "popularSearches": "よく探されている",
+    "players": "注目選手",
+    "playersAll": "成績で比較",
+    "seeAll": "すべて見る",
+    "pillarWatchLead": "動画を見ながら、現地の歓喜も嘆きもジョークもスクロールで。",
+    "pillarPlayerLead": "日本人選手の今季成績を、数値そのままで。"
   },
   "threads": {
     "sportLead": "{subreddits} の盛り上がったスレを、現地の反応つきで日本語まとめ。",
@@ -129,6 +142,11 @@
   },
   "popularTags": {
     "heading": "人気のタグ"
+  },
+  "tags": {
+    "allTitle": "すべてのタグ",
+    "allLead": "選手名・話題で、まとめを横断する。",
+    "viewAll": "すべてのタグ"
   },
   "search": {
     "heading": "サイト内検索",

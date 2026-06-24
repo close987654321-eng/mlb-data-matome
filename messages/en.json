@@ -10,6 +10,7 @@
     "players": "Players",
     "reactions": "Overseas Reactions",
     "columns": "Interviews / Columns",
+    "search": "Search",
     "about": "About",
     "privacy": "Privacy Policy",
     "contact": "Contact"
@@ -25,15 +26,27 @@
     "title": "Watch-Along with Overseas Fans",
     "lead": "Game highlight videos, paired with the locals' comments from overseas threads (Reddit). The video stays pinned while the hype, the heartbreak, and the jokes scroll by — our signature watch-along.",
     "empty": "No video digests yet.",
+    "tonight": "Latest game",
+    "totalCount": "{count} watch-along videos",
     "singlesTitle": "Featured games",
+    "singlesLead": "Standalone game highlights, newest first.",
     "count": "{count} episodes"
   },
   "home": {
-    "heroTitle": "Overseas Reactions — MLB / Boxing / MMA",
-    "heroBody": "No English needed. Japanese digests of buzzing overseas (Reddit) threads, with the locals' raw comments — the hype, the trash talk, and the jokes, all of it.",
+    "heroTitle": "Watch MLB, boxing & MMA with overseas fans.",
+    "heroBody": "From Ohtani to Inoue — game highlights with the locals' raw reactions, plus every Japanese player's season stats in one place.",
     "latest": "Latest digests",
     "pickup": "Pick up",
-    "pickupLead": "Editors' picks"
+    "pickupLead": "Editors' picks",
+    "updated": "Updated",
+    "todays": "Today's front page",
+    "more": "More stories",
+    "popularSearches": "Popular",
+    "players": "Featured players",
+    "playersAll": "Compare stats",
+    "seeAll": "See all",
+    "pillarWatchLead": "The video stays pinned while the hype, the heartbreak, and the jokes scroll by.",
+    "pillarPlayerLead": "Every Japanese player's season stats — just the numbers."
   },
   "threads": {
     "sportLead": "Japanese digests of buzzing threads from {subreddits}, with the locals' reactions.",
@@ -129,6 +142,11 @@
   },
   "popularTags": {
     "heading": "Popular tags"
+  },
+  "tags": {
+    "allTitle": "All tags",
+    "allLead": "Browse every player and topic across the digests.",
+    "viewAll": "All tags"
   },
   "search": {
     "heading": "Search",

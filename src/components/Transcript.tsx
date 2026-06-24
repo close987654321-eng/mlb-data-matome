@@ -7,7 +7,7 @@ type Props = {
 
 /**
  * 動画内のキャスター/解説者の会話を、動画とコメントの間に表示する。
- * 番組セグメント（MLB Network 等）を記事化するとき、海外ニキのコメントへ入る前の
+ * 番組セグメント（MLB Network 等）を記事化するとき、海外ファンのコメントへ入る前の
  * 「文脈」として読ませる。発言者が分かる場合は名前を、原文があれば添える。
  */
 export default function Transcript({ segments, heading }: Props) {

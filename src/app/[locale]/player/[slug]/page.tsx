@@ -189,12 +189,14 @@ export default async function PlayerHubPage({
           {latestGame && (
             <Link
               href={`/${latestGame.sport}/${latestGame.id}`}
-              className="flex items-center justify-between rounded-xl bg-surface px-4 py-3.5 text-sm font-semibold text-accent ring-1 ring-line transition-colors hover:bg-paper"
+              className="group flex items-center justify-between border-y border-line py-3.5 text-sm font-semibold text-accent transition-colors hover:text-accent-ink"
             >
               <span>
                 <span aria-hidden="true">▶</span> {t('player.latestGame')}
               </span>
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
             </Link>
           )}
 
@@ -260,7 +262,7 @@ export default async function PlayerHubPage({
               <Link
                 key={rp.slug}
                 href={`/player/${rp.slug}`}
-                className="inline-flex items-center gap-1 rounded-full bg-surface px-3.5 py-1.5 text-sm text-accent ring-1 ring-line transition-colors hover:bg-paper"
+                className="inline-flex items-center gap-1 rounded-full border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
               >
                 <span aria-hidden="true">📊</span>
                 {locale === 'en' ? rp.nameEn : rp.nameJa}
