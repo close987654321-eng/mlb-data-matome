@@ -32,9 +32,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin "$BRANCH"
-          # 競合なくマージできた時だけ push（壊れる時は main を進めない＝安全側）
-          git merge --no-ff "origin/$BRANCH" -m "Auto-merge $BRANCH into main (cloud jp-games routine)"
-          git push origin main
+          # 成績更新CI等が同時刻に main を進めても落ちないよう、競合時は最新 main で再マージしてリトライ
+          pushed=0
+          for i in 1 2 3 4 5; do
+            git fetch origin main "$BRANCH"
+            git reset --hard origin/main
+            # 競合なくマージできた時だけ進める（壊れる時は main を進めない＝安全側）
+            git merge --no-ff "origin/$BRANCH" -m "Auto-merge $BRANCH into main (cloud jp-games routine)"
+            if git push origin HEAD:main; then pushed=1; echo "push成功"; break; fi
+            echo "push競合 → 最新 main で再マージしてリトライ ($i/5)"
+            sleep 3
+          done
+          if [ "$pushed" != "1" ]; then echo "5回リトライしても push できず" >&2; exit 1; fi
           # 公開済みのクラウドブランチは掃除（失敗は無視）
           git push origin --delete "$BRANCH" || true

@@ -49,4 +49,11 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/jp-players-stats.json
           git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
-          git push
+          # 記事の自動マージ等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
+          for i in 1 2 3 4 5; do
+            if git push; then echo "push成功"; exit 0; fi
+            echo "push競合 → fetch & rebase してリトライ ($i/5)"
+            git pull --rebase origin main
+          done
+          echo "5回リトライしても push できず" >&2
+          exit 1
