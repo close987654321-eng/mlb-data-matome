@@ -26,7 +26,15 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Merge pushed branch into main and publish
+      - name: Setup Node（og-thumb の sharp 用）
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Merge, generate Discover thumbnails, publish
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
@@ -39,6 +47,13 @@ jobs:
             git reset --hard origin/main
             # 競合なくマージできた時だけ進める（壊れる時は main を進めない＝安全側）
             git merge --no-ff "origin/$BRANCH" -m "Auto-merge $BRANCH into main (cloud jp-games routine)"
+            # クラウドは maxres 無しの記事の thumbUrl を空にして渡す。ここで公式サムネから
+            # 1280x720 の Discover 用サムネを自前生成する（既存 thumbUrl / maxres 有りは skip）。失敗は非致命。
+            node scripts/og-thumb.mjs --all || echo "og-thumb skipped/failed (non-fatal)"
+            if ! git diff --quiet; then
+              git add -A
+              git commit -m "chore(thumb): Discover用サムネを自動生成"
+            fi
             if git push origin HEAD:main; then pushed=1; echo "push成功"; break; fi
             echo "push競合 → 最新 main で再マージしてリトライ ($i/5)"
             sleep 3

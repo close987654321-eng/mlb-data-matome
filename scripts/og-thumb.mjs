@@ -14,7 +14,7 @@
  * YouTube の sddefault/hqdefault は 16:9 動画を 4:3 に letterbox（上下に黒帯）したもの。中央の 16:9 を
  * 切り出す前提なので、対象は 16:9 の公式ハイライト（MLB / RIZIN 等）＝当サイトの動画記事すべてに合う。
  *
- * 依存: macOS の sips（画像の crop/resize）。編集時に手元で走らせる運用（サイト本体/Vercel は叩かない）。
+ * 依存: sharp（クロスプラットフォーム・Next.js が同梱）。手元(macOS)でも GitHub Action(Linux)でも動く。
  *
  * 使い方:
  *   node scripts/og-thumb.mjs <thread-id|path>   # 1記事（例: 2026-06-23-dodgers-vs-twins）
@@ -23,12 +23,10 @@
  *   node scripts/og-thumb.mjs <id> --force       # thumbUrl 既設でも作り直す
  */
 import { readFile, writeFile, readdir, access } from 'node:fs/promises';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import sharp from 'sharp';
 
-const execFileP = promisify(execFile);
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const THREADS_DIR = join(ROOT, 'data/threads');
 const MEDIA_DIR = join(ROOT, 'public/media');
@@ -47,24 +45,6 @@ async function headOk(url) {
   }
 }
 
-async function download(url, dest) {
-  const res = await fetch(url, { redirect: 'follow' });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  await writeFile(dest, Buffer.from(await res.arrayBuffer()));
-}
-
-async function sips(file, args) {
-  await execFileP('sips', [...args, file]);
-}
-
-async function dims(file) {
-  const { stdout } = await execFileP('sips', ['-g', 'pixelWidth', '-g', 'pixelHeight', file]);
-  return {
-    w: Number(stdout.match(/pixelWidth:\s*(\d+)/)?.[1] ?? 0),
-    h: Number(stdout.match(/pixelHeight:\s*(\d+)/)?.[1] ?? 0),
-  };
-}
-
 async function exists(p) {
   try {
     await access(p);
@@ -74,14 +54,20 @@ async function exists(p) {
   }
 }
 
-// 公式サムネ(4:3 letterbox)の中央 16:9 を切り出して 1280x720 に拡大する。
-// 上下の黒帯を除いた「実フレーム」だけを残すのが狙い。
+// 公式サムネ(4:3 letterbox)の中央 16:9 を切り出して 1280x720 に整える。
+// 上下の黒帯を除いた「実フレーム」だけを残すのが狙い。sharp なので macOS / Linux 共通。
 async function makeOg(srcUrl, destPath) {
-  await download(srcUrl, destPath);
-  const { w } = await dims(destPath);
-  const cropH = Math.round((w * 9) / 16); // 16:9 の中央帯（640→360）。元が既に 16:9 なら実質 no-op
-  await sips(destPath, ['-c', String(cropH), String(w)]); // 中央クロップ（sips は 高さ→幅 の順）
-  await sips(destPath, ['-z', '720', '1280']); //            1280x720 へ拡大（同じく 高さ→幅）
+  const res = await fetch(srcUrl, { redirect: 'follow' });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const input = Buffer.from(await res.arrayBuffer());
+  const { width = 0, height = 0 } = await sharp(input).metadata();
+  const cropH = Math.min(height, Math.round((width * 9) / 16)); // 16:9 の中央帯（4:3→高さの0.75）。元が16:9なら全高
+  const top = Math.max(0, Math.round((height - cropH) / 2));
+  await sharp(input)
+    .extract({ left: 0, top, width, height: cropH }) // 中央の実フレーム（上下の黒帯を除く）
+    .resize(1280, 720, { fit: 'fill' }) // 1280x720 に拡大
+    .jpeg({ quality: 82 })
+    .toFile(destPath);
 }
 
 async function fixThread(path, { dry, force }) {
@@ -156,16 +142,6 @@ async function main() {
     console.error('使い方: node scripts/og-thumb.mjs <id|path|--all> [--dry] [--force]');
     process.exit(2);
   }
-  // sips（画像処理）の存在確認。dry は画像を触らないので不要。
-  if (!dry) {
-    try {
-      await execFileP('which', ['sips']);
-    } catch {
-      console.error('sips が見つかりません（macOS 専用）。画像の crop/resize に必要です。');
-      process.exit(2);
-    }
-  }
-
   const paths = await resolveTargets(target ?? '--all');
   const results = [];
   for (const p of paths) results.push(await fixThread(p, { dry, force }));
