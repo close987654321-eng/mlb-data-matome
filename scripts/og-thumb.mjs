@@ -115,6 +115,7 @@ async function fixThread(path, { dry, force }) {
   // media.url の直後に thumbUrl を挿入してキー順を保つ（手編集時の体裁に合わせる）。
   const rebuilt = {};
   for (const [k, v] of Object.entries(m)) {
+    if (k === 'thumbUrl') continue; // 既存 thumbUrl は捨てて url 直後に作り直す（--force で maxres 等を上書き）
     rebuilt[k] = v;
     if (k === 'url') rebuilt.thumbUrl = `/media/${file}`;
   }
