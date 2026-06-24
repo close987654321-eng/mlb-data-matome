@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-06-24 13:46",
+  "asOf": "2026-06-24 14:20",
   "players": {
     "519242": {
       "fielding": {
@@ -1282,8 +1282,8 @@
             "mlb": 11
           },
           "rbi": {
-            "lg": 25,
-            "mlb": 41
+            "lg": 26,
+            "mlb": 42
           },
           "runs": {
             "lg": 17,
@@ -1625,34 +1625,34 @@
         "fielding": ".800",
         "gamesPlayed": 32,
         "gamesStarted": 0,
-        "innings": "33.0",
+        "innings": "34.0",
         "position": "投手",
         "putOuts": 3
       },
       "hitting": null,
       "league": "NL",
       "pitching": {
-        "avg": ".123",
+        "avg": ".122",
         "baseOnBalls": 13,
         "earnedRuns": 3,
-        "era": "0.80",
+        "era": "0.79",
         "gamesPlayed": 32,
         "gamesStarted": 0,
         "hits": 14,
         "holds": 0,
         "homeRuns": 0,
         "homeRunsPer9": "0.00",
-        "inningsPitched": "33.2",
+        "inningsPitched": "34.0",
         "losses": 1,
         "runs": 5,
         "saves": 21,
         "strikeOuts": 66,
         "strikeoutWalkRatio": "5.08",
-        "strikeoutsPer9Inn": "17.64",
-        "walksPer9Inn": "3.48",
-        "whip": "0.80",
-        "winPercentage": ".500",
-        "wins": 1
+        "strikeoutsPer9Inn": "17.47",
+        "walksPer9Inn": "3.44",
+        "whip": "0.79",
+        "winPercentage": ".667",
+        "wins": 2
       },
       "ranks": {
         "pitching": {
@@ -1663,6 +1663,9 @@
           "strikeOuts": {
             "lg": 35,
             "mlb": 72
+          },
+          "wins": {
+            "lg": 94
           }
         }
       },
