@@ -1,0 +1,40 @@
+name: cloud-articles-automerge
+
+# クラウド定期ルーティン(jp-games)が push する claude/** ブランチを
+# 自動で main にマージ → Vercel が本番公開する橋渡し。
+# クラウドは GitHub プロキシ制約で main へ直 push できないため、これで
+# 「無人でスタート→ライブ公開」まで完結させる。
+on:
+  push:
+    branches:
+      - "claude/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cloud-articles-automerge
+  cancel-in-progress: false
+
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge pushed branch into main and publish
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$BRANCH"
+          # 競合なくマージできた時だけ push（壊れる時は main を進めない＝安全側）
+          git merge --no-ff "origin/$BRANCH" -m "Auto-merge $BRANCH into main (cloud jp-games routine)"
+          git push origin main
+          # 公開済みのクラウドブランチは掃除（失敗は無視）
+          git push origin --delete "$BRANCH" || true
