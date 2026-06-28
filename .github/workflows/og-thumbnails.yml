@@ -1,0 +1,66 @@
+name: og-thumbnails
+
+# data/threads が main に入るたびに、maxres 無し動画記事の Discover/OG 用サムネ(1280x720)を
+# 自前生成して main に積み直す「保険」。
+#
+# 背景: cloud-articles-automerge.yml は claude/** ブランチ経由の記事にしか og-thumb をかけない。
+# だがクラウド routine が main へ直 push する経路（automerge を経由しない）だと og-thumb が走らず、
+# maxres の無い公式ハイライト記事の OG がデフォルトの球場ストック画像に落ちてしまう。
+# このワークフローは「記事がどの経路で main に入っても」OG を実サムネに直す最後の砦。
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/threads/**"
+
+permissions:
+  contents: write
+
+# 成績更新CI / automerge と main を取り合っても壊れないよう直列化する。
+concurrency:
+  group: og-thumbnails
+  cancel-in-progress: false
+
+jobs:
+  thumbs:
+    # 自分が積む chore(thumb) コミットでは再発火させない（無限ループ防止）。
+    if: ${{ !contains(github.event.head_commit.message, 'chore(thumb)') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node（og-thumb の sharp 用）
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Generate Discover thumbnails and publish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # maxres 無し＆未対応の動画記事だけ公式サムネから 1280x720 を生成する（既存 thumbUrl/maxres 有りは skip）。
+          # 失敗は非致命（既存の OG を壊さない）。
+          node scripts/og-thumb.mjs --all || echo "og-thumb skipped/failed (non-fatal)"
+          if git diff --quiet; then
+            echo "生成対象なし（全記事サムネ済み）"
+            exit 0
+          fi
+          git add -A
+          git commit -m "chore(thumb): Discover用サムネを自動生成"
+          # 成績更新CI等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ。
+          for i in 1 2 3 4 5; do
+            if git push origin HEAD:main; then echo "push成功"; exit 0; fi
+            echo "push競合 → 最新 main に rebase してリトライ ($i/5)"
+            git fetch origin main
+            git rebase origin/main || { git rebase --abort; echo "rebase 失敗" >&2; exit 1; }
+            sleep 3
+          done
+          echo "5回リトライしても push できず" >&2
+          exit 1
