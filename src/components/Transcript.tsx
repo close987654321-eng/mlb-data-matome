@@ -14,7 +14,7 @@ export default function Transcript({ segments, heading }: Props) {
   return (
     <section className="mt-8">
       <h2 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-        <span className="h-3 w-1 rounded-full bg-accent" />
+        <span className="h-3 w-[2px] bg-ink" />
         {heading}
       </h2>
       <div className="space-y-3 rounded-xl border border-line bg-surface p-5">

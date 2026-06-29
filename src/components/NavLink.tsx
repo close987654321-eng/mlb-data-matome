@@ -4,8 +4,8 @@ import { Link, usePathname } from '@/lib/navigation';
 
 /**
  * グローバルナビの1項目。現在地をアクティブ表示する（どのページにいるか一目で分かるように）。
- * アクティブ＝差し色(accent)＋太字、非アクティブ＝ink-soft。これまで「海外ファンと見る」だけ常時赤で
- * アクティブが判別できなかったのを、アクティブ項目だけ赤くする方式に統一して解消する。
+ * アクティブ＝濃いインク＋太字、非アクティブ＝ink-soft。色（赤）は誌面の一点に温存する方針なので、
+ * 現在地はインクの濃淡だけで示す（無彩色）。
  * usePathname は next-intl 版でロケール接頭辞を含まない（ja=/player, en でも /player）。
  */
 export default function NavLink({
@@ -26,7 +26,7 @@ export default function NavLink({
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`transition-colors ${active ? 'font-semibold text-accent' : 'text-ink-soft hover:text-ink'} ${className}`}
+      className={`transition-colors ${active ? 'font-semibold text-ink' : 'text-ink-soft hover:text-ink'} ${className}`}
     >
       {children}
     </Link>

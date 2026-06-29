@@ -35,7 +35,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       <div className="mt-8 border-t border-line pt-6">
         <Link
           href="/contact"
-          className="inline-flex items-center rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          className="inline-flex items-center rounded-lg bg-ink px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
           {t('nav.contact')}
         </Link>

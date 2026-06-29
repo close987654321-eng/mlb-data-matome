@@ -37,7 +37,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
           href={CONTACT_FORM_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center rounded-lg bg-accent px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          className="inline-flex items-center rounded-lg bg-ink px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
         >
           {t('contact.openForm')}
         </a>

@@ -61,7 +61,7 @@ export default function PlayerStickyBar({
       >
         <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-5">
           <div className="flex min-w-0 items-center gap-2">
-            <span className={`h-2 w-2 shrink-0 rounded-full ${dotAccent ? 'bg-accent' : 'bg-ink-soft'}`} />
+            <span className={`h-2 w-2 shrink-0 rounded-full ${dotAccent ? 'bg-ink' : 'bg-ink-soft/50'}`} />
             <span className="truncate text-sm font-bold text-ink">{name}</span>
           </div>
           <div className="flex shrink-0 items-baseline gap-1.5">

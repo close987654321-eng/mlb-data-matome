@@ -19,7 +19,7 @@ export default function SearchConsole({ tags }: { tags: TagCount[] }) {
         action={action}
         method="get"
         role="search"
-        className="flex items-center gap-3 border-b-2 border-line pb-3 transition-colors focus-within:border-accent"
+        className="flex items-center gap-3 border-b border-ink/80 pb-3 transition-colors focus-within:border-ink"
       >
         <svg
           viewBox="0 0 24 24"
@@ -40,7 +40,7 @@ export default function SearchConsole({ tags }: { tags: TagCount[] }) {
         />
         <button
           type="submit"
-          className="shrink-0 text-sm font-semibold text-accent transition-colors hover:text-accent-ink"
+          className="shrink-0 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
         >
           {t('search.button')}
         </button>
@@ -52,7 +52,7 @@ export default function SearchConsole({ tags }: { tags: TagCount[] }) {
             <Link
               key={tag}
               href={`/tag/${encodeURIComponent(tag)}`}
-              className="text-sm text-ink-soft transition-colors hover:text-accent"
+              className="text-sm text-ink-soft transition-colors hover:text-ink"
             >
               #{tag}
             </Link>

@@ -75,7 +75,7 @@ export default async function WatchPage({ params }: { params: Promise<{ locale: 
   return (
     <div className="space-y-12">
       <section className="border-b border-line pb-8">
-        <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+        <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
           {t('watch.eyebrow')}
         </span>
         <h1 className="mt-2 text-3xl font-bold leading-tight text-ink sm:text-5xl">
@@ -96,7 +96,7 @@ export default async function WatchPage({ params }: { params: Promise<{ locale: 
           {hero && (
             <section className="space-y-4">
               <div className="flex items-center gap-3">
-                <span className="h-4 w-1 rounded-full bg-accent" />
+                <span className="h-4 w-[2px] bg-ink" />
                 <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">
                   {t('watch.tonight')}
                 </h2>
@@ -109,12 +109,12 @@ export default async function WatchPage({ params }: { params: Promise<{ locale: 
           {seriesGroups.map(({ info, items }) => (
             <section key={info.id} className="space-y-5">
               <div className="flex items-center gap-3">
-                <span className="h-4 w-1 rounded-full bg-accent" />
+                <span className="h-4 w-[2px] bg-ink" />
                 <h2 className="text-base font-bold text-ink sm:text-lg">{info.badge[locale]}</h2>
                 <span className="text-xs text-ink-soft">{items.length}</span>
                 <Link
                   href={`/watch/series/${info.id}`}
-                  className="ml-auto text-xs font-medium text-accent transition-colors hover:text-accent-ink"
+                  className="ml-auto text-xs font-medium text-ink-soft transition-colors hover:text-ink"
                 >
                   {t('home.seeAll')} →
                 </Link>
@@ -140,7 +140,7 @@ export default async function WatchPage({ params }: { params: Promise<{ locale: 
                 <span className="text-xs text-ink-soft">{singles.length}</span>
                 <Link
                   href="/watch/singles"
-                  className="ml-auto text-xs font-medium text-accent transition-colors hover:text-accent-ink"
+                  className="ml-auto text-xs font-medium text-ink-soft transition-colors hover:text-ink"
                 >
                   {t('home.seeAll')} →
                 </Link>
@@ -148,13 +148,12 @@ export default async function WatchPage({ params }: { params: Promise<{ locale: 
               {singleZones.map((z) => (
                 <section key={z.sport} className="space-y-4">
                   <h3
-                    className={`flex items-center gap-2 uppercase tracking-wider text-ink ${
+                    className={`flex items-center gap-2 tracking-wide text-ink ${
                       z.lead ? 'text-base font-bold' : 'text-sm font-semibold'
                     }`}
                   >
-                    <span aria-hidden>{z.emoji}</span>
                     {z.label}
-                    <span className="text-xs font-normal text-ink-soft">{z.count}</span>
+                    <span className="text-xs font-normal text-ink-mute">{z.count}</span>
                   </h3>
                   <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
                     {z.shown.map((th) => (
@@ -171,7 +170,11 @@ export default async function WatchPage({ params }: { params: Promise<{ locale: 
           {/* 選手成績ブリッジ＝watch（感情）→ player（数値）の往復 */}
           <section className="rounded-2xl border border-line bg-surface p-6">
             <div className="flex items-center gap-2">
-              <span aria-hidden>📊</span>
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current text-ink-soft" aria-hidden>
+                <rect x="3" y="13" width="4" height="8" />
+                <rect x="10" y="8" width="4" height="13" />
+                <rect x="17" y="4" width="4" height="17" />
+              </svg>
               <h2 className="text-lg font-bold text-ink">{t('nav.players')}</h2>
             </div>
             <p className="mt-2 text-sm leading-relaxed text-ink-soft">{t('home.pillarPlayerLead')}</p>
@@ -180,14 +183,14 @@ export default async function WatchPage({ params }: { params: Promise<{ locale: 
                 <Link
                   key={p.slug}
                   href={`/player/${p.slug}`}
-                  className="rounded-full border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+                  className="rounded-[2px] border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-ink hover:text-ink"
                 >
                   {locale === 'en' ? p.nameEn : p.nameJa}
                 </Link>
               ))}
               <Link
                 href="/player"
-                className="rounded-full px-2 py-1 text-sm font-medium text-accent transition-colors hover:text-accent-ink"
+                className="rounded-full px-2 py-1 text-sm font-medium text-ink-soft transition-colors hover:text-ink"
               >
                 {t('home.playersAll')} →
               </Link>

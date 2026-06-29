@@ -69,8 +69,8 @@ export default async function SportPage({
           <span className="text-xs font-medium uppercase tracking-[0.2em] text-white/80">
             {t('nav.reactions')}
           </span>
-          <h1 className="mt-1 text-3xl font-bold sm:text-4xl">
-            {info.emoji} {locale === 'ja' ? info.labelJa : info.labelEn}
+          <h1 className="mt-1 text-3xl font-bold tracking-[-0.02em] sm:text-4xl">
+            {locale === 'ja' ? info.labelJa : info.labelEn}
           </h1>
           <p className="mt-1 text-sm text-white/80">{info.subreddits.join(' · ')}</p>
         </div>

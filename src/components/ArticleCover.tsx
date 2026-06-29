@@ -48,7 +48,8 @@ export default function ArticleCover({
   credit,
 }: Props) {
   const info = SPORT_INFO[sport];
-  const label = eyebrow ?? `${info.emoji} ${locale === 'ja' ? info.labelJa : info.labelEn}`;
+  // カバー上のラベルは競技名のみ（絵文字は使わない）。eyebrow 指定があればそれを優先。
+  const label = eyebrow ?? (locale === 'ja' ? info.labelJa : info.labelEn);
   // 画像 SEO（代表画像の文脈シグナル）のため空 alt をやめる。記事タイトルがあればそれを、
   // 無ければ競技名ベースの説明を入れる（写真自体は競技の雰囲気カットなので汎用説明で可）。
   const altText =

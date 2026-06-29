@@ -79,13 +79,12 @@ export default function PickupSection({ threads, columns, locale }: Props) {
 
   return (
     <section>
-      {/* 見出し: 赤の縦バー + ラベル + 全幅の細い罫で「特集面」感を出す（ベタ囲みは使わない）。 */}
+      {/* 見出し: ラベル + 全幅の細い罫で「特集面」感を出す（無彩色・ベタ囲みは使わない）。 */}
       <div className="mb-7 flex items-baseline gap-3">
-        <span className="h-4 w-1 shrink-0 self-center rounded-full bg-accent" />
-        <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+        <h2 className="shrink-0 text-sm font-semibold tracking-wide text-ink">
           {t('home.pickup')}
         </h2>
-        <span className="text-xs text-ink-soft">{t('home.pickupLead')}</span>
+        <span className="text-xs text-ink-mute">{t('home.pickupLead')}</span>
         <span className="ml-1 h-px flex-1 self-center bg-line" />
       </div>
 
@@ -116,7 +115,7 @@ export default function PickupSection({ threads, columns, locale }: Props) {
               </span>
             )}
           </div>
-          <span className="mt-4 inline-block text-xs font-medium uppercase tracking-[0.16em] text-accent">
+          <span className="mt-4 inline-block text-xs font-medium uppercase tracking-[0.16em] text-ink-mute">
             {lead.eyebrow}
           </span>
           <h3 className="mt-2 text-2xl font-bold leading-snug text-ink decoration-accent/40 underline-offset-4 group-hover:underline sm:text-[1.7rem]">
@@ -146,7 +145,7 @@ export default function PickupSection({ threads, columns, locale }: Props) {
                   {item.hasVideo && <MiniPlay />}
                 </div>
                 <div className="min-w-0">
-                  <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
+                  <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-ink-mute">
                     {item.eyebrow}
                   </span>
                   <h3 className="mt-1 line-clamp-3 font-bold leading-snug text-ink decoration-accent/40 underline-offset-4 group-hover:underline">

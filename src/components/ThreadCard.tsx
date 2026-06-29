@@ -41,8 +41,9 @@ export default function ThreadCard({
     // relative + 見出しの stretched link（after:absolute inset-0）でカード全体をクリック可能にしつつ、
     // タグチップは relative z-10 でその上に乗せ、別リンクとして独立して押せる（入れ子アンカーを避ける）。
     <article className={`group relative ${featured ? 'grid gap-5 sm:grid-cols-2 sm:items-center' : ''}`}>
-      <div className="overflow-hidden rounded-lg">
-        <div className="transition-transform duration-500 group-hover:scale-[1.03]">
+      <div className="overflow-hidden rounded-[3px]">
+        {/* ホバーは“拡大ポップ”を抑え、ごく僅か（1.02）にゆっくり寄せるだけ＝上品な気配に留める。 */}
+        <div className="transition-transform duration-[600ms] ease-out group-hover:scale-[1.02]">
           <ArticleCover
             sport={thread.sport}
             locale={locale}
@@ -60,20 +61,20 @@ export default function ThreadCard({
           </div>
         )}
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-ink-mute">
           {showSport && (
-            <span className="font-medium uppercase tracking-wider text-accent">{sportLabel}</span>
+            <span className="font-semibold tracking-wide text-ink-soft">{sportLabel}</span>
           )}
           <span>{thread.subreddit}</span>
           {thread.isSample && (
-            <span className="rounded bg-amber-100 px-1.5 py-0.5 font-medium text-amber-700">
+            <span className="rounded-[2px] border border-line px-1.5 py-0.5 font-medium text-ink-mute">
               {t('threads.sampleBadge')}
             </span>
           )}
         </div>
 
         <h3
-          className={`mt-2 font-bold leading-snug text-ink decoration-accent/40 underline-offset-4 group-hover:underline ${
+          className={`mt-2 font-bold leading-snug tracking-[-0.01em] text-ink decoration-ink/25 underline-offset-4 group-hover:underline ${
             featured ? 'text-2xl sm:text-[1.7rem]' : 'text-lg'
           }`}
         >
@@ -101,7 +102,7 @@ export default function ThreadCard({
               <Link
                 key={tag}
                 href={`/tag/${encodeURIComponent(tag)}`}
-                className="rounded-full border border-line px-2 py-0.5 text-[11px] text-ink-soft transition-colors hover:border-accent hover:text-accent"
+                className="rounded-[2px] border border-line px-2 py-0.5 text-[11px] text-ink-soft transition-colors hover:border-ink hover:text-ink"
               >
                 #{tag}
               </Link>

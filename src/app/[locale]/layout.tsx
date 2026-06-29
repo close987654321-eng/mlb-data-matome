@@ -146,9 +146,7 @@ function SiteHeader() {
           <NavLink href="/" exact>
             {t('nav.home')}
           </NavLink>
-          <NavLink href="/watch">
-            <span aria-hidden="true">▶</span> {t('nav.watch')}
-          </NavLink>
+          <NavLink href="/watch">{t('nav.watch')}</NavLink>
           <NavLink href="/player">{t('nav.players')}</NavLink>
           {SPORTS.map((s) => (
             <NavLink key={s} href={`/${s}`}>
@@ -162,20 +160,19 @@ function SiteHeader() {
           <LocaleSwitcher />
         </div>
       </div>
-      {/* スマホ用ナビ */}
-      <nav className="flex items-center gap-4 overflow-x-auto border-t border-line px-5 text-sm sm:hidden">
+      {/* スマホ用ナビ。絵文字アイコンは撤去し、文字だけの落ち着いたタブに。 */}
+      <nav className="flex items-center gap-5 overflow-x-auto border-t border-line px-5 text-sm sm:hidden">
         <NavLink href="/" exact className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.home')}
         </NavLink>
         <NavLink href="/watch" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
-          <span aria-hidden="true">▶</span>&nbsp;{t('nav.watch')}
+          {t('nav.watch')}
         </NavLink>
         <NavLink href="/player" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
-          <span aria-hidden="true">📊</span>&nbsp;{t('nav.players')}
+          {t('nav.players')}
         </NavLink>
         {SPORTS.map((s) => (
           <NavLink key={s} href={`/${s}`} className="inline-flex min-h-[44px] items-center whitespace-nowrap">
-            <span aria-hidden="true">{SPORT_INFO[s].emoji}</span>&nbsp;
             {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
           </NavLink>
         ))}
@@ -202,7 +199,7 @@ function SiteFooter() {
             <Link href="/" className="transition-colors hover:text-ink">
               {t('nav.home')}
             </Link>
-            <Link href="/watch" className="font-medium text-accent transition-colors hover:text-ink">
+            <Link href="/watch" className="transition-colors hover:text-ink">
               {t('nav.watch')}
             </Link>
             <Link href="/player" className="transition-colors hover:text-ink">

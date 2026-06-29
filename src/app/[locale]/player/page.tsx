@@ -175,7 +175,7 @@ export default async function PlayerIndexPage({
       <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: t('player.indexTitle') }]} />
 
       <section className="border-b border-line pb-6">
-        <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+        <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
           {t('player.eyebrow')}
         </span>
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{t('player.indexTitle')}</h1>
@@ -223,9 +223,13 @@ export default async function PlayerIndexPage({
               <Link
                 key={p.slug}
                 href={`/player/${p.slug}`}
-                className="inline-flex items-center gap-1 rounded-full border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-1.5 rounded-[3px] border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-ink hover:bg-paper"
               >
-                <span aria-hidden="true">📊</span>
+                <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current text-ink-mute" aria-hidden>
+                  <rect x="3" y="13" width="4" height="8" />
+                  <rect x="10" y="8" width="4" height="13" />
+                  <rect x="17" y="4" width="4" height="17" />
+                </svg>
                 {locale === 'en' ? p.nameEn : p.nameJa}
               </Link>
             ))}

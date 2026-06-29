@@ -43,7 +43,7 @@ export default function VodCta({
               href={o.href}
               target="_blank"
               rel="noopener nofollow sponsored"
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-accent px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-[3px] bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
             >
               {watchLabel}
               <span aria-hidden>→</span>

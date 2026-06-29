@@ -28,7 +28,7 @@ export default function RankBadges({
   const lgLabel = league === 'AL' ? labels.al : labels.nl;
   const pad = size === 'md' ? 'px-2 py-0.5 text-[11px]' : 'px-1.5 py-px text-[10px]';
   const tone = strong
-    ? 'bg-accent/10 text-accent'
+    ? 'bg-ink/[0.06] text-ink-soft'
     : 'bg-paper text-ink-soft';
 
   return (

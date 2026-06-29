@@ -11,7 +11,7 @@ export default function SearchPill() {
     <Link
       href="/search"
       aria-label={t('search.heading')}
-      className="inline-flex items-center gap-1.5 rounded-full border border-line px-2.5 py-1.5 text-xs text-ink-soft transition-colors hover:border-accent hover:text-accent sm:px-3"
+      className="inline-flex items-center gap-1.5 rounded-[3px] border border-line px-2.5 py-1.5 text-xs text-ink-soft transition-colors hover:border-ink hover:text-ink sm:px-3"
     >
       <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
         <circle cx="11" cy="11" r="7" />

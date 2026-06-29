@@ -91,7 +91,7 @@ export default async function ColumnDetailPage({
       />
 
       <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
-        <span className="font-medium uppercase tracking-wider text-accent">{kindLabel}</span>
+        <span className="font-medium uppercase tracking-wider text-ink-soft">{kindLabel}</span>
         {column.source && <span>{column.source}</span>}
         <span className="ml-auto">{formatUpdatedAt(column.publishedAt, locale)}</span>
       </div>
@@ -101,7 +101,7 @@ export default async function ColumnDetailPage({
       {column.tags && <TagList tags={column.tags} />}
 
       {column.heroQuote && (
-        <figure className="mt-8 border-l-4 border-accent pl-5">
+        <figure className="mt-8 border-l-4 border-ink pl-5">
           <blockquote className="text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug">
             “{column.heroQuote.text}”
           </blockquote>
@@ -130,14 +130,14 @@ export default async function ColumnDetailPage({
                 key={i}
                 className="mt-10 flex items-center gap-2 text-lg font-bold leading-snug text-ink sm:text-xl"
               >
-                <span className="h-5 w-1 rounded-full bg-accent" />
+                <span className="h-5 w-[2px] bg-ink" />
                 {block.text}
               </h2>
             );
           }
           if (block.type === 'quote') {
             return (
-              <figure key={i} className="border-l-4 border-accent/50 pl-5">
+              <figure key={i} className="border-l-4 border-ink/50 pl-5">
                 <blockquote className="text-[17px] font-medium leading-relaxed text-ink">
                   “{block.quote.text}”
                 </blockquote>
@@ -167,7 +167,7 @@ export default async function ColumnDetailPage({
             href={column.sourceUrl}
             target="_blank"
             rel="noopener noreferrer nofollow"
-            className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-accent"
+            className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
           >
             {t('columns.viewSource')}
             <span aria-hidden>→</span>

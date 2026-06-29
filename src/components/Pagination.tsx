@@ -51,7 +51,7 @@ export default async function Pagination({
       className="mt-12 flex flex-wrap items-center justify-center gap-2"
     >
       {page > 1 && (
-        <Link href={href(page - 1)} className={`${numCls} border-line text-ink hover:border-accent`}>
+        <Link href={href(page - 1)} className={`${numCls} border-line text-ink hover:border-ink`}>
           {t('pagination.prev')}
         </Link>
       )}
@@ -64,7 +64,7 @@ export default async function Pagination({
           <span
             key={it}
             aria-current="page"
-            className={`${numCls} border-accent bg-accent font-medium text-white`}
+            className={`${numCls} border-ink bg-ink font-medium text-paper`}
           >
             {it}
           </span>
@@ -72,14 +72,14 @@ export default async function Pagination({
           <Link
             key={it}
             href={href(it)}
-            className={`${numCls} border-line text-ink hover:border-accent hover:text-accent`}
+            className={`${numCls} border-line text-ink-soft hover:border-ink hover:text-ink`}
           >
             {it}
           </Link>
         ),
       )}
       {page < totalPages && (
-        <Link href={href(page + 1)} className={`${numCls} border-line text-ink hover:border-accent`}>
+        <Link href={href(page + 1)} className={`${numCls} border-line text-ink hover:border-ink`}>
           {t('pagination.next')}
         </Link>
       )}

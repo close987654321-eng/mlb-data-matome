@@ -52,7 +52,7 @@ export default async function WatchSinglesPage({
       />
 
       <section className="border-b border-line pb-6">
-        <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+        <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
           {t('watch.eyebrow')}
         </span>
         <h1 className="mt-2 text-3xl font-bold leading-tight text-ink sm:text-4xl">

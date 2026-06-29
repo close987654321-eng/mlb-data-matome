@@ -46,7 +46,7 @@ export default async function TagPage({
   return (
     <div className="space-y-10">
       <section className="border-b border-line pb-6">
-        <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+        <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
           {t('tag.eyebrow')}
         </span>
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">#{decoded}</h1>

@@ -189,10 +189,13 @@ export default async function PlayerHubPage({
           {latestGame && (
             <Link
               href={`/${latestGame.sport}/${latestGame.id}`}
-              className="group flex items-center justify-between border-y border-line py-3.5 text-sm font-semibold text-accent transition-colors hover:text-accent-ink"
+              className="group flex items-center justify-between border-y border-line py-3.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
             >
-              <span>
-                <span aria-hidden="true">▶</span> {t('player.latestGame')}
+              <span className="inline-flex items-center gap-1.5">
+                <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current text-ink-mute" aria-hidden>
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                {t('player.latestGame')}
               </span>
               <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
                 →
@@ -221,7 +224,7 @@ export default async function PlayerHubPage({
       ) : (
         // 成績がまだ無い選手（記事だけ）。名前＋経歴の最小ヘッダ。
         <section className="border-b border-line pb-6">
-          <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{t('player.eyebrow')}</span>
+          <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">{t('player.eyebrow')}</span>
           <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">
             {player.nameJa}
             <span className="ml-2 text-base font-normal text-ink-soft">{player.nameEn}</span>
@@ -262,7 +265,7 @@ export default async function PlayerHubPage({
               <Link
                 key={rp.slug}
                 href={`/player/${rp.slug}`}
-                className="inline-flex items-center gap-1 rounded-full border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+                className="inline-flex items-center gap-1 rounded-[2px] border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-ink hover:text-ink"
               >
                 <span aria-hidden="true">📊</span>
                 {locale === 'en' ? rp.nameEn : rp.nameJa}
@@ -273,7 +276,7 @@ export default async function PlayerHubPage({
       )}
 
       <p className="text-sm">
-        <Link href="/player" className="text-accent hover:underline">
+        <Link href="/player" className="text-ink-soft hover:text-ink hover:underline">
           ← {t('player.indexTitle')}
         </Link>
       </p>

@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import { Link } from '@/lib/navigation';
 import ThreadCard from '@/components/ThreadCard';
+import SectionHeading from '@/components/SectionHeading';
 import type { Thread } from '@/types/thread';
 import type { Sport } from '@/lib/sports';
 import type { Locale } from '@/lib/i18n';
@@ -25,26 +25,13 @@ export default function SportZones({ zones, locale }: { zones: SportZone[]; loca
     <div className="space-y-12">
       {zones.map((z) => (
         <section key={z.sport} className="space-y-5">
-          <div className="flex items-center gap-3">
-            <span className={`${z.lead ? 'h-6' : 'h-4'} w-1 rounded-full bg-accent`} />
-            <h2
-              className={`font-bold uppercase tracking-wider text-ink ${
-                z.lead ? 'text-lg sm:text-xl' : 'text-sm font-semibold'
-              }`}
-            >
-              <span aria-hidden className="mr-1">
-                {z.emoji}
-              </span>
-              {z.label}
-            </h2>
-            <span className="text-xs text-ink-soft">{z.count}</span>
-            <Link
-              href={`/${z.sport}`}
-              className="ml-auto text-xs font-medium text-accent transition-colors hover:text-accent-ink"
-            >
-              {t('home.seeAll')} →
-            </Link>
-          </div>
+          <SectionHeading
+            label={z.label}
+            count={z.count}
+            seeAllHref={`/${z.sport}`}
+            seeAllLabel={t('home.seeAll')}
+            lead={z.lead}
+          />
           <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
             {z.threads.map((th) => (
               <li key={`${th.sport}/${th.id}`}>

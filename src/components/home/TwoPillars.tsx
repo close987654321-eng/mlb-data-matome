@@ -12,29 +12,29 @@ export default function TwoPillars({ watchCount, asOf }: { watchCount: number; a
   return (
     <section className="grid gap-px overflow-hidden border-y border-line bg-line sm:grid-cols-2">
       <Link href="/watch" className="group bg-paper px-4 py-7 transition-colors hover:bg-surface sm:px-7">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
-          <span aria-hidden>▶</span> Watch-Along
+        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-mute">
+          Watch-Along
         </span>
-        <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink">{t('nav.watch')}</h2>
+        <h2 className="mt-3 text-2xl font-bold tracking-[-0.02em] text-ink">{t('nav.watch')}</h2>
         <p className="mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">
           {t('home.pillarWatchLead')}
         </p>
         <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink">
           {t('watch.count', { count: watchCount })}
-          <span className="text-accent transition-transform duration-300 group-hover:translate-x-1">→</span>
+          <span className="text-ink-soft transition-transform duration-300 group-hover:translate-x-1">→</span>
         </span>
       </Link>
       <Link href="/player" className="group bg-paper px-4 py-7 transition-colors hover:bg-surface sm:px-7">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
-          <span aria-hidden>📊</span> Stats
+        <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-ink-mute">
+          Stats
         </span>
-        <h2 className="mt-3 text-2xl font-bold tracking-tight text-ink">{t('nav.players')}</h2>
+        <h2 className="mt-3 text-2xl font-bold tracking-[-0.02em] text-ink">{t('nav.players')}</h2>
         <p className="mt-2 max-w-xs text-sm leading-relaxed text-ink-soft">
           {t('home.pillarPlayerLead')}
         </p>
         <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-ink">
           {asOf ? t('player.asOf', { date: asOf }) : t('home.playersAll')}
-          <span className="text-accent transition-transform duration-300 group-hover:translate-x-1">→</span>
+          <span className="text-ink-soft transition-transform duration-300 group-hover:translate-x-1">→</span>
         </span>
       </Link>
     </section>

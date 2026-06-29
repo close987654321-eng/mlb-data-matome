@@ -52,7 +52,7 @@ function RoleGroups({
         return (
           <div key={g.id}>
             <h3 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-              <span className="h-3 w-1 rounded-full bg-accent" />
+              <span className="h-3 w-[2px] bg-ink" />
               {titleOf(g.titleKey)}
             </h3>
             <StatRail rows={rows} league={league} labels={labels} dense />
@@ -108,7 +108,7 @@ export default async function PlayerDetail({
       {/* 詳細ブロックの見出し（視覚は summary が担うので SR 向けに sr-only）。見出しナビの h2→h3 の階層を保つ。 */}
       <h2 className="sr-only">{t('statsTitle')}</h2>
       <details className="group">
-        <summary className="flex w-full cursor-pointer list-none items-center justify-between border-y border-line py-3 text-sm font-semibold text-ink transition-colors hover:text-accent [&::-webkit-details-marker]:hidden">
+        <summary className="flex w-full cursor-pointer list-none items-center justify-between border-y border-line py-3 text-sm font-semibold text-ink transition-colors hover:text-ink [&::-webkit-details-marker]:hidden">
           {t('detailToggle')}
           <span aria-hidden="true" className="text-ink-soft transition-transform group-open:rotate-180">▾</span>
         </summary>
@@ -135,7 +135,7 @@ export default async function PlayerDetail({
           {fieldRows.length > 0 && season.fielding && (
             <div className="mt-6">
               <h3 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-                <span className="h-3 w-1 rounded-full bg-accent" />
+                <span className="h-3 w-[2px] bg-ink" />
                 {t('grpFielding')}（{season.fielding.position}）
               </h3>
               <StatRail rows={fieldRows} league={season.league} labels={labels} dense />
@@ -146,7 +146,7 @@ export default async function PlayerDetail({
           {speedValue && (
             <div className="mt-6">
               <h3 className="mb-2.5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-                <span className="h-3 w-1 rounded-full bg-accent" />
+                <span className="h-3 w-[2px] bg-ink" />
                 {t('grpSpeed')}
               </h3>
               <StatRail rows={[{ label: SPEED_FIELD.label, value: speedValue }]} league={season.league} labels={labels} dense />

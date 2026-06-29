@@ -11,9 +11,10 @@
     text-rendering: optimizeLegibility;
   }
 
+  /* 選択色はインク基調（無彩色）。赤は誌面の一点に温存し、選択ハイライトでは主張させない。 */
   ::selection {
-    background-color: #C8102E;
-    color: #fff;
+    background-color: #191A1C;
+    color: #FAFAF9;
   }
 }
 

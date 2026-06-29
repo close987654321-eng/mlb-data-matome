@@ -16,9 +16,11 @@ export default function SeriesBadge({
   if (!info) return null;
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-0.5 text-xs font-semibold text-paper ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-[2px] bg-accent px-2.5 py-1 text-xs font-semibold text-paper ${className}`}
     >
-      <span aria-hidden>▶</span>
+      <svg viewBox="0 0 24 24" className="h-2.5 w-2.5 fill-current" aria-hidden>
+        <path d="M8 5v14l11-7z" />
+      </svg>
       {info.badge[locale]}
     </span>
   );

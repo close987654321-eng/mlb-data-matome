@@ -18,8 +18,10 @@ export default function StickyVideo({ media, sourceUrl, hintLabel }: Props) {
   return (
     <div className="sticky top-[96px] z-10 -mx-2 bg-paper px-2 pb-3 pt-1 sm:top-16">
       <MediaEmbed media={media} sourceUrl={sourceUrl} />
-      <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-accent">
-        <span aria-hidden>▶</span>
+      <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-ink-soft">
+        <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current" aria-hidden>
+          <path d="M8 5v14l11-7z" />
+        </svg>
         {hintLabel}
       </p>
     </div>

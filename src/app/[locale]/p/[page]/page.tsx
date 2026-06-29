@@ -53,7 +53,7 @@ export default async function FeedPage({
   return (
     <div className="space-y-10">
       <div className="flex items-center gap-3">
-        <span className="h-4 w-1 rounded-full bg-accent" />
+        <span className="h-4 w-[2px] bg-ink" />
         <h1 className="text-sm font-semibold uppercase tracking-wider text-ink">
           {t('home.latest')}
         </h1>

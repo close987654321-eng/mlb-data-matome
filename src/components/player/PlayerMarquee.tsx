@@ -69,7 +69,7 @@ export default async function PlayerMarquee({
 
   const tick = (label: string) => (
     <div className="mb-2.5 flex items-center gap-2 text-xs font-semibold text-ink-soft">
-      <span className="h-3 w-1 rounded-full bg-accent" />
+      <span className="h-3 w-[2px] bg-ink" />
       {label}
     </div>
   );

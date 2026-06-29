@@ -53,8 +53,8 @@ export default function RankMeter({
 
   const trackH = variant === 'hero' ? 'h-[4px]' : 'h-[3px]';
   const labelSize = variant === 'hero' ? 'text-[11px]' : 'text-[10px]';
-  const fillTone = strong ? 'bg-accent' : 'bg-ink-soft/45';
-  const textTone = strong ? 'text-accent font-bold' : 'text-ink-soft font-medium';
+  const fillTone = strong ? 'bg-ink' : 'bg-ink-soft/40';
+  const textTone = strong ? 'text-ink font-bold' : 'text-ink-soft font-medium';
 
   return (
     <div role="img" aria-label={aria} className="w-full">

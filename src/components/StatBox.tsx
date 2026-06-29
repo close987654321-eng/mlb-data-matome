@@ -29,7 +29,7 @@ export default function StatBox({
   return (
     <section className="mt-8">
       <h2 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-        <span className="h-3 w-1 rounded-full bg-accent" />
+        <span className="h-3 w-[2px] bg-ink" />
         {heading}
       </h2>
       <div className="space-y-4 rounded-xl border border-line bg-surface p-5">
@@ -41,7 +41,7 @@ export default function StatBox({
                 {(() => {
                   const slug = playerSlugByJaName(s.player);
                   return slug ? (
-                    <Link href={`/player/${slug}`} className="hover:text-accent hover:underline">
+                    <Link href={`/player/${slug}`} className="hover:text-ink hover:underline">
                       {s.player}
                     </Link>
                   ) : (
@@ -53,7 +53,7 @@ export default function StatBox({
                 )}
               </p>
               {s.note && (
-                <span className="shrink-0 rounded-full bg-accent/10 px-2 py-0.5 text-xs font-semibold text-accent">
+                <span className="shrink-0 rounded-[2px] border border-line px-2 py-0.5 text-xs font-semibold text-ink-soft">
                   {s.note}
                 </span>
               )}

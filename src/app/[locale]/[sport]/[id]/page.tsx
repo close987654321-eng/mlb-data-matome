@@ -194,7 +194,7 @@ export default async function ThreadDetailPage({
       )}
 
       <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
-        <span className="font-medium uppercase tracking-wider text-accent">
+        <span className="font-medium uppercase tracking-wider text-ink-soft">
           {locale === 'ja' ? info.labelJa : info.labelEn}
         </span>
         <span>{thread.subreddit}</span>
@@ -212,7 +212,7 @@ export default async function ThreadDetailPage({
       {thread.tags && <TagList tags={thread.tags} />}
 
       {hook && (
-        <figure className="mt-8 border-l-4 border-accent pl-5">
+        <figure className="mt-8 border-l-4 border-ink pl-5">
           <blockquote className="text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug">
             “{hook.bodyJa}”
           </blockquote>
@@ -245,11 +245,15 @@ export default async function ThreadDetailPage({
             <Link
               key={p.slug}
               href={`/player/${p.slug}`}
-              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full bg-surface px-4 text-sm font-medium text-accent ring-1 ring-line transition-colors hover:bg-paper"
+              className="inline-flex min-h-[44px] items-center gap-1.5 rounded-[3px] bg-surface px-4 text-sm font-medium text-ink ring-1 ring-line transition-colors hover:bg-paper"
             >
-              <span aria-hidden="true">📊</span>
+              <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current text-ink-mute" aria-hidden>
+                <rect x="3" y="13" width="4" height="8" />
+                <rect x="10" y="8" width="4" height="13" />
+                <rect x="17" y="4" width="4" height="17" />
+              </svg>
               {t('player.hubCta', { name: p.nameJa })}
-              <span aria-hidden="true">→</span>
+              <span aria-hidden="true" className="text-ink-mute">→</span>
             </Link>
           ))}
         </p>
@@ -283,7 +287,7 @@ export default async function ThreadDetailPage({
 
           <section className="mt-10">
             <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-              <span className="h-3 w-1 rounded-full bg-accent" />
+              <span className="h-3 w-[2px] bg-ink" />
               {t('threads.pickedComments', { total: thread.totalComments })}
             </h2>
             <ul className="space-y-5">
@@ -291,7 +295,7 @@ export default async function ThreadDetailPage({
                 <li
                   key={i}
                   className={`rounded-xl border p-5 ${
-                    c.isHighlight ? 'border-accent/30 bg-accent/[0.04]' : 'border-line bg-surface'
+                    c.isHighlight ? 'border-ink/20 bg-ink/[0.03]' : 'border-line bg-surface'
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs text-ink-soft">
@@ -322,7 +326,7 @@ export default async function ThreadDetailPage({
           href={thread.sourceUrl}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-accent"
+          className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
         >
           {t('threads.viewSource')}
           <span aria-hidden>→</span>

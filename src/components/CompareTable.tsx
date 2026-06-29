@@ -140,7 +140,7 @@ export default function CompareTable({
                     type="button"
                     onClick={() => onSort(c)}
                     className={`inline-flex items-center gap-0.5 transition-colors hover:text-ink ${
-                      c.key === sortKey ? 'text-accent' : ''
+                      c.key === sortKey ? 'text-ink font-semibold' : ''
                     }`}
                   >
                     {c.label}
@@ -166,13 +166,13 @@ export default function CompareTable({
                       <Link
                         href={`/player/${r.slug}`}
                         onClick={(e) => e.stopPropagation()}
-                        className="font-medium text-ink group-hover:text-accent"
+                        className="font-medium text-ink group-hover:text-ink"
                       >
                         {r.name}
                       </Link>
                       {r.team && <span className="text-[10px] text-ink-soft">{r.team}</span>}
                     </span>
-                    <span aria-hidden className="ml-auto shrink-0 text-xs text-ink-soft transition-colors group-hover:text-accent">
+                    <span aria-hidden className="ml-auto shrink-0 text-xs text-ink-soft transition-colors group-hover:text-ink">
                       ›
                     </span>
                   </span>

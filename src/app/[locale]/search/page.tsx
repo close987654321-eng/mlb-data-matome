@@ -64,11 +64,11 @@ export default async function SearchPage({
             defaultValue={query}
             placeholder={t('search.placeholder')}
             aria-label={t('search.heading')}
-            className="w-full rounded-lg border border-line bg-white px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+            className="w-full rounded-lg border border-line bg-white px-4 py-2 text-sm text-ink outline-none focus:border-ink"
           />
           <button
             type="submit"
-            className="shrink-0 rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white"
+            className="shrink-0 rounded-lg bg-ink px-5 py-2 text-sm font-semibold text-white"
           >
             {t('search.button')}
           </button>

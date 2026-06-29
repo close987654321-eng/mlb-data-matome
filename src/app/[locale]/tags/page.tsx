@@ -41,7 +41,7 @@ export default async function TagsPage({ params }: { params: Promise<{ locale: L
       <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: t('tags.allTitle') }]} />
 
       <section className="border-b border-line pb-6">
-        <span className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+        <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
           {t('tag.eyebrow')}
         </span>
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{t('tags.allTitle')}</h1>
@@ -54,7 +54,7 @@ export default async function TagsPage({ params }: { params: Promise<{ locale: L
             <Link
               key={tag}
               href={`/tag/${encodeURIComponent(tag)}`}
-              className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+              className="inline-flex items-center gap-1 rounded-[2px] border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-ink hover:text-ink"
             >
               #{tag}
               <span className="text-xs text-ink-soft">{count}</span>

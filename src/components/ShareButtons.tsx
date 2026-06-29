@@ -56,7 +56,7 @@ export default function ShareButtons({ url, title }: Props) {
   };
 
   const btn =
-    'inline-flex items-center gap-1.5 rounded-full border border-line px-3.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-accent hover:text-accent';
+    'inline-flex items-center gap-1.5 rounded-[2px] border border-line px-3.5 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-ink hover:text-ink';
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -81,7 +81,7 @@ export default function ShareButtons({ url, title }: Props) {
         </span>
         はてブ
         {hatenaCount !== null && (
-          <span className="ml-0.5 rounded-full bg-accent/10 px-1.5 text-[11px] font-bold text-accent">
+          <span className="ml-0.5 rounded-full bg-ink/[0.06] px-1.5 text-[11px] font-bold text-ink-soft">
             {hatenaCount}
           </span>
         )}

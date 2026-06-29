@@ -27,8 +27,8 @@ export default function ColumnCard({ column, locale, featured = false, priority 
   return (
     <Link href={`/columns/${column.id}`} className="group block">
       <article className={featured ? 'grid gap-5 sm:grid-cols-2 sm:items-center' : ''}>
-        <div className="overflow-hidden rounded-lg">
-          <div className="transition-transform duration-500 group-hover:scale-[1.03]">
+        <div className="overflow-hidden rounded-[3px]">
+          <div className="transition-transform duration-[600ms] ease-out group-hover:scale-[1.02]">
             <ArticleCover
               sport={column.sport}
               locale={locale}
@@ -41,13 +41,13 @@ export default function ColumnCard({ column, locale, featured = false, priority 
         </div>
 
         <div className={featured ? '' : 'pt-3'}>
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-ink-soft">
-            <span className="font-medium uppercase tracking-wider text-accent">{kindLabel}</span>
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-ink-mute">
+            <span className="font-semibold tracking-wide text-ink-soft">{kindLabel}</span>
             {column.source && <span>{column.source}</span>}
           </div>
 
           <h3
-            className={`mt-2 font-bold leading-snug text-ink decoration-accent/40 underline-offset-4 group-hover:underline ${
+            className={`mt-2 font-bold leading-snug tracking-[-0.01em] text-ink decoration-ink/25 underline-offset-4 group-hover:underline ${
               featured ? 'text-2xl sm:text-[1.7rem]' : 'text-lg'
             }`}
           >

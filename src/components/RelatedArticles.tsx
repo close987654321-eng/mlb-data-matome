@@ -65,7 +65,7 @@ export default async function RelatedArticles({
   return (
     <section className="mt-14 border-t border-line pt-10">
       <div className="mb-7 flex items-center gap-3">
-        <span className="h-4 w-1 rounded-full bg-accent" />
+        <span className="h-4 w-[2px] bg-ink" />
         <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">
           {t('related.title')}
         </h2>

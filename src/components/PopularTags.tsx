@@ -13,9 +13,8 @@ export default async function PopularTags({ limit = 12 }: { limit?: number }) {
   const t = await getTranslations();
 
   return (
-    <section aria-label={t('popularTags.heading')} className="rounded-xl border border-line bg-surface p-5">
-      <h2 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-        <span className="h-3 w-1 rounded-full bg-accent" />
+    <section aria-label={t('popularTags.heading')} className="rounded-[4px] border border-line bg-surface p-5">
+      <h2 className="mb-3 text-xs font-semibold tracking-wide text-ink-soft">
         {t('popularTags.heading')}
       </h2>
       <div className="flex flex-wrap items-center gap-2">
@@ -23,16 +22,16 @@ export default async function PopularTags({ limit = 12 }: { limit?: number }) {
           <Link
             key={tag}
             href={`/tag/${encodeURIComponent(tag)}`}
-            className="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex items-center gap-1 rounded-[2px] border border-line px-3 py-1 text-sm text-ink transition-colors hover:border-ink hover:bg-paper"
           >
             #{tag}
-            <span className="text-xs text-ink-soft">{count}</span>
+            <span className="text-xs text-ink-mute">{count}</span>
           </Link>
         ))}
         {/* ロングテール（13位以下・1件タグ）への到達経路。これが無いと人気タグが行き止まりになる。 */}
         <Link
           href="/tags"
-          className="inline-flex items-center rounded-full px-2 py-1 text-sm font-medium text-accent transition-colors hover:text-accent-ink"
+          className="inline-flex items-center px-2 py-1 text-sm font-medium text-ink-soft transition-colors hover:text-ink"
         >
           {t('tags.viewAll')} →
         </Link>

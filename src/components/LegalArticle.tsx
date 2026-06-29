@@ -34,7 +34,7 @@ export default function LegalArticle({
           <section key={i}>
             {section.heading && (
               <h2 className="mb-3 flex items-center gap-2 text-base font-bold text-ink">
-                <span className="h-3 w-1 rounded-full bg-accent" />
+                <span className="h-3 w-[2px] bg-ink" />
                 {section.heading}
               </h2>
             )}

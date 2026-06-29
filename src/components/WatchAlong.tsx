@@ -38,7 +38,7 @@ export default function WatchAlong({
       )}
 
       <h2 className="mb-4 mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-        <span className="h-3 w-1 rounded-full bg-accent" />
+        <span className="h-3 w-[2px] bg-ink" />
         {pickedLabel}
       </h2>
       <ul className="space-y-4">
@@ -46,7 +46,7 @@ export default function WatchAlong({
           <li
             key={i}
             className={`rounded-xl border p-5 ${
-              c.isHighlight ? 'border-accent/30 bg-accent/[0.04]' : 'border-line bg-surface'
+              c.isHighlight ? 'border-ink/20 bg-ink/[0.03]' : 'border-line bg-surface'
             }`}
           >
             <div className="flex items-center justify-between text-xs text-ink-soft">
