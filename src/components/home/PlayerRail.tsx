@@ -37,7 +37,7 @@ export default function PlayerRail({ items }: { items: PlayerRailItem[] }) {
               width={44}
               height={44}
               loading="lazy"
-              className="h-11 w-11 rounded-full bg-paper object-cover grayscale transition-[filter] duration-500 group-hover:grayscale-0"
+              className="h-11 w-11 rounded-full bg-paper object-cover"
               style={p.teamColor ? { boxShadow: `0 0 0 2px ${p.teamColor}` } : undefined}
             />
             <span className="mt-2.5 block text-sm font-bold text-ink transition-colors group-hover:text-ink-soft">

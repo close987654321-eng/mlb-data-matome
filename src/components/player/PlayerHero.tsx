@@ -70,16 +70,16 @@ export default async function PlayerHero({
           <p className="mt-1 text-sm font-semibold text-ink-soft">{t('hubH1Sub', { year: String(year) })}</p>
         </div>
 
-        {/* 顔写真（グレースケール／ホバーで原色）＋所属ロゴのバッジ＋チームカラーの下罫。
-            画像はすべて MLB 公式 CDN から直リンク（自サイトに再ホストしない）。 */}
+        {/* 顔写真（カラー）＋所属ロゴのバッジ＋チームカラーの下罫。公式CDNの素材は 2:3 の縦長なので
+            器も縦長にしてクロップ（見切れ）を避ける。画像は MLB 公式 CDN から直リンク（再ホストしない）。 */}
         <div className="relative shrink-0">
           {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式CDNの顔写真を直リンク（再ホストしない） */}
           <img
             src={portrait}
             alt={season.team ? `${player.nameJa}（${season.team}）` : player.nameJa}
-            width={104}
-            height={104}
-            className="h-[88px] w-[88px] rounded-[3px] bg-paper object-cover object-top grayscale transition-[filter] duration-500 hover:grayscale-0 sm:h-[104px] sm:w-[104px]"
+            width={108}
+            height={162}
+            className="h-[144px] w-[96px] rounded-[3px] bg-paper object-cover object-top sm:h-[162px] sm:w-[108px]"
             style={team ? { borderBottom: `3px solid ${team.color}` } : undefined}
           />
           {team && (
