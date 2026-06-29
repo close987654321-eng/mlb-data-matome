@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/navigation';
+import { headshotUrl } from '@/lib/teams';
 import Rail from './Rail';
 
 /** 1 選手ぶんの表示データ（page.tsx 側で pickHero から整形して渡す＝この層は数値を作らない）。 */
@@ -8,6 +9,9 @@ export type PlayerRailItem = {
   name: string;
   statValue: string;
   statLabel: string | null;
+  mlbId: number;
+  /** 所属チームの主要カラー（アバターのリング）。未所属なら無し。 */
+  teamColor?: string;
 };
 
 /**
@@ -24,16 +28,26 @@ export default function PlayerRail({ items }: { items: PlayerRailItem[] }) {
         <li key={p.slug} className="shrink-0 snap-start">
           <Link
             href={`/player/${p.slug}`}
-            className="group block w-32 rounded-xl p-3 transition-colors hover:bg-surface"
+            className="group block w-32 rounded-[3px] p-3 transition-colors hover:bg-surface"
           >
-            <span className="block text-sm font-bold text-ink transition-colors group-hover:text-accent">
+            {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式CDNの顔写真を直リンク（再ホストしない） */}
+            <img
+              src={headshotUrl(p.mlbId, 'spot')}
+              alt=""
+              width={44}
+              height={44}
+              loading="lazy"
+              className="h-11 w-11 rounded-full bg-paper object-cover grayscale transition-[filter] duration-500 group-hover:grayscale-0"
+              style={p.teamColor ? { boxShadow: `0 0 0 2px ${p.teamColor}` } : undefined}
+            />
+            <span className="mt-2.5 block text-sm font-bold text-ink transition-colors group-hover:text-ink-soft">
               {p.name}
             </span>
-            <span className="mt-3 block text-[2rem] font-bold leading-none tabular-nums text-ink">
+            <span className="mt-3 block text-[2rem] font-bold leading-none tracking-[-0.02em] tabular-nums text-ink">
               {p.statValue}
             </span>
             {p.statLabel && (
-              <span className="mt-1.5 block text-[10px] uppercase tracking-[0.15em] text-ink-soft">
+              <span className="mt-1.5 block text-[10px] uppercase tracking-[0.15em] text-ink-mute">
                 {p.statLabel}
               </span>
             )}

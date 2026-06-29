@@ -8,10 +8,12 @@ import { PLAYERS } from '@/lib/players';
 import { getPlayersSnapshot, type PlayerSeason } from '@/lib/playerStats';
 import { pickHero } from '@/lib/playerHero';
 import { SPORTS, SPORT_INFO, type Sport } from '@/lib/sports';
+import { getTeam } from '@/lib/teams';
 import FeedCard from '@/components/FeedCard';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
+import SectionHeading from '@/components/SectionHeading';
 import SearchConsole from '@/components/home/SearchConsole';
 import TwoPillars from '@/components/home/TwoPillars';
 import PlayerRail, { type PlayerRailItem } from '@/components/home/PlayerRail';
@@ -68,7 +70,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     .map(({ p, s }) => {
       const hero = pickHero(s as PlayerSeason);
       const statLabel = hero.statLabel ?? (hero.kind === 'warTotal' ? t('threads.statWar') : null);
-      return { slug: p.slug, name: locale === 'en' ? p.nameEn : p.nameJa, statValue: hero.value, statLabel };
+      return {
+        slug: p.slug,
+        name: locale === 'en' ? p.nameEn : p.nameJa,
+        statValue: hero.value,
+        statLabel,
+        mlbId: p.mlbId,
+        teamColor: getTeam((s as PlayerSeason).team)?.color,
+      };
     });
 
   // 競技別ゾーン。主役 MLB は枠を 2 倍（8件）＋見出し大、ボクシング/MMA は各4件で専用ゾーンを確保。
@@ -132,21 +141,23 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       {/* ネームプレート（紙面の題字）＋本日の日付＋説明 h1。旧ロゴ画像のメインビジュアルは撤去。
           ヘッダーの小ロゴ・OG/構造化データの Organization.logo は logo.png のまま温存している。 */}
-      <section className="border-b-2 border-ink pb-5">
+      {/* 題字（マスト）。サイト唯一の赤は、ここの細い縦罫の一点にだけ宿す（色は極小）。
+          丸ピルのバーをやめ、シャープな 3px 罫に。題字は字間を詰めて誌面の風格を出す。 */}
+      <section className="border-b border-ink pb-5">
         <div className="flex items-end justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span className="h-8 w-1.5 rounded-full bg-accent sm:h-10" />
-            <span className="text-3xl font-bold tracking-tight text-ink sm:text-5xl">
+          <div className="flex items-center gap-3.5">
+            <span className="h-8 w-[3px] bg-accent sm:h-11" />
+            <span className="text-3xl font-bold tracking-[-0.02em] text-ink sm:text-5xl">
               {t('site.title')}
             </span>
           </div>
           {issue && (
-            <span className="whitespace-nowrap pb-1 text-[11px] uppercase tracking-[0.18em] text-ink-soft sm:text-xs">
+            <span className="whitespace-nowrap pb-1.5 text-[11px] tracking-[0.12em] text-ink-mute tabular-nums sm:text-xs">
               {issue} {t('home.updated')}
             </span>
           )}
         </div>
-        <h1 className="mt-5 text-lg font-bold leading-snug text-ink sm:text-xl">
+        <h1 className="mt-5 text-lg font-bold leading-snug tracking-[-0.01em] text-ink sm:text-xl">
           {t('home.heroTitle')}
         </h1>
         <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-soft">{t('home.heroBody')}</p>
@@ -156,12 +167,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       {heroItem && (
         <section className="space-y-4">
-          <div className="flex items-center gap-3">
-            <span className="h-4 w-1 rounded-full bg-accent" />
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">
-              {t('home.todays')}
-            </h2>
-          </div>
+          <SectionHeading label={t('home.todays')} />
           <FeedCard item={heroItem} locale={locale} featured priority />
         </section>
       )}
@@ -176,12 +182,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       {restItems.length > 0 && (
         <section className="space-y-8">
-          <div className="flex items-center gap-3">
-            <span className="h-4 w-1 rounded-full bg-accent" />
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-ink">
-              {t('home.more')}
-            </h2>
-          </div>
+          <SectionHeading label={t('home.more')} />
           <FeedGrid items={restItems} locale={locale} />
           <Pagination basePath="" page={1} totalPages={paged.totalPages} />
         </section>

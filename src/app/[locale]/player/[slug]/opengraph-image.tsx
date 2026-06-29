@@ -5,6 +5,7 @@ import { getPlayerSeason, getPlayersSnapshot, type PlayerSeason } from '@/lib/pl
 import { pickHero, pickBestRankCaption, type Hero } from '@/lib/playerHero';
 import { wrc, signedInt, oneDecimal } from '@/lib/statGroups';
 import { getTeamColor, ACCENT } from '@/lib/teamColors';
+import { getTeam, teamLogoUrl, headshotUrl } from '@/lib/teams';
 import { locales, type Locale } from '@/lib/i18n';
 import { CREAM, MUTED, FAINT, RULE, loadOgBg, loadOgFonts, ogFrame } from '@/lib/ogCard';
 
@@ -120,6 +121,24 @@ function footerTokens(season: PlayerSeason, hero: Hero): Tok[] {
     .slice(0, 4);
 }
 
+/**
+ * 顔写真・ロゴを data URI 化して取り込む（Satori は <img> に http URL も渡せるが、ビルド時の
+ * 外部フェッチ失敗で OG 生成ごと落ちるのを避けるため、ここで取得して base64 に inline する。
+ * 取得失敗時は null＝写真/ロゴ無しの従来カードに自然縮退する＝ビルドを壊さない）。
+ * 画像は MLB 公式 CDN から取得し、データはここでの一時利用のみ（記事/サイトに再ホストしない）。
+ */
+async function loadImageData(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const ct = res.headers.get('content-type') ?? 'image/png';
+    const b64 = Buffer.from(await res.arrayBuffer()).toString('base64');
+    return `data:${ct};base64,${b64}`;
+  } catch {
+    return null;
+  }
+}
+
 // 内側コンテンツ枠（背景の上に乗る層）。padding と flex はここが持つ＝背景/黒レイヤーは全面。
 function containerStyle() {
   return {
@@ -157,6 +176,34 @@ export default async function Image({ params }: { params: { locale: Locale; slug
 
   const teamColor = getTeamColor(season?.team);
   const yr = snap.season || 2026; // 年はスナップショット由来（ベタ書きしない）。未生成のみ 2026 フォールバック。
+
+  // 顔写真＋所属ロゴ（MLB公式CDN→data URI）。読み込めた時だけ出す＝オフライン/失敗でもカードは成立。
+  const teamInfo = getTeam(season?.team);
+  const [portraitImg, logoImg] = await Promise.all([
+    player ? loadImageData(headshotUrl(player.mlbId, 'portrait')) : null,
+    teamInfo ? loadImageData(teamLogoUrl(teamInfo.id)) : null,
+  ]);
+  // 顔写真タイル: チーム色の枠＋右下に白タイルのロゴバッジ（暗色ロゴでも沈まないよう下地は CREAM）。
+  const portraitBlock = portraitImg ? (
+    <div style={{ display: 'flex', position: 'relative', marginRight: 40, flexShrink: 0 }}>
+      {/* eslint-disable-next-line @next/next/no-img-element -- data URI 化済みの公式写真 */}
+      <img
+        src={portraitImg}
+        width={168}
+        height={168}
+        style={{ borderRadius: 10, border: `3px solid ${teamColor}`, objectFit: 'cover' }}
+      />
+      {logoImg ? (
+        // eslint-disable-next-line @next/next/no-img-element -- data URI 化済みの公式ロゴ
+        <img
+          src={logoImg}
+          width={60}
+          height={60}
+          style={{ position: 'absolute', bottom: -14, right: -14, borderRadius: 8, background: CREAM, padding: 7, objectFit: 'contain' }}
+        />
+      ) : null}
+    </div>
+  ) : null;
 
   // 選手名: 和名は6字までが主役映え。長いカタカナ中黒名（ライバル等）や和フォント未生成は英字へ。
   const nameJa = player?.nameJa ?? '';
@@ -215,13 +262,16 @@ export default async function Image({ params }: { params: { locale: Locale; slug
         bg,
         <div style={containerStyle()}>
           {header}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', fontFamily: useJa ? JP : DISP, fontWeight: 900, fontSize: useJa ? nameSizeJa : nameEnSize, color: CREAM, lineHeight: 1.05 }}>
-              {useJa ? nameJa : nameEn}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {portraitBlock}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', fontFamily: useJa ? JP : DISP, fontWeight: 900, fontSize: useJa ? nameSizeJa : nameEnSize, color: CREAM, lineHeight: 1.05 }}>
+                {useJa ? nameJa : nameEn}
+              </div>
+              {useJa ? (
+                <div style={{ display: 'flex', fontFamily: DISP, fontSize: 28, color: MUTED, letterSpacing: 3, marginTop: 12 }}>{nameEn}</div>
+              ) : null}
             </div>
-            {useJa ? (
-              <div style={{ display: 'flex', fontFamily: DISP, fontSize: 28, color: MUTED, letterSpacing: 3, marginTop: 12 }}>{nameEn}</div>
-            ) : null}
           </div>
           <div style={{ display: 'flex', alignItems: 'center' }}>{domain}</div>
         </div>,
@@ -252,16 +302,19 @@ export default async function Image({ params }: { params: { locale: Locale; slug
       <div style={containerStyle()}>
         {header}
 
-        {/* 主役: 左=選手名 / 右=巨大数字＋チーム色下線＋順位リテラル */}
+        {/* 主役: 左=顔写真＋選手名 / 右=巨大数字＋チーム色下線＋順位リテラル */}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', width: '100%' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, maxWidth: 720, overflow: 'hidden' }}>
-            <div style={{ display: 'flex', fontFamily: useJa ? JP : DISP, fontWeight: 900, fontSize: useJa ? nameSizeJa : nameEnSize, color: CREAM, lineHeight: 1.04 }}>
-              {useJa ? nameJa : nameEn}
+          <div style={{ display: 'flex', alignItems: 'flex-end', flex: 1, minWidth: 0 }}>
+            {portraitBlock}
+            <div style={{ display: 'flex', flexDirection: 'column', maxWidth: portraitImg ? 470 : 720, overflow: 'hidden' }}>
+              <div style={{ display: 'flex', fontFamily: useJa ? JP : DISP, fontWeight: 900, fontSize: useJa ? nameSizeJa : nameEnSize, color: CREAM, lineHeight: 1.04 }}>
+                {useJa ? nameJa : nameEn}
+              </div>
+              {useJa ? (
+                <div style={{ display: 'flex', fontFamily: DISP, fontSize: 27, color: MUTED, letterSpacing: 3, marginTop: 10 }}>{nameEn}</div>
+              ) : null}
+              <div style={{ display: 'flex', fontFamily: JP, fontSize: 26, color: MUTED, marginTop: 22 }}>{metaLine}</div>
             </div>
-            {useJa ? (
-              <div style={{ display: 'flex', fontFamily: DISP, fontSize: 27, color: MUTED, letterSpacing: 3, marginTop: 10 }}>{nameEn}</div>
-            ) : null}
-            <div style={{ display: 'flex', fontFamily: JP, fontSize: 26, color: MUTED, marginTop: 22 }}>{metaLine}</div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0, marginLeft: 36 }}>
