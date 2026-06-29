@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Link, useRouter } from '@/lib/navigation';
+import { headshotUrl } from '@/lib/teams';
 
 // 見比べ用のソート可能な比較表。列ヘッダクリックで並び替え（数値）。サーバーで全行を
 // 渡すので HTML にデータは載る（クローラ可）＋クライアントでソートだけ足す。
@@ -15,6 +16,10 @@ export type CompareRow = {
   slug: string;
   name: string;
   team?: string;
+  /** 顔写真（MLB公式CDN直リンク）の選手ID。無ければアバターを出さない。 */
+  mlbId?: number;
+  /** 所属チームの主要カラー（アバターのリング）。 */
+  teamColor?: string;
   values: Record<string, CompareCell>;
 };
 
@@ -124,10 +129,10 @@ export default function CompareTable({
         // sticky を壊す既知バグなので入れない。
         className="overflow-x-auto overscroll-x-contain px-5 will-change-scroll [scrollbar-color:theme(colors.line)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-line [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar]:h-1.5 sm:px-0"
       >
-        <table className="w-full min-w-[560px] table-fixed border-collapse text-sm">
+        <table className="w-full min-w-[600px] table-fixed border-collapse text-sm">
           <colgroup>
-            {/* 固定する選手名列を圧縮（従来は余白を吸って肥大していた）。残りの数値列は均等割り。 */}
-            <col className="w-[116px] sm:w-[132px]" />
+            {/* 固定する選手名列。顔写真アバターぶん少し広めに取る。残りの数値列は均等割り。 */}
+            <col className="w-[156px] sm:w-[176px]" />
           </colgroup>
           <thead>
             <tr className="border-b border-line text-ink-soft">
@@ -160,7 +165,20 @@ export default function CompareTable({
                 className="group cursor-pointer border-b border-line/60 hover:bg-surface"
               >
                 <td className="sticky left-0 z-20 border-r border-line bg-paper px-2.5 py-3 text-left group-hover:bg-surface">
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-2">
+                    {/* 顔写真アバター（カラー・チームカラーのリング）。MLB公式CDNから直リンク。 */}
+                    {r.mlbId != null && (
+                      // eslint-disable-next-line @next/next/no-img-element -- MLB公式CDNの顔写真を直リンク（再ホストしない）
+                      <img
+                        src={headshotUrl(r.mlbId, 'spot')}
+                        alt=""
+                        width={32}
+                        height={32}
+                        loading="lazy"
+                        className="h-8 w-8 shrink-0 rounded-full bg-paper object-cover"
+                        style={r.teamColor ? { boxShadow: `0 0 0 1.5px ${r.teamColor}` } : undefined}
+                      />
+                    )}
                     {/* 名前（上段）＋チーム名（下段）の2段。横並びだと長い名前が窮屈なので縦に積む。 */}
                     <span className="flex min-w-0 flex-col leading-tight">
                       <Link

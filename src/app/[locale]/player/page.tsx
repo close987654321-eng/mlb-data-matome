@@ -4,6 +4,7 @@ import { getAllThreads } from '@/lib/data';
 import { PLAYERS, hubEligible } from '@/lib/players';
 import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import CompareTable, { type CompareCol, type CompareRow } from '@/components/CompareTable';
+import { getTeam } from '@/lib/teams';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -115,22 +116,22 @@ export default async function PlayerIndexPage({
   // 日本人の比較表。ライバル（非日本人）は混ぜず、専用ブロックに出す（rival を除外）。
   const batRows: CompareRow[] = withStats
     .filter((x) => x.s!.hitting && !x.p.rival)
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: batValues(s!) }));
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: batValues(s!) }));
 
   // 今季のスター野手（大谷と比較）＝大谷＋強打者ライバル（野手 rival）。リーグ横断（AL/NL）で打WAR降順に見比べる。
   const mvpRows: CompareRow[] = withStats
     .filter((x) => x.s!.hitting && (x.p.rival || x.p.slug === 'shohei-ohtani'))
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: batValues(s!) }));
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: batValues(s!) }));
 
   const pitRows: CompareRow[] = withStats
     .filter((x) => x.s!.pitching && !x.p.rival)
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: pitValues(s!) }));
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: pitValues(s!) }));
 
   // サイヤング争い：日本人の候補（大谷・山本）＋ライバル投手（rival）を1つの表で見比べる。
   const cyJpSlugs = new Set(['shohei-ohtani', 'yoshinobu-yamamoto']);
   const cyRows: CompareRow[] = withStats
     .filter((x) => x.s!.pitching && (x.p.rival || cyJpSlugs.has(x.p.slug)))
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, values: pitValues(s!) }));
+    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: pitValues(s!) }));
 
   // ピラー（/player）から全ハブへ内部リンクを閉じる。比較表に出ない（MLB今季成績が無い）が記事のある
   // 選手（村上・岡本・ヌートバー等）への入口を一覧に持たせ、子ハブに評価・回遊を届ける。
