@@ -129,7 +129,9 @@ function footerTokens(season: PlayerSeason, hero: Hero): Tok[] {
  */
 async function loadImageData(url: string): Promise<string | null> {
   try {
-    const res = await fetch(url);
+    // タイムアウト必須: ビルド時に CDN が詰まると（60ルート×2枚の取得）ビルドごとハングするため、
+    // 各取得を 4 秒で打ち切り、失敗時は写真/ロゴ無しのカードへ自然縮退させる。
+    const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
     if (!res.ok) return null;
     const ct = res.headers.get('content-type') ?? 'image/png';
     const b64 = Buffer.from(await res.arrayBuffer()).toString('base64');
@@ -189,9 +191,9 @@ export default async function Image({ params }: { params: { locale: Locale; slug
       {/* eslint-disable-next-line @next/next/no-img-element -- data URI 化済みの公式写真 */}
       <img
         src={portraitImg}
-        width={168}
-        height={168}
-        style={{ borderRadius: 10, border: `3px solid ${teamColor}`, objectFit: 'cover' }}
+        width={148}
+        height={222}
+        style={{ borderRadius: 10, border: `3px solid ${teamColor}`, objectFit: 'cover', objectPosition: 'top' }}
       />
       {logoImg ? (
         // eslint-disable-next-line @next/next/no-img-element -- data URI 化済みの公式ロゴ
