@@ -576,17 +576,17 @@ function drawGameCardWide(canvas: HTMLCanvasElement, d: GameCardData, art: GameC
     ctx.fillText(String(c.score), c.x, 600);
   }
 
-  // ── 日本人選手のこの試合（あれば・1行を中央に）。
+  // ── 日本人選手のこの試合（あれば・1行を中央に）。テキストは大きめ（村山指示で2回り拡大）。
   if (d.lines.length) {
     const s = d.lines[0];
     const text = `${s.player}  ${s.line}`;
-    let fsz = 34;
-    const maxW = W - fx * 2 - 120;
+    let fsz = 48;
+    const maxW = W - fx * 2 - 100;
     ctx.font = `600 ${fsz}px ${SANS}`;
-    while (ctx.measureText(text).width > maxW && fsz > 20) { fsz -= 2; ctx.font = `600 ${fsz}px ${SANS}`; }
+    while (ctx.measureText(text).width > maxW && fsz > 26) { fsz -= 2; ctx.font = `600 ${fsz}px ${SANS}`; }
     ctx.textAlign = 'center';
-    ctx.fillStyle = wht(0.85);
-    ctx.fillText(text, W / 2, 690);
+    ctx.fillStyle = wht(0.9);
+    ctx.fillText(text, W / 2, 695);
   }
 
   // ── フッタ：ドメイン（送客）＋タグライン。

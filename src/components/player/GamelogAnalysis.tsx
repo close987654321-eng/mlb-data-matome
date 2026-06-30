@@ -28,11 +28,12 @@ type Col<R> = { key: string; label: string; num: (r: R) => number | string; cell
 
 const LAST_NS = [5, 10, 15, 20, 25, 30];
 
-/** SNS シェア用カードの形（縦長=フィード映え / 正方=万能）と実ピクセル。 */
-type CardFormat = 'portrait' | 'square';
+/** SNS シェア用カードの形（縦長=フィード映え / 正方=万能 / ワイド=X 4枚投稿の2×2グリッド向け）と実ピクセル。 */
+type CardFormat = 'portrait' | 'square' | 'wide';
 const CARD_DIMS: Record<CardFormat, { w: number; h: number }> = {
   portrait: { w: 1080, h: 1350 },
   square: { w: 1080, h: 1080 },
+  wide: { w: 1600, h: 800 }, // X(Twitter)4枚＝2×2タイル比(約2:1)。横長の専用レイアウトで描く
 };
 /** 画像カードに描くデータ。主役＝選手名/写真/ロゴ/期間。成績は強弱なしの均等グリッド（村山指示）。 */
 type CardData = {
@@ -76,7 +77,7 @@ export default function GamelogAnalysis({
         share: 'Share', copyText: 'Copy caption', copied: 'Copied',
         shareHeading: 'Share as an image', shareSub: 'A clean stat card for X, Instagram or your blog. Pick the period and format below — the card follows live.',
         shareCta: 'Make a share card', close: 'Close',
-        fmtPortrait: 'Portrait', fmtSquare: 'Square', period: 'Period', lastGroup: 'Recent', monthGroup: 'By month', tagline: 'Overseas reactions, in Japanese',
+        fmtPortrait: 'Portrait', fmtSquare: 'Square', fmtWide: 'X 4-up', period: 'Period', lastGroup: 'Recent', monthGroup: 'By month', tagline: 'Overseas reactions, in Japanese',
         date: 'Date', opp: 'Opp', result: 'Dec', win: 'W', loss: 'L', none: '—', asOf: (d: string) => `As of ${d}`,
         gameWar: 'Est. WAR', warNote: 'Per-game value estimated from each box score, calibrated so the season total matches the official WAR.',
         warDelta: 'Est. WAR in this span', covered: (n: number) => `${n} games with overseas-reaction digests`,
@@ -93,7 +94,7 @@ export default function GamelogAnalysis({
         share: 'シェアする', copyText: '投稿文をコピー', copied: 'コピーしました',
         shareHeading: '成績カードを画像でシェア', shareSub: 'X・インスタ・ブログにそのまま使える成績カード。期間と形を選ぶと、その場でカードが変わります。',
         shareCta: '成績カードを作る', close: '閉じる',
-        fmtPortrait: '縦長', fmtSquare: '正方形', period: '期間', lastGroup: '直近', monthGroup: '月別', tagline: '海外の反応まとめ',
+        fmtPortrait: '縦長', fmtSquare: '正方形', fmtWide: 'X4枚', period: '期間', lastGroup: '直近', monthGroup: '月別', tagline: '海外の反応まとめ',
         date: '日付', opp: '対戦', result: '結果', win: '勝', loss: '敗', none: '—', asOf: (d: string) => `${d}時点`,
         gameWar: '推定WAR', warNote: '各試合の成績から1試合ぶんを試算し、季節合計が公式WARに一致するよう補正した推定値です。',
         warDelta: '選択期間の推定WAR', covered: (n: number) => `海外の反応つき ${n}試合`,
@@ -910,7 +911,7 @@ export default function GamelogAnalysis({
                 </span>
               </div>
               <div className="inline-flex overflow-hidden rounded-[2px] border border-line">
-                {(['portrait', 'square'] as CardFormat[]).map((f) => (
+                {(['portrait', 'square', 'wide'] as CardFormat[]).map((f) => (
                   <button
                     key={f}
                     type="button"
@@ -920,7 +921,7 @@ export default function GamelogAnalysis({
                     }`}
                     aria-pressed={format === f}
                   >
-                    {f === 'portrait' ? t.fmtPortrait : t.fmtSquare}
+                    {f === 'portrait' ? t.fmtPortrait : f === 'square' ? t.fmtSquare : t.fmtWide}
                   </button>
                 ))}
               </div>
@@ -1030,6 +1031,7 @@ function WarSparkline({ points: pts }: { points: number[] }) {
  * 画像は MLB公式CDN（CORS可）を crossOrigin で読むので canvas は汚染されない（保存/共有が通る）。
  */
 function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, art: CardArt) {
+  if (format === 'wide') { drawCardWide(canvas, d, art); return; } // X4枚＝横長の専用レイアウト
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   // letterSpacing（eyebrow用）＝Chrome99+/Safari16.4+ で有効。未対応環境では no-op に縮退（型は交差で付与）。
@@ -1218,6 +1220,169 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   ctx.fillStyle = wht(0.45);
   ctx.font = `500 ${portrait ? 23 : 21}px ${SANS}`;
   ctx.fillText(d.tagline, W - fx - 24, H - 44);
+  ctx.textAlign = 'left';
+}
+
+/**
+ * 選手成績カード＝ワイド（X 4枚投稿の2×2タイル向け・1600×800）。右にフチなし顔写真、左に期間バナー＋
+ * 選手名＋ロゴ＋3×3 の成績グリッドを横長に組み替える。色・図形・法務 posture は縦長/正方と同じ。
+ * グリッドは行ピッチ適応式でフッタと被らないよう枠内に必ず収める。
+ */
+function drawCardWide(canvas: HTMLCanvasElement, d: CardData, art: CardArt) {
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  const ctxLS = ctx as CanvasRenderingContext2D & { letterSpacing: string };
+  const W = canvas.width; // 1600
+  const H = canvas.height; // 800
+  const wht = (a: number) => `rgba(255,255,255,${a})`;
+  const team = art.teamColor || '#191A1C';
+  const acc = teamAccent(team);
+  const accLt = lightenHex(acc, 0.18);
+  const fx = 30;
+
+  ctx.clearRect(0, 0, W, H);
+  // ── 背景：チーム色の地＋斜めスイープ＋役割シルエットの透かし。
+  const bg = ctx.createLinearGradient(0, 0, W * 0.4, H);
+  bg.addColorStop(0, teamField(team, 0.25));
+  bg.addColorStop(1, teamField(team, 0.15));
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+  ctx.beginPath();
+  ctx.moveTo(W * 0.5, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(W * 0.34, H); ctx.closePath();
+  ctx.fillStyle = hexToRgba(teamField(team, 0.31), 0.55); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(W * 0.6, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(W * 0.46, H); ctx.closePath();
+  ctx.fillStyle = hexToRgba(acc, 0.1); ctx.fill();
+  drawAthlete(ctx, W * 0.74, H * 0.6, H * 0.72, art.role, hexToRgba(acc, 0.07));
+
+  // ── 顔写真（右・フチなし＝ドロップシャドウ＋背後グロー）。
+  const pw = 470;
+  const ph = Math.round(pw * 1.5);
+  const px = W - fx - pw - 8;
+  const py = 48;
+  const pgx = px + pw * 0.5;
+  const pgy = py + ph * 0.4;
+  const rg = ctx.createRadialGradient(pgx, pgy, 0, pgx, pgy, pw * 0.8);
+  rg.addColorStop(0, hexToRgba(acc, 0.3));
+  rg.addColorStop(1, hexToRgba(acc, 0));
+  ctx.fillStyle = rg;
+  ctx.fillRect(px - 140, py - 80, pw + 280, ph + 160);
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.38)';
+  ctx.shadowBlur = 34;
+  ctx.shadowOffsetY = 14;
+  roundRectPath(ctx, px, py, pw, ph, 8);
+  ctx.fillStyle = '#0E0F11';
+  ctx.fill();
+  ctx.restore();
+  if (art.headImg) drawPortrait(ctx, art.headImg, px, py, pw, ph);
+  else { roundRectPath(ctx, px, py, pw, ph, 8); ctx.fillStyle = teamField(team, 0.3); ctx.fill(); }
+
+  // ── 外周フレーム。
+  roundRectPath(ctx, fx, fx, W - fx * 2, H - fx * 2, 8);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = wht(0.14);
+  ctx.stroke();
+
+  ctx.textBaseline = 'alphabetic';
+  ctx.textAlign = 'left';
+  const bx = fx + 30;
+  const colMaxW = px - 28 - bx;
+
+  // ── 期間バナー（eyebrow=年 / head=期間 / 細いルール）。
+  ctxLS.letterSpacing = '6px';
+  ctx.fillStyle = accLt;
+  ctx.font = `700 23px ${SANS}`;
+  ctx.fillText(d.periodEyebrow, bx, 112);
+  let hSize = 48;
+  ctxLS.letterSpacing = '1px';
+  ctx.font = `800 ${hSize}px ${SANS}`;
+  while (ctx.measureText(d.periodHead).width > colMaxW && hSize > 30) { hSize -= 2; ctx.font = `800 ${hSize}px ${SANS}`; }
+  const headBaseline = 112 + 24 + hSize - 6;
+  ctx.fillStyle = '#fff';
+  ctx.fillText(d.periodHead, bx, headBaseline);
+  ctxLS.letterSpacing = '0px';
+  const ruleY = headBaseline + 20;
+  ctx.fillStyle = wht(0.22);
+  ctx.fillRect(bx, ruleY, Math.max(ctx.measureText(d.periodHead).width, 280), 2);
+  ctx.fillStyle = accLt;
+  ctx.fillRect(bx, ruleY - 0.5, 60, 3);
+
+  // ── 選手名（姓/名を積む or 1行）＋EN サブ。
+  const parts = d.name.split(/[\s・]/).filter(Boolean);
+  const nameTop = ruleY + 76;
+  let nameBottom: number;
+  if (parts.length === 2) {
+    let ns = 76;
+    ctx.font = `800 ${ns}px ${SANS}`;
+    while (Math.max(ctx.measureText(parts[0]).width, ctx.measureText(parts[1]).width) > colMaxW && ns > 44) { ns -= 4; ctx.font = `800 ${ns}px ${SANS}`; }
+    ctx.fillStyle = '#fff';
+    ctx.fillText(parts[0], bx, nameTop);
+    ctx.fillText(parts[1], bx, nameTop + ns + 2);
+    nameBottom = nameTop + ns + 2;
+  } else {
+    let ns = 66;
+    ctx.font = `800 ${ns}px ${SANS}`;
+    while (ctx.measureText(d.name).width > colMaxW && ns > 36) { ns -= 2; ctx.font = `800 ${ns}px ${SANS}`; }
+    ctx.fillStyle = '#fff';
+    ctx.fillText(d.name, bx, nameTop);
+    nameBottom = nameTop;
+  }
+  if (d.name !== d.nameEn) {
+    nameBottom += 34;
+    ctx.fillStyle = wht(0.62);
+    ctx.font = `500 24px ${SANS}`;
+    ctx.fillText(d.nameEn, bx + 2, nameBottom);
+  }
+
+  // ── ロゴ＋所属＋mode/asOf。
+  const badgeR = 38;
+  const logoCY = nameBottom + 22 + badgeR;
+  if (art.logoImg) {
+    drawLogoBadge(ctx, art.logoImg, bx + badgeR, logoCY, badgeR);
+    const mx = bx + badgeR * 2 + 16;
+    ctx.fillStyle = wht(0.78);
+    ctx.font = `600 23px ${SANS}`;
+    if (d.teamName) ctx.fillText(d.teamName, mx, logoCY - 6);
+    ctx.fillStyle = wht(0.5);
+    ctx.font = `400 20px ${SANS}`;
+    ctx.fillText(`${d.modeLabel}・${d.asOf}`, mx, logoCY + 22);
+  } else {
+    ctx.fillStyle = wht(0.5);
+    ctx.font = `400 20px ${SANS}`;
+    ctx.fillText(`${d.modeLabel}・${d.asOf}`, bx, logoCY);
+  }
+
+  // ── 成績グリッド（3×3・均等）。行ピッチ適応＝フッタ手前まで等分し枠内に必ず収める。
+  const gx = bx;
+  const gw = colMaxW;
+  const cols = 3;
+  const cw = gw / cols;
+  const footerY = H - 40;
+  const gTop = logoCY + badgeR + 20;
+  const rowPitch = ((footerY - 26) - gTop) / 3;
+  const valSize = Math.min(54, Math.round(rowPitch * 0.62));
+  ctx.textAlign = 'center';
+  d.grid.forEach((item, i) => {
+    const cx = gx + (i % cols) * cw + cw / 2;
+    const vy = gTop + Math.floor(i / cols) * rowPitch + valSize;
+    ctx.fillStyle = '#fff';
+    ctx.font = `800 ${valSize}px ${SANS}`;
+    ctx.fillText(item.value, cx, vy);
+    ctx.fillStyle = wht(0.52);
+    ctx.font = `600 22px ${SANS}`;
+    ctx.fillText(item.label, cx, vy + 28);
+  });
+  ctx.textAlign = 'left';
+
+  // ── フッタ：ドメイン（送客）＋タグライン。
+  ctx.fillStyle = wht(0.82);
+  ctx.font = `700 24px ${SANS}`;
+  ctx.fillText(d.site, bx, H - 40);
+  ctx.textAlign = 'right';
+  ctx.fillStyle = wht(0.45);
+  ctx.font = `500 21px ${SANS}`;
+  ctx.fillText(d.tagline, W - fx - 24, H - 40);
   ctx.textAlign = 'left';
 }
 

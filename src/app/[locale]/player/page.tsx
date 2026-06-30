@@ -245,9 +245,10 @@ export default async function PlayerIndexPage({
         </section>
       )}
 
-      {/* ④ 看板「海外ファンと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。 */}
+      {/* ④ 看板「海外ファンと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。
+          id=dodgers＝試合記事の「ドジャース選手の成績を見る」(/player#dodgers) の着地点。 */}
       {dodgersRows.length > 0 && (
-        <section>
+        <section id="dodgers" className="scroll-mt-24">
           <SectionHeading label={t('player.dodgersLineup')} count={dodgersRows.length} />
           <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.dodgersLineupLead')}</p>
           <CompareTable rows={dodgersShown} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />

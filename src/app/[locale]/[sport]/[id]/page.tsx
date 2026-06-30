@@ -127,6 +127,10 @@ export default async function ThreadDetailPage({
   });
   const hiddenTeammates = (thread.stats ?? []).length - jpStats.length;
   const seriesTeam = thread.series ? getSeries(thread.series.id)?.team : undefined;
+  const seriesId = thread.series?.id; // 一覧リンクの自軍アンカー（/player#dodgers 等）
+  // 試合ページ→選手ハブの個別リンクは日本人選手だけに絞る（打線全員のチップで埋めない。
+  // 非日本人は「{自軍}選手の成績を見る」一覧リンクに集約）。JSON-LD の about は全員のまま（SEO）。
+  const jpTagged = taggedPlayers.filter((p) => !p.rival);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -253,7 +257,7 @@ export default async function ThreadDetailPage({
       {seriesTeam && hiddenTeammates > 0 && (
         <p className="mt-3">
           <Link
-            href="/player"
+            href={`/player${seriesId ? `#${seriesId}` : ''}`}
             className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-medium text-ink-soft transition-colors hover:text-ink hover:underline"
           >
             {t('threads.teamRosterStats', { team: locale === 'ja' ? seriesTeam.ja : seriesTeam.en })}
@@ -262,10 +266,10 @@ export default async function ThreadDetailPage({
         </p>
       )}
 
-      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。選手ハブは MLB のみ。 */}
-      {sport === 'mlb' && taggedPlayers.length > 0 && (
+      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。日本人選手のみ（jpTagged）。 */}
+      {sport === 'mlb' && jpTagged.length > 0 && (
         <p className="mt-4 flex flex-wrap gap-2">
-          {taggedPlayers.map((p) => (
+          {jpTagged.map((p) => (
             <Link
               key={p.slug}
               href={`/player/${p.slug}`}
