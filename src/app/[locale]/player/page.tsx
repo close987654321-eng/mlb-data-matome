@@ -129,33 +129,34 @@ export default async function PlayerIndexPage({
   const isRealPitcher = (s: PlayerSeason) =>
     !!s.pitching && (Number(s.pitching.gamesStarted) >= 1 || Number(s.pitching.inningsPitched) >= 10);
 
-  // 大谷・山本はサイ・ヤング賞レースが主たる居場所。投打どの表でも重複させないための除外集合。
+  // サイ・ヤング賞レースの“当事者”集合（日本人エース）。大谷・山本はここの主役だが、日本人投手表にも出す
+  // ＝大谷は二刀流・両当事者という唯一の主役なので各表に正当に再登場させる（議論の最終結論＝重複は許容）。
   const cyJpSlugs = new Set(['shohei-ohtani', 'yoshinobu-yamamoto']);
 
-  // ① サイ・ヤング賞レース：投手ゲートを通った rival 投手＋大谷・山本。野手の火消し登板は弾く。
+  // 日本人 野手：日本人の野手（大谷を含む＝最上段の表に主役を置く）。
+  const batRows: CompareRow[] = withStats
+    .filter((x) => x.s!.hitting && !x.p.rival)
+    .map(({ p, s }) => toRow(p, s!, batValues(s!)));
+
+  // 日本人 投手：投手ゲートを通った日本人（大谷・山本を含む＝二刀流の投手面/日本人エース）。
+  const pitRows: CompareRow[] = withStats
+    .filter((x) => isRealPitcher(x.s!) && !x.p.rival)
+    .map(({ p, s }) => toRow(p, s!, pitValues(s!)));
+
+  // サイ・ヤング賞レース：投手ゲートを通った rival 投手＋大谷・山本。野手の火消し登板は弾く。
   const cyRows: CompareRow[] = withStats
     .filter((x) => isRealPitcher(x.s!) && (x.p.rival || cyJpSlugs.has(x.p.slug)))
     .map(({ p, s }) => toRow(p, s!, pitValues(s!)));
 
-  // ② ドジャース打線：所属＝ドジャース（teamId 119）の野手全員。大谷の打撃はここが主たる居場所。
-  // rival フラグでなく「今どこに居るか」の事実で引く＝トレードでもデータ追従で自動更新される。
+  // ドジャース打線：所属＝ドジャース（teamId 119）の野手全員（大谷＋同僚）。rival フラグでなく
+  // 「今どこに居るか」の事実で引く＝トレードでもデータ追従で自動更新される。
   const dodgersRows: CompareRow[] = withStats
     .filter((x) => x.s!.hitting && getTeam(x.s!.team)?.id === 119)
     .map(({ p, s }) => toRow(p, s!, batValues(s!)));
 
-  // ③ クロスリーグの強打者：ドジャース以外の rival 野手。大谷は入れない（4枚目の重複を作らない）。
+  // クロスリーグの強打者：大谷（比較のアンカー）＋ドジャース以外の rival 野手（リード文と一致）。
   const leagueRows: CompareRow[] = withStats
-    .filter((x) => x.s!.hitting && x.p.rival && getTeam(x.s!.team)?.id !== 119)
-    .map(({ p, s }) => toRow(p, s!, batValues(s!)));
-
-  // ④ 日本人投手：投手ゲートを通った日本人。大谷・山本はサイ・ヤング賞レースが主たる居場所なので外す。
-  const pitRows: CompareRow[] = withStats
-    .filter((x) => isRealPitcher(x.s!) && !x.p.rival && !cyJpSlugs.has(x.p.slug))
-    .map(({ p, s }) => toRow(p, s!, pitValues(s!)));
-
-  // ⑤ 日本人野手：日本人の野手。大谷はドジャース打線が主たる居場所なので外す。
-  const batRows: CompareRow[] = withStats
-    .filter((x) => x.s!.hitting && !x.p.rival && x.p.slug !== 'shohei-ohtani')
+    .filter((x) => x.s!.hitting && (x.p.slug === 'shohei-ohtani' || (x.p.rival && getTeam(x.s!.team)?.id !== 119)))
     .map(({ p, s }) => toRow(p, s!, batValues(s!)));
 
   // ドジャース打線は当面全件。将来15人超で初期高さを抑えたくなったら数値1つ（例 10）にするだけ。
@@ -217,34 +218,16 @@ export default async function PlayerIndexPage({
         )}
       </section>
 
-      {/* ① 二刀流で投げる大谷のサイ・ヤング賞挑戦＝レースの当事者を1表に。 */}
-      {cyRows.length > 0 && (
+      {/* 事業の主眼＝日本人ハブ（検索母艦）を最上段に。① 日本人 野手（大谷を含む＝先頭に主役）。 */}
+      {batRows.length > 0 && (
         <section>
-          <SectionHeading label={t('player.cyYoung')} count={cyRows.length} />
-          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.cyYoungLead')}</p>
-          <CompareTable rows={cyRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+          <SectionHeading label={t('player.batting')} count={batRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.battingLead')}</p>
+          <CompareTable rows={batRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 
-      {/* ② 看板「海外ニキと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。 */}
-      {dodgersRows.length > 0 && (
-        <section>
-          <SectionHeading label={t('player.dodgersLineup')} count={dodgersRows.length} />
-          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.dodgersLineupLead')}</p>
-          <CompareTable rows={dodgersShown} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
-        </section>
-      )}
-
-      {/* ③ 大谷の打撃を測る、リーグ横断の強打者（ライバル野手）。 */}
-      {leagueRows.length > 0 && (
-        <section>
-          <SectionHeading label={t('player.leagueSluggers')} count={leagueRows.length} />
-          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.leagueSluggersLead')}</p>
-          <CompareTable rows={leagueRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
-        </section>
-      )}
-
-      {/* ④ 事業の主眼＝日本人ハブ。投手を独立セクションで明確に残す。 */}
+      {/* ② 日本人 投手（大谷・山本を含む）。 */}
       {pitRows.length > 0 && (
         <section>
           <SectionHeading label={t('player.pitching')} count={pitRows.length} />
@@ -253,12 +236,30 @@ export default async function PlayerIndexPage({
         </section>
       )}
 
-      {/* ⑤ 日本人野手。 */}
-      {batRows.length > 0 && (
+      {/* ③ 二刀流で投げる大谷のサイ・ヤング賞挑戦＝レースの当事者を1表に。 */}
+      {cyRows.length > 0 && (
         <section>
-          <SectionHeading label={t('player.batting')} count={batRows.length} />
-          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.battingLead')}</p>
-          <CompareTable rows={batRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+          <SectionHeading label={t('player.cyYoung')} count={cyRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.cyYoungLead')}</p>
+          <CompareTable rows={cyRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+        </section>
+      )}
+
+      {/* ④ 看板「海外ニキと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。 */}
+      {dodgersRows.length > 0 && (
+        <section>
+          <SectionHeading label={t('player.dodgersLineup')} count={dodgersRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.dodgersLineupLead')}</p>
+          <CompareTable rows={dodgersShown} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+        </section>
+      )}
+
+      {/* ⑤ 大谷の打撃を測る、リーグ横断の強打者（大谷＋他球団のライバル野手）。 */}
+      {leagueRows.length > 0 && (
+        <section>
+          <SectionHeading label={t('player.leagueSluggers')} count={leagueRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.leagueSluggersLead')}</p>
+          <CompareTable rows={leagueRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 
