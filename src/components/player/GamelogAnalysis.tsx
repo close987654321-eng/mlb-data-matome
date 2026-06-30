@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@/lib/navigation';
 import Chevron from '@/components/Chevron';
 import type { Gamelog, HitGame, PitGame } from '@/lib/gamelog';
@@ -25,14 +25,32 @@ type Col<R> = { key: string; label: string; num: (r: R) => number | string; cell
 
 const LAST_NS = [5, 10, 15, 20, 25, 30];
 
+/** SNS シェア用カードの形（縦長=フィード映え / 正方=万能）と実ピクセル。 */
+type CardFormat = 'portrait' | 'square';
+const CARD_DIMS: Record<CardFormat, { w: number; h: number }> = {
+  portrait: { w: 1080, h: 1350 },
+  square: { w: 1080, h: 1080 },
+};
+/** 画像カードに描く厳選データ（ページの全項目表とは別＝SNSで映える主役＋6指標に絞る）。 */
+type CardData = {
+  name: string; nameEn: string; meta: string; badge: string;
+  hero: { value: string; label: string; note: string };
+  hero2: { value: string; label: string };
+  grid: { label: string; value: string }[];
+  war: string; warSplit: string; site: string; tagline: string;
+};
+
 export default function GamelogAnalysis({
   log,
   locale,
   articles,
+  shareUrl,
 }: {
   log: Gamelog;
   locale: string;
   articles?: Record<string, ArticleRef>;
+  /** この選手ハブの正規URL。シェア用の投稿文（コピー）に入れて送客する。 */
+  shareUrl?: string;
 }) {
   const en = locale === 'en';
   // ラベル群は locale でだけ変わる＝毎レンダー新規生成しないよう memo（下流 useMemo の依存安定化）。
@@ -44,7 +62,10 @@ export default function GamelogAnalysis({
         batting: 'Batting', pitching: 'Pitching', all: 'Full', month: (m: number) => `${m}/`,
         colPeriod: 'Selected', colSeason: 'Season', colProj: '162 pace',
         warTitle: 'WAR trend', warStart: (d: string) => `Tracking began ${d}. The trend builds from here (one point per game day).`,
-        warGain: 'WAR in this span (approx)', warNA: '—', save: 'Save as image', saving: 'Rendering…',
+        warGain: 'WAR in this span (approx)', warNA: '—', save: 'Save image', saving: 'Rendering…',
+        share: 'Share', copyText: 'Copy caption', copied: 'Copied',
+        shareHeading: 'Share as an image', shareSub: 'A clean stat card for X, Instagram or your blog — narrow the period above and the card follows. Tap to share or save.',
+        fmtPortrait: 'Portrait', fmtSquare: 'Square', period: 'Period', lastGroup: 'Recent', monthGroup: 'By month', tagline: 'Overseas reactions, in Japanese',
         date: 'Date', opp: 'Opp', result: 'Dec', win: 'W', loss: 'L', none: '—', asOf: (d: string) => `As of ${d}`,
         gameWar: 'Est. WAR', warNote: 'Per-game value estimated from each box score, calibrated so the season total matches the official WAR.',
         warDelta: 'Est. WAR in this span', covered: (n: number) => `${n} games with overseas-reaction digests`,
@@ -57,7 +78,10 @@ export default function GamelogAnalysis({
         batting: '打撃', pitching: '投球', all: '全期間', month: (m: number) => `${m}月`,
         colPeriod: '選択期間', colSeason: '今季累計', colProj: '162換算',
         warTitle: 'WAR推移', warStart: (d: string) => `${d}に追跡開始。ここから1試合ぶんずつ推移が積み上がります。`,
-        warGain: '選択期間のWAR増分（近似）', warNA: '—', save: 'この内容を画像で保存', saving: '生成中…',
+        warGain: '選択期間のWAR増分（近似）', warNA: '—', save: '画像を保存', saving: '生成中…',
+        share: 'シェアする', copyText: '投稿文をコピー', copied: 'コピーしました',
+        shareHeading: '成績カードを画像でシェア', shareSub: 'X・インスタ・ブログにそのまま使える成績カード。上で期間を絞ると、その期間のカードになります。タップで共有／保存。',
+        fmtPortrait: '縦長', fmtSquare: '正方形', period: '期間', lastGroup: '直近', monthGroup: '月別', tagline: '海外の反応まとめ',
         date: '日付', opp: '対戦', result: '結果', win: '勝', loss: '敗', none: '—', asOf: (d: string) => `${d}時点`,
         gameWar: '推定WAR', warNote: '各試合の成績から1試合ぶんを試算し、季節合計が公式WARに一致するよう補正した推定値です。',
         warDelta: '選択期間の推定WAR', covered: (n: number) => `海外の反応つき ${n}試合`,
@@ -92,7 +116,14 @@ export default function GamelogAnalysis({
   const [filter, setFilter] = useState<Filter>({ kind: 'all' });
   const [sort, setSort] = useState<{ key: string; dir: SortDir }>({ key: 'd', dir: 'desc' });
   const [busy, setBusy] = useState(false);
+  const [format, setFormat] = useState<CardFormat>('portrait');
+  const [copied, setCopied] = useState(false);
+  const [canShare, setCanShare] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // ネイティブ共有（モバイル＝OSのシェアシートにファイルを渡せる）か。ボタン文言と挙動を分岐。
+  useEffect(() => {
+    setCanShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function');
+  }, []);
 
   const baseRows = mode === 'hitting' ? log.hitting : log.pitching;
   const months = useMemo(() => [...new Set(baseRows.map((r) => monthOf(r.d)))].sort((a, b) => a - b), [baseRows]);
@@ -215,6 +246,14 @@ export default function GamelogAnalysis({
   const filterLabelEn = filter.kind === 'all' ? t.all : filter.kind === 'last' ? `Last ${filter.n}` : t.month(filter.m);
   const fLabel = en ? filterLabelEn : filterLabel;
 
+  // 期間 select の値⇄Filter（"all" / "last:N" / "month:M"）。
+  const filterValue = filter.kind === 'all' ? 'all' : filter.kind === 'last' ? `last:${filter.n}` : `month:${filter.m}`;
+  const applyFilterValue = (v: string) => {
+    if (v.startsWith('last:')) setFilter({ kind: 'last', n: Number(v.slice(5)) });
+    else if (v.startsWith('month:')) setFilter({ kind: 'month', m: Number(v.slice(6)) });
+    else setFilter({ kind: 'all' });
+  };
+
   // サマリ3列（選択期間 / 今季累計 / 162換算）。162は「今季累計」からの推計（絞り込みに依らず固定）。
   const summary: SummaryRow[] = useMemo(() => {
     if (mode === 'hitting') {
@@ -332,38 +371,141 @@ export default function GamelogAnalysis({
     [filter.kind, filtered, warByDate],
   );
 
-  // ── 画像出力（クライアント canvas・モノクロのサマリカード） ──
-  const saveImage = () => {
+  // ── SNS シェア用カード（ページの全項目表とは別＝主役数字＋162換算/節目＋6指標＋WAR に厳選） ──
+  const cardData = useMemo<CardData>(() => {
+    const site = 'matome-mlb-kaigai.jp';
+    const name = en ? log.player.nameEn : log.player.nameJa;
+    const meta = `${mode === 'hitting' ? t.batting : t.pitching} · ${fLabel} · ${t.asOf(log.asOf)}`;
+    const badge = paceInfo.chase ?? '';
+    const war = warT != null ? warT.toFixed(1) : '';
+    const warSplit =
+      warLatest && warLatest.warHit != null && warLatest.warPit != null
+        ? `${en ? 'P' : '投'}${warLatest.warPit.toFixed(1)} / ${en ? 'B' : '打'}${warLatest.warHit.toFixed(1)}`
+        : '';
+    const base = { name, nameEn: log.player.nameEn, meta, badge, war, warSplit, site, tagline: t.tagline };
+    if (mode === 'hitting') {
+      const p = aggHitting(filtered as HitGame[]);
+      const j = projectHitting(aggHitting(log.hitting), log.teamGames);
+      return {
+        ...base,
+        hero: { value: `${p.hr}`, label: HL.hr, note: en ? `162-pace ${j.hr}` : `162換算 ${j.hr}本` },
+        hero2: { value: fmtRate(p.ops), label: HL.ops },
+        grid: [
+          { label: HL.avg, value: fmtRate(p.avg) },
+          { label: HL.obp, value: fmtRate(p.obp) },
+          { label: HL.slg, value: fmtRate(p.slg) },
+          { label: HL.h, value: `${p.h}` },
+          { label: HL.rbi, value: `${p.rbi}` },
+          { label: HL.sb, value: `${p.sb}` },
+        ],
+      };
+    }
+    const p = aggPitching(filtered as PitGame[]);
+    return {
+      ...base,
+      hero: { value: fmt2(p.era), label: PL.era, note: `WHIP ${fmt2(p.whip)}` },
+      hero2: { value: `${p.so}`, label: PL.so },
+      grid: [
+        { label: PL.ip, value: fmtIp(p.outs) },
+        { label: PL.k9, value: fmt1(p.k9) },
+        { label: PL.kbb, value: fmt1(p.kbb) },
+        { label: PL.wl, value: `${p.w}-${p.l}` },
+        { label: PL.hr, value: `${p.hr}` },
+        { label: PL.bb, value: `${p.bb}` },
+      ],
+    };
+  }, [mode, filtered, log, en, t, HL, PL, fLabel, paceInfo.chase, warT, warLatest]);
+
+  // 投稿文（コピー用）＝主役指標＋ハッシュタグ＋ハブURL（[[x-promotion-workflow]] の本文＋リンク）。
+  const caption = useMemo(() => {
+    const year = log.season;
+    const heroLine =
+      mode === 'hitting'
+        ? en
+          ? `${HL.hr} ${cardData.hero.value} (${cardData.hero.note}) · ${HL.ops} ${cardData.hero2.value}`
+          : `${HL.hr} ${cardData.hero.value}（${cardData.hero.note}）・${HL.ops} ${cardData.hero2.value}`
+        : en
+          ? `${PL.era} ${cardData.hero.value} · ${PL.so} ${cardData.hero2.value}`
+          : `${PL.era} ${cardData.hero.value}・${PL.so} ${cardData.hero2.value}`;
+    const tag = (en ? log.player.nameEn : log.player.nameJa).replace(/[\s・]/g, '');
+    const head = en
+      ? `${log.player.nameEn} ${year} — ${heroLine}${cardData.war ? ` · WAR ${cardData.war}` : ''}`
+      : `${log.player.nameJa} ${year}｜${heroLine}${cardData.war ? ` ・WAR ${cardData.war}` : ''}`;
+    return [head, `#MLB #${tag}`, shareUrl].filter(Boolean).join('\n');
+  }, [mode, cardData, HL, PL, en, log, shareUrl]);
+
+  // プレビュー＝状態変化のたびに描き直す（見たままがそのまま保存／共有される）。
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const { w, h } = CARD_DIMS[format];
+    canvas.width = w;
+    canvas.height = h;
+    drawCard(canvas, cardData, format);
+  }, [cardData, format]);
+
+  const cardFileName = () => {
+    const slug = filter.kind === 'all' ? 'season' : filter.kind === 'last' ? `last${filter.n}` : `m${filter.m}`;
+    return `${log.player.nameEn.replace(/\s+/g, '-').toLowerCase()}-${mode}-${slug}.png`;
+  };
+  const drawNow = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+    const { w, h } = CARD_DIMS[format];
+    canvas.width = w;
+    canvas.height = h;
+    drawCard(canvas, cardData, format);
+    return canvas;
+  };
+  // 保存（ダウンロード）。
+  const saveImage = () => {
+    const canvas = drawNow();
+    if (!canvas) return;
     setBusy(true);
-    drawCard(canvas, {
-      title: en ? log.player.nameEn : log.player.nameJa,
-      subtitle: `${mode === 'hitting' ? t.batting : t.pitching} · ${fLabel} · ${t.asOf(log.asOf)}`,
-      cols: [t.colPeriod, t.colSeason, t.colProj],
-      rows: summary,
-      war: warT != null ? `WAR ${warT.toFixed(1)}${warLatest && warLatest.warHit != null && warLatest.warPit != null ? `  (${en ? 'P' : '投'}${warLatest.warPit.toFixed(1)} / ${en ? 'B' : '打'}${warLatest.warHit.toFixed(1)})` : ''}` : '',
-      badge: paceInfo.chase ?? '',
-      site: 'matome-mlb-kaigai.jp',
-    });
     canvas.toBlob((blob) => {
       if (blob) {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
-        const slug = filter.kind === 'all' ? 'season' : filter.kind === 'last' ? `last${filter.n}` : `m${filter.m}`;
         a.href = url;
-        a.download = `${log.player.nameEn.replace(/\s+/g, '-').toLowerCase()}-${mode}-${slug}.png`;
+        a.download = cardFileName();
         a.click();
         URL.revokeObjectURL(url);
       }
       setBusy(false);
     }, 'image/png');
   };
-
-  const chip = (active: boolean) =>
-    `rounded-[2px] border px-3 py-1.5 text-xs tabular-nums transition-colors ${
-      active ? 'border-ink bg-ink text-paper' : 'border-line text-ink-soft hover:border-ink hover:text-ink'
-    }`;
+  // ネイティブ共有（モバイル）。iOS は transient activation を要求＝toDataURL を同期取得して File を作り、
+  // ユーザー操作の文脈を保ったまま share する（toBlob の非同期コールバックだと活性が切れて失敗するため）。
+  const shareImage = async () => {
+    const canvas = drawNow();
+    if (!canvas) return;
+    try {
+      const dataUrl = canvas.toDataURL('image/png');
+      const [head, b64] = dataUrl.split(',');
+      const mime = head.match(/:(.*?);/)?.[1] ?? 'image/png';
+      const bin = atob(b64);
+      const arr = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+      const file = new File([arr], cardFileName(), { type: mime });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], text: caption });
+        return;
+      }
+    } catch {
+      return; // キャンセル／共有不可は尊重して終了（保存に勝手に倒さない）
+    }
+    saveImage(); // files 共有自体が不可なら保存にフォールバック
+  };
+  const onPrimaryShare = () => (canShare ? shareImage() : saveImage());
+  const copyCaption = async () => {
+    try {
+      await navigator.clipboard.writeText(caption);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* クリップボード不可（古い環境）は黙って無視 */
+    }
+  };
 
   return (
     <section className="space-y-4" aria-label={t.heading}>
@@ -397,19 +539,36 @@ export default function GamelogAnalysis({
         </div>
       )}
 
-      {/* 期間フィルタ。 */}
-      <div className="flex flex-wrap gap-1.5">
-        <button type="button" className={chip(filter.kind === 'all')} onClick={() => setFilter({ kind: 'all' })}>{t.all}</button>
-        {lastNs.map((n) => (
-          <button key={n} type="button" className={chip(filter.kind === 'last' && filter.n === n)} onClick={() => setFilter({ kind: 'last', n })}>
-            {en ? `Last ${n}` : `直近${n}`}
-          </button>
-        ))}
-        {months.map((m) => (
-          <button key={m} type="button" className={chip(filter.kind === 'month' && filter.m === m)} onClick={() => setFilter({ kind: 'month', m })}>
-            {t.month(m)}
-          </button>
-        ))}
+      {/* 期間フィルタ＝optgroup付きネイティブ select（項目が増えても伸びない・モバイルはネイティブピッカー）。 */}
+      <div className="flex items-center gap-2">
+        <label htmlFor="gl-period" className="text-xs font-medium text-ink-mute">{t.period}</label>
+        <div className="relative inline-block">
+          <select
+            id="gl-period"
+            value={filterValue}
+            onChange={(e) => applyFilterValue(e.target.value)}
+            className="min-h-[40px] appearance-none rounded-[2px] border border-line bg-paper py-2 pl-3 pr-9 text-sm font-medium text-ink transition-colors hover:border-ink focus:border-ink focus:outline-none"
+          >
+            <option value="all">{t.all}</option>
+            {lastNs.length > 0 && (
+              <optgroup label={t.lastGroup}>
+                {lastNs.map((n) => (
+                  <option key={n} value={`last:${n}`}>{en ? `Last ${n}` : `直近${n}試合`}</option>
+                ))}
+              </optgroup>
+            )}
+            {months.length > 0 && (
+              <optgroup label={t.monthGroup}>
+                {months.map((m) => (
+                  <option key={m} value={`month:${m}`}>{t.month(m)}</option>
+                ))}
+              </optgroup>
+            )}
+          </select>
+          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-soft">
+            <Chevron />
+          </span>
+        </div>
       </div>
 
       {/* サマリ3列。 */}
@@ -592,17 +751,70 @@ export default function GamelogAnalysis({
         </details>
       </div>
 
-      {/* 画像出力。 */}
-      <div>
-        <button
-          type="button"
-          onClick={saveImage}
-          disabled={busy}
-          className="inline-flex min-h-[44px] items-center gap-2 rounded-[2px] border border-ink bg-ink px-5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft disabled:opacity-50"
-        >
-          {busy ? t.saving : t.save}
-        </button>
-        <canvas ref={canvasRef} width={1200} height={760} className="hidden" />
+      {/* 画像でシェア＝プレビューを見て即 共有/保存。期間 select を絞ればその期間のカードになる。 */}
+      <div className="space-y-4 rounded-[2px] border border-line p-4">
+        <div>
+          <h3 className="text-sm font-bold text-ink">{t.shareHeading}</h3>
+          <p className="mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{t.shareSub}</p>
+        </div>
+
+        {/* 形（縦長 / 正方形）。 */}
+        <div className="inline-flex overflow-hidden rounded-[2px] border border-line">
+          {(['portrait', 'square'] as CardFormat[]).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFormat(f)}
+              className={`min-h-[36px] px-4 text-xs font-semibold transition-colors ${
+                format === f ? 'bg-ink text-paper' : 'bg-paper text-ink-soft hover:text-ink'
+              }`}
+              aria-pressed={format === f}
+            >
+              {f === 'portrait' ? t.fmtPortrait : t.fmtSquare}
+            </button>
+          ))}
+        </div>
+
+        {/* プレビュー（実物）＋操作。 */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+          <canvas
+            ref={canvasRef}
+            width={1080}
+            height={1350}
+            aria-label={t.shareHeading}
+            className="block h-auto w-full max-w-[260px] self-center rounded-[2px] border border-line sm:self-start"
+          />
+          <div className="flex w-full flex-col gap-2 sm:max-w-[220px]">
+            <button
+              type="button"
+              onClick={onPrimaryShare}
+              disabled={busy}
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-ink bg-ink px-5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft disabled:opacity-50"
+            >
+              {busy ? t.saving : canShare ? t.share : t.save}
+              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                {canShare ? (
+                  <path d="M12 15V4M8 8l4-4 4 4M5 13v6a1 1 0 001 1h12a1 1 0 001-1v-6" strokeLinecap="round" strokeLinejoin="round" />
+                ) : (
+                  <path d="M12 4v11M8 11l4 4 4-4M5 20h14" strokeLinecap="round" strokeLinejoin="round" />
+                )}
+              </svg>
+            </button>
+            <button
+              type="button"
+              onClick={copyCaption}
+              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-line px-5 text-sm font-semibold text-ink-soft transition-colors hover:border-ink hover:text-ink"
+            >
+              {copied ? t.copied : t.copyText}
+              {!copied && (
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                  <rect x="9" y="9" width="11" height="11" rx="1.5" />
+                  <path d="M5 15V5a1 1 0 011-1h9" strokeLinecap="round" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -655,90 +867,157 @@ function WarSparkline({ points: pts }: { points: number[] }) {
   );
 }
 
-/** サマリカードを canvas に描く（白地・無彩色・送客ウォーターマーク）。 */
-function drawCard(
-  canvas: HTMLCanvasElement,
-  d: { title: string; subtitle: string; cols: [string, string, string]; rows: SummaryRow[]; war: string; badge: string; site: string },
-) {
+/**
+ * SNS 用の成績カードを canvas に描く（白地・無彩色・編集的レイアウト）。
+ * 構成＝ヘッダ(名前/メタ＋右上に節目バッジ) → 題字罫 → 主役の大数字＋162換算/note と右に第2指標
+ * → 6指標グリッド(3×2) → WAR バンド → フッタ(ドメイン＋タグライン)。縦長/正方の双方に収まる縦フロー。
+ * ブランド規律＝赤は使わない（[[design-system-monochrome]]：カードは無彩色で締める）。
+ */
+function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const W = canvas.width;
   const H = canvas.height;
+  const portrait = format === 'portrait';
   const PAPER = '#FAFAF9';
   const INK = '#191A1C';
   const SOFT = '#565659';
   const MUTE = '#97979B';
   const LINE = '#E7E6E3';
   const SANS = '-apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif';
+  ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, W, H);
-
-  const padX = 60;
-  // タイトル
-  ctx.fillStyle = INK;
-  ctx.font = `700 46px ${SANS}`;
   ctx.textBaseline = 'alphabetic';
-  ctx.fillText(d.title, padX, 86);
-  ctx.fillStyle = SOFT;
-  ctx.font = `400 24px ${SANS}`;
-  ctx.fillText(d.subtitle, padX, 126);
-  // 節目バッジ（50本ペース等）を右上に太字で（SNSで一目で伝わる見出し）。
-  if (d.badge) {
-    ctx.font = `700 28px ${SANS}`;
-    ctx.fillStyle = INK;
-    ctx.textAlign = 'right';
-    ctx.fillText(d.badge, W - padX, 86);
-    ctx.textAlign = 'left';
+  ctx.textAlign = 'left';
+  const padX = 72;
+  const right = W - padX;
+
+  // ── ヘッダ：選手名（幅に収まるよう自動縮小）＋ English ＋ メタ
+  let nameSize = 78;
+  const maxNameW = W - padX * 2 - 170; // 右上の節目バッジ分を空ける
+  ctx.font = `800 ${nameSize}px ${SANS}`;
+  while (ctx.measureText(d.name).width > maxNameW && nameSize > 38) {
+    nameSize -= 2;
+    ctx.font = `800 ${nameSize}px ${SANS}`;
   }
-  // 題字罫（サイト唯一の赤の一点はここでは使わず無彩色で締める）
+  ctx.fillStyle = INK;
+  ctx.fillText(d.name, padX, 152);
+  let metaY: number;
+  if (d.name !== d.nameEn) {
+    ctx.fillStyle = MUTE;
+    ctx.font = `500 30px ${SANS}`;
+    ctx.fillText(d.nameEn, padX, 196);
+    metaY = 240;
+  } else {
+    metaY = 204;
+  }
+  ctx.fillStyle = SOFT;
+  ctx.font = `400 27px ${SANS}`;
+  ctx.fillText(d.meta, padX, metaY);
+
+  // 節目バッジ（50本ペース等）を右上に枠つきで。
+  if (d.badge) {
+    ctx.font = `800 30px ${SANS}`;
+    const bw = ctx.measureText(d.badge).width;
+    const bh = 54;
+    const by = 92;
+    const bx = right - bw - 24;
+    ctx.strokeStyle = INK;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(bx - 18, by, bw + 36, bh);
+    ctx.fillStyle = INK;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(d.badge, bx, by + bh / 2 + 2);
+    ctx.textBaseline = 'alphabetic';
+  }
+
+  // 題字罫（無彩色で締める）。
+  const ruleY = metaY + 34;
   ctx.strokeStyle = INK;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.moveTo(padX, 150);
-  ctx.lineTo(W - padX, 150);
+  ctx.moveTo(padX, ruleY);
+  ctx.lineTo(right, ruleY);
   ctx.stroke();
 
-  // 列ヘッダ（右3列）
-  const colX = [W - padX - 420, W - padX - 210, W - padX];
-  ctx.font = `600 22px ${SANS}`;
+  // ── 主役：大きな数字＋ラベル＋note、右に第2指標。
+  const heroTop = ruleY + (portrait ? 64 : 44);
   ctx.fillStyle = MUTE;
+  ctx.font = `700 30px ${SANS}`;
+  ctx.fillText(d.hero.label, padX, heroTop + 6);
+  const heroSize = portrait ? 188 : 152;
+  const heroBaseline = heroTop + heroSize * 0.78;
+  ctx.fillStyle = INK;
+  ctx.font = `800 ${heroSize}px ${SANS}`;
+  ctx.fillText(d.hero.value, padX - 4, heroBaseline);
+  ctx.fillStyle = SOFT;
+  ctx.font = `500 30px ${SANS}`;
+  ctx.fillText(d.hero.note, padX, heroBaseline + 46);
+  // 第2指標（右揃え）。
   ctx.textAlign = 'right';
-  d.cols.forEach((c, i) => ctx.fillText(c, colX[i], 196));
+  ctx.fillStyle = INK;
+  ctx.font = `800 76px ${SANS}`;
+  ctx.fillText(d.hero2.value, right, heroBaseline - 6);
+  ctx.fillStyle = MUTE;
+  ctx.font = `600 28px ${SANS}`;
+  ctx.fillText(d.hero2.label, right, heroBaseline + 32);
   ctx.textAlign = 'left';
 
-  // 行
-  let y = 240;
-  const rowH = 44;
-  for (const r of d.rows) {
-    ctx.fillStyle = SOFT;
-    ctx.font = `400 24px ${SANS}`;
-    ctx.fillText(r.label, padX, y);
-    ctx.textAlign = 'right';
-    r.vals.forEach((v, i) => {
-      ctx.fillStyle = i === 0 ? INK : MUTE;
-      ctx.font = `${i === 0 ? 700 : 400} 24px ${SANS}`;
-      ctx.fillText(v, colX[i], y);
-    });
-    ctx.textAlign = 'left';
+  // ── 6指標グリッド（3列×2行）。
+  const gridTop = heroBaseline + (portrait ? 116 : 92);
+  const cols = 3;
+  const colW = (W - padX * 2) / cols;
+  const rowH = portrait ? 148 : 130;
+  d.grid.forEach((item, i) => {
+    const cx = padX + (i % cols) * colW;
+    const ry = gridTop + Math.floor(i / cols) * rowH;
+    ctx.fillStyle = INK;
+    ctx.font = `800 56px ${SANS}`;
+    ctx.fillText(item.value, cx, ry + 56);
+    ctx.fillStyle = MUTE;
+    ctx.font = `500 26px ${SANS}`;
+    ctx.fillText(item.label, cx, ry + 92);
+  });
+  const gridBottom = gridTop + 2 * rowH;
+
+  // ── WAR バンド（罫の下に大きく＋投/打内訳）。
+  if (d.war) {
+    const wy = gridBottom + 16;
     ctx.strokeStyle = LINE;
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(padX, y + 14);
-    ctx.lineTo(W - padX, y + 14);
+    ctx.moveTo(padX, wy);
+    ctx.lineTo(right, wy);
     ctx.stroke();
-    y += rowH;
+    ctx.fillStyle = SOFT;
+    ctx.font = `700 32px ${SANS}`;
+    ctx.fillText('WAR', padX, wy + 66);
+    ctx.fillStyle = INK;
+    ctx.font = `800 64px ${SANS}`;
+    ctx.fillText(d.war, padX + 100, wy + 72);
+    const warW = ctx.measureText(d.war).width;
+    if (d.warSplit) {
+      ctx.fillStyle = MUTE;
+      ctx.font = `500 28px ${SANS}`;
+      ctx.fillText(d.warSplit, padX + 100 + warW + 24, wy + 68);
+    }
   }
 
-  // WAR
-  if (d.war) {
-    ctx.fillStyle = INK;
-    ctx.font = `700 28px ${SANS}`;
-    ctx.fillText(d.war, padX, y + 30);
-  }
-  // ウォーターマーク（送客）
-  ctx.fillStyle = MUTE;
-  ctx.font = `500 22px ${SANS}`;
+  // ── フッタ（下部固定）：題字罫＋ドメイン（送客）＋タグライン。
+  const footRule = H - 96;
+  ctx.strokeStyle = INK;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(padX, footRule);
+  ctx.lineTo(right, footRule);
+  ctx.stroke();
+  ctx.fillStyle = INK;
+  ctx.font = `700 28px ${SANS}`;
+  ctx.fillText(d.site, padX, footRule + 46);
   ctx.textAlign = 'right';
-  ctx.fillText(d.site, W - padX, H - 32);
+  ctx.fillStyle = MUTE;
+  ctx.font = `500 25px ${SANS}`;
+  ctx.fillText(d.tagline, right, footRule + 46);
   ctx.textAlign = 'left';
 }

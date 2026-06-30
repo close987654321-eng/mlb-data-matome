@@ -243,7 +243,7 @@ export default async function PlayerHubPage({
               gamelog ファイルがある選手だけ（今は大谷）。サイト本体は静的JSONを読むだけ＝API は叩かない。 */}
           {gamelog && (
             <div className="pt-4">
-              <GamelogAnalysis log={gamelog} locale={locale} articles={gameArticles} />
+              <GamelogAnalysis log={gamelog} locale={locale} articles={gameArticles} shareUrl={hubUrl} />
             </div>
           )}
 
