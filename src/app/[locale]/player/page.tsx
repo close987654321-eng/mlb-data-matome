@@ -4,6 +4,7 @@ import { getAllThreads } from '@/lib/data';
 import { PLAYERS, hubEligible } from '@/lib/players';
 import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import CompareTable, { type CompareCol, type CompareRow } from '@/components/CompareTable';
+import SectionHeading from '@/components/SectionHeading';
 import { getTeam } from '@/lib/teams';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
@@ -113,30 +114,60 @@ export default async function PlayerIndexPage({
     };
   };
 
-  // 日本人の比較表。ライバル（非日本人）は混ぜず、専用ブロックに出す（rival を除外）。
-  const batRows: CompareRow[] = withStats
-    .filter((x) => x.s!.hitting && !x.p.rival)
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: batValues(s!) }));
+  // 行オブジェクトの共通形（CompareRow）。5つの表で同形なので1か所にまとめる。
+  const toRow = (p: (typeof withStats)[number]['p'], s: PlayerSeason, values: CompareRow['values']): CompareRow => ({
+    slug: p.slug,
+    name: p.nameJa,
+    team: s.team,
+    mlbId: p.mlbId,
+    teamColor: getTeam(s.team)?.color,
+    values,
+  });
 
-  // 今季のスター野手（大谷と比較）＝大谷＋強打者ライバル（野手 rival）。リーグ横断（AL/NL）で打WAR降順に見比べる。
-  const mvpRows: CompareRow[] = withStats
-    .filter((x) => x.s!.hitting && (x.p.rival || x.p.slug === 'shohei-ohtani'))
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: batValues(s!) }));
+  // 投手ゲート：先発登板あり or 規定級の投球回がある＝「投手として」の行だけを投手表に出す。
+  // 野手の火消し登板（ロハス GS=0/IP=4.0 等）を選手名に依存せず構造的に弾く恒久対策。
+  const isRealPitcher = (s: PlayerSeason) =>
+    !!s.pitching && (Number(s.pitching.gamesStarted) >= 1 || Number(s.pitching.inningsPitched) >= 10);
 
-  const pitRows: CompareRow[] = withStats
-    .filter((x) => x.s!.pitching && !x.p.rival)
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: pitValues(s!) }));
-
-  // サイヤング争い：日本人の候補（大谷・山本）＋ライバル投手（rival）を1つの表で見比べる。
+  // 大谷・山本はサイ・ヤング賞レースが主たる居場所。投打どの表でも重複させないための除外集合。
   const cyJpSlugs = new Set(['shohei-ohtani', 'yoshinobu-yamamoto']);
+
+  // ① サイ・ヤング賞レース：投手ゲートを通った rival 投手＋大谷・山本。野手の火消し登板は弾く。
   const cyRows: CompareRow[] = withStats
-    .filter((x) => x.s!.pitching && (x.p.rival || cyJpSlugs.has(x.p.slug)))
-    .map(({ p, s }) => ({ slug: p.slug, name: p.nameJa, team: s!.team, mlbId: p.mlbId, teamColor: getTeam(s!.team)?.color, values: pitValues(s!) }));
+    .filter((x) => isRealPitcher(x.s!) && (x.p.rival || cyJpSlugs.has(x.p.slug)))
+    .map(({ p, s }) => toRow(p, s!, pitValues(s!)));
+
+  // ② ドジャース打線：所属＝ドジャース（teamId 119）の野手全員。大谷の打撃はここが主たる居場所。
+  // rival フラグでなく「今どこに居るか」の事実で引く＝トレードでもデータ追従で自動更新される。
+  const dodgersRows: CompareRow[] = withStats
+    .filter((x) => x.s!.hitting && getTeam(x.s!.team)?.id === 119)
+    .map(({ p, s }) => toRow(p, s!, batValues(s!)));
+
+  // ③ クロスリーグの強打者：ドジャース以外の rival 野手。大谷は入れない（4枚目の重複を作らない）。
+  const leagueRows: CompareRow[] = withStats
+    .filter((x) => x.s!.hitting && x.p.rival && getTeam(x.s!.team)?.id !== 119)
+    .map(({ p, s }) => toRow(p, s!, batValues(s!)));
+
+  // ④ 日本人投手：投手ゲートを通った日本人。大谷・山本はサイ・ヤング賞レースが主たる居場所なので外す。
+  const pitRows: CompareRow[] = withStats
+    .filter((x) => isRealPitcher(x.s!) && !x.p.rival && !cyJpSlugs.has(x.p.slug))
+    .map(({ p, s }) => toRow(p, s!, pitValues(s!)));
+
+  // ⑤ 日本人野手：日本人の野手。大谷はドジャース打線が主たる居場所なので外す。
+  const batRows: CompareRow[] = withStats
+    .filter((x) => x.s!.hitting && !x.p.rival && x.p.slug !== 'shohei-ohtani')
+    .map(({ p, s }) => toRow(p, s!, batValues(s!)));
+
+  // ドジャース打線は当面全件。将来15人超で初期高さを抑えたくなったら数値1つ（例 10）にするだけ。
+  const DODGERS_CAP: number | null = null;
+  const dodgersShown = DODGERS_CAP ? dodgersRows.slice(0, DODGERS_CAP) : dodgersRows;
 
   // ピラー（/player）から全ハブへ内部リンクを閉じる。比較表に出ない（MLB今季成績が無い）が記事のある
   // 選手（村上・岡本・ヌートバー等）への入口を一覧に持たせ、子ハブに評価・回遊を届ける。
   const hubPlayers = PLAYERS.filter((p) => hubEligible(p, all, snap.players[String(p.mlbId)]));
-  const tableSlugs = new Set([...batRows, ...pitRows, ...cyRows, ...mvpRows].map((r) => r.slug));
+  const tableSlugs = new Set(
+    [...cyRows, ...dodgersRows, ...leagueRows, ...pitRows, ...batRows].map((r) => r.slug),
+  );
   const moreHubs = hubPlayers.filter((p) => !tableSlugs.has(p.slug));
 
   // 一覧（GA4最強回遊面）の構造化データ。CollectionPage＋ItemList（全ハブを列挙）＋パンくず。
@@ -186,40 +217,55 @@ export default async function PlayerIndexPage({
         )}
       </section>
 
+      {/* ① 二刀流で投げる大谷のサイ・ヤング賞挑戦＝レースの当事者を1表に。 */}
       {cyRows.length > 0 && (
         <section>
-          <h2 className="mb-1 text-lg font-bold text-ink">{t('player.cyYoung')}</h2>
-          <p className="mb-3 max-w-prose text-sm text-ink-soft">{t('player.cyYoungLead')}</p>
+          <SectionHeading label={t('player.cyYoung')} count={cyRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.cyYoungLead')}</p>
           <CompareTable rows={cyRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 
-      {mvpRows.length > 0 && (
+      {/* ② 看板「海外ニキと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。 */}
+      {dodgersRows.length > 0 && (
         <section>
-          <h2 className="mb-1 text-lg font-bold text-ink">{t('player.mvpRace')}</h2>
-          <p className="mb-3 max-w-prose text-sm text-ink-soft">{t('player.mvpRaceLead')}</p>
-          <CompareTable rows={mvpRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+          <SectionHeading label={t('player.dodgersLineup')} count={dodgersRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.dodgersLineupLead')}</p>
+          <CompareTable rows={dodgersShown} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 
-      {batRows.length > 0 && (
+      {/* ③ 大谷の打撃を測る、リーグ横断の強打者（ライバル野手）。 */}
+      {leagueRows.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-bold text-ink">{t('player.batting')}</h2>
-          <CompareTable rows={batRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+          <SectionHeading label={t('player.leagueSluggers')} count={leagueRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.leagueSluggersLead')}</p>
+          <CompareTable rows={leagueRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 
+      {/* ④ 事業の主眼＝日本人ハブ。投手を独立セクションで明確に残す。 */}
       {pitRows.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-bold text-ink">{t('player.pitching')}</h2>
+          <SectionHeading label={t('player.pitching')} count={pitRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.pitchingLead')}</p>
           <CompareTable rows={pitRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
+        </section>
+      )}
+
+      {/* ⑤ 日本人野手。 */}
+      {batRows.length > 0 && (
+        <section>
+          <SectionHeading label={t('player.batting')} count={batRows.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.battingLead')}</p>
+          <CompareTable rows={batRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
         </section>
       )}
 
       {moreHubs.length > 0 && (
         <section>
-          <h2 className="mb-3 text-lg font-bold text-ink">{t('player.moreTitle')}</h2>
-          <div className="flex flex-wrap gap-2">
+          <SectionHeading label={t('player.moreTitle')} count={moreHubs.length} />
+          <div className="mt-3 flex flex-wrap gap-2">
             {moreHubs.map((p) => (
               <Link
                 key={p.slug}
