@@ -32,13 +32,14 @@ const CARD_DIMS: Record<CardFormat, { w: number; h: number }> = {
   portrait: { w: 1080, h: 1350 },
   square: { w: 1080, h: 1080 },
 };
-/** 画像カードに描く厳選データ（ページの全項目表とは別＝SNSで映える主役＋6指標に絞る）。 */
+/** 画像カードに描くデータ。主役＝選手名/写真/ロゴ/期間。成績は強弱なしの均等グリッド（村山指示）。 */
 type CardData = {
-  name: string; nameEn: string; meta: string; badge: string;
-  hero: { value: string; label: string; note: string };
-  hero2: { value: string; label: string };
-  grid: { label: string; value: string }[];
-  war: string; warSplit: string; site: string; tagline: string;
+  name: string; nameEn: string;
+  periodLabel: string; // 全期間 / 直近5 / 6月 ＝カードで最も目立たせる
+  modeLabel: string; // 打撃 / 投球
+  asOf: string;
+  grid: { label: string; value: string }[]; // 9指標を均等サイズで並べる
+  site: string; tagline: string;
 };
 /** カードの装飾レイヤー（顔写真・チームロゴ・チーム色・役割＝投手/打者のシルエット選択）。 */
 type CardArt = { headImg: HTMLImageElement | null; logoImg: HTMLImageElement | null; teamColor: string; role: Mode };
@@ -397,68 +398,76 @@ export default function GamelogAnalysis({
     [filter.kind, filtered, warByDate],
   );
 
-  // ── SNS シェア用カード（ページの全項目表とは別＝主役数字＋162換算/節目＋6指標＋WAR に厳選） ──
+  // ── SNS シェア用カード。主役＝選手名/写真/ロゴ/期間。成績は強弱なしの均等9グリッド（村山指示）。 ──
   const cardData = useMemo<CardData>(() => {
     const site = 'matome-mlb-kaigai.jp';
     const name = en ? log.player.nameEn : log.player.nameJa;
-    const meta = `${mode === 'hitting' ? t.batting : t.pitching} · ${fLabel} · ${t.asOf(log.asOf)}`;
-    const badge = paceInfo.chase ?? '';
-    const war = warT != null ? warT.toFixed(1) : '';
-    const warSplit =
-      warLatest && warLatest.warHit != null && warLatest.warPit != null
-        ? `${en ? 'P' : '投'}${warLatest.warPit.toFixed(1)} / ${en ? 'B' : '打'}${warLatest.warHit.toFixed(1)}`
-        : '';
-    const base = { name, nameEn: log.player.nameEn, meta, badge, war, warSplit, site, tagline: t.tagline };
+    const war = warT != null ? warT.toFixed(1) : '—';
+    const base = {
+      name,
+      nameEn: log.player.nameEn,
+      periodLabel: fLabel,
+      modeLabel: mode === 'hitting' ? t.batting : t.pitching,
+      asOf: t.asOf(log.asOf),
+      site,
+      tagline: t.tagline,
+    };
     if (mode === 'hitting') {
       const p = aggHitting(filtered as HitGame[]);
-      const j = projectHitting(aggHitting(log.hitting), log.teamGames);
       return {
         ...base,
-        hero: { value: `${p.hr}`, label: HL.hr, note: en ? `162-pace ${j.hr}` : `162換算 ${j.hr}本` },
-        hero2: { value: fmtRate(p.ops), label: HL.ops },
         grid: [
           { label: HL.avg, value: fmtRate(p.avg) },
+          { label: HL.hr, value: `${p.hr}` },
+          { label: HL.rbi, value: `${p.rbi}` },
           { label: HL.obp, value: fmtRate(p.obp) },
           { label: HL.slg, value: fmtRate(p.slg) },
+          { label: HL.ops, value: fmtRate(p.ops) },
           { label: HL.h, value: `${p.h}` },
-          { label: HL.rbi, value: `${p.rbi}` },
           { label: HL.sb, value: `${p.sb}` },
+          { label: 'WAR', value: war },
         ],
       };
     }
     const p = aggPitching(filtered as PitGame[]);
     return {
       ...base,
-      hero: { value: fmt2(p.era), label: PL.era, note: `WHIP ${fmt2(p.whip)}` },
-      hero2: { value: `${p.so}`, label: PL.so },
       grid: [
+        { label: PL.era, value: fmt2(p.era) },
         { label: PL.ip, value: fmtIp(p.outs) },
+        { label: PL.so, value: `${p.so}` },
+        { label: PL.whip, value: fmt2(p.whip) },
+        { label: en ? 'W' : '勝', value: `${p.w}` },
+        { label: en ? 'L' : '敗', value: `${p.l}` },
         { label: PL.k9, value: fmt1(p.k9) },
         { label: PL.kbb, value: fmt1(p.kbb) },
-        { label: PL.wl, value: `${p.w}-${p.l}` },
-        { label: PL.hr, value: `${p.hr}` },
-        { label: PL.bb, value: `${p.bb}` },
+        { label: 'WAR', value: war },
       ],
     };
-  }, [mode, filtered, log, en, t, HL, PL, fLabel, paceInfo.chase, warT, warLatest]);
+  }, [mode, filtered, log, en, t, HL, PL, fLabel, warT]);
 
-  // 投稿文（コピー用）＝主役指標＋ハッシュタグ＋ハブURL（[[x-promotion-workflow]] の本文＋リンク）。
+  // 投稿文（コピー用）＝期間＋主要指標＋ハッシュタグ＋ハブURL（[[x-promotion-workflow]] の本文＋リンク）。
   const caption = useMemo(() => {
     const year = log.season;
-    const heroLine =
-      mode === 'hitting'
-        ? en
-          ? `${HL.hr} ${cardData.hero.value} (${cardData.hero.note}) · ${HL.ops} ${cardData.hero2.value}`
-          : `${HL.hr} ${cardData.hero.value}（${cardData.hero.note}）・${HL.ops} ${cardData.hero2.value}`
-        : en
-          ? `${PL.era} ${cardData.hero.value} · ${PL.so} ${cardData.hero2.value}`
-          : `${PL.era} ${cardData.hero.value}・${PL.so} ${cardData.hero2.value}`;
+    let line: string;
+    if (mode === 'hitting') {
+      const p = aggHitting(filtered as HitGame[]);
+      line = en
+        ? `${HL.hr} ${p.hr} · ${HL.avg} ${fmtRate(p.avg)} · ${HL.ops} ${fmtRate(p.ops)}`
+        : `${HL.hr} ${p.hr}・${HL.avg} ${fmtRate(p.avg)}・${HL.ops} ${fmtRate(p.ops)}`;
+    } else {
+      const p = aggPitching(filtered as PitGame[]);
+      line = en
+        ? `${PL.era} ${fmt2(p.era)} · ${PL.so} ${p.so} · ${PL.whip} ${fmt2(p.whip)}`
+        : `${PL.era} ${fmt2(p.era)}・${PL.so} ${p.so}・${PL.whip} ${fmt2(p.whip)}`;
+    }
+    const warStr = warT != null ? (en ? ` · WAR ${warT.toFixed(1)}` : `・WAR ${warT.toFixed(1)}`) : '';
     const tag = (en ? log.player.nameEn : log.player.nameJa).replace(/[\s・]/g, '');
     const head = en
-      ? `${log.player.nameEn} ${year} — ${heroLine}${cardData.war ? ` · WAR ${cardData.war}` : ''}`
-      : `${log.player.nameJa} ${year}｜${heroLine}${cardData.war ? ` ・WAR ${cardData.war}` : ''}`;
+      ? `${log.player.nameEn} ${year} (${fLabel}) — ${line}${warStr}`
+      : `${log.player.nameJa} ${year}（${fLabel}）｜${line}${warStr}`;
     return [head, `#MLB #${tag}`, shareUrl].filter(Boolean).join('\n');
-  }, [mode, cardData, HL, PL, en, log, shareUrl]);
+  }, [mode, filtered, en, log, HL, PL, fLabel, warT, shareUrl]);
 
   // プレビュー＝状態変化（データ・形・読み込んだ画像）のたびに描き直す（見たままがそのまま保存／共有される）。
   useEffect(() => {
@@ -894,10 +903,9 @@ function WarSparkline({ points: pts }: { points: number[] }) {
 }
 
 /**
- * SNS 用の成績カードを canvas に描く。デザイン層＝所属チーム色の透過背景＋役割シルエット（投手/打者）
- * ＋選手の顔写真（丸枠・チーム色リング）＋チームロゴのバッジ。テキスト層＝名前/メタ → 題字罫 → 主役の
- * 大数字＋162換算/note と右に第2指標 → 6指標グリッド(3×2) → WARバンド → フッタ。縦長/正方の双方に収まる縦フロー。
- * 画像は MLB公式CDN（CORS可）を crossOrigin で読むので canvas を汚染しない。未読込/失敗時は無しで自然縮退。
+ * SNS 用の成績カードを canvas に描く（村山指示で再設計）。主役＝期間チップ（最も目立つ）／選手名／顔写真
+ * （一覧と同じ縦長2:3・チーム色枠）／チームロゴ。成績は強弱なしの均等3×3グリッド。背景はチーム色の濃いめ
+ * 透過グラデ＋役割シルエット（投手/打者）。画像は MLB公式CDN（CORS可）を crossOrigin で読むので汚染しない。
  */
 function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, art: CardArt) {
   const ctx = canvas.getContext('2d');
@@ -909,60 +917,82 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   const INK = '#191A1C';
   const SOFT = '#565659';
   const MUTE = '#97979B';
-  const LINE = '#E7E6E3';
   const SANS = '-apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif';
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, W, H);
 
-  // ── デザイン層（背景）：チーム色の縦グラデ＋役割シルエットを薄く敷く（主役数字の邪魔をしない watermark）。
+  // ── 背景：チーム色を“濃いめ”の縦グラデで（上は淡く文字を守り、下へ向けて濃く）＋役割シルエット。
   const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, hexToRgba(art.teamColor, 0));
-  grad.addColorStop(1, hexToRgba(art.teamColor, 0.1));
+  grad.addColorStop(0, hexToRgba(art.teamColor, 0.05));
+  grad.addColorStop(0.5, hexToRgba(art.teamColor, 0.14));
+  grad.addColorStop(1, hexToRgba(art.teamColor, 0.34));
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, W, H);
-  drawAthlete(ctx, W * 0.76, H * (portrait ? 0.52 : 0.54), H * (portrait ? 0.46 : 0.52), art.role, hexToRgba(art.teamColor, 0.13));
+  drawAthlete(ctx, W * 0.72, H * 0.6, H * (portrait ? 0.56 : 0.62), art.role, hexToRgba(art.teamColor, 0.2));
 
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
-  const padX = 72;
+  const padX = 64;
   const right = W - padX;
 
-  // ── 顔写真（右上・丸枠＋チーム色リング）＋ロゴバッジ（顔の右下角／顔が無ければ単体）。
-  const hasHead = Boolean(art.headImg);
-  const headR = portrait ? 96 : 88;
-  const headCx = right - headR;
-  const headCy = 64 + headR;
-  if (art.headImg) drawHeadshot(ctx, art.headImg, headCx, headCy, headR, art.teamColor);
-  if (art.headImg && art.logoImg) drawLogoBadge(ctx, art.logoImg, headCx + headR * 0.66, headCy + headR * 0.66, headR * 0.38);
-  else if (art.logoImg) drawLogoBadge(ctx, art.logoImg, right - 44, 112, 44);
+  // ── 顔写真（右上・一覧と同じ縦長2:3・object-top でカット感を消す）＋チーム色枠＋ロゴバッジ（左下角）。
+  const photoW = portrait ? 232 : 196;
+  const photoH = Math.round(photoW * 1.5);
+  const photoX = right - photoW;
+  const photoY = 56;
+  if (art.headImg) drawHeadshotRect(ctx, art.headImg, photoX, photoY, photoW, photoH, art.teamColor);
+  if (art.logoImg && art.headImg) drawLogoBadge(ctx, art.logoImg, photoX + 40, photoY + photoH - 40, 38);
+  else if (art.logoImg) drawLogoBadge(ctx, art.logoImg, right - 46, 110, 46);
 
-  // ── ヘッダ：選手名（顔写真ぶん右を空けて自動縮小）＋ English ＋ メタ
-  const headReserve = hasHead ? headR * 2 + 28 : 180;
-  let nameSize = portrait ? 76 : 70;
-  const maxNameW = W - padX * 2 - headReserve;
+  const leftW = (art.headImg ? photoX - 28 : right) - padX;
+
+  // ── 期間（最も目立たせる）＝インク塗りバー＋大きな白文字。右に小さくモード（打撃/投球）。
+  let periodSize = portrait ? 48 : 42;
+  ctx.font = `800 ${periodSize}px ${SANS}`;
+  while (ctx.measureText(d.periodLabel).width > leftW - 120 && periodSize > 30) {
+    periodSize -= 2;
+    ctx.font = `800 ${periodSize}px ${SANS}`;
+  }
+  const chipPad = 28;
+  const chipH = periodSize + 30;
+  const chipW = ctx.measureText(d.periodLabel).width + chipPad * 2;
+  const chipY = 60;
+  roundRectPath(ctx, padX, chipY, chipW, chipH, 3);
+  ctx.fillStyle = INK;
+  ctx.fill();
+  ctx.fillStyle = PAPER;
+  ctx.textBaseline = 'middle';
+  ctx.fillText(d.periodLabel, padX + chipPad, chipY + chipH / 2 + 2);
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = SOFT;
+  ctx.font = `700 27px ${SANS}`;
+  ctx.fillText(d.modeLabel, padX + chipW + 18, chipY + chipH / 2 + 10);
+
+  // ── 選手名（大きく・左カラム幅に自動縮小）＋ English ＋ asOf。
+  const nameY = chipY + chipH + (portrait ? 86 : 76);
+  let nameSize = portrait ? 72 : 62;
   ctx.font = `800 ${nameSize}px ${SANS}`;
-  while (ctx.measureText(d.name).width > maxNameW && nameSize > 34) {
+  while (ctx.measureText(d.name).width > leftW && nameSize > 32) {
     nameSize -= 2;
     ctx.font = `800 ${nameSize}px ${SANS}`;
   }
   ctx.fillStyle = INK;
-  ctx.fillText(d.name, padX, 150);
-  let metaY: number;
+  ctx.fillText(d.name, padX, nameY);
+  let metaY = nameY;
   if (d.name !== d.nameEn) {
+    metaY += 40;
     ctx.fillStyle = MUTE;
-    ctx.font = `500 30px ${SANS}`;
-    ctx.fillText(d.nameEn, padX, 194);
-    metaY = 234;
-  } else {
-    metaY = 200;
+    ctx.font = `500 28px ${SANS}`;
+    ctx.fillText(d.nameEn, padX, metaY);
   }
+  metaY += 36;
   ctx.fillStyle = SOFT;
-  ctx.font = `400 27px ${SANS}`;
-  ctx.fillText(d.meta, padX, metaY);
+  ctx.font = `400 25px ${SANS}`;
+  ctx.fillText(d.asOf, padX, metaY);
 
-  // 題字罫（無彩色で構造を締める）。
-  const ruleY = metaY + 34;
+  // ── 題字罫（写真下端 と 左ヘッダ下端 の下に）。
+  const ruleY = Math.max(metaY, photoY + photoH) + 40;
   ctx.strokeStyle = INK;
   ctx.lineWidth = 3;
   ctx.beginPath();
@@ -970,101 +1000,41 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   ctx.lineTo(right, ruleY);
   ctx.stroke();
 
-  // ── 主役：ラベル（同じ行の右端に節目バッジ）→ 大数字 → note、右に第2指標。
-  const heroTop = ruleY + (portrait ? 58 : 40);
-  ctx.fillStyle = MUTE;
-  ctx.font = `700 30px ${SANS}`;
-  ctx.fillText(d.hero.label, padX, heroTop + 6);
-  // 節目バッジ（50本ペース等・該当時）＝ヒーローのラベル行 右端に枠つきで（結論ファーストの hook）。
-  if (d.badge) {
-    ctx.font = `800 28px ${SANS}`;
-    const bw = ctx.measureText(d.badge).width;
-    const bh = 48;
-    const bx = right - bw - 16;
-    const by = heroTop - 26;
-    ctx.fillStyle = PAPER;
-    ctx.fillRect(bx - 16, by, bw + 32, bh);
-    ctx.strokeStyle = INK;
-    ctx.lineWidth = 2;
-    ctx.strokeRect(bx - 16, by, bw + 32, bh);
-    ctx.fillStyle = INK;
-    ctx.textBaseline = 'middle';
-    ctx.fillText(d.badge, bx, by + bh / 2 + 1);
-    ctx.textBaseline = 'alphabetic';
-  }
-  const heroSize = portrait ? 184 : 150;
-  const heroBaseline = heroTop + heroSize * 0.78;
-  ctx.fillStyle = INK;
-  ctx.font = `800 ${heroSize}px ${SANS}`;
-  ctx.fillText(d.hero.value, padX - 4, heroBaseline);
-  ctx.fillStyle = SOFT;
-  ctx.font = `500 30px ${SANS}`;
-  ctx.fillText(d.hero.note, padX, heroBaseline + 46);
-  // 第2指標（右揃え）。
-  ctx.textAlign = 'right';
-  ctx.fillStyle = INK;
-  ctx.font = `800 76px ${SANS}`;
-  ctx.fillText(d.hero2.value, right, heroBaseline - 6);
-  ctx.fillStyle = MUTE;
-  ctx.font = `600 28px ${SANS}`;
-  ctx.fillText(d.hero2.label, right, heroBaseline + 32);
-  ctx.textAlign = 'left';
-
-  // ── 6指標グリッド（3列×2行）。
-  const gridTop = heroBaseline + (portrait ? 116 : 92);
+  // ── 成績＝強弱なしの均等3×3グリッド（中央寄せで綺麗に）。罫とフッタの間に縦中央配置。
   const cols = 3;
   const colW = (W - padX * 2) / cols;
-  const rowH = portrait ? 148 : 130;
+  const footTop = H - 92;
+  const rowsN = Math.ceil(d.grid.length / cols);
+  const rowH = portrait ? 188 : 150;
+  const gridTop = ruleY + Math.max(36, (footTop - ruleY - rowsN * rowH) / 2);
+  const valSize = portrait ? 62 : 54;
+  ctx.textAlign = 'center';
   d.grid.forEach((item, i) => {
-    const cx = padX + (i % cols) * colW;
+    const cx = padX + (i % cols) * colW + colW / 2;
     const ry = gridTop + Math.floor(i / cols) * rowH;
     ctx.fillStyle = INK;
-    ctx.font = `800 56px ${SANS}`;
-    ctx.fillText(item.value, cx, ry + 56);
+    ctx.font = `800 ${valSize}px ${SANS}`;
+    ctx.fillText(item.value, cx, ry + valSize);
     ctx.fillStyle = MUTE;
     ctx.font = `500 26px ${SANS}`;
-    ctx.fillText(item.label, cx, ry + 92);
+    ctx.fillText(item.label, cx, ry + valSize + 38);
   });
-  const gridBottom = gridTop + 2 * rowH;
+  ctx.textAlign = 'left';
 
-  // ── WAR バンド（罫の下に大きく＋投/打内訳）。
-  if (d.war) {
-    const wy = gridBottom + 16;
-    ctx.strokeStyle = LINE;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(padX, wy);
-    ctx.lineTo(right, wy);
-    ctx.stroke();
-    ctx.fillStyle = SOFT;
-    ctx.font = `700 32px ${SANS}`;
-    ctx.fillText('WAR', padX, wy + 66);
-    ctx.fillStyle = INK;
-    ctx.font = `800 64px ${SANS}`;
-    ctx.fillText(d.war, padX + 100, wy + 72);
-    const warW = ctx.measureText(d.war).width;
-    if (d.warSplit) {
-      ctx.fillStyle = MUTE;
-      ctx.font = `500 28px ${SANS}`;
-      ctx.fillText(d.warSplit, padX + 100 + warW + 24, wy + 68);
-    }
-  }
-
-  // ── フッタ（下部固定）：題字罫＋ドメイン（送客）＋タグライン。
-  const footRule = H - 96;
+  // ── フッタ：題字罫＋ドメイン（送客）＋タグライン。
   ctx.strokeStyle = INK;
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(padX, footRule);
-  ctx.lineTo(right, footRule);
+  ctx.moveTo(padX, footTop);
+  ctx.lineTo(right, footTop);
   ctx.stroke();
   ctx.fillStyle = INK;
   ctx.font = `700 28px ${SANS}`;
-  ctx.fillText(d.site, padX, footRule + 46);
+  ctx.fillText(d.site, padX, footTop + 46);
   ctx.textAlign = 'right';
   ctx.fillStyle = MUTE;
   ctx.font = `500 25px ${SANS}`;
-  ctx.fillText(d.tagline, right, footRule + 46);
+  ctx.fillText(d.tagline, right, footTop + 46);
   ctx.textAlign = 'left';
 }
 
@@ -1076,78 +1046,94 @@ function hexToRgba(hex: string, a: number): string {
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 }
 
+/** 角丸長方形のパスを引く（ctx.roundRect が無い環境にもフォールバック）。 */
+function roundRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath();
+  if (typeof ctx.roundRect === 'function') {
+    ctx.roundRect(x, y, w, h, r);
+    return;
+  }
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
 /**
  * 役割シルエット（共通の図）。hitting=打者のスイング／pitching=投手の投球フォーム。
- * 太い丸ストロークの関節図で描く（多角形の自己交差で崩れない＝安全）。背景に薄く敷く watermark。
+ * 太い丸キャップのカプセル（=四肢）＋極太の胴カプセル＋頭の円を“重ねて連続した塊”に合成する
+ * （多角形の自己交差で崩れず、参考画像のような塗りシルエットになる）。座標は 300×360 の図を正規化。
  */
 function drawAthlete(ctx: CanvasRenderingContext2D, cx: number, cy: number, h: number, role: Mode, rgba: string) {
-  const NW = 110;
-  const NH = 150;
+  const NW = 300;
+  const NH = 360;
   const s = h / NH;
   const ox = cx - (NW * s) / 2;
   const oy = cy - (NH * s) / 2;
-  const P = (nx: number, ny: number): [number, number] => [ox + nx * s, oy + ny * s];
   ctx.save();
   ctx.strokeStyle = rgba;
   ctx.fillStyle = rgba;
   ctx.lineCap = 'round';
   ctx.lineJoin = 'round';
-  const seg = (pts: [number, number][], w: number) => {
+  const cap = (x1: number, y1: number, x2: number, y2: number, w: number) => {
     ctx.lineWidth = w * s;
     ctx.beginPath();
-    pts.forEach(([nx, ny], i) => {
-      const [x, y] = P(nx, ny);
-      if (i) ctx.lineTo(x, y);
-      else ctx.moveTo(x, y);
-    });
+    ctx.moveTo(ox + x1 * s, oy + y1 * s);
+    ctx.lineTo(ox + x2 * s, oy + y2 * s);
     ctx.stroke();
   };
-  const dot = (nx: number, ny: number, r: number) => {
-    const [x, y] = P(nx, ny);
+  const circ = (x: number, y: number, r: number) => {
     ctx.beginPath();
-    ctx.arc(x, y, r * s, 0, Math.PI * 2);
+    ctx.arc(ox + x * s, oy + y * s, r * s, 0, Math.PI * 2);
+    ctx.fill();
+  };
+  const ell = (x: number, y: number, rx: number, ry: number, rot: number) => {
+    ctx.beginPath();
+    ctx.ellipse(ox + x * s, oy + y * s, rx * s, ry * s, (rot * Math.PI) / 180, 0, Math.PI * 2);
     ctx.fill();
   };
   if (role === 'hitting') {
-    dot(44, 18, 13); // 頭（ヘルメット）
-    seg([[44, 30], [44, 44], [50, 86]], 12); // 首〜背骨〜腰
-    seg([[44, 46], [70, 48]], 12); // 腕→手
-    seg([[68, 48], [106, 8]], 15); // バット（太め・打者の決め手）
-    seg([[50, 86], [40, 112], [34, 146]], 12); // 前脚
-    seg([[50, 86], [66, 110], [80, 138]], 12); // 後脚
+    // 右向き・フォロースルー（バットを右上へ振り抜き）。
+    cap(150, 206, 192, 260, 27); cap(192, 260, 214, 322, 19); ell(214, 326, 15, 9, 20); // 前脚
+    cap(150, 206, 112, 256, 27); cap(112, 256, 80, 318, 19); ell(80, 322, 15, 9, -20); // 後脚
+    cap(162, 120, 150, 208, 44); // 胴（極太）
+    cap(164, 124, 182, 100, 19); cap(182, 100, 190, 86, 16); cap(168, 128, 184, 104, 19); // 腕
+    cap(186, 86, 264, 46, 11); // バット
+    cap(160, 118, 180, 92, 18); circ(184, 86, 25); cap(196, 80, 224, 72, 12); // 首・頭・つば
   } else {
-    dot(56, 18, 13); // 頭（キャップ）
-    seg([[56, 30], [56, 44], [52, 86]], 12); // 背骨
-    seg([[56, 44], [72, 30], [80, 16]], 12); // 投げ腕（コック）
-    dot(82, 13, 6); // ボール
-    seg([[56, 44], [42, 54]], 12); // グラブ腕
-    seg([[52, 86], [56, 114], [60, 146]], 12); // 軸脚
-    seg([[52, 86], [32, 92], [22, 114]], 12); // 上げた脚（投手の決め手）
+    // 左向き・広いストライドの投球（投げ腕を右後上へコック）。
+    cap(166, 194, 104, 232, 27); cap(104, 232, 46, 298, 19); ell(44, 302, 15, 9, -15); // 前脚（大きく踏み出す）
+    cap(166, 194, 208, 246, 27); cap(208, 246, 238, 300, 19); ell(240, 304, 15, 9, 18); // 軸脚
+    cap(178, 126, 166, 196, 44); // 胴
+    cap(172, 130, 116, 150, 19); cap(116, 150, 96, 176, 16); // グラブ腕
+    cap(184, 128, 238, 148, 19); cap(238, 148, 250, 106, 16); circ(250, 100, 8); // 投げ腕＋ボール
+    cap(178, 124, 182, 92, 18); circ(182, 86, 25); cap(170, 80, 142, 72, 12); // 首・頭・つば
   }
   ctx.restore();
 }
 
-/** 顔写真を丸くクリップ＋cover フィットで描き、チーム色のリングで締める。 */
-function drawHeadshot(ctx: CanvasRenderingContext2D, img: HTMLImageElement, cx: number, cy: number, r: number, ring: string) {
+/** 顔写真を縦長長方形（一覧と同じ 2:3）で描く＝object-top の cover フィットで顔のカット感を消す＋チーム色枠。 */
+function drawHeadshotRect(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number, frame: string) {
   const iw = img.naturalWidth || img.width || 1;
   const ih = img.naturalHeight || img.height || 1;
   ctx.save();
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.closePath();
+  roundRectPath(ctx, x, y, w, h, 4);
   ctx.fillStyle = '#FAFAF9';
   ctx.fill();
   ctx.clip();
-  const scale = Math.max((2 * r) / iw, (2 * r) / ih);
+  const scale = Math.max(w / iw, h / ih); // cover
   const dw = iw * scale;
   const dh = ih * scale;
-  ctx.drawImage(img, cx - dw / 2, cy - dh / 2 - r * 0.08, dw, dh); // 顔が上に来るよう少し上寄せ
+  ctx.drawImage(img, x + (w - dw) / 2, y, dw, dh); // 上揃え＝頭を切らない
   ctx.restore();
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI * 2);
-  ctx.lineWidth = 7;
-  ctx.strokeStyle = ring;
+  ctx.save();
+  roundRectPath(ctx, x, y, w, h, 4);
+  ctx.lineWidth = 6;
+  ctx.strokeStyle = frame;
   ctx.stroke();
+  ctx.restore();
 }
 
 /** チームロゴを白い丸バッジに収めて描く（顔写真の右下角 or 単体配置）。 */
