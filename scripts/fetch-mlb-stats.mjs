@@ -27,7 +27,7 @@
  *   node scripts/fetch-mlb-stats.mjs player 大谷 --json
  */
 
-import { writeFileSync, readFileSync, readdirSync } from 'node:fs';
+import { writeFileSync, readFileSync, readdirSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 
 const BASE = 'https://statsapi.mlb.com/api/v1';
@@ -920,6 +920,127 @@ async function runSnapshot(season, asOf) {
   console.log(`snapshot 書き出し: ${Object.keys(players).length}名 / asOf ${stampedAsOf} → ${file}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// gamelog … 1選手の「試合ごとの成績ログ」を data/gamelogs/{id}.json に書き出す。
+// 用途: 選手ハブ /player の徹底分析セクション（日付別の全成績テーブル・直近N試合/月のソート・162換算）。
+// サイト本体はこの静的JSONを読むだけ＝API は叩かない（snapshot と同じ posture）。残すのは公知の数値のみ。
+//
+// WAR の推移について: MLB API の sabermetrics は日付範囲を無視し「今季累計WAR」しか返さない
+// （＝試合別WARは取得不能）。そこで毎回の取得で「最新試合日づけの累計WAR」を warHistory に upsert し、
+// 自前の時系列を積み上げる（これから先の推移＝日次解像度の近似が出せる。追跡開始日からの片側のみ）。
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 試合ごとに残すフィールド（公知の数値のみ・短いキーで委細をコミットしても差分を小さく保つ）。
+// 率（avg/ops/era/whip）はその試合だけの率でノイズなので持たない＝期間集計はカウント数から再計算する。
+const GL_HIT = {
+  pa: 'plateAppearances', ab: 'atBats', r: 'runs', h: 'hits', dbl: 'doubles', tpl: 'triples',
+  hr: 'homeRuns', rbi: 'rbi', sb: 'stolenBases', cs: 'caughtStealing', bb: 'baseOnBalls',
+  ibb: 'intentionalWalks', hbp: 'hitByPitch', so: 'strikeOuts', sf: 'sacFlies', tb: 'totalBases',
+};
+const GL_PIT = {
+  gs: 'gamesStarted', outs: 'outs', h: 'hits', r: 'runs', er: 'earnedRuns', hr: 'homeRuns',
+  bb: 'baseOnBalls', ibb: 'intentionalWalks', hbp: 'hitBatsmen', so: 'strikeOuts', bf: 'battersFaced',
+  w: 'wins', l: 'losses',
+};
+const num = (v) => (v == null || v === '' ? 0 : Number(v));
+/** gameLog の1試合 split → コンパクトな行（map のキーで stat を引いて数値化）。 */
+function glRow(split, map, extra = {}) {
+  const st = split.stat ?? {};
+  const row = { d: split.date, opp: split.opponent?.name ?? '', oppJa: TEAM_JA[split.opponent?.name] ?? split.opponent?.name ?? '', home: Boolean(split.isHome), ...extra };
+  for (const [k, field] of Object.entries(map)) row[k] = num(st[field]);
+  return row;
+}
+
+/** 指定 ID の gameLog（打撃＋投球）を取得。currentTeam も hydrate（チーム試合数の算出に使う）。 */
+async function fetchGamelog(id, season) {
+  const hydrate = `currentTeam,stats(group=%5Bhitting,pitching%5D,type=gameLog,season=${season})`;
+  const data = await getJson(`${BASE}/people/${id}?hydrate=${hydrate}`);
+  return data.people?.[0] ?? null;
+}
+/** チームの今季消化試合数（レギュラーシーズンの Final 数）。162換算の分母に使う。 */
+async function fetchTeamGamesPlayed(teamId, season) {
+  if (!teamId) return null;
+  const data = await getJson(`${BASE}/schedule?sportId=1&season=${season}&teamId=${teamId}&gameType=R`);
+  const games = (data.dates ?? []).flatMap((d) => d.games ?? []);
+  return games.filter((g) => g.status?.codedGameState === 'F' || g.status?.abstractGameState === 'Final').length;
+}
+
+async function runGamelog(query, season, asOf) {
+  // 選手解決（runPlayer と同じ：数字=ID / 日本語名 / 英語検索）。既定は大谷。
+  let id;
+  if (!query) id = 660271;
+  else if (/^\d+$/.test(query)) id = Number(query);
+  else {
+    const jpHit = Object.entries(DISPLAY_NAMES).find(([, ja]) => ja.includes(query));
+    if (jpHit) id = Number(jpHit[0]);
+    else {
+      const d = await getJson(`${BASE}/people/search?names=${encodeURIComponent(query)}`);
+      id = d.people?.[0]?.id;
+      if (!id) return console.error(`選手が見つからない: ${query}`);
+    }
+  }
+  const [person, saberMap] = await Promise.all([fetchGamelog(id, season), fetchWar([id], season)]);
+  if (!person) return console.error(`gameLog 取得失敗: ${id}`);
+  const teamGames = await fetchTeamGamesPlayed(person.currentTeam?.id, season);
+
+  const blockOf = (g) => (person.stats ?? []).find((s) => s.group?.displayName === g)?.splits ?? [];
+  const hitting = blockOf('hitting').filter((s) => s.gameType === 'R').map((s) => glRow(s, GL_HIT, { win: s.isWin ?? null }));
+  const pitching = blockOf('pitching').filter((s) => s.gameType === 'R').map((s) => glRow(s, GL_PIT));
+
+  // WAR 時系列を upsert：キー＝スナップ日（asOf の JST 日付）。累計WARは「今この瞬間の今季値」＝
+  // 取得時点で持つ量なので、試合日でなくスナップ日で打つ（git 履歴からの backfill も asOf 日付キー＝一貫）。
+  // 同日複数回の取得は上書き（その日の最終値が残る）。日が変われば新しい点が増える＝1日1点の近似系列。
+  const lastDate = (asOf ?? '').slice(0, 10) || ([...hitting, ...pitching].map((r) => r.d).sort().pop() ?? '');
+  const saber = saberMap.get(id) ?? {};
+  const r1 = (v) => (typeof v === 'number' ? Math.round(v * 10) / 10 : null);
+  const warPoint =
+    lastDate && (typeof saber.hit === 'number' || typeof saber.pit === 'number')
+      ? {
+          d: lastDate,
+          ...(typeof saber.hit === 'number' ? { warHit: r1(saber.hit) } : {}),
+          ...(typeof saber.pit === 'number' ? { warPit: r1(saber.pit) } : {}),
+          ...(saber.woba != null ? { woba: saber.woba } : {}),
+          ...(saber.wrcplus != null ? { wrcplus: saber.wrcplus } : {}),
+        }
+      : null;
+
+  const dir = path.join(process.cwd(), 'data', 'gamelogs');
+  mkdirSync(dir, { recursive: true });
+  const file = path.join(dir, `${id}.json`);
+  let warHistory = [];
+  let prevContent = null;
+  let prevAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    warHistory = Array.isArray(prev.warHistory) ? prev.warHistory : [];
+    prevAsOf = prev.asOf || asOf;
+    const { asOf: _a, ...rest } = prev;
+    prevContent = stableStringify(rest);
+  } catch {
+    /* 初回作成 */
+  }
+  if (warPoint) {
+    warHistory = warHistory.filter((p) => p.d !== warPoint.d);
+    warHistory.push(warPoint);
+    warHistory.sort((a, b) => a.d.localeCompare(b.d));
+  }
+
+  const content = {
+    season,
+    player: { id, nameJa: jpName(person), nameEn: person.fullName },
+    team: teamJa(person),
+    teamGames,
+    hitting,
+    pitching,
+    warHistory,
+  };
+  // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（毎時 cron の無駄コミット防止）。
+  let stampedAsOf = asOf;
+  if (prevContent != null && stableStringify(content) === prevContent) stampedAsOf = prevAsOf;
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
+  console.log(`gamelog 書き出し: ${content.player.nameJa} 打${hitting.length}試合 / 投${pitching.length}試合 / WAR点${warHistory.length} → ${file}`);
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -958,6 +1079,11 @@ async function main() {
     const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
     const season = arg2 && /^\d{4}$/.test(arg2) ? Number(arg2) : defaultSeason();
     await runSnapshot(season, asOf);
+  } else if (cmd === 'gamelog') {
+    // gamelog [選手 or ID] [season]。既定=大谷(660271)。選手ハブの徹底分析セクション用の試合別ログ。
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    const playerArg = [arg, arg2].find((x) => x && !/^\d{4}$/.test(x));
+    await runGamelog(playerArg, seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
   } else {
     console.error(
       [
@@ -967,6 +1093,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs player <名前|ID> [season]',
         '  node scripts/fetch-mlb-stats.mjs games [YYYY-MM-DD] [YYYY-MM-DD] # 日本人選手の出場試合を列挙（既定=ET昨日／重複検知つき）',
         '  node scripts/fetch-mlb-stats.mjs snapshot [YYYY-MM-DD] # 選手ハブ用に全選手の今季成績を data/jp-players-stats.json へ',
+        '  node scripts/fetch-mlb-stats.mjs gamelog [選手|ID] [season] # 1選手の試合別ログ＋WAR推移を data/gamelogs/{id}.json へ（既定=大谷）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
     );

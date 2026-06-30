@@ -38,16 +38,24 @@ jobs:
           # pipefail で node の失敗が tail に飲まれず赤くなる（取得失敗を no-op と誤認しない）
           node scripts/fetch-mlb-stats.mjs snapshot "$ASOF" "$SEASON" | tail -3
 
+      - name: 大谷の試合別ログ＋WAR推移を更新（徹底分析セクション用）
+        run: |
+          set -euo pipefail
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          # gamelog は試合別ログを取り直しつつ、毎時の累計WARを warHistory に1点 upsert（自前の推移を積む）。
+          # 失敗してもスナップショットの更新は活かす（|| true せず可視化、ただし続行）。
+          node scripts/fetch-mlb-stats.mjs gamelog 660271 "$SEASON" | tail -2 || echo "gamelog 取得スキップ（snapshot は反映済み）"
+
       - name: 変化があればコミット＆push
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/jp-players-stats.json; then
+          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/jp-players-stats.json
+          git add data/jp-players-stats.json data/gamelogs/
           git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
           # 記事の自動マージ等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
           for i in 1 2 3 4 5; do

@@ -4,6 +4,7 @@ import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/playerStats';
+import { getGamelog } from '@/lib/gamelog';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { playerLede } from '@/lib/playerLede';
 import { buildFeed, feedKey } from '@/lib/feed';
@@ -12,6 +13,7 @@ import ShareButtons from '@/components/ShareButtons';
 import PlayerHero from '@/components/player/PlayerHero';
 import PlayerMarquee from '@/components/player/PlayerMarquee';
 import PlayerDetail from '@/components/player/PlayerDetail';
+import GamelogAnalysis from '@/components/player/GamelogAnalysis';
 import PlayerStickyBar from '@/components/player/PlayerStickyBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import type { RankLabels } from '@/components/RankBadges';
@@ -72,7 +74,11 @@ export default async function PlayerHubPage({
   const t = await getTranslations();
 
   const all = await getAllThreads();
-  const [season, snap] = await Promise.all([getPlayerSeason(player.mlbId), getPlayersSnapshot()]);
+  const [season, snap, gamelog] = await Promise.all([
+    getPlayerSeason(player.mlbId),
+    getPlayersSnapshot(),
+    getGamelog(player.mlbId), // 試合別ログがある選手だけ「徹底分析」セクションを出す（今は大谷）
+  ]);
   const threads = threadsOf(player, all);
   // 記事も成績も無ければハブを作らない（dynamicParams=false なので通常ここには来ないが保険）
   if (!hubEligible(player, all, season)) notFound();
@@ -184,6 +190,14 @@ export default async function PlayerHubPage({
           <ShareButtons url={hubUrl} title={playerShareText(player.nameJa, season, hero)} />
 
           <PlayerDetail season={season} hero={hero} labels={rankLabels} />
+
+          {/* 試合別の徹底分析（日付別の全成績・直近N/月フィルタ・162換算・WAR推移・画像出力）。
+              gamelog ファイルがある選手だけ（今は大谷）。サイト本体は静的JSONを読むだけ＝API は叩かない。 */}
+          {gamelog && (
+            <div className="border-t border-line pt-6">
+              <GamelogAnalysis log={gamelog} locale={locale} />
+            </div>
+          )}
 
           {/* 成績詳細 → 直近の試合まとめへの導線（相互リンク／回遊）。 */}
           {latestGame && (
