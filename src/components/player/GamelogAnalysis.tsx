@@ -74,7 +74,7 @@ export default function GamelogAnalysis({
         colPeriod: 'Selected', colSeason: 'Season', colProj: '162 pace',
         warTitle: 'WAR trend', warStart: (d: string) => `Tracking began ${d}. The trend builds from here (one point per game day).`,
         warGain: 'WAR in this span (approx)', warNA: '—', save: 'Save image', saving: 'Rendering…',
-        share: 'Share', copyText: 'Copy caption', copied: 'Copied',
+        share: 'Share', copyText: 'Copy caption', copyImg: 'Copy image', copied: 'Copied',
         shareHeading: 'Share as an image', shareSub: 'A clean stat card for X, Instagram or your blog. Pick the period and format below — the card follows live.',
         shareCta: 'Make a share card', close: 'Close',
         fmtPortrait: 'Portrait', fmtSquare: 'Square', fmtWide: 'X 4-up', period: 'Period', lastGroup: 'Recent', monthGroup: 'By month', tagline: 'Overseas reactions, in Japanese',
@@ -91,7 +91,7 @@ export default function GamelogAnalysis({
         colPeriod: '選択期間', colSeason: '今季累計', colProj: '162換算',
         warTitle: 'WAR推移', warStart: (d: string) => `${d}に追跡開始。ここから1試合ぶんずつ推移が積み上がります。`,
         warGain: '選択期間のWAR増分（近似）', warNA: '—', save: '画像を保存', saving: '生成中…',
-        share: 'シェアする', copyText: '投稿文をコピー', copied: 'コピーしました',
+        share: 'シェアする', copyText: '投稿文をコピー', copyImg: '画像をコピー', copied: 'コピーしました',
         shareHeading: '成績カードを画像でシェア', shareSub: 'X・インスタ・ブログにそのまま使える成績カード。期間と形を選ぶと、その場でカードが変わります。',
         shareCta: '成績カードを作る', close: '閉じる',
         fmtPortrait: '縦長', fmtSquare: '正方形', fmtWide: 'X4枚', period: '期間', lastGroup: '直近', monthGroup: '月別', tagline: '海外の反応まとめ',
@@ -131,12 +131,22 @@ export default function GamelogAnalysis({
   const [busy, setBusy] = useState(false);
   const [format, setFormat] = useState<CardFormat>('portrait');
   const [copied, setCopied] = useState(false);
+  const [imgCopied, setImgCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
+  const [canCopyImg, setCanCopyImg] = useState(false);
   const [shareOpen, setShareOpen] = useState(false); // 成績カードのシェア＝モーダル（期間と連動・本文末尾でなく即起動）。
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  // ネイティブ共有（モバイル＝OSのシェアシートにファイルを渡せる）か。ボタン文言と挙動を分岐。
+  // ネイティブ共有（モバイル＝OSのシェアシートにファイルを渡せる）か／画像をクリップボードへ直接書けるか。
+  // 後者は「画像をコピー」ボタンの出し分け＝コピーで1枚を保証する正規ルート（共有シートの「コピー」に頼らない）。
   useEffect(() => {
     setCanShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function');
+    setCanCopyImg(
+      typeof navigator !== 'undefined' &&
+        !!navigator.clipboard &&
+        typeof navigator.clipboard.write === 'function' &&
+        typeof window !== 'undefined' &&
+        typeof window.ClipboardItem === 'function',
+    );
   }, []);
 
   // シェアカードの装飾＝所属チームの色/ロゴ＋選手の顔写真。すべて MLB公式CDN（CORS可＝crossOrigin で
@@ -507,11 +517,11 @@ export default function GamelogAnalysis({
     const shareLink = shareUrl
       ? `${shareUrl}${shareUrl.includes('?') ? '&' : '?'}utm_source=card&utm_medium=image&utm_campaign=player_card`
       : undefined;
-    // share=URL抜き／full=URLつき。共有テキストにURLがあると iOS の「コピー」でリンクのOGプレビュー画像が
-    // 2枚目として乗る（同じ画像が2枚に見える）ため、ネイティブ共有には URL を含めない。送客は画像フッタの
-    // 焼き込みURL＋「投稿文をコピー」(full) で担保する。
+    // 投稿文（コピー用）＝ハッシュタグ＋UTM付きURL。画像のネイティブ共有には text を一切渡さない
+    // （iOS は files＋text を一緒に渡すと共有シートの「コピー」でクリップボードに画像が2枚乗るため）。送客は
+    // 「画像をコピー」(画像のみ)＋「投稿文をコピー」(このテキスト) の2ボタンに分離して担保する。
     const body = [head, `#MLB #${tag}`].join('\n');
-    return { share: body, full: shareLink ? `${body}\n${shareLink}` : body };
+    return shareLink ? `${body}\n${shareLink}` : body;
   }, [mode, filtered, en, log, HL, PL, fLabel, warT, shareUrl]);
 
   // プレビュー＝状態変化（データ・形・読み込んだ画像）のたびに描き直す（見たままがそのまま保存／共有される）。
@@ -580,7 +590,8 @@ export default function GamelogAnalysis({
       for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
       const file = new File([arr], cardFileName(), { type: mime });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: caption.share });
+        // text は渡さない＝iOS 共有シートの「コピー」で画像が2枚クリップボードに乗るのを防ぐ。投稿文は別ボタン。
+        await navigator.share({ files: [file] });
         return;
       }
     } catch {
@@ -596,12 +607,31 @@ export default function GamelogAnalysis({
   };
   const copyCaption = async () => {
     try {
-      await navigator.clipboard.writeText(caption.full);
+      await navigator.clipboard.writeText(caption);
       setCopied(true);
       track('card_copy', { player: log.player.nameEn, mode, period: filterValue, format });
       setTimeout(() => setCopied(false), 1800);
     } catch {
       /* クリップボード不可（古い環境）は黙って無視 */
+    }
+  };
+  // 画像だけをクリップボードに置く＝コピー＝1枚を保証（共有シート経由でなく直接書き込み）。Safari は
+  // user gesture を維持するため ClipboardItem に Blob の Promise を渡す（toBlob が非同期でも活性が切れない）。
+  const copyImage = async () => {
+    const canvas = drawNow();
+    if (!canvas) return;
+    try {
+      const item = new ClipboardItem({
+        'image/png': new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('toBlob failed'))), 'image/png');
+        }),
+      });
+      await navigator.clipboard.write([item]);
+      setImgCopied(true);
+      track('card_copy_image', { player: log.player.nameEn, mode, period: filterValue, format });
+      setTimeout(() => setImgCopied(false), 1800);
+    } catch {
+      saveImage(); // 画像クリップボード不可な環境は保存にフォールバック
     }
   };
 
@@ -952,6 +982,22 @@ export default function GamelogAnalysis({
                     )}
                   </svg>
                 </button>
+                {canCopyImg && (
+                  <button
+                    type="button"
+                    onClick={copyImage}
+                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-line px-5 text-sm font-semibold text-ink-soft transition-colors hover:border-ink hover:text-ink"
+                  >
+                    {imgCopied ? t.copied : t.copyImg}
+                    {!imgCopied && (
+                      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="9" r="1.6" />
+                        <path d="M21 15l-5-5L6 20" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={copyCaption}

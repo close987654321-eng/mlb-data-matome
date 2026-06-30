@@ -58,14 +58,14 @@ export default function GameResultCard({
             cta: 'Make a result card', heading: 'Share the result as an image',
             sub: 'A clean scoreboard card for X, Instagram or your blog. Pick the format below.',
             close: 'Close', portrait: 'Portrait', square: 'Square', wide: 'X 4-up',
-            share: 'Share', save: 'Save image', saving: 'Rendering…', copy: 'Copy caption', copied: 'Copied',
+            share: 'Share', save: 'Save image', saving: 'Rendering…', copy: 'Copy caption', copyImg: 'Copy image', copied: 'Copied',
             tagline: 'Overseas reactions, in Japanese',
           }
         : {
             cta: '試合結果カードを作る', heading: '試合結果を画像でシェア',
             sub: 'X・インスタ・ブログにそのまま使えるスコアカード。形を選んで保存／シェア。',
             close: '閉じる', portrait: '縦長', square: '正方形', wide: 'X4枚',
-            share: 'シェアする', save: '画像を保存', saving: '生成中…', copy: '投稿文をコピー', copied: 'コピーしました',
+            share: 'シェアする', save: '画像を保存', saving: '生成中…', copy: '投稿文をコピー', copyImg: '画像をコピー', copied: 'コピーしました',
             tagline: '海外の反応まとめ',
           },
     [en],
@@ -75,10 +75,20 @@ export default function GameResultCard({
   const [format, setFormat] = useState<CardFormat>('portrait');
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [imgCopied, setImgCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
+  const [canCopyImg, setCanCopyImg] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // ネイティブ共有可否＋画像をクリップボードへ直接書けるか（「画像をコピー」＝コピーで1枚を保証する正規ルート）。
   useEffect(() => {
     setCanShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function');
+    setCanCopyImg(
+      typeof navigator !== 'undefined' &&
+        !!navigator.clipboard &&
+        typeof navigator.clipboard.write === 'function' &&
+        typeof window !== 'undefined' &&
+        typeof window.ClipboardItem === 'function',
+    );
   }, []);
 
   // チーム色（teams.ts）＝カード地・アクセント。未解決は無彩色に自然縮退。表示名は ja/en で出し分け。
@@ -134,11 +144,11 @@ export default function GameResultCard({
     const tagOf = (s: string) => s.replace(/[\s・]/g, '');
     const tags = `#MLB #${tagOf(awayName)} #${tagOf(homeName)}`;
     const link = `${articleUrl}${articleUrl.includes('?') ? '&' : '?'}utm_source=card&utm_medium=image&utm_campaign=game_card`;
-    // share=URL抜き／full=URLつき。共有テキストにURLがあると iOS の「コピー」でリンクのOGプレビュー画像が
-    // 2枚目として乗る（同じ画像が2枚に見える）ため、ネイティブ共有には URL を含めない。送客は画像フッタの
-    // 焼き込みURL＋「投稿文をコピー」(full) で担保する。
+    // 投稿文（コピー用）＝ハッシュタグ＋UTM付きURL。画像のネイティブ共有には text を一切渡さない
+    // （iOS は files＋text を一緒に渡すと共有シートの「コピー」でクリップボードに画像が2枚乗るため）。送客は
+    // 「画像をコピー」(画像のみ)＋「投稿文をコピー」(このテキスト) の2ボタンに分離して担保する。
     const body = [head, ...statLines, tags].join('\n');
-    return { share: body, full: `${body}\n${link}` };
+    return `${body}\n${link}`;
   }, [en, awayName, homeName, game, dateLabel, lines, articleUrl]);
 
   // プレビュー＝開いている間、状態（形・読み込んだロゴ）が変わるたび描き直す（見たまま＝保存/共有される）。
@@ -202,7 +212,8 @@ export default function GameResultCard({
       for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
       const file = new File([arr], fileName(), { type: mime });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: caption.share });
+        // text は渡さない＝iOS 共有シートの「コピー」で画像が2枚クリップボードに乗るのを防ぐ。投稿文は別ボタン。
+        await navigator.share({ files: [file] });
         return;
       }
     } catch {
@@ -216,12 +227,31 @@ export default function GameResultCard({
   };
   const copyCaption = async () => {
     try {
-      await navigator.clipboard.writeText(caption.full);
+      await navigator.clipboard.writeText(caption);
       setCopied(true);
       track('card_copy', trackParams());
       setTimeout(() => setCopied(false), 1800);
     } catch {
       /* クリップボード不可（古い環境）は黙って無視 */
+    }
+  };
+  // 画像だけをクリップボードに置く＝コピー＝1枚を保証（共有シート経由でなく直接書き込み）。Safari は
+  // user gesture を維持するため ClipboardItem に Blob の Promise を渡す（toBlob が非同期でも活性が切れない）。
+  const copyImage = async () => {
+    const canvas = drawNow();
+    if (!canvas) return;
+    try {
+      const item = new ClipboardItem({
+        'image/png': new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error('toBlob failed'))), 'image/png');
+        }),
+      });
+      await navigator.clipboard.write([item]);
+      setImgCopied(true);
+      track('card_copy_image', trackParams());
+      setTimeout(() => setImgCopied(false), 1800);
+    } catch {
+      saveImage(); // 画像クリップボード不可な環境は保存にフォールバック
     }
   };
 
@@ -309,6 +339,22 @@ export default function GameResultCard({
                     )}
                   </svg>
                 </button>
+                {canCopyImg && (
+                  <button
+                    type="button"
+                    onClick={copyImage}
+                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-line px-5 text-sm font-semibold text-ink-soft transition-colors hover:border-ink hover:text-ink"
+                  >
+                    {imgCopied ? t.copied : t.copyImg}
+                    {!imgCopied && (
+                      <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <circle cx="8.5" cy="9" r="1.6" />
+                        <path d="M21 15l-5-5L6 20" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    )}
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={copyCaption}
