@@ -37,6 +37,8 @@ type CardData = {
   name: string; nameEn: string;
   periodLabel: string; // 全期間 / 直近5 / 6月 ＝カードで最も目立たせる
   modeLabel: string; // 打撃 / 投球
+  season: string; // 2026
+  teamName: string; // ドジャース / Dodgers（ロゴ脇の所属表記）
   asOf: string;
   grid: { label: string; value: string }[]; // 9指標を均等サイズで並べる
   site: string; tagline: string;
@@ -403,11 +405,14 @@ export default function GamelogAnalysis({
     const site = 'matome-mlb-kaigai.jp';
     const name = en ? log.player.nameEn : log.player.nameJa;
     const war = warT != null ? warT.toFixed(1) : '—';
+    const tm = getTeam(log.team);
     const base = {
       name,
       nameEn: log.player.nameEn,
       periodLabel: fLabel,
       modeLabel: mode === 'hitting' ? t.batting : t.pitching,
+      season: String(log.season),
+      teamName: en ? (tm?.nameEn ?? '') : (log.team ?? ''),
       asOf: t.asOf(log.asOf),
       site,
       tagline: t.tagline,
@@ -903,9 +908,12 @@ function WarSparkline({ points: pts }: { points: number[] }) {
 }
 
 /**
- * SNS 用の成績カードを canvas に描く（村山指示で再設計）。主役＝期間チップ（最も目立つ）／選手名／顔写真
- * （一覧と同じ縦長2:3・チーム色枠）／チームロゴ。成績は強弱なしの均等3×3グリッド。背景はチーム色の濃いめ
- * 透過グラデ＋役割シルエット（投手/打者）。画像は MLB公式CDN（CORS可）を crossOrigin で読むので汚染しない。
+ * SNS 用の成績カードを canvas に描く＝「拡散したくなる」プレミアム1枚（Toppsカードの質感が狙い）。
+ * 構図＝右に額装した顔写真（ドロップシャドウ＋チーム色フレーム）／左に積み上げ大見出しの選手名／
+ * 最上段に最も目立つ期間バナー（インクのペーパーピル＋チーム色タブ）／下段に均等3×3の成績ブロック。
+ * 背景はチーム色を“濃く”落とした地（白文字が映える）＋斜めスイープ＋役割シルエットの透かし。
+ * モノクロ規律の例外＝オフサイトのSNS素材としてチーム色を主役に使う（運営合意・[[design-system-monochrome]]）。
+ * 画像は MLB公式CDN（CORS可）を crossOrigin で読むので canvas は汚染されない（保存/共有が通る）。
  */
 function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, art: CardArt) {
   const ctx = canvas.getContext('2d');
@@ -914,127 +922,189 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   const H = canvas.height;
   const portrait = format === 'portrait';
   const PAPER = '#FAFAF9';
-  const INK = '#191A1C';
-  const SOFT = '#565659';
-  const MUTE = '#97979B';
+  const INK = '#16171A';
   const SANS = '-apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif';
-  ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = PAPER;
-  ctx.fillRect(0, 0, W, H);
+  const wht = (a: number) => `rgba(255,255,255,${a})`;
+  const team = art.teamColor || '#191A1C';
+  // チーム色を黒へ強く寄せた“地”＝どのチーム色（黄や水色でも）でも白文字が映える濃さに正規化。
+  const bgTop = darkenHex(team, 0.8);
+  const bgBot = darkenHex(team, 0.91);
+  const sweep = darkenHex(team, 0.5);
+  const glowC = lightenHex(team, 0.22);
+  const fx = 30;
 
-  // ── 背景：チーム色を“濃いめ”の縦グラデで（上は淡く文字を守り、下へ向けて濃く）＋役割シルエット。
-  const grad = ctx.createLinearGradient(0, 0, 0, H);
-  grad.addColorStop(0, hexToRgba(art.teamColor, 0.05));
-  grad.addColorStop(0.5, hexToRgba(art.teamColor, 0.14));
-  grad.addColorStop(1, hexToRgba(art.teamColor, 0.34));
-  ctx.fillStyle = grad;
+  ctx.clearRect(0, 0, W, H);
+  // ── 背景：チーム色の濃い縦グラデ＋斜めスイープ（奥行き）＋役割シルエットの大きな透かし。
+  const bg = ctx.createLinearGradient(0, 0, W * 0.3, H);
+  bg.addColorStop(0, bgTop);
+  bg.addColorStop(1, bgBot);
+  ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
-  drawAthlete(ctx, W * 0.72, H * 0.6, H * (portrait ? 0.56 : 0.62), art.role, hexToRgba(art.teamColor, 0.2));
+  ctx.beginPath();
+  ctx.moveTo(W * 0.44, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(W * 0.16, H); ctx.closePath();
+  ctx.fillStyle = hexToRgba(sweep, 0.5); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(W * 0.52, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(W * 0.28, H); ctx.closePath();
+  ctx.fillStyle = hexToRgba(team, 0.12); ctx.fill();
+  drawAthlete(ctx, fx + 230, H * (portrait ? 0.68 : 0.66), H * (portrait ? 0.42 : 0.46), art.role, hexToRgba(lightenHex(team, 0.3), 0.07));
+
+  // ── 顔写真（右・額装）。位置とサイズ。
+  const pw = portrait ? 452 : 372;
+  const ph = Math.round(pw * 1.5);
+  const px = W - fx - pw - 6;
+  const py = portrait ? 150 : 116;
+  // グロー（写真の背後をふわっと持ち上げる）。
+  const pgx = px + pw * 0.5;
+  const pgy = py + ph * 0.4;
+  const rg = ctx.createRadialGradient(pgx, pgy, 0, pgx, pgy, pw * 0.78);
+  rg.addColorStop(0, hexToRgba(glowC, 0.42));
+  rg.addColorStop(1, hexToRgba(glowC, 0));
+  ctx.fillStyle = rg;
+  ctx.fillRect(px - 140, py - 90, pw + 280, ph + 180);
+  // フレーム（ドロップシャドウ＋チーム色グラデの縁）。
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.42)';
+  ctx.shadowBlur = 38;
+  ctx.shadowOffsetY = 16;
+  const fg = ctx.createLinearGradient(0, py - 7, 0, py + ph + 7);
+  fg.addColorStop(0, lightenHex(team, 0.16));
+  fg.addColorStop(1, team);
+  roundRectPath(ctx, px - 7, py - 7, pw + 14, ph + 14, 11);
+  ctx.fillStyle = fg;
+  ctx.fill();
+  ctx.restore();
+  if (art.headImg) drawPortrait(ctx, art.headImg, px, py, pw, ph);
+  else { roundRectPath(ctx, px, py, pw, ph, 6); ctx.fillStyle = darkenHex(team, 0.6); ctx.fill(); }
+  roundRectPath(ctx, px, py, pw, ph, 6);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = wht(0.28);
+  ctx.stroke();
+
+  // ── カード外周フレーム（“1枚もの”の収まり）。
+  roundRectPath(ctx, fx, fx, W - fx * 2, H - fx * 2, 8);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = wht(0.16);
+  ctx.stroke();
 
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
-  const padX = 64;
-  const right = W - padX;
+  const colMaxW = px - 28 - (fx + 30); // 左カラム（写真左端まで）の使える幅。
 
-  // ── 顔写真（右上・一覧と同じ縦長2:3・object-top でカット感を消す）＋チーム色枠＋ロゴバッジ（左下角）。
-  const photoW = portrait ? 232 : 196;
-  const photoH = Math.round(photoW * 1.5);
-  const photoX = right - photoW;
-  const photoY = 56;
-  if (art.headImg) drawHeadshotRect(ctx, art.headImg, photoX, photoY, photoW, photoH, art.teamColor);
-  if (art.logoImg && art.headImg) drawLogoBadge(ctx, art.logoImg, photoX + 40, photoY + photoH - 40, 38);
-  else if (art.logoImg) drawLogoBadge(ctx, art.logoImg, right - 46, 110, 46);
-
-  const leftW = (art.headImg ? photoX - 28 : right) - padX;
-
-  // ── 期間（最も目立たせる）＝インク塗りバー＋大きな白文字。右に小さくモード（打撃/投球）。
-  let periodSize = portrait ? 48 : 42;
-  ctx.font = `800 ${periodSize}px ${SANS}`;
-  while (ctx.measureText(d.periodLabel).width > leftW - 120 && periodSize > 30) {
-    periodSize -= 2;
-    ctx.font = `800 ${periodSize}px ${SANS}`;
-  }
-  const chipPad = 28;
-  const chipH = periodSize + 30;
-  const chipW = ctx.measureText(d.periodLabel).width + chipPad * 2;
-  const chipY = 60;
-  roundRectPath(ctx, padX, chipY, chipW, chipH, 3);
-  ctx.fillStyle = INK;
+  // ── 期間バナー（最も目立たせる）＝チーム色タブ＋ペーパーピル＋インク大文字。
+  const bannerY = portrait ? 148 : 116;
+  const bannerH = portrait ? 94 : 82;
+  const accW = 46;
+  let pSize = portrait ? 50 : 44;
+  ctx.font = `800 ${pSize}px ${SANS}`;
+  const pillMax = (portrait ? 372 : 320) - 56;
+  while (ctx.measureText(d.periodLabel).width > pillMax && pSize > 30) { pSize -= 2; ctx.font = `800 ${pSize}px ${SANS}`; }
+  roundRectPath(ctx, fx + 24, bannerY, accW, bannerH, 3);
+  ctx.fillStyle = team;
   ctx.fill();
+  const pillX = fx + 24 + accW;
+  const pillW = ctx.measureText(d.periodLabel).width + 56;
+  roundRectPath(ctx, pillX, bannerY, pillW, bannerH, 3);
   ctx.fillStyle = PAPER;
-  ctx.textBaseline = 'middle';
-  ctx.fillText(d.periodLabel, padX + chipPad, chipY + chipH / 2 + 2);
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = SOFT;
-  ctx.font = `700 27px ${SANS}`;
-  ctx.fillText(d.modeLabel, padX + chipW + 18, chipY + chipH / 2 + 10);
-
-  // ── 選手名（大きく・左カラム幅に自動縮小）＋ English ＋ asOf。
-  const nameY = chipY + chipH + (portrait ? 86 : 76);
-  let nameSize = portrait ? 72 : 62;
-  ctx.font = `800 ${nameSize}px ${SANS}`;
-  while (ctx.measureText(d.name).width > leftW && nameSize > 32) {
-    nameSize -= 2;
-    ctx.font = `800 ${nameSize}px ${SANS}`;
-  }
+  ctx.fill();
   ctx.fillStyle = INK;
-  ctx.fillText(d.name, padX, nameY);
-  let metaY = nameY;
-  if (d.name !== d.nameEn) {
-    metaY += 40;
-    ctx.fillStyle = MUTE;
-    ctx.font = `500 28px ${SANS}`;
-    ctx.fillText(d.nameEn, padX, metaY);
+  ctx.textBaseline = 'middle';
+  ctx.fillText(d.periodLabel, pillX + 28, bannerY + bannerH / 2 + 2);
+  ctx.textBaseline = 'alphabetic';
+  // モード・シーズン。
+  ctx.fillStyle = wht(0.72);
+  ctx.font = `700 ${portrait ? 30 : 27}px ${SANS}`;
+  ctx.fillText(`${d.modeLabel}・${d.season}`, fx + 30, bannerY + bannerH + (portrait ? 56 : 50));
+
+  // ── 選手名＝姓/名を積み上げた大見出し（空白・中黒で2分割できる時）。長い・1語は1行で自動縮小。
+  // nameBottomY＝名前ブロックの最下ベースライン（=ロゴ列を直下に重ねず置くためのアンカー）。
+  const parts = d.name.split(/[\s・]/).filter(Boolean);
+  const nameTop = bannerY + bannerH + (portrait ? 150 : 130);
+  let nameBottomY: number;
+  if (parts.length === 2) {
+    let ns = portrait ? 98 : 80;
+    ctx.font = `800 ${ns}px ${SANS}`;
+    while (Math.max(ctx.measureText(parts[0]).width, ctx.measureText(parts[1]).width) > colMaxW && ns > 48) {
+      ns -= 4; ctx.font = `800 ${ns}px ${SANS}`;
+    }
+    ctx.fillStyle = '#fff';
+    ctx.fillText(parts[0], fx + 30, nameTop);
+    ctx.fillText(parts[1], fx + 30, nameTop + ns + 2);
+    nameBottomY = nameTop + ns + 2;
+    if (d.name !== d.nameEn) {
+      nameBottomY += portrait ? 44 : 38;
+      ctx.fillStyle = wht(0.62);
+      ctx.font = `500 ${portrait ? 27 : 24}px ${SANS}`;
+      ctx.fillText(d.nameEn, fx + 34, nameBottomY);
+    }
+  } else {
+    let ns = portrait ? 74 : 62;
+    ctx.font = `800 ${ns}px ${SANS}`;
+    while (ctx.measureText(d.name).width > colMaxW && ns > 36) { ns -= 2; ctx.font = `800 ${ns}px ${SANS}`; }
+    ctx.fillStyle = '#fff';
+    ctx.fillText(d.name, fx + 30, nameTop);
+    nameBottomY = nameTop;
+    if (d.name !== d.nameEn) {
+      nameBottomY += portrait ? 50 : 44;
+      ctx.fillStyle = wht(0.62);
+      ctx.font = `500 ${portrait ? 27 : 24}px ${SANS}`;
+      ctx.fillText(d.nameEn, fx + 34, nameBottomY);
+    }
   }
-  metaY += 36;
-  ctx.fillStyle = SOFT;
-  ctx.font = `400 25px ${SANS}`;
-  ctx.fillText(d.asOf, padX, metaY);
 
-  // ── 題字罫（写真下端 と 左ヘッダ下端 の下に）。
-  const ruleY = Math.max(metaY, photoY + photoH) + 40;
-  ctx.strokeStyle = INK;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(padX, ruleY);
-  ctx.lineTo(right, ruleY);
-  ctx.stroke();
+  // ── ロゴバッジ＋所属＋asOf（名前ブロックの“下”に確実に置く＝重なり防止）。
+  const badgeR = portrait ? 52 : 46;
+  const logoCY = nameBottomY + (portrait ? 28 : 24) + badgeR;
+  const metaX = fx + 30 + badgeR * 2 + 18;
+  if (art.logoImg) {
+    drawLogoBadge(ctx, art.logoImg, fx + 30 + badgeR, logoCY, badgeR);
+    ctx.fillStyle = wht(0.78);
+    ctx.font = `600 ${portrait ? 27 : 24}px ${SANS}`;
+    if (d.teamName) ctx.fillText(d.teamName, metaX, logoCY - 8);
+    ctx.fillStyle = wht(0.5);
+    ctx.font = `400 ${portrait ? 23 : 21}px ${SANS}`;
+    ctx.fillText(d.asOf, metaX, logoCY + 28);
+  } else {
+    ctx.fillStyle = wht(0.5);
+    ctx.font = `400 ${portrait ? 23 : 21}px ${SANS}`;
+    ctx.fillText(d.asOf, fx + 30, logoCY);
+  }
 
-  // ── 成績＝強弱なしの均等3×3グリッド（中央寄せで綺麗に）。罫とフッタの間に縦中央配置。
+  // ── 成績ブロック（均等3×3・強弱なし）＝半透明パネル＋チーム色のアクセント線。
+  const bandX = fx + 24;
+  const bandW = W - fx * 2 - 48;
+  const bandH = portrait ? 300 : 236;
+  const bandY = H - bandH - (portrait ? 92 : 78);
+  roundRectPath(ctx, bandX, bandY, bandW, bandH, 10);
+  ctx.fillStyle = wht(0.05);
+  ctx.fill();
+  roundRectPath(ctx, bandX, bandY, 120, 5, 2.5);
+  ctx.fillStyle = team;
+  ctx.fill();
   const cols = 3;
-  const colW = (W - padX * 2) / cols;
-  const footTop = H - 92;
-  const rowsN = Math.ceil(d.grid.length / cols);
-  const rowH = portrait ? 188 : 150;
-  const gridTop = ruleY + Math.max(36, (footTop - ruleY - rowsN * rowH) / 2);
-  const valSize = portrait ? 62 : 54;
+  const cw = bandW / cols;
+  const rowH = bandH / 3;
+  const valSize = portrait ? 56 : 48;
   ctx.textAlign = 'center';
   d.grid.forEach((item, i) => {
-    const cx = padX + (i % cols) * colW + colW / 2;
-    const ry = gridTop + Math.floor(i / cols) * rowH;
-    ctx.fillStyle = INK;
+    const cx = bandX + (i % cols) * cw + cw / 2;
+    const ry = bandY + (portrait ? 24 : 16) + Math.floor(i / cols) * rowH;
+    ctx.fillStyle = '#fff';
     ctx.font = `800 ${valSize}px ${SANS}`;
-    ctx.fillText(item.value, cx, ry + valSize);
-    ctx.fillStyle = MUTE;
-    ctx.font = `500 26px ${SANS}`;
-    ctx.fillText(item.label, cx, ry + valSize + 38);
+    ctx.fillText(item.value, cx, ry + valSize + 2);
+    ctx.fillStyle = wht(0.5);
+    ctx.font = `600 ${portrait ? 23 : 21}px ${SANS}`;
+    ctx.fillText(item.label, cx, ry + valSize + (portrait ? 40 : 36));
   });
   ctx.textAlign = 'left';
 
-  // ── フッタ：題字罫＋ドメイン（送客）＋タグライン。
-  ctx.strokeStyle = INK;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(padX, footTop);
-  ctx.lineTo(right, footTop);
-  ctx.stroke();
-  ctx.fillStyle = INK;
-  ctx.font = `700 28px ${SANS}`;
-  ctx.fillText(d.site, padX, footTop + 46);
+  // ── フッタ：ドメイン（送客）＋タグライン。
+  ctx.fillStyle = wht(0.82);
+  ctx.font = `700 ${portrait ? 26 : 24}px ${SANS}`;
+  ctx.fillText(d.site, fx + 30, H - 46);
   ctx.textAlign = 'right';
-  ctx.fillStyle = MUTE;
-  ctx.font = `500 25px ${SANS}`;
-  ctx.fillText(d.tagline, right, footTop + 46);
+  ctx.fillStyle = wht(0.45);
+  ctx.font = `500 ${portrait ? 23 : 21}px ${SANS}`;
+  ctx.fillText(d.tagline, W - fx - 24, H - 46);
   ctx.textAlign = 'left';
 }
 
@@ -1045,6 +1115,23 @@ function hexToRgba(hex: string, a: number): string {
   const n = parseInt(full, 16);
   return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
 }
+
+/** '#RRGGBB' → [r,g,b]。 */
+function hexToRgbArr(hex: string): [number, number, number] {
+  const m = hex.replace('#', '');
+  const full = m.length === 3 ? m.split('').map((c) => c + c).join('') : m;
+  const n = parseInt(full, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+/** 2色を t で混色して '#RRGGBB' を返す（カード地のチーム色シェード生成用）。 */
+function mixHex(a: string, b: string, t: number): string {
+  const A = hexToRgbArr(a);
+  const B = hexToRgbArr(b);
+  const c = A.map((v, i) => Math.round(v + (B[i] - v) * t));
+  return `#${c.map((n) => n.toString(16).padStart(2, '0')).join('')}`;
+}
+const lightenHex = (hex: string, t: number) => mixHex(hex, '#FFFFFF', t);
+const darkenHex = (hex: string, t: number) => mixHex(hex, '#0A0B0C', t);
 
 /** 角丸長方形のパスを引く（ctx.roundRect が無い環境にもフォールバック）。 */
 function roundRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
@@ -1114,25 +1201,20 @@ function drawAthlete(ctx: CanvasRenderingContext2D, cx: number, cy: number, h: n
   ctx.restore();
 }
 
-/** 顔写真を縦長長方形（一覧と同じ 2:3）で描く＝object-top の cover フィットで顔のカット感を消す＋チーム色枠。 */
-function drawHeadshotRect(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number, frame: string) {
+/** 顔写真を縦長長方形（一覧と同じ 2:3）で額装する＝object-top の cover フィットで顔のカット感を消す。
+ * フレーム/シャドウは呼び出し側で描く（ここはクリップした写真本体のみ）。 */
+function drawPortrait(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: number, y: number, w: number, h: number) {
   const iw = img.naturalWidth || img.width || 1;
   const ih = img.naturalHeight || img.height || 1;
   ctx.save();
-  roundRectPath(ctx, x, y, w, h, 4);
-  ctx.fillStyle = '#FAFAF9';
+  roundRectPath(ctx, x, y, w, h, 6);
+  ctx.fillStyle = '#0E0F11';
   ctx.fill();
   ctx.clip();
   const scale = Math.max(w / iw, h / ih); // cover
   const dw = iw * scale;
   const dh = ih * scale;
   ctx.drawImage(img, x + (w - dw) / 2, y, dw, dh); // 上揃え＝頭を切らない
-  ctx.restore();
-  ctx.save();
-  roundRectPath(ctx, x, y, w, h, 4);
-  ctx.lineWidth = 6;
-  ctx.strokeStyle = frame;
-  ctx.stroke();
   ctx.restore();
 }
 
