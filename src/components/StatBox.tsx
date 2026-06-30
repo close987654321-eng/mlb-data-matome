@@ -4,7 +4,7 @@ import { Link } from '@/lib/navigation';
 
 type Props = {
   stats: PlayerStat[];
-  heading: string; // ローカライズ済み見出し（例: 「🇯🇵 日本人選手の成績」）
+  heading: string; // ローカライズ済み見出し（例: 「注目選手の成績」）
   todayLabel: string; // その試合の行ラベル（例: 「この試合」）
   seasonLabel: string; // 今季の行ラベル（例: 「今季」）
   warLabel: string; // WAR の行ラベル（例: 「WAR」）
@@ -13,7 +13,7 @@ type Props = {
 };
 
 /**
- * 日本人選手の成績ボックス（matome R10）。summaryJa の直下に置き、海外の反応に「成績の文脈」を
+ * 注目選手の成績ボックス（matome R10）。summaryJa の直下に置き、海外の反応に「成績の文脈」を
  * 1 点そえて差別化する。値は MLB公式 Stats API 由来の数値のみ（公知の事実）で、ロゴ/写真/表組みは持たない。
  * 数値は編集時に scripts/fetch-mlb-stats.mjs で取得して JSON に書き込む（サイト本体は API を叩かない）。
  */

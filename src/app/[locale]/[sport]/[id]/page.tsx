@@ -118,15 +118,17 @@ export default async function ThreadDetailPage({
     // 同一選手が nameJa とエイリアスで二重に出ないよう slug で重複排除。
     .filter((p, i, arr) => arr.findIndex((x) => x.slug === p.slug) === i);
 
-  // 成績ボックスは「日本人選手の成績」。多本塁打試合だと打線全員(stats)が積まれて長くなるので、
-  // 日本人選手（カタログの非 rival）だけを残し、他のチームメイト（rival=比較用の非日本人）は件数だけ数えて
-  // 「{自軍}選手の成績を見る」で /player 一覧へ畳む。自軍名は watch-along シリーズ（series.id）から引く。
+  // 成績ボックスは「注目選手の成績」＝日本人とは限らない（対戦相手の主役なども載る）。
+  // watch-along シリーズ戦（ドジャース等）は打線全員(stats)が積まれて長くなるので、日本人選手（カタログの
+  // 非 rival）だけに絞り、残りのチームメイトは件数だけ数えて「{自軍}選手の成績を見る」で /player 一覧へ畳む。
+  // 単発の試合は編集者が選んだ注目選手(stats 全件)をそのまま出す＝Wood/Abrams のような非日本人も表示する。
   const jpStats = (thread.stats ?? []).filter((s) => {
     const pl = getPlayerByJaName(s.player);
     return pl != null && !pl.rival;
   });
-  const hiddenTeammates = (thread.stats ?? []).length - jpStats.length;
   const seriesTeam = thread.series ? getSeries(thread.series.id)?.team : undefined;
+  const boxStats = seriesTeam ? jpStats : (thread.stats ?? []);
+  const hiddenTeammates = (thread.stats ?? []).length - jpStats.length;
   const seriesId = thread.series?.id; // 一覧リンクの自軍アンカー（/player#dodgers 等）
   // 試合ページ→選手ハブの個別リンクは日本人選手だけに絞る（打線全員のチップで埋めない。
   // 非日本人は「{自軍}選手の成績を見る」一覧リンクに集約）。JSON-LD の about は全員のまま（SEO）。
@@ -239,12 +241,12 @@ export default async function ThreadDetailPage({
 
       <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
 
-      {/* 日本人選手の成績ボックス（R10）。MLB の試合まとめで summaryJa の直下に出す。数値は編集時に
+      {/* 注目選手の成績ボックス（R10）。MLB の試合まとめで summaryJa の直下に出す。数値は編集時に
           fetch-mlb-stats.mjs で取得した公知の事実のみ（サイト本体は API を叩かない）。
-          打線全員ではなく日本人選手（jpStats）だけ＝出場した選手のみ表示する。 */}
-      {jpStats.length > 0 && (
+          単発の試合は注目選手(boxStats=stats全件・非日本人も含む)、シリーズ戦は日本人だけ＝残りは下のリンクへ。 */}
+      {boxStats.length > 0 && (
         <StatBox
-          stats={jpStats}
+          stats={boxStats}
           heading={t('threads.statsHeading')}
           todayLabel={t('threads.statToday')}
           seasonLabel={t('threads.statSeason')}
