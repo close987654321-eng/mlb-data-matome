@@ -1089,13 +1089,13 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   const bh = 26 + ebSize + 12 + hSize + 26;
   // 影（右下に少しずらして覗かせる＝フロスト面の透過を保ったまま浮かせる）。
   roundRectPath(ctx, bx + 4, by + 6, bw, bh, 10);
-  ctx.fillStyle = 'rgba(0,0,0,0.28)';
+  ctx.fillStyle = 'rgba(0,0,0,0.24)';
   ctx.fill();
-  // 透過レイヤー：フロスト地（背景がうっすら透ける）＋上シーン＋アクセントバー（クリップ内）。
+  // 透過レイヤー：フロスト地（背景がしっかり透ける＝村山「もっと透かす」）＋上シーン＋アクセントバー（クリップ内）。
   ctx.save();
   roundRectPath(ctx, bx, by, bw, bh, 10);
   ctx.clip();
-  ctx.fillStyle = 'rgba(6,8,12,0.30)';
+  ctx.fillStyle = 'rgba(6,8,12,0.19)';
   ctx.fillRect(bx, by, bw, bh);
   const sheen = ctx.createLinearGradient(0, by, 0, by + bh);
   sheen.addColorStop(0, 'rgba(255,255,255,0.16)');
@@ -1178,28 +1178,32 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   // ── 成績ブロック（均等3×3・強弱なし）＝半透明パネル＋アクセント線。一回り大きく（村山指示）。
   const bandX = fx + 24;
   const bandW = W - fx * 2 - 48;
-  const bandH = portrait ? 360 : 250;
-  const bandY = H - bandH - (portrait ? 118 : 100); // フッタ（URL/タグライン）と被らないよう一段持ち上げ
+  const bandH = portrait ? 360 : 268;
+  const bandY = H - bandH - (portrait ? 118 : 92); // フッタ（URL/タグライン）と被らないよう一段持ち上げ
   roundRectPath(ctx, bandX, bandY, bandW, bandH, 10);
   ctx.fillStyle = wht(0.055);
   ctx.fill();
   roundRectPath(ctx, bandX, bandY, 130, 5, 2.5);
   ctx.fillStyle = acc;
   ctx.fill();
+  // 数値ベースライン基準で3段を組む＝パネル内に確実に収める（村山「枠から数字がはみ出ている」修正）。
   const cols = 3;
   const cw = bandW / cols;
-  const rowH = bandH / 3;
-  const valSize = portrait ? 64 : 52;
+  const valSize = portrait ? 64 : 50;
+  const labSize = portrait ? 26 : 22;
+  const rowPitch = portrait ? 104 : 78;
+  const vTop = portrait ? 80 : 56; // 1段目の数値ベースライン
+  const labGap = portrait ? 36 : 30;
   ctx.textAlign = 'center';
   d.grid.forEach((item, i) => {
     const cx = bandX + (i % cols) * cw + cw / 2;
-    const ry = bandY + (portrait ? 28 : 18) + Math.floor(i / cols) * rowH;
+    const vy = bandY + vTop + Math.floor(i / cols) * rowPitch;
     ctx.fillStyle = '#fff';
     ctx.font = `800 ${valSize}px ${SANS}`;
-    ctx.fillText(item.value, cx, ry + valSize + 2);
+    ctx.fillText(item.value, cx, vy);
     ctx.fillStyle = wht(0.52);
-    ctx.font = `600 ${portrait ? 26 : 22}px ${SANS}`;
-    ctx.fillText(item.label, cx, ry + valSize + (portrait ? 44 : 38));
+    ctx.font = `600 ${labSize}px ${SANS}`;
+    ctx.fillText(item.label, cx, vy + labGap);
   });
   ctx.textAlign = 'left';
 
