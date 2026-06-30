@@ -1041,6 +1041,66 @@ async function runGamelog(query, season, asOf) {
   console.log(`gamelog 書き出し: ${content.player.nameJa} 打${hitting.length}試合 / 投${pitching.length}試合 / WAR点${warHistory.length} → ${file}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// warrace … 大谷＋主なライバルの「今季累計WAR」を1日1点で time series 化（data/war-race.json）。
+// 用途: 選手ハブ /player の徹底分析「WARレース」（MVP/サイヤング争いを日次で可視化）。
+// snapshot（data/jp-players-stats.json）を読むだけ＝API は叩かない。残すのは公知の数値(WAR)のみ。
+// WAR の日次系列は MLB API が直接返さないので、毎日の累計を asOf日キーで upsert して自前で積む。
+// ─────────────────────────────────────────────────────────────────────────────
+const WARRACE_IDS = [660271, ...RIVAL_IDS]; // 大谷＋ライバル（src/lib/players.ts の rival と対応）
+
+async function runWarRace(asOf) {
+  const snapFile = path.join(process.cwd(), 'data', 'jp-players-stats.json');
+  let snap;
+  try {
+    snap = JSON.parse(readFileSync(snapFile, 'utf8'));
+  } catch {
+    console.error('snapshot 未生成のため warrace をスキップ（先に snapshot を実行）');
+    return;
+  }
+  const date = (asOf ?? '').slice(0, 10);
+  const file = path.join(process.cwd(), 'data', 'war-race.json');
+  let prev = {};
+  try {
+    prev = JSON.parse(readFileSync(file, 'utf8'));
+  } catch {
+    /* 初回 */
+  }
+  const r1 = (v) => (typeof v === 'number' ? Math.round(v * 10) / 10 : null);
+  const players = {};
+  for (const id of WARRACE_IDS) {
+    const sp = snap.players?.[String(id)];
+    const s = sp?.saber;
+    if (!s) continue;
+    const hit = r1(s.hit);
+    const pit = r1(s.pit);
+    if (hit == null && pit == null) continue;
+    const war = Math.round(((hit ?? 0) + (pit ?? 0)) * 10) / 10;
+    const prevP = prev.players?.[String(id)] ?? {};
+    const hist = (prevP.warHistory ?? []).filter((p) => p.d !== date);
+    if (date) {
+      hist.push({ d: date, war, ...(hit != null ? { warHit: hit } : {}), ...(pit != null ? { warPit: pit } : {}) });
+      hist.sort((a, b) => a.d.localeCompare(b.d));
+    }
+    players[String(id)] = {
+      nameJa: DISPLAY_NAMES[id] ?? prevP.nameJa ?? String(id),
+      league: sp.league ?? prevP.league ?? null,
+      warHistory: hist,
+    };
+  }
+  const content = { season: snap.season, players };
+  // asOf 以外が前回と一致なら据え置き＝バイト一致で no-op。
+  let stampedAsOf = asOf;
+  try {
+    const { asOf: _a, ...rest } = prev;
+    if (stableStringify(rest) === stableStringify(content)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 比較不能なら新規 */
+  }
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
+  console.log(`warrace 書き出し: ${Object.keys(players).length}選手 / asOf ${stampedAsOf} → ${file}`);
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -1084,6 +1144,9 @@ async function main() {
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     const playerArg = [arg, arg2].find((x) => x && !/^\d{4}$/.test(x));
     await runGamelog(playerArg, seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
+  } else if (cmd === 'warrace') {
+    // warrace：snapshot を読んで大谷＋ライバルの累計WARを1日1点で war-race.json に積む。
+    await runWarRace(jstStamp());
   } else {
     console.error(
       [
@@ -1094,6 +1157,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs games [YYYY-MM-DD] [YYYY-MM-DD] # 日本人選手の出場試合を列挙（既定=ET昨日／重複検知つき）',
         '  node scripts/fetch-mlb-stats.mjs snapshot [YYYY-MM-DD] # 選手ハブ用に全選手の今季成績を data/jp-players-stats.json へ',
         '  node scripts/fetch-mlb-stats.mjs gamelog [選手|ID] [season] # 1選手の試合別ログ＋WAR推移を data/gamelogs/{id}.json へ（既定=大谷）',
+        '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
     );

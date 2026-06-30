@@ -5,6 +5,7 @@ import { getAllThreads } from '@/lib/data';
 import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/playerStats';
 import { getGamelog } from '@/lib/gamelog';
+import { getWarRace } from '@/lib/warRace';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { playerLede } from '@/lib/playerLede';
 import { buildFeed, feedKey } from '@/lib/feed';
@@ -14,6 +15,7 @@ import PlayerHero from '@/components/player/PlayerHero';
 import PlayerMarquee from '@/components/player/PlayerMarquee';
 import PlayerDetail from '@/components/player/PlayerDetail';
 import GamelogAnalysis from '@/components/player/GamelogAnalysis';
+import WarRace from '@/components/player/WarRace';
 import PlayerStickyBar from '@/components/player/PlayerStickyBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import type { RankLabels } from '@/components/RankBadges';
@@ -81,10 +83,11 @@ export default async function PlayerHubPage({
   const t = await getTranslations();
 
   const all = await getAllThreads();
-  const [season, snap, gamelog] = await Promise.all([
+  const [season, snap, gamelog, warRace] = await Promise.all([
     getPlayerSeason(player.mlbId),
     getPlayersSnapshot(),
     getGamelog(player.mlbId), // 試合別ログがある選手だけ「徹底分析」セクションを出す（今は大谷）
+    getWarRace(), // WARレース（大谷＋ライバル）。focus がレースに居る時だけ出す。
   ]);
 
   // 徹底分析の「海外の反応 融合」: 各試合(ET日付)→ その試合のまとめ記事を索引化して島へ渡す。
@@ -228,6 +231,13 @@ export default async function PlayerHubPage({
           {gamelog && (
             <div className="border-t border-line pt-6">
               <GamelogAnalysis log={gamelog} locale={locale} articles={gameArticles} />
+            </div>
+          )}
+
+          {/* ④ WARレース（MVP/サイヤング争いを日次で）。focus がレースに居る時だけ（今は大谷）。 */}
+          {gamelog && warRace?.players[String(player.mlbId)] && (
+            <div className="border-t border-line pt-6">
+              <WarRace race={warRace} focusId={player.mlbId} locale={locale} />
             </div>
           )}
 
