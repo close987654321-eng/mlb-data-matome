@@ -1,6 +1,73 @@
 {
-  "asOf": "2026-06-30 13:27",
+  "asOf": "2026-06-30 13:36",
   "players": {
+    "500743": {
+      "fielding": {
+        "arm": 85.9,
+        "assists": 35,
+        "doublePlays": 3,
+        "errors": 0,
+        "fielding": "1.000",
+        "gamesPlayed": 24,
+        "gamesStarted": 14,
+        "innings": "128.1",
+        "oaa": 3,
+        "position": "二塁",
+        "putOuts": 22,
+        "runsPrevented": 3
+      },
+      "hitting": {
+        "atBats": 119,
+        "avg": ".277",
+        "babip": ".292",
+        "baseOnBalls": 9,
+        "doubles": 7,
+        "gamesPlayed": 57,
+        "hits": 33,
+        "homeRuns": 2,
+        "obp": ".331",
+        "ops": ".718",
+        "plateAppearances": 135,
+        "rbi": 13,
+        "runs": 14,
+        "slg": ".387",
+        "stolenBases": 0,
+        "strikeOuts": 14,
+        "triples": 0
+      },
+      "league": "NL",
+      "pitching": {
+        "avg": ".429",
+        "baseOnBalls": 1,
+        "earnedRuns": 6,
+        "era": "13.50",
+        "gamesPlayed": 4,
+        "gamesStarted": 0,
+        "hits": 9,
+        "holds": 0,
+        "homeRuns": 2,
+        "homeRunsPer9": "4.50",
+        "inningsPitched": "4.0",
+        "losses": 0,
+        "runs": 6,
+        "saves": 0,
+        "strikeOuts": 0,
+        "strikeoutWalkRatio": "0.00",
+        "strikeoutsPer9Inn": "0.00",
+        "walksPer9Inn": "2.25",
+        "whip": "2.50",
+        "winPercentage": ".---",
+        "wins": 0
+      },
+      "saber": {
+        "hit": 0.48179,
+        "pit": -0.129628,
+        "woba": 0.307411,
+        "wrcplus": 94.1118
+      },
+      "sprintSpeed": 26.1,
+      "team": "ドジャース"
+    },
     "518692": {
       "fielding": {
         "arm": 83.8,
@@ -202,7 +269,7 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 33,
+            "lg": 34,
             "mlb": 57
           },
           "baseOnBalls": {
@@ -1484,7 +1551,7 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 34,
+            "lg": 33,
             "mlb": 56
           },
           "baseOnBalls": {
@@ -1625,6 +1692,75 @@
       },
       "sprintSpeed": 30.3,
       "team": "ロイヤルズ"
+    },
+    "680736": {
+      "fielding": {
+        "assists": 4,
+        "doublePlays": 0,
+        "errors": 1,
+        "fielding": ".875",
+        "gamesPlayed": 14,
+        "gamesStarted": 13,
+        "innings": "86.1",
+        "position": "投手",
+        "putOuts": 3
+      },
+      "hitting": null,
+      "league": "NL",
+      "pitching": {
+        "avg": ".214",
+        "baseOnBalls": 18,
+        "earnedRuns": 26,
+        "era": "2.71",
+        "gamesPlayed": 14,
+        "gamesStarted": 13,
+        "hits": 69,
+        "holds": 0,
+        "homeRuns": 7,
+        "homeRunsPer9": "0.73",
+        "inningsPitched": "86.1",
+        "losses": 2,
+        "runs": 26,
+        "saves": 0,
+        "strikeOuts": 53,
+        "strikeoutWalkRatio": "2.94",
+        "strikeoutsPer9Inn": "5.53",
+        "walksPer9Inn": "1.88",
+        "whip": "1.01",
+        "winPercentage": ".818",
+        "wins": 9
+      },
+      "ranks": {
+        "pitching": {
+          "era": {
+            "lg": 8,
+            "mlb": 12
+          },
+          "inningsPitched": {
+            "lg": 24,
+            "mlb": 55
+          },
+          "strikeOuts": {
+            "lg": 59
+          },
+          "whip": {
+            "lg": 4,
+            "mlb": 7
+          },
+          "winPercentage": {
+            "lg": 3,
+            "mlb": 4
+          },
+          "wins": {
+            "lg": 2,
+            "mlb": 2
+          }
+        }
+      },
+      "saber": {
+        "pit": 1.79007
+      },
+      "team": "ドジャース"
     },
     "681624": {
       "fielding": {
@@ -1997,20 +2133,20 @@
         "runsPrevented": -1
       },
       "hitting": {
-        "atBats": 149,
-        "avg": ".248",
-        "babip": ".295",
+        "atBats": 150,
+        "avg": ".247",
+        "babip": ".292",
         "baseOnBalls": 16,
         "doubles": 7,
         "gamesPlayed": 50,
         "hits": 37,
         "homeRuns": 9,
-        "obp": ".337",
-        "ops": ".814",
-        "plateAppearances": 169,
+        "obp": ".335",
+        "ops": ".808",
+        "plateAppearances": 170,
         "rbi": 24,
         "runs": 24,
-        "slg": ".477",
+        "slg": ".473",
         "stolenBases": 0,
         "strikeOuts": 45,
         "triples": 0
@@ -2423,7 +2559,7 @@
         "fielding": ".995",
         "gamesPlayed": 82,
         "gamesStarted": 82,
-        "innings": "732.1",
+        "innings": "733.0",
         "oaa": -2,
         "position": "一塁",
         "putOuts": 576,

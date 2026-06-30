@@ -118,6 +118,8 @@ const RIVAL_NAMES = {
   663656: 'カイル・タッカー', // Tucker
   606192: 'テオスカー・ヘルナンデス', // Teoscar Hernández
   571970: 'マックス・マンシー', // Muncy
+  500743: 'ミゲル・ロハス', // M.Rojas
+  680736: 'ジャスティン・ロブレスキー', // Wrobleski (P)
 };
 const RIVAL_IDS = Object.keys(RIVAL_NAMES).map(Number);
 

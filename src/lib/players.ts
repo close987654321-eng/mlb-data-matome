@@ -157,6 +157,13 @@ export const PLAYERS: Player[] = [
   { slug: 'max-muncy', nameJa: 'マックス・マンシー', nameEn: 'Max Muncy', mlbId: 571970, rival: true,
     bio: '出塁能力と長打力を持つ左打ちの内野手。',
     aliases: ['マンシー'], sameAs: [mlb('max-muncy', 571970)] },
+  { slug: 'miguel-rojas', nameJa: 'ミゲル・ロハス', nameEn: 'Miguel Rojas', mlbId: 500743, rival: true,
+    bio: '堅実な守備と勝負強い打撃が持ち味のベテラン内野手。',
+    aliases: ['ミゲルロハス', 'ロハス'], sameAs: [mlb('miguel-rojas', 500743)] },
+  // ドジャースの先発左腕（rival・投手）。野手ではないため一覧では「サイヤング争い」ブロックに出る。
+  { slug: 'justin-wrobleski', nameJa: 'ジャスティン・ロブレスキー', nameEn: 'Justin Wrobleski', mlbId: 680736, rival: true,
+    bio: '先発もこなすドジャースの若手左腕。',
+    aliases: ['ロブレスキー'], sameAs: [mlb('justin-wrobleski', 680736)] },
 ];
 
 const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));
