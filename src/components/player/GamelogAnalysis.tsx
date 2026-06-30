@@ -35,14 +35,16 @@ const CARD_DIMS: Record<CardFormat, { w: number; h: number }> = {
 /** 画像カードに描くデータ。主役＝選手名/写真/ロゴ/期間。成績は強弱なしの均等グリッド（村山指示）。 */
 type CardData = {
   name: string; nameEn: string;
-  periodLabel: string; // 全期間 / 直近5 / 6月 ＝カードで最も目立たせる
+  // 期間ロックアップ＝カード最大の見せ場。英語表記（Toppsカード調・村山指示）。eyebrow=年, head=期間。
+  periodEyebrow: string; // 2026
+  periodHead: string; // THIS SEASON / LAST 10 GAMES / JUNE
   modeLabel: string; // 打撃 / 投球
-  season: string; // 2026
   teamName: string; // ドジャース / Dodgers（ロゴ脇の所属表記）
   asOf: string;
   grid: { label: string; value: string }[]; // 9指標を均等サイズで並べる
   site: string; tagline: string;
 };
+const MONTHS_EN = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
 /** カードの装飾レイヤー（顔写真・チームロゴ・チーム色・役割＝投手/打者のシルエット選択）。 */
 type CardArt = { headImg: HTMLImageElement | null; logoImg: HTMLImageElement | null; teamColor: string; role: Mode };
 
@@ -271,8 +273,8 @@ export default function GamelogAnalysis({
     return baseRows;
   }, [baseRows, filter]);
 
-  const filterLabel = filter.kind === 'all' ? t.all : filter.kind === 'last' ? `直近${filter.n}` : t.month(filter.m);
-  const filterLabelEn = filter.kind === 'all' ? t.all : filter.kind === 'last' ? `Last ${filter.n}` : t.month(filter.m);
+  const filterLabel = filter.kind === 'all' ? t.all : filter.kind === 'last' ? `直近${filter.n}試合` : t.month(filter.m);
+  const filterLabelEn = filter.kind === 'all' ? t.all : filter.kind === 'last' ? `Last ${filter.n} games` : t.month(filter.m);
   const fLabel = en ? filterLabelEn : filterLabel;
 
   // 期間 select の値⇄Filter（"all" / "last:N" / "month:M"）。
@@ -406,12 +408,17 @@ export default function GamelogAnalysis({
     const name = en ? log.player.nameEn : log.player.nameJa;
     const war = warT != null ? warT.toFixed(1) : '—';
     const tm = getTeam(log.team);
+    // 期間ヘッドライン＝英語（All→THIS SEASON / Last→LAST N GAMES / Month→月名）。
+    const periodHead =
+      filter.kind === 'all' ? 'THIS SEASON'
+      : filter.kind === 'last' ? `LAST ${filter.n} GAMES`
+      : (MONTHS_EN[filter.m - 1] ?? `MONTH ${filter.m}`);
     const base = {
       name,
       nameEn: log.player.nameEn,
-      periodLabel: fLabel,
+      periodEyebrow: String(log.season),
+      periodHead,
       modeLabel: mode === 'hitting' ? t.batting : t.pitching,
-      season: String(log.season),
       teamName: en ? (tm?.nameEn ?? '') : (log.team ?? ''),
       asOf: t.asOf(log.asOf),
       site,
@@ -449,7 +456,7 @@ export default function GamelogAnalysis({
         { label: 'WAR', value: war },
       ],
     };
-  }, [mode, filtered, log, en, t, HL, PL, fLabel, warT]);
+  }, [mode, filtered, filter, log, en, t, HL, PL, warT]);
 
   // 投稿文（コピー用）＝期間＋主要指標＋ハッシュタグ＋ハブURL（[[x-promotion-workflow]] の本文＋リンク）。
   const caption = useMemo(() => {
@@ -909,116 +916,142 @@ function WarSparkline({ points: pts }: { points: number[] }) {
 
 /**
  * SNS 用の成績カードを canvas に描く＝「拡散したくなる」プレミアム1枚（Toppsカードの質感が狙い）。
- * 構図＝右に額装した顔写真（ドロップシャドウ＋チーム色フレーム）／左に積み上げ大見出しの選手名／
- * 最上段に最も目立つ期間バナー（インクのペーパーピル＋チーム色タブ）／下段に均等3×3の成績ブロック。
- * 背景はチーム色を“濃く”落とした地（白文字が映える）＋斜めスイープ＋役割シルエットの透かし。
+ * 構図＝右にフチなしの顔写真（ドロップシャドウ＋背後グローで浮かせる）／左に積み上げ大見出しの選手名／
+ * 最上段に最も目立つ期間ロックアップ（英語・ガラス調グラデ＋斜めハッチ＋シーンの“透過レイヤー重ね”）／
+ * 下段に均等3×3の成績ブロック（一回り大きく）。背景はチーム色を“色を残したまま”暗く正規化した地
+ * （teamField＝黄も水色も黒も白文字が映える色つきに）＋斜めスイープ＋役割シルエットの透かし。
  * モノクロ規律の例外＝オフサイトのSNS素材としてチーム色を主役に使う（運営合意・[[design-system-monochrome]]）。
  * 画像は MLB公式CDN（CORS可）を crossOrigin で読むので canvas は汚染されない（保存/共有が通る）。
  */
 function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, art: CardArt) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
+  // letterSpacing（eyebrow用）＝Chrome99+/Safari16.4+ で有効。未対応環境では no-op に縮退（型は交差で付与）。
+  const ctxLS = ctx as CanvasRenderingContext2D & { letterSpacing: string };
   const W = canvas.width;
   const H = canvas.height;
   const portrait = format === 'portrait';
-  const PAPER = '#FAFAF9';
-  const INK = '#16171A';
   const SANS = '-apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif';
   const wht = (a: number) => `rgba(255,255,255,${a})`;
   const team = art.teamColor || '#191A1C';
-  // チーム色を黒へ強く寄せた“地”＝どのチーム色（黄や水色でも）でも白文字が映える濃さに正規化。
-  const bgTop = darkenHex(team, 0.8);
-  const bgBot = darkenHex(team, 0.91);
-  const sweep = darkenHex(team, 0.5);
-  const glowC = lightenHex(team, 0.22);
+  const acc = teamAccent(team);
   const fx = 30;
 
   ctx.clearRect(0, 0, W, H);
-  // ── 背景：チーム色の濃い縦グラデ＋斜めスイープ（奥行き）＋役割シルエットの大きな透かし。
+  // ── 背景：チーム色を“色つきのまま暗く”した地の縦グラデ＋斜めスイープ＋役割シルエットの透かし。
   const bg = ctx.createLinearGradient(0, 0, W * 0.3, H);
-  bg.addColorStop(0, bgTop);
-  bg.addColorStop(1, bgBot);
+  bg.addColorStop(0, teamField(team, 0.25));
+  bg.addColorStop(1, teamField(team, 0.15));
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
   ctx.beginPath();
   ctx.moveTo(W * 0.44, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(W * 0.16, H); ctx.closePath();
-  ctx.fillStyle = hexToRgba(sweep, 0.5); ctx.fill();
+  ctx.fillStyle = hexToRgba(teamField(team, 0.31), 0.55); ctx.fill();
   ctx.beginPath();
   ctx.moveTo(W * 0.52, 0); ctx.lineTo(W, 0); ctx.lineTo(W, H); ctx.lineTo(W * 0.28, H); ctx.closePath();
-  ctx.fillStyle = hexToRgba(team, 0.12); ctx.fill();
-  drawAthlete(ctx, fx + 230, H * (portrait ? 0.68 : 0.66), H * (portrait ? 0.42 : 0.46), art.role, hexToRgba(lightenHex(team, 0.3), 0.07));
+  ctx.fillStyle = hexToRgba(acc, 0.1); ctx.fill();
+  drawAthlete(ctx, fx + 230, H * (portrait ? 0.68 : 0.66), H * (portrait ? 0.42 : 0.46), art.role, hexToRgba(acc, 0.08));
 
-  // ── 顔写真（右・額装）。位置とサイズ。
+  // ── 顔写真（右・フチなし＝ドロップシャドウ＋背後グローで浮かせる。村山指示で枠/白線は撤去）。
   const pw = portrait ? 452 : 372;
   const ph = Math.round(pw * 1.5);
   const px = W - fx - pw - 6;
   const py = portrait ? 150 : 116;
-  // グロー（写真の背後をふわっと持ち上げる）。
   const pgx = px + pw * 0.5;
   const pgy = py + ph * 0.4;
-  const rg = ctx.createRadialGradient(pgx, pgy, 0, pgx, pgy, pw * 0.78);
-  rg.addColorStop(0, hexToRgba(glowC, 0.42));
-  rg.addColorStop(1, hexToRgba(glowC, 0));
+  const rg = ctx.createRadialGradient(pgx, pgy, 0, pgx, pgy, pw * 0.8);
+  rg.addColorStop(0, hexToRgba(acc, 0.3));
+  rg.addColorStop(1, hexToRgba(acc, 0));
   ctx.fillStyle = rg;
   ctx.fillRect(px - 140, py - 90, pw + 280, ph + 180);
-  // フレーム（ドロップシャドウ＋チーム色グラデの縁）。
   ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.42)';
-  ctx.shadowBlur = 38;
-  ctx.shadowOffsetY = 16;
-  const fg = ctx.createLinearGradient(0, py - 7, 0, py + ph + 7);
-  fg.addColorStop(0, lightenHex(team, 0.16));
-  fg.addColorStop(1, team);
-  roundRectPath(ctx, px - 7, py - 7, pw + 14, ph + 14, 11);
-  ctx.fillStyle = fg;
+  ctx.shadowColor = 'rgba(0,0,0,0.38)';
+  ctx.shadowBlur = 34;
+  ctx.shadowOffsetY = 14;
+  roundRectPath(ctx, px, py, pw, ph, 8);
+  ctx.fillStyle = '#0E0F11';
   ctx.fill();
   ctx.restore();
   if (art.headImg) drawPortrait(ctx, art.headImg, px, py, pw, ph);
-  else { roundRectPath(ctx, px, py, pw, ph, 6); ctx.fillStyle = darkenHex(team, 0.6); ctx.fill(); }
-  roundRectPath(ctx, px, py, pw, ph, 6);
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = wht(0.28);
-  ctx.stroke();
+  else { roundRectPath(ctx, px, py, pw, ph, 8); ctx.fillStyle = teamField(team, 0.3); ctx.fill(); }
 
   // ── カード外周フレーム（“1枚もの”の収まり）。
   roundRectPath(ctx, fx, fx, W - fx * 2, H - fx * 2, 8);
   ctx.lineWidth = 2;
-  ctx.strokeStyle = wht(0.16);
+  ctx.strokeStyle = wht(0.14);
   ctx.stroke();
 
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
   const colMaxW = px - 28 - (fx + 30); // 左カラム（写真左端まで）の使える幅。
 
-  // ── 期間バナー（最も目立たせる）＝チーム色タブ＋ペーパーピル＋インク大文字。
-  const bannerY = portrait ? 148 : 116;
-  const bannerH = portrait ? 94 : 82;
-  const accW = 46;
-  let pSize = portrait ? 50 : 44;
-  ctx.font = `800 ${pSize}px ${SANS}`;
-  const pillMax = (portrait ? 372 : 320) - 56;
-  while (ctx.measureText(d.periodLabel).width > pillMax && pSize > 30) { pSize -= 2; ctx.font = `800 ${pSize}px ${SANS}`; }
-  roundRectPath(ctx, fx + 24, bannerY, accW, bannerH, 3);
-  ctx.fillStyle = team;
+  // ── 期間ロックアップ（最大の見せ場）＝英語の eyebrow（年）＋ headline（期間）。
+  // ガラス調グラデ＋斜めハッチ＋上シーンの“透過レイヤー”を重ねた札。
+  const bx = fx + 24;
+  const by = portrait ? 140 : 118;
+  const bpad = 28;
+  const leftbar = 9;
+  const ebSize = portrait ? 25 : 22;
+  const accLt = lightenHex(acc, 0.2);
+  let hSize = portrait ? 58 : 50;
+  ctxLS.letterSpacing = '0px';
+  ctx.font = `800 ${hSize}px ${SANS}`;
+  const headCap = portrait ? 470 : 400;
+  while (ctx.measureText(d.periodHead).width > headCap && hSize > 34) { hSize -= 2; ctx.font = `800 ${hSize}px ${SANS}`; }
+  const headW = ctx.measureText(d.periodHead).width;
+  ctxLS.letterSpacing = '4px';
+  ctx.font = `800 ${ebSize}px ${SANS}`;
+  const ebW = ctx.measureText(d.periodEyebrow).width;
+  ctxLS.letterSpacing = '0px';
+  const bw = leftbar + bpad + Math.max(headW, ebW) + bpad;
+  const bh = 26 + ebSize + 12 + hSize + 26;
+  // 影＋グラデ本体（acc → 暗い色つき地）。
+  ctx.save();
+  ctx.shadowColor = 'rgba(0,0,0,0.34)';
+  ctx.shadowBlur = 24;
+  ctx.shadowOffsetY = 8;
+  const bgl = ctx.createLinearGradient(bx, by, bx + bw, by + bh);
+  bgl.addColorStop(0, acc);
+  bgl.addColorStop(1, teamField(team, 0.18));
+  roundRectPath(ctx, bx, by, bw, bh, 9);
+  ctx.fillStyle = bgl;
   ctx.fill();
-  const pillX = fx + 24 + accW;
-  const pillW = ctx.measureText(d.periodLabel).width + 56;
-  roundRectPath(ctx, pillX, bannerY, pillW, bannerH, 3);
-  ctx.fillStyle = PAPER;
-  ctx.fill();
-  ctx.fillStyle = INK;
-  ctx.textBaseline = 'middle';
-  ctx.fillText(d.periodLabel, pillX + 28, bannerY + bannerH / 2 + 2);
-  ctx.textBaseline = 'alphabetic';
-  // モード・シーズン。
-  ctx.fillStyle = wht(0.72);
-  ctx.font = `700 ${portrait ? 30 : 27}px ${SANS}`;
-  ctx.fillText(`${d.modeLabel}・${d.season}`, fx + 30, bannerY + bannerH + (portrait ? 56 : 50));
+  ctx.restore();
+  // 透過レイヤー：斜めハッチ＋左バー＋上シーン（クリップ内）。
+  ctx.save();
+  roundRectPath(ctx, bx, by, bw, bh, 9);
+  ctx.clip();
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 18; i++) { const sx = bx - bh + i * 46; ctx.beginPath(); ctx.moveTo(sx, by + bh); ctx.lineTo(sx + bh, by); ctx.stroke(); }
+  ctx.fillStyle = accLt;
+  ctx.fillRect(bx, by, leftbar, bh);
+  const sheen = ctx.createLinearGradient(0, by, 0, by + bh);
+  sheen.addColorStop(0, 'rgba(255,255,255,0.20)');
+  sheen.addColorStop(0.5, 'rgba(255,255,255,0)');
+  ctx.fillStyle = sheen;
+  ctx.fillRect(bx, by, bw, bh);
+  ctx.restore();
+  roundRectPath(ctx, bx, by, bw, bh, 9);
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+  ctx.stroke();
+  // テキスト（eyebrow letter-spaced ＋ headline）。
+  const tx = bx + leftbar + bpad;
+  ctxLS.letterSpacing = '4px';
+  ctx.fillStyle = wht(0.82);
+  ctx.font = `800 ${ebSize}px ${SANS}`;
+  ctx.fillText(d.periodEyebrow, tx, by + 26 + ebSize - 4);
+  ctxLS.letterSpacing = '0px';
+  ctx.fillStyle = '#fff';
+  ctx.font = `800 ${hSize}px ${SANS}`;
+  ctx.fillText(d.periodHead, tx, by + 26 + ebSize + 12 + hSize - 8);
+  const bannerBottom = by + bh;
 
   // ── 選手名＝姓/名を積み上げた大見出し（空白・中黒で2分割できる時）。長い・1語は1行で自動縮小。
   // nameBottomY＝名前ブロックの最下ベースライン（=ロゴ列を直下に重ねず置くためのアンカー）。
   const parts = d.name.split(/[\s・]/).filter(Boolean);
-  const nameTop = bannerY + bannerH + (portrait ? 150 : 130);
+  const nameTop = bannerBottom + (portrait ? 96 : 84);
   let nameBottomY: number;
   if (parts.length === 2) {
     let ns = portrait ? 98 : 80;
@@ -1062,49 +1095,49 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
     if (d.teamName) ctx.fillText(d.teamName, metaX, logoCY - 8);
     ctx.fillStyle = wht(0.5);
     ctx.font = `400 ${portrait ? 23 : 21}px ${SANS}`;
-    ctx.fillText(d.asOf, metaX, logoCY + 28);
+    ctx.fillText(`${d.modeLabel}・${d.asOf}`, metaX, logoCY + 28);
   } else {
     ctx.fillStyle = wht(0.5);
     ctx.font = `400 ${portrait ? 23 : 21}px ${SANS}`;
-    ctx.fillText(d.asOf, fx + 30, logoCY);
+    ctx.fillText(`${d.modeLabel}・${d.asOf}`, fx + 30, logoCY);
   }
 
-  // ── 成績ブロック（均等3×3・強弱なし）＝半透明パネル＋チーム色のアクセント線。
+  // ── 成績ブロック（均等3×3・強弱なし）＝半透明パネル＋アクセント線。一回り大きく（村山指示）。
   const bandX = fx + 24;
   const bandW = W - fx * 2 - 48;
-  const bandH = portrait ? 300 : 236;
-  const bandY = H - bandH - (portrait ? 92 : 78);
+  const bandH = portrait ? 360 : 250;
+  const bandY = H - bandH - (portrait ? 84 : 74);
   roundRectPath(ctx, bandX, bandY, bandW, bandH, 10);
-  ctx.fillStyle = wht(0.05);
+  ctx.fillStyle = wht(0.055);
   ctx.fill();
-  roundRectPath(ctx, bandX, bandY, 120, 5, 2.5);
-  ctx.fillStyle = team;
+  roundRectPath(ctx, bandX, bandY, 130, 5, 2.5);
+  ctx.fillStyle = acc;
   ctx.fill();
   const cols = 3;
   const cw = bandW / cols;
   const rowH = bandH / 3;
-  const valSize = portrait ? 56 : 48;
+  const valSize = portrait ? 64 : 52;
   ctx.textAlign = 'center';
   d.grid.forEach((item, i) => {
     const cx = bandX + (i % cols) * cw + cw / 2;
-    const ry = bandY + (portrait ? 24 : 16) + Math.floor(i / cols) * rowH;
+    const ry = bandY + (portrait ? 28 : 18) + Math.floor(i / cols) * rowH;
     ctx.fillStyle = '#fff';
     ctx.font = `800 ${valSize}px ${SANS}`;
     ctx.fillText(item.value, cx, ry + valSize + 2);
-    ctx.fillStyle = wht(0.5);
-    ctx.font = `600 ${portrait ? 23 : 21}px ${SANS}`;
-    ctx.fillText(item.label, cx, ry + valSize + (portrait ? 40 : 36));
+    ctx.fillStyle = wht(0.52);
+    ctx.font = `600 ${portrait ? 26 : 22}px ${SANS}`;
+    ctx.fillText(item.label, cx, ry + valSize + (portrait ? 44 : 38));
   });
   ctx.textAlign = 'left';
 
   // ── フッタ：ドメイン（送客）＋タグライン。
   ctx.fillStyle = wht(0.82);
   ctx.font = `700 ${portrait ? 26 : 24}px ${SANS}`;
-  ctx.fillText(d.site, fx + 30, H - 46);
+  ctx.fillText(d.site, fx + 30, H - 44);
   ctx.textAlign = 'right';
   ctx.fillStyle = wht(0.45);
   ctx.font = `500 ${portrait ? 23 : 21}px ${SANS}`;
-  ctx.fillText(d.tagline, W - fx - 24, H - 46);
+  ctx.fillText(d.tagline, W - fx - 24, H - 44);
   ctx.textAlign = 'left';
 }
 
@@ -1131,7 +1164,47 @@ function mixHex(a: string, b: string, t: number): string {
   return `#${c.map((n) => n.toString(16).padStart(2, '0')).join('')}`;
 }
 const lightenHex = (hex: string, t: number) => mixHex(hex, '#FFFFFF', t);
-const darkenHex = (hex: string, t: number) => mixHex(hex, '#0A0B0C', t);
+
+const clamp01 = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+function rgbToHsl(r: number, g: number, b: number): [number, number, number] {
+  r /= 255; g /= 255; b /= 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+  let h = 0, s = 0; const l = (mx + mn) / 2;
+  if (mx !== mn) {
+    const d = mx - mn;
+    s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+    h = mx === r ? (g - b) / d + (g < b ? 6 : 0) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    h /= 6;
+  }
+  return [h, s, l];
+}
+function hslToHex(h: number, s: number, l: number): string {
+  let r: number, g: number, b: number;
+  if (s === 0) { r = g = b = l; }
+  else {
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const f = (t: number) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+    r = f(h + 1 / 3); g = f(h); b = f(h - 1 / 3);
+  }
+  return `#${[r, g, b].map((n) => Math.round(n * 255).toString(16).padStart(2, '0')).join('')}`;
+}
+/** カードの“地”＝チーム色の色相・彩度を保ったまま暗い色つきに正規化（真っ黒回避＋白文字が映える）。 */
+function teamField(hex: string, l: number): string {
+  const [h, s] = rgbToHsl(...hexToRgbArr(hex));
+  return hslToHex(h, clamp01(s, 0.32, 0.82), l);
+}
+/** カードのアクセント＝鮮やかめ（バナー/枠/グロー）。暗い・無彩色チームでも視認できる明るさに引き上げ。 */
+function teamAccent(hex: string): string {
+  const [h, s, l] = rgbToHsl(...hexToRgbArr(hex));
+  return hslToHex(h, clamp01(s, 0.42, 1), clamp01(l, 0.5, 0.64));
+}
 
 /** 角丸長方形のパスを引く（ctx.roundRect が無い環境にもフォールバック）。 */
 function roundRectPath(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
@@ -1207,7 +1280,7 @@ function drawPortrait(ctx: CanvasRenderingContext2D, img: HTMLImageElement, x: n
   const iw = img.naturalWidth || img.width || 1;
   const ih = img.naturalHeight || img.height || 1;
   ctx.save();
-  roundRectPath(ctx, x, y, w, h, 6);
+  roundRectPath(ctx, x, y, w, h, 8);
   ctx.fillStyle = '#0E0F11';
   ctx.fill();
   ctx.clip();
