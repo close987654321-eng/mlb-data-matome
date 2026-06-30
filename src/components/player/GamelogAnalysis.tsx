@@ -15,6 +15,7 @@ type ArticleRef = { id: string; sport: string; series: boolean };
 type Mode = 'hitting' | 'pitching';
 type Filter = { kind: 'all' } | { kind: 'last'; n: number } | { kind: 'month'; m: number };
 type SortDir = 'asc' | 'desc';
+type Agg = HitAgg | PitAgg;
 
 /** サマリ1行＝指標ラベル＋[選択期間, 今季累計, 162換算]の整形済み文字列。画像出力でも同じ配列を使う。 */
 type SummaryRow = { label: string; vals: [string, string, string] };
@@ -46,6 +47,9 @@ export default function GamelogAnalysis({
         date: 'Date', opp: 'Opp', result: 'Dec', win: 'W', loss: 'L', none: '—', asOf: (d: string) => `As of ${d}`,
         gameWar: 'Est. WAR', warNote: 'Per-game value estimated from each box score, calibrated so the season total matches the official WAR.',
         warDelta: 'Est. WAR in this span', reaction: 'Reactions', covered: (n: number) => `${n} games with overseas-reaction digests`,
+        splits: 'Splits', home: 'Home', away: 'Away', pitchDay: 'On days he pitched', restDay: 'Other days',
+        twoWay: 'Two-way split (batting)', vsTeam: 'By opponent', pace: 'Milestones & pace', proj: '162-pace',
+        watchGame: 'View game',
       }
     : {
         heading: '徹底分析（試合別）', sub: '直近の試合数や月で絞り込み。率はカウント数から再計算、162換算は今季ペースからの推計です。',
@@ -56,6 +60,9 @@ export default function GamelogAnalysis({
         date: '日付', opp: '対戦', result: '結果', win: '勝', loss: '敗', none: '—', asOf: (d: string) => `${d}時点`,
         gameWar: '推定WAR', warNote: '各試合の成績から1試合ぶんを試算し、季節合計が公式WARに一致するよう補正した推定値です。',
         warDelta: '選択期間の推定WAR', reaction: '反応', covered: (n: number) => `海外の反応つき ${n}試合`,
+        splits: 'スプリット', home: 'ホーム', away: 'ビジター', pitchDay: '登板した試合', restDay: 'それ以外',
+        twoWay: '二刀流スプリット（打撃）', vsTeam: '対戦相手別', pace: '節目・ペース', proj: '162換算',
+        watchGame: '試合を見る',
       },
     [en],
   );
@@ -94,6 +101,103 @@ export default function GamelogAnalysis({
     [articles, log],
   );
 
+  // ② スプリット（ホーム/ビジター・二刀流の登板日/非登板日・対戦相手別）。すべて gamelog から純粋集計。
+  const pitchDates = useMemo(() => new Set(log.pitching.map((p) => p.d)), [log]);
+  const venueSplit = useMemo<{ label: string; agg: Agg }[]>(() => {
+    const f = (pred: (home: boolean) => boolean) =>
+      mode === 'hitting'
+        ? aggHitting(log.hitting.filter((r) => pred(r.home)))
+        : aggPitching(log.pitching.filter((r) => pred(r.home)));
+    return [
+      { label: t.home, agg: f((h) => h) },
+      { label: t.away, agg: f((h) => !h) },
+    ];
+  }, [mode, log, t]);
+  // 二刀流スプリット＝登板した試合の打撃 vs それ以外（打撃モードのみ・大谷固有の切り口）。
+  const twoWaySplit = useMemo<{ label: string; agg: Agg }[] | null>(() => {
+    if (mode !== 'hitting' || log.pitching.length === 0) return null;
+    return [
+      { label: t.pitchDay, agg: aggHitting(log.hitting.filter((r) => pitchDates.has(r.d))) },
+      { label: t.restDay, agg: aggHitting(log.hitting.filter((r) => !pitchDates.has(r.d))) },
+    ];
+  }, [mode, log, pitchDates, t]);
+  const byOpp = useMemo(() => {
+    const m = new Map<string, (HitGame | PitGame)[]>();
+    for (const r of baseRows) {
+      const arr = m.get(r.oppJa) ?? [];
+      arr.push(r);
+      m.set(r.oppJa, arr);
+    }
+    return [...m.entries()]
+      .map(([opp, rs]) => ({
+        opp,
+        n: rs.length,
+        agg: (mode === 'hitting' ? aggHitting(rs as HitGame[]) : aggPitching(rs as PitGame[])) as Agg,
+      }))
+      .sort((a, b) => b.n - a.n);
+  }, [baseRows, mode]);
+  // スプリット表の指標行（モード別・4指標に絞る）。
+  const splitRows = useMemo<{ label: string; get: (a: Agg) => string }[]>(
+    () =>
+      mode === 'hitting'
+        ? [
+            { label: HL.g, get: (a) => `${(a as HitAgg).g}` },
+            { label: HL.avg, get: (a) => fmtRate((a as HitAgg).avg) },
+            { label: HL.hr, get: (a) => `${(a as HitAgg).hr}` },
+            { label: HL.ops, get: (a) => fmtRate((a as HitAgg).ops) },
+          ]
+        : [
+            { label: PL.g, get: (a) => `${(a as PitAgg).g}` },
+            { label: PL.era, get: (a) => fmt2((a as PitAgg).era) },
+            { label: PL.whip, get: (a) => fmt2((a as PitAgg).whip) },
+            { label: PL.so, get: (a) => `${(a as PitAgg).so}` },
+          ],
+    [mode, HL, PL],
+  );
+
+  // ③ 節目・ペース（今季累計＋162換算）。chase（50本ペース等）はSNSカードの見出しにも使う。
+  const cumHit = useMemo(() => aggHitting(log.hitting), [log]);
+  const projHit = useMemo(() => projectHitting(cumHit, log.teamGames), [cumHit, log.teamGames]);
+  const cumPit = useMemo(() => aggPitching(log.pitching), [log]);
+  const projPit = useMemo(() => projectPitching(cumPit, log.teamGames), [cumPit, log.teamGames]);
+  const paceInfo = useMemo<{ lines: string[]; chase: string | null }>(() => {
+    if (mode === 'hitting') {
+      const hrNext = Math.ceil((cumHit.hr + 1) / 10) * 10;
+      const chase =
+        projHit.hr >= 50 && projHit.sb >= 50 ? '50-50' :
+        projHit.hr >= 40 && projHit.sb >= 40 ? '40-40' :
+        projHit.hr >= 50 ? (en ? '50 HR pace' : '50本塁打ペース') :
+        projHit.hr >= 40 ? (en ? '40 HR pace' : '40本塁打ペース') : null;
+      const lines = en
+        ? [
+            `HR ${cumHit.hr} — ${hrNext - cumHit.hr} to ${hrNext} (162-pace ${projHit.hr})`,
+            `RBI ${cumHit.rbi} (162-pace ${projHit.rbi})`,
+            `H ${cumHit.h} (162-pace ${projHit.h}) · SB ${cumHit.sb} (${projHit.sb})`,
+          ]
+        : [
+            `本塁打 ${cumHit.hr} — あと${hrNext - cumHit.hr}本で${hrNext}号（162換算 ${projHit.hr}本）`,
+            `打点 ${cumHit.rbi}（162換算 ${projHit.rbi}）`,
+            `安打 ${cumHit.h}（162換算 ${projHit.h}）・盗塁 ${cumHit.sb}（${projHit.sb}）`,
+          ];
+      return { lines, chase };
+    }
+    const soNext = Math.ceil((cumPit.so + 1) / 50) * 50;
+    const ipRemain = (log.teamGames ?? 0) - cumPit.ip;
+    const chase = projPit.so >= 250 ? (en ? '250 K pace' : '250奪三振ペース') : projPit.so >= 200 ? (en ? '200 K pace' : '200奪三振ペース') : null;
+    const lines = en
+      ? [
+          `K ${cumPit.so} — ${soNext - cumPit.so} to ${soNext} (162-pace ${projPit.so})`,
+          `ERA ${fmt2(cumPit.era)} · WHIP ${fmt2(cumPit.whip)}`,
+          `${cumPit.w}-${cumPit.l} (162-pace ${projPit.w} W) · ${ipRemain > 0 ? `${ipRemain.toFixed(1)} IP to qualify` : 'qualified'}`,
+        ]
+      : [
+          `奪三振 ${cumPit.so} — あと${soNext - cumPit.so}で${soNext}（162換算 ${projPit.so}）`,
+          `防御率 ${fmt2(cumPit.era)} ・ WHIP ${fmt2(cumPit.whip)}`,
+          `${cumPit.w}勝${cumPit.l}敗（162換算 ${projPit.w}勝）・${ipRemain > 0 ? `規定まであと${ipRemain.toFixed(1)}回` : '規定到達'}`,
+        ];
+    return { lines, chase };
+  }, [mode, en, cumHit, projHit, cumPit, projPit, log.teamGames]);
+
   // 絞り込み（時系列 asc のまま＝期間の端＝最初/最後の試合日が取れる）。
   const filtered = useMemo(() => {
     if (filter.kind === 'last') return baseRows.slice(-filter.n);
@@ -112,7 +216,17 @@ export default function GamelogAnalysis({
       const c = aggHitting(log.hitting);
       const j = projectHitting(c, log.teamGames);
       const row = (label: string, f: (a: HitAgg) => string): SummaryRow => ({ label, vals: [f(p), f(c), f(j)] });
+      // WAR行：選択期間＝推定の和／今季累計＝公式値／162換算＝公式値×162/チーム試合。
+      const warRow: SummaryRow = {
+        label: 'WAR',
+        vals: [
+          (filtered as HitGame[]).reduce((s, r) => s + (est.hitByDate.get(r.d) ?? 0), 0).toFixed(1),
+          est.official.hit.toFixed(1),
+          (log.teamGames ? (est.official.hit * 162) / log.teamGames : est.official.hit).toFixed(1),
+        ],
+      };
       return [
+        warRow,
         row(HL.g, (a) => `${a.g}`),
         row(HL.avg, (a) => fmtRate(a.avg)),
         row(HL.hr, (a) => `${a.hr}`),
@@ -130,7 +244,16 @@ export default function GamelogAnalysis({
     const c = aggPitching(log.pitching);
     const j = projectPitching(c, log.teamGames);
     const row = (label: string, f: (a: PitAgg) => string): SummaryRow => ({ label, vals: [f(p), f(c), f(j)] });
+    const warRow: SummaryRow = {
+      label: 'WAR',
+      vals: [
+        (filtered as PitGame[]).reduce((s, r) => s + (est.pitByDate.get(r.d) ?? 0), 0).toFixed(1),
+        est.official.pit.toFixed(1),
+        (log.teamGames ? (est.official.pit * 162) / log.teamGames : est.official.pit).toFixed(1),
+      ],
+    };
     return [
+      warRow,
       row(PL.g, (a) => `${a.g}`),
       row(PL.era, (a) => fmt2(a.era)),
       row(PL.whip, (a) => fmt2(a.whip)),
@@ -142,7 +265,7 @@ export default function GamelogAnalysis({
       row(PL.k9, (a) => fmt1(a.k9)),
       row(PL.kbb, (a) => fmt1(a.kbb)),
     ];
-  }, [mode, filtered, log, HL, PL]);
+  }, [mode, filtered, log, HL, PL, est]);
 
   // 表の列定義。
   const cols: Col<HitGame>[] | Col<PitGame>[] = useMemo(() => {
@@ -214,6 +337,7 @@ export default function GamelogAnalysis({
       cols: [t.colPeriod, t.colSeason, t.colProj],
       rows: summary,
       war: warT != null ? `WAR ${warT.toFixed(1)}${warLatest ? `  (${en ? 'P' : '投'}${(warLatest.warPit ?? 0).toFixed(1)} / ${en ? 'B' : '打'}${(warLatest.warHit ?? 0).toFixed(1)})` : ''}` : '',
+      badge: paceInfo.chase ?? '',
       site: 'matome-mlb-kaigai.jp',
     });
     canvas.toBlob((blob) => {
@@ -298,7 +422,22 @@ export default function GamelogAnalysis({
         </table>
       </div>
 
-      {/* WAR 推移。APIは累計しか返さないため、自前で日次に積み上げた近似系列。 */}
+      {/* ③ 節目・ペース（chase は SNS カードの見出しにも使う）。 */}
+      <div className="rounded-[2px] border border-line p-4">
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="text-sm font-bold text-ink">{t.pace}</h3>
+          {paceInfo.chase && (
+            <span className="rounded-[2px] border border-ink px-2 py-0.5 text-xs font-bold text-ink">{paceInfo.chase}</span>
+          )}
+        </div>
+        <ul className="mt-2 space-y-1 text-sm tabular-nums text-ink-soft">
+          {paceInfo.lines.map((l) => (
+            <li key={l}>{l}</li>
+          ))}
+        </ul>
+      </div>
+
+      {/* WAR 推移。1試合ごとの推定WARの積み上がり（末尾＝公式季節値に一致）。 */}
       <div className="rounded-[2px] border border-line p-4">
         <div className="flex items-baseline justify-between gap-3">
           <h3 className="text-sm font-bold text-ink">{t.warTitle}</h3>
@@ -348,7 +487,7 @@ export default function GamelogAnalysis({
                   </button>
                 </th>
               ))}
-              {articles && <th className="whitespace-nowrap px-2.5 py-2 text-right font-medium">{t.reaction}</th>}
+              {articles && <th className="whitespace-nowrap px-2.5 py-2 text-right font-medium">{t.watchGame}</th>}
             </tr>
           </thead>
           <tbody>
@@ -369,9 +508,14 @@ export default function GamelogAnalysis({
                       {article ? (
                         <Link
                           href={`/${article.sport}/${article.id}`}
-                          className="text-ink underline decoration-line underline-offset-2 hover:decoration-ink"
+                          aria-label={t.watchGame}
+                          title={t.watchGame}
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-[2px] border border-line text-ink-soft transition-colors hover:border-ink hover:bg-ink hover:text-paper"
                         >
-                          {t.reaction}
+                          {/* 試合ページへ遷移する“開く”を表す北東向き矢印（モダン・無彩色）。 */}
+                          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                            <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
                         </Link>
                       ) : (
                         <span className="text-ink-mute">{t.none}</span>
@@ -383,6 +527,51 @@ export default function GamelogAnalysis({
             })}
           </tbody>
         </table>
+      </div>
+
+      {/* ② スプリット（ホーム/ビジター・二刀流の登板日/非登板日・対戦相手別）。 */}
+      <div className="space-y-3">
+        <h3 className="text-sm font-bold text-ink">{t.splits}</h3>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <p className="mb-1 text-xs text-ink-mute">{t.home} / {t.away}</p>
+            <MiniStatTable groups={venueSplit} rows={splitRows} />
+          </div>
+          {twoWaySplit && (
+            <div>
+              <p className="mb-1 text-xs text-ink-mute">{t.twoWay}</p>
+              <MiniStatTable groups={twoWaySplit} rows={splitRows} />
+            </div>
+          )}
+        </div>
+        <details className="group rounded-[2px] border border-line">
+          <summary className="flex min-h-[40px] cursor-pointer list-none items-center justify-between px-3 text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
+            {t.vsTeam}
+            <span aria-hidden className="text-ink-soft transition-transform group-open:rotate-180">▾</span>
+          </summary>
+          <div className="overflow-x-auto border-t border-line">
+            <table className="w-full min-w-[420px] text-sm tabular-nums">
+              <thead>
+                <tr className="border-b border-line text-xs text-ink-mute">
+                  <th className="px-3 py-2 text-left font-medium">{t.opp}</th>
+                  {splitRows.map((s) => (
+                    <th key={s.label} className="px-3 py-2 text-right font-medium">{s.label}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {byOpp.map((o) => (
+                  <tr key={o.opp} className="border-b border-line/50 last:border-0">
+                    <td className="whitespace-nowrap px-3 py-1.5 text-left text-ink-soft">{o.opp}</td>
+                    {splitRows.map((s) => (
+                      <td key={s.label} className="px-3 py-1.5 text-right text-ink">{s.get(o.agg)}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </details>
       </div>
 
       {/* 画像出力。 */}
@@ -398,6 +587,34 @@ export default function GamelogAnalysis({
         <canvas ref={canvasRef} width={1200} height={760} className="hidden" />
       </div>
     </section>
+  );
+}
+
+/** スプリット比較の小表（列＝グループ・行＝指標）。型は呼び出し側の Agg に従う（any を避ける）。 */
+function MiniStatTable<A>({ groups, rows }: { groups: { label: string; agg: A }[]; rows: { label: string; get: (a: A) => string }[] }) {
+  return (
+    <div className="overflow-x-auto rounded-[2px] border border-line">
+      <table className="w-full text-sm tabular-nums">
+        <thead>
+          <tr className="border-b border-line text-xs text-ink-mute">
+            <th className="px-3 py-2 text-left font-medium"> </th>
+            {groups.map((g) => (
+              <th key={g.label} className="px-3 py-2 text-right font-semibold text-ink">{g.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr key={r.label} className="border-b border-line/60 last:border-0">
+              <td className="px-3 py-2 text-left text-ink-soft">{r.label}</td>
+              {groups.map((g) => (
+                <td key={g.label} className="px-3 py-2 text-right text-ink">{r.get(g.agg)}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -423,7 +640,7 @@ function WarSparkline({ points: pts }: { points: number[] }) {
 /** サマリカードを canvas に描く（白地・無彩色・送客ウォーターマーク）。 */
 function drawCard(
   canvas: HTMLCanvasElement,
-  d: { title: string; subtitle: string; cols: [string, string, string]; rows: SummaryRow[]; war: string; site: string },
+  d: { title: string; subtitle: string; cols: [string, string, string]; rows: SummaryRow[]; war: string; badge: string; site: string },
 ) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -447,6 +664,14 @@ function drawCard(
   ctx.fillStyle = SOFT;
   ctx.font = `400 24px ${SANS}`;
   ctx.fillText(d.subtitle, padX, 126);
+  // 節目バッジ（50本ペース等）を右上に太字で（SNSで一目で伝わる見出し）。
+  if (d.badge) {
+    ctx.font = `700 28px ${SANS}`;
+    ctx.fillStyle = INK;
+    ctx.textAlign = 'right';
+    ctx.fillText(d.badge, W - padX, 86);
+    ctx.textAlign = 'left';
+  }
   // 題字罫（サイト唯一の赤の一点はここでは使わず無彩色で締める）
   ctx.strokeStyle = INK;
   ctx.lineWidth = 2;
