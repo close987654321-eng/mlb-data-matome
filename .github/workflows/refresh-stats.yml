@@ -38,13 +38,14 @@ jobs:
           # pipefail で node の失敗が tail に飲まれず赤くなる（取得失敗を no-op と誤認しない）
           node scripts/fetch-mlb-stats.mjs snapshot "$ASOF" "$SEASON" | tail -3
 
-      - name: 大谷の試合別ログ＋WAR推移を更新（徹底分析セクション用）
+      - name: 全選手の試合別ログ＋WAR推移を更新（徹底分析セクションを全選手へ展開）
         run: |
           set -euo pipefail
           SEASON=$(TZ=Asia/Tokyo date +%Y)
-          # gamelog は試合別ログを取り直しつつ、毎時の累計WARを warHistory に1点 upsert（自前の推移を積む）。
+          # gamelogs は snapshot の MLBロースター級 全選手の試合別ログを取り直しつつ、毎時の累計WARを
+          # warHistory に1点 upsert（自前の推移を積む）。WAR は snapshot の saber を流用＝API を節約。
           # 失敗してもスナップショットの更新は活かす（|| true せず可視化、ただし続行）。
-          node scripts/fetch-mlb-stats.mjs gamelog 660271 "$SEASON" | tail -2 || echo "gamelog 取得スキップ（snapshot は反映済み）"
+          node scripts/fetch-mlb-stats.mjs gamelogs "$SEASON" | tail -3 || echo "gamelogs 取得スキップ（snapshot は反映済み）"
 
       - name: WARレースを更新（大谷＋ライバルの累計WARを1日1点 積む）
         run: |

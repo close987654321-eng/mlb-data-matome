@@ -47,7 +47,7 @@ export default function GamelogAnalysis({
         warGain: 'WAR in this span (approx)', warNA: '—', save: 'Save as image', saving: 'Rendering…',
         date: 'Date', opp: 'Opp', result: 'Dec', win: 'W', loss: 'L', none: '—', asOf: (d: string) => `As of ${d}`,
         gameWar: 'Est. WAR', warNote: 'Per-game value estimated from each box score, calibrated so the season total matches the official WAR.',
-        warDelta: 'Est. WAR in this span', reaction: 'Reactions', covered: (n: number) => `${n} games with overseas-reaction digests`,
+        warDelta: 'Est. WAR in this span', covered: (n: number) => `${n} games with overseas-reaction digests`,
         splits: 'Splits', home: 'Home', away: 'Away', pitchDay: 'On days he pitched', restDay: 'Other days',
         twoWay: 'Two-way split (batting)', vsTeam: 'By opponent', pace: 'Milestones & pace', proj: '162-pace',
         watchGame: 'View game',
@@ -60,7 +60,7 @@ export default function GamelogAnalysis({
         warGain: '選択期間のWAR増分（近似）', warNA: '—', save: 'この内容を画像で保存', saving: '生成中…',
         date: '日付', opp: '対戦', result: '結果', win: '勝', loss: '敗', none: '—', asOf: (d: string) => `${d}時点`,
         gameWar: '推定WAR', warNote: '各試合の成績から1試合ぶんを試算し、季節合計が公式WARに一致するよう補正した推定値です。',
-        warDelta: '選択期間の推定WAR', reaction: '反応', covered: (n: number) => `海外の反応つき ${n}試合`,
+        warDelta: '選択期間の推定WAR', covered: (n: number) => `海外の反応つき ${n}試合`,
         splits: 'スプリット', home: 'ホーム', away: 'ビジター', pitchDay: '登板した試合', restDay: 'それ以外',
         twoWay: '二刀流スプリット（打撃）', vsTeam: '対戦相手別', pace: '節目・ペース', proj: '162換算',
         watchGame: '試合を見る',
@@ -83,7 +83,12 @@ export default function GamelogAnalysis({
     [en],
   );
 
-  const [mode, setMode] = useState<Mode>('hitting');
+  // 全選手に展開＝単一分野（純投手/純打者）でも壊さない。既定モードは試合数が多い方（二刀流は打撃→大谷）、
+  // 切替トグルは両分野を持つ二刀流だけ出す（純投手に空の「打撃」タブを見せない）。
+  const hasHit = log.hitting.length > 0;
+  const hasPit = log.pitching.length > 0;
+  const twoWay = hasHit && hasPit;
+  const [mode, setMode] = useState<Mode>(log.pitching.length > log.hitting.length ? 'pitching' : 'hitting');
   const [filter, setFilter] = useState<Filter>({ kind: 'all' });
   const [sort, setSort] = useState<{ key: string; dir: SortDir }>({ key: 'd', dir: 'desc' });
   const [busy, setBusy] = useState(false);
@@ -337,7 +342,7 @@ export default function GamelogAnalysis({
       subtitle: `${mode === 'hitting' ? t.batting : t.pitching} · ${fLabel} · ${t.asOf(log.asOf)}`,
       cols: [t.colPeriod, t.colSeason, t.colProj],
       rows: summary,
-      war: warT != null ? `WAR ${warT.toFixed(1)}${warLatest ? `  (${en ? 'P' : '投'}${(warLatest.warPit ?? 0).toFixed(1)} / ${en ? 'B' : '打'}${(warLatest.warHit ?? 0).toFixed(1)})` : ''}` : '',
+      war: warT != null ? `WAR ${warT.toFixed(1)}${warLatest && warLatest.warHit != null && warLatest.warPit != null ? `  (${en ? 'P' : '投'}${warLatest.warPit.toFixed(1)} / ${en ? 'B' : '打'}${warLatest.warHit.toFixed(1)})` : ''}` : '',
       badge: paceInfo.chase ?? '',
       site: 'matome-mlb-kaigai.jp',
     });
@@ -373,22 +378,24 @@ export default function GamelogAnalysis({
         <p className="mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{t.sub}</p>
       </div>
 
-      {/* モード切替（打撃 / 投球）。 */}
-      <div className="inline-flex overflow-hidden rounded-[2px] border border-line">
-        {(['hitting', 'pitching'] as Mode[]).map((m) => (
-          <button
-            key={m}
-            type="button"
-            onClick={() => { setMode(m); setFilter({ kind: 'all' }); setSort({ key: 'd', dir: 'desc' }); }}
-            className={`min-h-[40px] px-5 text-sm font-semibold transition-colors ${
-              mode === m ? 'bg-ink text-paper' : 'bg-paper text-ink-soft hover:text-ink'
-            }`}
-            aria-pressed={mode === m}
-          >
-            {m === 'hitting' ? t.batting : t.pitching}
-          </button>
-        ))}
-      </div>
+      {/* モード切替（打撃 / 投球）＝二刀流（両分野あり）だけ。純投手/純打者は単一モード固定で出さない。 */}
+      {twoWay && (
+        <div className="inline-flex overflow-hidden rounded-[2px] border border-line">
+          {(['hitting', 'pitching'] as Mode[]).map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => { setMode(m); setFilter({ kind: 'all' }); setSort({ key: 'd', dir: 'desc' }); }}
+              className={`min-h-[40px] px-5 text-sm font-semibold transition-colors ${
+                mode === m ? 'bg-ink text-paper' : 'bg-paper text-ink-soft hover:text-ink'
+              }`}
+              aria-pressed={mode === m}
+            >
+              {m === 'hitting' ? t.batting : t.pitching}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* 期間フィルタ。 */}
       <div className="flex flex-wrap gap-1.5">
@@ -446,9 +453,10 @@ export default function GamelogAnalysis({
           {warT != null && (
             <span className="text-sm tabular-nums text-ink">
               <span className="text-lg font-bold">{warT.toFixed(1)}</span>
-              {warLatest && (
+              {/* 投/打 内訳は二刀流のみ（単一分野は総計＝その分野値なので内訳を出さない）。 */}
+              {warLatest && warLatest.warHit != null && warLatest.warPit != null && (
                 <span className="ml-1.5 text-xs text-ink-mute">
-                  {en ? 'P' : '投'}{(warLatest.warPit ?? 0).toFixed(1)} / {en ? 'B' : '打'}{(warLatest.warHit ?? 0).toFixed(1)}
+                  {en ? 'P' : '投'}{warLatest.warPit.toFixed(1)} / {en ? 'B' : '打'}{warLatest.warHit.toFixed(1)}
                 </span>
               )}
             </span>
@@ -517,14 +525,13 @@ export default function GamelogAnalysis({
                   {articles && (
                     <td className="whitespace-nowrap px-2.5 py-1 text-right">
                       {article ? (
-                        // 試合ページへ遷移＝実効44pxのタップ域＋「反応」ラベル併記（“反応が読める”報酬を言語化）＋北東矢印。
+                        // 試合ページへ遷移＝矢印アイコンのみ（北東矢印＝外部遷移の含意）。ラベルは aria のみ・実効36pxの正方タップ域。
                         <Link
                           href={`/${article.sport}/${article.id}`}
                           aria-label={t.watchGame}
-                          className="inline-flex min-h-[36px] items-center gap-1 rounded-[2px] border border-line px-2.5 text-xs font-semibold text-ink-soft transition-colors hover:border-ink hover:bg-ink hover:text-paper"
+                          className="inline-flex min-h-[36px] min-w-[36px] items-center justify-center rounded-[2px] border border-line text-ink-soft transition-colors hover:border-ink hover:bg-ink hover:text-paper"
                         >
-                          {t.reaction}
-                          <svg viewBox="0 0 24 24" className="h-3 w-3 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
                             <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </Link>

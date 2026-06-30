@@ -965,7 +965,10 @@ async function fetchTeamGamesPlayed(teamId, season) {
   return games.filter((g) => g.status?.codedGameState === 'F' || g.status?.abstractGameState === 'Final').length;
 }
 
-async function runGamelog(query, season, asOf) {
+// opts: { saber, teamGamesCache } ＝ バッチ(gamelogs)が snapshot の saber を渡して WAR 再取得を省き
+// （warrace と同じ値で一貫）、teamGames を teamId 単位でキャッシュして同一チームの schedule 再取得も防ぐ。
+// 単発の gamelog では opts なし＝従来どおり WAR/schedule を個別取得する。
+async function runGamelog(query, season, asOf, opts = {}) {
   // 選手解決（runPlayer と同じ：数字=ID / 日本語名 / 英語検索）。既定は大谷。
   let id;
   if (!query) id = 660271;
@@ -979,9 +982,19 @@ async function runGamelog(query, season, asOf) {
       if (!id) return console.error(`選手が見つからない: ${query}`);
     }
   }
-  const [person, saberMap] = await Promise.all([fetchGamelog(id, season), fetchWar([id], season)]);
+  const person = await fetchGamelog(id, season);
   if (!person) return console.error(`gameLog 取得失敗: ${id}`);
-  const teamGames = await fetchTeamGamesPlayed(person.currentTeam?.id, season);
+  // saber（WAR の補正目標）＝渡されたら snapshot 値を流用、無ければ個別取得。
+  const saber = opts.saber ?? (await fetchWar([id], season)).get(id) ?? {};
+  // teamGames（162換算の分母）＝チーム単位でキャッシュ可。
+  const teamId = person.currentTeam?.id;
+  let teamGames;
+  if (opts.teamGamesCache?.has(teamId)) {
+    teamGames = opts.teamGamesCache.get(teamId);
+  } else {
+    teamGames = await fetchTeamGamesPlayed(teamId, season);
+    opts.teamGamesCache?.set(teamId, teamGames);
+  }
 
   const blockOf = (g) => (person.stats ?? []).find((s) => s.group?.displayName === g)?.splits ?? [];
   const hitting = blockOf('hitting').filter((s) => s.gameType === 'R').map((s) => glRow(s, GL_HIT, { win: s.isWin ?? null }));
@@ -991,7 +1004,6 @@ async function runGamelog(query, season, asOf) {
   // 取得時点で持つ量なので、試合日でなくスナップ日で打つ（git 履歴からの backfill も asOf 日付キー＝一貫）。
   // 同日複数回の取得は上書き（その日の最終値が残る）。日が変われば新しい点が増える＝1日1点の近似系列。
   const lastDate = (asOf ?? '').slice(0, 10) || ([...hitting, ...pitching].map((r) => r.d).sort().pop() ?? '');
-  const saber = saberMap.get(id) ?? {};
   const r1 = (v) => (typeof v === 'number' ? Math.round(v * 10) / 10 : null);
   const warPoint =
     lastDate && (typeof saber.hit === 'number' || typeof saber.pit === 'number')
@@ -1039,6 +1051,36 @@ async function runGamelog(query, season, asOf) {
   if (prevContent != null && stableStringify(content) === prevContent) stampedAsOf = prevAsOf;
   writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
   console.log(`gamelog 書き出し: ${content.player.nameJa} 打${hitting.length}試合 / 投${pitching.length}試合 / WAR点${warHistory.length} → ${file}`);
+}
+
+// gamelogs … 徹底分析セクションを「選手一覧の全選手」に展開。snapshot を読んで MLBロースター級
+// （league があり hitting/pitching を持つ）選手だけを対象に gamelog を一括更新する。WAR は snapshot の
+// saber を流用し（warrace と同値で一貫＋API節約）、teamGames は teamId 単位でキャッシュして schedule の
+// 重複取得を避ける。snapshot 後に実行（warrace と同じ前提）。1選手の失敗は握りつぶして他を活かす。
+async function runGamelogs(season, asOf) {
+  const snapFile = path.join(process.cwd(), 'data', 'jp-players-stats.json');
+  let snap;
+  try {
+    snap = JSON.parse(readFileSync(snapFile, 'utf8'));
+  } catch {
+    console.error('snapshot 未生成のため gamelogs をスキップ（先に snapshot を実行）');
+    return;
+  }
+  // 対象＝サイト本体が徹底分析を出す条件（hasMlbStats: league あり＋打/投あり）に揃える。AAA等(league=null)は除外。
+  const targets = Object.entries(snap.players ?? {}).filter(
+    ([, p]) => p.league && (p.hitting || p.pitching),
+  );
+  const teamGamesCache = new Map();
+  let ok = 0;
+  for (const [id, p] of targets) {
+    try {
+      await runGamelog(String(id), season, asOf, { saber: p.saber ?? {}, teamGamesCache });
+      ok++;
+    } catch (e) {
+      console.error(`gamelog 失敗 ${id}: ${e?.message ?? e}`);
+    }
+  }
+  console.log(`gamelogs: ${ok}/${targets.length}選手の試合別ログを更新`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1144,6 +1186,10 @@ async function main() {
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     const playerArg = [arg, arg2].find((x) => x && !/^\d{4}$/.test(x));
     await runGamelog(playerArg, seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
+  } else if (cmd === 'gamelogs') {
+    // gamelogs [season]：snapshot の MLBロースター級 全選手の試合別ログを一括更新（徹底分析を全選手へ展開）。
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    await runGamelogs(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
   } else if (cmd === 'warrace') {
     // warrace：snapshot を読んで大谷＋ライバルの累計WARを1日1点で war-race.json に積む。
     await runWarRace(jstStamp());
@@ -1157,6 +1203,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs games [YYYY-MM-DD] [YYYY-MM-DD] # 日本人選手の出場試合を列挙（既定=ET昨日／重複検知つき）',
         '  node scripts/fetch-mlb-stats.mjs snapshot [YYYY-MM-DD] # 選手ハブ用に全選手の今季成績を data/jp-players-stats.json へ',
         '  node scripts/fetch-mlb-stats.mjs gamelog [選手|ID] [season] # 1選手の試合別ログ＋WAR推移を data/gamelogs/{id}.json へ（既定=大谷）',
+        '  node scripts/fetch-mlb-stats.mjs gamelogs [season]  # MLBロースター級 全選手の試合別ログを一括更新（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
