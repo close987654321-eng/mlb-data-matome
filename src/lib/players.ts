@@ -127,6 +127,36 @@ export const PLAYERS: Player[] = [
   { slug: 'aaron-judge', nameJa: 'アーロン・ジャッジ', nameEn: 'Aaron Judge', mlbId: 592450, rival: true,
     bio: '球界を代表する右の大砲。圧倒的な長打力で知られる。',
     sameAs: [mlb('aaron-judge', 592450)] },
+
+  // ───── ドジャースのスター野手（rival・大谷の同僚）。一覧「今季のスター野手」で大谷と横並び比較する。
+  // nameJa は RIVAL_NAMES（scripts/fetch-mlb-stats.mjs）と一致。aliases で記事タグの短い表記ゆれも拾う。
+  { slug: 'mookie-betts', nameJa: 'ムーキー・ベッツ', nameEn: 'Mookie Betts', mlbId: 605141, rival: true,
+    bio: '走攻守すべてに優れる球界屈指のスター。MVP受賞歴を持ち、内外野をこなす。',
+    aliases: ['ベッツ'], sameAs: [mlb('mookie-betts', 605141)] },
+  { slug: 'freddie-freeman', nameJa: 'フレディ・フリーマン', nameEn: 'Freddie Freeman', mlbId: 518692, rival: true,
+    bio: '高打率と勝負強さを兼ね備える左打ちの一塁手。MVP受賞歴を持つ安定した強打者。',
+    aliases: ['フリーマン'], sameAs: [mlb('freddie-freeman', 518692)] },
+  { slug: 'andy-pages', nameJa: 'アンディ・パヘス', nameEn: 'Andy Pages', mlbId: 681624, rival: true,
+    bio: '広い守備範囲と長打力を持つ中堅手。',
+    aliases: ['パヘス'], sameAs: [mlb('andy-pages', 681624)] },
+  { slug: 'tommy-edman', nameJa: 'トミー・エドマン', nameEn: 'Tommy Edman', mlbId: 669242, rival: true,
+    bio: '内外野をこなすユーティリティ。走力と勝負強い打撃が持ち味。',
+    aliases: ['エドマン'], sameAs: [mlb('tommy-edman', 669242)] },
+  { slug: 'dalton-rushing', nameJa: 'ダルトン・ラッシング', nameEn: 'Dalton Rushing', mlbId: 687221, rival: true,
+    bio: '打力を期待される若手の左打ち捕手。',
+    aliases: ['ラッシング'], sameAs: [mlb('dalton-rushing', 687221)] },
+  { slug: 'will-smith', nameJa: 'ウィル・スミス', nameEn: 'Will Smith', mlbId: 669257, rival: true,
+    bio: '打てる正捕手として中軸を担う右打者。',
+    aliases: ['スミス'], sameAs: [mlb('will-smith', 669257)] },
+  { slug: 'kyle-tucker', nameJa: 'カイル・タッカー', nameEn: 'Kyle Tucker', mlbId: 663656, rival: true,
+    bio: '長打力と選球眼を兼ね備える外野手。リーグ屈指の総合的なスラッガー。',
+    aliases: ['タッカー'], sameAs: [mlb('kyle-tucker', 663656)] },
+  { slug: 'teoscar-hernandez', nameJa: 'テオスカー・ヘルナンデス', nameEn: 'Teoscar Hernández', mlbId: 606192, rival: true,
+    bio: '長打力が魅力の外野手。勝負強い打撃で中軸を担う。',
+    aliases: ['テオスカーヘルナンデス'], sameAs: [mlb('teoscar-hernandez', 606192)] },
+  { slug: 'max-muncy', nameJa: 'マックス・マンシー', nameEn: 'Max Muncy', mlbId: 571970, rival: true,
+    bio: '出塁能力と長打力を持つ左打ちの内野手。',
+    aliases: ['マンシー'], sameAs: [mlb('max-muncy', 571970)] },
 ];
 
 const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));
