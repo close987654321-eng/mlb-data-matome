@@ -506,7 +506,11 @@ export default function GamelogAnalysis({
     const shareLink = shareUrl
       ? `${shareUrl}${shareUrl.includes('?') ? '&' : '?'}utm_source=card&utm_medium=image&utm_campaign=player_card`
       : undefined;
-    return [head, `#MLB #${tag}`, shareLink].filter(Boolean).join('\n');
+    // share=URL抜き／full=URLつき。共有テキストにURLがあると iOS の「コピー」でリンクのOGプレビュー画像が
+    // 2枚目として乗る（同じ画像が2枚に見える）ため、ネイティブ共有には URL を含めない。送客は画像フッタの
+    // 焼き込みURL＋「投稿文をコピー」(full) で担保する。
+    const body = [head, `#MLB #${tag}`].join('\n');
+    return { share: body, full: shareLink ? `${body}\n${shareLink}` : body };
   }, [mode, filtered, en, log, HL, PL, fLabel, warT, shareUrl]);
 
   // プレビュー＝状態変化（データ・形・読み込んだ画像）のたびに描き直す（見たままがそのまま保存／共有される）。
@@ -575,7 +579,7 @@ export default function GamelogAnalysis({
       for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
       const file = new File([arr], cardFileName(), { type: mime });
       if (navigator.canShare?.({ files: [file] })) {
-        await navigator.share({ files: [file], text: caption });
+        await navigator.share({ files: [file], text: caption.share });
         return;
       }
     } catch {
@@ -591,7 +595,7 @@ export default function GamelogAnalysis({
   };
   const copyCaption = async () => {
     try {
-      await navigator.clipboard.writeText(caption);
+      await navigator.clipboard.writeText(caption.full);
       setCopied(true);
       track('card_copy', { player: log.player.nameEn, mode, period: filterValue, format });
       setTimeout(() => setCopied(false), 1800);
@@ -632,7 +636,8 @@ export default function GamelogAnalysis({
         </div>
       )}
 
-      {/* 期間フィルタ＋シェアCTA＝同じ行に並べ「期間を選ぶ→そのままカードに」を一連の流れに。 */}
+      {/* 期間フィルタ。カード生成の入口は選手ページ上部のボタン（MakeCardButton）に一本化したので
+          ここには置かない（イベント mlb:open-card / #card で同じモーダルが開く）。 */}
       <div className="flex flex-wrap items-center gap-2">
         <label htmlFor="gl-period" className="text-xs font-medium text-ink-mute">{t.period}</label>
         <div className="relative inline-block">
@@ -662,18 +667,6 @@ export default function GamelogAnalysis({
             <Chevron />
           </span>
         </div>
-        <button
-          type="button"
-          onClick={() => openShare('analysis')}
-          className="ml-auto inline-flex min-h-[40px] items-center gap-2 rounded-[2px] border border-ink bg-ink px-4 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
-        >
-          <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
-            <rect x="3" y="3" width="18" height="18" rx="2" />
-            <circle cx="8.5" cy="9" r="1.6" />
-            <path d="M21 15l-5-5L6 20" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          {t.shareCta}
-        </button>
       </div>
 
       {/* サマリ3列。 */}

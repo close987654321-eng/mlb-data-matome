@@ -6,7 +6,7 @@ import { getThread, getThreadsBySport, getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
-import { threadTitle, seriesTitle } from '@/lib/series';
+import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
 import { coverImage, ogCover } from '@/lib/media';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
@@ -117,6 +117,16 @@ export default async function ThreadDetailPage({
     .filter((p): p is NonNullable<typeof p> => p != null)
     // 同一選手が nameJa とエイリアスで二重に出ないよう slug で重複排除。
     .filter((p, i, arr) => arr.findIndex((x) => x.slug === p.slug) === i);
+
+  // 成績ボックスは「日本人選手の成績」。多本塁打試合だと打線全員(stats)が積まれて長くなるので、
+  // 日本人選手（カタログの非 rival）だけを残し、他のチームメイト（rival=比較用の非日本人）は件数だけ数えて
+  // 「{自軍}選手の成績を見る」で /player 一覧へ畳む。自軍名は watch-along シリーズ（series.id）から引く。
+  const jpStats = (thread.stats ?? []).filter((s) => {
+    const pl = getPlayerByJaName(s.player);
+    return pl != null && !pl.rival;
+  });
+  const hiddenTeammates = (thread.stats ?? []).length - jpStats.length;
+  const seriesTeam = thread.series ? getSeries(thread.series.id)?.team : undefined;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -226,10 +236,11 @@ export default async function ThreadDetailPage({
       <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
 
       {/* 日本人選手の成績ボックス（R10）。MLB の試合まとめで summaryJa の直下に出す。数値は編集時に
-          fetch-mlb-stats.mjs で取得した公知の事実のみ（サイト本体は API を叩かない）。 */}
-      {thread.stats && thread.stats.length > 0 && (
+          fetch-mlb-stats.mjs で取得した公知の事実のみ（サイト本体は API を叩かない）。
+          打線全員ではなく日本人選手（jpStats）だけ＝出場した選手のみ表示する。 */}
+      {jpStats.length > 0 && (
         <StatBox
-          stats={thread.stats}
+          stats={jpStats}
           heading={t('threads.statsHeading')}
           todayLabel={t('threads.statToday')}
           seasonLabel={t('threads.statSeason')}
@@ -237,6 +248,18 @@ export default async function ThreadDetailPage({
           deltaLabel={t('threads.statDelta')}
           rankLabel={t('threads.statRank')}
         />
+      )}
+      {/* 残りのチームメイト（非日本人）は畳んで、自軍の選手成績一覧（/player）へ送る。 */}
+      {seriesTeam && hiddenTeammates > 0 && (
+        <p className="mt-3">
+          <Link
+            href="/player"
+            className="inline-flex min-h-[44px] items-center gap-1.5 text-sm font-medium text-ink-soft transition-colors hover:text-ink hover:underline"
+          >
+            {t('threads.teamRosterStats', { team: locale === 'ja' ? seriesTeam.ja : seriesTeam.en })}
+            <span aria-hidden="true">→</span>
+          </Link>
+        </p>
       )}
 
       {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。選手ハブは MLB のみ。 */}
@@ -270,7 +293,7 @@ export default async function ThreadDetailPage({
               const g = (thread.series?.date ?? thread.id.slice(0, 10)).split('-');
               return `${g[0]}.${Number(g[1])}.${Number(g[2])}`;
             })()}
-            stats={(thread.stats ?? [])
+            stats={jpStats
               .filter((s) => s.today)
               .map((s) => ({ player: s.player, line: s.today as string }))}
             articleUrl={absoluteUrl(locale, `/${sport}/${thread.id}`)}
