@@ -1067,64 +1067,43 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   ctx.textAlign = 'left';
   const colMaxW = px - 28 - (fx + 30); // 左カラム（写真左端まで）の使える幅。
 
-  // ── 期間ロックアップ（最大の見せ場）＝英語の eyebrow（年）＋ headline（期間）。
-  // ガラス調グラデ＋斜めハッチ＋上シーンの“透過レイヤー”を重ねた札。
-  const bx = fx + 24;
-  const by = portrait ? 140 : 118;
-  const bpad = 28;
-  const leftbar = 9;
-  const ebSize = portrait ? 25 : 22;
-  const accLt = lightenHex(acc, 0.2);
+  // ── 期間ロックアップ（最大の見せ場）＝箱なしのエディトリアル調（村山「モダンでスマート・洗練」）。
+  // eyebrow（年・字間広め・アクセント色）→ headline（期間・白の大見出し）→ 細いルール（左にチーム色の短い区間）。
+  const bx = fx + 30;
+  const by = portrait ? 150 : 120;
+  const ebSize = portrait ? 23 : 20;
+  const accLt = lightenHex(acc, 0.18);
   let hSize = portrait ? 58 : 50;
-  ctxLS.letterSpacing = '0px';
+  ctxLS.letterSpacing = '1px';
   ctx.font = `800 ${hSize}px ${SANS}`;
-  const headCap = portrait ? 470 : 400;
-  while (ctx.measureText(d.periodHead).width > headCap && hSize > 34) { hSize -= 2; ctx.font = `800 ${hSize}px ${SANS}`; }
+  while (ctx.measureText(d.periodHead).width > colMaxW && hSize > 34) { hSize -= 2; ctx.font = `800 ${hSize}px ${SANS}`; }
   const headW = ctx.measureText(d.periodHead).width;
-  ctxLS.letterSpacing = '4px';
-  ctx.font = `800 ${ebSize}px ${SANS}`;
-  const ebW = ctx.measureText(d.periodEyebrow).width;
-  ctxLS.letterSpacing = '0px';
-  const bw = leftbar + bpad + Math.max(headW, ebW) + bpad;
-  const bh = 26 + ebSize + 12 + hSize + 26;
-  // 影（右下に少しずらして覗かせる＝フロスト面の透過を保ったまま浮かせる）。
-  roundRectPath(ctx, bx + 4, by + 6, bw, bh, 10);
-  ctx.fillStyle = 'rgba(0,0,0,0.24)';
-  ctx.fill();
-  // 透過レイヤー：フロスト地（背景がしっかり透ける＝村山「もっと透かす」）＋上シーン＋アクセントバー（クリップ内）。
-  ctx.save();
-  roundRectPath(ctx, bx, by, bw, bh, 10);
-  ctx.clip();
-  ctx.fillStyle = 'rgba(6,8,12,0.19)';
-  ctx.fillRect(bx, by, bw, bh);
-  const sheen = ctx.createLinearGradient(0, by, 0, by + bh);
-  sheen.addColorStop(0, 'rgba(255,255,255,0.16)');
-  sheen.addColorStop(0.55, 'rgba(255,255,255,0)');
-  ctx.fillStyle = sheen;
-  ctx.fillRect(bx, by, bw, bh);
+  // eyebrow（年）＝字間広めの小さなキッカー。
+  const ebY = by + ebSize;
+  ctxLS.letterSpacing = '6px';
   ctx.fillStyle = accLt;
-  ctx.fillRect(bx, by, leftbar, bh);
-  ctx.restore();
-  roundRectPath(ctx, bx, by, bw, bh, 10);
-  ctx.lineWidth = 1.5;
-  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
-  ctx.stroke();
-  // テキスト＝透過レイヤーの“上に載せる”（eyebrow=明アクセント＋字間／headline=白）。
-  const tx = bx + leftbar + bpad;
-  ctxLS.letterSpacing = '4px';
-  ctx.fillStyle = accLt;
-  ctx.font = `800 ${ebSize}px ${SANS}`;
-  ctx.fillText(d.periodEyebrow, tx, by + 26 + ebSize - 4);
-  ctxLS.letterSpacing = '0px';
+  ctx.font = `700 ${ebSize}px ${SANS}`;
+  ctx.fillText(d.periodEyebrow, bx, ebY);
+  // headline（期間）＝白の大見出し。
+  const hY = ebY + 22 + hSize - 6;
+  ctxLS.letterSpacing = '1px';
   ctx.fillStyle = '#fff';
   ctx.font = `800 ${hSize}px ${SANS}`;
-  ctx.fillText(d.periodHead, tx, by + 26 + ebSize + 12 + hSize - 8);
-  const bannerBottom = by + bh;
+  ctx.fillText(d.periodHead, bx, hY);
+  ctxLS.letterSpacing = '0px';
+  // 細いルール＋左端のチーム色アクセント区間（洗練の決め手）。
+  const ruleY = hY + 24;
+  const ruleW = Math.max(headW, portrait ? 300 : 260);
+  ctx.fillStyle = wht(0.22);
+  ctx.fillRect(bx, ruleY, ruleW, 2);
+  ctx.fillStyle = accLt;
+  ctx.fillRect(bx, ruleY - 0.5, 64, 3);
+  const bannerBottom = ruleY + 2;
 
   // ── 選手名＝姓/名を積み上げた大見出し（空白・中黒で2分割できる時）。長い・1語は1行で自動縮小。
   // nameBottomY＝名前ブロックの最下ベースライン（=ロゴ列を直下に重ねず置くためのアンカー）。
   const parts = d.name.split(/[\s・]/).filter(Boolean);
-  const nameTop = bannerBottom + (portrait ? 96 : 84);
+  const nameTop = bannerBottom + (portrait ? 116 : 96);
   let nameBottomY: number;
   if (parts.length === 2) {
     let ns = portrait ? 98 : 80;
