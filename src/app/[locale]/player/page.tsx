@@ -216,6 +216,15 @@ export default async function PlayerIndexPage({
         {snap.asOf && (
           <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: snap.asOf })}</p>
         )}
+        {/* ファネル: 現役MLB日本人 → 次に続くNPBの注目株（next メジャーリーガー）。往復で回遊を作る。 */}
+        <p className="mt-3 text-sm">
+          <Link
+            href="/prospects"
+            className="text-ink-soft transition-colors hover:text-ink hover:underline"
+          >
+            {t('prospects.fromMlbHub')} <span aria-hidden>→</span>
+          </Link>
+        </p>
       </section>
 
       {/* 事業の主眼＝日本人ハブ（検索母艦）を最上段に。① 日本人 野手（大谷を含む＝先頭に主役）。 */}

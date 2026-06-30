@@ -4,6 +4,7 @@ import { getAllColumns } from '@/lib/columns';
 import { getAllTags } from '@/lib/tags';
 import { PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
+import { NPB_PROSPECTS } from '@/lib/npbPlayers';
 import { SPORTS } from '@/lib/sports';
 import { locales, defaultLocale } from '@/lib/i18n';
 
@@ -76,6 +77,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // （/player ピラー＝選手ハブ群の最新／個別＝最新記事 or 成績更新の新しい方）。
     entry('/player', playerHubLatest),
     ...playerEntries,
+    // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。手キュレーションなので lastmod なし。
+    entry('/prospects'),
+    ...NPB_PROSPECTS.map((p) => entry(`/prospects/${p.slug}`)),
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
     // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。

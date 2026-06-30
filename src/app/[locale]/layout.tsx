@@ -148,6 +148,7 @@ function SiteHeader() {
           </NavLink>
           <NavLink href="/watch">{t('nav.watch')}</NavLink>
           <NavLink href="/player">{t('nav.players')}</NavLink>
+          <NavLink href="/prospects">{t('nav.prospects')}</NavLink>
           {SPORTS.map((s) => (
             <NavLink key={s} href={`/${s}`}>
               {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
@@ -170,6 +171,9 @@ function SiteHeader() {
         </NavLink>
         <NavLink href="/player" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.players')}
+        </NavLink>
+        <NavLink href="/prospects" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
+          {t('nav.prospects')}
         </NavLink>
         {SPORTS.map((s) => (
           <NavLink key={s} href={`/${s}`} className="inline-flex min-h-[44px] items-center whitespace-nowrap">
@@ -204,6 +208,9 @@ function SiteFooter() {
             </Link>
             <Link href="/player" className="transition-colors hover:text-ink">
               {t('nav.players')}
+            </Link>
+            <Link href="/prospects" className="transition-colors hover:text-ink">
+              {t('nav.prospects')}
             </Link>
             {SPORTS.map((s) => (
               <Link key={s} href={`/${s}`} className="whitespace-nowrap transition-colors hover:text-ink">
