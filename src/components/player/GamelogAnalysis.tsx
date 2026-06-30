@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react';
 import { Link } from '@/lib/navigation';
+import Chevron from '@/components/Chevron';
 import type { Gamelog, HitGame, PitGame } from '@/lib/gamelog';
 import {
   aggHitting, aggPitching, projectHitting, projectPitching,
@@ -362,7 +363,13 @@ export default function GamelogAnalysis({
   return (
     <section className="space-y-4" aria-label={t.heading}>
       <div>
-        <h2 className="text-base font-bold tracking-wide text-ink sm:text-lg">{t.heading}</h2>
+        <div className="flex flex-wrap items-center gap-2.5">
+          <h2 className="text-base font-bold tracking-wide text-ink sm:text-lg">{t.heading}</h2>
+          {/* 節目バッジ（50本ペース等）は“結論ファースト”で見出し直下に。触る作業の前に読んで驚く入口。該当時のみ。 */}
+          {paceInfo.chase && (
+            <span className="rounded-[2px] border border-ink px-2 py-0.5 text-xs font-bold text-ink">{paceInfo.chase}</span>
+          )}
+        </div>
         <p className="mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{t.sub}</p>
       </div>
 
@@ -424,12 +431,7 @@ export default function GamelogAnalysis({
 
       {/* ③ 節目・ペース（chase は SNS カードの見出しにも使う）。 */}
       <div className="rounded-[2px] border border-line p-4">
-        <div className="flex items-center justify-between gap-3">
-          <h3 className="text-sm font-bold text-ink">{t.pace}</h3>
-          {paceInfo.chase && (
-            <span className="rounded-[2px] border border-ink px-2 py-0.5 text-xs font-bold text-ink">{paceInfo.chase}</span>
-          )}
-        </div>
+        <h3 className="text-sm font-bold text-ink">{t.pace}</h3>
         <ul className="mt-2 space-y-1 text-sm tabular-nums text-ink-soft">
           {paceInfo.lines.map((l) => (
             <li key={l}>{l}</li>
@@ -479,11 +481,20 @@ export default function GamelogAnalysis({
                   key={c.key}
                   className={`whitespace-nowrap px-2.5 py-2 font-medium ${c.align === 'left' ? 'text-left' : 'text-right'}`}
                 >
-                  <button type="button" onClick={() => toggleSort(c.key)} className="inline-flex items-center gap-0.5 hover:text-ink">
+                  <button
+                    type="button"
+                    onClick={() => toggleSort(c.key)}
+                    className={`inline-flex min-h-[40px] items-center gap-0.5 hover:text-ink ${c.align === 'left' ? '' : 'flex-row-reverse'}`}
+                  >
                     {c.label}
-                    <span aria-hidden className={`text-[9px] ${sort.key === c.key ? 'text-ink' : 'text-transparent'}`}>
-                      {sort.key === c.key && sort.dir === 'asc' ? '▲' : '▼'}
-                    </span>
+                    {/* ソート可能のアフォーダンスを常時可視に（未選択=ink-mute・選択=ink）。絵文字▲▼→caret SVG。 */}
+                    <svg
+                      viewBox="0 0 12 12"
+                      aria-hidden
+                      className={`h-2 w-2 fill-current transition-transform ${sort.key === c.key ? 'text-ink' : 'text-ink-mute'} ${sort.key === c.key && sort.dir === 'asc' ? 'rotate-180' : ''}`}
+                    >
+                      <path d="M6 8.5 2 4.5h8z" />
+                    </svg>
                   </button>
                 </th>
               ))}
@@ -494,7 +505,7 @@ export default function GamelogAnalysis({
             {(sortedRows as Array<HitGame | PitGame>).map((r, i) => {
               const article = articles?.[r.d];
               return (
-                <tr key={`${r.d}-${i}`} className="border-b border-line/50 last:border-0">
+                <tr key={`${r.d}-${i}`} className={`border-b border-line/50 last:border-0 ${article ? 'bg-ink/[0.02]' : ''}`}>
                   {(cols as Array<Col<HitGame | PitGame>>).map((c) => (
                     <td
                       key={c.key}
@@ -504,16 +515,16 @@ export default function GamelogAnalysis({
                     </td>
                   ))}
                   {articles && (
-                    <td className="whitespace-nowrap px-2.5 py-1.5 text-right">
+                    <td className="whitespace-nowrap px-2.5 py-1 text-right">
                       {article ? (
+                        // 試合ページへ遷移＝実効44pxのタップ域＋「反応」ラベル併記（“反応が読める”報酬を言語化）＋北東矢印。
                         <Link
                           href={`/${article.sport}/${article.id}`}
                           aria-label={t.watchGame}
-                          title={t.watchGame}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-[2px] border border-line text-ink-soft transition-colors hover:border-ink hover:bg-ink hover:text-paper"
+                          className="inline-flex min-h-[36px] items-center gap-1 rounded-[2px] border border-line px-2.5 text-xs font-semibold text-ink-soft transition-colors hover:border-ink hover:bg-ink hover:text-paper"
                         >
-                          {/* 試合ページへ遷移する“開く”を表す北東向き矢印（モダン・無彩色）。 */}
-                          <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                          {t.reaction}
+                          <svg viewBox="0 0 24 24" className="h-3 w-3 fill-none stroke-current" strokeWidth={2} aria-hidden>
                             <path d="M7 17 17 7M9 7h8v8" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </Link>
@@ -547,7 +558,7 @@ export default function GamelogAnalysis({
         <details className="group rounded-[2px] border border-line">
           <summary className="flex min-h-[40px] cursor-pointer list-none items-center justify-between px-3 text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
             {t.vsTeam}
-            <span aria-hidden className="text-ink-soft transition-transform group-open:rotate-180">▾</span>
+            <span aria-hidden className="text-ink-soft transition-transform group-open:rotate-180"><Chevron /></span>
           </summary>
           <div className="overflow-x-auto border-t border-line">
             <table className="w-full min-w-[420px] text-sm tabular-nums">

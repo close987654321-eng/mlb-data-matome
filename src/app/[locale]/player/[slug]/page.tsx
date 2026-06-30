@@ -5,7 +5,7 @@ import { getAllThreads } from '@/lib/data';
 import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/playerStats';
 import { getGamelog } from '@/lib/gamelog';
-import { getWarRace } from '@/lib/warRace';
+import { getWarRace, warRank } from '@/lib/warRace';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { playerLede } from '@/lib/playerLede';
 import { buildFeed, feedKey } from '@/lib/feed';
@@ -18,6 +18,8 @@ import GamelogAnalysis from '@/components/player/GamelogAnalysis';
 import WarRace from '@/components/player/WarRace';
 import PlayerStickyBar from '@/components/player/PlayerStickyBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import SectionHeading from '@/components/SectionHeading';
+import Chevron from '@/components/Chevron';
 import type { RankLabels } from '@/components/RankBadges';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -198,6 +200,10 @@ export default async function PlayerHubPage({
     .slice(0, 6)
     .map((x) => x.p);
 
+  // ヒーローの唯一の赤「MLB 1位」エンブレム＆シェア文フックの発火源＝WARレース由来の全体順位。
+  // hero.caption(別指標の最良順位・lg<=5でscope化け)では誤発火/不発火の二重事故になるためここで固定。
+  const warRankInfo = warRace ? warRank(warRace, player.mlbId) : null;
+
   return (
     <div className="space-y-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -212,7 +218,7 @@ export default async function PlayerHubPage({
 
       {hasStats && season && hero ? (
         <>
-          <PlayerHero player={player} season={season} hero={hero} labels={rankLabels} asOf={snap.asOf} year={year} lede={lede} />
+          <PlayerHero player={player} season={season} hero={hero} labels={rankLabels} asOf={snap.asOf} year={year} lede={lede} warRank={warRankInfo} />
           <PlayerStickyBar
             name={player.nameJa}
             heroLabel={stickyLabel}
@@ -221,22 +227,29 @@ export default async function PlayerHubPage({
           />
           <PlayerMarquee season={season} hero={hero} labels={rankLabels} name={locale === 'en' ? player.nameEn : player.nameJa} />
 
-          {/* 成績の二次拡散導線。シェア文に今季の主要数値を載せて“いい感じ”に拡散させる。 */}
-          <ShareButtons url={hubUrl} title={playerShareText(player.nameJa, season, hero)} />
+          {/* 成績の二次拡散導線。WAR全体1位の時はシェア文の先頭を「MLB WAR全体1位」に（rank連動・1位を外れたら自動で消える）。 */}
+          <ShareButtons
+            url={hubUrl}
+            title={
+              warRankInfo?.rank === 1
+                ? playerShareText(player.nameJa, season, hero).replace('今季成績', `${year}年 MLB WAR全体1位`)
+                : playerShareText(player.nameJa, season, hero)
+            }
+          />
 
           <PlayerDetail season={season} hero={hero} labels={rankLabels} />
 
           {/* 試合別の徹底分析（日付別の全成績・直近N/月フィルタ・162換算・WAR推移・画像出力）。
               gamelog ファイルがある選手だけ（今は大谷）。サイト本体は静的JSONを読むだけ＝API は叩かない。 */}
           {gamelog && (
-            <div className="border-t border-line pt-6">
+            <div className="pt-4">
               <GamelogAnalysis log={gamelog} locale={locale} articles={gameArticles} />
             </div>
           )}
 
           {/* ④ WARレース（MVP/サイヤング争いを日次で）。focus がレースに居る時だけ（今は大谷）。 */}
           {gamelog && warRace?.players[String(player.mlbId)] && (
-            <div className="border-t border-line pt-6">
+            <div className="pt-4">
               <WarRace race={warRace} focusId={player.mlbId} locale={locale} />
             </div>
           )}
@@ -263,7 +276,7 @@ export default async function PlayerHubPage({
           <details className="group border-t border-line pt-2">
             <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between text-sm font-semibold text-ink [&::-webkit-details-marker]:hidden">
               {t('player.about')}
-              <span aria-hidden="true" className="text-ink-soft transition-transform group-open:rotate-180">▾</span>
+              <span aria-hidden="true" className="text-ink-soft transition-transform group-open:rotate-180"><Chevron /></span>
             </summary>
             <p className="mt-1 max-w-prose text-sm leading-relaxed text-ink-soft">{player.bio}</p>
             {player.sameAs.length > 0 && (
@@ -300,9 +313,9 @@ export default async function PlayerHubPage({
 
       {threads.length > 0 && (
         <section>
-          <h2 className="mb-5 text-lg font-bold text-ink">
-            {t('player.articles', { name: player.nameJa, count: threads.length })}
-          </h2>
+          <div className="mb-5">
+            <SectionHeading label={t('player.articles', { name: player.nameJa, count: threads.length })} lead />
+          </div>
           <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {feed.map((item, i) => (
               <li key={feedKey(item)}>
@@ -314,16 +327,17 @@ export default async function PlayerHubPage({
       )}
 
       {related.length > 0 && (
-        <section className="border-t border-line pt-6">
-          <h2 className="mb-3 text-sm font-bold text-ink">{t('player.relatedTitle')}</h2>
+        <section className="pt-2">
+          <div className="mb-3">
+            <SectionHeading label={t('player.relatedTitle')} level="h3" />
+          </div>
           <div className="flex flex-wrap gap-2">
             {related.map((rp) => (
               <Link
                 key={rp.slug}
                 href={`/player/${rp.slug}`}
-                className="inline-flex items-center gap-1 rounded-[2px] border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-ink hover:text-ink"
+                className="inline-flex min-h-[40px] items-center rounded-[2px] border border-line px-3.5 text-sm text-ink-soft transition-colors hover:border-ink hover:text-ink"
               >
-                <span aria-hidden="true">📊</span>
                 {locale === 'en' ? rp.nameEn : rp.nameJa}
               </Link>
             ))}

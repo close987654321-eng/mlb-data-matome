@@ -26,7 +26,7 @@ export default function StatRail({
   const maxMlb = dense ? 20 : 40;
   const maxLg = dense ? 10 : 20;
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-surface">
+    <div className="overflow-hidden rounded-[2px] border border-line bg-surface">
       <div className="divide-y divide-line">
         {rows.map((r) => (
           <div

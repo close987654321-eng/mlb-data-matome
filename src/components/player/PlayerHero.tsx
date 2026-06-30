@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import type { Player } from '@/lib/players';
 import type { PlayerSeason } from '@/lib/playerStats';
 import type { Hero } from '@/lib/playerHero';
+import type { WarRank } from '@/lib/warRace';
 import type { RankLabels } from '@/components/RankBadges';
 import { getTeam, teamLogoUrl, headshotUrl } from '@/lib/teams';
 import RankMeter from './RankMeter';
@@ -18,6 +19,7 @@ export default async function PlayerHero({
   asOf,
   year,
   lede,
+  warRank,
 }: {
   player: Player;
   season: PlayerSeason;
@@ -27,8 +29,16 @@ export default async function PlayerHero({
   year: number;
   /** H1 直下に出す「今季の地の文」（playerLede 生成・実在値のみ）。薄ページ回避＋クエリ面拡大。 */
   lede?: string;
+  /** WARレース由来の全体順位。rank===1 のときだけ唯一の赤「MLB 1位」エンブレムを発火する（捏造防止＝§4.4）。 */
+  warRank?: WarRank | null;
 }) {
   const t = await getTranslations('player');
+
+  // 二刀流の積み上げ二連バー用の比率（投=ink / 打=中グレー）。warSplit は整形済み文字列。
+  const pitN = hero.warSplit ? parseFloat(hero.warSplit.pit) || 0 : 0;
+  const batN = hero.warSplit ? parseFloat(hero.warSplit.bat) || 0 : 0;
+  const pitPct = Math.round((pitN / (pitN + batN || 1)) * 100);
+  const isWarLeader = warRank?.rank === 1;
 
   const roleText =
     hero.role === 'two-way' ? t('roleTwoWay') : hero.role === 'pitcher' ? t('rolePitcher') : t('roleBatter');
@@ -79,7 +89,7 @@ export default async function PlayerHero({
             alt={season.team ? `${player.nameJa}（${season.team}）` : player.nameJa}
             width={108}
             height={162}
-            className="h-[144px] w-[96px] rounded-[3px] bg-paper object-cover object-top sm:h-[162px] sm:w-[108px]"
+            className="h-[144px] w-[96px] rounded-[2px] bg-paper object-cover object-top sm:h-[162px] sm:w-[108px]"
             style={team ? { borderBottom: `3px solid ${team.color}` } : undefined}
           />
           {team && (
@@ -114,26 +124,39 @@ export default async function PlayerHero({
         </p>
       )}
 
-      {/* 今季の地の文（独自散文）。数値表の外に選手別テキストを置き“薄ページ”を脱する。 */}
-      {lede && <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">{lede}</p>}
-
-      {/* ヒーロー指標 */}
+      {/* ヒーロー指標（数字ファースト）。最初の数秒で「何が・どれだけ凄いか」を大数値で殴る。 */}
       <div className="mt-5">
-        <div className="mb-1 text-xs font-medium uppercase tracking-[0.18em] text-ink-soft">{heroLabel}</div>
+        {/* ラベル行の右に、唯一の赤エンブレム「MLB 1位」。発火源は warRank(WARレース由来の全体順位)に固定。
+            rank===1 のときだけ・stagger で最後にスッと載る（rise は from/to を含む＝レイアウトは即確保＝CLSゼロ）。
+            塗り面の赤は作らず罫＋文字で上品に。literal は「MLB 1位」のみ（%・母数は出さない＝RankMeter の誠実さを赤でも死守）。 */}
+        <div className="mb-1 flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-ink-soft">
+          <span>{heroLabel}</span>
+          {isWarLeader && (
+            <span className="inline-flex items-center rounded-[2px] border border-accent px-2 py-0.5 text-[11px] font-bold normal-case tracking-wide text-accent tabular-nums motion-safe:animate-[rise_.4s_ease-out_.34s_both]">
+              {t('warLeaderEmblem')}
+            </span>
+          )}
+        </div>
         <div className="text-[52px] font-bold leading-none tabular-nums text-ink [font-feature-settings:'palt'] sm:text-[56px]">
           {hero.value}
         </div>
 
+        {/* 二刀流＝投/打の積み上げ二連バー。「一人で二人分」を足し算でなく二本の柱の絵にする。 */}
         {hero.warSplit && (
-          <p className="mt-2 text-sm text-ink-soft tabular-nums">
-            {t('heroWarSplit', { bat: hero.warSplit.bat, pit: hero.warSplit.pit })}
-          </p>
+          <div className="mt-3 max-w-[280px]">
+            <div className="flex h-2 w-full overflow-hidden rounded-[2px]" aria-hidden="true">
+              <span className="block h-full bg-ink" style={{ width: `${pitPct}%` }} />
+              <span className="block h-full bg-ink-soft/45" style={{ width: `${100 - pitPct}%` }} />
+            </div>
+            <p className="mt-1.5 text-sm tabular-nums text-ink-soft">
+              {t('heroWarSplit', { bat: hero.warSplit.bat, pit: hero.warSplit.pit })}
+            </p>
+          </div>
         )}
         {hero.showWrcGloss && <p className="mt-1.5 text-xs text-ink-soft">{t('wrcGloss')}</p>}
 
         {captionText && (
-          <p className="mt-3 inline-flex items-center gap-1.5 rounded-[2px] border border-line px-2.5 py-1 text-xs font-semibold text-ink-soft">
-            <span aria-hidden="true" className="text-[7px] leading-none text-ink-mute">●</span>
+          <p className="mt-3 inline-flex items-center rounded-[2px] border border-line px-2.5 py-1 text-xs font-semibold text-ink-soft">
             {captionText}
           </p>
         )}
@@ -144,6 +167,9 @@ export default async function PlayerHero({
           </div>
         )}
       </div>
+
+      {/* 今季の地の文（独自散文・SEO）。大数値の“驚きの絵”をファーストビューに収めるため数値ブロックの下へ。DOM保持。 */}
+      {lede && <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink-soft">{lede}</p>}
     </section>
   );
 }

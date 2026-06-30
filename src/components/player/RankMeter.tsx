@@ -43,7 +43,15 @@ export default function RankMeter({
   const scale = scope === 'mlb' ? SCALE_MLB : SCALE_LG;
   const fill = clamp(1 - (driver - 1) / scale, 0.06, 1);
 
-  const strong = (rank.mlb != null && rank.mlb <= 10) || (rank.lg != null && rank.lg <= 5);
+  // 上位感を「赤や記号でなく」3段の濃淡＋字の太さ/字間で誠実に出す。
+  // ⚠️ fill 幅だけだと 1位(1.0)と10位(0.775)が同 bg-ink で無差別になるため、トーンを3段に分ける。
+  // 1位の特別扱い（赤）は RankMeter に絶対入れない（rail は全選手で共有＝赤が漏れる）。ヒーローに隔離。
+  const tier =
+    (rank.mlb != null && rank.mlb <= 3) || (rank.lg != null && rank.lg <= 2)
+      ? 1
+      : (rank.mlb != null && rank.mlb <= 10) || (rank.lg != null && rank.lg <= 5)
+        ? 2
+        : 3;
   const lgLabel = league === 'AL' ? labels.al : labels.nl;
   const prim = scope === 'mlb' ? `${labels.mlb} ${rank.mlb}${labels.unit}` : `${lgLabel} ${rank.lg}${labels.unit}`;
   // ヒーローでは両方あれば従順位を小さく添える（誠実：両方とも事実）。
@@ -53,8 +61,9 @@ export default function RankMeter({
 
   const trackH = variant === 'hero' ? 'h-[4px]' : 'h-[3px]';
   const labelSize = variant === 'hero' ? 'text-[11px]' : 'text-[10px]';
-  const fillTone = strong ? 'bg-ink' : 'bg-ink-soft/40';
-  const textTone = strong ? 'text-ink font-bold' : 'text-ink-soft font-medium';
+  const fillTone = tier === 1 ? 'bg-ink' : tier === 2 ? 'bg-ink-soft/70' : 'bg-ink-soft/40';
+  const textTone =
+    tier === 1 ? 'text-ink font-bold tracking-tight' : tier === 2 ? 'text-ink-soft font-semibold' : 'text-ink-soft font-medium';
 
   return (
     <div role="img" aria-label={aria} className="w-full">
@@ -65,7 +74,6 @@ export default function RankMeter({
         />
       </div>
       <div className={`mt-1 flex items-center gap-0.5 tabular-nums ${labelSize} ${textTone}`}>
-        {strong && <span aria-hidden="true" className="text-[7px] leading-none">●</span>}
         <span className="truncate">{prim}</span>
         {secondary && (
           <span aria-hidden="true" className="ml-1 font-medium text-ink-soft">

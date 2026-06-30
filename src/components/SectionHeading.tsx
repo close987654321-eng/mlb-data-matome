@@ -12,6 +12,7 @@ export default function SectionHeading({
   seeAllHref,
   seeAllLabel,
   lead = false,
+  level = 'h2',
 }: {
   label: React.ReactNode;
   /** その競技/棚の総数（在庫量を実数で添える）。 */
@@ -20,14 +21,17 @@ export default function SectionHeading({
   seeAllLabel?: string;
   /** 主役セクション（MLB 等）。見出しを一段大きく。 */
   lead?: boolean;
+  /** 見出しの論理レベル。級数整理（関連選手=h3降格 / WARレース=h2昇格）で見出しアウトラインを平坦化させない。 */
+  level?: 'h2' | 'h3';
 }) {
+  const Heading = level;
   return (
     <div className="flex items-baseline gap-3">
-      <h2
+      <Heading
         className={`tracking-wide text-ink ${lead ? 'text-base font-bold sm:text-lg' : 'text-sm font-semibold'}`}
       >
         {label}
-      </h2>
+      </Heading>
       {typeof count === 'number' && (
         <span className="text-xs tabular-nums text-ink-mute">{count}</span>
       )}

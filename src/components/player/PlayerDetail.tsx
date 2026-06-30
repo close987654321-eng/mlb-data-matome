@@ -4,6 +4,7 @@ import type { Hero } from '@/lib/playerHero';
 import type { RankLabels } from '@/components/RankBadges';
 import { HIT_GROUPS, PIT_GROUPS, FIELD_LABELS, ADV_FIELD, SPEED_FIELD, resolveStatValue, type StatGroup } from '@/lib/statGroups';
 import StatRail, { type RailRow } from './StatRail';
+import Chevron from '@/components/Chevron';
 
 /**
  * 今季成績（詳細）。旧 PlayerStatTable の代替。
@@ -110,7 +111,7 @@ export default async function PlayerDetail({
       <details className="group">
         <summary className="flex w-full cursor-pointer list-none items-center justify-between border-y border-line py-3 text-sm font-semibold text-ink transition-colors hover:text-ink [&::-webkit-details-marker]:hidden">
           {t('detailToggle')}
-          <span aria-hidden="true" className="text-ink-soft transition-transform group-open:rotate-180">▾</span>
+          <span aria-hidden="true" className="text-ink-soft transition-transform group-open:rotate-180"><Chevron /></span>
         </summary>
 
         <div className="pt-5">
@@ -119,10 +120,10 @@ export default async function PlayerDetail({
             <div className="flex flex-wrap items-center gap-1">
               <input id="pd-bat" type="radio" name="player-detail-role" defaultChecked className="peer/dbat sr-only" aria-label={t('tabBat')} />
               <input id="pd-pit" type="radio" name="player-detail-role" className="peer/dpit sr-only" aria-label={t('tabPit')} />
-              <label htmlFor="pd-bat" className="order-1 inline-flex min-h-[44px] cursor-pointer select-none items-center rounded-lg px-4 text-sm text-ink-soft ring-1 ring-transparent transition-colors peer-checked/dbat:bg-surface peer-checked/dbat:font-semibold peer-checked/dbat:text-ink peer-checked/dbat:ring-line peer-focus-visible/dbat:ring-2 peer-focus-visible/dbat:ring-accent">
+              <label htmlFor="pd-bat" className="order-1 inline-flex min-h-[44px] cursor-pointer select-none items-center rounded-[2px] px-4 text-sm text-ink-soft ring-1 ring-transparent transition-colors peer-checked/dbat:bg-surface peer-checked/dbat:font-semibold peer-checked/dbat:text-ink peer-checked/dbat:ring-line peer-focus-visible/dbat:ring-2 peer-focus-visible/dbat:ring-ink">
                 {t('tabBat')}
               </label>
-              <label htmlFor="pd-pit" className="order-2 inline-flex min-h-[44px] cursor-pointer select-none items-center rounded-lg px-4 text-sm text-ink-soft ring-1 ring-transparent transition-colors peer-checked/dpit:bg-surface peer-checked/dpit:font-semibold peer-checked/dpit:text-ink peer-checked/dpit:ring-line peer-focus-visible/dpit:ring-2 peer-focus-visible/dpit:ring-accent">
+              <label htmlFor="pd-pit" className="order-2 inline-flex min-h-[44px] cursor-pointer select-none items-center rounded-[2px] px-4 text-sm text-ink-soft ring-1 ring-transparent transition-colors peer-checked/dpit:bg-surface peer-checked/dpit:font-semibold peer-checked/dpit:text-ink peer-checked/dpit:ring-line peer-focus-visible/dpit:ring-2 peer-focus-visible/dpit:ring-ink">
                 {t('tabPit')}
               </label>
               <div className="order-3 mt-5 hidden w-full peer-checked/dbat:block">{batPanel}</div>
