@@ -23,6 +23,13 @@ import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
 
+/** ET の試合日 → JST（記事の series.date / id は JST。夜試合は常に翌日）。試合↔記事の突き合わせに使う。 */
+function etToJst(d: string): string {
+  const dt = new Date(`${d}T12:00:00Z`);
+  dt.setUTCDate(dt.getUTCDate() + 1);
+  return dt.toISOString().slice(0, 10);
+}
+
 export async function generateStaticParams() {
   const [all, snap] = await Promise.all([getAllThreads(), getPlayersSnapshot()]);
   // 記事がある or MLBの今季成績がある選手のハブを作る（成績つきなら薄くない＝松井・千賀のように
@@ -79,6 +86,31 @@ export default async function PlayerHubPage({
     getPlayersSnapshot(),
     getGamelog(player.mlbId), // 試合別ログがある選手だけ「徹底分析」セクションを出す（今は大谷）
   ]);
+
+  // 徹底分析の「海外の反応 融合」: 各試合(ET日付)→ その試合のまとめ記事を索引化して島へ渡す。
+  // 試合表の行から現地の反応へ送客＝このサイト固有の回遊（[[player-pages-seo-direction]]）。
+  let gameArticles: Record<string, { id: string; sport: string; series: boolean }> | undefined;
+  if (gamelog) {
+    const byDate = new Map<string, typeof all>();
+    for (const th of all.filter((t) => t.sport === 'mlb')) {
+      const date = th.series?.date ?? th.id.slice(0, 10);
+      const arr = byDate.get(date) ?? [];
+      arr.push(th);
+      byDate.set(date, arr);
+    }
+    const idx: Record<string, { id: string; sport: string; series: boolean }> = {};
+    for (const g of [...gamelog.hitting, ...gamelog.pitching]) {
+      if (idx[g.d]) continue; // 同日（打＋投）は1記事に集約
+      const cands = byDate.get(etToJst(g.d)) ?? [];
+      // 試合記事を優先で同定：watch-along シリーズ → 自軍＋相手タグ → 相手タグのみ。
+      const m =
+        cands.find((th) => th.series?.opponent?.ja === g.oppJa) ??
+        cands.find((th) => (th.tags ?? []).includes(g.oppJa) && (th.tags ?? []).includes(gamelog.team)) ??
+        cands.find((th) => (th.tags ?? []).includes(g.oppJa));
+      if (m) idx[g.d] = { id: m.id, sport: 'mlb', series: Boolean(m.series) };
+    }
+    gameArticles = idx;
+  }
   const threads = threadsOf(player, all);
   // 記事も成績も無ければハブを作らない（dynamicParams=false なので通常ここには来ないが保険）
   if (!hubEligible(player, all, season)) notFound();
@@ -195,7 +227,7 @@ export default async function PlayerHubPage({
               gamelog ファイルがある選手だけ（今は大谷）。サイト本体は静的JSONを読むだけ＝API は叩かない。 */}
           {gamelog && (
             <div className="border-t border-line pt-6">
-              <GamelogAnalysis log={gamelog} locale={locale} />
+              <GamelogAnalysis log={gamelog} locale={locale} articles={gameArticles} />
             </div>
           )}
 

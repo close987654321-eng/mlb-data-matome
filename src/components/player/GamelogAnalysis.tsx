@@ -1,12 +1,16 @@
 'use client';
 
 import { useMemo, useRef, useState } from 'react';
+import { Link } from '@/lib/navigation';
 import type { Gamelog, HitGame, PitGame } from '@/lib/gamelog';
 import {
   aggHitting, aggPitching, projectHitting, projectPitching,
-  warTotal, warGain, fmtRate, fmt2, fmt1, fmtIp, fmtMd, monthOf,
+  warTotal, estimateGameWar, fmtWar, fmtRate, fmt2, fmt1, fmtIp, fmtMd, monthOf,
   type HitAgg, type PitAgg,
 } from '@/lib/gamelogStats';
+
+/** 試合(ET日付) → その試合の海外の反応まとめ記事への参照。 */
+type ArticleRef = { id: string; sport: string; series: boolean };
 
 type Mode = 'hitting' | 'pitching';
 type Filter = { kind: 'all' } | { kind: 'last'; n: number } | { kind: 'month'; m: number };
@@ -19,7 +23,15 @@ type Col<R> = { key: string; label: string; num: (r: R) => number | string; cell
 
 const LAST_NS = [5, 10, 15, 20, 25, 30];
 
-export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale: string }) {
+export default function GamelogAnalysis({
+  log,
+  locale,
+  articles,
+}: {
+  log: Gamelog;
+  locale: string;
+  articles?: Record<string, ArticleRef>;
+}) {
   const en = locale === 'en';
   // ラベル群は locale でだけ変わる＝毎レンダー新規生成しないよう memo（下流 useMemo の依存安定化）。
   const t = useMemo(
@@ -32,6 +44,8 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
         warTitle: 'WAR trend', warStart: (d: string) => `Tracking began ${d}. The trend builds from here (one point per game day).`,
         warGain: 'WAR in this span (approx)', warNA: '—', save: 'Save as image', saving: 'Rendering…',
         date: 'Date', opp: 'Opp', result: 'Dec', win: 'W', loss: 'L', none: '—', asOf: (d: string) => `As of ${d}`,
+        gameWar: 'Est. WAR', warNote: 'Per-game value estimated from each box score, calibrated so the season total matches the official WAR.',
+        warDelta: 'Est. WAR in this span', reaction: 'Reactions', covered: (n: number) => `${n} games with overseas-reaction digests`,
       }
     : {
         heading: '徹底分析（試合別）', sub: '直近の試合数や月で絞り込み。率はカウント数から再計算、162換算は今季ペースからの推計です。',
@@ -40,6 +54,8 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
         warTitle: 'WAR推移', warStart: (d: string) => `${d}に追跡開始。ここから1試合ぶんずつ推移が積み上がります。`,
         warGain: '選択期間のWAR増分（近似）', warNA: '—', save: 'この内容を画像で保存', saving: '生成中…',
         date: '日付', opp: '対戦', result: '結果', win: '勝', loss: '敗', none: '—', asOf: (d: string) => `${d}時点`,
+        gameWar: '推定WAR', warNote: '各試合の成績から1試合ぶんを試算し、季節合計が公式WARに一致するよう補正した推定値です。',
+        warDelta: '選択期間の推定WAR', reaction: '反応', covered: (n: number) => `海外の反応つき ${n}試合`,
       },
     [en],
   );
@@ -68,6 +84,15 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
   const baseRows = mode === 'hitting' ? log.hitting : log.pitching;
   const months = useMemo(() => [...new Set(baseRows.map((r) => monthOf(r.d)))].sort((a, b) => a - b), [baseRows]);
   const lastNs = LAST_NS.filter((n) => n < baseRows.length);
+
+  // 1試合ごとの推定WAR（公式季節値に補正）。試合表の列・推移カーブ・期間増分すべてに使う。
+  const est = useMemo(() => estimateGameWar(log), [log]);
+  const warByDate = mode === 'hitting' ? est.hitByDate : est.pitByDate;
+  // 海外の反応つき試合数（打＋投の全試合日のうち記事がある数）。
+  const coveredCount = useMemo(
+    () => (articles ? new Set([...log.hitting, ...log.pitching].map((r) => r.d).filter((d) => articles[d])).size : 0),
+    [articles, log],
+  );
 
   // 絞り込み（時系列 asc のまま＝期間の端＝最初/最後の試合日が取れる）。
   const filtered = useMemo(() => {
@@ -133,6 +158,7 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
         { key: 'bb', label: HL.bb, num: (r) => r.bb, cell: (r) => `${r.bb}` },
         { key: 'so', label: HL.so, num: (r) => r.so, cell: (r) => `${r.so}` },
         { key: 'sb', label: HL.sb, num: (r) => r.sb, cell: (r) => `${r.sb}` },
+        { key: 'war', label: t.gameWar, num: (r) => warByDate.get(r.d) ?? 0, cell: (r) => (warByDate.has(r.d) ? fmtWar(warByDate.get(r.d)!) : t.none) },
       ];
       return c;
     }
@@ -146,9 +172,10 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
       { key: 'bb', label: en ? 'BB' : '四球', num: (r) => r.bb, cell: (r) => `${r.bb}` },
       { key: 'hr', label: en ? 'HR' : '被弾', num: (r) => r.hr, cell: (r) => `${r.hr}` },
       { key: 'dec', label: t.result, num: (r) => (r.w ? 2 : r.l ? 1 : 0), cell: (r) => (r.w ? t.win : r.l ? t.loss : t.none) },
+      { key: 'war', label: t.gameWar, num: (r) => warByDate.get(r.d) ?? 0, cell: (r) => (warByDate.has(r.d) ? fmtWar(warByDate.get(r.d)!) : t.none) },
     ];
     return c;
-  }, [mode, en, t, HL, PL]);
+  }, [mode, en, t, HL, PL, warByDate]);
 
   // 表示用にソート（型は緩めて扱う＝列の num で取り出した値で比較）。
   const sortedRows = useMemo(() => {
@@ -167,13 +194,14 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
   const toggleSort = (key: string) =>
     setSort((s) => (s.key === key ? { key, dir: s.dir === 'asc' ? 'desc' : 'asc' } : { key, dir: key === 'd' ? 'desc' : 'desc' }));
 
-  // WAR：最新点＝今季累計、推移、選択期間の増分（近似）。
+  // WAR：headline＝公式の今季累計（warHistory 最新点）。推移＝1試合ごとの推定の積み上がり（末尾＝公式値）。
+  // 選択期間の増分＝その mode の per-game 推定の合計（＝表の推定WAR列の和・絞り込みと完全一致）。
   const warLatest = log.warHistory.at(-1);
   const warT = warLatest ? warTotal(warLatest) : null;
-  const warSpan =
-    filter.kind !== 'all' && filtered.length > 0
-      ? warGain(log.warHistory, filtered[0].d, filtered[filtered.length - 1].d)
-      : null;
+  const warSpanEst = useMemo(
+    () => (filter.kind === 'all' ? null : filtered.reduce((s, r) => s + (warByDate.get(r.d) ?? 0), 0)),
+    [filter.kind, filtered, warByDate],
+  );
 
   // ── 画像出力（クライアント canvas・モノクロのサマリカード） ──
   const saveImage = () => {
@@ -285,12 +313,14 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
             </span>
           )}
         </div>
-        {log.warHistory.length >= 2 ? (
+        {est.cumulative.length >= 2 ? (
           <>
-            <WarSparkline history={log.warHistory} />
-            {filter.kind !== 'all' && (
-              <p className="mt-2 text-xs text-ink-mute">
-                {t.warGain}: <span className="font-semibold text-ink-soft tabular-nums">{warSpan == null ? t.warNA : `${warSpan >= 0 ? '+' : ''}${warSpan.toFixed(1)}`}</span>
+            <WarSparkline points={est.cumulative.map((c) => c.cum)} />
+            <p className="mt-2 max-w-prose text-[11px] leading-relaxed text-ink-mute">{t.warNote}</p>
+            {warSpanEst != null && (
+              <p className="mt-1 text-xs text-ink-mute">
+                {t.warDelta}（{mode === 'hitting' ? (en ? 'B' : '打') : en ? 'P' : '投'}）:{' '}
+                <span className="font-semibold text-ink-soft tabular-nums">{fmtWar(warSpanEst)}</span>
               </p>
             )}
           </>
@@ -299,7 +329,8 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
         )}
       </div>
 
-      {/* 試合別テーブル（列ヘッダのクリックでソート）。 */}
+      {/* 試合別テーブル（列ヘッダのクリックでソート・推定WAR列・行から海外の反応へ送客）。 */}
+      {articles && coveredCount > 0 && <p className="text-xs text-ink-mute">{t.covered(coveredCount)}</p>}
       <div className="overflow-x-auto rounded-[2px] border border-line">
         <table className="w-full min-w-[560px] text-sm tabular-nums">
           <thead>
@@ -317,21 +348,39 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
                   </button>
                 </th>
               ))}
+              {articles && <th className="whitespace-nowrap px-2.5 py-2 text-right font-medium">{t.reaction}</th>}
             </tr>
           </thead>
           <tbody>
-            {(sortedRows as Array<HitGame | PitGame>).map((r, i) => (
-              <tr key={`${r.d}-${i}`} className="border-b border-line/50 last:border-0">
-                {(cols as Array<Col<HitGame | PitGame>>).map((c) => (
-                  <td
-                    key={c.key}
-                    className={`whitespace-nowrap px-2.5 py-1.5 ${c.align === 'left' ? 'text-left text-ink-soft' : 'text-right text-ink'}`}
-                  >
-                    {c.cell(r)}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {(sortedRows as Array<HitGame | PitGame>).map((r, i) => {
+              const article = articles?.[r.d];
+              return (
+                <tr key={`${r.d}-${i}`} className="border-b border-line/50 last:border-0">
+                  {(cols as Array<Col<HitGame | PitGame>>).map((c) => (
+                    <td
+                      key={c.key}
+                      className={`whitespace-nowrap px-2.5 py-1.5 ${c.align === 'left' ? 'text-left text-ink-soft' : 'text-right text-ink'}`}
+                    >
+                      {c.cell(r)}
+                    </td>
+                  ))}
+                  {articles && (
+                    <td className="whitespace-nowrap px-2.5 py-1.5 text-right">
+                      {article ? (
+                        <Link
+                          href={`/${article.sport}/${article.id}`}
+                          className="text-ink underline decoration-line underline-offset-2 hover:decoration-ink"
+                        >
+                          {t.reaction}
+                        </Link>
+                      ) : (
+                        <span className="text-ink-mute">{t.none}</span>
+                      )}
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -352,9 +401,8 @@ export default function GamelogAnalysis({ log, locale }: { log: Gamelog; locale:
   );
 }
 
-/** 累計WARの推移をモノクロの簡易ラインで（SVG・依存なし）。 */
-function WarSparkline({ history }: { history: Gamelog['warHistory'] }) {
-  const pts = [...history].sort((a, b) => a.d.localeCompare(b.d)).map((p) => warTotal(p));
+/** 推移をモノクロの簡易ラインで（SVG・依存なし）。points は時系列の累積値。 */
+function WarSparkline({ points: pts }: { points: number[] }) {
   const W = 600;
   const H = 80;
   const pad = 6;

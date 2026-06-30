@@ -1,4 +1,4 @@
-import type { HitGame, PitGame, WarPoint } from './gamelog';
+import type { HitGame, PitGame, WarPoint, Gamelog } from './gamelog';
 
 /**
  * 試合別ログの「期間集計・率の再計算・162換算」を行う純粋関数群（fs 非依存＝クライアント島から使える）。
@@ -89,6 +89,83 @@ export function warGain(history: WarPoint[], start: string, end: string): number
   if (!cur || !base) return null;
   return Math.round((warTotal(cur) - warTotal(base)) * 10) / 10;
 }
+
+// ── 1試合ごとの推定WAR ───────────────────────────────────────────
+// MLB API は試合別WARを返さない（累計のみ）。そこで「各試合のスタッツから1試合ぶんの価値を推定し、
+// 季節合計が公式WARに一致するよう補正」する。打撃=wOBA線形ウェイト→平均比得点(wRAA)、
+// 投球=対リーグ平均の失点抑止。どちらも“形（試合ごとの良し悪し）”を出し、“水準（替え選手・守備位置・
+// 出場時間の積み増し）”は公式季節WARとの差を出場量(PA/IP)で按分して埋める＝合計は公式値に一致。
+// ⚠️ これは独自の推定値（公知の事実ではない）。UIで必ず「推定（公式季節値に補正）」と明示する。
+//   定数はリーグ環境の近似（年により微変動）。推定なので厳密一致は求めない。
+const WOBA = { ubb: 0.69, hbp: 0.72, b1: 0.89, b2: 1.27, b3: 1.62, hr: 2.1 }; // wOBA 線形ウェイト
+const LG_WOBA = 0.32; // リーグ平均 wOBA（近似）
+const WOBA_SCALE = 1.25; // wRAA への換算スケール
+const LG_ERA = 4.1; // リーグ平均ERA（近似・投球の対平均失点抑止に使う）
+const RUNS_PER_WIN = 10; // 得点→勝利の換算（近似）
+
+/** 打撃1試合の wRAA（平均比の得点貢献）。den は wOBA の分母(=PA相当)。 */
+function rawHitRuns(r: HitGame): { runs: number; pa: number } {
+  const single = Math.max(0, r.h - r.dbl - r.tpl - r.hr);
+  const ubb = Math.max(0, r.bb - r.ibb);
+  const num = WOBA.ubb * ubb + WOBA.hbp * r.hbp + WOBA.b1 * single + WOBA.b2 * r.dbl + WOBA.b3 * r.tpl + WOBA.hr * r.hr;
+  const den = r.ab + ubb + r.sf + r.hbp;
+  if (den <= 0) return { runs: 0.2 * r.sb - 0.4 * r.cs, pa: 0 };
+  const woba = num / den;
+  const wraa = ((woba - LG_WOBA) / WOBA_SCALE) * den;
+  return { runs: wraa + 0.2 * r.sb - 0.4 * r.cs, pa: den };
+}
+/** 投球1登板の対リーグ平均 失点抑止（lgERA×IP/9 − 自責）。 */
+function rawPitRuns(r: PitGame): { runs: number; ip: number } {
+  const ip = r.outs / 3;
+  return { runs: (LG_ERA * ip) / 9 - r.er, ip };
+}
+
+export type GameWar = { d: string; hit: number | null; pit: number | null; total: number };
+export type WarEstimate = {
+  hitByDate: Map<string, number>;
+  pitByDate: Map<string, number>;
+  games: GameWar[]; // 日付昇順（打のみ／打＋投が混在）
+  cumulative: { d: string; cum: number }[]; // 推定の積み上がり（末尾＝公式季節合計に一致）
+  official: { hit: number; pit: number; total: number };
+};
+
+/**
+ * 試合別ログ → 1試合ごとの推定WAR（公式季節値に補正）。official が無ければ生の推定のまま（水準は未補正）。
+ */
+export function estimateGameWar(log: Gamelog): WarEstimate {
+  const last = log.warHistory.at(-1);
+  const offHit = last?.warHit ?? 0;
+  const offPit = last?.warPit ?? 0;
+
+  // 打撃：生 wRAA→WAR を出し、公式 warHit との差を PA で按分して各試合に積む（合計＝公式）。
+  const hitRaw = log.hitting.map((r) => ({ d: r.d, ...rawHitRuns(r) }));
+  const sumHitWar = hitRaw.reduce((s, x) => s + x.runs / RUNS_PER_WIN, 0);
+  const totalPa = hitRaw.reduce((s, x) => s + x.pa, 0);
+  const cHitPerPa = last && totalPa > 0 ? (offHit - sumHitWar) / totalPa : 0;
+  const hitByDate = new Map<string, number>();
+  for (const x of hitRaw) hitByDate.set(x.d, x.runs / RUNS_PER_WIN + cHitPerPa * x.pa);
+
+  // 投球：同様に warPit との差を IP で按分。
+  const pitRaw = log.pitching.map((r) => ({ d: r.d, ...rawPitRuns(r) }));
+  const sumPitWar = pitRaw.reduce((s, x) => s + x.runs / RUNS_PER_WIN, 0);
+  const totalIp = pitRaw.reduce((s, x) => s + x.ip, 0);
+  const cPitPerIp = last && totalIp > 0 ? (offPit - sumPitWar) / totalIp : 0;
+  const pitByDate = new Map<string, number>();
+  for (const x of pitRaw) pitByDate.set(x.d, x.runs / RUNS_PER_WIN + cPitPerIp * x.ip);
+
+  const dates = [...new Set([...hitByDate.keys(), ...pitByDate.keys()])].sort((a, b) => a.localeCompare(b));
+  const games: GameWar[] = dates.map((d) => {
+    const hit = hitByDate.has(d) ? hitByDate.get(d)! : null;
+    const pit = pitByDate.has(d) ? pitByDate.get(d)! : null;
+    return { d, hit, pit, total: (hit ?? 0) + (pit ?? 0) };
+  });
+  let run = 0;
+  const cumulative = games.map((g) => ({ d: g.d, cum: (run += g.total) }));
+  return { hitByDate, pitByDate, games, cumulative, official: { hit: offHit, pit: offPit, total: offHit + offPit } };
+}
+
+/** 推定WARの符号つき表示（"+0.12" / "-0.05"）。 */
+export const fmtWar = (x: number): string => `${x >= 0 ? '+' : '−'}${Math.abs(x).toFixed(2)}`;
 
 // ── 表示フォーマット ─────────────────────────────────────────────
 /** 率指標を ".321" / "1.045" 形式に（1未満は先頭の0を落とす・3桁）。 */
