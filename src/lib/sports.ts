@@ -55,7 +55,7 @@ export const SPORT_INFO: Record<Sport, SportInfo> = {
   // 選手ハブは別ルート /prospects（カテゴリ /npb はナビから外し、ハブを NPB の入口にする＝layout で filter）。
   npb: {
     slug: 'npb',
-    labelJa: 'next メジャーリーガー',
+    labelJa: 'NEXT MLB',
     labelEn: 'NPB Prospects',
     emoji: '⚾️',
     subreddits: ['r/NPB', 'r/baseball'],
