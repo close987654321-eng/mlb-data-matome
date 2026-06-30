@@ -245,7 +245,7 @@ export default async function PlayerIndexPage({
         </section>
       )}
 
-      {/* ④ 看板「海外ニキと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。 */}
+      {/* ④ 看板「海外ファンと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。 */}
       {dodgersRows.length > 0 && (
         <section>
           <SectionHeading label={t('player.dodgersLineup')} count={dodgersRows.length} />
