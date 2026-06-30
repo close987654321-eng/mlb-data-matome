@@ -1157,7 +1157,7 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   // ── 成績ブロック（均等3×3・強弱なし）＝半透明パネル＋アクセント線。一回り大きく（村山指示）。
   const bandX = fx + 24;
   const bandW = W - fx * 2 - 48;
-  const bandH = portrait ? 360 : 268;
+  const bandH = portrait ? 408 : 300;
   const bandY = H - bandH - (portrait ? 118 : 92); // フッタ（URL/タグライン）と被らないよう一段持ち上げ
   roundRectPath(ctx, bandX, bandY, bandW, bandH, 10);
   ctx.fillStyle = wht(0.055);
@@ -1166,13 +1166,14 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   ctx.fillStyle = acc;
   ctx.fill();
   // 数値ベースライン基準で3段を組む＝パネル内に確実に収める（村山「枠から数字がはみ出ている」修正）。
+  // 村山「もう一回り大きく」でエリア・文字とも拡大（パネル360→408・数値64→74・ラベル26→28px）。
   const cols = 3;
   const cw = bandW / cols;
-  const valSize = portrait ? 64 : 50;
-  const labSize = portrait ? 26 : 22;
-  const rowPitch = portrait ? 104 : 78;
-  const vTop = portrait ? 80 : 56; // 1段目の数値ベースライン
-  const labGap = portrait ? 36 : 30;
+  const valSize = portrait ? 74 : 56;
+  const labSize = portrait ? 28 : 24;
+  const rowPitch = portrait ? 116 : 88;
+  const vTop = portrait ? 88 : 64; // 1段目の数値ベースライン
+  const labGap = portrait ? 40 : 34;
   ctx.textAlign = 'center';
   d.grid.forEach((item, i) => {
     const cx = bandX + (i % cols) * cw + cw / 2;
