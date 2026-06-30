@@ -149,7 +149,7 @@ function SiteHeader() {
           <NavLink href="/watch">{t('nav.watch')}</NavLink>
           <NavLink href="/player">{t('nav.players')}</NavLink>
           <NavLink href="/prospects">{t('nav.prospects')}</NavLink>
-          {SPORTS.map((s) => (
+          {SPORTS.filter((s) => s !== 'npb').map((s) => (
             <NavLink key={s} href={`/${s}`}>
               {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
             </NavLink>
@@ -175,7 +175,7 @@ function SiteHeader() {
         <NavLink href="/prospects" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.prospects')}
         </NavLink>
-        {SPORTS.map((s) => (
+        {SPORTS.filter((s) => s !== 'npb').map((s) => (
           <NavLink key={s} href={`/${s}`} className="inline-flex min-h-[44px] items-center whitespace-nowrap">
             {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
           </NavLink>
@@ -212,7 +212,7 @@ function SiteFooter() {
             <Link href="/prospects" className="transition-colors hover:text-ink">
               {t('nav.prospects')}
             </Link>
-            {SPORTS.map((s) => (
+            {SPORTS.filter((s) => s !== 'npb').map((s) => (
               <Link key={s} href={`/${s}`} className="whitespace-nowrap transition-colors hover:text-ink">
                 {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
               </Link>

@@ -65,6 +65,8 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
       href: 'https://abema.tv/',
     },
   ],
+  // NPB（next メジャーリーガー）の視聴サービスは提携が固まるまで非表示（空配列＝vodOffers は [] を返し CTA 非表示）。
+  npb: [],
 };
 
 /** href が設定済み（提携前は公式URL）の案件だけ返す。null は非表示。 */

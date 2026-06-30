@@ -115,12 +115,15 @@ export default async function ProspectsPage({
         </ul>
       </section>
 
-      {/* ファネル: MLBで活躍する日本人選手（現役）へ。next（NPB）↔ 現役MLB の往復で回遊を作る。 */}
-      <p className="text-sm">
+      {/* 回遊導線: 海外の反応・評価の記事一覧（/npb カテゴリ）＋ 現役MLB日本人ハブ（往復ファネル）。 */}
+      <div className="flex flex-col gap-2 text-sm">
+        <Link href="/npb" className="text-ink-soft transition-colors hover:text-ink hover:underline">
+          {t('prospects.toArticles')} <span aria-hidden>→</span>
+        </Link>
         <Link href="/player" className="text-ink-soft transition-colors hover:text-ink hover:underline">
           {t('prospects.toMlbHub')} <span aria-hidden>→</span>
         </Link>
-      </p>
+      </div>
     </div>
   );
 }

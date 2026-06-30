@@ -1,4 +1,4 @@
-export const SPORTS = ['mlb', 'boxing', 'mma'] as const;
+export const SPORTS = ['mlb', 'boxing', 'mma', 'npb'] as const;
 export type Sport = (typeof SPORTS)[number];
 
 export type SportInfo = {
@@ -49,6 +49,19 @@ export const SPORT_INFO: Record<Sport, SportInfo> = {
     subreddits: ['r/MMA', 'r/ufc'],
     heroImages: [
       U('1615117972428-28de67cda58e'), // マットでのグラップリング
+    ],
+  },
+  // next メジャーリーガー＝MLB挑戦が注目される NPB の逸材。記事は「海外（MLBメディア・スカウト）の評価」中心。
+  // 選手ハブは別ルート /prospects（カテゴリ /npb はナビから外し、ハブを NPB の入口にする＝layout で filter）。
+  npb: {
+    slug: 'npb',
+    labelJa: 'next メジャーリーガー',
+    labelEn: 'NPB Prospects',
+    emoji: '⚾️',
+    subreddits: ['r/NPB', 'r/baseball'],
+    heroImages: [
+      U('1508344928928-7165b67de128'), // バッター
+      U('1471295253337-3ceaaedca402'), // 野球場の空撮（夜）
     ],
   },
 };
