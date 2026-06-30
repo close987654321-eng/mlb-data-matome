@@ -72,7 +72,8 @@ export default function GamelogAnalysis({
         warTitle: 'WAR trend', warStart: (d: string) => `Tracking began ${d}. The trend builds from here (one point per game day).`,
         warGain: 'WAR in this span (approx)', warNA: '—', save: 'Save image', saving: 'Rendering…',
         share: 'Share', copyText: 'Copy caption', copied: 'Copied',
-        shareHeading: 'Share as an image', shareSub: 'A clean stat card for X, Instagram or your blog — narrow the period above and the card follows. Tap to share or save.',
+        shareHeading: 'Share as an image', shareSub: 'A clean stat card for X, Instagram or your blog. Pick the period and format below — the card follows live.',
+        shareCta: 'Make a share card', close: 'Close',
         fmtPortrait: 'Portrait', fmtSquare: 'Square', period: 'Period', lastGroup: 'Recent', monthGroup: 'By month', tagline: 'Overseas reactions, in Japanese',
         date: 'Date', opp: 'Opp', result: 'Dec', win: 'W', loss: 'L', none: '—', asOf: (d: string) => `As of ${d}`,
         gameWar: 'Est. WAR', warNote: 'Per-game value estimated from each box score, calibrated so the season total matches the official WAR.',
@@ -88,7 +89,8 @@ export default function GamelogAnalysis({
         warTitle: 'WAR推移', warStart: (d: string) => `${d}に追跡開始。ここから1試合ぶんずつ推移が積み上がります。`,
         warGain: '選択期間のWAR増分（近似）', warNA: '—', save: '画像を保存', saving: '生成中…',
         share: 'シェアする', copyText: '投稿文をコピー', copied: 'コピーしました',
-        shareHeading: '成績カードを画像でシェア', shareSub: 'X・インスタ・ブログにそのまま使える成績カード。上で期間を絞ると、その期間のカードになります。タップで共有／保存。',
+        shareHeading: '成績カードを画像でシェア', shareSub: 'X・インスタ・ブログにそのまま使える成績カード。期間と形を選ぶと、その場でカードが変わります。',
+        shareCta: '成績カードを作る', close: '閉じる',
         fmtPortrait: '縦長', fmtSquare: '正方形', period: '期間', lastGroup: '直近', monthGroup: '月別', tagline: '海外の反応まとめ',
         date: '日付', opp: '対戦', result: '結果', win: '勝', loss: '敗', none: '—', asOf: (d: string) => `${d}時点`,
         gameWar: '推定WAR', warNote: '各試合の成績から1試合ぶんを試算し、季節合計が公式WARに一致するよう補正した推定値です。',
@@ -127,6 +129,7 @@ export default function GamelogAnalysis({
   const [format, setFormat] = useState<CardFormat>('portrait');
   const [copied, setCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false); // 成績カードのシェア＝モーダル（期間と連動・本文末尾でなく即起動）。
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // ネイティブ共有（モバイル＝OSのシェアシートにファイルを渡せる）か。ボタン文言と挙動を分岐。
   useEffect(() => {
@@ -482,14 +485,26 @@ export default function GamelogAnalysis({
   }, [mode, filtered, en, log, HL, PL, fLabel, warT, shareUrl]);
 
   // プレビュー＝状態変化（データ・形・読み込んだ画像）のたびに描き直す（見たままがそのまま保存／共有される）。
+  // canvas はモーダル内にのみ存在するので shareOpen も依存に入れる（開いた瞬間にマウント→描画）。
   useEffect(() => {
+    if (!shareOpen) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const { w, h } = CARD_DIMS[format];
     canvas.width = w;
     canvas.height = h;
     drawCard(canvas, cardData, format, { headImg, logoImg, teamColor, role: mode });
-  }, [cardData, format, headImg, logoImg, teamColor, mode]);
+  }, [shareOpen, cardData, format, headImg, logoImg, teamColor, mode]);
+
+  // モーダル中は Esc で閉じる＋背面スクロールをロック。
+  useEffect(() => {
+    if (!shareOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShareOpen(false); };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = prev; };
+  }, [shareOpen]);
 
   const cardFileName = () => {
     const slug = filter.kind === 'all' ? 'season' : filter.kind === 'last' ? `last${filter.n}` : `m${filter.m}`;
@@ -586,8 +601,8 @@ export default function GamelogAnalysis({
         </div>
       )}
 
-      {/* 期間フィルタ＝optgroup付きネイティブ select（項目が増えても伸びない・モバイルはネイティブピッカー）。 */}
-      <div className="flex items-center gap-2">
+      {/* 期間フィルタ＋シェアCTA＝同じ行に並べ「期間を選ぶ→そのままカードに」を一連の流れに。 */}
+      <div className="flex flex-wrap items-center gap-2">
         <label htmlFor="gl-period" className="text-xs font-medium text-ink-mute">{t.period}</label>
         <div className="relative inline-block">
           <select
@@ -600,7 +615,7 @@ export default function GamelogAnalysis({
             {lastNs.length > 0 && (
               <optgroup label={t.lastGroup}>
                 {lastNs.map((n) => (
-                  <option key={n} value={`last:${n}`}>{en ? `Last ${n}` : `直近${n}試合`}</option>
+                  <option key={n} value={`last:${n}`}>{en ? `Last ${n} games` : `直近${n}試合`}</option>
                 ))}
               </optgroup>
             )}
@@ -616,6 +631,18 @@ export default function GamelogAnalysis({
             <Chevron />
           </span>
         </div>
+        <button
+          type="button"
+          onClick={() => setShareOpen(true)}
+          className="ml-auto inline-flex min-h-[40px] items-center gap-2 rounded-[2px] border border-ink bg-ink px-4 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
+        >
+          <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="9" r="1.6" />
+            <path d="M21 15l-5-5L6 20" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          {t.shareCta}
+        </button>
       </div>
 
       {/* サマリ3列。 */}
@@ -798,71 +825,126 @@ export default function GamelogAnalysis({
         </details>
       </div>
 
-      {/* 画像でシェア＝プレビューを見て即 共有/保存。期間 select を絞ればその期間のカードになる。 */}
-      <div className="space-y-4 rounded-[2px] border border-line p-4">
-        <div>
-          <h3 className="text-sm font-bold text-ink">{t.shareHeading}</h3>
-          <p className="mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{t.shareSub}</p>
-        </div>
-
-        {/* 形（縦長 / 正方形）。 */}
-        <div className="inline-flex overflow-hidden rounded-[2px] border border-line">
-          {(['portrait', 'square'] as CardFormat[]).map((f) => (
-            <button
-              key={f}
-              type="button"
-              onClick={() => setFormat(f)}
-              className={`min-h-[36px] px-4 text-xs font-semibold transition-colors ${
-                format === f ? 'bg-ink text-paper' : 'bg-paper text-ink-soft hover:text-ink'
-              }`}
-              aria-pressed={format === f}
-            >
-              {f === 'portrait' ? t.fmtPortrait : t.fmtSquare}
-            </button>
-          ))}
-        </div>
-
-        {/* プレビュー（実物）＋操作。 */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-          <canvas
-            ref={canvasRef}
-            width={1080}
-            height={1350}
-            aria-label={t.shareHeading}
-            className="block h-auto w-full max-w-[260px] self-center rounded-[2px] border border-line sm:self-start"
-          />
-          <div className="flex w-full flex-col gap-2 sm:max-w-[220px]">
-            <button
-              type="button"
-              onClick={onPrimaryShare}
-              disabled={busy}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-ink bg-ink px-5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft disabled:opacity-50"
-            >
-              {busy ? t.saving : canShare ? t.share : t.save}
-              <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
-                {canShare ? (
-                  <path d="M12 15V4M8 8l4-4 4 4M5 13v6a1 1 0 001 1h12a1 1 0 001-1v-6" strokeLinecap="round" strokeLinejoin="round" />
-                ) : (
-                  <path d="M12 4v11M8 11l4 4 4-4M5 20h14" strokeLinecap="round" strokeLinejoin="round" />
-                )}
-              </svg>
-            </button>
-            <button
-              type="button"
-              onClick={copyCaption}
-              className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-line px-5 text-sm font-semibold text-ink-soft transition-colors hover:border-ink hover:text-ink"
-            >
-              {copied ? t.copied : t.copyText}
-              {!copied && (
-                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
-                  <rect x="9" y="9" width="11" height="11" rx="1.5" />
-                  <path d="M5 15V5a1 1 0 011-1h9" strokeLinecap="round" />
+      {/* 成績カードのシェア＝モーダル（期間 select は本文上部とモーダル内の両方から操作・状態は共有）。
+          開いた瞬間に canvas がマウントされ、見たままがそのまま保存／共有される。 */}
+      {shareOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={t.shareHeading}
+          onClick={() => setShareOpen(false)}
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-ink/60 p-4 backdrop-blur-sm sm:items-center"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="my-auto w-full max-w-md rounded-[2px] border border-line bg-paper p-5 shadow-2xl"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h3 className="text-base font-bold text-ink">{t.shareHeading}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-ink-mute">{t.shareSub}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShareOpen(false)}
+                aria-label={t.close}
+                className="shrink-0 rounded-[2px] border border-line p-2 text-ink-soft transition-colors hover:border-ink hover:text-ink"
+              >
+                <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                  <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
                 </svg>
-              )}
-            </button>
+              </button>
+            </div>
+
+            {/* 期間（連動・カードが即変わる）＋形（縦長/正方形）。 */}
+            <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="relative inline-block">
+                <select
+                  aria-label={t.period}
+                  value={filterValue}
+                  onChange={(e) => applyFilterValue(e.target.value)}
+                  className="min-h-[40px] appearance-none rounded-[2px] border border-line bg-paper py-2 pl-3 pr-9 text-sm font-medium text-ink transition-colors hover:border-ink focus:border-ink focus:outline-none"
+                >
+                  <option value="all">{t.all}</option>
+                  {lastNs.length > 0 && (
+                    <optgroup label={t.lastGroup}>
+                      {lastNs.map((n) => (
+                        <option key={n} value={`last:${n}`}>{en ? `Last ${n} games` : `直近${n}試合`}</option>
+                      ))}
+                    </optgroup>
+                  )}
+                  {months.length > 0 && (
+                    <optgroup label={t.monthGroup}>
+                      {months.map((m) => (
+                        <option key={m} value={`month:${m}`}>{t.month(m)}</option>
+                      ))}
+                    </optgroup>
+                  )}
+                </select>
+                <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-ink-soft">
+                  <Chevron />
+                </span>
+              </div>
+              <div className="inline-flex overflow-hidden rounded-[2px] border border-line">
+                {(['portrait', 'square'] as CardFormat[]).map((f) => (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setFormat(f)}
+                    className={`min-h-[40px] px-4 text-xs font-semibold transition-colors ${
+                      format === f ? 'bg-ink text-paper' : 'bg-paper text-ink-soft hover:text-ink'
+                    }`}
+                    aria-pressed={format === f}
+                  >
+                    {f === 'portrait' ? t.fmtPortrait : t.fmtSquare}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* プレビュー（実物）＋操作。 */}
+            <div className="mt-4 flex flex-col items-center gap-4">
+              <canvas
+                ref={canvasRef}
+                width={CARD_DIMS[format].w}
+                height={CARD_DIMS[format].h}
+                aria-label={t.shareHeading}
+                className="block h-auto w-full max-w-[300px] rounded-[2px] border border-line"
+              />
+              <div className="flex w-full max-w-[300px] flex-col gap-2">
+                <button
+                  type="button"
+                  onClick={onPrimaryShare}
+                  disabled={busy}
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-ink bg-ink px-5 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft disabled:opacity-50"
+                >
+                  {busy ? t.saving : canShare ? t.share : t.save}
+                  <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                    {canShare ? (
+                      <path d="M12 15V4M8 8l4-4 4 4M5 13v6a1 1 0 001 1h12a1 1 0 001-1v-6" strokeLinecap="round" strokeLinejoin="round" />
+                    ) : (
+                      <path d="M12 4v11M8 11l4 4 4-4M5 20h14" strokeLinecap="round" strokeLinejoin="round" />
+                    )}
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={copyCaption}
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[2px] border border-line px-5 text-sm font-semibold text-ink-soft transition-colors hover:border-ink hover:text-ink"
+                >
+                  {copied ? t.copied : t.copyText}
+                  {!copied && (
+                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-none stroke-current" strokeWidth={2} aria-hidden>
+                      <rect x="9" y="9" width="11" height="11" rx="1.5" />
+                      <path d="M5 15V5a1 1 0 011-1h9" strokeLinecap="round" />
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
