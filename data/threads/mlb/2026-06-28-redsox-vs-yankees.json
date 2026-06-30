@@ -124,5 +124,9 @@
       "bodyEn": "Yankee's sure struggle with the Red Sox.",
       "bodyJa": "ヤンキース、ほんとにレッドソックスに苦手意識あるな"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 1 },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4 }
+  }
 }

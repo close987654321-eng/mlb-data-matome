@@ -1155,6 +1155,65 @@ async function runWarRace(asOf) {
   console.log(`warrace 書き出し: ${Object.keys(players).length}選手 / asOf ${stampedAsOf} → ${file}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// backfill-games … 既存の MLB 記事に試合の最終スコア（thread.game）を埋める。記事 id の
+// "{date}-{slugA}-vs-{slugB}" から対戦2チームを取り、id 日付(JST)の前日(ET)の公式スケジュールで
+// 該当試合を同定→away/home＋スコアを書き込む（公知の数値だけ・「試合結果カード」の素データ）。
+// 既定は dry-run、--apply で書き込み。series を跨ぐ同一カードの誤マッチを避けるため日付は ET=JST-1 固定。
+// 曖昧（同日DH等で複数一致）・未確定・不一致はスキップ（捏造しない）。
+// ─────────────────────────────────────────────────────────────────────────────
+const TEAM_SLUGS = new Set(Object.values(TEAM_SLUG));
+
+async function runBackfillGames({ apply } = {}) {
+  const dir = path.join(process.cwd(), 'data', 'threads', 'mlb');
+  const files = readdirSync(dir).filter((f) => f.endsWith('.json'));
+  const cache = new Map(); // etDate -> schedule games[]（同日複数記事で API を1回に）
+  let filled = 0, already = 0, noPattern = 0, unmatched = 0, ambiguous = 0;
+  for (const f of files) {
+    const file = path.join(dir, f);
+    let t;
+    try { t = JSON.parse(readFileSync(file, 'utf8')); } catch { continue; }
+    if (t.game) { already++; continue; }
+    const id = t.id ?? f.replace(/\.json$/, '');
+    const mt = id.match(/^(\d{4}-\d{2}-\d{2})-(.+)-vs-(.+)$/);
+    if (!mt) { noPattern++; continue; } // "X-vs-Y" でない（議論スレ等）は対象外
+    const slugA = mt[2], slugB = mt[3];
+    if (!TEAM_SLUGS.has(slugA) || !TEAM_SLUGS.has(slugB)) { noPattern++; continue; } // 未知 slug（WBC/SP 等）
+    const jstDate = t.series?.date ?? mt[1];
+    const etDate = addDays(jstDate, -1); // JST = ET+1（夜試合）。id / series.date は JST。
+    if (!cache.has(etDate)) cache.set(etDate, await fetchSchedule(etDate));
+    // 同定は en 名でなくスラッグで（移転で "Oakland Athletics"→"Athletics" のような名称揺れに強い）。
+    const found = cache.get(etDate).filter((g) => {
+      const gs = new Set([TEAM_SLUG[g.away], TEAM_SLUG[g.home]]);
+      return gs.has(slugA) && gs.has(slugB);
+    });
+    if (found.length === 0) { unmatched++; console.log(`· ${id}  （${etDate}(ET) に一致試合なし）`); continue; }
+    if (found.length > 1) { ambiguous++; console.log(`· ${id}  （同日に複数一致＝DH等・手動）`); continue; }
+    const g = found[0];
+    if (g.awayScore == null || g.homeScore == null || !/Final|Completed|Game Over/i.test(g.status)) {
+      unmatched++; console.log(`· ${id}  （スコア未確定: ${g.status}）`); continue;
+    }
+    const away = { ja: TEAM_JA[g.away] ?? g.away, en: g.away, score: g.awayScore };
+    const home = { ja: TEAM_JA[g.home] ?? g.home, en: g.home, score: g.homeScore };
+    if (apply) {
+      // JSON.stringify で全文を書き戻すと既存のインライン整形（opponent/tags の1行表記）まで展開され
+      // 無関係な再整形ノイズが出る。差分を「game 追記のみ」に保つため、末尾 } の直前にテキスト挿入する。
+      const src = readFileSync(file, 'utf8');
+      const head = src.slice(0, src.lastIndexOf('}')).replace(/\s+$/, '');
+      const block =
+        '  "game": {\n' +
+        `    "away": { "ja": ${JSON.stringify(away.ja)}, "en": ${JSON.stringify(away.en)}, "score": ${away.score} },\n` +
+        `    "home": { "ja": ${JSON.stringify(home.ja)}, "en": ${JSON.stringify(home.en)}, "score": ${home.score} }\n` +
+        '  }';
+      writeFileSync(file, `${head},\n${block}\n}\n`);
+    }
+    filled++;
+    console.log(`${apply ? '✓' : '○'} ${id}  ${away.ja} ${g.awayScore} - ${g.homeScore} ${home.ja}`);
+  }
+  console.log(`\n試合結果 backfill: 書込${apply ? '' : '(予定)'} ${filled} / 既存 ${already} / 対象外 ${noPattern} / 不一致 ${unmatched} / 曖昧 ${ambiguous}`);
+  if (!apply) console.log('（dry-run。実際に書き込むには --apply を付ける）');
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -1205,6 +1264,9 @@ async function main() {
   } else if (cmd === 'warrace') {
     // warrace：snapshot を読んで大谷＋ライバルの累計WARを1日1点で war-race.json に積む。
     await runWarRace(jstStamp());
+  } else if (cmd === 'backfill-games') {
+    // backfill-games [--apply]：既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用）。
+    await runBackfillGames({ apply: raw.includes('--apply') });
   } else {
     console.error(
       [
@@ -1217,6 +1279,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs gamelog [選手|ID] [season] # 1選手の試合別ログ＋WAR推移を data/gamelogs/{id}.json へ（既定=大谷）',
         '  node scripts/fetch-mlb-stats.mjs gamelogs [season]  # MLBロースター級 全選手の試合別ログを一括更新（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
+        '  node scripts/fetch-mlb-stats.mjs backfill-games [--apply] # 既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用・既定dry-run）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
     );

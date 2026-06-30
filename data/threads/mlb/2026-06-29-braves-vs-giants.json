@@ -131,5 +131,9 @@
       "bodyEn": "The game was up for \"Sale\" and the Giant were buying.",
       "bodyJa": "セール（Sale）に出されたゲームを、ジャイアンツが「買った」ってわけだ。"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 2 },
+    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 3 }
+  }
 }

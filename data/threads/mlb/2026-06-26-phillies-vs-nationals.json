@@ -204,5 +204,9 @@
       "bodyEn": "They can indeed, it turns out, keep getting away with this.",
       "bodyJa": "どうやらフィリーズは、こういう勝ち方を続けられるらしい。"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10 },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 5 }
+  }
 }

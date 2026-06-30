@@ -197,5 +197,9 @@
       "bodyEn": "Don't worry, Tucker will make sure Baltimore wins tomorrow",
       "bodyJa": "心配すんな、タッカーが明日ちゃんとボルチモア（オリオールズ）を勝たせてくれるさ。"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3 },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2 }
+  }
 }

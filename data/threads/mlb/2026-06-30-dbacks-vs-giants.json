@@ -74,5 +74,9 @@
       "bodyEn": "I wish we could face SF every week",
       "bodyJa": "SF（ジャイアンツ）と毎週対戦できたらなぁ"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 4 },
+    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 5 }
+  }
 }

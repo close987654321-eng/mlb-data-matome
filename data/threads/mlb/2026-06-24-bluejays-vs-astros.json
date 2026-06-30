@@ -211,5 +211,9 @@
       "bodyEn": "The Jays are addicted to staying below .500",
       "bodyJa": "ジェイズは勝率5割未満でいることに依存してるんだよ"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 9 },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 7 }
+  }
 }

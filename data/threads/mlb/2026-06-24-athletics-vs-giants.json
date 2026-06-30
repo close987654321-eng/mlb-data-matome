@@ -130,5 +130,9 @@
       "bodyEn": "The San Francisco Giants are 32-46",
       "bodyJa": "サンフランシスコ・ジャイアンツは32勝46敗。"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 1 },
+    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 3 }
+  }
 }

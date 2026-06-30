@@ -13,6 +13,7 @@ import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
 import Transcript from '@/components/Transcript';
 import StatBox from '@/components/StatBox';
+import GameResultCard from '@/components/GameResultCard';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
@@ -257,6 +258,25 @@ export default async function ThreadDetailPage({
             </Link>
           ))}
         </p>
+      )}
+
+      {/* 試合結果カード（横展開）。最終スコア（thread.game・公知数値）がある MLB 記事だけ、Topps 調の
+          スコアボード1枚を画像出力できる＝記事＝拡散の起点。日本人選手のこの試合の成績(stats.today)も同梱。 */}
+      {sport === 'mlb' && thread.game && (
+        <div className="mt-6">
+          <GameResultCard
+            game={thread.game}
+            dateLabel={(() => {
+              const g = (thread.series?.date ?? thread.id.slice(0, 10)).split('-');
+              return `${g[0]}.${Number(g[1])}.${Number(g[2])}`;
+            })()}
+            stats={(thread.stats ?? [])
+              .filter((s) => s.today)
+              .map((s) => ({ player: s.player, line: s.today as string }))}
+            articleUrl={absoluteUrl(locale, `/${sport}/${thread.id}`)}
+            locale={locale}
+          />
+        </div>
       )}
 
       {isWatchAlong ? (
