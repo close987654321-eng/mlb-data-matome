@@ -1087,41 +1087,32 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   ctxLS.letterSpacing = '0px';
   const bw = leftbar + bpad + Math.max(headW, ebW) + bpad;
   const bh = 26 + ebSize + 12 + hSize + 26;
-  // 影＋グラデ本体（acc → 暗い色つき地）。
-  ctx.save();
-  ctx.shadowColor = 'rgba(0,0,0,0.34)';
-  ctx.shadowBlur = 24;
-  ctx.shadowOffsetY = 8;
-  const bgl = ctx.createLinearGradient(bx, by, bx + bw, by + bh);
-  bgl.addColorStop(0, acc);
-  bgl.addColorStop(1, teamField(team, 0.18));
-  roundRectPath(ctx, bx, by, bw, bh, 9);
-  ctx.fillStyle = bgl;
+  // 影（右下に少しずらして覗かせる＝フロスト面の透過を保ったまま浮かせる）。
+  roundRectPath(ctx, bx + 4, by + 6, bw, bh, 10);
+  ctx.fillStyle = 'rgba(0,0,0,0.28)';
   ctx.fill();
-  ctx.restore();
-  // 透過レイヤー：斜めハッチ＋左バー＋上シーン（クリップ内）。
+  // 透過レイヤー：フロスト地（背景がうっすら透ける）＋上シーン＋アクセントバー（クリップ内）。
   ctx.save();
-  roundRectPath(ctx, bx, by, bw, bh, 9);
+  roundRectPath(ctx, bx, by, bw, bh, 10);
   ctx.clip();
-  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-  ctx.lineWidth = 2;
-  for (let i = 0; i < 18; i++) { const sx = bx - bh + i * 46; ctx.beginPath(); ctx.moveTo(sx, by + bh); ctx.lineTo(sx + bh, by); ctx.stroke(); }
-  ctx.fillStyle = accLt;
-  ctx.fillRect(bx, by, leftbar, bh);
+  ctx.fillStyle = 'rgba(6,8,12,0.30)';
+  ctx.fillRect(bx, by, bw, bh);
   const sheen = ctx.createLinearGradient(0, by, 0, by + bh);
-  sheen.addColorStop(0, 'rgba(255,255,255,0.20)');
-  sheen.addColorStop(0.5, 'rgba(255,255,255,0)');
+  sheen.addColorStop(0, 'rgba(255,255,255,0.16)');
+  sheen.addColorStop(0.55, 'rgba(255,255,255,0)');
   ctx.fillStyle = sheen;
   ctx.fillRect(bx, by, bw, bh);
+  ctx.fillStyle = accLt;
+  ctx.fillRect(bx, by, leftbar, bh);
   ctx.restore();
-  roundRectPath(ctx, bx, by, bw, bh, 9);
+  roundRectPath(ctx, bx, by, bw, bh, 10);
   ctx.lineWidth = 1.5;
-  ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
   ctx.stroke();
-  // テキスト（eyebrow letter-spaced ＋ headline）。
+  // テキスト＝透過レイヤーの“上に載せる”（eyebrow=明アクセント＋字間／headline=白）。
   const tx = bx + leftbar + bpad;
   ctxLS.letterSpacing = '4px';
-  ctx.fillStyle = wht(0.82);
+  ctx.fillStyle = accLt;
   ctx.font = `800 ${ebSize}px ${SANS}`;
   ctx.fillText(d.periodEyebrow, tx, by + 26 + ebSize - 4);
   ctxLS.letterSpacing = '0px';
@@ -1188,7 +1179,7 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, ar
   const bandX = fx + 24;
   const bandW = W - fx * 2 - 48;
   const bandH = portrait ? 360 : 250;
-  const bandY = H - bandH - (portrait ? 84 : 74);
+  const bandY = H - bandH - (portrait ? 118 : 100); // フッタ（URL/タグライン）と被らないよう一段持ち上げ
   roundRectPath(ctx, bandX, bandY, bandW, bandH, 10);
   ctx.fillStyle = wht(0.055);
   ctx.fill();
