@@ -15,6 +15,7 @@ import PlayerHero from '@/components/player/PlayerHero';
 import PlayerMarquee from '@/components/player/PlayerMarquee';
 import PlayerDetail from '@/components/player/PlayerDetail';
 import GamelogAnalysis from '@/components/player/GamelogAnalysis';
+import MakeCardButton from '@/components/player/MakeCardButton';
 import WarRace from '@/components/player/WarRace';
 import PlayerStickyBar from '@/components/player/PlayerStickyBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -236,6 +237,10 @@ export default async function PlayerHubPage({
                 : playerShareText(player.nameJa, season, hero)
             }
           />
+
+          {/* 発見導線: カードメーカーはページ中段にあり埋もれるので、ファーストビュー近くから 1 タップで
+              同じモーダルを開く入口を置く（gamelog がある選手＝メーカーが出る選手のみ）。 */}
+          {gamelog && <MakeCardButton label={t('player.makeCard')} />}
 
           <PlayerDetail season={season} hero={hero} labels={rankLabels} />
 

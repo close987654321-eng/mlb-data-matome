@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@/lib/navigation';
+import { track } from '@/lib/analytics';
 import Chevron from '@/components/Chevron';
 import { getTeam, headshotUrl, teamLogoUrl } from '@/lib/teams';
 import type { Gamelog, HitGame, PitGame } from '@/lib/gamelog';
@@ -288,6 +289,24 @@ export default function GamelogAnalysis({
     else setFilter({ kind: 'all' });
   };
 
+  // カードメーカー＝モーダルを開く唯一の入口（このセクションの CTA・ヒーローのボタン・記事からの
+  // #card ディープリンク）。開いた瞬間を card_open として計測し、source で流入元を分ける＝発見導線の効きを見る。
+  const openShare = (source: string) => {
+    setShareOpen(true);
+    track('card_open', { player: log.player.nameEn, mode, period: filterValue, format, source });
+  };
+  // 最新 state を読む openShare をリスナから呼ぶための ref（mount 一度きりの購読でも値が陳腐化しない）。
+  const openShareRef = useRef(openShare);
+  openShareRef.current = openShare;
+  // ヒーローの「成績カードを作る」（同ページ＝カスタムイベント）と、記事 CTA からの /player/{slug}#card
+  // （別ページ＝ハッシュ）の両方からモーダルを開く。発見導線とループの着地を同じ口に集約する。
+  useEffect(() => {
+    if (window.location.hash === '#card') openShareRef.current('deeplink');
+    const onOpen = (e: Event) => openShareRef.current(((e as CustomEvent).detail as string) || 'cta');
+    window.addEventListener('mlb:open-card', onOpen);
+    return () => window.removeEventListener('mlb:open-card', onOpen);
+  }, []);
+
   // サマリ3列（選択期間 / 今季累計 / 162換算）。162は「今季累計」からの推計（絞り込みに依らず固定）。
   const summary: SummaryRow[] = useMemo(() => {
     if (mode === 'hitting') {
@@ -481,7 +500,12 @@ export default function GamelogAnalysis({
     const head = en
       ? `${log.player.nameEn} ${year} (${fLabel}) — ${line}${warStr}`
       : `${log.player.nameJa} ${year}（${fLabel}）｜${line}${warStr}`;
-    return [head, `#MLB #${tag}`, shareUrl].filter(Boolean).join('\n');
+    // 投稿文のリンクにだけ UTM を付ける（カード経由の来訪を GA4 で見分ける＝③の計測）。画像に焼く
+    // フッターURL（drawCard 側）は素のドメインのまま＝印字なので UTM を付けても意味がなく見栄えも崩す。
+    const shareLink = shareUrl
+      ? `${shareUrl}${shareUrl.includes('?') ? '&' : '?'}utm_source=card&utm_medium=image&utm_campaign=player_card`
+      : undefined;
+    return [head, `#MLB #${tag}`, shareLink].filter(Boolean).join('\n');
   }, [mode, filtered, en, log, HL, PL, fLabel, warT, shareUrl]);
 
   // プレビュー＝状態変化（データ・形・読み込んだ画像）のたびに描き直す（見たままがそのまま保存／共有される）。
@@ -558,11 +582,17 @@ export default function GamelogAnalysis({
     }
     saveImage(); // files 共有自体が不可なら保存にフォールバック
   };
-  const onPrimaryShare = () => (canShare ? shareImage() : saveImage());
+  const onPrimaryShare = () => {
+    // 「出す」操作の発火＝②シェア率の分子（method でネイティブ共有/保存を分ける）。OS シェアシート上の
+    // キャンセルは全環境で確実に検知できないため、意思＝ボタン押下を計測する（実運用で十分な近似）。
+    track('card_share', { player: log.player.nameEn, mode, period: filterValue, format, method: canShare ? 'share' : 'save' });
+    return canShare ? shareImage() : saveImage();
+  };
   const copyCaption = async () => {
     try {
       await navigator.clipboard.writeText(caption);
       setCopied(true);
+      track('card_copy', { player: log.player.nameEn, mode, period: filterValue, format });
       setTimeout(() => setCopied(false), 1800);
     } catch {
       /* クリップボード不可（古い環境）は黙って無視 */
@@ -570,7 +600,7 @@ export default function GamelogAnalysis({
   };
 
   return (
-    <section className="space-y-4" aria-label={t.heading}>
+    <section id="card" className="scroll-mt-24 space-y-4" aria-label={t.heading}>
       <div>
         <div className="flex flex-wrap items-center gap-2.5">
           <h2 className="text-base font-bold tracking-wide text-ink sm:text-lg">{t.heading}</h2>
@@ -633,7 +663,7 @@ export default function GamelogAnalysis({
         </div>
         <button
           type="button"
-          onClick={() => setShareOpen(true)}
+          onClick={() => openShare('analysis')}
           className="ml-auto inline-flex min-h-[40px] items-center gap-2 rounded-[2px] border border-ink bg-ink px-4 text-sm font-semibold text-paper transition-colors hover:bg-ink-soft"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth={2} aria-hidden>
