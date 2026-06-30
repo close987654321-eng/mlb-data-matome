@@ -27,6 +27,12 @@ export type NpbProspect = {
   aliases?: string[];
   /** Wikipedia 等の権威URL（E-E-A-T）。 */
   sameAs?: string[];
+  /** 今季成績（公知の数値のみ・編集時に手入力。出典は NPB公式 npb.jp。MLB成績APIは NPB を持たないため自動取得しない）。 */
+  season?: {
+    asOf: string; // 集計時点（例: "2026-06-29"）
+    sourceUrl: string; // 出典（NPB公式の個人成績ページ）
+    stats: { ja: string; en: string; value: string }[]; // 見出し指標（5つ程度）
+  };
 };
 
 export const NPB_PROSPECTS: NpbProspect[] = [
@@ -54,6 +60,17 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     aliases: ['佐藤輝'],
     sameAs: ['https://ja.wikipedia.org/wiki/佐藤輝明'],
+    season: {
+      asOf: '2026-06-29',
+      sourceUrl: 'https://npb.jp/bis/players/41045153.html',
+      stats: [
+        { ja: '試合', en: 'G', value: '69' },
+        { ja: '打率', en: 'AVG', value: '.353' },
+        { ja: '本塁打', en: 'HR', value: '16' },
+        { ja: '打点', en: 'RBI', value: '49' },
+        { ja: 'OPS', en: 'OPS', value: '1.087' },
+      ],
+    },
   },
   {
     slug: 'ito-hiromi',
@@ -78,6 +95,17 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A mid-rotation right-hander who blends velocity with command.',
     },
     sameAs: ['https://ja.wikipedia.org/wiki/伊藤大海'],
+    season: {
+      asOf: '2026-06-29',
+      sourceUrl: 'https://npb.jp/bis/players/51355153.html',
+      stats: [
+        { ja: '登板', en: 'G', value: '14' },
+        { ja: '防御率', en: 'ERA', value: '2.86' },
+        { ja: '勝-敗', en: 'W-L', value: '8-3' },
+        { ja: '投球回', en: 'IP', value: '94.1' },
+        { ja: '奪三振', en: 'SO', value: '88' },
+      ],
+    },
   },
   {
     slug: 'taira-kaima',
@@ -102,6 +130,17 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A high-octane power arm who can work in relief or start.',
     },
     sameAs: ['https://ja.wikipedia.org/wiki/平良海馬'],
+    season: {
+      asOf: '2026-06-29',
+      sourceUrl: 'https://npb.jp/bis/players/31035136.html',
+      stats: [
+        { ja: '登板', en: 'G', value: '11' },
+        { ja: '防御率', en: 'ERA', value: '0.89' },
+        { ja: '勝-敗', en: 'W-L', value: '5-1' },
+        { ja: '投球回', en: 'IP', value: '71.0' },
+        { ja: '奪三振', en: 'SO', value: '66' },
+      ],
+    },
   },
 ];
 

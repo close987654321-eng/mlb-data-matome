@@ -27,12 +27,16 @@ export async function generateMetadata({
   const p = getNpbProspect(slug);
   if (!p) return {};
   const en = locale === 'en';
+  // 今季の見出し数値を description 前方へ＝「{選手} 成績 2026」系の指名検索に当てる（公知の数値のみ）。
+  const statStr = p.season
+    ? p.season.stats.slice(0, 3).map((s) => `${en ? s.en : s.ja}${s.value}`).join(en ? ' · ' : '・')
+    : '';
   const title = en
     ? `${p.nameEn} — NPB Player on the MLB Radar`
     : `${p.nameJa} — MLB挑戦が注目されるNPBの逸材`;
   const description = en
-    ? `${p.nameEn} (${p.team.en}, ${p.pos.en}) — why MLB scouts are watching, his posting outlook, and a hub of overseas reactions.`
-    : `${p.nameJa}（${p.team.ja}・${p.pos.ja}）のMLB注目ポイント、ポスティング見通し、海外の反応まとめ。`;
+    ? `${p.nameEn} (${p.team.en}, ${p.pos.en})${statStr ? ` — 2026 ${statStr}.` : '.'} Why MLB scouts are watching, his posting outlook, and a hub of overseas reactions.`
+    : `${p.nameJa}（${p.team.ja}・${p.pos.ja}）の2026年成績${statStr ? `（${statStr}）` : ''}、MLB注目ポイント、ポスティング見通し、海外の反応まとめ。`;
   return {
     title,
     description,
@@ -169,9 +173,34 @@ export default async function ProspectPage({
         <div className="mb-3">
           <SectionHeading label={t('prospects.stats')} />
         </div>
-        <p className="rounded-[2px] border border-dashed border-line p-4 text-sm text-ink-soft">
-          {t('prospects.statsSoon')}
-        </p>
+        {p.season ? (
+          <div className="rounded-[2px] border border-line bg-surface p-5">
+            <dl className="grid grid-cols-3 gap-x-4 gap-y-4 sm:grid-cols-5">
+              {p.season.stats.map((s) => (
+                <div key={s.ja}>
+                  <dt className="text-xs text-ink-soft">{en ? s.en : s.ja}</dt>
+                  <dd className="mt-0.5 text-xl font-bold tabular-nums text-ink">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 text-xs text-ink-soft">
+              {t('prospects.statsAsOf', { date: p.season.asOf })}
+              {' · '}
+              <a
+                href={p.season.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="underline hover:text-ink"
+              >
+                {t('prospects.statsSource')}
+              </a>
+            </p>
+          </div>
+        ) : (
+          <p className="rounded-[2px] border border-dashed border-line p-4 text-sm text-ink-soft">
+            {t('prospects.statsSoon')}
+          </p>
+        )}
       </section>
 
       {feed.length > 0 && (
