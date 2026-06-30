@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from '@/lib/navigation';
 import Chevron from '@/components/Chevron';
+import { getTeam, headshotUrl, teamLogoUrl } from '@/lib/teams';
 import type { Gamelog, HitGame, PitGame } from '@/lib/gamelog';
 import {
   aggHitting, aggPitching, projectHitting, projectPitching,
@@ -39,6 +40,8 @@ type CardData = {
   grid: { label: string; value: string }[];
   war: string; warSplit: string; site: string; tagline: string;
 };
+/** カードの装飾レイヤー（顔写真・チームロゴ・チーム色・役割＝投手/打者のシルエット選択）。 */
+type CardArt = { headImg: HTMLImageElement | null; logoImg: HTMLImageElement | null; teamColor: string; role: Mode };
 
 export default function GamelogAnalysis({
   log,
@@ -124,6 +127,29 @@ export default function GamelogAnalysis({
   useEffect(() => {
     setCanShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function');
   }, []);
+
+  // シェアカードの装飾＝所属チームの色/ロゴ＋選手の顔写真。すべて MLB公式CDN（CORS可＝crossOrigin で
+  // 読み込めば canvas を汚染せず toBlob/toDataURL が通る）。チーム未解決時は無彩色で素のカードに自然縮退。
+  const team = getTeam(log.team);
+  const teamColor = team?.color ?? '#191A1C';
+  const headUrl = headshotUrl(log.player.id, 'portrait');
+  const logoUrl = team ? teamLogoUrl(team.id) : null;
+  const [headImg, setHeadImg] = useState<HTMLImageElement | null>(null);
+  const [logoImg, setLogoImg] = useState<HTMLImageElement | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const load = (src: string) =>
+      new Promise<HTMLImageElement | null>((res) => {
+        const im = new Image();
+        im.crossOrigin = 'anonymous';
+        im.onload = () => res(im);
+        im.onerror = () => res(null); // 失敗時は無し＝カードは描ける（顔/ロゴだけ欠落）
+        im.src = src;
+      });
+    load(headUrl).then((im) => { if (alive) setHeadImg(im); });
+    if (logoUrl) load(logoUrl).then((im) => { if (alive) setLogoImg(im); });
+    return () => { alive = false; };
+  }, [headUrl, logoUrl]);
 
   const baseRows = mode === 'hitting' ? log.hitting : log.pitching;
   const months = useMemo(() => [...new Set(baseRows.map((r) => monthOf(r.d)))].sort((a, b) => a - b), [baseRows]);
@@ -434,15 +460,15 @@ export default function GamelogAnalysis({
     return [head, `#MLB #${tag}`, shareUrl].filter(Boolean).join('\n');
   }, [mode, cardData, HL, PL, en, log, shareUrl]);
 
-  // プレビュー＝状態変化のたびに描き直す（見たままがそのまま保存／共有される）。
+  // プレビュー＝状態変化（データ・形・読み込んだ画像）のたびに描き直す（見たままがそのまま保存／共有される）。
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const { w, h } = CARD_DIMS[format];
     canvas.width = w;
     canvas.height = h;
-    drawCard(canvas, cardData, format);
-  }, [cardData, format]);
+    drawCard(canvas, cardData, format, { headImg, logoImg, teamColor, role: mode });
+  }, [cardData, format, headImg, logoImg, teamColor, mode]);
 
   const cardFileName = () => {
     const slug = filter.kind === 'all' ? 'season' : filter.kind === 'last' ? `last${filter.n}` : `m${filter.m}`;
@@ -454,7 +480,7 @@ export default function GamelogAnalysis({
     const { w, h } = CARD_DIMS[format];
     canvas.width = w;
     canvas.height = h;
-    drawCard(canvas, cardData, format);
+    drawCard(canvas, cardData, format, { headImg, logoImg, teamColor, role: mode });
     return canvas;
   };
   // 保存（ダウンロード）。
@@ -868,12 +894,12 @@ function WarSparkline({ points: pts }: { points: number[] }) {
 }
 
 /**
- * SNS 用の成績カードを canvas に描く（白地・無彩色・編集的レイアウト）。
- * 構成＝ヘッダ(名前/メタ＋右上に節目バッジ) → 題字罫 → 主役の大数字＋162換算/note と右に第2指標
- * → 6指標グリッド(3×2) → WAR バンド → フッタ(ドメイン＋タグライン)。縦長/正方の双方に収まる縦フロー。
- * ブランド規律＝赤は使わない（[[design-system-monochrome]]：カードは無彩色で締める）。
+ * SNS 用の成績カードを canvas に描く。デザイン層＝所属チーム色の透過背景＋役割シルエット（投手/打者）
+ * ＋選手の顔写真（丸枠・チーム色リング）＋チームロゴのバッジ。テキスト層＝名前/メタ → 題字罫 → 主役の
+ * 大数字＋162換算/note と右に第2指標 → 6指標グリッド(3×2) → WARバンド → フッタ。縦長/正方の双方に収まる縦フロー。
+ * 画像は MLB公式CDN（CORS可）を crossOrigin で読むので canvas を汚染しない。未読込/失敗時は無しで自然縮退。
  */
-function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat) {
+function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat, art: CardArt) {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   const W = canvas.width;
@@ -888,51 +914,54 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat) {
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = PAPER;
   ctx.fillRect(0, 0, W, H);
+
+  // ── デザイン層（背景）：チーム色の縦グラデ＋役割シルエットを薄く敷く（主役数字の邪魔をしない watermark）。
+  const grad = ctx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, hexToRgba(art.teamColor, 0));
+  grad.addColorStop(1, hexToRgba(art.teamColor, 0.1));
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+  drawAthlete(ctx, W * 0.76, H * (portrait ? 0.52 : 0.54), H * (portrait ? 0.46 : 0.52), art.role, hexToRgba(art.teamColor, 0.13));
+
   ctx.textBaseline = 'alphabetic';
   ctx.textAlign = 'left';
   const padX = 72;
   const right = W - padX;
 
-  // ── ヘッダ：選手名（幅に収まるよう自動縮小）＋ English ＋ メタ
-  let nameSize = 78;
-  const maxNameW = W - padX * 2 - 170; // 右上の節目バッジ分を空ける
+  // ── 顔写真（右上・丸枠＋チーム色リング）＋ロゴバッジ（顔の右下角／顔が無ければ単体）。
+  const hasHead = Boolean(art.headImg);
+  const headR = portrait ? 96 : 88;
+  const headCx = right - headR;
+  const headCy = 64 + headR;
+  if (art.headImg) drawHeadshot(ctx, art.headImg, headCx, headCy, headR, art.teamColor);
+  if (art.headImg && art.logoImg) drawLogoBadge(ctx, art.logoImg, headCx + headR * 0.66, headCy + headR * 0.66, headR * 0.38);
+  else if (art.logoImg) drawLogoBadge(ctx, art.logoImg, right - 44, 112, 44);
+
+  // ── ヘッダ：選手名（顔写真ぶん右を空けて自動縮小）＋ English ＋ メタ
+  const headReserve = hasHead ? headR * 2 + 28 : 180;
+  let nameSize = portrait ? 76 : 70;
+  const maxNameW = W - padX * 2 - headReserve;
   ctx.font = `800 ${nameSize}px ${SANS}`;
-  while (ctx.measureText(d.name).width > maxNameW && nameSize > 38) {
+  while (ctx.measureText(d.name).width > maxNameW && nameSize > 34) {
     nameSize -= 2;
     ctx.font = `800 ${nameSize}px ${SANS}`;
   }
   ctx.fillStyle = INK;
-  ctx.fillText(d.name, padX, 152);
+  ctx.fillText(d.name, padX, 150);
   let metaY: number;
   if (d.name !== d.nameEn) {
     ctx.fillStyle = MUTE;
     ctx.font = `500 30px ${SANS}`;
-    ctx.fillText(d.nameEn, padX, 196);
-    metaY = 240;
+    ctx.fillText(d.nameEn, padX, 194);
+    metaY = 234;
   } else {
-    metaY = 204;
+    metaY = 200;
   }
   ctx.fillStyle = SOFT;
   ctx.font = `400 27px ${SANS}`;
   ctx.fillText(d.meta, padX, metaY);
 
-  // 節目バッジ（50本ペース等）を右上に枠つきで。
-  if (d.badge) {
-    ctx.font = `800 30px ${SANS}`;
-    const bw = ctx.measureText(d.badge).width;
-    const bh = 54;
-    const by = 92;
-    const bx = right - bw - 24;
-    ctx.strokeStyle = INK;
-    ctx.lineWidth = 2;
-    ctx.strokeRect(bx - 18, by, bw + 36, bh);
-    ctx.fillStyle = INK;
-    ctx.textBaseline = 'middle';
-    ctx.fillText(d.badge, bx, by + bh / 2 + 2);
-    ctx.textBaseline = 'alphabetic';
-  }
-
-  // 題字罫（無彩色で締める）。
+  // 題字罫（無彩色で構造を締める）。
   const ruleY = metaY + 34;
   ctx.strokeStyle = INK;
   ctx.lineWidth = 3;
@@ -941,12 +970,29 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat) {
   ctx.lineTo(right, ruleY);
   ctx.stroke();
 
-  // ── 主役：大きな数字＋ラベル＋note、右に第2指標。
-  const heroTop = ruleY + (portrait ? 64 : 44);
+  // ── 主役：ラベル（同じ行の右端に節目バッジ）→ 大数字 → note、右に第2指標。
+  const heroTop = ruleY + (portrait ? 58 : 40);
   ctx.fillStyle = MUTE;
   ctx.font = `700 30px ${SANS}`;
   ctx.fillText(d.hero.label, padX, heroTop + 6);
-  const heroSize = portrait ? 188 : 152;
+  // 節目バッジ（50本ペース等・該当時）＝ヒーローのラベル行 右端に枠つきで（結論ファーストの hook）。
+  if (d.badge) {
+    ctx.font = `800 28px ${SANS}`;
+    const bw = ctx.measureText(d.badge).width;
+    const bh = 48;
+    const bx = right - bw - 16;
+    const by = heroTop - 26;
+    ctx.fillStyle = PAPER;
+    ctx.fillRect(bx - 16, by, bw + 32, bh);
+    ctx.strokeStyle = INK;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(bx - 16, by, bw + 32, bh);
+    ctx.fillStyle = INK;
+    ctx.textBaseline = 'middle';
+    ctx.fillText(d.badge, bx, by + bh / 2 + 1);
+    ctx.textBaseline = 'alphabetic';
+  }
+  const heroSize = portrait ? 184 : 150;
   const heroBaseline = heroTop + heroSize * 0.78;
   ctx.fillStyle = INK;
   ctx.font = `800 ${heroSize}px ${SANS}`;
@@ -1020,4 +1066,106 @@ function drawCard(canvas: HTMLCanvasElement, d: CardData, format: CardFormat) {
   ctx.font = `500 25px ${SANS}`;
   ctx.fillText(d.tagline, right, footRule + 46);
   ctx.textAlign = 'left';
+}
+
+/** '#RRGGBB' → 'rgba(r,g,b,a)'（チーム色の透過レイヤー用）。 */
+function hexToRgba(hex: string, a: number): string {
+  const m = hex.replace('#', '');
+  const full = m.length === 3 ? m.split('').map((c) => c + c).join('') : m;
+  const n = parseInt(full, 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`;
+}
+
+/**
+ * 役割シルエット（共通の図）。hitting=打者のスイング／pitching=投手の投球フォーム。
+ * 太い丸ストロークの関節図で描く（多角形の自己交差で崩れない＝安全）。背景に薄く敷く watermark。
+ */
+function drawAthlete(ctx: CanvasRenderingContext2D, cx: number, cy: number, h: number, role: Mode, rgba: string) {
+  const NW = 110;
+  const NH = 150;
+  const s = h / NH;
+  const ox = cx - (NW * s) / 2;
+  const oy = cy - (NH * s) / 2;
+  const P = (nx: number, ny: number): [number, number] => [ox + nx * s, oy + ny * s];
+  ctx.save();
+  ctx.strokeStyle = rgba;
+  ctx.fillStyle = rgba;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  const seg = (pts: [number, number][], w: number) => {
+    ctx.lineWidth = w * s;
+    ctx.beginPath();
+    pts.forEach(([nx, ny], i) => {
+      const [x, y] = P(nx, ny);
+      if (i) ctx.lineTo(x, y);
+      else ctx.moveTo(x, y);
+    });
+    ctx.stroke();
+  };
+  const dot = (nx: number, ny: number, r: number) => {
+    const [x, y] = P(nx, ny);
+    ctx.beginPath();
+    ctx.arc(x, y, r * s, 0, Math.PI * 2);
+    ctx.fill();
+  };
+  if (role === 'hitting') {
+    dot(44, 18, 13); // 頭（ヘルメット）
+    seg([[44, 30], [44, 44], [50, 86]], 12); // 首〜背骨〜腰
+    seg([[44, 46], [70, 48]], 12); // 腕→手
+    seg([[68, 48], [106, 8]], 15); // バット（太め・打者の決め手）
+    seg([[50, 86], [40, 112], [34, 146]], 12); // 前脚
+    seg([[50, 86], [66, 110], [80, 138]], 12); // 後脚
+  } else {
+    dot(56, 18, 13); // 頭（キャップ）
+    seg([[56, 30], [56, 44], [52, 86]], 12); // 背骨
+    seg([[56, 44], [72, 30], [80, 16]], 12); // 投げ腕（コック）
+    dot(82, 13, 6); // ボール
+    seg([[56, 44], [42, 54]], 12); // グラブ腕
+    seg([[52, 86], [56, 114], [60, 146]], 12); // 軸脚
+    seg([[52, 86], [32, 92], [22, 114]], 12); // 上げた脚（投手の決め手）
+  }
+  ctx.restore();
+}
+
+/** 顔写真を丸くクリップ＋cover フィットで描き、チーム色のリングで締める。 */
+function drawHeadshot(ctx: CanvasRenderingContext2D, img: HTMLImageElement, cx: number, cy: number, r: number, ring: string) {
+  const iw = img.naturalWidth || img.width || 1;
+  const ih = img.naturalHeight || img.height || 1;
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.fillStyle = '#FAFAF9';
+  ctx.fill();
+  ctx.clip();
+  const scale = Math.max((2 * r) / iw, (2 * r) / ih);
+  const dw = iw * scale;
+  const dh = ih * scale;
+  ctx.drawImage(img, cx - dw / 2, cy - dh / 2 - r * 0.08, dw, dh); // 顔が上に来るよう少し上寄せ
+  ctx.restore();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.lineWidth = 7;
+  ctx.strokeStyle = ring;
+  ctx.stroke();
+}
+
+/** チームロゴを白い丸バッジに収めて描く（顔写真の右下角 or 単体配置）。 */
+function drawLogoBadge(ctx: CanvasRenderingContext2D, img: HTMLImageElement, cx: number, cy: number, r: number) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.fillStyle = '#FAFAF9';
+  ctx.fill();
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#E7E6E3';
+  ctx.stroke();
+  const iw = img.naturalWidth || 100;
+  const ih = img.naturalHeight || 100;
+  const box = (r - r * 0.32) * 2;
+  const scale = Math.min(box / iw, box / ih);
+  const dw = iw * scale;
+  const dh = ih * scale;
+  ctx.drawImage(img, cx - dw / 2, cy - dh / 2, dw, dh);
+  ctx.restore();
 }
