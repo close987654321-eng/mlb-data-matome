@@ -12,7 +12,7 @@
   [`.claude/skills/matome/SKILL.md`](./.claude/skills/matome/SKILL.md)
 - データ取得・更新手順 → [`scripts/threads-update.md`](./scripts/threads-update.md)
 
-## 絶対に守る制約（要約）
+## 絶対に守る制約（要約 — 唯一の正は CLAUDE.md §4.4〜§4.5）
 
 - コメントの捏造禁止。実在する発言だけを訳す。
 - 全文転載禁止。**抜粋＋翻訳＋元スレ送客**の編集物にする（`sourceUrl` 必須）。

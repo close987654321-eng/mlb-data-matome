@@ -35,19 +35,25 @@ SSG します。
 ├── CLAUDE.md
 ├── AGENTS.md                    # 他エージェント向けの薄いポインタ（内容はここに複製しない）
 ├── README.md
-├── .claude/skills/matome/       # まとめ記事の編集ルール（SKILL.md + references/feedback-log.md）
+├── .claude/skills/              # matome / jp-games / x-post / x-share（各 SKILL.md + references/）
 ├── data/
 │   └── threads/
 │       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
 │       ├── boxing/{id}.json     # ボクシング
-│       └── mma/{id}.json        # MMA（UFC・RIZIN）
+│       ├── mma/{id}.json        # MMA（UFC・RIZIN）
+│       └── npb/{id}.json        # NEXT MLB（NPB の MLB 注目株）
 ├── messages/{ja,en}.json        # i18n
 ├── src/
 │   ├── app/[locale]/
 │   │   ├── layout.tsx
 │   │   ├── page.tsx                 # 新着（全競技横断）
 │   │   ├── [sport]/page.tsx         # 競技ごとの一覧
-│   │   └── [sport]/[id]/page.tsx    # まとめ個別
+│   │   ├── [sport]/[id]/page.tsx    # まとめ個別
+│   │   ├── watch/                   # 「海外ファンと見る」ハブ（動画つき記事）
+│   │   ├── player/ + player/[slug]/ # 日本人選手ハブ（成績・徹底分析・滞在5分の検索母艦）
+│   │   ├── ranking/ + allstar/      # 日本人選手ランキング／オールスター特設
+│   │   ├── prospects/               # NEXT MLB ハブ（NPB 注目株）
+│   │   └── tag/[tag]/ + search/ + columns/ + p/[page]/  # タグ・検索・コラム・ページネーション
 │   ├── components/
 │   │   ├── ThreadCard.tsx
 │   │   └── LocaleSwitcher.tsx
@@ -59,6 +65,8 @@ SSG します。
 │       └── common.ts
 └── scripts/
     ├── fetch-youtube.mjs       # YouTube コメント取得（要 YOUTUBE_API_KEY・2号店から移植）
+    ├── fetch-mlb-stats.mjs     # 日本人選手の成績・出場試合レーダー・snapshot（§4.1）
+    ├── og-thumb.mjs / check-discover-images.mjs  # OG 画像の生成・監査（§4.5）
     ├── fetch-reddit.mjs        # Reddit OAuth 取得スクリプト（承認待ち）
     └── threads-update.md       # 更新手順
 ```
@@ -74,17 +82,21 @@ SSG します。
 | `mlb`    | MLB          | r/baseball, r/mlb, YouTube（MLB 公式）      |
 | `boxing` | ボクシング   | r/Boxing                                    |
 | `mma`    | MMA          | r/MMA, r/ufc, YouTube（RIZIN 公式・人気枠） |
+| `npb`    | NEXT MLB     | NPB の MLB 注目株（`/prospects` ハブと連動） |
 
 ---
 
 ## 4. まとめ更新プロトコル（Claude 向け）
 
-まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約 = **R1〜R9**）と
-**ネタ選定の比重**（MLB 7 : ボクシング 2.5 : MMA 0.5）は **`matome` スキル**
-（`.claude/skills/matome/SKILL.md`）が正。「まとめ作って」等で発動する。
+まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約・成績ボックス =
+**R1〜R10**）と**ネタ選定の比重**の唯一の正は **`matome` スキル**
+（`.claude/skills/matome/SKILL.md`）。「まとめ作って」等で発動する。本章は概要と出力仕様のみ＝
+ルールの値・詳細をここに複製しない。
 日本人選手の**出場試合を漏れなく**記事化する段取り（出場試合の洗い出し→公式ハイライト同定→重複検知→
 matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md`）。「今日の日本人選手の試合
 まとめて」等で発動し、選手ハブ /player を出場試合の動画記事で充実させる。
+X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の人ボイス・リンク無し）と
+**`x-share` スキル**（サイト資産の配信パッケージ・成績カード画像）が正。
 データ形式・運用の詳細は [`scripts/threads-update.md`](./scripts/threads-update.md)。要点:
 
 ### 4.1 データ取得
@@ -139,18 +151,13 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
 }
 ```
 
-- `format`: `"reddit"`（既定・u/＋▲）/ `"interview"`（名前のみ）/ `"youtube"`（動画コメント・
-  author そのまま＋👍）。`score` は Reddit=upvote、YouTube=likeCount（**捏造しない**）
+- `format`（`"reddit"` / `"interview"` / `"youtube"`）の使い分け・表示仕様は **matome スキルの
+  R7 / R7+ が唯一の正**。`score` は実測値のみ（**捏造しない**）
 
 ### 4.3 更新時に必ずやること
 
-- [ ] `sport` はフォルダと一致（`data/threads/{sport}/`）
-- [ ] `id` は `{YYYY-MM-DD}-{英語スラッグ}` の kebab-case
-- [ ] `sourceUrl` は実在する元スレ URL（**必ず送客**＝引用要件）
-- [ ] コメントは**抜粋**（全件転載しない）。`bodyEn` 原文と `bodyJa` 訳を両方入れる
-- [ ] 良いコメントに `isHighlight: true`
-- [ ] 画像／動画があれば `media`（恒久 URL 参照が原則・`credit` 必須。ローカルは §4.5 の条件で `public/media/` のみ）
-- [ ] `fetchedAt` は JST（ISO8601）
+保存前チェックリストは **matome スキルの手順（Step 1〜7）が唯一の正**。要点だけ:
+`sourceUrl` 実在＝必ず送客／コメントは抜粋＋`bodyEn`/`bodyJa` 両方／`fetchedAt` は JST。
 
 ### 4.4 やってはいけないこと
 
@@ -182,25 +189,10 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
 
 ### 4.6 シリーズ（看板 watch-along 企画「海外ファンと見る」）
 
-確実に毎試合作る固定企画（例: **海外ドジャースファンと見る**＝大谷／ドジャースの試合ハイライト
-＋現地ファンのコメント）は、記事に `series` を付ける。付けると次が自動で効く:
-
-- **タイトル定型化**: `海外ドジャースファンと見る 2026.6.10 ドジャース vs パイレーツ` を自動生成
-  （`title.ja/en` は表示時に上書きされる。凝らなくてよい）
-- **シリーズバッジ**: カード・記事に表示
-- **`/watch` ハブ掲載**: 「海外ファンと見る」総合ページにシリーズ単位で並ぶ
-
-```json
-"series": { "id": "dodgers", "date": "2026-06-10", "opponent": { "ja": "パイレーツ", "en": "Pirates" } }
-```
-
-- シリーズ定義（接頭辞・自軍名・バッジ）は `src/lib/series.ts` の `SERIES` が**唯一の正**。
-  新シリーズ（例: ヤンキースファンと見る）を増やすときはまずここに足す。
-- `date` は試合日（`fetchedAt` とは別物）。シリーズ記事は**動画必須**（watch-along 表示）。
-- **`/watch` ハブは「動画つき記事ぜんぶ」を載せる**（`media.kind:"video"` が条件）。固定シリーズは
-  シリーズ単位の枠＋定型タイトル＋バッジで出し、`series` 無しの単発動画まとめ（ジャイアンツの
-  名勝負など）は「注目の試合」枠に新着順で出る（タイトルは自由）。
-- 動画つきだがハブに載せたくない記事は今のところ無い（動画＝watch-along＝ハブ掲載）。編集ルールは matome §R6。
+確実に毎試合作る固定企画（例: **海外ドジャースファンと見る**）は記事に `series` を付ける。
+運用ルール（タイトル定型化・バッジ・`/watch` ハブ掲載・動画必須・JSON の書き方）は
+**matome スキル R6 が唯一の正**。シリーズ定義（接頭辞・自軍名・バッジ）は
+`src/lib/series.ts` の `SERIES` が唯一の正＝新シリーズはまずここに足す。
 
 ---
 
@@ -236,6 +228,10 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
 
 ## 8. 収益化ロードマップ（2026-06-13 合意・実装は順次）
 
+> ⚠️ **2026-06-24 上位方針転換**: PV 換金（AdSense/VOD）は天井が低いと判断し、
+> 「無人メディア工場＋AI駆動PM本人」の商品化（MVP=note「らく」）を主戦線に変更。
+> 正はメモリ `monetization-pivot-productize-machine`。以下はサイト側の器の整備＝二次戦線として継続。
+
 方針: **AdSense（土台）＋ VOD アフィリエイト（ブースター）**。流入の主戦場は検索より
 **Google Discover**（高頻度更新・1200px 以上の画像・独自ドメインが条件）。
 
@@ -252,7 +248,9 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
    `/about`・`/privacy`・`/contact`（`src/lib/legal.ts` がコンテンツの正・`LegalArticle` で描画）。
    ⚠️ **公開前に2点差し替え**: `CONTACT_FORM_URL`（Google フォーム URL）と、必要なら
    `OPERATOR_NAME`。フッターに運営者情報/プライバシー/問い合わせ/RSS のリンクを設置済み。
-4. 記事下の sport 別 VOD CTA コンポーネント（ASP 提携確定後にリンク差し込み）
+4. ~~記事下の sport 別 VOD CTA コンポーネント~~ ✅ **実装済み（2026-06-23頃）**。`src/lib/vod.ts`
+   （`VOD_OFFERS`）＋ `src/components/VodCta.tsx`。当面は公式視聴サービスの案内。ASP 提携確定後は
+   `VOD_OFFERS` の `href` をアフィリエイトリンクに差し替えるだけで全記事に反映される。
 5. 自動化スキル: matome 拡張（X 下書き・タグ正規化・関連リンク同時生成）→ kpi-weekly →
    neta-radar → money-page（興行の「視聴方法×海外の反応」成約ページ）
 
@@ -262,5 +260,3 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
 
 - Reddit API 承認後、`scripts/fetch-reddit.mjs` で取得を半自動化
 - 競技の追加（NBA / サッカー 等）
-- 画像なしでの OGP・カード見栄え改善
-- 過去まとめのアーカイブページ
