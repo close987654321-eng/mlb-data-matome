@@ -1177,7 +1177,10 @@ async function runBackfillGames({ apply } = {}) {
     const id = t.id ?? f.replace(/\.json$/, '');
     const mt = id.match(/^(\d{4}-\d{2}-\d{2})-(.+)-vs-(.+)$/);
     if (!mt) { noPattern++; continue; } // "X-vs-Y" でない（議論スレ等）は対象外
-    const slugA = mt[2], slugB = mt[3];
+    // id のスラッグ表記ゆれを吸収する。旧記事は "white-sox"/"blue-jays"/"red-sox" のようにハイフン入りで
+    // 書かれており、現行の自動生成（TEAM_SLUG）は "whitesox"/"bluejays"/"redsox"。ハイフンを除いて正規
+    // スラッグに突き合わせる（30球団の正規スラッグは全て単一トークン＝ハイフン無しなので誤マッチしない）。
+    const slugA = mt[2].replace(/-/g, ''), slugB = mt[3].replace(/-/g, '');
     if (!TEAM_SLUGS.has(slugA) || !TEAM_SLUGS.has(slugB)) { noPattern++; continue; } // 未知 slug（WBC/SP 等）
     const jstDate = t.series?.date ?? mt[1];
     const etDate = addDays(jstDate, -1); // JST = ET+1（夜試合）。id / series.date は JST。

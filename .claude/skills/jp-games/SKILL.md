@@ -112,6 +112,19 @@ node scripts/fetch-mlb-stats.mjs jp <etDate> --json        # その日の全出�
 - 日次でまとめて投げる運用なら「今日の日本人選手の結果＋海外の反応」を1本に束ねてもよい。
 - `_local/` は gitignore 済み＝コミットしない（下書き置き場）。
 
+### Step 5 — 試合結果カードの素データを埋める（記事＝拡散の起点）
+記事を作り切ったら**必ず**次を1回走らせる（複数記事をまとめて処理・冪等＝既に `game` がある記事は飛ばす）:
+
+```sh
+node scripts/fetch-mlb-stats.mjs backfill-games --apply
+```
+
+id の `{date}-{自軍slug}-vs-{相手slug}` から公式スケジュールの最終スコアを取り `thread.game`（away/home の
+{ja,en,score}・公知の数値）を追記する。これが入って初めて記事に「**試合結果カードを作る**」ボタン（`GameResultCard`）
+が出る＝拡散の起点。**入れ忘れると自動追加された記事にカードが出ない**（新規記事は `game` が自動で入らないため、
+この Step を省略しない）。ダブルヘッダー（同カード同日2試合）は曖昧としてスキップされるので、そのカードだけ box score を
+手動で入れる（Step 4 の DH 注意と同じ）。
+
 作成後は matome と同じ運用（任意で `npm run build` 確認 → コミット → デプロイ後 ping。手順は `scripts/threads-update.md`）。
 
 ---

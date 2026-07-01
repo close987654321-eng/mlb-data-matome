@@ -211,5 +211,9 @@
       "bodyJa": "第2戦はメッツが10-5で負けて6エラーすると予言しておく。",
       "isHighlight": true
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 10 },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 3 }
+  }
 }
