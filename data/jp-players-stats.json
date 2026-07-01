@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-01 17:17",
+  "asOf": "2026-07-01 18:19",
   "players": {
     "500743": {
       "fielding": {
@@ -358,7 +358,7 @@
         "wins": 0
       },
       "saber": {
-        "pit": 0.659286
+        "pit": 0.659725
       },
       "team": "エンゼルス"
     },
@@ -1452,7 +1452,7 @@
         "wins": 0
       },
       "saber": {
-        "pit": 0.184671
+        "pit": 0.186456
       },
       "team": "パドレス"
     },
@@ -1494,7 +1494,7 @@
         "wins": 0
       },
       "saber": {
-        "pit": -0.581562
+        "pit": -0.579262
       },
       "team": "メッツ"
     },
@@ -1746,7 +1746,7 @@
         }
       },
       "saber": {
-        "pit": 1.79468
+        "pit": 2.08375
       },
       "team": "ドジャース"
     },
@@ -2102,7 +2102,7 @@
         }
       },
       "saber": {
-        "pit": 0.870454
+        "pit": 0.876633
       },
       "team": "カブス"
     },
@@ -2391,7 +2391,7 @@
         }
       },
       "saber": {
-        "pit": 2.83468
+        "pit": 2.83946
       },
       "team": "パイレーツ"
     },
@@ -2540,6 +2540,101 @@
       },
       "sprintSpeed": 27.6,
       "team": "ナショナルズ"
+    },
+    "700250": {
+      "fielding": {
+        "arm": 65.2,
+        "assists": 26,
+        "doublePlays": 26,
+        "errors": 3,
+        "fielding": ".992",
+        "gamesPlayed": 46,
+        "gamesStarted": 43,
+        "innings": "382.0",
+        "oaa": -6,
+        "position": "一塁",
+        "putOuts": 351,
+        "runsPrevented": -5
+      },
+      "hitting": {
+        "atBats": 298,
+        "avg": ".268",
+        "babip": ".292",
+        "baseOnBalls": 40,
+        "doubles": 15,
+        "gamesPlayed": 80,
+        "hits": 80,
+        "homeRuns": 23,
+        "obp": ".357",
+        "ops": ".921",
+        "plateAppearances": 342,
+        "rbi": 54,
+        "runs": 57,
+        "slg": ".564",
+        "stolenBases": 2,
+        "strikeOuts": 82,
+        "triples": 2
+      },
+      "league": "AL",
+      "pitching": null,
+      "ranks": {
+        "hitting": {
+          "avg": {
+            "lg": 18,
+            "mlb": 50
+          },
+          "baseOnBalls": {
+            "lg": 16,
+            "mlb": 33
+          },
+          "doubles": {
+            "lg": 29,
+            "mlb": 59
+          },
+          "hits": {
+            "lg": 26,
+            "mlb": 56
+          },
+          "homeRuns": {
+            "lg": 3,
+            "mlb": 5
+          },
+          "obp": {
+            "lg": 16,
+            "mlb": 40
+          },
+          "ops": {
+            "lg": 5,
+            "mlb": 8
+          },
+          "rbi": {
+            "lg": 7,
+            "mlb": 15
+          },
+          "runs": {
+            "lg": 4,
+            "mlb": 8
+          },
+          "slg": {
+            "lg": 3,
+            "mlb": 4
+          },
+          "stolenBases": {
+            "lg": 92
+          },
+          "triples": {
+            "lg": 8,
+            "mlb": 24
+          }
+        }
+      },
+      "saber": {
+        "hit": 2.26343,
+        "woba": 0.388926,
+        "wrcplus": 150.882
+      },
+      "sprintSpeed": 26.7,
+      "team": "ヤンキース"
     },
     "701762": {
       "fielding": {

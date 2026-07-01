@@ -127,6 +127,9 @@ export const PLAYERS: Player[] = [
   { slug: 'aaron-judge', nameJa: 'アーロン・ジャッジ', nameEn: 'Aaron Judge', mlbId: 592450, rival: true,
     bio: '球界を代表する右の大砲。圧倒的な長打力で知られる。',
     sameAs: [mlb('aaron-judge', 592450)] },
+  { slug: 'ben-rice', nameJa: 'ベン・ライス', nameEn: 'Ben Rice', mlbId: 700250, rival: true,
+    bio: '長打力が魅力の左打ちの捕手／一塁手。本塁打と出塁で存在感を放つ若手スラッガー。',
+    sameAs: [mlb('ben-rice', 700250)] },
 
   // ───── ドジャースのスター野手（rival・大谷の同僚）。一覧「今季のスター野手」で大谷と横並び比較する。
   // nameJa は RIVAL_NAMES（scripts/fetch-mlb-stats.mjs）と一致。aliases で記事タグの短い表記ゆれも拾う。
