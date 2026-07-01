@@ -142,6 +142,147 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       ],
     },
   },
+  {
+    slug: 'takahashi-hiroto',
+    nameJa: '髙橋宏斗',
+    nameEn: 'Hiroto Takahashi',
+    team: { ja: '中日ドラゴンズ', en: 'Chunichi Dragons' },
+    pos: { ja: '投手（先発）', en: 'Pitcher (starter)' },
+    bio: {
+      ja: '中日ドラゴンズのエース格右腕。2002年生まれ、2020年ドラフト1位。2023年WBC優勝メンバー。150キロ台後半の直球とスプリットで三振を奪う、世代屈指の先発右腕。',
+      en: 'A right-handed ace for the Chunichi Dragons. Born in 2002 and a 2020 first-round pick, he was part of Japan’s 2023 WBC-winning squad. He misses bats with a high-90s mph fastball and a sharp splitter, and is one of the best starters of his generation.',
+    },
+    mlbWatch: {
+      ja: '海外メディアは「まだMLBに居ない中で最高クラスの投手」「日本人先発で屈指の伸びしろ」と評する。2024年は防御率1.38とリーグ最高クラスで圧巻だったが2025年は不振と波もある。山本由伸とオフに合同自主トレを組む間柄で、ドジャースの関心も取り沙汰される。',
+      en: 'Overseas outlets call him maybe the best NPB pitcher who hasn’t joined MLB yet, with one of the highest ceilings of any Japanese starter. He was dominant in 2024 (a league-best 1.38 ERA) but uneven in 2025. He trains with Yoshinobu Yamamoto in the offseason, and Dodgers interest has been floated.',
+    },
+    posting: {
+      ja: 'ポスティングやFAでの移籍が2026〜2027年オフに取り沙汰される。正式な公表はまだなく、今後の安定感が鍵。',
+      en: 'A move via the posting system or free agency is discussed for the 2026–27 offseason. Nothing is official yet; regaining consistency is the key.',
+    },
+    comp: {
+      ja: '山本由伸と重ねられることが多い世代の先発右腕。ミッチ・ケラー型との見方も。',
+      en: 'Often likened to Yoshinobu Yamamoto among his generation of starters; some see a Mitch Keller profile.',
+    },
+    aliases: ['高橋宏斗'],
+    sameAs: ['https://ja.wikipedia.org/wiki/髙橋宏斗'],
+    season: {
+      asOf: '2026-06-29',
+      sourceUrl: 'https://npb.jp/bis/players/61265153.html',
+      stats: [
+        { ja: '登板', en: 'G', value: '9' },
+        { ja: '防御率', en: 'ERA', value: '4.86' },
+        { ja: '勝-敗', en: 'W-L', value: '1-6' },
+        { ja: '投球回', en: 'IP', value: '53.2' },
+        { ja: '奪三振', en: 'SO', value: '58' },
+      ],
+    },
+  },
+  {
+    slug: 'maki-shugo',
+    nameJa: '牧秀悟',
+    nameEn: 'Shugo Maki',
+    team: { ja: '横浜DeNAベイスターズ', en: 'Yokohama DeNA BayStars' },
+    pos: { ja: '二塁手', en: 'Second baseman' },
+    bio: {
+      ja: '横浜DeNAの主軸内野手。2020年ドラフト2位、2023年WBC優勝メンバー。通算打率.295・三振の少なさとパワーを両立する右の二塁手。2024年はチームの26年ぶり日本一に貢献した。',
+      en: 'A middle-of-the-order infielder for the Yokohama DeNA BayStars. A 2020 second-round pick and 2023 WBC champion, the right-handed second baseman pairs contact and pop (a .295 career average). He helped DeNA to its first Japan Series title in 26 years in 2024.',
+    },
+    mlbWatch: {
+      ja: '海外スカウトは「NPBで最も総合力の高い打者の一人」と評価。卓越したバットコントロール（三振率15%未満）が武器で、2026年はwRC+165と打ちまくる。一方で四球が極端に少なく（5シーズン中3年で6%未満）、メジャーの精緻な投球への対応が課題。比較対象はジェフ・マクニールや全盛期ダニエル・マーフィー。',
+      en: 'Scouts call him one of the most well-rounded bats in NPB. Elite bat-to-ball skills (a sub-15% strikeout rate) are his calling card, and he has raked to a 165 wRC+ in 2026. The question is a very low walk rate (under 6% in three of five seasons) against big-league pitching. Comps range from Jeff McNeil to prime Daniel Murphy.',
+    },
+    posting: {
+      ja: '年齢・実績・本人の意思から「早ければ来オフにも渡米しうる最有力候補の一人」と海外メディア。ポスティング/FAは2027年オフが現実的な機会。',
+      en: 'With his age, track record and stated interest, overseas outlets call him one of the most realistic candidates to make the jump as soon as next offseason; 2027 is the realistic window.',
+    },
+    comp: {
+      ja: 'バット・ファーストの内野手としてジェフ・マクニール／全盛期ダニエル・マーフィー型。',
+      en: 'A bat-first infielder in the Jeff McNeil / prime Daniel Murphy mold.',
+    },
+    sameAs: ['https://ja.wikipedia.org/wiki/牧秀悟'],
+    season: {
+      asOf: '2026-06-29',
+      sourceUrl: 'https://npb.jp/bis/players/13115153.html',
+      stats: [
+        { ja: '試合', en: 'G', value: '36' },
+        { ja: '打率', en: 'AVG', value: '.299' },
+        { ja: '本塁打', en: 'HR', value: '6' },
+        { ja: '打点', en: 'RBI', value: '25' },
+        { ja: 'OPS', en: 'OPS', value: '.863' },
+      ],
+    },
+  },
+  {
+    slug: 'morishita-shota',
+    nameJa: '森下翔太',
+    nameEn: 'Shota Morishita',
+    team: { ja: '阪神タイガース', en: 'Hanshin Tigers' },
+    pos: { ja: '外野手', en: 'Outfielder' },
+    bio: {
+      ja: '阪神タイガースの右の中軸外野手。2022年ドラフト1位。勝負強い打撃と長打力で、若くしてクリーンアップを担う。2026年は打率3割・17本塁打とブレイク中。',
+      en: 'A right-handed middle-of-the-order outfielder for the Hanshin Tigers and a 2022 first-round pick. Clutch hitting and power have him batting cleanup early in his career; he is breaking out in 2026 (.300 with 17 homers).',
+    },
+    mlbWatch: {
+      ja: '2026年はOPS.952と打棒爆発、特に左投手に滅法強い（前年は対左でwRC+181）。海外でも名前が挙がり始めたが、MLB挑戦の具体的な動きはまだなく、現状は「当面は日本に残る」との見立て。今後の積み上げ次第で評価が上がるタイプ。',
+      en: 'He is mashing in 2026 (a .952 OPS), with big damage against lefties (a 181 wRC+ vs. LHP the prior year). His name is starting to come up abroad, but there is no concrete MLB move yet — evaluators currently file him under “likely to stay in Japan.” A profile whose stock can rise with more production.',
+    },
+    posting: {
+      ja: 'ポスティング等の公表は無し。MLB挑戦が具体化するのはこれから。',
+      en: 'No posting or move has been announced; any MLB push is still down the road.',
+    },
+    comp: {
+      ja: 'ヒットとパワーはあるが守備価値は限定的、というマット・ヴィアリング型との見方。',
+      en: 'Seen by some as a Matt Vierling type — hit and power, with limited defensive value.',
+    },
+    sameAs: ['https://ja.wikipedia.org/wiki/森下翔太'],
+    season: {
+      asOf: '2026-06-29',
+      sourceUrl: 'https://npb.jp/bis/players/43145157.html',
+      stats: [
+        { ja: '試合', en: 'G', value: '69' },
+        { ja: '打率', en: 'AVG', value: '.300' },
+        { ja: '本塁打', en: 'HR', value: '17' },
+        { ja: '打点', en: 'RBI', value: '43' },
+        { ja: 'OPS', en: 'OPS', value: '.952' },
+      ],
+    },
+  },
+  {
+    slug: 'murakami-shoki',
+    nameJa: '村上頌樹',
+    nameEn: 'Shoki Murakami',
+    team: { ja: '阪神タイガース', en: 'Hanshin Tigers' },
+    pos: { ja: '投手（先発）', en: 'Pitcher (starter)' },
+    bio: {
+      ja: '阪神タイガースの先発右腕。兵庫県南あわじ市出身、智辯学園高では2019年センバツ優勝のエース。2023年に投手として史上3人目（セ・リーグ初）の新人王＆MVP同時受賞。抜群の制球が持ち味。※ヤクルトの長距離砲・村上宗隆とは別人。',
+      en: 'A right-handed starter for the Hanshin Tigers. From Minami-Awaji, Hyogo, he was the ace of Chiben Gakuen’s 2019 national championship team. In 2023 he became just the third player ever — a Central League first — to win Rookie of the Year and MVP in the same season. Pinpoint command is his calling card. (Not to be confused with slugger Munetaka Murakami.)',
+    },
+    mlbWatch: {
+      ja: '2026年は防御率2.13・WHIP0.89と安定感が際立つ制球派右腕。剛速球ではなく完成度で勝負するタイプで、MLBではミドルローテーション級と見られる。海外での言及はまだ限定的。',
+      en: 'A command right-hander posting a 2.13 ERA and 0.89 WHIP in 2026. He wins with polish rather than power, projecting as a mid-rotation arm in MLB. Overseas coverage is still limited.',
+    },
+    posting: {
+      ja: '2027年オフのポスティングが見込まれるが公式発表はまだ。国際FA資格の取得は今後。',
+      en: 'A 2027-offseason posting is anticipated but not announced; international free agency comes later.',
+    },
+    comp: {
+      ja: '制球で投げる完成度の高いミドルローテーション右腕。',
+      en: 'A polished, command-first mid-rotation right-hander.',
+    },
+    sameAs: ['https://ja.wikipedia.org/wiki/村上頌樹'],
+    season: {
+      asOf: '2026-06-30',
+      sourceUrl: 'https://npb.jp/bis/players/13315153.html',
+      stats: [
+        { ja: '登板', en: 'G', value: '14' },
+        { ja: '防御率', en: 'ERA', value: '2.13' },
+        { ja: '勝-敗', en: 'W-L', value: '6-5' },
+        { ja: '投球回', en: 'IP', value: '97.1' },
+        { ja: '奪三振', en: 'SO', value: '81' },
+      ],
+    },
+  },
 ];
 
 const BY_SLUG = new Map(NPB_PROSPECTS.map((p) => [p.slug, p]));

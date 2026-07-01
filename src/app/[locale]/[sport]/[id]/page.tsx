@@ -234,7 +234,13 @@ export default async function ThreadDetailPage({
             “{hook.bodyJa}”
           </blockquote>
           <figcaption className="mt-2 text-sm text-ink-soft">
-            — {authorLabel(hook.author)}
+            — {hook.sourceUrl ? (
+              <a href={hook.sourceUrl} target="_blank" rel="noopener noreferrer nofollow" className="underline decoration-line underline-offset-2 transition-colors hover:text-ink">
+                {authorLabel(hook.author)}
+              </a>
+            ) : (
+              authorLabel(hook.author)
+            )}
           </figcaption>
         </figure>
       )}
@@ -348,7 +354,19 @@ export default async function ThreadDetailPage({
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs text-ink-soft">
-                    <span className="font-medium">{authorLabel(c.author)}</span>
+                    {/* 媒体引用は著者名から出典へ送客（海外メディア評価の記事＝媒体ごとにリンク）。 */}
+                    {c.sourceUrl ? (
+                      <a
+                        href={c.sourceUrl}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="font-medium underline decoration-line underline-offset-2 transition-colors hover:text-ink"
+                      >
+                        {authorLabel(c.author)}
+                      </a>
+                    ) : (
+                      <span className="font-medium">{authorLabel(c.author)}</span>
+                    )}
                     {!isInterview && (
                       <span className="tabular-nums">
                         {scoreMark} {c.score.toLocaleString()}

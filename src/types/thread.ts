@@ -9,6 +9,7 @@ export type ThreadComment = {
   bodyJa: string; // 日本語訳
   isHighlight?: boolean; // まとめのピックアップとして強調するか
   isHook?: boolean; // 冒頭に大きく掲げる「フック引用」（記事につき1つ）
+  sourceUrl?: string; // 媒体引用（interview/海外メディア評価）で、その発言の出典URL。あると著者名がリンクになり媒体ごとに送客できる
 };
 
 /**
