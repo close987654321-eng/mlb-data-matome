@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-01 08:17",
+  "asOf": "2026-07-01 09:17",
   "players": {
     "500743": {
       "fielding": {
@@ -111,28 +111,28 @@
             "mlb": 19
           },
           "baseOnBalls": {
-            "lg": 12,
-            "mlb": 24
+            "lg": 14,
+            "mlb": 26
           },
           "doubles": {
             "lg": 4,
             "mlb": 4
           },
           "hits": {
-            "lg": 7,
-            "mlb": 11
+            "lg": 8,
+            "mlb": 12
           },
           "homeRuns": {
             "lg": 28,
-            "mlb": 53
+            "mlb": 54
           },
           "obp": {
             "lg": 7,
-            "mlb": 16
+            "mlb": 17
           },
           "ops": {
-            "lg": 12,
-            "mlb": 19
+            "lg": 10,
+            "mlb": 17
           },
           "rbi": {
             "lg": 21,
@@ -204,12 +204,12 @@
             "mlb": 4
           },
           "inningsPitched": {
-            "lg": 19,
-            "mlb": 44
+            "lg": 20,
+            "mlb": 46
           },
           "strikeOuts": {
-            "lg": 7,
-            "mlb": 11
+            "lg": 8,
+            "mlb": 13
           },
           "whip": {
             "lg": 7,
@@ -277,7 +277,7 @@
             "mlb": 48
           },
           "doubles": {
-            "lg": 71
+            "lg": 72
           },
           "hits": {
             "lg": 51,
@@ -288,16 +288,16 @@
             "mlb": 24
           },
           "obp": {
-            "lg": 21,
-            "mlb": 35
+            "lg": 20,
+            "mlb": 34
           },
           "ops": {
-            "lg": 10,
-            "mlb": 17
+            "lg": 8,
+            "mlb": 15
           },
           "rbi": {
-            "lg": 49,
-            "mlb": 84
+            "lg": 50,
+            "mlb": 85
           },
           "runs": {
             "lg": 14,
@@ -475,7 +475,7 @@
         "hitting": {
           "homeRuns": {
             "lg": 43,
-            "mlb": 78
+            "mlb": 79
           },
           "rbi": {
             "lg": 90
@@ -532,7 +532,7 @@
       "ranks": {
         "hitting": {
           "baseOnBalls": {
-            "lg": 93
+            "lg": 94
           },
           "hits": {
             "lg": 88
@@ -541,7 +541,7 @@
             "lg": 74
           },
           "rbi": {
-            "lg": 72
+            "lg": 73
           },
           "runs": {
             "lg": 76
@@ -596,11 +596,11 @@
       "ranks": {
         "pitching": {
           "inningsPitched": {
-            "lg": 28,
-            "mlb": 61
+            "lg": 30,
+            "mlb": 63
           },
           "strikeOuts": {
-            "lg": 71
+            "lg": 72
           },
           "wins": {
             "lg": 9,
@@ -620,31 +620,31 @@
         "doublePlays": 57,
         "errors": 4,
         "fielding": ".994",
-        "gamesPlayed": 82,
-        "gamesStarted": 82,
-        "innings": "722.2",
+        "gamesPlayed": 83,
+        "gamesStarted": 83,
+        "innings": "725.2",
         "oaa": 6,
         "position": "一塁",
-        "putOuts": 576,
+        "putOuts": 582,
         "runsPrevented": 4
       },
       "hitting": {
-        "atBats": 319,
-        "avg": ".276",
+        "atBats": 321,
+        "avg": ".274",
         "babip": ".309",
         "baseOnBalls": 34,
         "doubles": 21,
-        "gamesPlayed": 82,
+        "gamesPlayed": 83,
         "hits": 88,
         "homeRuns": 20,
-        "obp": ".345",
-        "ops": ".875",
-        "plateAppearances": 357,
+        "obp": ".343",
+        "ops": ".869",
+        "plateAppearances": 359,
         "rbi": 52,
         "runs": 54,
-        "slg": ".530",
+        "slg": ".526",
         "stolenBases": 2,
-        "strikeOuts": 82,
+        "strikeOuts": 84,
         "triples": 0
       },
       "league": "NL",
@@ -652,12 +652,12 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 24,
-            "mlb": 39
+            "lg": 25,
+            "mlb": 40
           },
           "baseOnBalls": {
             "lg": 30,
-            "mlb": 54
+            "mlb": 55
           },
           "doubles": {
             "lg": 4,
@@ -665,19 +665,19 @@
           },
           "hits": {
             "lg": 11,
-            "mlb": 17
+            "mlb": 18
           },
           "homeRuns": {
             "lg": 4,
-            "mlb": 8
+            "mlb": 9
           },
           "obp": {
-            "lg": 34,
-            "mlb": 54
+            "lg": 36,
+            "mlb": 58
           },
           "ops": {
-            "lg": 9,
-            "mlb": 16
+            "lg": 10,
+            "mlb": 17
           },
           "rbi": {
             "lg": 11,
@@ -688,8 +688,8 @@
             "mlb": 14
           },
           "slg": {
-            "lg": 7,
-            "mlb": 12
+            "lg": 8,
+            "mlb": 14
           }
         }
       },
@@ -709,31 +709,31 @@
         "fielding": "1.000",
         "gamesPlayed": 18,
         "gamesStarted": 18,
-        "innings": "112.0",
+        "innings": "116.0",
         "position": "投手",
         "putOuts": 5
       },
       "hitting": null,
       "league": "NL",
       "pitching": {
-        "avg": ".235",
-        "baseOnBalls": 21,
+        "avg": ".234",
+        "baseOnBalls": 23,
         "earnedRuns": 26,
-        "era": "2.09",
+        "era": "2.02",
         "gamesPlayed": 18,
         "gamesStarted": 18,
-        "hits": 101,
+        "hits": 104,
         "holds": 0,
         "homeRuns": 8,
-        "homeRunsPer9": "0.64",
-        "inningsPitched": "112.0",
+        "homeRunsPer9": "0.62",
+        "inningsPitched": "116.0",
         "losses": 3,
         "runs": 31,
         "saves": 0,
-        "strikeOuts": 132,
-        "strikeoutWalkRatio": "6.29",
-        "strikeoutsPer9Inn": "10.61",
-        "walksPer9Inn": "1.69",
+        "strikeOuts": 135,
+        "strikeoutWalkRatio": "5.87",
+        "strikeoutsPer9Inn": "10.47",
+        "walksPer9Inn": "1.78",
         "whip": "1.09",
         "winPercentage": ".750",
         "wins": 9
@@ -742,11 +742,11 @@
         "pitching": {
           "era": {
             "lg": 2,
-            "mlb": 3
+            "mlb": 2
           },
           "inningsPitched": {
-            "lg": 2,
-            "mlb": 2
+            "lg": 1,
+            "mlb": 1
           },
           "strikeOuts": {
             "lg": 2,
@@ -786,22 +786,22 @@
         "runsPrevented": -1
       },
       "hitting": {
-        "atBats": 305,
-        "avg": ".252",
+        "atBats": 307,
+        "avg": ".251",
         "babip": ".305",
         "baseOnBalls": 52,
         "doubles": 9,
         "gamesPlayed": 82,
         "hits": 77,
         "homeRuns": 30,
-        "obp": ".367",
-        "ops": ".951",
-        "plateAppearances": 362,
+        "obp": ".365",
+        "ops": ".945",
+        "plateAppearances": 364,
         "rbi": 55,
         "runs": 54,
-        "slg": ".584",
+        "slg": ".580",
         "stolenBases": 2,
-        "strikeOuts": 122,
+        "strikeOuts": 124,
         "triples": 1
       },
       "league": "NL",
@@ -809,15 +809,15 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 47,
-            "mlb": 83
+            "lg": 48,
+            "mlb": 85
           },
           "baseOnBalls": {
             "lg": 5,
             "mlb": 10
           },
           "doubles": {
-            "lg": 94
+            "lg": 95
           },
           "hits": {
             "lg": 38,
@@ -828,8 +828,8 @@
             "mlb": 1
           },
           "obp": {
-            "lg": 15,
-            "mlb": 27
+            "lg": 16,
+            "mlb": 28
           },
           "ops": {
             "lg": 3,
@@ -918,8 +918,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 9,
-            "mlb": 12
+            "lg": 8,
+            "mlb": 11
           },
           "baseOnBalls": {
             "lg": 4,
@@ -927,7 +927,7 @@
           },
           "doubles": {
             "lg": 27,
-            "mlb": 53
+            "mlb": 55
           },
           "hits": {
             "lg": 13,
@@ -947,7 +947,7 @@
           },
           "rbi": {
             "lg": 14,
-            "mlb": 27
+            "mlb": 28
           },
           "runs": {
             "lg": 2,
@@ -968,8 +968,8 @@
         },
         "pitching": {
           "inningsPitched": {
-            "lg": 41,
-            "mlb": 82
+            "lg": 42,
+            "mlb": 83
           },
           "strikeOuts": {
             "lg": 18,
@@ -996,28 +996,28 @@
         "doublePlays": 0,
         "errors": 0,
         "fielding": "1.000",
-        "gamesPlayed": 15,
-        "gamesStarted": 13,
-        "innings": "120.0",
+        "gamesPlayed": 16,
+        "gamesStarted": 14,
+        "innings": "122.2",
         "oaa": 1,
         "position": "左翼",
-        "putOuts": 30,
+        "putOuts": 32,
         "runsPrevented": 1
       },
       "hitting": {
-        "atBats": 68,
-        "avg": ".294",
-        "babip": ".360",
+        "atBats": 70,
+        "avg": ".300",
+        "babip": ".365",
         "baseOnBalls": 12,
         "doubles": 4,
-        "gamesPlayed": 20,
-        "hits": 20,
+        "gamesPlayed": 21,
+        "hits": 21,
         "homeRuns": 2,
-        "obp": ".395",
-        "ops": ".866",
-        "plateAppearances": 81,
+        "obp": ".398",
+        "ops": ".869",
+        "plateAppearances": 83,
         "rbi": 7,
-        "runs": 12,
+        "runs": 13,
         "slg": ".471",
         "stolenBases": 0,
         "strikeOuts": 17,
@@ -1079,7 +1079,7 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 58
+            "lg": 57
           },
           "baseOnBalls": {
             "lg": 17,
@@ -1097,23 +1097,23 @@
             "lg": 74
           },
           "obp": {
-            "lg": 41,
-            "mlb": 68
+            "lg": 40,
+            "mlb": 67
           },
           "ops": {
-            "lg": 53,
-            "mlb": 100
+            "lg": 52,
+            "mlb": 99
           },
           "rbi": {
-            "lg": 27,
-            "mlb": 47
+            "lg": 28,
+            "mlb": 48
           },
           "runs": {
-            "lg": 26,
-            "mlb": 41
+            "lg": 27,
+            "mlb": 42
           },
           "slg": {
-            "lg": 58
+            "lg": 57
           },
           "stolenBases": {
             "lg": 43,
@@ -1142,24 +1142,24 @@
         "fielding": "1.000",
         "gamesPlayed": 41,
         "gamesStarted": 41,
-        "innings": "344.2",
+        "innings": "347.2",
         "oaa": 0,
         "position": "左翼",
-        "putOuts": 86,
+        "putOuts": 87,
         "runsPrevented": 0
       },
       "hitting": {
         "atBats": 237,
         "avg": ".300",
         "babip": ".290",
-        "baseOnBalls": 43,
+        "baseOnBalls": 44,
         "doubles": 8,
         "gamesPlayed": 67,
         "hits": 71,
         "homeRuns": 17,
-        "obp": ".406",
-        "ops": ".971",
-        "plateAppearances": 282,
+        "obp": ".408",
+        "ops": ".973",
+        "plateAppearances": 283,
         "rbi": 39,
         "runs": 38,
         "slg": ".565",
@@ -1176,8 +1176,8 @@
             "mlb": 8
           },
           "baseOnBalls": {
-            "lg": 12,
-            "mlb": 24
+            "lg": 11,
+            "mlb": 20
           },
           "hits": {
             "lg": 46,
@@ -1205,7 +1205,7 @@
           },
           "slg": {
             "lg": 2,
-            "mlb": 4
+            "mlb": 5
           },
           "stolenBases": {
             "lg": 43,
@@ -1369,8 +1369,8 @@
             "lg": 50
           },
           "baseOnBalls": {
-            "lg": 30,
-            "mlb": 63
+            "lg": 31,
+            "mlb": 64
           },
           "doubles": {
             "lg": 67
@@ -1384,16 +1384,16 @@
             "mlb": 13
           },
           "obp": {
-            "lg": 45,
-            "mlb": 97
+            "lg": 46,
+            "mlb": 99
           },
           "ops": {
             "lg": 24,
             "mlb": 65
           },
           "rbi": {
-            "lg": 7,
-            "mlb": 15
+            "lg": 8,
+            "mlb": 16
           },
           "runs": {
             "lg": 22,
@@ -1513,20 +1513,20 @@
         "runsPrevented": 2
       },
       "hitting": {
-        "atBats": 256,
-        "avg": ".266",
-        "babip": ".331",
+        "atBats": 257,
+        "avg": ".265",
+        "babip": ".329",
         "baseOnBalls": 32,
         "doubles": 11,
-        "gamesPlayed": 69,
+        "gamesPlayed": 70,
         "hits": 68,
         "homeRuns": 12,
-        "obp": ".350",
-        "ops": ".799",
-        "plateAppearances": 294,
+        "obp": ".349",
+        "ops": ".796",
+        "plateAppearances": 295,
         "rbi": 39,
-        "runs": 39,
-        "slg": ".449",
+        "runs": 40,
+        "slg": ".447",
         "stolenBases": 0,
         "strikeOuts": 78,
         "triples": 0
@@ -1536,43 +1536,43 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 33,
-            "mlb": 55
+            "lg": 35,
+            "mlb": 58
           },
           "baseOnBalls": {
             "lg": 34,
-            "mlb": 63
+            "mlb": 64
           },
           "doubles": {
-            "lg": 71
+            "lg": 72
           },
           "hits": {
             "lg": 55,
-            "mlb": 97
+            "mlb": 98
           },
           "homeRuns": {
             "lg": 37,
             "mlb": 68
           },
           "obp": {
-            "lg": 28,
-            "mlb": 45
+            "lg": 30,
+            "mlb": 48
           },
           "ops": {
-            "lg": 37,
-            "mlb": 57
+            "lg": 38,
+            "mlb": 59
           },
           "rbi": {
             "lg": 44,
             "mlb": 75
           },
           "runs": {
-            "lg": 46,
-            "mlb": 83
+            "lg": 43,
+            "mlb": 85
           },
           "slg": {
-            "lg": 38,
-            "mlb": 59
+            "lg": 39,
+            "mlb": 62
           }
         }
       },
@@ -1587,33 +1587,33 @@
     "677951": {
       "fielding": {
         "arm": 94,
-        "assists": 177,
+        "assists": 178,
         "doublePlays": 41,
         "errors": 6,
         "fielding": ".979",
-        "gamesPlayed": 78,
-        "gamesStarted": 78,
-        "innings": "675.2",
+        "gamesPlayed": 79,
+        "gamesStarted": 79,
+        "innings": "677.2",
         "oaa": 15,
         "position": "遊撃",
         "putOuts": 97,
         "runsPrevented": 11
       },
       "hitting": {
-        "atBats": 309,
-        "avg": ".288",
-        "babip": ".326",
+        "atBats": 310,
+        "avg": ".290",
+        "babip": ".329",
         "baseOnBalls": 37,
         "doubles": 20,
-        "gamesPlayed": 79,
-        "hits": 89,
+        "gamesPlayed": 80,
+        "hits": 90,
         "homeRuns": 10,
-        "obp": ".363",
-        "ops": ".819",
-        "plateAppearances": 350,
+        "obp": ".365",
+        "ops": ".823",
+        "plateAppearances": 351,
         "rbi": 33,
         "runs": 42,
-        "slg": ".456",
+        "slg": ".458",
         "stolenBases": 28,
         "strikeOuts": 60,
         "triples": 1
@@ -1624,7 +1624,7 @@
         "hitting": {
           "avg": {
             "lg": 7,
-            "mlb": 21
+            "mlb": 19
           },
           "baseOnBalls": {
             "lg": 21,
@@ -1636,30 +1636,30 @@
           },
           "hits": {
             "lg": 5,
-            "mlb": 14
+            "mlb": 12
           },
           "homeRuns": {
-            "lg": 44,
-            "mlb": 90
+            "lg": 45,
+            "mlb": 91
           },
           "obp": {
-            "lg": 14,
-            "mlb": 31
+            "lg": 13,
+            "mlb": 29
           },
           "ops": {
-            "lg": 14,
-            "mlb": 39
+            "lg": 13,
+            "mlb": 36
           },
           "rbi": {
             "lg": 54
           },
           "runs": {
-            "lg": 26,
-            "mlb": 63
+            "lg": 28,
+            "mlb": 65
           },
           "slg": {
             "lg": 20,
-            "mlb": 51
+            "mlb": 52
           },
           "stolenBases": {
             "lg": 1,
@@ -1722,15 +1722,15 @@
             "mlb": 11
           },
           "inningsPitched": {
-            "lg": 24,
-            "mlb": 55
+            "lg": 25,
+            "mlb": 56
           },
           "strikeOuts": {
             "lg": 59
           },
           "whip": {
             "lg": 4,
-            "mlb": 7
+            "mlb": 8
           },
           "winPercentage": {
             "lg": 3,
@@ -1787,7 +1787,7 @@
         "hitting": {
           "avg": {
             "lg": 30,
-            "mlb": 47
+            "mlb": 48
           },
           "baseOnBalls": {
             "lg": 54
@@ -1798,19 +1798,19 @@
           },
           "hits": {
             "lg": 11,
-            "mlb": 17
+            "mlb": 18
           },
           "homeRuns": {
             "lg": 14,
             "mlb": 31
           },
           "obp": {
-            "lg": 46,
-            "mlb": 82
+            "lg": 45,
+            "mlb": 81
           },
           "ops": {
             "lg": 33,
-            "mlb": 49
+            "mlb": 50
           },
           "rbi": {
             "lg": 1,
@@ -1825,8 +1825,8 @@
             "mlb": 34
           },
           "stolenBases": {
-            "lg": 34,
-            "mlb": 63
+            "lg": 35,
+            "mlb": 64
           },
           "triples": {
             "lg": 48
@@ -1848,31 +1848,31 @@
         "doublePlays": 37,
         "errors": 12,
         "fielding": ".962",
-        "gamesPlayed": 81,
-        "gamesStarted": 80,
-        "innings": "709.2",
+        "gamesPlayed": 82,
+        "gamesStarted": 81,
+        "innings": "713.0",
         "oaa": -8,
         "position": "遊撃",
         "putOuts": 112,
         "runsPrevented": -6
       },
       "hitting": {
-        "atBats": 306,
-        "avg": ".275",
+        "atBats": 308,
+        "avg": ".273",
         "babip": ".310",
         "baseOnBalls": 31,
         "doubles": 16,
-        "gamesPlayed": 83,
+        "gamesPlayed": 84,
         "hits": 84,
         "homeRuns": 17,
-        "obp": ".357",
-        "ops": ".864",
-        "plateAppearances": 350,
+        "obp": ".355",
+        "ops": ".858",
+        "plateAppearances": 352,
         "rbi": 59,
         "runs": 51,
-        "slg": ".507",
+        "slg": ".503",
         "stolenBases": 13,
-        "strikeOuts": 76,
+        "strikeOuts": 78,
         "triples": 2
       },
       "league": "NL",
@@ -1880,8 +1880,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 26,
-            "mlb": 41
+            "lg": 28,
+            "mlb": 43
           },
           "baseOnBalls": {
             "lg": 38,
@@ -1901,11 +1901,11 @@
           },
           "obp": {
             "lg": 25,
-            "mlb": 40
+            "mlb": 41
           },
           "ops": {
-            "lg": 13,
-            "mlb": 21
+            "lg": 15,
+            "mlb": 24
           },
           "rbi": {
             "lg": 2,
@@ -1916,8 +1916,8 @@
             "mlb": 25
           },
           "slg": {
-            "lg": 14,
-            "mlb": 22
+            "lg": 15,
+            "mlb": 23
           },
           "stolenBases": {
             "lg": 15,
@@ -1976,8 +1976,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 25,
-            "mlb": 40
+            "lg": 24,
+            "mlb": 39
           },
           "baseOnBalls": {
             "lg": 20,
@@ -1989,19 +1989,19 @@
           },
           "hits": {
             "lg": 24,
-            "mlb": 36
+            "mlb": 37
           },
           "homeRuns": {
             "lg": 28,
-            "mlb": 53
+            "mlb": 54
           },
           "obp": {
-            "lg": 18,
-            "mlb": 32
+            "lg": 17,
+            "mlb": 30
           },
           "ops": {
-            "lg": 5,
-            "mlb": 12
+            "lg": 6,
+            "mlb": 13
           },
           "rbi": {
             "lg": 33,
@@ -2012,8 +2012,8 @@
             "mlb": 35
           },
           "slg": {
-            "lg": 8,
-            "mlb": 13
+            "lg": 7,
+            "mlb": 12
           },
           "stolenBases": {
             "lg": 30,
@@ -2073,24 +2073,24 @@
       "ranks": {
         "pitching": {
           "era": {
-            "lg": 23,
-            "mlb": 53
+            "lg": 24,
+            "mlb": 55
           },
           "inningsPitched": {
             "lg": 7,
-            "mlb": 16
+            "mlb": 18
           },
           "strikeOuts": {
-            "lg": 13,
-            "mlb": 29
+            "lg": 14,
+            "mlb": 31
           },
           "whip": {
             "lg": 8,
             "mlb": 18
           },
           "winPercentage": {
-            "lg": 19,
-            "mlb": 39
+            "lg": 20,
+            "mlb": 40
           },
           "wins": {
             "lg": 31,
@@ -2160,29 +2160,29 @@
         "doublePlays": 0,
         "errors": 4,
         "fielding": ".983",
-        "gamesPlayed": 85,
-        "gamesStarted": 84,
-        "innings": "742.1",
+        "gamesPlayed": 86,
+        "gamesStarted": 85,
+        "innings": "743.1",
         "oaa": 15,
         "position": "中堅",
         "putOuts": 234,
         "runsPrevented": 13
       },
       "hitting": {
-        "atBats": 320,
-        "avg": ".284",
-        "babip": ".354",
+        "atBats": 321,
+        "avg": ".283",
+        "babip": ".352",
         "baseOnBalls": 38,
         "doubles": 13,
-        "gamesPlayed": 85,
+        "gamesPlayed": 86,
         "hits": 91,
         "homeRuns": 17,
-        "obp": ".372",
-        "ops": ".881",
-        "plateAppearances": 369,
+        "obp": ".371",
+        "ops": ".879",
+        "plateAppearances": 370,
         "rbi": 45,
         "runs": 52,
-        "slg": ".509",
+        "slg": ".508",
         "stolenBases": 20,
         "strikeOuts": 96,
         "triples": 4
@@ -2192,8 +2192,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 17,
-            "mlb": 26
+            "lg": 18,
+            "mlb": 27
           },
           "baseOnBalls": {
             "lg": 20,
@@ -2212,8 +2212,8 @@
             "mlb": 24
           },
           "obp": {
-            "lg": 12,
-            "mlb": 23
+            "lg": 13,
+            "mlb": 24
           },
           "ops": {
             "lg": 7,
@@ -2221,15 +2221,15 @@
           },
           "rbi": {
             "lg": 24,
-            "mlb": 41
+            "mlb": 42
           },
           "runs": {
             "lg": 13,
-            "mlb": 22
+            "mlb": 23
           },
           "slg": {
-            "lg": 12,
-            "mlb": 20
+            "lg": 13,
+            "mlb": 21
           },
           "stolenBases": {
             "lg": 3,
@@ -2294,7 +2294,7 @@
           },
           "inningsPitched": {
             "lg": 5,
-            "mlb": 14
+            "mlb": 15
           },
           "strikeOuts": {
             "lg": 1,
@@ -2363,8 +2363,8 @@
             "mlb": 17
           },
           "inningsPitched": {
-            "lg": 15,
-            "mlb": 30
+            "lg": 16,
+            "mlb": 32
           },
           "strikeOuts": {
             "lg": 5,
@@ -2375,8 +2375,8 @@
             "mlb": 5
           },
           "winPercentage": {
-            "lg": 18,
-            "mlb": 38
+            "lg": 19,
+            "mlb": 39
           },
           "wins": {
             "lg": 22,
@@ -2434,7 +2434,7 @@
           },
           "strikeOuts": {
             "lg": 41,
-            "mlb": 87
+            "mlb": 88
           }
         }
       },
@@ -2459,20 +2459,20 @@
         "runsPrevented": -4
       },
       "hitting": {
-        "atBats": 331,
-        "avg": ".257",
-        "babip": ".339",
+        "atBats": 332,
+        "avg": ".259",
+        "babip": ".342",
         "baseOnBalls": 64,
         "doubles": 20,
         "gamesPlayed": 87,
-        "hits": 85,
+        "hits": 86,
         "homeRuns": 21,
-        "obp": ".382",
-        "ops": ".890",
-        "plateAppearances": 401,
+        "obp": ".383",
+        "ops": ".892",
+        "plateAppearances": 402,
         "rbi": 50,
         "runs": 73,
-        "slg": ".508",
+        "slg": ".509",
         "stolenBases": 13,
         "strikeOuts": 123,
         "triples": 0
@@ -2483,7 +2483,7 @@
         "hitting": {
           "avg": {
             "lg": 40,
-            "mlb": 72
+            "mlb": 71
           },
           "baseOnBalls": {
             "lg": 1,
@@ -2494,8 +2494,8 @@
             "mlb": 8
           },
           "hits": {
-            "lg": 21,
-            "mlb": 30
+            "lg": 18,
+            "mlb": 26
           },
           "homeRuns": {
             "lg": 3,
@@ -2503,7 +2503,7 @@
           },
           "obp": {
             "lg": 6,
-            "mlb": 15
+            "mlb": 14
           },
           "ops": {
             "lg": 5,
@@ -2511,15 +2511,15 @@
           },
           "rbi": {
             "lg": 14,
-            "mlb": 27
+            "mlb": 28
           },
           "runs": {
             "lg": 1,
             "mlb": 1
           },
           "slg": {
-            "lg": 13,
-            "mlb": 21
+            "lg": 12,
+            "mlb": 20
           },
           "stolenBases": {
             "lg": 15,
@@ -2582,12 +2582,12 @@
             "mlb": 1
           },
           "doubles": {
-            "lg": 27,
-            "mlb": 53
+            "lg": 29,
+            "mlb": 55
           },
           "hits": {
             "lg": 10,
-            "mlb": 30
+            "mlb": 31
           },
           "homeRuns": {
             "lg": 7,
@@ -2773,8 +2773,8 @@
             "lg": 97
           },
           "homeRuns": {
-            "lg": 5,
-            "mlb": 8
+            "lg": 6,
+            "mlb": 9
           },
           "rbi": {
             "lg": 24,
@@ -2834,12 +2834,12 @@
       "ranks": {
         "pitching": {
           "inningsPitched": {
-            "lg": 52,
-            "mlb": 99
+            "lg": 53,
+            "mlb": 100
           },
           "strikeOuts": {
-            "lg": 32,
-            "mlb": 70
+            "lg": 33,
+            "mlb": 71
           },
           "wins": {
             "lg": 68
@@ -2896,11 +2896,11 @@
           },
           "inningsPitched": {
             "lg": 9,
-            "mlb": 18
+            "mlb": 20
           },
           "strikeOuts": {
-            "lg": 14,
-            "mlb": 34
+            "lg": 15,
+            "mlb": 36
           },
           "whip": {
             "lg": 2,
