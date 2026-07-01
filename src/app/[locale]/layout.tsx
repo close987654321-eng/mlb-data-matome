@@ -148,6 +148,9 @@ function SiteHeader() {
           </NavLink>
           <NavLink href="/watch">{t('nav.watch')}</NavLink>
           <NavLink href="/player">{t('nav.players')}</NavLink>
+          <NavLink href="/ranking">{t('nav.ranking')}</NavLink>
+          {/* 期間限定（オールスター）。会期後は allstar.ts の enabled=false と合わせてこの行を外す。 */}
+          <NavLink href="/allstar">{t('nav.allstar')}</NavLink>
           <NavLink href="/prospects">{t('nav.prospects')}</NavLink>
           {SPORTS.filter((s) => s !== 'npb').map((s) => (
             <NavLink key={s} href={`/${s}`}>
@@ -171,6 +174,13 @@ function SiteHeader() {
         </NavLink>
         <NavLink href="/player" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.players')}
+        </NavLink>
+        <NavLink href="/ranking" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
+          {t('nav.ranking')}
+        </NavLink>
+        {/* 期間限定（オールスター）。会期後に外す。 */}
+        <NavLink href="/allstar" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
+          {t('nav.allstar')}
         </NavLink>
         <NavLink href="/prospects" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.prospects')}
@@ -208,6 +218,9 @@ function SiteFooter() {
             </Link>
             <Link href="/player" className="transition-colors hover:text-ink">
               {t('nav.players')}
+            </Link>
+            <Link href="/ranking" className="transition-colors hover:text-ink">
+              {t('nav.ranking')}
             </Link>
             <Link href="/prospects" className="transition-colors hover:text-ink">
               {t('nav.prospects')}

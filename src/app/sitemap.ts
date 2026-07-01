@@ -5,6 +5,7 @@ import { getAllTags } from '@/lib/tags';
 import { PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
+import { ALLSTAR } from '@/lib/allstar';
 import { SPORTS } from '@/lib/sports';
 import { locales, defaultLocale } from '@/lib/i18n';
 
@@ -76,6 +77,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 選手ハブ（トピッククラスタのピラー）。lastmod は上で算出済み
     // （/player ピラー＝選手ハブ群の最新／個別＝最新記事 or 成績更新の新しい方）。
     entry('/player', playerHubLatest),
+    // 日本人選手 成績ランキング（WAR/本塁打/防御率…の順位づけ面）。lastmod は成績スナップショットの日付。
+    entry('/ranking', statDate),
+    // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
+    ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     ...playerEntries,
     // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。手キュレーションなので lastmod なし。
     entry('/prospects'),
