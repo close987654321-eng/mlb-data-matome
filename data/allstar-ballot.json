@@ -1,0 +1,1118 @@
+{
+  "season": 2026,
+  "fetchedAt": "2026-07-01T23:42:50.528+09:00",
+  "asOf": "2026-07-01 23:42",
+  "ballotUrl": "https://www.mlb.com/all-star/ballot",
+  "leagues": {
+    "AL": {
+      "positions": {
+        "C": {
+          "total": 15,
+          "players": [
+            {
+              "id": 680777,
+              "name": "Ryan Jeffers",
+              "pos": "C",
+              "teamId": 142,
+              "team": "Minnesota Twins",
+              "ops": 0.949,
+              "hr": 7,
+              "avg": 0.295,
+              "pa": 148,
+              "rank": 1
+            },
+            {
+              "id": 693307,
+              "name": "Dillon Dingler",
+              "pos": "C",
+              "teamId": 116,
+              "team": "Detroit Tigers",
+              "ops": 0.856,
+              "hr": 19,
+              "avg": 0.264,
+              "pa": 329,
+              "rank": 2
+            },
+            {
+              "id": 669127,
+              "name": "Shea Langeliers",
+              "pos": "C",
+              "teamId": 133,
+              "team": "Athletics",
+              "ops": 0.818,
+              "hr": 19,
+              "avg": 0.263,
+              "pa": 356,
+              "rank": 3
+            },
+            {
+              "id": 668939,
+              "name": "Adley Rutschman",
+              "pos": "C",
+              "teamId": 110,
+              "team": "Baltimore Orioles",
+              "ops": 0.777,
+              "hr": 8,
+              "avg": 0.252,
+              "pa": 236,
+              "rank": 4
+            },
+            {
+              "id": 595978,
+              "name": "Austin Hedges",
+              "pos": "C",
+              "teamId": 114,
+              "team": "Cleveland Guardians",
+              "ops": 0.688,
+              "hr": 1,
+              "avg": 0.268,
+              "pa": 127,
+              "rank": 5
+            },
+            {
+              "id": 673237,
+              "name": "Yainer Diaz",
+              "pos": "C",
+              "teamId": 117,
+              "team": "Houston Astros",
+              "ops": 0.636,
+              "hr": 3,
+              "avg": 0.246,
+              "pa": 146,
+              "rank": 6
+            }
+          ]
+        },
+        "1B": {
+          "total": 15,
+          "players": [
+            {
+              "id": 808959,
+              "name": "Munetaka Murakami",
+              "pos": "1B",
+              "teamId": 145,
+              "team": "Chicago White Sox",
+              "ops": 0.938,
+              "hr": 20,
+              "avg": 0.24,
+              "pa": 246,
+              "jp": true,
+              "ja": "村上宗隆",
+              "slug": "munetaka-murakami",
+              "rank": 1
+            },
+            {
+              "id": 701762,
+              "name": "Nick Kurtz",
+              "pos": "1B",
+              "teamId": 133,
+              "team": "Athletics",
+              "ops": 0.937,
+              "hr": 19,
+              "avg": 0.276,
+              "pa": 385,
+              "rank": 2
+            },
+            {
+              "id": 700250,
+              "name": "Ben Rice",
+              "pos": "1B",
+              "teamId": 147,
+              "team": "New York Yankees",
+              "ops": 0.921,
+              "hr": 23,
+              "avg": 0.268,
+              "pa": 342,
+              "rank": 3
+            },
+            {
+              "id": 575929,
+              "name": "Willson Contreras",
+              "pos": "1B",
+              "teamId": 111,
+              "team": "Boston Red Sox",
+              "ops": 0.903,
+              "hr": 18,
+              "avg": 0.28,
+              "pa": 337,
+              "rank": 4
+            },
+            {
+              "id": 666018,
+              "name": "Jonathan Aranda",
+              "pos": "1B",
+              "teamId": 139,
+              "team": "Tampa Bay Rays",
+              "ops": 0.863,
+              "hr": 13,
+              "avg": 0.29,
+              "pa": 354,
+              "rank": 5
+            },
+            {
+              "id": 624413,
+              "name": "Pete Alonso",
+              "pos": "1B",
+              "teamId": 110,
+              "team": "Baltimore Orioles",
+              "ops": 0.811,
+              "hr": 19,
+              "avg": 0.249,
+              "pa": 376,
+              "rank": 6
+            }
+          ]
+        },
+        "2B": {
+          "total": 15,
+          "players": [
+            {
+              "id": 650402,
+              "name": "Gleyber Torres",
+              "pos": "2B",
+              "teamId": 116,
+              "team": "Detroit Tigers",
+              "ops": 0.79,
+              "hr": 4,
+              "avg": 0.28,
+              "pa": 190,
+              "rank": 1
+            },
+            {
+              "id": 676391,
+              "name": "Ernie Clement",
+              "pos": "2B",
+              "teamId": 141,
+              "team": "Toronto Blue Jays",
+              "ops": 0.755,
+              "hr": 7,
+              "avg": 0.297,
+              "pa": 331,
+              "rank": 2
+            },
+            {
+              "id": 683953,
+              "name": "Travis Bazzana",
+              "pos": "2B",
+              "teamId": 114,
+              "team": "Cleveland Guardians",
+              "ops": 0.748,
+              "hr": 7,
+              "avg": 0.245,
+              "pa": 235,
+              "rank": 3
+            },
+            {
+              "id": 677649,
+              "name": "Ezequiel Duran",
+              "pos": "2B",
+              "teamId": 140,
+              "team": "Texas Rangers",
+              "ops": 0.731,
+              "hr": 6,
+              "avg": 0.266,
+              "pa": 284,
+              "rank": 4
+            },
+            {
+              "id": 686681,
+              "name": "Michael Massey",
+              "pos": "2B",
+              "teamId": 118,
+              "team": "Kansas City Royals",
+              "ops": 0.731,
+              "hr": 7,
+              "avg": 0.26,
+              "pa": 211,
+              "rank": 5
+            },
+            {
+              "id": 805367,
+              "name": "Chase Meidroth",
+              "pos": "2B",
+              "teamId": 145,
+              "team": "Chicago White Sox",
+              "ops": 0.729,
+              "hr": 6,
+              "avg": 0.275,
+              "pa": 348,
+              "rank": 6
+            }
+          ]
+        },
+        "3B": {
+          "total": 15,
+          "players": [
+            {
+              "id": 691406,
+              "name": "Junior Caminero",
+              "pos": "3B",
+              "teamId": 139,
+              "team": "Tampa Bay Rays",
+              "ops": 0.939,
+              "hr": 23,
+              "avg": 0.294,
+              "pa": 359,
+              "rank": 1
+            },
+            {
+              "id": 678246,
+              "name": "Miguel Vargas",
+              "pos": "3B",
+              "teamId": 145,
+              "team": "Chicago White Sox",
+              "ops": 0.853,
+              "hr": 19,
+              "avg": 0.248,
+              "pa": 361,
+              "rank": 2
+            },
+            {
+              "id": 680977,
+              "name": "Brendan Donovan",
+              "pos": "3B",
+              "teamId": 136,
+              "team": "Seattle Mariners",
+              "ops": 0.838,
+              "hr": 3,
+              "avg": 0.274,
+              "pa": 101,
+              "rank": 3
+            },
+            {
+              "id": 680869,
+              "name": "Zack Gelof",
+              "pos": "3B",
+              "teamId": 133,
+              "team": "Athletics",
+              "ops": 0.834,
+              "hr": 11,
+              "avg": 0.282,
+              "pa": 228,
+              "rank": 4
+            },
+            {
+              "id": 673962,
+              "name": "Josh Jung",
+              "pos": "3B",
+              "teamId": 140,
+              "team": "Texas Rangers",
+              "ops": 0.804,
+              "hr": 9,
+              "avg": 0.297,
+              "pa": 345,
+              "rank": 5
+            },
+            {
+              "id": 672960,
+              "name": "Kazuma Okamoto",
+              "pos": "3B",
+              "teamId": 141,
+              "team": "Toronto Blue Jays",
+              "ops": 0.78,
+              "hr": 19,
+              "avg": 0.236,
+              "pa": 340,
+              "jp": true,
+              "ja": "岡本和真",
+              "slug": "kazuma-okamoto",
+              "rank": 6
+            }
+          ]
+        },
+        "SS": {
+          "total": 15,
+          "players": [
+            {
+              "id": 677951,
+              "name": "Bobby Witt Jr.",
+              "pos": "SS",
+              "teamId": 118,
+              "team": "Kansas City Royals",
+              "ops": 0.846,
+              "hr": 12,
+              "avg": 0.294,
+              "pa": 354,
+              "rank": 1
+            },
+            {
+              "id": 805808,
+              "name": "Kevin McGonigle",
+              "pos": "SS",
+              "teamId": 116,
+              "team": "Detroit Tigers",
+              "ops": 0.812,
+              "hr": 6,
+              "avg": 0.283,
+              "pa": 368,
+              "rank": 2
+            },
+            {
+              "id": 665161,
+              "name": "Jeremy Peña",
+              "pos": "SS",
+              "teamId": 117,
+              "team": "Houston Astros",
+              "ops": 0.799,
+              "hr": 6,
+              "avg": 0.295,
+              "pa": 202,
+              "rank": 3
+            },
+            {
+              "id": 695657,
+              "name": "Colson Montgomery",
+              "pos": "SS",
+              "teamId": 145,
+              "team": "Chicago White Sox",
+              "ops": 0.793,
+              "hr": 21,
+              "avg": 0.221,
+              "pa": 338,
+              "rank": 4
+            },
+            {
+              "id": 687263,
+              "name": "Zach Neto",
+              "pos": "SS",
+              "teamId": 108,
+              "team": "Los Angeles Angels",
+              "ops": 0.775,
+              "hr": 18,
+              "avg": 0.227,
+              "pa": 379,
+              "rank": 5
+            },
+            {
+              "id": 686797,
+              "name": "Brooks Lee",
+              "pos": "SS",
+              "teamId": 142,
+              "team": "Minnesota Twins",
+              "ops": 0.747,
+              "hr": 14,
+              "avg": 0.251,
+              "pa": 329,
+              "rank": 6
+            }
+          ]
+        },
+        "OF": {
+          "total": 45,
+          "players": [
+            {
+              "id": 592450,
+              "name": "Aaron Judge",
+              "pos": "OF",
+              "teamId": 147,
+              "team": "New York Yankees",
+              "ops": 0.908,
+              "hr": 17,
+              "avg": 0.248,
+              "pa": 261,
+              "rank": 1
+            },
+            {
+              "id": 621439,
+              "name": "Byron Buxton",
+              "pos": "OF",
+              "teamId": 142,
+              "team": "Minnesota Twins",
+              "ops": 0.898,
+              "hr": 25,
+              "avg": 0.268,
+              "pa": 329,
+              "rank": 2
+            },
+            {
+              "id": 545361,
+              "name": "Mike Trout",
+              "pos": "OF",
+              "teamId": 108,
+              "team": "Los Angeles Angels",
+              "ops": 0.866,
+              "hr": 17,
+              "avg": 0.234,
+              "pa": 335,
+              "rank": 3
+            },
+            {
+              "id": 682985,
+              "name": "Riley Greene",
+              "pos": "OF",
+              "teamId": 116,
+              "team": "Detroit Tigers",
+              "ops": 0.828,
+              "hr": 11,
+              "avg": 0.288,
+              "pa": 357,
+              "rank": 4
+            },
+            {
+              "id": 668723,
+              "name": "Ryan Vilade",
+              "pos": "OF",
+              "teamId": 139,
+              "team": "Tampa Bay Rays",
+              "ops": 0.827,
+              "hr": 6,
+              "avg": 0.278,
+              "pa": 144,
+              "rank": 5
+            },
+            {
+              "id": 694671,
+              "name": "Wyatt Langford",
+              "pos": "OF",
+              "teamId": 140,
+              "team": "Texas Rangers",
+              "ops": 0.824,
+              "hr": 8,
+              "avg": 0.278,
+              "pa": 173,
+              "rank": 6
+            }
+          ]
+        },
+        "DH": {
+          "total": 15,
+          "players": [
+            {
+              "id": 670541,
+              "name": "Yordan Alvarez",
+              "pos": "DH",
+              "teamId": 117,
+              "team": "Houston Astros",
+              "ops": 1.046,
+              "hr": 26,
+              "avg": 0.314,
+              "pa": 374,
+              "rank": 1
+            },
+            {
+              "id": 650490,
+              "name": "Yandy Díaz",
+              "pos": "DH",
+              "teamId": 139,
+              "team": "Tampa Bay Rays",
+              "ops": 0.928,
+              "hr": 12,
+              "avg": 0.334,
+              "pa": 346,
+              "rank": 2
+            },
+            {
+              "id": 686527,
+              "name": "Dominic Canzone",
+              "pos": "DH",
+              "teamId": 136,
+              "team": "Seattle Mariners",
+              "ops": 0.899,
+              "hr": 13,
+              "avg": 0.273,
+              "pa": 219,
+              "rank": 3
+            },
+            {
+              "id": 592626,
+              "name": "Joc Pederson",
+              "pos": "DH",
+              "teamId": 140,
+              "team": "Texas Rangers",
+              "ops": 0.812,
+              "hr": 14,
+              "avg": 0.241,
+              "pa": 267,
+              "rank": 4
+            },
+            {
+              "id": 694212,
+              "name": "Samuel Basallo",
+              "pos": "DH",
+              "teamId": 110,
+              "team": "Baltimore Orioles",
+              "ops": 0.766,
+              "hr": 12,
+              "avg": 0.256,
+              "pa": 266,
+              "rank": 5
+            },
+            {
+              "id": 695600,
+              "name": "Carter Jensen",
+              "pos": "DH",
+              "teamId": 118,
+              "team": "Kansas City Royals",
+              "ops": 0.762,
+              "hr": 12,
+              "avg": 0.251,
+              "pa": 304,
+              "rank": 6
+            }
+          ]
+        }
+      }
+    },
+    "NL": {
+      "positions": {
+        "C": {
+          "total": 15,
+          "players": [
+            {
+              "id": 696100,
+              "name": "Hunter Goodman",
+              "pos": "C",
+              "teamId": 115,
+              "team": "Colorado Rockies",
+              "ops": 0.848,
+              "hr": 26,
+              "avg": 0.243,
+              "pa": 336,
+              "rank": 1
+            },
+            {
+              "id": 689414,
+              "name": "Liam Hicks",
+              "pos": "C",
+              "teamId": 146,
+              "team": "Miami Marlins",
+              "ops": 0.827,
+              "hr": 13,
+              "avg": 0.28,
+              "pa": 294,
+              "rank": 2
+            },
+            {
+              "id": 672515,
+              "name": "Gabriel Moreno",
+              "pos": "C",
+              "teamId": 109,
+              "team": "Arizona Diamondbacks",
+              "ops": 0.804,
+              "hr": 6,
+              "avg": 0.282,
+              "pa": 228,
+              "rank": 3
+            },
+            {
+              "id": 686948,
+              "name": "Drake Baldwin",
+              "pos": "C",
+              "teamId": 144,
+              "team": "Atlanta Braves",
+              "ops": 0.793,
+              "hr": 14,
+              "avg": 0.254,
+              "pa": 266,
+              "rank": 4
+            },
+            {
+              "id": 660688,
+              "name": "Keibert Ruiz",
+              "pos": "C",
+              "teamId": 120,
+              "team": "Washington Nationals",
+              "ops": 0.791,
+              "hr": 6,
+              "avg": 0.285,
+              "pa": 190,
+              "rank": 5
+            },
+            {
+              "id": 661388,
+              "name": "William Contreras",
+              "pos": "C",
+              "teamId": 158,
+              "team": "Milwaukee Brewers",
+              "ops": 0.788,
+              "hr": 9,
+              "avg": 0.297,
+              "pa": 340,
+              "rank": 6
+            }
+          ]
+        },
+        "1B": {
+          "total": 15,
+          "players": [
+            {
+              "id": 547180,
+              "name": "Bryce Harper",
+              "pos": "1B",
+              "teamId": 143,
+              "team": "Philadelphia Phillies",
+              "ops": 0.908,
+              "hr": 20,
+              "avg": 0.275,
+              "pa": 360,
+              "rank": 1
+            },
+            {
+              "id": 641343,
+              "name": "Jake Bauers",
+              "pos": "1B",
+              "teamId": 158,
+              "team": "Milwaukee Brewers",
+              "ops": 0.885,
+              "hr": 15,
+              "avg": 0.272,
+              "pa": 292,
+              "rank": 2
+            },
+            {
+              "id": 518692,
+              "name": "Freddie Freeman",
+              "pos": "1B",
+              "teamId": 119,
+              "team": "Los Angeles Dodgers",
+              "ops": 0.876,
+              "hr": 13,
+              "avg": 0.293,
+              "pa": 364,
+              "rank": 3
+            },
+            {
+              "id": 621566,
+              "name": "Matt Olson",
+              "pos": "1B",
+              "teamId": 144,
+              "team": "Atlanta Braves",
+              "ops": 0.874,
+              "hr": 20,
+              "avg": 0.276,
+              "pa": 362,
+              "rank": 4
+            },
+            {
+              "id": 681198,
+              "name": "TJ Rumfield",
+              "pos": "1B",
+              "teamId": 115,
+              "team": "Colorado Rockies",
+              "ops": 0.864,
+              "hr": 12,
+              "avg": 0.294,
+              "pa": 337,
+              "rank": 5
+            },
+            {
+              "id": 671277,
+              "name": "Luis García Jr.",
+              "pos": "1B",
+              "teamId": 120,
+              "team": "Washington Nationals",
+              "ops": 0.852,
+              "hr": 16,
+              "avg": 0.28,
+              "pa": 277,
+              "rank": 6
+            }
+          ]
+        },
+        "2B": {
+          "total": 15,
+          "players": [
+            {
+              "id": 650333,
+              "name": "Luis Arraez",
+              "pos": "2B",
+              "teamId": 137,
+              "team": "San Francisco Giants",
+              "ops": 0.836,
+              "hr": 4,
+              "avg": 0.331,
+              "pa": 353,
+              "rank": 1
+            },
+            {
+              "id": 669364,
+              "name": "Xavier Edwards",
+              "pos": "2B",
+              "teamId": 146,
+              "team": "Miami Marlins",
+              "ops": 0.816,
+              "hr": 6,
+              "avg": 0.304,
+              "pa": 362,
+              "rank": 2
+            },
+            {
+              "id": 664040,
+              "name": "Brandon Lowe",
+              "pos": "2B",
+              "teamId": 134,
+              "team": "Pittsburgh Pirates",
+              "ops": 0.815,
+              "hr": 20,
+              "avg": 0.239,
+              "pa": 351,
+              "rank": 3
+            },
+            {
+              "id": 668930,
+              "name": "Brice Turang",
+              "pos": "2B",
+              "teamId": 158,
+              "team": "Milwaukee Brewers",
+              "ops": 0.809,
+              "hr": 12,
+              "avg": 0.259,
+              "pa": 359,
+              "rank": 4
+            },
+            {
+              "id": 606466,
+              "name": "Ketel Marte",
+              "pos": "2B",
+              "teamId": 109,
+              "team": "Arizona Diamondbacks",
+              "ops": 0.806,
+              "hr": 17,
+              "avg": 0.265,
+              "pa": 356,
+              "rank": 5
+            },
+            {
+              "id": 802139,
+              "name": "JJ Wetherholt",
+              "pos": "2B",
+              "teamId": 138,
+              "team": "St. Louis Cardinals",
+              "ops": 0.763,
+              "hr": 12,
+              "avg": 0.261,
+              "pa": 355,
+              "rank": 6
+            }
+          ]
+        },
+        "3B": {
+          "total": 15,
+          "players": [
+            {
+              "id": 571970,
+              "name": "Max Muncy",
+              "pos": "3B",
+              "teamId": 119,
+              "team": "Los Angeles Dodgers",
+              "ops": 0.873,
+              "hr": 17,
+              "avg": 0.265,
+              "pa": 299,
+              "rank": 1
+            },
+            {
+              "id": 678554,
+              "name": "Curtis Mead",
+              "pos": "3B",
+              "teamId": 120,
+              "team": "Washington Nationals",
+              "ops": 0.78,
+              "hr": 14,
+              "avg": 0.223,
+              "pa": 256,
+              "rank": 2
+            },
+            {
+              "id": 691720,
+              "name": "Kyle Karros",
+              "pos": "3B",
+              "teamId": 115,
+              "team": "Colorado Rockies",
+              "ops": 0.753,
+              "hr": 5,
+              "avg": 0.258,
+              "pa": 271,
+              "rank": 3
+            },
+            {
+              "id": 693304,
+              "name": "Nick Gonzales",
+              "pos": "3B",
+              "teamId": 134,
+              "team": "Pittsburgh Pirates",
+              "ops": 0.718,
+              "hr": 3,
+              "avg": 0.294,
+              "pa": 323,
+              "rank": 4
+            },
+            {
+              "id": 691594,
+              "name": "Javier Sanoja",
+              "pos": "3B",
+              "teamId": 146,
+              "team": "Miami Marlins",
+              "ops": 0.716,
+              "hr": 3,
+              "avg": 0.275,
+              "pa": 206,
+              "rank": 5
+            },
+            {
+              "id": 571448,
+              "name": "Nolan Arenado",
+              "pos": "3B",
+              "teamId": 109,
+              "team": "Arizona Diamondbacks",
+              "ops": 0.714,
+              "hr": 9,
+              "avg": 0.243,
+              "pa": 306,
+              "rank": 6
+            }
+          ]
+        },
+        "SS": {
+          "total": 15,
+          "players": [
+            {
+              "id": 682928,
+              "name": "CJ Abrams",
+              "pos": "SS",
+              "teamId": 120,
+              "team": "Washington Nationals",
+              "ops": 0.866,
+              "hr": 18,
+              "avg": 0.273,
+              "pa": 355,
+              "rank": 1
+            },
+            {
+              "id": 672640,
+              "name": "Otto Lopez",
+              "pos": "SS",
+              "teamId": 146,
+              "team": "Miami Marlins",
+              "ops": 0.852,
+              "hr": 7,
+              "avg": 0.333,
+              "pa": 358,
+              "rank": 2
+            },
+            {
+              "id": 682829,
+              "name": "Elly De La Cruz",
+              "pos": "SS",
+              "teamId": 113,
+              "team": "Cincinnati Reds",
+              "ops": 0.829,
+              "hr": 13,
+              "avg": 0.27,
+              "pa": 289,
+              "rank": 3
+            },
+            {
+              "id": 605141,
+              "name": "Mookie Betts",
+              "pos": "SS",
+              "teamId": 119,
+              "team": "Los Angeles Dodgers",
+              "ops": 0.744,
+              "hr": 11,
+              "avg": 0.244,
+              "pa": 223,
+              "rank": 4
+            },
+            {
+              "id": 804606,
+              "name": "Konnor Griffin",
+              "pos": "SS",
+              "teamId": 134,
+              "team": "Pittsburgh Pirates",
+              "ops": 0.737,
+              "hr": 5,
+              "avg": 0.271,
+              "pa": 227,
+              "rank": 5
+            },
+            {
+              "id": 672695,
+              "name": "Geraldo Perdomo",
+              "pos": "SS",
+              "teamId": 109,
+              "team": "Arizona Diamondbacks",
+              "ops": 0.72,
+              "hr": 5,
+              "avg": 0.244,
+              "pa": 346,
+              "rank": 6
+            }
+          ]
+        },
+        "OF": {
+          "total": 45,
+          "players": [
+            {
+              "id": 665742,
+              "name": "Juan Soto",
+              "pos": "OF",
+              "teamId": 121,
+              "team": "New York Mets",
+              "ops": 0.971,
+              "hr": 17,
+              "avg": 0.298,
+              "pa": 285,
+              "rank": 1
+            },
+            {
+              "id": 695578,
+              "name": "James Wood",
+              "pos": "OF",
+              "teamId": 120,
+              "team": "Washington Nationals",
+              "ops": 0.898,
+              "hr": 21,
+              "avg": 0.263,
+              "pa": 405,
+              "rank": 2
+            },
+            {
+              "id": 691718,
+              "name": "Pete Crow-Armstrong",
+              "pos": "OF",
+              "teamId": 112,
+              "team": "Chicago Cubs",
+              "ops": 0.888,
+              "hr": 18,
+              "avg": 0.284,
+              "pa": 374,
+              "rank": 3
+            },
+            {
+              "id": 694192,
+              "name": "Jackson Chourio",
+              "pos": "OF",
+              "teamId": 158,
+              "team": "Milwaukee Brewers",
+              "ops": 0.882,
+              "hr": 12,
+              "avg": 0.295,
+              "pa": 229,
+              "rank": 4
+            },
+            {
+              "id": 682998,
+              "name": "Corbin Carroll",
+              "pos": "OF",
+              "teamId": 109,
+              "team": "Arizona Diamondbacks",
+              "ops": 0.881,
+              "hr": 13,
+              "avg": 0.272,
+              "pa": 350,
+              "rank": 5
+            },
+            {
+              "id": 666160,
+              "name": "Mickey Moniak",
+              "pos": "OF",
+              "teamId": 115,
+              "team": "Colorado Rockies",
+              "ops": 0.875,
+              "hr": 13,
+              "avg": 0.26,
+              "pa": 188,
+              "rank": 6
+            },
+            {
+              "id": 673548,
+              "name": "Seiya Suzuki",
+              "pos": "OF",
+              "teamId": 112,
+              "team": "Chicago Cubs",
+              "ops": 0.799,
+              "hr": 12,
+              "avg": 0.268,
+              "pa": 299,
+              "jp": true,
+              "ja": "鈴木誠也",
+              "slug": "seiya-suzuki",
+              "rank": 17
+            }
+          ]
+        },
+        "DH": {
+          "total": 15,
+          "players": [
+            {
+              "id": 660271,
+              "name": "Shohei Ohtani",
+              "pos": "DH",
+              "teamId": 119,
+              "team": "Los Angeles Dodgers",
+              "ops": 0.954,
+              "hr": 18,
+              "avg": 0.296,
+              "pa": 364,
+              "jp": true,
+              "ja": "大谷翔平",
+              "slug": "shohei-ohtani",
+              "rank": 1
+            },
+            {
+              "id": 656941,
+              "name": "Kyle Schwarber",
+              "pos": "DH",
+              "teamId": 143,
+              "team": "Philadelphia Phillies",
+              "ops": 0.952,
+              "hr": 30,
+              "avg": 0.256,
+              "pa": 366,
+              "rank": 2
+            },
+            {
+              "id": 687859,
+              "name": "Troy Johnston",
+              "pos": "DH",
+              "teamId": 115,
+              "team": "Colorado Rockies",
+              "ops": 0.813,
+              "hr": 3,
+              "avg": 0.312,
+              "pa": 284,
+              "rank": 3
+            },
+            {
+              "id": 669477,
+              "name": "Casey Schmitt",
+              "pos": "DH",
+              "teamId": 137,
+              "team": "San Francisco Giants",
+              "ops": 0.805,
+              "hr": 16,
+              "avg": 0.283,
+              "pa": 321,
+              "rank": 4
+            },
+            {
+              "id": 671056,
+              "name": "Iván Herrera",
+              "pos": "DH",
+              "teamId": 138,
+              "team": "St. Louis Cardinals",
+              "ops": 0.795,
+              "hr": 10,
+              "avg": 0.252,
+              "pa": 370,
+              "rank": 5
+            },
+            {
+              "id": 642086,
+              "name": "Dominic Smith",
+              "pos": "DH",
+              "teamId": 144,
+              "team": "Atlanta Braves",
+              "ops": 0.742,
+              "hr": 6,
+              "avg": 0.279,
+              "pa": 199,
+              "rank": 6
+            }
+          ]
+        }
+      }
+    }
+  }
+}

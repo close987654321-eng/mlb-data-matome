@@ -6,7 +6,9 @@ import { buildFeed } from '@/lib/feed';
 import { PLAYERS } from '@/lib/players';
 import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import { ALLSTAR } from '@/lib/allstar';
+import { getAllStarBallot } from '@/lib/allstarBallot';
 import Leaderboard, { type LeaderRow } from '@/components/Leaderboard';
+import BallotRace from '@/components/BallotRace';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -47,7 +49,7 @@ export default async function AllStarPage({
   if (!ALLSTAR.enabled) notFound();
   const t = await getTranslations();
   const en = locale === 'en';
-  const [snap, all] = await Promise.all([getPlayersSnapshot(), getAllThreads()]);
+  const [snap, all, ballot] = await Promise.all([getPlayersSnapshot(), getAllThreads(), getAllStarBallot()]);
   const year = seasonYear(snap);
 
   // 今季 MLB 成績のある日本人選手（WAR算出可能）。
@@ -115,6 +117,29 @@ export default async function AllStarPage({
         )}
         {snap.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: snap.asOf })}</p>}
       </section>
+
+      {/* 投票レース: 各リーグ×守備位置の候補を成績(OPS)で見る。投票数は公式非公開なので出さず、公式ballotへ送客。 */}
+      {ballot && (
+        <section>
+          <SectionHeading label={t('allstar.ballotTitle')} lead />
+          <p className="mb-4 mt-1.5 max-w-prose text-sm text-ink-soft">{t('allstar.ballotLead')}</p>
+          <BallotRace ballot={ballot} locale={locale} />
+          <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <a
+              href={ballot.ballotUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft"
+            >
+              {t('allstar.ballotCta')} <span aria-hidden>↗</span>
+            </a>
+            <span className="text-xs text-ink-soft">
+              {t('allstar.ballotNote')}
+              {ballot.asOf ? ` ／ ${t('player.asOf', { date: ballot.asOf })}` : ''}
+            </span>
+          </div>
+        </section>
+      )}
 
       {/* 選出／候補: 前半戦WAR上位の日本人選手。各行→選手ハブ（母艦へ送客）。 */}
       {candidateRows.length > 0 && (
