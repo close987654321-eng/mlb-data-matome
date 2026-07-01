@@ -283,6 +283,111 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       ],
     },
   },
+  {
+    slug: 'saiki-hiroto',
+    nameJa: '才木浩人',
+    nameEn: 'Hiroto Saiki',
+    team: { ja: '阪神タイガース', en: 'Hanshin Tigers' },
+    pos: { ja: '投手（先発）', en: 'Pitcher (starter)' },
+    bio: {
+      ja: '阪神タイガースの先発右腕。1998年生まれ、189cmの本格派。2016年ドラフト3位。2020年にトミー・ジョン手術を受け、2022年に約3年ぶりの実戦復帰を果たすと、2025年には防御率1.55でセ・リーグ最優秀防御率を獲得した。150キロ台後半の直球と鋭いスプリットが武器。',
+      en: 'A right-handed starter for the Hanshin Tigers. Born in 1998 and standing 189 cm, the 2016 third-round pick underwent Tommy John surgery in 2020, returned in 2022 after nearly three years out, and won the 2025 Central League ERA title (1.55). A high-90s mph fastball and a sharp splitter are his weapons.',
+    },
+    mlbWatch: {
+      ja: '海外の評価も高い。ドジャースのデーブ・ロバーツ監督は東京ドームの試合で大谷・フリーマンらから7奪三振した才木を「メジャー級の球質」と絶賛。ジャイアンツの編成トップ、バスター・ポージーも来日視察したと報じられた。MLB.comは「阪神がポスティングを認めていれば、最も引く手あまたのFA投手の一人になったはず」と評した。',
+      en: 'He is highly regarded abroad. After he struck out seven — including Ohtani and Freeman — in a Tokyo Dome game, Dodgers manager Dave Roberts called his stuff "major-league." Giants baseball boss Buster Posey reportedly traveled to Japan to scout him, and MLB.com wrote he would have been "one of the most sought-after free-agent pitchers had Hanshin agreed to post him."',
+    },
+    posting: {
+      ja: '2025年オフにポスティングを申請したが、球団が主力先発の同時流出を避けるため不承認とした。MLB志向は公言しており、将来的な挑戦の可能性は高い。',
+      en: 'He filed for posting after the 2025 season, but the club declined it to avoid losing two rotation arms at once. He has stated his MLB ambitions, and a future move looks likely.',
+    },
+    comp: {
+      ja: '150キロ台後半の直球とスプリットで押す、MLBミドルローテーション級の本格派右腕。',
+      en: 'A power right-hander with a high-90s fastball and splitter, projecting as an MLB mid-rotation starter.',
+    },
+    sameAs: ['https://ja.wikipedia.org/wiki/才木浩人'],
+    season: {
+      asOf: '2026-06-30',
+      sourceUrl: 'https://npb.jp/bis/players/41745134.html',
+      stats: [
+        { ja: '登板', en: 'G', value: '14' },
+        { ja: '防御率', en: 'ERA', value: '3.06' },
+        { ja: '勝-敗', en: 'W-L', value: '5-4' },
+        { ja: '投球回', en: 'IP', value: '82.1' },
+        { ja: '奪三振', en: 'SO', value: '105' },
+      ],
+    },
+  },
+  {
+    slug: 'sumida-chihiro',
+    nameJa: '隅田知一郎',
+    nameEn: 'Chihiro Sumida',
+    team: { ja: '埼玉西武ライオンズ', en: 'Saitama Seibu Lions' },
+    pos: { ja: '投手（先発・左腕）', en: 'Pitcher (LHP starter)' },
+    bio: {
+      ja: '埼玉西武ライオンズの先発左腕。制球と変化球で勝負するタイプで、2025年は防御率2.65・159回2/3を投げる働き。チェンジアップとスプリットは海外で「ダブルプラス級」と評される。',
+      en: 'A left-handed starter for the Saitama Seibu Lions. A command-and-secondaries pitcher, he threw 159⅔ innings with a 2.65 ERA in 2025. His changeup and splitter are rated abroad as “arguably double-plus” pitches.',
+    },
+    mlbWatch: {
+      ja: 'FanGraphs によれば2025年は防御率2.59・FIP2.49、K-BB率17.8%は規定投球回到達者で5位。Just Baseball はチェンジアップとスプリットを「ダブルプラス級（Stuff+ 164）」と高評価。ESPNはスカウトが左腕ダニー・クーロムになぞらえると伝える。剛速球ではなく完成度で見せる左腕。',
+      en: 'Per FanGraphs, he posted a 2.59 ERA and 2.49 FIP in 2025, with a 17.8% K-BB rate that ranked fifth among qualifiers. Just Baseball grades his changeup and splitter as “arguably double-plus” (a 164 Stuff+), and ESPN says scouts liken him to lefty Danny Coulombe. A polish-over-power southpaw.',
+    },
+    posting: {
+      ja: 'ポスティング/FAの公式発表はまだ。西武の先発の柱として続投中。',
+      en: 'No posting or move has been announced; he remains a rotation anchor for Seibu.',
+    },
+    comp: {
+      ja: 'チェンジアップ／スプリットと制球で見せる、完成度の高い先発左腕。',
+      en: 'A polished left-handed starter who wins with a changeup/splitter and command.',
+    },
+    sameAs: ['https://ja.wikipedia.org/wiki/隅田知一郎'],
+    season: {
+      asOf: '2026-06-30',
+      sourceUrl: 'https://npb.jp/bis/players/21025155.html',
+      stats: [
+        { ja: '登板', en: 'G', value: '12' },
+        { ja: '防御率', en: 'ERA', value: '2.30' },
+        { ja: '勝-敗', en: 'W-L', value: '6-4' },
+        { ja: '投球回', en: 'IP', value: '90.0' },
+        { ja: '奪三振', en: 'SO', value: '87' },
+      ],
+    },
+  },
+  {
+    slug: 'sotani-ryuhei',
+    nameJa: '曽谷龍平',
+    nameEn: 'Ryuhei Sotani',
+    team: { ja: 'オリックス・バファローズ', en: 'Orix Buffaloes' },
+    pos: { ja: '投手（先発・左腕）', en: 'Pitcher (LHP starter)' },
+    bio: {
+      ja: 'オリックス・バファローズの先発左腕。2000年生まれ、白鷗大から2022年ドラフト1位。2026年WBC日本代表。低〜中速の直球と鋭いスウィーパーで左打者を封じる、山本由伸の後継と目される左腕。',
+      en: 'A left-handed starter for the Orix Buffaloes. Born in 2000 and a 2022 first-round pick out of Hakuoh University, he was named to Japan’s 2026 WBC roster. He shuts down lefties with a low-to-mid-90s fastball and a sharp sweeper, and is seen as an heir to Yoshinobu Yamamoto.',
+    },
+    mlbWatch: {
+      ja: 'Just Baseball は「4.01の防御率は見かけほど悪くなく、FIP・SIERAはともに2.93。打球運と守備に恵まれなかっただけ」と指摘。右打者用の球種が課題だが、左打者は速球とスウィーパーで支配し続けるとみる。EssentiallySports は山本由伸の“精神的後継者”と位置づけ、WBC2026選出で海外の認知も高まった。',
+      en: 'Just Baseball notes his 4.01 ERA masked much better underlying numbers (a 2.93 FIP and 2.93 SIERA) hurt by poor batted-ball luck and defense; he needs a pitch for righties but keeps dominating lefties. EssentiallySports frames him as a “spiritual successor to Yoshinobu Yamamoto,” and his 2026 WBC selection has raised his overseas profile.',
+    },
+    posting: {
+      ja: 'ポスティング/FAの公式な見通しはまだ。WBC2026での活躍が評価を押し上げる可能性。',
+      en: 'No posting or free-agency timetable yet; a strong 2026 WBC could lift his stock.',
+    },
+    comp: {
+      ja: '速球とスウィーパーで左を封じる、山本由伸型を目指す先発左腕。',
+      en: 'A left-handed starter in the mold Orix hopes will succeed Yoshinobu Yamamoto, living off a fastball-sweeper mix.',
+    },
+    sameAs: ['https://ja.wikipedia.org/wiki/曽谷龍平'],
+    season: {
+      asOf: '2026-06-30',
+      sourceUrl: 'https://npb.jp/bis/players/81985157.html',
+      stats: [
+        { ja: '登板', en: 'G', value: '8' },
+        { ja: '防御率', en: 'ERA', value: '3.08' },
+        { ja: '勝-敗', en: 'W-L', value: '4-3' },
+        { ja: '投球回', en: 'IP', value: '49.2' },
+        { ja: '奪三振', en: 'SO', value: '45' },
+      ],
+    },
+  },
 ];
 
 const BY_SLUG = new Map(NPB_PROSPECTS.map((p) => [p.slug, p]));
