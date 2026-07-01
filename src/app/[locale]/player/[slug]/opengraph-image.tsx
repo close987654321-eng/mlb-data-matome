@@ -4,24 +4,31 @@ import { PLAYERS, getPlayer, hubEligible } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, type PlayerSeason } from '@/lib/playerStats';
 import { pickHero, pickBestRankCaption, type Hero } from '@/lib/playerHero';
 import { wrc, signedInt, oneDecimal } from '@/lib/statGroups';
-import { getTeamColor, ACCENT } from '@/lib/teamColors';
+import { getTeamColor } from '@/lib/teamColors';
+import { teamAccent, lightenHex } from '@/lib/cardCanvas';
 import { getTeam, teamLogoUrl, headshotUrl } from '@/lib/teams';
 import { locales, type Locale } from '@/lib/i18n';
-import { CREAM, MUTED, FAINT, RULE, loadOgBg, loadOgFonts, ogFrame } from '@/lib/ogCard';
+import { CREAM, loadOgFonts, teamOgFrame, FIELD_MUTED as MUTED, FIELD_FAINT as FAINT, FIELD_RULE as RULE } from '@/lib/ogCard';
 
 /**
- * 選手別の OG カード「THE COLUMN／海外の反応・紙面」。X 拡散時の見栄え＝各選手の成績シェアの
- * バズ起点になる固定テンプレ。設計の核（ワークフロー合意）:
+ * 選手別の OG カード。X 拡散時の見栄え＝各選手の成績シェアのバズ起点になる固定テンプレ。
+ * 意匠は SNS 成績カード（GamelogAnalysis の drawCard）を踏襲＝チーム色の地・フチなし顔写真・白丸ロゴ。
+ * 設計の核（ワークフロー合意）:
  *  - 引き算: 主役は「巨大数字1個＋和文選手名」の2要素。X 縮小サムネでも誰の何の数字か即読できる。
  *  - 和文同梱: Noto Sans JP をサブセット同梱（scripts/build-og-fonts.mjs）して「大谷翔平」を主役級に出す。
  *    巨大数字/英字は条幅の Anton。フォント未生成でも豆腐(□)を出さず英字へ縮退する（loadFonts → hasJp）。
  *  - 誠実: 数値は pickHero / pickBestRankCaption が返す実在値のみ。順位は分母を持たない「位置」リテラルだけ
  *    （%・パーセンタイル・「◯人中」は出さない＝RankMeter と同じドクトリン）。
- *  - チーム識別: 球団ロゴ/名称マークは商標なので使わず、teamColors の色だけで「自分のチームの色だ」を出す。
+ *  - チーム識別: 地の色を teamField でチーム色に（色は商標外＝合法的な識別）＋所属ロゴ/顔写真は MLB公式CDN
+ *    から一時取得して inline（再ホストしない）。チーム色を主役に使うのはモノクロ規律のSNS例外（[[design-system-monochrome]]）。
  */
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 export const alt = 'MLB日本人選手の今季成績カード｜海外の反応';
+
+// 意匠の版。ogVersion に混ぜて「地をチーム色に」した今回の刷新で URL を一度だけ変え、
+// SNS スクレイパー/CDN に旧デザイン画像を捨てて再取得させる（data は不変でも見た目が変わったため）。
+const DESIGN_REV = 'teamfield-v1';
 
 export async function generateStaticParams() {
   const [all, snap] = await Promise.all([getAllThreads(), getPlayersSnapshot()]);
@@ -39,6 +46,7 @@ export async function generateStaticParams() {
 function ogVersion(season: PlayerSeason | null): string {
   const basis = season
     ? JSON.stringify([
+        DESIGN_REV,
         season.team,
         season.league,
         season.hitting,
@@ -47,7 +55,7 @@ function ogVersion(season: PlayerSeason | null): string {
         season.saber,
         season.sprintSpeed,
       ])
-    : 'degraded';
+    : `${DESIGN_REV}:degraded`;
   let h = 0x811c9dc5; // FNV-1a（依存を増やさない小さなハッシュ。衝突は実用上問題にならない）
   for (let i = 0; i < basis.length; i++) {
     h ^= basis.charCodeAt(i);
@@ -141,7 +149,7 @@ async function loadImageData(url: string): Promise<string | null> {
   }
 }
 
-// 内側コンテンツ枠（背景の上に乗る層）。padding と flex はここが持つ＝背景/黒レイヤーは全面。
+// 内側コンテンツ枠（背景の上に乗る層）。padding と flex はここが持つ＝背景層は全面。
 function containerStyle() {
   return {
     position: 'relative' as const,
@@ -160,7 +168,7 @@ function containerStyle() {
 
 export default async function Image({ params }: { params: { locale: Locale; slug: string } }) {
   const { slug } = params;
-  const [fonts, bg] = await Promise.all([loadOgFonts(), loadOgBg()]);
+  const fonts = await loadOgFonts();
   const hasJp = fonts != null;
   const JP = hasJp ? 'NotoJP' : undefined; // 和文ノードの fontFamily（未生成なら undefined＝既定フォント）
   const DISP = hasJp ? 'Anton' : undefined; // 巨大数字/英字名
@@ -177,6 +185,10 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   const degraded = !season || !hero || hero.value === '—' || !hasJp;
 
   const teamColor = getTeamColor(season?.team);
+  // 色地の上で映えるアクセント（成績カードと同じ＝彩度/明度を持ち上げた鮮やか版）。地のチーム色に
+  // そのまま罫を引くと沈むので、下線/題字罫/順位リテラルはこの acc/accLt を使う。
+  const acc = teamAccent(teamColor);
+  const accLt = lightenHex(acc, 0.2);
   const yr = snap.season || 2026; // 年はスナップショット由来（ベタ書きしない）。未生成のみ 2026 フォールバック。
 
   // 顔写真＋所属ロゴ（MLB公式CDN→data URI）。読み込めた時だけ出す＝オフライン/失敗でもカードは成立。
@@ -185,23 +197,24 @@ export default async function Image({ params }: { params: { locale: Locale; slug
     player ? loadImageData(headshotUrl(player.mlbId, 'portrait')) : null,
     teamInfo ? loadImageData(teamLogoUrl(teamInfo.id)) : null,
   ]);
-  // 顔写真タイル: チーム色の枠＋右下に白タイルのロゴバッジ（暗色ロゴでも沈まないよう下地は CREAM）。
+  // 顔写真＝成績カードと同じフチなし＋ドロップシャドウで地から浮かせる／右下に白丸のロゴバッジ
+  //（暗色ロゴでも沈まないよう下地は白＝drawLogoBadge と同じ）。
   const portraitBlock = portraitImg ? (
-    <div style={{ display: 'flex', position: 'relative', marginRight: 40, flexShrink: 0 }}>
+    <div style={{ display: 'flex', position: 'relative', marginRight: 44, flexShrink: 0 }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- data URI 化済みの公式写真 */}
       <img
         src={portraitImg}
-        width={148}
-        height={222}
-        style={{ borderRadius: 10, border: `3px solid ${teamColor}`, objectFit: 'cover', objectPosition: 'top' }}
+        width={152}
+        height={228}
+        style={{ borderRadius: 8, objectFit: 'cover', objectPosition: 'top', boxShadow: '0 16px 36px rgba(0,0,0,0.42)' }}
       />
       {logoImg ? (
-        // eslint-disable-next-line @next/next/no-img-element -- data URI 化済みの公式ロゴ
+        // eslint-disable-next-line @next/next/no-img-element -- data URI 化済みの公式ロゴ（成績カードと同じ白丸バッジ）
         <img
           src={logoImg}
-          width={60}
-          height={60}
-          style={{ position: 'absolute', bottom: -14, right: -14, borderRadius: 8, background: CREAM, padding: 7, objectFit: 'contain' }}
+          width={62}
+          height={62}
+          style={{ position: 'absolute', bottom: -14, right: -16, borderRadius: 999, background: '#FAFAF9', padding: 9, objectFit: 'contain', boxShadow: '0 4px 14px rgba(0,0,0,0.32)' }}
         />
       ) : null}
     </div>
@@ -218,7 +231,7 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   // ヘッダー（媒体面）。チーム色の縦バー＋「海外の反応」＋右に役割バッジ（縮退時はバッジ無し）。
   const header = (
     <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-      <div style={{ display: 'flex', width: 14, height: 42, background: teamColor, borderRadius: 3, marginRight: 20 }} />
+      <div style={{ display: 'flex', width: 14, height: 42, background: accLt, borderRadius: 3, marginRight: 20 }} />
       <div style={{ display: 'flex', fontFamily: JP, fontWeight: 700, fontSize: hasJp ? 27 : 24, letterSpacing: hasJp ? 2 : 4, color: CREAM }}>
         {hasJp ? '海外の反応' : 'MLB SEASON STATS'}
       </div>
@@ -260,8 +273,8 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   // ── 縮退カード: 媒体面＋名前＋ドメインだけ（成績ブロックを出さない）──
   if (degraded) {
     return new ImageResponse(
-      ogFrame(
-        bg,
+      teamOgFrame(
+        teamColor,
         <div style={containerStyle()}>
           {header}
           <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -299,8 +312,8 @@ export default async function Image({ params }: { params: { locale: Locale; slug
   const tokens = footerTokens(season!, hero!);
 
   return new ImageResponse(
-    ogFrame(
-      bg,
+    teamOgFrame(
+      teamColor,
       <div style={containerStyle()}>
         {header}
 
@@ -322,9 +335,9 @@ export default async function Image({ params }: { params: { locale: Locale; slug
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', flexShrink: 0, marginLeft: 36 }}>
             <div style={{ display: 'flex', fontFamily: JP, fontSize: 26, color: MUTED, letterSpacing: 1, marginBottom: 2 }}>{heroLabel}</div>
             <div style={{ display: 'flex', fontFamily: DISP, fontSize: heroSize, color: CREAM, lineHeight: 1 }}>{heroValue}</div>
-            <div style={{ display: 'flex', width: '100%', height: capThick ? 9 : 6, background: teamColor, borderRadius: 2, marginTop: 14 }} />
+            <div style={{ display: 'flex', width: '100%', height: capThick ? 9 : 6, background: acc, borderRadius: 2, marginTop: 14 }} />
             {caption ? (
-              <div style={{ display: 'flex', fontFamily: JP, fontWeight: 700, fontSize: 26, color: ACCENT, marginTop: 12 }}>{capText}</div>
+              <div style={{ display: 'flex', fontFamily: JP, fontWeight: 700, fontSize: 26, color: accLt, marginTop: 12 }}>{capText}</div>
             ) : null}
           </div>
         </div>
