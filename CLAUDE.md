@@ -251,7 +251,10 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
 4. ~~記事下の sport 別 VOD CTA コンポーネント~~ ✅ **実装済み（2026-06-23頃）**。`src/lib/vod.ts`
    （`VOD_OFFERS`）＋ `src/components/VodCta.tsx`。当面は公式視聴サービスの案内。ASP 提携確定後は
    `VOD_OFFERS` の `href` をアフィリエイトリンクに差し替えるだけで全記事に反映される。
-5. 自動化スキル: matome 拡張（X 下書き・タグ正規化・関連リンク同時生成）→ kpi-weekly →
+5. 自動化スキル: matome 拡張（X 下書き・タグ正規化・関連リンク同時生成）→ ~~kpi-weekly~~
+   ✅ **実装済み（2026-07-02）**＝`.claude/skills/kpi-weekly/`＋`scripts/fetch-kpi.mjs`
+   （GA4/GSC をサービスアカウントで取得。初回セットアップは同スキル references/setup.md・
+   Google 側の鍵発行が済むまでは実行するとセットアップ案内を出して止まる）→
    neta-radar → money-page（興行の「視聴方法×海外の反応」成約ページ）
 
 ---
