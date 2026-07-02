@@ -141,7 +141,8 @@
     "grpSpeed": "走力",
     "hubCta": "{name}の今季成績",
     "latestGame": "直近の試合まとめを見る",
-    "makeCard": "成績カードを作る"
+    "makeCard": "成績カードを作る",
+    "tagHub": "「{name}」タグの海外の反応まとめ一覧"
   },
   "ranking": {
     "eyebrow": "RANKING",
@@ -246,8 +247,10 @@
   "scrollTop": "上に戻る",
   "tag": {
     "eyebrow": "タグ",
-    "heading": "「{tag}」のまとめ",
-    "lead": "「{tag}」に関する海外の反応まとめ・コラムの一覧。",
-    "count": "{count} 件のまとめ"
+    "heading": "{tag}の海外の反応まとめ",
+    "lead": "「{tag}」に関する海外の反応まとめ・コラムの一覧。現地ファンのコメントを日本語訳で紹介。",
+    "count": "{count} 件のまとめ",
+    "updated": "最終更新 {date}",
+    "statsHub": "{name}の成績・徹底分析を見る"
   }
 }

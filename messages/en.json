@@ -141,7 +141,8 @@
     "grpSpeed": "Speed",
     "hubCta": "{name}'s season stats",
     "latestGame": "See the latest game recap",
-    "makeCard": "Make a share card"
+    "makeCard": "Make a share card",
+    "tagHub": "All posts tagged “{name}”"
   },
   "ranking": {
     "eyebrow": "RANKING",
@@ -246,8 +247,10 @@
   "scrollTop": "Back to top",
   "tag": {
     "eyebrow": "Tag",
-    "heading": "Posts tagged “{tag}”",
+    "heading": "“{tag}” — Overseas Fan Reactions",
     "lead": "Overseas reaction digests and columns about “{tag}”.",
-    "count": "{count} posts"
+    "count": "{count} posts",
+    "updated": "Updated {date}",
+    "statsHub": "{name}: stats & deep dive"
   }
 }

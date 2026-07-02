@@ -120,6 +120,9 @@ export default async function PlayerHubPage({
   const threads = threadsOf(player, all);
   // 記事も成績も無ければハブを作らない（dynamicParams=false なので通常ここには来ないが保険）
   if (!hubEligible(player, all, season)) notFound();
+  // タグLP（/tag/{正式名}）への導線。選手名タグの記事リンクはハブに向く設計（TagList）なので、
+  // 「海外の反応 {選手名}」系KWの受け皿であるタグLPへは、ここからの内部リンクが実質唯一の入口。
+  const hasTagPage = all.some((th) => (th.tags ?? []).includes(player.nameJa));
   const feed = buildFeed(threads, []);
 
   const rankLabels: RankLabels = {
@@ -328,6 +331,17 @@ export default async function PlayerHubPage({
               </li>
             ))}
           </ul>
+          {hasTagPage && (
+            <Link
+              href={`/tag/${encodeURIComponent(player.nameJa)}`}
+              className="group mt-8 flex items-center justify-between border-y border-line py-3.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
+            >
+              <span>{t('player.tagHub', { name: player.nameJa })}</span>
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
+            </Link>
+          )}
         </section>
       )}
 
