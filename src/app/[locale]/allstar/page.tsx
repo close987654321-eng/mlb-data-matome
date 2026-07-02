@@ -12,6 +12,7 @@ import BallotRace from '@/components/BallotRace';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import PlayerHubNav from '@/components/PlayerHubNav';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { type Locale } from '@/lib/i18n';
@@ -104,6 +105,8 @@ export default async function AllStarPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: t('allstar.title') }]} />
+
+      <PlayerHubNav />
 
       <section className="border-b border-line pb-6">
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">{t('allstar.eyebrow')}</span>

@@ -7,6 +7,7 @@ import CompareTable, { type CompareCol, type CompareRow } from '@/components/Com
 import SectionHeading from '@/components/SectionHeading';
 import { getTeam } from '@/lib/teams';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import PlayerHubNav from '@/components/PlayerHubNav';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { type Locale } from '@/lib/i18n';
@@ -207,6 +208,8 @@ export default async function PlayerIndexPage({
 
       <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: t('player.indexTitle') }]} />
 
+      <PlayerHubNav />
+
       <section className="border-b border-line pb-6">
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
           {t('player.eyebrow')}
@@ -216,15 +219,6 @@ export default async function PlayerIndexPage({
         {snap.asOf && (
           <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: snap.asOf })}</p>
         )}
-        {/* ファネル: 現役MLB日本人 → 次に続くNPBの注目株（next メジャーリーガー）。往復で回遊を作る。 */}
-        <p className="mt-3 text-sm">
-          <Link
-            href="/prospects"
-            className="text-ink-soft transition-colors hover:text-ink hover:underline"
-          >
-            {t('prospects.fromMlbHub')} <span aria-hidden>→</span>
-          </Link>
-        </p>
       </section>
 
       {/* 事業の主眼＝日本人ハブ（検索母艦）を最上段に。① 日本人 野手（大谷を含む＝先頭に主役）。 */}

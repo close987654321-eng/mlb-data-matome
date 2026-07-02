@@ -1,14 +1,20 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/navigation';
-import { getAllTags } from '@/lib/tags';
+import { getAllTags, getTagsBySport, isStopTag } from '@/lib/tags';
+import type { Sport } from '@/lib/sports';
 
 /**
  * 人気タグ（記事数の多い順）の回遊導線。サイト内検索の代替＝興味のある選手・話題へ
  * 1クリックで横断できる。SSR で全リンクを出すのでクロール経路にもなる。
  * トップ・各カテゴリ一覧の上部に置く。
+ * sport を渡すとその競技のタグだけに絞る（競技ページで他競技の選手タグや、
+ * 自分自身を指す競技名タグを出さない＝競技LPのトピック集中を保つ）。
  */
-export default async function PopularTags({ limit = 12 }: { limit?: number }) {
-  const tags = (await getAllTags()).slice(0, limit);
+export default async function PopularTags({ limit = 12, sport }: { limit?: number; sport?: Sport }) {
+  const all = sport
+    ? (await getTagsBySport(sport)).filter(({ tag }) => !isStopTag(tag))
+    : await getAllTags();
+  const tags = all.slice(0, limit);
   if (tags.length === 0) return null;
   const t = await getTranslations();
 

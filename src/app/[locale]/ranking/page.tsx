@@ -5,6 +5,7 @@ import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerS
 import Leaderboard, { type LeaderRow } from '@/components/Leaderboard';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import PlayerHubNav from '@/components/PlayerHubNav';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { type Locale } from '@/lib/i18n';
 
@@ -150,6 +151,8 @@ export default async function RankingPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: t('ranking.title') }]} />
+
+      <PlayerHubNav />
 
       <section className="border-b border-line pb-6">
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">{t('ranking.eyebrow')}</span>

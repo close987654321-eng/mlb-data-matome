@@ -87,7 +87,7 @@ export default async function SportFeedPage({
         </div>
       </section>
 
-      <PopularTags />
+      <PopularTags sport={sport} />
       <FeedGrid items={paged.items} locale={locale} showSport={false} />
       <Pagination basePath={`/${sport}`} page={paged.page} totalPages={paged.totalPages} />
     </div>

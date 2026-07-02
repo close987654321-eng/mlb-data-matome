@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import PlayerHubNav from '@/components/PlayerHubNav';
 import SectionHeading from '@/components/SectionHeading';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -72,6 +73,8 @@ export default async function ProspectsPage({
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: t('prospects.indexTitle') }]} />
+
+      <PlayerHubNav />
 
       <section className="border-b border-line pb-6">
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">

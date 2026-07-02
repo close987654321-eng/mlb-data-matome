@@ -11,6 +11,7 @@ import NavLink from '@/components/NavLink';
 import { Link } from '@/lib/navigation';
 import { locales } from '@/lib/i18n';
 import { SPORTS, SPORT_INFO } from '@/lib/sports';
+import { ALLSTAR } from '@/lib/allstar';
 import { SITE_URL } from '@/lib/site';
 import '../globals.css';
 
@@ -142,16 +143,15 @@ function SiteHeader() {
             className="h-7 w-auto sm:h-8"
           />
         </Link>
-        <nav className="hidden items-center gap-5 text-sm sm:flex">
+        {/* グローバルは2本柱（海外ファンと見る/選手成績）＋競技のみ。日本人選手クラスタの
+            子ハブ（ランキング/オールスター/NEXT MLB）は PlayerHubNav（クラスタ内タブ）に委譲
+            ＝ヘッダーの MLB 項目肥大を避け、1項目1階層を守る。 */}
+        <nav aria-label={t('nav.main')} className="hidden items-center gap-5 text-sm sm:flex">
           <NavLink href="/" exact>
             {t('nav.home')}
           </NavLink>
           <NavLink href="/watch">{t('nav.watch')}</NavLink>
           <NavLink href="/player">{t('nav.players')}</NavLink>
-          <NavLink href="/ranking">{t('nav.ranking')}</NavLink>
-          {/* 期間限定（オールスター）。会期後は allstar.ts の enabled=false と合わせてこの行を外す。 */}
-          <NavLink href="/allstar">{t('nav.allstar')}</NavLink>
-          <NavLink href="/prospects">{t('nav.prospects')}</NavLink>
           {SPORTS.filter((s) => s !== 'npb').map((s) => (
             <NavLink key={s} href={`/${s}`}>
               {locale === 'ja' ? SPORT_INFO[s].labelJa : SPORT_INFO[s].labelEn}
@@ -164,8 +164,11 @@ function SiteHeader() {
           <LocaleSwitcher />
         </div>
       </div>
-      {/* スマホ用ナビ。絵文字アイコンは撤去し、文字だけの落ち着いたタブに。 */}
-      <nav className="flex items-center gap-5 overflow-x-auto border-t border-line px-5 text-sm sm:hidden">
+      {/* スマホ用ナビ。デスクトップと同じ6項目（横スクロール無しで収まる本数に抑える）。 */}
+      <nav
+        aria-label={t('nav.main')}
+        className="flex items-center gap-5 overflow-x-auto border-t border-line px-5 text-sm sm:hidden"
+      >
         <NavLink href="/" exact className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.home')}
         </NavLink>
@@ -174,16 +177,6 @@ function SiteHeader() {
         </NavLink>
         <NavLink href="/player" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.players')}
-        </NavLink>
-        <NavLink href="/ranking" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
-          {t('nav.ranking')}
-        </NavLink>
-        {/* 期間限定（オールスター）。会期後に外す。 */}
-        <NavLink href="/allstar" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
-          {t('nav.allstar')}
-        </NavLink>
-        <NavLink href="/prospects" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
-          {t('nav.prospects')}
         </NavLink>
         {SPORTS.filter((s) => s !== 'npb').map((s) => (
           <NavLink key={s} href={`/${s}`} className="inline-flex min-h-[44px] items-center whitespace-nowrap">
@@ -222,6 +215,12 @@ function SiteFooter() {
             <Link href="/ranking" className="transition-colors hover:text-ink">
               {t('nav.ranking')}
             </Link>
+            {/* 期間限定ハブ。ヘッダーから外した分、会期中はサイトワイド導線をフッターで担保。 */}
+            {ALLSTAR.enabled && (
+              <Link href="/allstar" className="transition-colors hover:text-ink">
+                {t('nav.allstar')}
+              </Link>
+            )}
             <Link href="/prospects" className="transition-colors hover:text-ink">
               {t('nav.prospects')}
             </Link>
