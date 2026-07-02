@@ -202,7 +202,19 @@
     "watch": "視聴する"
   },
   "related": {
-    "title": "ほかのまとめも読む"
+    "title": "ほかのまとめも読む",
+    "because": {
+      "category": "同じカテゴリ",
+      "latest": "新着"
+    }
+  },
+  "nextRead": {
+    "eyebrow": "次に読む",
+    "cta": "この記事を読む"
+  },
+  "seriesNav": {
+    "prev": "前の試合",
+    "next": "次の試合"
   },
   "pagination": {
     "label": "ページ送り",

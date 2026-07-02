@@ -1,66 +1,57 @@
 import { getTranslations } from 'next-intl/server';
-import { buildFeed, feedKey, type FeedItem } from '@/lib/feed';
+import { feedKey } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
+import { rankNextReads, reasonLabel, type Ranked } from '@/lib/nextRead';
 import type { Thread } from '@/types/thread';
 import type { Column } from '@/types/column';
 import type { Sport } from '@/lib/sports';
 import type { Locale } from '@/lib/i18n';
 
 type Props = {
-  threads: Thread[];
-  columns: Column[];
-  /** 表示中の記事（feedKey）。回遊先から自分自身を除くために使う。 */
-  currentKey: string;
-  /** 表示中の記事の競技。タグが並んだ後の同点は同競技を優先する。 */
-  sport: Sport;
-  /** 表示中の記事のタグ。共有タグ数で関連度を測る。 */
-  currentTags?: string[];
   locale: Locale;
+  /**
+   * 事前に計算済みの順位（記事詳細ページ用）。これを渡すと再計算しない＝多様性キャップが
+   * 「次に読む」カードと関連枠で通算1回で効く（同一選手が card+grid で重複しない）。
+   */
+  ranked?: Ranked[];
+  /** 未計算パス（コラムページ等）: currentKey/sport/currentTags から算出する。 */
+  threads?: Thread[];
+  columns?: Column[];
+  currentKey?: string;
+  sport?: Sport;
+  currentTags?: string[];
   limit?: number;
 };
 
-const sportOf = (item: FeedItem): Sport =>
-  item.kind === 'thread' ? item.thread.sport : item.column.sport;
-
-const tagsOf = (item: FeedItem): string[] =>
-  (item.kind === 'thread' ? item.thread.tags : item.column.tags) ?? [];
-
 /**
  * 記事ページ末尾の回遊導線。反応まとめ＋コラムを横断した新着フィードから、
- * 関連度の高い順に数件出す。記事ページは元スレへ送るだけの行き止まりに
- * なりがちなので、ここで内部回遊を作る。
- *
- * 関連度は ①共有タグ数（多いほど上） → ②同競技かどうか → ③新着順 の優先順。
- * タグが一致する記事が無ければ同競技の新着で、それも尽きれば他競技の新着で埋める。
+ * nextRead の関連度（選手優先＋共有タグの IDF＋多様性キャップ）で数件出す。
+ * 記事ページは元スレへ送るだけの行き止まりになりがちなので、ここで内部回遊を作る。
+ * カードには「なぜ近いか」の理由チップ（同一選手／効いた共有タグ）を添える。
  */
 export default async function RelatedArticles({
+  ranked,
   threads,
   columns,
   currentKey,
   sport,
-  currentTags = [],
+  currentTags,
   locale,
   limit = 4,
 }: Props) {
   const t = await getTranslations();
-  // 自分自身は除外。buildFeed が日付降順に整列済み（同点時の③新着順はこの順序で担保）。
-  const feed = buildFeed(threads, columns).filter((item) => feedKey(item) !== currentKey);
-  if (feed.length === 0) return null;
-
-  const currentTagSet = new Set(currentTags);
-  const sharedTagCount = (item: FeedItem): number =>
-    tagsOf(item).reduce((n, tag) => (currentTagSet.has(tag) ? n + 1 : n), 0);
-
-  // 安定ソート（Array.prototype.sort）＋ feed が新着順なので、スコア同点は新着順を保つ。
-  const picked = feed
-    .map((item) => ({
-      item,
-      shared: sharedTagCount(item),
-      sameSport: sportOf(item) === sport ? 1 : 0,
-    }))
-    .sort((a, b) => b.shared - a.shared || b.sameSport - a.sameSport)
-    .slice(0, limit)
-    .map((x) => x.item);
+  // 事前計算があればそれを使う（記事詳細）。無ければ current から算出（コラム等）。
+  const items =
+    ranked ??
+    (currentKey && sport
+      ? rankNextReads({
+          current: { sport, key: currentKey, tags: currentTags },
+          threads: threads ?? [],
+          columns: columns ?? [],
+          limit,
+        })
+      : []);
+  if (items.length === 0) return null;
 
   return (
     <section className="mt-14 border-t border-line pt-10">
@@ -71,11 +62,20 @@ export default async function RelatedArticles({
         </h2>
       </div>
       <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
-        {picked.map((item) => (
-          <li key={feedKey(item)}>
-            <FeedCard item={item} locale={locale} />
-          </li>
-        ))}
+        {items.map(({ item, reason }) => {
+          const label = reasonLabel(reason, locale, t as (key: string) => string);
+          return (
+            <li key={feedKey(item)}>
+              {/* 強い根拠（同一選手・効いた共有タグ）だけ理由チップを出す。弱い根拠は出さない。 */}
+              {label.strong && (
+                <span className="mb-1.5 block text-[11px] font-medium uppercase tracking-wide text-ink-soft">
+                  {label.text}
+                </span>
+              )}
+              <FeedCard item={item} locale={locale} />
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

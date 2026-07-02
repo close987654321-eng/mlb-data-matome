@@ -8,6 +8,8 @@ import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
 import { coverImage, ogCover } from '@/lib/media';
+import { rankNextReads } from '@/lib/nextRead';
+import { tagCountMap } from '@/lib/tags';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
@@ -16,12 +18,14 @@ import StatBox from '@/components/StatBox';
 import GameResultCard from '@/components/GameResultCard';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
+import NextReadCard from '@/components/NextReadCard';
+import SeriesNav from '@/components/SeriesNav';
 import TagList from '@/components/TagList';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
 import { absoluteUrl, SITE_URL, localeAlternates } from '@/lib/site';
-import { getPlayerByJaName } from '@/lib/players';
+import { getPlayerByJaName, primaryPlayerOf } from '@/lib/players';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -84,6 +88,28 @@ export default async function ThreadDetailPage({
 
   // 回遊導線（記事末尾）用に全記事を読む。SSG なのでビルド時のみ走る。
   const [allThreads, allColumns] = await Promise.all([getAllThreads(), getAllColumns()]);
+
+  // タグの回遊価値判定用: 全記事横断のタグ出現数（singleton の非リンク化に使う。追加 I/O 無し）。
+  const tagCounts = tagCountMap(allThreads);
+  // この記事の「主役選手」＝パンくずの選手階層。タグに居る選手は必ずハブが生成済み＝リンク安全。
+  const primaryPlayer = primaryPlayerOf(thread);
+  const primaryPlayerName = primaryPlayer
+    ? locale === 'ja'
+      ? primaryPlayer.nameJa
+      : primaryPlayer.nameEn
+    : null;
+
+  // 「次に読む」ランキング（選手優先＋共有タグ IDF＋多様性）。先頭をオチ直後のプライムカードに、
+  // 残りを記事末の関連枠に回す（1回の順位付けを分けるので多様性キャップが card+grid をまたいで効く）。
+  const currentKey = `thread/${sport}/${thread.id}`;
+  const ranked = rankNextReads({
+    current: { sport, key: currentKey, tags: thread.tags, thread },
+    threads: allThreads,
+    columns: allColumns,
+    limit: 5,
+  });
+  const nextPick = ranked[0] ?? null;
+  const relatedRanked = ranked.slice(1, 5);
 
   const info = SPORT_INFO[sport];
   const otherLocale = locale === 'ja' ? 'en' : 'ja';
@@ -174,7 +200,22 @@ export default async function ThreadDetailPage({
             name: categoryLabel,
             item: absoluteUrl(locale, `/${sport}`),
           },
-          { '@type': 'ListItem', position: 3, name: title },
+          // 主役選手ハブを挟む4階層（可視パンくずと一致）。選手が居ない記事は3階層のまま。
+          ...(primaryPlayer && primaryPlayerName
+            ? [
+                {
+                  '@type': 'ListItem',
+                  position: 3,
+                  name: primaryPlayerName,
+                  item: absoluteUrl(locale, `/player/${primaryPlayer.slug}`),
+                },
+              ]
+            : []),
+          {
+            '@type': 'ListItem',
+            position: primaryPlayer && primaryPlayerName ? 4 : 3,
+            name: title,
+          },
         ],
       },
     ],
@@ -191,6 +232,10 @@ export default async function ThreadDetailPage({
           items={[
             { name: t('nav.home'), href: '/' },
             { name: categoryLabel, href: `/${sport}` },
+            // 主役選手の常緑ハブを挟んで、検索着地→選手ハブ→他記事の回遊を作る。
+            ...(primaryPlayer && primaryPlayerName
+              ? [{ name: primaryPlayerName, href: `/player/${primaryPlayer.slug}` }]
+              : []),
             { name: title },
           ]}
         />
@@ -206,7 +251,8 @@ export default async function ThreadDetailPage({
 
       {thread.series && (
         <div className="mt-6">
-          <SeriesBadge series={thread.series} locale={locale} />
+          {/* 記事詳細ではバッジをシリーズ棚（/watch/series/{id}）への回遊リンクにする。 */}
+          <SeriesBadge series={thread.series} locale={locale} asLink />
         </div>
       )}
 
@@ -226,7 +272,7 @@ export default async function ThreadDetailPage({
 
       <p className="mt-2 text-sm text-ink-soft">{subtitle}</p>
 
-      {thread.tags && <TagList tags={thread.tags} />}
+      {thread.tags && <TagList tags={thread.tags} counts={tagCounts} />}
 
       {hook && (
         <figure className="mt-8 border-l-4 border-ink pl-5">
@@ -388,15 +434,22 @@ export default async function ThreadDetailPage({
         </>
       )}
 
-      <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
+      {/* シリーズ記事なら前試合/次試合の直列ナビ（毎試合追う読者の回遊）。1本しか無い間は何も出さない。 */}
+      <SeriesNav thread={thread} threads={allThreads} locale={locale} />
+
+      {/* オチ直後（感情のピーク）＝回遊の一等地。ページ唯一の塗り CTA をここへ移す。 */}
+      {nextPick && <NextReadCard pick={nextPick} locale={locale} />}
+
+      {/* 元スレ導線はテキストリンクに降格（送客の引用要件は維持しつつ「去る」導線は主役から外す）。 */}
+      <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         <a
           href={thread.sourceUrl}
           target="_blank"
           rel="noopener noreferrer nofollow"
-          className="inline-flex items-center gap-1.5 rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
+          className="inline-flex items-center gap-1.5 text-sm text-ink-soft underline-offset-2 transition-colors hover:text-ink hover:underline"
         >
           {t('threads.viewSource')}
-          <span aria-hidden>→</span>
+          <span aria-hidden>↗</span>
         </a>
         <ShareButtons url={absoluteUrl(locale, `/${sport}/${thread.id}`)} title={title} />
       </footer>
@@ -410,14 +463,8 @@ export default async function ThreadDetailPage({
         watchLabel={t('vod.watch')}
       />
 
-      <RelatedArticles
-        threads={allThreads}
-        columns={allColumns}
-        currentKey={`thread/${sport}/${thread.id}`}
-        sport={sport}
-        currentTags={thread.tags}
-        locale={locale}
-      />
+      {/* 記事末の関連枠は「次に読む」カードと同じ順位付けの続き（多様性キャップが両方をまたいで効く）。 */}
+      <RelatedArticles ranked={relatedRanked} locale={locale} />
     </article>
   );
 }

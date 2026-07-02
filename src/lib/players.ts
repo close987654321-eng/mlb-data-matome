@@ -192,6 +192,21 @@ export function playerSlugByJaName(nameJa: string): string | undefined {
   return BY_JA.get(nameJa)?.slug;
 }
 
+/**
+ * 記事の「主役選手」＝ tags から最初に解決できる選手（日本人＝非 rival を優先）。
+ * 作品ハブを持たない MLB 版では選手ハブが常緑の回遊先になるので、選手が「作品」の役を担う。
+ * パンくずの選手階層・関連度の同一選手ブースト・多様性キャップのハブキーに使う。
+ * 現在記事のタグに居る選手は必ず記事が1本ある＝/player/{slug} が生成済み（hubEligible）＝リンク安全。
+ */
+export function primaryPlayerOf(thread: Thread): Player | null {
+  const resolved: Player[] = [];
+  for (const tag of thread.tags ?? []) {
+    const p = BY_JA.get(tag);
+    if (p && !resolved.some((x) => x.slug === p.slug)) resolved.push(p);
+  }
+  return resolved.find((p) => !p.rival) ?? resolved[0] ?? null;
+}
+
 /** その選手の記事（タグ or 成績ボックスに名前がある記事）。ハブのクラスタ・対象判定で使う。エイリアス表記も拾う。 */
 export function threadsOf(player: Player, all: Thread[]): Thread[] {
   const names = new Set([player.nameJa, ...(player.aliases ?? [])]);

@@ -4,6 +4,7 @@ import { formatUpdatedAt } from '@/lib/format';
 import { SPORT_INFO } from '@/lib/sports';
 import { threadTitle } from '@/lib/series';
 import { coverImage } from '@/lib/media';
+import { isStopTag } from '@/lib/tags';
 import ArticleCover from '@/components/ArticleCover';
 import SeriesBadge from '@/components/SeriesBadge';
 import type { Thread } from '@/types/thread';
@@ -20,9 +21,6 @@ type Props = {
   priority?: boolean;
 };
 
-// カードに出す主要タグから外す汎用語（ほぼ全記事に付く＝回遊の手がかりにならない）。
-const CARD_TAG_DENY = new Set(['海外の反応']);
-
 export default function ThreadCard({
   thread,
   locale,
@@ -35,7 +33,8 @@ export default function ThreadCard({
   const sportLabel = locale === 'ja' ? info.labelJa : info.labelEn;
   const title = threadTitle(thread, locale);
   // 話題回遊用の主要タグ（最大2つ）。多すぎるとジャケットの美観と CLS を損なうので絞る。
-  const cardTags = (thread.tags ?? []).filter((tag) => !CARD_TAG_DENY.has(tag)).slice(0, 2);
+  // 汎用タグ（海外の反応・競技名など＝tags.ts の STOPLIST）は回遊の手がかりにならないので出さない。
+  const cardTags = (thread.tags ?? []).filter((tag) => !isStopTag(tag)).slice(0, 2);
 
   return (
     // relative + 見出しの stretched link（after:absolute inset-0）でカード全体をクリック可能にしつつ、

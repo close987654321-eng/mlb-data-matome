@@ -202,7 +202,19 @@
     "watch": "Watch"
   },
   "related": {
-    "title": "More to read"
+    "title": "More to read",
+    "because": {
+      "category": "Same category",
+      "latest": "Latest"
+    }
+  },
+  "nextRead": {
+    "eyebrow": "Read next",
+    "cta": "Read this"
+  },
+  "seriesNav": {
+    "prev": "Previous game",
+    "next": "Next game"
   },
   "pagination": {
     "label": "Pagination",
