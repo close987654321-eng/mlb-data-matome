@@ -15,8 +15,12 @@ description: 日本人MLB選手の出場試合を漏れなく洗い出し、MLB�
 
 > **📅 日付規約（唯一の正。混同＝二重作成ガード失敗のもと）**
 > - `games` / `jp <date>` の引数 ＝ **ET（現地の試合日）**
-> - 記事 `id`・`series.date` ＝ **JST**（スクリプトが返す `gameDateJst` をそのまま使う。手計算しない）
-> - 動画同定 ＝ **`titleDateUS`（M/D/YY・ET）** が動画タイトルにそのまま含まれること
+> - **サイトに出す日付は常に JST**（記事 `id`・`series.date`・要約/本文中の日付、すべて `gameDateJst`）。
+>   スクリプトが返す `gameDateJst` をそのまま使い、手計算しない。**要約に「◯月◯日（現地）」と ET を書かない**
+>   ＝日米で1日ズレて読者が混乱するため（2026-07-02 村山）。ET 7/1 の試合なら本文も「7月2日」（JST）。
+> - **動画同定だけ ET を使う**（内部キー・サイトには出さない）＝ **`titleDateName`（"July 1" ＝月名+日・ET）**
+>   が動画タイトルにそのまま含まれること。※ MLB は 2026-06 末にタイトル書式を **`(6/21/26)` → `(July 1)`** に
+>   変更。旧 `titleDateUS`（M/D/YY）は実タイトルに無いので使わない（残っているが参考値）。
 
 ## このスキルが解く問題
 - 「出場したのに記事化していない試合」を**機械的に**見つける（人手だと漏れる）。
@@ -43,7 +47,7 @@ node scripts/fetch-mlb-stats.mjs games 2026-06-21 --json       # 機械処理用
 出力（`--json`）の各試合に入る主なキー:
 - `existingArticle` … **これが `null` の試合だけが「未記事化」**＝今回の作成対象。
 - `jpPlayers` … この試合に出た日本人選手（`player`＝日本語名 / `team` / `today`＝その試合の成績）。
-- `etDate`（ET試合日）/ `gameDateJst`（JST＝記事 id・series.date に使う）/ `titleDateUS`（"6/21/26"＝動画同定キー）。
+- `etDate`（ET試合日）/ `gameDateJst`（JST＝記事 id・series.date・サイト表示に使う）/ `titleDateName`（"July 1"＝動画同定キー・ET内部専用）。
 - `seriesId`（watch-along シリーズを持つ自軍なら入る。例 `dodgers`）/ `selfTeamJa` / `opponentJa`。
 - `suggestedId`（推奨記事 id）/ `searchQuery`（YouTube 検索語）/ `matchup`（スコア入り）。
 
@@ -70,9 +74,13 @@ node scripts/fetch-mlb-stats.mjs games 2026-06-21 --json       # 機械処理用
 node scripts/fetch-youtube.mjs search "<その試合の searchQuery>" 5 --channel UCoLrcjPV5PbUrUyXq5mjc_A
 ```
 
-- `UCoLrcjPV5PbUrUyXq5mjc_A` は **MLB公式チャンネル**（"… Full Game Highlights (M/D/YY) | MLB Highlights" を出す出どころ）。
-- **採用ルール**: 結果のうち `channel` が `MLB` で、`title` に **`(titleDateUS)` がそのまま含まれる**動画を選ぶ
-  （例: `(6/21/26)`）。連戦だと同カードが何本も並ぶので、**日付一致でしか確定しない**。
+- `UCoLrcjPV5PbUrUyXq5mjc_A` は **MLB公式チャンネル**（現行タイトル書式＝
+  "… Official Full Game Highlights (July 1) | 2026 MLB Season" を出す出どころ）。
+- **採用ルール**: 結果のうち `channel` が `MLB` で、`title` に **`(titleDateName)` がそのまま含まれる**動画を選ぶ
+  （例: `(July 1)`）。連戦だと同カードが何本も並ぶので、**日付一致でしか確定しない**。
+  - ⚠️ MLB は 2026-06 末にタイトル書式を **`(6/21/26)` → `(July 1)`（月名+日）** に変えた。`titleDateName` で照合する
+    （M/D/YY の `titleDateUS` は実タイトルに無い＝そのまま grep すると全試合「動画未投稿」と誤判定する。実測 2026-07-02）。
+    もし将来また書式が変わったら、まず `search` の生タイトルを見て、その表記に合わせて照合キーを更新する。
 - ⚠️ **その日付の動画が無ければ「まだ未投稿」**＝記事化しない。別カードの動画や前後日で代用しない・
   捏造しない（CLAUDE.md §4.4）。ギャップ表に「動画待ち」として残し、後でもう一度回す。
 - **二重作成の最終ガード**（id の日付規約ブレ対策）: 採用した videoId が既存記事に無いか確認する。
@@ -137,9 +145,9 @@ id の `{date}-{自軍slug}-vs-{相手slug}` から公式スケジュールの�
 ## 必ず守ること
 - **漏らさず＝ギャップ表が真実**。`existingArticle: null` を作り切れば漏れゼロ。動画未投稿は「待ち」として残し再走する。
 - **捏造しない**: 日付一致の公式動画が無ければ作らない。コメント・成績も実在する値だけ（matome R10 の法務ガード＝公知の数値だけ／サイト本体は API を叩かない）。
-- **取り違えない**: 動画は必ず `titleDateUS`（M/D/YY）一致で確定。連戦の別日を掴まない。
+- **取り違えない**: 動画は必ず `titleDateName`（"July 1"＝月名+日・ET）一致で確定。連戦の別日を掴まない。
 - **二重に作らない**: `existingArticle` ＋ videoId の `grep` の二段で確認。
-- **日付の基準**: 冒頭の**日付規約ボックス**が正（ET / JST / titleDateUS を混同しない）。
+- **日付の基準**: 冒頭の**日付規約ボックス**が正（ET / JST / titleDateName を混同しない。サイト表示は常に JST）。
 - **ダブルヘッダー**: 同カードが同日2試合のときは `doubleHeader:true`/`gameNumber` が付く。その日の成績(`jp`)は2試合合算なので、記事は1本に束ねるかユーザーに確認する（box score の手作業が要る）。
 
 ## 関連

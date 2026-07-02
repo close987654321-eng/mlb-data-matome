@@ -722,10 +722,20 @@ function enumerateDates(start, end) {
   }
   return out;
 }
-/** "2026-06-21" → "6/21/26"（MLB公式ハイライトのタイトル中の日付＝YouTube動画の同定に使う）。 */
+/** "2026-06-21" → "6/21/26"（旧書式。MLB が 2026-06 末にタイトル書式を変えたため今は titleDateName を使う）。 */
 function titleDateUS(etDate) {
   const [y, m, d] = etDate.split('-');
   return `${Number(m)}/${Number(d)}/${y.slice(2)}`;
+}
+const MONTH_NAMES_US = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+/**
+ * "2026-07-01" → "July 1"（＝現行 MLB 公式ハイライトのタイトル書式
+ * "… Official Full Game Highlights (July 1) | 2026 MLB Season" 中の日付）。YouTube 動画の同定キー。
+ * ⚠️ これは ET（現地の試合日）＝**動画を探す内部キー専用**。サイトに出す日付は常に JST（gameDateJst）。
+ */
+function titleDateName(etDate) {
+  const [, m, d] = etDate.split('-');
+  return `${MONTH_NAMES_US[Number(m) - 1]} ${Number(d)}`;
 }
 
 /** 指定日(ET)の全試合（チーム・スコア・状態）。officialDate が ET の試合日。 */
@@ -819,6 +829,7 @@ async function gamesForDate(season, date, ids, existing, { team } = {}) {
       opponentJa: TEAM_JA[rightEn] ?? rightEn,
       suggestedId: `${gameDateJst}-${TEAM_SLUG[leftEn] ?? 'team'}-vs-${TEAM_SLUG[rightEn] ?? 'team'}`,
       searchQuery: `${g.away} vs. ${g.home} Game Highlights`,
+      titleDateName: titleDateName(g.etDate),
       titleDateUS: titleDateUS(g.etDate),
       existingArticle: match ? match.id : null,
     });
@@ -843,7 +854,7 @@ async function runGames(dates, { asJson, team } = {}) {
   if (!all.length) return console.log('（この期間に日本人選手の出場試合は確認できず）');
   for (const g of all) {
     const mark = g.existingArticle ? `✓ ${g.existingArticle}` : '▶ 未記事化';
-    console.log(`${mark}  [${g.titleDateUS}] ${g.matchup}${g.doubleHeader ? `（DH第${g.gameNumber}試合）` : ''}`);
+    console.log(`${mark}  [動画: (${g.titleDateName})] ${g.matchup}${g.doubleHeader ? `（DH第${g.gameNumber}試合）` : ''}`);
     console.log(`    出場: ${g.jpPlayers.map((p) => `${p.player}（${p.today || '出場'}）`).join(' / ')}`);
     if (!g.existingArticle) {
       console.log(`    候補id: ${g.suggestedId}${g.seriesId ? ` / series:${g.seriesId}` : ''}`);
