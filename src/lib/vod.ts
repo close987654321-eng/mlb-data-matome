@@ -21,8 +21,9 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
         ja: '大谷・ドジャース戦をはじめ MLB をライブ＆見逃し配信。',
         en: 'Watch MLB live and on demand — including Ohtani and the Dodgers.',
       },
-      // TODO(提携確定後): アクセストレード / A8 の SPOTV NOW（実質 U-NEXT「SPOTV NOWパック」）リンクに差し替え
-      href: 'https://www.spotvnow.jp/',
+      // 2026-07-03 一旦非表示（href:null＝安全弁で自動で出さない）。SPOTV NOW への送客を止める。
+      // 復活は URL を戻すだけ（提携確定後はアクセストレード / A8 の SPOTV NOW＝実質 U-NEXT「SPOTV NOWパック」リンクに差し替え）。
+      href: null,
     },
   ],
   boxing: [
