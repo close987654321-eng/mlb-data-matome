@@ -121,6 +121,14 @@ const ABOUT: Record<Locale, LegalDoc> = {
         ],
       },
       {
+        heading: '編集・執筆方針',
+        paragraphs: [
+          '各まとめは、海外で実際に反応が集まったスレッド・動画を選び、現地ファンのコメントを抜粋して日本語に翻訳・編集しています。翻訳は発言の意図を保つことを第一とし、存在しない発言やスコアを創作することはありません。',
+          '記事には必ず翻訳元のスレッド・動画へのリンクを添え、読者が一次情報を確認できるようにしています。選手の成績・試合結果などの数値は、MLB 公式のデータに基づいて記載します（推測で補いません）。',
+          '内容に誤り・不正確な点を見つけられた場合は、お問い合わせフォームよりご指摘ください。確認のうえ速やかに訂正します。',
+        ],
+      },
+      {
         heading: '著作権・引用方針',
         paragraphs: [
           '各まとめはコメントの全文転載ではなく、抜粋＋翻訳＋出典リンクによる編集物です。引用元の著作権は各権利者に帰属します。掲載内容に関するご連絡は、お問い合わせフォームよりお願いいたします。',
@@ -146,6 +154,14 @@ const ABOUT: Record<Locale, LegalDoc> = {
         paragraphs: [
           '“Overseas Reactions” curates and translates into Japanese how overseas fans react to buzzing threads and videos about MLB, Boxing, and MMA (UFC, RIZIN) on forums like Reddit and on YouTube.',
           'Our goal is to let Japanese fans enjoy the overseas buzz even without reading English. We excerpt and translate local comments and always link back to the source.',
+        ],
+      },
+      {
+        heading: 'Editorial policy',
+        paragraphs: [
+          'Each digest starts from threads and videos that actually drew reactions overseas. We excerpt local fans’ comments and translate and edit them into Japanese, prioritizing the speaker’s intent — we never invent comments or scores that were not there.',
+          'Every article links back to the source thread or video so readers can check the original. Figures such as player stats and game results are based on official MLB data (we do not fill gaps with guesses).',
+          'If you spot an error or inaccuracy, please let us know via the contact form and we will correct it promptly.',
         ],
       },
       {

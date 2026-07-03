@@ -163,6 +163,17 @@ export default async function ThreadDetailPage({
     '@context': 'https://schema.org',
     '@graph': [
       {
+        // ブランド実体を @id 付きで1回定義し、記事の author/publisher をここへ名寄せする（ホーム #organization と同一 @id）。
+        // 素の Organization のままだと記事の発行者がホームの #organization と別実体扱いになり、公式X等の外部シグナル（sameAs）が
+        // 記事の発行者に紐づかない。@id 参照で1実体に束ねる。#organization ノードを同グラフに置くので publisher.name/logo も満たす。
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        name: '海外の反応',
+        url: SITE_URL,
+        logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png`, width: 1358, height: 428 },
+        sameAs: ['https://x.com/gogogo123ka'],
+      },
+      {
         // 試合直後の反応まとめ＝時事コンテンツなので NewsArticle（Top Stories/News 適格の鍵）。
         '@type': 'NewsArticle',
         headline: title,
@@ -171,12 +182,9 @@ export default async function ThreadDetailPage({
         datePublished: thread.fetchedAt,
         dateModified: thread.fetchedAt,
         inLanguage: locale,
-        author: { '@type': 'Organization', name: '海外の反応', url: SITE_URL },
-        publisher: {
-          '@type': 'Organization',
-          name: '海外の反応',
-          logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png`, width: 1358, height: 428 },
-        },
+        // author/publisher は上の #organization（@id）へ名寄せ＝別実体化を防ぐ。同グラフ内で name/logo/sameAs に解決される。
+        author: { '@id': `${SITE_URL}/#organization` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
         mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
         ...(taggedPlayers.length
           ? {
