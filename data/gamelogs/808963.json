@@ -1,6 +1,30 @@
 {
-  "asOf": "2026-07-03 01:17",
-  "hitting": [],
+  "asOf": "2026-07-03 11:17",
+  "hitting": [
+    {
+      "ab": 0,
+      "bb": 0,
+      "cs": 0,
+      "d": "2026-07-02",
+      "dbl": 0,
+      "h": 0,
+      "hbp": 0,
+      "home": true,
+      "hr": 0,
+      "ibb": 0,
+      "opp": "San Diego Padres",
+      "oppJa": "パドレス",
+      "pa": 0,
+      "r": 0,
+      "rbi": 0,
+      "sb": 0,
+      "sf": 0,
+      "so": 0,
+      "tb": 0,
+      "tpl": 0,
+      "win": false
+    }
+  ],
   "pitching": [
     {
       "bb": 2,
@@ -266,6 +290,25 @@
       "outs": 12,
       "r": 3,
       "so": 2,
+      "w": 0
+    },
+    {
+      "bb": 0,
+      "bf": 4,
+      "d": "2026-07-02",
+      "er": 2,
+      "gs": 1,
+      "h": 2,
+      "hbp": 0,
+      "home": true,
+      "hr": 1,
+      "ibb": 0,
+      "l": 0,
+      "opp": "San Diego Padres",
+      "oppJa": "パドレス",
+      "outs": 2,
+      "r": 2,
+      "so": 0,
       "w": 0
     }
   ],
