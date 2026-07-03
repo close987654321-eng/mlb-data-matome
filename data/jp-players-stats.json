@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-04 05:35",
+  "asOf": "2026-07-04 06:17",
   "players": {
     "500743": {
       "fielding": {
@@ -119,8 +119,8 @@
             "mlb": 4
           },
           "hits": {
-            "lg": 5,
-            "mlb": 9
+            "lg": 6,
+            "mlb": 10
           },
           "homeRuns": {
             "lg": 25,
@@ -280,7 +280,7 @@
             "mlb": 50
           },
           "doubles": {
-            "lg": 53
+            "lg": 54
           },
           "hits": {
             "lg": 50,
@@ -480,7 +480,7 @@
             "lg": 99
           },
           "hits": {
-            "lg": 91
+            "lg": 92
           },
           "homeRuns": {
             "lg": 45,
@@ -544,10 +544,10 @@
             "lg": 87
           },
           "hits": {
-            "lg": 91
+            "lg": 92
           },
           "homeRuns": {
-            "lg": 74
+            "lg": 75
           },
           "rbi": {
             "lg": 75
@@ -681,8 +681,8 @@
             "mlb": 9
           },
           "obp": {
-            "lg": 39,
-            "mlb": 62
+            "lg": 38,
+            "mlb": 61
           },
           "ops": {
             "lg": 15,
@@ -693,12 +693,12 @@
             "mlb": 27
           },
           "runs": {
-            "lg": 9,
-            "mlb": 15
-          },
-          "slg": {
             "lg": 10,
             "mlb": 16
+          },
+          "slg": {
+            "lg": 11,
+            "mlb": 17
           }
         }
       },
@@ -818,8 +818,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 48,
-            "mlb": 84
+            "lg": 49,
+            "mlb": 85
           },
           "baseOnBalls": {
             "lg": 5,
@@ -849,8 +849,8 @@
             "mlb": 17
           },
           "runs": {
-            "lg": 9,
-            "mlb": 15
+            "lg": 10,
+            "mlb": 16
           },
           "slg": {
             "lg": 1,
@@ -927,8 +927,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 13,
-            "mlb": 19
+            "lg": 14,
+            "mlb": 20
           },
           "baseOnBalls": {
             "lg": 3,
@@ -1089,8 +1089,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 52,
-            "mlb": 90
+            "lg": 53,
+            "mlb": 91
           },
           "baseOnBalls": {
             "lg": 10,
@@ -1105,7 +1105,7 @@
             "mlb": 82
           },
           "homeRuns": {
-            "lg": 74
+            "lg": 75
           },
           "obp": {
             "lg": 30,
@@ -1517,7 +1517,7 @@
         "fielding": "1.000",
         "gamesPlayed": 53,
         "gamesStarted": 53,
-        "innings": "455.2",
+        "innings": "457.2",
         "oaa": 2,
         "position": "右翼",
         "putOuts": 109,
@@ -1635,7 +1635,7 @@
         "hitting": {
           "avg": {
             "lg": 7,
-            "mlb": 20
+            "mlb": 21
           },
           "baseOnBalls": {
             "lg": 23,
@@ -1647,7 +1647,7 @@
           },
           "hits": {
             "lg": 5,
-            "mlb": 12
+            "mlb": 13
           },
           "homeRuns": {
             "lg": 33,
@@ -1892,16 +1892,16 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 26,
-            "mlb": 43
+            "lg": 25,
+            "mlb": 42
           },
           "baseOnBalls": {
             "lg": 39,
             "mlb": 75
           },
           "doubles": {
-            "lg": 24,
-            "mlb": 43
+            "lg": 25,
+            "mlb": 44
           },
           "hits": {
             "lg": 23,
@@ -1916,8 +1916,8 @@
             "mlb": 44
           },
           "ops": {
-            "lg": 11,
-            "mlb": 18
+            "lg": 12,
+            "mlb": 19
           },
           "rbi": {
             "lg": 3,
@@ -2160,7 +2160,7 @@
             "lg": 89
           },
           "runs": {
-            "lg": 97
+            "lg": 98
           }
         }
       },
@@ -2181,27 +2181,27 @@
         "fielding": ".984",
         "gamesPlayed": 88,
         "gamesStarted": 87,
-        "innings": "759.1",
+        "innings": "761.1",
         "oaa": 14,
         "position": "中堅",
-        "putOuts": 241,
+        "putOuts": 243,
         "runsPrevented": 13
       },
       "hitting": {
-        "atBats": 329,
-        "avg": ".286",
-        "babip": ".350",
+        "atBats": 330,
+        "avg": ".288",
+        "babip": ".353",
         "baseOnBalls": 39,
-        "doubles": 13,
+        "doubles": 14,
         "gamesPlayed": 88,
-        "hits": 94,
+        "hits": 95,
         "homeRuns": 19,
-        "obp": ".373",
-        "ops": ".896",
-        "plateAppearances": 379,
+        "obp": ".375",
+        "ops": ".902",
+        "plateAppearances": 380,
         "rbi": 49,
         "runs": 56,
-        "slg": ".523",
+        "slg": ".527",
         "stolenBases": 21,
         "strikeOuts": 98,
         "triples": 4
@@ -2219,23 +2219,24 @@
             "mlb": 37
           },
           "doubles": {
-            "lg": 53
+            "lg": 46,
+            "mlb": 88
           },
           "hits": {
             "lg": 5,
-            "mlb": 9
+            "mlb": 8
           },
           "homeRuns": {
             "lg": 7,
             "mlb": 14
           },
           "obp": {
-            "lg": 11,
-            "mlb": 23
+            "lg": 10,
+            "mlb": 20
           },
           "ops": {
             "lg": 6,
-            "mlb": 13
+            "mlb": 12
           },
           "rbi": {
             "lg": 21,
@@ -2451,8 +2452,8 @@
             "mlb": 3
           },
           "strikeOuts": {
-            "lg": 44,
-            "mlb": 91
+            "lg": 45,
+            "mlb": 92
           }
         }
       },
@@ -2946,8 +2947,8 @@
       "ranks": {
         "pitching": {
           "inningsPitched": {
-            "lg": 51,
-            "mlb": 97
+            "lg": 52,
+            "mlb": 98
           },
           "strikeOuts": {
             "lg": 33,
