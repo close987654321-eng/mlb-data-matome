@@ -4,6 +4,17 @@ import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { feedKey, type FeedItem } from '@/lib/feed';
 import { tagHubOf, tagHubIntroJa } from '@/lib/tagHub';
+import {
+  teamHubOf,
+  teamHubIntroJa,
+  teamHubDescriptionJa,
+  teamHubTopics,
+  teamJpPlayers,
+  TEAM_HUB_MIN_ARTICLES,
+  type TeamHub,
+} from '@/lib/teamHub';
+import { teamLogoUrl, teamOfficialUrl } from '@/lib/teams';
+import type { Player } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear } from '@/lib/playerStats';
 import FeedCard from '@/components/FeedCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -19,11 +30,27 @@ export async function generateStaticParams() {
   return locales.flatMap((locale) => tags.map(({ tag }) => ({ locale, tag })));
 }
 
-/** タグLPの H1 ＝ meta title（選手タグは「{名前}の海外の反応まとめ」で KW を正面に）。 */
-async function headingOf(locale: Locale, tag: string): Promise<string> {
+/**
+ * このタグをチームLPとして扱うか。teams.ts に載る30球団タグでも、記事が閾値未満のうちは
+ * 通常タグのまま（薄いLPを量産しない）。件数はビルドごとに再評価＝増えたら自動昇格。
+ */
+function teamLpOf(tag: string, feedCount: number): TeamHub | null {
+  return feedCount >= TEAM_HUB_MIN_ARTICLES ? teamHubOf(tag) : null;
+}
+
+/** フィード1件のタグ（チームLPの話題集計用）。 */
+function tagsOfItem(item: FeedItem): string[] {
+  return (item.kind === 'thread' ? item.thread.tags : item.column.tags) ?? [];
+}
+
+/** タグLPの H1 ＝ meta title（選手・チームタグは「{名前}の海外の反応まとめ」で KW を正面に）。 */
+async function headingOf(locale: Locale, tag: string, teamLp: TeamHub | null): Promise<string> {
   const hub = tagHubOf(tag);
   const t = await getTranslations({ locale });
-  if (hub && locale === 'en') return `${hub.nameEn} — Overseas Fan Reactions`;
+  if (locale === 'en') {
+    if (hub) return `${hub.nameEn} — Overseas Fan Reactions`;
+    if (teamLp) return `${teamLp.info.nameEn} — Overseas Fan Reactions`;
+  }
   return t('tag.heading', { tag });
 }
 
@@ -35,23 +62,26 @@ export async function generateMetadata({
   const { locale, tag } = await params;
   const decoded = decodeURIComponent(tag);
   const t = await getTranslations({ locale });
-  const heading = await headingOf(locale, decoded);
   const hub = tagHubOf(decoded);
-  // 選手タグLPは absolute でテンプレート接尾辞（｜海外の反応）を外す＝「海外の反応」の重複を避け、
-  // 「{選手名} 海外の反応」クエリに正面から当てる title に固定する。
-  const isJaHub = Boolean(hub) && locale !== 'en';
+  const feed = await getFeedByTag(decoded);
+  const teamLp = hub ? null : teamLpOf(decoded, feed.length);
+  const heading = await headingOf(locale, decoded, teamLp);
+  // 選手・チームタグLPは absolute でテンプレート接尾辞（｜海外の反応）を外す＝「海外の反応」の重複を
+  // 避け、「{選手名/チーム名} 海外の反応」クエリに正面から当てる title に固定する。
+  const isJaHub = Boolean(hub || teamLp) && locale !== 'en';
   const fullTitle = isJaHub ? `${decoded}の海外の反応まとめ【MLB現地ファンの声を日本語訳】` : heading;
   const title = isJaHub ? { absolute: fullTitle } : fullTitle;
   let description = t('tag.lead', { tag: decoded });
+  const updated = feed[0]?.date.slice(0, 10);
   if (hub && locale !== 'en') {
     // 選手タグLP: 実在の成績値入りの導入文をそのまま description に（毎日変わる＝鮮度）。
-    const [snap, season, feed] = await Promise.all([
-      getPlayersSnapshot(),
-      getPlayerSeason(hub.mlbId),
-      getFeedByTag(decoded),
-    ]);
-    const updated = feed[0]?.date.slice(0, 10);
+    const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(hub.mlbId)]);
     description = `${tagHubIntroJa(hub, season, seasonYear(snap), feed.length)}${updated ? `最終更新: ${updated}。` : ''}`;
+  } else if (teamLp && locale !== 'en') {
+    // チームタグLP: 所属日本人選手・件数・最終更新入りの短縮文（移籍・新記事で変わる＝鮮度）。
+    const snap = await getPlayersSnapshot();
+    const jp = teamJpPlayers(snap, decoded);
+    description = teamHubDescriptionJa(teamLp, seasonYear(snap), jp, feed.length, updated);
   }
   const url = absoluteUrl(locale, `/tag/${encodeURIComponent(decoded)}`);
   return {
@@ -88,13 +118,27 @@ export default async function TagPage({
   const feed = await getFeedByTag(decoded);
   if (feed.length === 0) notFound();
 
-  const heading = await headingOf(locale, decoded);
   const hub = tagHubOf(decoded);
-  // 選手タグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
+  const teamLp = hub ? null : teamLpOf(decoded, feed.length);
+  const heading = await headingOf(locale, decoded, teamLp);
+  // 選手・チームタグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
   let intro: string | undefined;
+  let teamPlayers: Player[] = [];
   if (hub && locale !== 'en') {
     const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(hub.mlbId)]);
     intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
+  } else if (teamLp) {
+    const snap = await getPlayersSnapshot();
+    teamPlayers = teamJpPlayers(snap, decoded);
+    if (locale !== 'en') {
+      intro = teamHubIntroJa(
+        teamLp,
+        seasonYear(snap),
+        teamPlayers,
+        teamHubTopics(feed.map(tagsOfItem), decoded, teamPlayers),
+        feed.length,
+      );
+    }
   }
 
   const pageUrl = absoluteUrl(locale, `/tag/${encodeURIComponent(decoded)}`);
@@ -117,6 +161,19 @@ export default async function TagPage({
                 alternateName: hub.nameEn,
                 url: absoluteUrl(locale, `/player/${hub.slug}`),
                 ...(hub.sameAs.length ? { sameAs: hub.sameAs } : {}),
+              },
+            }
+          : {}),
+        // チームタグは SportsTeam エンティティを明示（MLB 公式サイトと照合＝Knowledge Graph 束ね）。
+        ...(teamLp
+          ? {
+              about: {
+                '@type': 'SportsTeam',
+                name: teamLp.info.nameFull,
+                alternateName: [teamLp.nameJa, teamLp.info.nameEn],
+                sport: 'Baseball',
+                logo: teamLogoUrl(teamLp.info.id),
+                sameAs: [teamOfficialUrl(teamLp.info.slug)],
               },
             }
           : {}),
@@ -169,6 +226,24 @@ export default async function TagPage({
               →
             </span>
           </Link>
+        )}
+
+        {/* チームLP: 所属日本人選手の成績ハブへ（snapshot 由来＝ハブが必ず生成済みの選手のみ）。 */}
+        {teamPlayers.length > 0 && (
+          <div className="mt-5 divide-y divide-line border-y border-line">
+            {teamPlayers.map((p) => (
+              <Link
+                key={p.slug}
+                href={`/player/${p.slug}`}
+                className="group flex items-center justify-between py-3.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
+              >
+                <span>{t('tag.statsHub', { name: locale === 'en' ? p.nameEn : p.nameJa })}</span>
+                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </Link>
+            ))}
+          </div>
         )}
       </section>
 

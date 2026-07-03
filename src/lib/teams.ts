@@ -8,39 +8,40 @@
  * 自サイトに再ホスト（コピー保存）しない。商用利用は規約グレー〜商標領域だが、運営判断で
  * 「引用の範囲＋直リンク」で運用する（2026-06-29 合意）。数値は従来どおり公知の事実。
  */
-export type TeamInfo = { id: number; color: string; slug: string; nameEn: string };
+export type TeamInfo = { id: number; color: string; slug: string; nameEn: string; nameFull: string };
 
 const TEAMS: Record<string, TeamInfo> = {
-  エンゼルス: { id: 108, color: '#BA0021', slug: 'angels', nameEn: 'Angels' },
-  ダイヤモンドバックス: { id: 109, color: '#A71930', slug: 'dbacks', nameEn: 'D-backs' },
-  オリオールズ: { id: 110, color: '#DF4601', slug: 'orioles', nameEn: 'Orioles' },
-  レッドソックス: { id: 111, color: '#BD3039', slug: 'redsox', nameEn: 'Red Sox' },
-  カブス: { id: 112, color: '#0E3386', slug: 'cubs', nameEn: 'Cubs' },
-  レッズ: { id: 113, color: '#C6011F', slug: 'reds', nameEn: 'Reds' },
-  ガーディアンズ: { id: 114, color: '#00385D', slug: 'guardians', nameEn: 'Guardians' },
-  ロッキーズ: { id: 115, color: '#333366', slug: 'rockies', nameEn: 'Rockies' },
-  タイガース: { id: 116, color: '#0C2340', slug: 'tigers', nameEn: 'Tigers' },
-  アストロズ: { id: 117, color: '#EB6E1F', slug: 'astros', nameEn: 'Astros' },
-  ロイヤルズ: { id: 118, color: '#004687', slug: 'royals', nameEn: 'Royals' },
-  ドジャース: { id: 119, color: '#005A9C', slug: 'dodgers', nameEn: 'Dodgers' },
-  ナショナルズ: { id: 120, color: '#AB0003', slug: 'nationals', nameEn: 'Nationals' },
-  メッツ: { id: 121, color: '#002D72', slug: 'mets', nameEn: 'Mets' },
-  アスレチックス: { id: 133, color: '#003831', slug: 'athletics', nameEn: 'Athletics' },
-  パイレーツ: { id: 134, color: '#FDB827', slug: 'pirates', nameEn: 'Pirates' },
-  パドレス: { id: 135, color: '#4E342E', slug: 'padres', nameEn: 'Padres' },
-  マリナーズ: { id: 136, color: '#0C2C56', slug: 'mariners', nameEn: 'Mariners' },
-  ジャイアンツ: { id: 137, color: '#FD5A1E', slug: 'giants', nameEn: 'Giants' },
-  カージナルス: { id: 138, color: '#C41E3A', slug: 'cardinals', nameEn: 'Cardinals' },
-  レイズ: { id: 139, color: '#092C5C', slug: 'rays', nameEn: 'Rays' },
-  レンジャーズ: { id: 140, color: '#003278', slug: 'rangers', nameEn: 'Rangers' },
-  ブルージェイズ: { id: 141, color: '#134A8E', slug: 'bluejays', nameEn: 'Blue Jays' },
-  ツインズ: { id: 142, color: '#002B5C', slug: 'twins', nameEn: 'Twins' },
-  フィリーズ: { id: 143, color: '#E81828', slug: 'phillies', nameEn: 'Phillies' },
-  ブレーブス: { id: 144, color: '#CE1141', slug: 'braves', nameEn: 'Braves' },
-  ホワイトソックス: { id: 145, color: '#27251F', slug: 'whitesox', nameEn: 'White Sox' },
-  マーリンズ: { id: 146, color: '#00A3E0', slug: 'marlins', nameEn: 'Marlins' },
-  ヤンキース: { id: 147, color: '#003087', slug: 'yankees', nameEn: 'Yankees' },
-  ブルワーズ: { id: 158, color: '#12284B', slug: 'brewers', nameEn: 'Brewers' },
+  エンゼルス: { id: 108, color: '#BA0021', slug: 'angels', nameEn: 'Angels', nameFull: 'Los Angeles Angels' },
+  ダイヤモンドバックス: { id: 109, color: '#A71930', slug: 'dbacks', nameEn: 'D-backs', nameFull: 'Arizona Diamondbacks' },
+  オリオールズ: { id: 110, color: '#DF4601', slug: 'orioles', nameEn: 'Orioles', nameFull: 'Baltimore Orioles' },
+  レッドソックス: { id: 111, color: '#BD3039', slug: 'redsox', nameEn: 'Red Sox', nameFull: 'Boston Red Sox' },
+  カブス: { id: 112, color: '#0E3386', slug: 'cubs', nameEn: 'Cubs', nameFull: 'Chicago Cubs' },
+  レッズ: { id: 113, color: '#C6011F', slug: 'reds', nameEn: 'Reds', nameFull: 'Cincinnati Reds' },
+  ガーディアンズ: { id: 114, color: '#00385D', slug: 'guardians', nameEn: 'Guardians', nameFull: 'Cleveland Guardians' },
+  ロッキーズ: { id: 115, color: '#333366', slug: 'rockies', nameEn: 'Rockies', nameFull: 'Colorado Rockies' },
+  タイガース: { id: 116, color: '#0C2340', slug: 'tigers', nameEn: 'Tigers', nameFull: 'Detroit Tigers' },
+  アストロズ: { id: 117, color: '#EB6E1F', slug: 'astros', nameEn: 'Astros', nameFull: 'Houston Astros' },
+  ロイヤルズ: { id: 118, color: '#004687', slug: 'royals', nameEn: 'Royals', nameFull: 'Kansas City Royals' },
+  ドジャース: { id: 119, color: '#005A9C', slug: 'dodgers', nameEn: 'Dodgers', nameFull: 'Los Angeles Dodgers' },
+  ナショナルズ: { id: 120, color: '#AB0003', slug: 'nationals', nameEn: 'Nationals', nameFull: 'Washington Nationals' },
+  メッツ: { id: 121, color: '#002D72', slug: 'mets', nameEn: 'Mets', nameFull: 'New York Mets' },
+  // 2025年以降は都市名を外した「Athletics」が公式名（ラスベガス移転までの暫定）。
+  アスレチックス: { id: 133, color: '#003831', slug: 'athletics', nameEn: 'Athletics', nameFull: 'Athletics' },
+  パイレーツ: { id: 134, color: '#FDB827', slug: 'pirates', nameEn: 'Pirates', nameFull: 'Pittsburgh Pirates' },
+  パドレス: { id: 135, color: '#4E342E', slug: 'padres', nameEn: 'Padres', nameFull: 'San Diego Padres' },
+  マリナーズ: { id: 136, color: '#0C2C56', slug: 'mariners', nameEn: 'Mariners', nameFull: 'Seattle Mariners' },
+  ジャイアンツ: { id: 137, color: '#FD5A1E', slug: 'giants', nameEn: 'Giants', nameFull: 'San Francisco Giants' },
+  カージナルス: { id: 138, color: '#C41E3A', slug: 'cardinals', nameEn: 'Cardinals', nameFull: 'St. Louis Cardinals' },
+  レイズ: { id: 139, color: '#092C5C', slug: 'rays', nameEn: 'Rays', nameFull: 'Tampa Bay Rays' },
+  レンジャーズ: { id: 140, color: '#003278', slug: 'rangers', nameEn: 'Rangers', nameFull: 'Texas Rangers' },
+  ブルージェイズ: { id: 141, color: '#134A8E', slug: 'bluejays', nameEn: 'Blue Jays', nameFull: 'Toronto Blue Jays' },
+  ツインズ: { id: 142, color: '#002B5C', slug: 'twins', nameEn: 'Twins', nameFull: 'Minnesota Twins' },
+  フィリーズ: { id: 143, color: '#E81828', slug: 'phillies', nameEn: 'Phillies', nameFull: 'Philadelphia Phillies' },
+  ブレーブス: { id: 144, color: '#CE1141', slug: 'braves', nameEn: 'Braves', nameFull: 'Atlanta Braves' },
+  ホワイトソックス: { id: 145, color: '#27251F', slug: 'whitesox', nameEn: 'White Sox', nameFull: 'Chicago White Sox' },
+  マーリンズ: { id: 146, color: '#00A3E0', slug: 'marlins', nameEn: 'Marlins', nameFull: 'Miami Marlins' },
+  ヤンキース: { id: 147, color: '#003087', slug: 'yankees', nameEn: 'Yankees', nameFull: 'New York Yankees' },
+  ブルワーズ: { id: 158, color: '#12284B', slug: 'brewers', nameEn: 'Brewers', nameFull: 'Milwaukee Brewers' },
 };
 
 /** 所属チーム（snapshot の team 文字列）→ チーム情報。未知（AAA等）は undefined。 */
@@ -52,6 +53,11 @@ export function getTeam(teamJa?: string | null): TeamInfo | undefined {
 /** 公式チームロゴ（SVG）の直リンクURL。 */
 export function teamLogoUrl(id: number): string {
   return `https://www.mlbstatic.com/team-logos/${id}.svg`;
+}
+
+/** MLB 公式チームサイトの URL（構造化データの sameAs＝エンティティ照合用）。 */
+export function teamOfficialUrl(slug: string): string {
+  return `https://www.mlb.com/${slug}`;
 }
 
 /**
