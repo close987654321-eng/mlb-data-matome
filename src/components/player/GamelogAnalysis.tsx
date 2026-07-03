@@ -9,7 +9,7 @@ import { SANS, hexToRgba, teamField, teamAccent, lightenHex, roundRectPath, draw
 import type { Gamelog, HitGame, PitGame } from '@/lib/gamelog';
 import {
   aggHitting, aggPitching, projectHitting, projectPitching,
-  warTotal, estimateGameWar, fmtWar, fmtRate, fmt2, fmt1, fmtIp, fmtMd, monthOf,
+  warTotal, estimateGameWar, fmtWar, fmtRate, fmt2, fmt1, fmtIp, fmtMd, monthOf, etToJst,
   type HitAgg, type PitAgg,
 } from '@/lib/gamelogStats';
 
@@ -173,7 +173,7 @@ export default function GamelogAnalysis({
   }, [headUrl, logoUrl]);
 
   const baseRows = mode === 'hitting' ? log.hitting : log.pitching;
-  const months = useMemo(() => [...new Set(baseRows.map((r) => monthOf(r.d)))].sort((a, b) => a - b), [baseRows]);
+  const months = useMemo(() => [...new Set(baseRows.map((r) => monthOf(etToJst(r.d))))].sort((a, b) => a - b), [baseRows]);
   const lastNs = LAST_NS.filter((n) => n < baseRows.length);
 
   // 1試合ごとの推定WAR（公式季節値に補正）。試合表の列・推移カーブ・期間増分すべてに使う。
@@ -285,7 +285,7 @@ export default function GamelogAnalysis({
   // 絞り込み（時系列 asc のまま＝期間の端＝最初/最後の試合日が取れる）。
   const filtered = useMemo(() => {
     if (filter.kind === 'last') return baseRows.slice(-filter.n);
-    if (filter.kind === 'month') return baseRows.filter((r) => monthOf(r.d) === filter.m);
+    if (filter.kind === 'month') return baseRows.filter((r) => monthOf(etToJst(r.d)) === filter.m);
     return baseRows;
   }, [baseRows, filter]);
 
@@ -382,7 +382,7 @@ export default function GamelogAnalysis({
     const oppCell = (r: { home: boolean; oppJa: string; opp: string }) => `${r.home ? 'vs' : '@'} ${en ? r.opp.split(' ').pop() : r.oppJa}`;
     if (mode === 'hitting') {
       const c: Col<HitGame>[] = [
-        { key: 'd', label: t.date, num: (r) => r.d, cell: (r) => fmtMd(r.d), align: 'left' },
+        { key: 'd', label: t.date, num: (r) => r.d, cell: (r) => fmtMd(etToJst(r.d)), align: 'left' },
         { key: 'opp', label: t.opp, num: (r) => r.opp, cell: oppCell, align: 'left' },
         { key: 'ab', label: HL.h === '安打' ? '打数' : 'AB', num: (r) => r.ab, cell: (r) => `${r.ab}` },
         { key: 'h', label: HL.h, num: (r) => r.h, cell: (r) => `${r.h}` },
@@ -396,7 +396,7 @@ export default function GamelogAnalysis({
       return c;
     }
     const c: Col<PitGame>[] = [
-      { key: 'd', label: t.date, num: (r) => r.d, cell: (r) => fmtMd(r.d), align: 'left' },
+      { key: 'd', label: t.date, num: (r) => r.d, cell: (r) => fmtMd(etToJst(r.d)), align: 'left' },
       { key: 'opp', label: t.opp, num: (r) => r.opp, cell: oppCell, align: 'left' },
       { key: 'ip', label: PL.ip, num: (r) => r.outs, cell: (r) => fmtIp(r.outs) },
       { key: 'h', label: en ? 'H' : '安打', num: (r) => r.h, cell: (r) => `${r.h}` },

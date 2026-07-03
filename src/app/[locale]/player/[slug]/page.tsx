@@ -5,6 +5,7 @@ import { getAllThreads } from '@/lib/data';
 import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/playerStats';
 import { getGamelog } from '@/lib/gamelog';
+import { etToJst } from '@/lib/gamelogStats';
 import { getWarRace, warRank } from '@/lib/warRace';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { playerLede } from '@/lib/playerLede';
@@ -27,13 +28,6 @@ import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
-
-/** ET の試合日 → JST（記事の series.date / id は JST。夜試合は常に翌日）。試合↔記事の突き合わせに使う。 */
-function etToJst(d: string): string {
-  const dt = new Date(`${d}T12:00:00Z`);
-  dt.setUTCDate(dt.getUTCDate() + 1);
-  return dt.toISOString().slice(0, 10);
-}
 
 export async function generateStaticParams() {
   const [all, snap] = await Promise.all([getAllThreads(), getPlayersSnapshot()]);

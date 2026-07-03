@@ -184,5 +184,12 @@ export const fmtMd = (d: string): string => {
   const [, m, day] = d.split('-');
   return `${Number(m)}/${Number(day)}`;
 };
+/** ET の試合日 → JST の暦日（"2026-07-02" → "2026-07-03"）。gamelog の d は ET（＝動画/記事の
+ *  内部キー）だが、サイトに出す日付は常に JST 統一。MLB は夜試合なので ET＋1日で JST に一致する。 */
+export const etToJst = (d: string): string => {
+  const dt = new Date(`${d}T12:00:00Z`);
+  dt.setUTCDate(dt.getUTCDate() + 1);
+  return dt.toISOString().slice(0, 10);
+};
 /** 試合日づけからシーズン中の月（3〜10）を拾う。月フィルタの選択肢生成に使う。 */
 export const monthOf = (d: string): number => Number(d.split('-')[1]);

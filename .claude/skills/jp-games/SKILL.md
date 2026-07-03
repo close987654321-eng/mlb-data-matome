@@ -134,7 +134,8 @@ node scripts/fetch-mlb-stats.mjs jp <etDate> --json        # その日の全出�
   **二重配線**になる（このスキルの目的）。⚠️ チーム表記の変形（「LAドジャース」等）は existingArticle の
   重複検知と LP 集約の両方を壊すので禁止。
 - `stats` … `jp <etDate> --json` の出力から、**この試合の `jpPlayers` に一致する選手だけ**を残す（無関係な選手は削る）。
-  WAR は全選手必須・投手は WHIP 必須（matome R10）。
+  ドジャース戦は日本人だけでよい（R10）。WAR は全選手必須・投手は WHIP 必須（matome R10）。
+  → **誰を載せるか**（ドジャース戦=日本人のみ／他の試合=主役スターは外国人も可）の唯一の正は **matome R10**。
 - `media` … `{ "kind": "video", "url": <動画URL>, "credit": "MLB（YouTube公式ハイライト）" }`（R5）。
   - **Discover 画像（1200px 足切り）**: 公式ハイライトに `maxresdefault`（1280px）があれば
     `media.thumbUrl` に `https://i.ytimg.com/vi/<videoId>/maxresdefault.jpg` を**明示**する（実サムネ＝

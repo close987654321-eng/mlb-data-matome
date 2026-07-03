@@ -119,7 +119,8 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
   → 当面は **手動運用**（ユーザーがスレ URL とコメントを貼り、Claude が翻訳・整形）。
 - **MLB 成績（編集時の味付け用）**: `node scripts/fetch-mlb-stats.mjs jp <ETの試合日> --json` で
   日本人 MLB 選手の成績を `Thread.stats` 配列として取得（MLB公式 Stats API・キー不要）。記事は
-  `summaryJa` 直下の専用ボックス（`StatBox`）で「この試合／今季／節目」を表示（matome R10）。日付は
+  `summaryJa` 直下の専用ボックス（`StatBox`）で「この試合／今季／節目」を表示（matome R10）。載せる対象は
+  ドジャース戦＝日本人だけ／他の試合＝主役スターなら外国人も可（正は matome R10・2026-07-03 拡張）。日付は
   現地(ET)基準＝JST と1日ズレることあり。⚠️ **サイト本体（Next.js ランタイム）は API を叩かない**＝
   読むのは静的JSON（`data/jp-players-stats.json`）だけ。記事に残すのは**数値だけ**（公知の事実）。ロゴ/写真/中継/表組みは転載しない。
   - 選手ハブ /player 用の `snapshot` は **GitHub Actions（`.github/workflows/refresh-stats.yml`）で「試合がある時間帯だけ毎時」**
