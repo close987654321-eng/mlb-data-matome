@@ -66,6 +66,23 @@ node scripts/fetch-mlb-stats.mjs games 2026-06-21 --json       # 機械処理用
   海外驚愕」等にしない（Discover の煽り厳罰・本文不一致＝CLAUDE.md §8）。成績ボックスの本人の数字は
   そのまま出す（0安打でも `war` 必須＝R10）。`summaryJa` に本人の出場を1句そえてよい（例:「{選手}は
   1打席のみで快音なし」）。
+- 編集の勝ちパターンは **matome R12-A（試合系・静かな試合）**: その試合で実際に盛り上がった選手・プレーを
+  主役に編集し、フックは「その試合いちばんの歓声」から選ぶ。
+
+**📊 チームLPの底上げ観点（「{チーム名} 海外の反応」の燃料）**: 未記事化の試合を提示するとき、チームタグLP
+未達のチーム（タグ出現が `TEAM_HUB_MIN_ARTICLES`（=3件・`src/lib/teamHub.ts`）未満＝まだ LP 化されていない）
+が絡む試合には「LP未達」の印を付けて優先候補に挙げる。確認はタグ出現数を数えるだけ:
+```sh
+grep -l '"カブス"' data/threads/mlb/*.json | wc -l   # 3未満ならLP未達
+```
+カブス（鈴木誠也・今永昇太）はドジャース戦と同格で扱う（競合にチーム専用LPが無い空白地帯・2026-07-02 SERP実測）。
+
+**🎯 ライバル枠（日本人不在・RIVAL_IDS のみ出場の試合）**: ギャップ表にはジャッジ/スキーンズ等 RIVAL_IDS
+だけが出た試合も載るが、これは**自動記事化の対象外**（「完全網羅」の約束は日本人選手の試合のみ＝比重 MLB 7
+を守る）。クラウド無人実行時は記事を作らず、Slack 通知の末尾に「今日のライバル候補」（試合／主役と当日成績／
+`suggestedId`）を1行ずつ列挙するだけ。手動実行時は未記事化表とは分けて候補として提示し、指定された試合だけ
+Step 2 以降を回す。作る場合の束縛は日本人試合と同一（titleDateName 同定・videoId grep・matome R8/R11）。
+狙いクエリは「{選手名} 海外の反応」「{チーム名} 海外の反応」＝タイトルに選手フルネーム＋成績数字＋カード表記。
 
 ### Step 2 — 未記事化の試合の「正しい動画」を確定する
 未記事化の各試合について、MLB公式チャンネルからハイライトを探し、**タイトル中の日付で同定**する。
@@ -105,9 +122,17 @@ node scripts/fetch-mlb-stats.mjs jp <etDate> --json        # その日の全出�
 - `id` = `suggestedId`（`{gameDateJst}-{自軍slug}-vs-{相手slug}`）。`sport` = `"mlb"`。
 - `format` = `"youtube"`、`sourceUrl` = `media.url` = 採用した動画 URL（= 送客）。`subreddit` = `"YouTube"`。
 - `series` … `seriesId` があれば付ける（matome R6）。`{ "id": seriesId, "date": gameDateJst, "opponent": { ja: opponentJa, en: <相手英語名> } }`。
-  → タイトルは定型自動生成される（`title.ja/en` は保険でよい）。`seriesId` が無い単発の試合は matome R8 でタイトルを作る。
-- `tags` … **両チームの日本語名＋この試合の日本人選手全員（`jpPlayers[].player`）＋活躍した現地選手＋`"海外の反応"`**。
-  → 出場選手を全員タグに入れることで、その試合が**各選手ページに載る**（このスキルの目的）。
+  → タイトルは定型自動生成される（`title.ja/en` は保険でよい）。`seriesId` が無い単発の試合は matome R8 の
+  **言い切り型**でタイトルを作る＝`{主役選手}が{成績数字}、{副話題}、{自軍}対{相手}戦【海外の反応】`。数字は
+  `jpPlayers[].today` と R10 の `note`（節目）から選ぶ＝節目（◯号・自己最多K・◯勝目）が最優先。
+  **「{自軍}対{相手}戦」のカード表記を省略しない**（「{チーム名} 海外の反応」クエリの一致装置。
+  `selfTeamJa`/`opponentJa` をそのまま使う）。同じ選手が続くときは前回と数字の種類か副話題を変える（R8）。
+- `tags` … 基礎セットを `selfTeamJa`/`opponentJa`/`jpPlayers[].player` から**機械的に写す**（両チームの日本語名は
+  teams.ts 表記そのまま・手で書き換えない＋この試合の日本人選手全員＋主役級の活躍をした現地スター（ジャッジ/
+  スキーンズ等 RIVAL 圏は必ず）＋`"海外の反応"`）。規則の本体は **matome R11**（ここに複製しない）。
+  → 選手タグ＝各選手ページ／選手タグLPへ、両チームタグ＝チームタグLP（teamHub・記事3件で自動LP化）へ、の
+  **二重配線**になる（このスキルの目的）。⚠️ チーム表記の変形（「LAドジャース」等）は existingArticle の
+  重複検知と LP 集約の両方を壊すので禁止。
 - `stats` … `jp <etDate> --json` の出力から、**この試合の `jpPlayers` に一致する選手だけ**を残す（無関係な選手は削る）。
   WAR は全選手必須・投手は WHIP 必須（matome R10）。
 - `media` … `{ "kind": "video", "url": <動画URL>, "credit": "MLB（YouTube公式ハイライト）" }`（R5）。
@@ -138,7 +163,11 @@ id の `{date}-{自軍slug}-vs-{相手slug}` から公式スケジュールの�
 この Step を省略しない）。ダブルヘッダー（同カード同日2試合）は曖昧としてスキップされるので、そのカードだけ box score を
 手動で入れる（Step 4 の DH 注意と同じ）。
 
-作成後は matome と同じ運用（任意で `npm run build` 確認 → コミット → デプロイ後 ping。手順は `scripts/threads-update.md`）。
+作成後は matome と同じ運用（任意で `npm run build` 確認 → コミット）。**手動セッションで main に push したら、
+デプロイ確認後に `node scripts/ping-indexnow.mjs --latest <今回の本数>` と `node scripts/ping-blogmura.mjs` を
+必ず走らせる**（手順詳細は `scripts/threads-update.md`）。⚠️ クラウド無人公開分（automerge 経由）は現状 ping が
+飛ばない＝CI に ping ステップが入るまで、手動セッションのついでに `--latest` を多めに指定してまとめて叩いてよい
+（二重 ping は無害）。
 
 ---
 

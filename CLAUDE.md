@@ -35,7 +35,7 @@ SSG します。
 ├── CLAUDE.md
 ├── AGENTS.md                    # 他エージェント向けの薄いポインタ（内容はここに複製しない）
 ├── README.md
-├── .claude/skills/              # matome / jp-games / x-post / x-share（各 SKILL.md + references/）
+├── .claude/skills/              # matome / jp-games / neta-radar / x-post / x-share / kpi-weekly（各 SKILL.md + references/）
 ├── data/
 │   └── threads/
 │       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
@@ -88,13 +88,16 @@ SSG します。
 
 ## 4. まとめ更新プロトコル（Claude 向け）
 
-まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約・成績ボックス =
-**R1〜R10**）と**ネタ選定の比重**の唯一の正は **`matome` スキル**
+まとめ記事を作る編集ルール（コメントの抜粋・並べ方・翻訳・タイトル・要約・成績ボックス・タグ =
+**R1〜R12**）と**狙う検索クエリ5クラス・ネタ選定の比重**の唯一の正は **`matome` スキル**
 （`.claude/skills/matome/SKILL.md`）。「まとめ作って」等で発動する。本章は概要と出力仕様のみ＝
 ルールの値・詳細をここに複製しない。
 日本人選手の**出場試合を漏れなく**記事化する段取り（出場試合の洗い出し→公式ハイライト同定→重複検知→
 matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md`）。「今日の日本人選手の試合
 まとめて」等で発動し、選手ハブ /player を出場試合の動画記事で充実させる。
+ネタの**発見**（YouTube 定点監視・MLB ライバル枠・興行カレンダー・Reddit 巡回注文）は **`neta-radar`
+スキル**（`.claude/skills/neta-radar/SKILL.md`）。「今日のネタある？」「ネタ探して」等で発動し、候補
+チケットを出して matome / jp-games に委譲する（記事化はしない）。
 X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の人ボイス・リンク無し）と
 **`x-share` スキル**（サイト資産の配信パッケージ・成績カード画像）が正。
 データ形式・運用の詳細は [`scripts/threads-update.md`](./scripts/threads-update.md)。要点:
@@ -255,7 +258,9 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
    ✅ **実装済み（2026-07-02）**＝`.claude/skills/kpi-weekly/`＋`scripts/fetch-kpi.mjs`
    （GA4/GSC をサービスアカウントで取得。初回セットアップは同スキル references/setup.md・
    Google 側の鍵発行が済むまでは実行するとセットアップ案内を出して止まる）→
-   neta-radar → money-page（興行の「視聴方法×海外の反応」成約ページ）
+   ~~neta-radar~~ ✅ **実装済み（2026-07-03）**＝`.claude/skills/neta-radar/`（YouTube 定点監視
+   `fetch-youtube.mjs latest`＋MLB ライバル枠＋興行カレンダー＋Reddit 巡回注文。Reddit API 承認後に本領）
+   → money-page（興行の「視聴方法×海外の反応」成約ページ）
 
 ---
 
