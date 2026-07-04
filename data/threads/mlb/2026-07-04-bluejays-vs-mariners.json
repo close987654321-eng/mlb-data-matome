@@ -15,17 +15,34 @@
   "series": {
     "id": "bluejays",
     "date": "2026-07-04",
-    "opponent": { "ja": "マリナーズ", "en": "Mariners" }
+    "opponent": {
+      "ja": "マリナーズ",
+      "en": "Mariners"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=Ws-9hMs7bLA",
+    "thumbUrl": "/media/2026-07-04-bluejays-vs-mariners-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ブルージェイズ", "マリナーズ", "岡本和真", "海外の反応"],
+  "tags": [
+    "ブルージェイズ",
+    "マリナーズ",
+    "岡本和真",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 2 },
-    "home": { "ja": "マリナーズ", "en": "Seattle Mariners", "score": 0 }
+    "away": {
+      "ja": "ブルージェイズ",
+      "en": "Toronto Blue Jays",
+      "score": 2
+    },
+    "home": {
+      "ja": "マリナーズ",
+      "en": "Seattle Mariners",
+      "score": 0
+    }
   },
   "stats": [
     {

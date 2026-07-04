@@ -15,17 +15,35 @@
   "series": {
     "id": "dodgers",
     "date": "2026-07-04",
-    "opponent": { "ja": "パドレス", "en": "Padres" }
+    "opponent": {
+      "ja": "パドレス",
+      "en": "Padres"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=Ks64AQcGZNY",
+    "thumbUrl": "/media/2026-07-04-dodgers-vs-padres-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ドジャース", "パドレス", "大谷翔平", "テオスカー・ヘルナンデス", "海外の反応"],
+  "tags": [
+    "ドジャース",
+    "パドレス",
+    "大谷翔平",
+    "テオスカー・ヘルナンデス",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 3 },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4 }
+    "away": {
+      "ja": "パドレス",
+      "en": "San Diego Padres",
+      "score": 3
+    },
+    "home": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 4
+    }
   },
   "stats": [
     {

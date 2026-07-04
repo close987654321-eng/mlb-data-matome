@@ -15,17 +15,35 @@
   "series": {
     "id": "cubs",
     "date": "2026-07-04",
-    "opponent": { "ja": "カージナルス", "en": "Cardinals" }
+    "opponent": {
+      "ja": "カージナルス",
+      "en": "Cardinals"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=l1hqHkCEaPM",
+    "thumbUrl": "/media/2026-07-04-cubs-vs-cardinals-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["カブス", "カージナルス", "鈴木誠也", "ピート・クロウアームストロング", "海外の反応"],
+  "tags": [
+    "カブス",
+    "カージナルス",
+    "鈴木誠也",
+    "ピート・クロウアームストロング",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 17 },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 1 }
+    "away": {
+      "ja": "カージナルス",
+      "en": "St. Louis Cardinals",
+      "score": 17
+    },
+    "home": {
+      "ja": "カブス",
+      "en": "Chicago Cubs",
+      "score": 1
+    }
   },
   "stats": [
     {
