@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "NODE_OPTIONS=\"${NODE_OPTIONS:-} --require $(pwd)/scripts/patch-graceful-fs.cjs\" next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
@@ -12,6 +12,7 @@
     "ping": "node scripts/ping-indexnow.mjs"
   },
   "dependencies": {
+    "graceful-fs": "^4.2.11",
     "next": "^15.0.0",
     "next-intl": "^3.20.0",
     "react": "^19.0.0",
