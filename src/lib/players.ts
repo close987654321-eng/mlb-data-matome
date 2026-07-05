@@ -130,6 +130,11 @@ export const PLAYERS: Player[] = [
   { slug: 'ben-rice', nameJa: 'ベン・ライス', nameEn: 'Ben Rice', mlbId: 700250, rival: true,
     bio: '長打力が魅力の左打ちの捕手／一塁手。本塁打と出塁で存在感を放つ若手スラッガー。',
     sameAs: [mlb('ben-rice', 700250)] },
+  // キューバ出身の内野手。ドジャースの有望株から移籍し力強い打棒で覚醒。村上と同僚になったことで
+  // 日本人ファンの注目も集める（記事 2026-06-18-vargas-breakout-star）。nameJa は同記事のタグと一致。
+  { slug: 'miguel-vargas', nameJa: 'ミゲル・バルガス', nameEn: 'Miguel Vargas', mlbId: 678246, rival: true,
+    bio: 'キューバの名選手ラサロ・バルガスを父に持つ内野手。ドジャースの有望株として注目され、力強い長打力で台頭した若手スラッガー。',
+    aliases: ['ミゲルバルガス'], sameAs: [mlb('miguel-vargas', 678246)] },
 
   // ───── ドジャースのスター野手（rival・大谷の同僚）。一覧「今季のスター野手」で大谷と横並び比較する。
   // nameJa は RIVAL_NAMES（scripts/fetch-mlb-stats.mjs）と一致。aliases で記事タグの短い表記ゆれも拾う。
