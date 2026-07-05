@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
+import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
 import { tagHubOf, tagHubIntroJa } from '@/lib/tagHub';
 import {
@@ -84,9 +85,12 @@ export async function generateMetadata({
     description = teamHubDescriptionJa(teamLp, seasonYear(snap), jp, feed.length, updated);
   }
   const url = absoluteUrl(locale, `/tag/${encodeURIComponent(decoded)}`);
+  // 薄い長尾タグ・汎用総称タグは noindex（ページは残すが検索対象から外す。sitemap 掲載条件と一致）。
+  const indexable = isTagIndexable(decoded, feed.length);
   return {
     title,
     description,
+    ...(indexable ? {} : { robots: { index: false } }),
     alternates: localeAlternates(locale, `/tag/${encodeURIComponent(decoded)}`),
     openGraph: { title: fullTitle, description, url },
     twitter: { card: 'summary_large_image', title: fullTitle, description },

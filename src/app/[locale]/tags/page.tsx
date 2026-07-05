@@ -22,6 +22,9 @@ export async function generateMetadata({
   return {
     title: t('tags.allTitle'),
     description: t('tags.allLead'),
+    // タグクラウドの全件一覧＝ナビ用のユーティリティ面。固有の本文が無く薄いので noindex
+    // （実質のあるタグは sitemap で拾える＝発見性は落とさない。follow は残しクロール経路にする）。
+    robots: { index: false },
     alternates: localeAlternates(locale, '/tags'),
   };
 }

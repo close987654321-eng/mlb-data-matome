@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { getAllTags } from '@/lib/tags';
+import { isTagIndexable } from '@/lib/tagIndex';
 import { PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
@@ -92,6 +93,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
     // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。
-    ...tags.map(({ tag }) => entry(`/tag/${encodeURIComponent(tag)}`)),
+    // 実質のあるタグ（選手LP／記事3本以上の通常タグ）だけ載せる＝薄い長尾タグLPを sitemap から外す
+    // （index 可否の唯一の正は isTagIndexable。タグページ側の robots noindex と一致させる）。
+    ...tags
+      .filter(({ tag, count }) => isTagIndexable(tag, count))
+      .map(({ tag }) => entry(`/tag/${encodeURIComponent(tag)}`)),
   ];
 }
