@@ -2,6 +2,15 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts');
 
+// 無人クラウドの build ゲート（scripts/build-gate.sh 経由・[[daily-jp-games-cloud-routine]]）は
+// fd 上限の低い(≈4096)コンテナで走る。next build の静的生成ワーカー数は既定で os.cpus()-1＝コア数に
+// 比例するため、コアの多いクラウドほど同時プリレンダーが増える。各レンダーが OG 画像(sharp/next-og)や
+// inlineCss(lightningcss) の“ネイティブ fd”を開くが、これは graceful-fs では待避できず（graceful-fs は
+// JS の fs しかパッチしない）、同時 fd が上限を超えて EMFILE(too many open files) で build が落ちる。
+// ＝graceful-fs だけでは足りなかった真因。MATOME_BUILD_LEAN=1 のときだけワーカー数と同時実行を絞り、
+// fd 圧をホストのコア数から切り離す。Vercel 本番(npm run build)は無指定＝全開のまま（fd 上限に余裕あり）。
+const leanBuild = process.env.MATOME_BUILD_LEAN === '1';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -18,6 +27,10 @@ const nextConfig = {
   // 由来のワンショット流入が主で回遊が少ないため、ページ毎インラインの欠点が出にくく FCP/LCP に効く。
   experimental: {
     inlineCss: true,
+    // ↓ 無人クラウドの build ゲートでだけ有効化（上の leanBuild コメント参照）。cpus=2 でワーカー数を
+    //   コア数から固定し、maxConcurrency=4 で 1 ワーカーの同時レンダーも絞る＝同時に開く fd を ~8 並列に
+    //   抑えて EMFILE を根絶する。Vercel/ローカルの通常ビルドには一切効かない（既定＝全開）。
+    ...(leanBuild ? { cpus: 2, staticGenerationMaxConcurrency: 4 } : {}),
   },
   images: {
     // Vercel の画像最適化(/_next/image)は無料枠=5,000変換/月で、更新頻度の高い本サイトでは

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "NODE_OPTIONS=\"${NODE_OPTIONS:-} --require $(pwd)/scripts/patch-graceful-fs.cjs\" next build",
+    "build:gate": "bash scripts/build-gate.sh",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
