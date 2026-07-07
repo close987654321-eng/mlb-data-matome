@@ -15,9 +15,15 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=SZmob13z54E",
+    "thumbUrl": "/media/2026-07-07-yankees-vs-rays-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ヤンキース", "レイズ", "ベン・ライス", "海外の反応"],
+  "tags": [
+    "ヤンキース",
+    "レイズ",
+    "ベン・ライス",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "ベン・ライス",
@@ -31,8 +37,16 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 5 },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 1 }
+    "away": {
+      "ja": "ヤンキース",
+      "en": "New York Yankees",
+      "score": 5
+    },
+    "home": {
+      "ja": "レイズ",
+      "en": "Tampa Bay Rays",
+      "score": 1
+    }
   },
   "comments": [
     {
