@@ -68,11 +68,16 @@ export function formatGameDate(isoDate: string): string {
   return `${y}.${Number(m)}.${Number(d)}`;
 }
 
-/** シリーズ記事の定型タイトル: 「{接頭辞} {YYYY.M.D} {自軍} vs {相手}」 */
+/** シリーズ記事の定型タイトル: 「{接頭辞} {YYYY.M.D} {自軍}対{相手}」 */
 export function seriesTitle(series: ThreadSeries, locale: Locale): string {
   const info = getSeries(series.id);
   if (!info) return '';
-  return `${info.titlePrefix[locale]} ${formatGameDate(series.date)} ${info.team[locale]} vs ${series.opponent[locale]}`;
+  // 「{自軍}対{相手}」は検索クエリ（例: ドジャース 対 オリオールズ）に一致させるため ja は「対」で詰める。en は vs。
+  const matchup =
+    locale === 'ja'
+      ? `${info.team.ja}対${series.opponent.ja}`
+      : `${info.team.en} vs ${series.opponent.en}`;
+  return `${info.titlePrefix[locale]} ${formatGameDate(series.date)} ${matchup}`;
 }
 
 /** 記事の表示タイトル。シリーズ記事は定型を自動生成し、それ以外は title をそのまま使う。 */

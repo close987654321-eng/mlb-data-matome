@@ -22,6 +22,13 @@ export type SportHub = {
 };
 
 const SPORT_HUBS: Partial<Record<Sport, SportHub>> = {
+  mlb: {
+    titleJa: 'MLBの海外の反応まとめ｜大谷翔平ら日本人選手への現地の声を日本語訳',
+    headingJa: 'MLBの海外の反応まとめ',
+    headingEn: 'MLB — Overseas Fan Reactions',
+    leadJa:
+      '大谷翔平・山本由伸ら日本人選手の活躍や、名勝負・珍プレーに対する海外の反応を、現地ファンのコメントの日本語訳でまとめたページ。翻訳元は海外掲示板 Reddit（r/baseball・r/mlb）と MLB 公式ハイライトのコメント欄。',
+  },
   boxing: {
     titleJa: 'ボクシングの海外の反応まとめ｜現地ファンの声を日本語訳',
     headingJa: 'ボクシングの海外の反応まとめ',
