@@ -1,0 +1,88 @@
+{
+  "id": "2026-07-08-whitesox-vs-redsox",
+  "sport": "mlb",
+  "subreddit": "YouTube",
+  "sourceUrl": "https://www.youtube.com/watch?v=ulqLcWc4h0c",
+  "fetchedAt": "2026-07-08T16:10:00+09:00",
+  "format": "youtube",
+  "series": {
+    "id": "whitesox",
+    "date": "2026-07-08",
+    "opponent": { "ja": "レッドソックス", "en": "Red Sox" }
+  },
+  "title": {
+    "en": "WHITE SOX vs. RED SOX: Official Full Game Highlights (July 7) | 2026 MLB Season",
+    "ja": "バルガスが先頭打者に起用も3打数無安打、レッドソックスが8-1快勝——ホワイトソックス采配に海外ファン呆れる【海外の反応】"
+  },
+  "summaryJa": "7月8日、ミゲル・バルガスは3打数無安打1四球1三振と低調。レッドソックスが8-1でホワイトソックスを圧倒した。コメント欄ではホワイトソックスの采配（バルガスを1番に起用、クリーンナップに謎の選手を並べる）への批判が高まり、「ベナブル監督の狂った打線はもう限界」と怒り。最後は「村上が来るまでは打順を固定してほしい」という声で締まった。レッドソックスはWC争いで首位に14差から8差まで詰め寄っていることも注目された。「Sox対決（白Sox対赤Sox）」のひと言がスレを和ませた。",
+  "flair": "Game Highlights",
+  "totalComments": 21,
+  "media": {
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=ulqLcWc4h0c",
+    "credit": "MLB（YouTube公式ハイライト）"
+  },
+  "tags": ["ホワイトソックス", "レッドソックス", "ミゲル・バルガス", "海外の反応"],
+  "game": {
+    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 8 },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1 }
+  },
+  "stats": [
+    {
+      "player": "ミゲル・バルガス",
+      "team": "ホワイトソックス",
+      "today": "3打数0安打 1四球 1三振",
+      "season": "打率.245 20本 56打点 OPS.851（89試合）",
+      "war": "3.3",
+      "delta": "OPS -.006",
+      "rank": "本塁打 MLB12位"
+    }
+  ],
+  "comments": [
+    {
+      "author": "@WilliamHerlihy-p4g",
+      "score": 6,
+      "bodyEn": "I'm getting tired of Will Venable's crazy stupid lineups.  Vargas leading off?  Meidroth cleanup?  Antonacci batting first?",
+      "bodyJa": "ウィル・ベナブルの滅茶苦茶な打順にはもう嫌気がさしてる。バルガスが1番？マイドロスがクリーンナップ？アントナッチが先頭？",
+      "isHook": true,
+      "isHighlight": true
+    },
+    {
+      "author": "@Mark-xl1ze",
+      "score": 11,
+      "bodyEn": "The Battle of the \"Sox\"",
+      "bodyJa": "『Sox』対決"
+    },
+    {
+      "author": "@RickBerger-e8w",
+      "score": 2,
+      "bodyEn": "Boston is now 8 back of NY for the 1st WC. They were 14 back less than two weeks ago...",
+      "bodyJa": "ボストンはワイルドカード首位のNYとの差が8まで縮まった。2週間前は14差だったのに……",
+      "isHighlight": true
+    },
+    {
+      "author": "@MisterKareem75",
+      "score": 2,
+      "bodyEn": "White Sox need to send Schultz back to the minors. He's a liability.",
+      "bodyJa": "ホワイトソックスはシュルツをマイナーに戻すべき。足を引っ張るだけだ"
+    },
+    {
+      "author": "@AnthonyLoveSr4534",
+      "score": 1,
+      "bodyEn": "Yea he's doing too much. I'm disappointed he sat Braden Montgomery. I hope the order is more stable when Murakami comes back.",
+      "bodyJa": "そう、やりすぎだ。ブレイデン・モンゴメリーを外したのはがっかりした。村上が戻ってくれば打順がもう少し安定してくれることを願う"
+    },
+    {
+      "author": "@myblacklab7",
+      "score": 1,
+      "bodyEn": "Well, I guess you do have to play well to win, at least sometimes. The White Sox have been getting away with some shoddy play lately.",
+      "bodyJa": "そうか、勝つためにはちゃんとプレーしないといけないな、たまには。ホワイトソックスは最近かなりいい加減なプレーで乗り切ってきたから"
+    },
+    {
+      "author": "@たらむら",
+      "score": 0,
+      "bodyEn": "ホワイトソックスに遠投出来るピッチャーが何人いる？ホームベースから助走なしで投げて何処まで届く？",
+      "bodyJa": "ホワイトソックスに遠投出来るピッチャーが何人いる？ホームベースから助走なしで投げて何処まで届く？"
+    }
+  ]
+}
