@@ -1,0 +1,69 @@
+name: 投手データ自動更新（球種＋サイヤング予測）
+
+# 投手の「球種の設計図」(data/pitch-arsenals.json) と「サイヤング予測ボード」(data/cy-young-board.json)
+# を取り直し、変化があればコミット→push（Vercel が自動デプロイ）。
+# データ源は Baseball Savant（Statcast）と MLB公式 Stats API＝キー不要・公知の数値のみ。
+# 球種/被弾は登板ごとにしか動かない＝毎時は過剰（かつ被弾HRは投手ごと約15リクエスト）。
+# なので「試合が確定した後に 1日1回」だけ回す（規約§4.1：恒常データ源にしない・低頻度に抑える）。
+# 値が変わらなければ no-op でコミットしない（安定ソート＋asOf据え置きで byte 一致）。
+
+on:
+  schedule:
+    # 1日1回。08:35 UTC = JST 17:35 = ET 04:35＝前日のMLB全試合が確定し、
+    # 毎時 snapshot（refresh-stats.yml の :17）も入った後に走らせる（arsenal が読む名簿を最新に）。
+    - cron: '35 8 * * *'
+  workflow_dispatch: {} # 手動実行も可（登板直後に即更新したいとき）
+
+permissions:
+  contents: write
+
+concurrency:
+  # 毎時の refresh-stats とは別グループ（互いにブロックしない。push 競合は下の rebase リトライで吸収）。
+  group: refresh-pitching
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22 # スクリプトは Node 組み込み(fs/path)＋global fetch のみ。依存インストール不要
+
+      - name: 球種別 徹底分析を更新（球種ごとの投球割合/空振り/被wOBA/被弾内訳）
+        run: |
+          set -euo pipefail
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          # arsenal は snapshot の MLBロースター級 投手を対象に Savant から球種データを取り直す。
+          # pipefail で node の失敗が tail に飲まれて no-op と誤認されないようにする。
+          node scripts/fetch-mlb-stats.mjs arsenal "$SEASON" | tail -2
+
+      - name: サイヤング予測ボードを更新（規定投手をAL/NL別にスコア化＋圏外の日本人）
+        run: |
+          set -euo pipefail
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          # cyyoung は statsapi 規定投手＋Savant xERA から自前で組む（snapshot 非依存）。
+          # 失敗しても arsenal の更新は活かす（|| でメッセージのみ、続行）。
+          node scripts/fetch-mlb-stats.mjs cyyoung "$SEASON" | tail -2 || echo "cyyoung スキップ（arsenal は反映済み）"
+
+      - name: 変化があればコミット＆push
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/pitch-arsenals.json data/cy-young-board.json; then
+            echo "変化なし＝コミットしない（no-op）"
+            exit 0
+          fi
+          git config user.name "stats-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/pitch-arsenals.json data/cy-young-board.json
+          git commit -m "chore(stats): 投手データ自動更新（球種＋サイヤング予測 $(TZ=Asia/Tokyo date '+%Y-%m-%d JST'))"
+          # 毎時の snapshot や記事マージが同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
+          for i in 1 2 3 4 5; do
+            if git push; then echo "push成功"; exit 0; fi
+            echo "push競合 → fetch & rebase してリトライ ($i/5)"
+            git pull --rebase origin main
+          done
+          echo "5回リトライしても push できず" >&2
+          exit 1
