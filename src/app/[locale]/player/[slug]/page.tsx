@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
-import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
+import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats, hasMinorStats } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/playerStats';
 import { getGamelog } from '@/lib/gamelog';
 import { etToJst } from '@/lib/gamelogStats';
@@ -16,6 +16,7 @@ import ShareButtons from '@/components/ShareButtons';
 import PlayerHero from '@/components/player/PlayerHero';
 import PlayerMarquee from '@/components/player/PlayerMarquee';
 import PlayerDetail from '@/components/player/PlayerDetail';
+import MinorSeason from '@/components/player/MinorSeason';
 import GamelogAnalysis from '@/components/player/GamelogAnalysis';
 import MakeCardButton from '@/components/player/MakeCardButton';
 import WarRace from '@/components/player/WarRace';
@@ -303,6 +304,9 @@ export default async function PlayerHubPage({
             )}
           </details>
         </>
+      ) : hasMinorStats(season) && season ? (
+        // マイナー（AAA）でプレー中の選手（村上ら）。MLB 昇格前の「現在地」を専用の軽量詳細で誠実に。
+        <MinorSeason player={player} season={season} year={year} asOf={snap.asOf} locale={locale} />
       ) : (
         // 成績がまだ無い選手（記事だけ）。名前＋経歴の最小ヘッダ。
         <section className="border-b border-line pb-6">

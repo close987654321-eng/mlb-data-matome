@@ -227,6 +227,16 @@ export function hasMlbStats(season?: PlayerSeason | null): boolean {
   return Boolean(season && (season.hitting || season.pitching) && season.league);
 }
 
+/**
+ * マイナー（AAA 等）の今季成績があるか＝成績はあるが所属リーグが確定していない（league=null）。
+ * MLB昇格前の注目選手（村上ら）の“現在地”を、MLB のヒーロー/順位UIとは分けて誠実に見せるための判定。
+ * hubEligible には足さない＝「マイナー成績だけ」を理由に新規ハブは作らない（薄ページ回避の既存方針を維持）。
+ * 既にハブがある（記事がある）選手の描画分岐にだけ使う。
+ */
+export function hasMinorStats(season?: PlayerSeason | null): boolean {
+  return Boolean(season && (season.hitting || season.pitching) && !season.league);
+}
+
 /** ハブ /player/[slug] を作る対象か＝記事がある or MLBの今季成績がある（成績つきなら“薄いページ”ではない）。 */
 export function hubEligible(player: Player, all: Thread[], season?: PlayerSeason | null): boolean {
   return threadsOf(player, all).length > 0 || hasMlbStats(season);
