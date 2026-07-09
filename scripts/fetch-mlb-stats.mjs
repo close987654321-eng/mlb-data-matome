@@ -1230,6 +1230,208 @@ async function runBackfillGames({ apply } = {}) {
   if (!apply) console.log('（dry-run。実際に書き込むには --apply を付ける）');
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// arsenal … 投手の「球種別 徹底分析」を data/pitch-arsenals.json に書き出す。
+// 用途: 選手ハブ /player の徹底分析（球種ごとの投球割合・空振り率・被打率/被wOBA/xwOBA・
+//   ハードヒット率・被本塁打の球種内訳）→ サイヤング予測の“中身の支配力”を語る素データ。
+// データ源: Baseball Savant（Statcast）のリーダーボード/検索 CSV（キー不要・MLB公式）。
+//   - pitch-arsenal-stats … 球種ごとの usage/whiff/被BA/wOBA/xwOBA/hard-hit/put-away/run-value
+//   - pitch-arsenals(avg_speed) … 球種ごとの平均球速
+//   - expected_statistics … ERA/xERA（“数字 vs 中身”の乖離＝運の剥離を語る）
+//   - statcast_search(details, events=home_run) … 被弾1本ずつの球種・球速・打球（被弾の球種内訳）
+// 法務 posture は他コマンドと同じ＝公知の数値だけ・サイト本体は叩かない（編集時/CI取得）・バルク常用しない。
+// 対象は snapshot の「MLBロースター級 投手」（league あり＋pitching あり）。snapshot 後に実行。
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Statcast の球種コード → 日本語表記（サイト表示用）。未知コードは英語名にフォールバック。
+const PITCH_JA = {
+  FF: 'フォーシーム', SI: 'シンカー', FT: 'ツーシーム', FC: 'カッター', SL: 'スライダー',
+  ST: 'スイーパー', SV: 'スラーブ', CH: 'チェンジアップ', CU: 'カーブ', KC: 'ナックルカーブ',
+  FS: 'スプリット', FO: 'フォーク', KN: 'ナックル', SC: 'スクリューボール', EP: 'イーファス',
+};
+// pitch_type → pitch-arsenals(avg_speed) CSV の列プレフィックス（球速の引き当て）。
+const SPEED_COL = { FF: 'ff', SI: 'si', FC: 'fc', SL: 'sl', CH: 'ch', CU: 'cu', FS: 'fs', KN: 'kn', ST: 'st', SV: 'sv' };
+const pitchJa = (r) => PITCH_JA[r.type] ?? r.name;
+
+/** 球種別スタッツ（usage/whiff/被打/xwOBA…）を id → {nameEn, rows[]} で返す（league全体を1回取得）。 */
+async function fetchArsenalStats(season) {
+  const rows = await getCsv(`${SAVANT}/pitch-arsenal-stats?type=pitcher&pitchType=&year=${season}&team=&min=10&csv=true`);
+  const map = new Map();
+  for (const r of rows) {
+    const id = Number(r.player_id);
+    if (!id) continue;
+    if (!map.has(id)) map.set(id, { nameEn: r['last_name, first_name'] || '', rows: [] });
+    map.get(id).rows.push({
+      type: r.pitch_type,
+      name: r.pitch_name,
+      usage: toNum(r.pitch_usage),
+      pitches: toNum(r.pitches),
+      whiff: toNum(r.whiff_percent),
+      k: toNum(r.k_percent),
+      putAway: toNum(r.put_away),
+      ba: toNum(r.ba),
+      slg: toNum(r.slg),
+      woba: toNum(r.woba),
+      xwoba: toNum(r.est_woba),
+      hardHit: toNum(r.hard_hit_percent),
+      rv100: toNum(r.run_value_per_100),
+    });
+  }
+  return map;
+}
+
+/** 球種別 平均球速を id → { [pitch_type]: mph } で返す（1リクエスト・league全体）。 */
+async function fetchArsenalSpeed(season) {
+  const rows = await getCsv(`${SAVANT}/pitch-arsenals?year=${season}&min=100&type=avg_speed&hand=&csv=true`);
+  const map = new Map();
+  for (const r of rows) {
+    const id = Number(r.pitcher);
+    if (!id) continue;
+    const velo = {};
+    for (const [pt, col] of Object.entries(SPEED_COL)) {
+      const v = toNum(r[`${col}_avg_speed`]);
+      if (v != null) velo[pt] = v;
+    }
+    map.set(id, velo);
+  }
+  return map;
+}
+
+/** 投手全体の ERA/xERA（“数字 vs 中身”の乖離）を id → { era, xera } で返す。規定到達のみ。 */
+async function fetchXera(season) {
+  const map = new Map();
+  try {
+    const rows = await getCsv(`${SAVANT}/expected_statistics?type=pitcher&year=${season}&position=&team=&min=q&csv=true`);
+    for (const r of rows) {
+      const id = Number(r.player_id);
+      if (id) map.set(id, { era: toNum(r.era), xera: toNum(r.xera), woba: toNum(r.woba), xwoba: toNum(r.est_woba) });
+    }
+  } catch (e) {
+    console.warn(`xERA取得スキップ（コアは継続）: ${e.message}`);
+  }
+  return map;
+}
+
+/**
+ * 被弾した本塁打の球種内訳（1本ずつ）を返す。events=home_run で投手指定＝その投手が「打たれた」本塁打。
+ * `all=true` が無いと0件になる（Savant 検索の仕様）。失敗しても null（コアは壊さない＝捏造しない）。
+ */
+async function fetchHrAllowed(id, season) {
+  try {
+    const url =
+      `https://baseballsavant.mlb.com/statcast_search/csv?all=true&player_type=pitcher` +
+      `&hfSea=${season}%7C&hfGT=R%7C&hfAB=home%5C.%5C.run%7C&pitchers_lookup%5B%5D=${id}&type=details`;
+    const rows = await getCsv(url);
+    const byType = {};
+    const list = [];
+    for (const r of rows) {
+      const type = r.pitch_type || '';
+      byType[type] = (byType[type] ?? 0) + 1;
+      list.push({
+        d: r.game_date,
+        type,
+        name: r.pitch_name || '',
+        velo: toNum(r.release_speed),
+        ev: toNum(r.launch_speed),
+        angle: toNum(r.launch_angle),
+        dist: toNum(r.hit_distance_sc),
+      });
+    }
+    list.sort((a, b) => (b.d || '').localeCompare(a.d || ''));
+    return { total: list.length, byType, list };
+  } catch (e) {
+    console.warn(`被弾HR取得スキップ ${id}（コアは継続）: ${e.message}`);
+    return null;
+  }
+}
+
+async function runArsenal(season, asOf) {
+  // 対象＝snapshot の「MLBロースター級 投手」（league あり＋pitching あり）に揃える（gamelogs と同じ流儀）。
+  const snapFile = path.join(process.cwd(), 'data', 'jp-players-stats.json');
+  let snap = null;
+  let targets = [];
+  try {
+    snap = JSON.parse(readFileSync(snapFile, 'utf8'));
+    targets = Object.entries(snap.players ?? {})
+      .filter(([, p]) => p.league && p.pitching)
+      .map(([id]) => Number(id));
+  } catch {
+    // snapshot 未生成のフォールバック＝日本人投手＋ライバル（team は空でも壊さない）。
+    targets = [...new Set([...RIVAL_IDS, ...Object.keys(JP_NAMES).map(Number)])];
+  }
+  if (!targets.length) return console.error('arsenal: 対象投手が見つからない（先に snapshot を実行）');
+
+  // league全体のリーダーボードは1回ずつ取得して id で引く（対象投手ぶんだけ組み立てる＝バルクにしない）。
+  const [statsMap, speedMap, xeraMap] = await Promise.all([
+    fetchArsenalStats(season),
+    fetchArsenalSpeed(season),
+    fetchXera(season),
+  ]);
+
+  const pitchers = {};
+  for (const id of targets) {
+    const entry = statsMap.get(id);
+    if (!entry || !entry.rows.length) continue; // 球種データが無い投手（登板僅少）は捏造せず省く
+    const velo = speedMap.get(id) ?? {};
+    const hr = await fetchHrAllowed(id, season); // 被弾内訳（球種 type 別）＝コア失敗時のみ null
+    const byType = hr?.byType ?? {};
+    const pitches = entry.rows
+      .map((p) => ({
+        type: p.type,
+        nameJa: pitchJa(p),
+        usage: p.usage,
+        velo: velo[p.type] ?? null,
+        whiff: p.whiff,
+        putAway: p.putAway,
+        ba: p.ba,
+        woba: p.woba,
+        xwoba: p.xwoba,
+        hardHit: p.hardHit,
+        rv100: p.rv100,
+        hr: byType[p.type] ?? 0,
+      }))
+      .sort((a, b) => (b.usage ?? 0) - (a.usage ?? 0));
+    const totalPitches = entry.rows.reduce((s, p) => s + (p.pitches ?? 0), 0);
+    const x = xeraMap.get(id);
+    const snapP = snap?.players?.[String(id)];
+    const hrAllowed = hr
+      ? {
+          total: hr.total,
+          // 表示用に球種名（日本語）で集計し直す（type→日本語・未知は英語名）。
+          byPitch: Object.fromEntries(
+            hr.list.reduce((m, it) => {
+              const nm = PITCH_JA[it.type] ?? it.name ?? '不明';
+              return m.set(nm, (m.get(nm) ?? 0) + 1);
+            }, new Map()),
+          ),
+          list: hr.list.map((it) => ({ ...it, nameJa: PITCH_JA[it.type] ?? it.name ?? '不明' })),
+        }
+      : null;
+    pitchers[id] = {
+      nameJa: DISPLAY_NAMES[id] ?? entry.nameEn,
+      team: snapP?.team ?? '',
+      league: snapP?.league ?? null,
+      totalPitches,
+      ...(x?.era != null ? { era: x.era } : {}),
+      ...(x?.xera != null ? { xera: x.xera } : {}),
+      pitches,
+      ...(hrAllowed ? { hrAllowed } : {}),
+    };
+  }
+
+  const file = path.join(process.cwd(), 'data', 'pitch-arsenals.json');
+  // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（CI の無駄コミット防止・snapshot と同じ）。
+  let stampedAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    if (stableStringify(prev.pitchers ?? {}) === stableStringify(pitchers)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 初回作成 */
+  }
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, season, pitchers }) + '\n');
+  console.log(`arsenal 書き出し: ${Object.keys(pitchers).length}投手 / asOf ${stampedAsOf} → ${file}`);
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -1280,6 +1482,10 @@ async function main() {
   } else if (cmd === 'warrace') {
     // warrace：snapshot を読んで大谷＋ライバルの累計WARを1日1点で war-race.json に積む。
     await runWarRace(jstStamp());
+  } else if (cmd === 'arsenal') {
+    // arsenal [season]：snapshot の MLB投手の球種別 徹底分析を data/pitch-arsenals.json へ（snapshot後に実行）。
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    await runArsenal(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
   } else if (cmd === 'backfill-games') {
     // backfill-games [--apply]：既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用）。
     await runBackfillGames({ apply: raw.includes('--apply') });
@@ -1295,6 +1501,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs gamelog [選手|ID] [season] # 1選手の試合別ログ＋WAR推移を data/gamelogs/{id}.json へ（既定=大谷）',
         '  node scripts/fetch-mlb-stats.mjs gamelogs [season]  # MLBロースター級 全選手の試合別ログを一括更新（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
+        '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs backfill-games [--apply] # 既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用・既定dry-run）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),

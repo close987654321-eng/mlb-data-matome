@@ -7,6 +7,7 @@ import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/
 import { getGamelog } from '@/lib/gamelog';
 import { etToJst } from '@/lib/gamelogStats';
 import { getWarRace, warRank } from '@/lib/warRace';
+import { getPitchArsenal } from '@/lib/pitchArsenal';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { playerLede } from '@/lib/playerLede';
 import { buildFeed, feedKey } from '@/lib/feed';
@@ -18,6 +19,7 @@ import PlayerDetail from '@/components/player/PlayerDetail';
 import GamelogAnalysis from '@/components/player/GamelogAnalysis';
 import MakeCardButton from '@/components/player/MakeCardButton';
 import WarRace from '@/components/player/WarRace';
+import PitchArsenal from '@/components/player/PitchArsenal';
 import PlayerStickyBar from '@/components/player/PlayerStickyBar';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import SectionHeading from '@/components/SectionHeading';
@@ -80,11 +82,12 @@ export default async function PlayerHubPage({
   const t = await getTranslations();
 
   const all = await getAllThreads();
-  const [season, snap, gamelog, warRace] = await Promise.all([
+  const [season, snap, gamelog, warRace, arsenal] = await Promise.all([
     getPlayerSeason(player.mlbId),
     getPlayersSnapshot(),
     getGamelog(player.mlbId), // 試合別ログがある選手だけ「徹底分析」セクションを出す（今は大谷）
     getWarRace(), // WARレース（大谷＋ライバル）。focus がレースに居る時だけ出す。
+    getPitchArsenal(player.mlbId), // 球種別 徹底分析（投手のみ）。データがある投手だけ出す。
   ]);
 
   // 徹底分析の「海外の反応 融合」: 各試合(ET日付)→ その試合のまとめ記事を索引化して島へ渡す。
@@ -246,6 +249,14 @@ export default async function PlayerHubPage({
           {gamelog && (
             <div className="pt-4">
               <GamelogAnalysis log={gamelog} locale={locale} articles={gameArticles} shareUrl={hubUrl} />
+            </div>
+          )}
+
+          {/* 球種別 徹底分析（投球割合/空振り/被wOBA/被弾の球種内訳＋ERA vs xERA）。
+              球種データがある投手だけ（純投手/二刀流）。サイヤング予測の“中身の支配力”を語る素データ。 */}
+          {arsenal && arsenal.pitches.length > 0 && (
+            <div className="pt-4">
+              <PitchArsenal arsenal={arsenal} season={seasonYear(snap)} locale={locale} />
             </div>
           )}
 

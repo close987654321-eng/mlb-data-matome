@@ -1,0 +1,2657 @@
+{
+  "asOf": "2026-07-09 12:48",
+  "pitchers": {
+    "519242": {
+      "era": 2.27,
+      "hrAllowed": {
+        "byPitch": {
+          "チェンジアップ": 1,
+          "フォーシーム": 7
+        },
+        "list": [
+          {
+            "angle": 30,
+            "d": "2026-07-04",
+            "dist": 396,
+            "ev": 104.1,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 98
+          },
+          {
+            "angle": 28,
+            "d": "2026-07-04",
+            "dist": 404,
+            "ev": 104.1,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.1
+          },
+          {
+            "angle": 24,
+            "d": "2026-05-08",
+            "dist": 413,
+            "ev": 107.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.8
+          },
+          {
+            "angle": 37,
+            "d": "2026-04-18",
+            "dist": 348,
+            "ev": 98.6,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 94.8
+          },
+          {
+            "angle": 28,
+            "d": "2026-04-12",
+            "dist": 411,
+            "ev": 102.7,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 84.7
+          },
+          {
+            "angle": 24,
+            "d": "2026-04-06",
+            "dist": 411,
+            "ev": 113.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 93.6
+          },
+          {
+            "angle": 29,
+            "d": "2026-04-06",
+            "dist": 400,
+            "ev": 107,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.3
+          },
+          {
+            "angle": 38,
+            "d": "2026-04-01",
+            "dist": 355,
+            "ev": 98.1,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 92.1
+          }
+        ],
+        "total": 8
+      },
+      "league": "NL",
+      "nameJa": "クリス・セール",
+      "pitches": [
+        {
+          "ba": 0.245,
+          "hardHit": 45.9,
+          "hr": 7,
+          "nameJa": "フォーシーム",
+          "putAway": 20,
+          "rv100": 0.4,
+          "type": "FF",
+          "usage": 40.2,
+          "velo": 96,
+          "whiff": 24.7,
+          "woba": 0.33,
+          "xwoba": 0.349
+        },
+        {
+          "ba": 0.19,
+          "hardHit": 14.8,
+          "hr": 0,
+          "nameJa": "スライダー",
+          "putAway": 26.2,
+          "rv100": 1.1,
+          "type": "SL",
+          "usage": 39.2,
+          "velo": 79.4,
+          "whiff": 37.8,
+          "woba": 0.244,
+          "xwoba": 0.231
+        },
+        {
+          "ba": 0.325,
+          "hardHit": 42.5,
+          "hr": 1,
+          "nameJa": "チェンジアップ",
+          "putAway": 3.6,
+          "rv100": 0.8,
+          "type": "CH",
+          "usage": 12.1,
+          "velo": 88.3,
+          "whiff": 33,
+          "woba": 0.321,
+          "xwoba": 0.31
+        },
+        {
+          "ba": 0.241,
+          "hardHit": 25,
+          "hr": 0,
+          "nameJa": "シンカー",
+          "putAway": 15.4,
+          "rv100": 2,
+          "type": "SI",
+          "usage": 8.6,
+          "velo": 95.4,
+          "whiff": 10.3,
+          "woba": 0.277,
+          "xwoba": 0.26
+        }
+      ],
+      "team": "ブレーブス",
+      "totalPitches": 1542,
+      "xera": 3.44
+    },
+    "579328": {
+      "era": 5.81,
+      "hrAllowed": {
+        "byPitch": {
+          "スプリット": 2,
+          "スライダー": 1
+        },
+        "list": [
+          {
+            "angle": 25,
+            "d": "2026-04-13",
+            "dist": 370,
+            "ev": 108.2,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 84.4
+          },
+          {
+            "angle": 26,
+            "d": "2026-04-13",
+            "dist": 456,
+            "ev": 116.2,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 84.5
+          },
+          {
+            "angle": 27,
+            "d": "2026-03-27",
+            "dist": 378,
+            "ev": 104.9,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 85.1
+          }
+        ],
+        "total": 3
+      },
+      "league": "AL",
+      "nameJa": "菊池雄星",
+      "pitches": [
+        {
+          "ba": 0.341,
+          "hardHit": 48.6,
+          "hr": 0,
+          "nameJa": "フォーシーム",
+          "putAway": 14.7,
+          "rv100": -2,
+          "type": "FF",
+          "usage": 33.9,
+          "velo": 95.4,
+          "whiff": 20.6,
+          "woba": 0.354,
+          "xwoba": 0.297
+        },
+        {
+          "ba": 0.294,
+          "hardHit": 34.8,
+          "hr": 1,
+          "nameJa": "スライダー",
+          "putAway": 26.2,
+          "rv100": 0.5,
+          "type": "SL",
+          "usage": 23.6,
+          "velo": 86.9,
+          "whiff": 30.1,
+          "woba": 0.399,
+          "xwoba": 0.313
+        },
+        {
+          "ba": 0.143,
+          "hardHit": 36.8,
+          "hr": 2,
+          "nameJa": "スプリット",
+          "putAway": 22,
+          "rv100": 1.4,
+          "type": "FS",
+          "usage": 22.2,
+          "velo": 86.7,
+          "whiff": 27.8,
+          "woba": 0.207,
+          "xwoba": 0.304
+        },
+        {
+          "ba": 0.5,
+          "hardHit": 62.5,
+          "hr": 0,
+          "nameJa": "カッター",
+          "putAway": 11.8,
+          "rv100": -4.6,
+          "type": "FC",
+          "usage": 11.5,
+          "velo": 90.2,
+          "whiff": 31,
+          "woba": 0.6,
+          "xwoba": 0.581
+        },
+        {
+          "ba": 0.125,
+          "hardHit": 33.3,
+          "hr": 0,
+          "nameJa": "カーブ",
+          "putAway": 14.3,
+          "rv100": 4,
+          "type": "CU",
+          "usage": 8.8,
+          "velo": 78.7,
+          "whiff": 23.8,
+          "woba": 0.145,
+          "xwoba": 0.31
+        }
+      ],
+      "team": "エンゼルス",
+      "totalPitches": 567,
+      "xera": 4.91
+    },
+    "608372": {
+      "era": 4.8,
+      "hrAllowed": {
+        "byPitch": {
+          "カッター": 5,
+          "カーブ": 1,
+          "スプリット": 3,
+          "スライダー": 3,
+          "フォーシーム": 4
+        },
+        "list": [
+          {
+            "angle": 29,
+            "d": "2026-06-26",
+            "dist": 348,
+            "ev": 93.9,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 85.9
+          },
+          {
+            "angle": 28,
+            "d": "2026-06-26",
+            "dist": 380,
+            "ev": 102.5,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 86
+          },
+          {
+            "angle": 32,
+            "d": "2026-06-20",
+            "dist": 434,
+            "ev": 102.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 92.7
+          },
+          {
+            "angle": 20,
+            "d": "2026-06-14",
+            "dist": 375,
+            "ev": 103.8,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 89.9
+          },
+          {
+            "angle": 28,
+            "d": "2026-06-09",
+            "dist": 424,
+            "ev": 105.6,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 91.6
+          },
+          {
+            "angle": 28,
+            "d": "2026-05-27",
+            "dist": 378,
+            "ev": 100.6,
+            "name": "Curveball",
+            "nameJa": "カーブ",
+            "type": "CU",
+            "velo": 80.1
+          },
+          {
+            "angle": 21,
+            "d": "2026-05-27",
+            "dist": 424,
+            "ev": 111.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 93.7
+          },
+          {
+            "angle": 19,
+            "d": "2026-05-10",
+            "dist": 378,
+            "ev": 109.1,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 88
+          },
+          {
+            "angle": 29,
+            "d": "2026-05-10",
+            "dist": 411,
+            "ev": 101.8,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 83.5
+          },
+          {
+            "angle": 32,
+            "d": "2026-05-10",
+            "dist": 432,
+            "ev": 107.4,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 93.8
+          },
+          {
+            "angle": 31,
+            "d": "2026-05-04",
+            "dist": 436,
+            "ev": 104.6,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 88.2
+          },
+          {
+            "angle": 25,
+            "d": "2026-04-17",
+            "dist": 452,
+            "ev": 107.9,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 88.3
+          },
+          {
+            "angle": 22,
+            "d": "2026-04-10",
+            "dist": 396,
+            "ev": 106.6,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 86.8
+          },
+          {
+            "angle": 29,
+            "d": "2026-04-10",
+            "dist": 416,
+            "ev": 106.3,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 88.9
+          },
+          {
+            "angle": 32,
+            "d": "2026-04-05",
+            "dist": 405,
+            "ev": 103.4,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 85.1
+          },
+          {
+            "angle": 25,
+            "d": "2026-03-30",
+            "dist": 416,
+            "ev": 105.2,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 89.6
+          }
+        ],
+        "total": 16
+      },
+      "league": "NL",
+      "nameJa": "菅野智之",
+      "pitches": [
+        {
+          "ba": 0.28,
+          "hardHit": 61.7,
+          "hr": 4,
+          "nameJa": "フォーシーム",
+          "putAway": 12.5,
+          "rv100": -0.2,
+          "type": "FF",
+          "usage": 21.8,
+          "velo": 92.3,
+          "whiff": 13.1,
+          "woba": 0.386,
+          "xwoba": 0.42
+        },
+        {
+          "ba": 0.167,
+          "hardHit": 28.1,
+          "hr": 3,
+          "nameJa": "スプリット",
+          "putAway": 17,
+          "rv100": 0.7,
+          "type": "FS",
+          "usage": 20.2,
+          "velo": 86.9,
+          "whiff": 29.8,
+          "woba": 0.24,
+          "xwoba": 0.326
+        },
+        {
+          "ba": 0.382,
+          "hardHit": 54.4,
+          "hr": 0,
+          "nameJa": "シンカー",
+          "putAway": 6.1,
+          "rv100": -0.5,
+          "type": "SI",
+          "usage": 19.1,
+          "velo": 92.2,
+          "whiff": 2.6,
+          "woba": 0.405,
+          "xwoba": 0.462
+        },
+        {
+          "ba": 0.257,
+          "hardHit": 33.3,
+          "hr": 3,
+          "nameJa": "スライダー",
+          "putAway": 14.8,
+          "rv100": -2.2,
+          "type": "SL",
+          "usage": 11.3,
+          "velo": 85.2,
+          "whiff": 23.8,
+          "woba": 0.346,
+          "xwoba": 0.303
+        },
+        {
+          "ba": 0.259,
+          "hardHit": 23.1,
+          "hr": 0,
+          "nameJa": "スイーパー",
+          "putAway": 9.1,
+          "rv100": 0.7,
+          "type": "ST",
+          "usage": 10.9,
+          "velo": 83.7,
+          "whiff": 18.8,
+          "woba": 0.278,
+          "xwoba": 0.298
+        },
+        {
+          "ba": 0.294,
+          "hardHit": 53.1,
+          "hr": 5,
+          "nameJa": "カッター",
+          "putAway": 11.8,
+          "rv100": -3.4,
+          "type": "FC",
+          "usage": 10.1,
+          "velo": 88.9,
+          "whiff": 21.4,
+          "woba": 0.496,
+          "xwoba": 0.516
+        },
+        {
+          "ba": 0.188,
+          "hardHit": 33.3,
+          "hr": 1,
+          "nameJa": "カーブ",
+          "putAway": 6.7,
+          "rv100": -0.3,
+          "type": "CU",
+          "usage": 6.6,
+          "velo": 79.7,
+          "whiff": 17.6,
+          "woba": 0.265,
+          "xwoba": 0.392
+        }
+      ],
+      "team": "ロッキーズ",
+      "totalPitches": 1380,
+      "xera": 7.09
+    },
+    "650911": {
+      "era": 2.62,
+      "hrAllowed": {
+        "byPitch": {
+          "シンカー": 5,
+          "スライダー": 2,
+          "チェンジアップ": 4
+        },
+        "list": [
+          {
+            "angle": 24,
+            "d": "2026-07-06",
+            "dist": 403,
+            "ev": 101.6,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 88.5
+          },
+          {
+            "angle": 27,
+            "d": "2026-07-06",
+            "dist": 401,
+            "ev": 101,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 87.1
+          },
+          {
+            "angle": 31,
+            "d": "2026-07-06",
+            "dist": 396,
+            "ev": 98.6,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 87.8
+          },
+          {
+            "angle": 23,
+            "d": "2026-06-25",
+            "dist": 409,
+            "ev": 107.5,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 95.9
+          },
+          {
+            "angle": 33,
+            "d": "2026-06-20",
+            "dist": 383,
+            "ev": 99,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 87.7
+          },
+          {
+            "angle": 27,
+            "d": "2026-06-14",
+            "dist": 399,
+            "ev": 101.8,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 86.4
+          },
+          {
+            "angle": 27,
+            "d": "2026-06-14",
+            "dist": 412,
+            "ev": 102.6,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 95.1
+          },
+          {
+            "angle": 33,
+            "d": "2026-06-08",
+            "dist": 399,
+            "ev": 100,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 95.7
+          },
+          {
+            "angle": 32,
+            "d": "2026-04-23",
+            "dist": 429,
+            "ev": 110.7,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 86.6
+          },
+          {
+            "angle": 25,
+            "d": "2026-04-23",
+            "dist": 421,
+            "ev": 106,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 94.9
+          },
+          {
+            "angle": 36,
+            "d": "2026-04-13",
+            "dist": 359,
+            "ev": 97.5,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 95.5
+          }
+        ],
+        "total": 11
+      },
+      "league": "NL",
+      "nameJa": "クリストファー・サンチェス",
+      "pitches": [
+        {
+          "ba": 0.34,
+          "hardHit": 56.2,
+          "hr": 5,
+          "nameJa": "シンカー",
+          "putAway": 19,
+          "rv100": 0,
+          "type": "SI",
+          "usage": 42.4,
+          "velo": 95.2,
+          "whiff": 12.4,
+          "woba": 0.386,
+          "xwoba": 0.367
+        },
+        {
+          "ba": 0.167,
+          "hardHit": 28.9,
+          "hr": 4,
+          "nameJa": "チェンジアップ",
+          "putAway": 29,
+          "rv100": 1.5,
+          "type": "CH",
+          "usage": 39,
+          "velo": 86.9,
+          "whiff": 45.3,
+          "woba": 0.216,
+          "xwoba": 0.197
+        },
+        {
+          "ba": 0.214,
+          "hardHit": 39.5,
+          "hr": 2,
+          "nameJa": "スライダー",
+          "putAway": 32.9,
+          "rv100": 1.1,
+          "type": "SL",
+          "usage": 18.6,
+          "velo": 86.1,
+          "whiff": 44.5,
+          "woba": 0.271,
+          "xwoba": 0.262
+        }
+      ],
+      "team": "フィリーズ",
+      "totalPitches": 1800,
+      "xera": 3.19
+    },
+    "660271": {
+      "era": 1.79,
+      "hrAllowed": {
+        "byPitch": {
+          "フォーシーム": 4
+        },
+        "list": [
+          {
+            "angle": 32,
+            "d": "2026-07-03",
+            "dist": 423,
+            "ev": 106.1,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 99.5
+          },
+          {
+            "angle": 35,
+            "d": "2026-06-10",
+            "dist": 427,
+            "ev": 107.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.8
+          },
+          {
+            "angle": 37,
+            "d": "2026-05-05",
+            "dist": 337,
+            "ev": 98,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 98.7
+          },
+          {
+            "angle": 39,
+            "d": "2026-05-05",
+            "dist": 395,
+            "ev": 107.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.7
+          }
+        ],
+        "total": 4
+      },
+      "league": "NL",
+      "nameJa": "大谷翔平",
+      "pitches": [
+        {
+          "ba": 0.193,
+          "hardHit": 39.4,
+          "hr": 4,
+          "nameJa": "フォーシーム",
+          "putAway": 26.9,
+          "rv100": 1.8,
+          "type": "FF",
+          "usage": 45.2,
+          "velo": 98.1,
+          "whiff": 26.9,
+          "woba": 0.263,
+          "xwoba": 0.261
+        },
+        {
+          "ba": 0.129,
+          "hardHit": 20.8,
+          "hr": 0,
+          "nameJa": "スイーパー",
+          "putAway": 28.1,
+          "rv100": 3.2,
+          "type": "ST",
+          "usage": 29.4,
+          "velo": 85,
+          "whiff": 37.7,
+          "woba": 0.17,
+          "xwoba": 0.226
+        },
+        {
+          "ba": 0.111,
+          "hardHit": 20,
+          "hr": 0,
+          "nameJa": "カーブ",
+          "putAway": 19,
+          "rv100": -0.6,
+          "type": "CU",
+          "usage": 10,
+          "velo": 75.2,
+          "whiff": 38.7,
+          "woba": 0.209,
+          "xwoba": 0.22
+        },
+        {
+          "ba": 0.294,
+          "hardHit": 36,
+          "hr": 0,
+          "nameJa": "スプリット",
+          "putAway": 21.3,
+          "rv100": -1.5,
+          "type": "FS",
+          "usage": 8.5,
+          "velo": 89,
+          "whiff": 34.5,
+          "woba": 0.296,
+          "xwoba": 0.237
+        },
+        {
+          "ba": 0.143,
+          "hardHit": 45.5,
+          "hr": 0,
+          "nameJa": "シンカー",
+          "putAway": 42.9,
+          "rv100": 0.6,
+          "type": "SI",
+          "usage": 5.1,
+          "velo": 96.5,
+          "whiff": 20.7,
+          "woba": 0.318,
+          "xwoba": 0.345
+        }
+      ],
+      "team": "ドジャース",
+      "totalPitches": 1311,
+      "xera": 2.7
+    },
+    "673513": {
+      "era": 2.01,
+      "hrAllowed": {
+        "byPitch": {
+          "スイーパー": 1,
+          "スプリット": 1,
+          "フォーシーム": 2
+        },
+        "list": [
+          {
+            "angle": 34,
+            "d": "2026-06-23",
+            "dist": 382,
+            "ev": 99,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 90.9
+          },
+          {
+            "angle": 27,
+            "d": "2026-06-09",
+            "dist": 407,
+            "ev": 106.9,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 82.5
+          },
+          {
+            "angle": 29,
+            "d": "2026-06-07",
+            "dist": 389,
+            "ev": 106.4,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 91.3
+          },
+          {
+            "angle": 35,
+            "d": "2026-06-07",
+            "dist": 398,
+            "ev": 105.6,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "type": "ST",
+            "velo": 79
+          }
+        ],
+        "total": 4
+      },
+      "league": "NL",
+      "nameJa": "松井裕樹",
+      "pitches": [
+        {
+          "ba": 0.342,
+          "hardHit": 46.7,
+          "hr": 2,
+          "nameJa": "フォーシーム",
+          "putAway": 19.6,
+          "rv100": -2.1,
+          "type": "FF",
+          "usage": 37.4,
+          "velo": 91.9,
+          "whiff": 27.2,
+          "woba": 0.43,
+          "xwoba": 0.369
+        },
+        {
+          "ba": 0.115,
+          "hardHit": 21.1,
+          "hr": 0,
+          "nameJa": "スライダー",
+          "putAway": 33.3,
+          "rv100": 2.6,
+          "type": "SL",
+          "usage": 29.1,
+          "velo": 85.5,
+          "whiff": 45.9,
+          "woba": 0.153,
+          "xwoba": 0.232
+        },
+        {
+          "ba": 0.139,
+          "hardHit": 27.3,
+          "hr": 1,
+          "nameJa": "スプリット",
+          "putAway": 23.9,
+          "rv100": 1.7,
+          "type": "FS",
+          "usage": 26.7,
+          "velo": 83.1,
+          "whiff": 49.4,
+          "woba": 0.228,
+          "xwoba": 0.257
+        }
+      ],
+      "team": "パドレス",
+      "totalPitches": 471,
+      "xera": 3.7
+    },
+    "673540": {
+      "era": 8.92,
+      "hrAllowed": {
+        "byPitch": {
+          "カッター": 4,
+          "シンカー": 1,
+          "スイーパー": 1,
+          "スライダー": 1,
+          "フォーシーム": 5
+        },
+        "list": [
+          {
+            "angle": 26,
+            "d": "2026-07-07",
+            "dist": 377,
+            "ev": 99,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 85.3
+          },
+          {
+            "angle": 28,
+            "d": "2026-07-03",
+            "dist": 411,
+            "ev": 105.9,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 87
+          },
+          {
+            "angle": 37,
+            "d": "2026-06-28",
+            "dist": 408,
+            "ev": 108.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.5
+          },
+          {
+            "angle": 22,
+            "d": "2026-06-23",
+            "dist": 380,
+            "ev": 104.4,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 86.3
+          },
+          {
+            "angle": 27,
+            "d": "2026-06-23",
+            "dist": 409,
+            "ev": 101.9,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 94.4
+          },
+          {
+            "angle": 35,
+            "d": "2026-06-16",
+            "dist": 392,
+            "ev": 102.9,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.2
+          },
+          {
+            "angle": 26,
+            "d": "2026-06-16",
+            "dist": 410,
+            "ev": 106.9,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 88.4
+          },
+          {
+            "angle": 31,
+            "d": "2026-04-26",
+            "dist": 390,
+            "ev": 104.9,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 94.4
+          },
+          {
+            "angle": 29,
+            "d": "2026-04-17",
+            "dist": 392,
+            "ev": 99.1,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 94.1
+          },
+          {
+            "angle": 32,
+            "d": "2026-04-17",
+            "dist": 365,
+            "ev": 96.3,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 88.7
+          },
+          {
+            "angle": 25,
+            "d": "2026-04-11",
+            "dist": 406,
+            "ev": 101.4,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 84.9
+          },
+          {
+            "angle": 36,
+            "d": "2026-04-11",
+            "dist": 386,
+            "ev": 104.1,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "type": "ST",
+            "velo": 80.6
+          }
+        ],
+        "total": 12
+      },
+      "league": "NL",
+      "nameJa": "千賀滉大",
+      "pitches": [
+        {
+          "ba": 0.321,
+          "hardHit": 37.8,
+          "hr": 5,
+          "nameJa": "フォーシーム",
+          "putAway": 25.8,
+          "rv100": -2.8,
+          "type": "FF",
+          "usage": 37.6,
+          "velo": 96.1,
+          "whiff": 19.8,
+          "woba": 0.453,
+          "xwoba": 0.407
+        },
+        {
+          "ba": 0.098,
+          "hardHit": 30,
+          "hr": 0,
+          "nameJa": "スプリット",
+          "putAway": 24.1,
+          "rv100": 0.2,
+          "type": "FS",
+          "usage": 23.4,
+          "velo": null,
+          "whiff": 41.3,
+          "woba": 0.212,
+          "xwoba": 0.23
+        },
+        {
+          "ba": 0.387,
+          "hardHit": 31,
+          "hr": 4,
+          "nameJa": "カッター",
+          "putAway": 8.3,
+          "rv100": -4.3,
+          "type": "FC",
+          "usage": 20.2,
+          "velo": 89.5,
+          "whiff": 26.1,
+          "woba": 0.534,
+          "xwoba": 0.402
+        },
+        {
+          "ba": 0.6,
+          "hardHit": 60,
+          "hr": 1,
+          "nameJa": "スイーパー",
+          "putAway": 0,
+          "rv100": -2.7,
+          "type": "ST",
+          "usage": 8.3,
+          "velo": 80.6,
+          "whiff": 22.2,
+          "woba": 0.65,
+          "xwoba": 0.462
+        },
+        {
+          "ba": 0.167,
+          "hardHit": 57.1,
+          "hr": 1,
+          "nameJa": "スライダー",
+          "putAway": 31.3,
+          "rv100": 1.2,
+          "type": "SL",
+          "usage": 6.4,
+          "velo": 86.2,
+          "whiff": 48.5,
+          "woba": 0.304,
+          "xwoba": 0.241
+        }
+      ],
+      "team": "メッツ",
+      "totalPitches": 702,
+      "xera": 5.35
+    },
+    "680736": {
+      "era": 2.69,
+      "hrAllowed": {
+        "byPitch": {
+          "カッター": 1,
+          "シンカー": 1,
+          "スライダー": 3,
+          "フォーシーム": 3
+        },
+        "list": [
+          {
+            "angle": 35,
+            "d": "2026-06-30",
+            "dist": 424,
+            "ev": 104.9,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 86.7
+          },
+          {
+            "angle": 28,
+            "d": "2026-06-23",
+            "dist": 369,
+            "ev": 100.4,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.9
+          },
+          {
+            "angle": 24,
+            "d": "2026-06-11",
+            "dist": 383,
+            "ev": 103.7,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 86.5
+          },
+          {
+            "angle": 26,
+            "d": "2026-06-11",
+            "dist": 440,
+            "ev": 108.7,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 88.1
+          },
+          {
+            "angle": 26,
+            "d": "2026-05-29",
+            "dist": 411,
+            "ev": 104.8,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.4
+          },
+          {
+            "angle": 29,
+            "d": "2026-05-22",
+            "dist": 410,
+            "ev": 107.2,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 89.2
+          },
+          {
+            "angle": 25,
+            "d": "2026-05-10",
+            "dist": 396,
+            "ev": 103.1,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 92.2
+          },
+          {
+            "angle": 28,
+            "d": "2026-05-10",
+            "dist": 390,
+            "ev": 104.9,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 94.2
+          }
+        ],
+        "total": 8
+      },
+      "league": "NL",
+      "nameJa": "ジャスティン・ロブレスキー",
+      "pitches": [
+        {
+          "ba": 0.18,
+          "hardHit": 41,
+          "hr": 3,
+          "nameJa": "フォーシーム",
+          "putAway": 21.9,
+          "rv100": 2.6,
+          "type": "FF",
+          "usage": 50,
+          "velo": 94.3,
+          "whiff": 21.9,
+          "woba": 0.225,
+          "xwoba": 0.284
+        },
+        {
+          "ba": 0.216,
+          "hardHit": 50.5,
+          "hr": 3,
+          "nameJa": "スライダー",
+          "putAway": 13.1,
+          "rv100": -0.2,
+          "type": "SL",
+          "usage": 29.9,
+          "velo": 86.2,
+          "whiff": 19.7,
+          "woba": 0.288,
+          "xwoba": 0.325
+        },
+        {
+          "ba": 0.361,
+          "hardHit": 28.6,
+          "hr": 1,
+          "nameJa": "シンカー",
+          "putAway": 25,
+          "rv100": 1.7,
+          "type": "SI",
+          "usage": 7,
+          "velo": 93.5,
+          "whiff": 9.1,
+          "woba": 0.392,
+          "xwoba": 0.382
+        },
+        {
+          "ba": 0.313,
+          "hardHit": 50,
+          "hr": 0,
+          "nameJa": "カーブ",
+          "putAway": 0,
+          "rv100": 0.2,
+          "type": "CU",
+          "usage": 5.4,
+          "velo": 74.5,
+          "whiff": 8.6,
+          "woba": 0.347,
+          "xwoba": 0.372
+        },
+        {
+          "ba": 0.125,
+          "hardHit": 33.3,
+          "hr": 0,
+          "nameJa": "チェンジアップ",
+          "putAway": 3.8,
+          "rv100": 1.6,
+          "type": "CH",
+          "usage": 5.1,
+          "velo": 85.7,
+          "whiff": 12.5,
+          "woba": 0.169,
+          "xwoba": 0.285
+        }
+      ],
+      "team": "ドジャース",
+      "totalPitches": 1398,
+      "xera": 4.11
+    },
+    "684007": {
+      "era": 4.28,
+      "hrAllowed": {
+        "byPitch": {
+          "シンカー": 2,
+          "スイーパー": 3,
+          "スプリット": 6,
+          "フォーシーム": 10
+        },
+        "list": [
+          {
+            "angle": 24,
+            "d": "2026-07-04",
+            "dist": 364,
+            "ev": 101.1,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 90.8
+          },
+          {
+            "angle": 23,
+            "d": "2026-06-24",
+            "dist": 416,
+            "ev": 108.4,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 91
+          },
+          {
+            "angle": 34,
+            "d": "2026-06-24",
+            "dist": 420,
+            "ev": 104.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 91.6
+          },
+          {
+            "angle": 34,
+            "d": "2026-06-24",
+            "dist": 387,
+            "ev": 102.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 92.5
+          },
+          {
+            "angle": 26,
+            "d": "2026-06-04",
+            "dist": 421,
+            "ev": 103.4,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 82.7
+          },
+          {
+            "angle": 24,
+            "d": "2026-06-04",
+            "dist": 396,
+            "ev": 103.7,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 89.6
+          },
+          {
+            "angle": 45,
+            "d": "2026-06-04",
+            "dist": 358,
+            "ev": 98,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 84.5
+          },
+          {
+            "angle": 30,
+            "d": "2026-06-04",
+            "dist": 369,
+            "ev": 98.7,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 92.3
+          },
+          {
+            "angle": 23,
+            "d": "2026-05-29",
+            "dist": 409,
+            "ev": 105.5,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 82.1
+          },
+          {
+            "angle": 32,
+            "d": "2026-05-29",
+            "dist": 402,
+            "ev": 104.9,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 84.4
+          },
+          {
+            "angle": 27,
+            "d": "2026-05-29",
+            "dist": 411,
+            "ev": 105,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 92.4
+          },
+          {
+            "angle": 24,
+            "d": "2026-05-24",
+            "dist": 426,
+            "ev": 105.1,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 83.5
+          },
+          {
+            "angle": 30,
+            "d": "2026-05-24",
+            "dist": 367,
+            "ev": 96,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 93
+          },
+          {
+            "angle": 25,
+            "d": "2026-05-24",
+            "dist": 388,
+            "ev": 103.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 92.6
+          },
+          {
+            "angle": 32,
+            "d": "2026-05-18",
+            "dist": 419,
+            "ev": 106.2,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "type": "ST",
+            "velo": 80.2
+          },
+          {
+            "angle": 34,
+            "d": "2026-05-18",
+            "dist": 409,
+            "ev": 109.3,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "type": "ST",
+            "velo": 81.4
+          },
+          {
+            "angle": 30,
+            "d": "2026-05-13",
+            "dist": 402,
+            "ev": 99,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "type": "ST",
+            "velo": 81.7
+          },
+          {
+            "angle": 35,
+            "d": "2026-05-07",
+            "dist": 393,
+            "ev": 105.8,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 91.2
+          },
+          {
+            "angle": 34,
+            "d": "2026-04-21",
+            "dist": 386,
+            "ev": 97.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 91.6
+          },
+          {
+            "angle": 28,
+            "d": "2026-04-15",
+            "dist": 423,
+            "ev": 105.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 92.3
+          },
+          {
+            "angle": 32,
+            "d": "2026-03-29",
+            "dist": 384,
+            "ev": 100.2,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 85.1
+          }
+        ],
+        "total": 21
+      },
+      "league": "NL",
+      "nameJa": "今永昇太",
+      "pitches": [
+        {
+          "ba": 0.26,
+          "hardHit": 46.2,
+          "hr": 10,
+          "nameJa": "フォーシーム",
+          "putAway": 17.6,
+          "rv100": -0.4,
+          "type": "FF",
+          "usage": 42.4,
+          "velo": 91.8,
+          "whiff": 20.2,
+          "woba": 0.352,
+          "xwoba": 0.345
+        },
+        {
+          "ba": 0.197,
+          "hardHit": 26,
+          "hr": 6,
+          "nameJa": "スプリット",
+          "putAway": 24.4,
+          "rv100": 0.6,
+          "type": "FS",
+          "usage": 33,
+          "velo": 83.2,
+          "whiff": 41.9,
+          "woba": 0.271,
+          "xwoba": 0.25
+        },
+        {
+          "ba": 0.19,
+          "hardHit": 21.4,
+          "hr": 3,
+          "nameJa": "スイーパー",
+          "putAway": 20,
+          "rv100": 0.3,
+          "type": "ST",
+          "usage": 13.9,
+          "velo": 81.4,
+          "whiff": 37,
+          "woba": 0.296,
+          "xwoba": 0.265
+        },
+        {
+          "ba": 0.281,
+          "hardHit": 50,
+          "hr": 2,
+          "nameJa": "シンカー",
+          "putAway": 27.3,
+          "rv100": -0.2,
+          "type": "SI",
+          "usage": 6.7,
+          "velo": 90.3,
+          "whiff": 13.2,
+          "woba": 0.39,
+          "xwoba": 0.343
+        }
+      ],
+      "team": "カブス",
+      "totalPitches": 1536,
+      "xera": 3.67
+    },
+    "694819": {
+      "era": 1.62,
+      "hrAllowed": {
+        "byPitch": {
+          "カッター": 2,
+          "スライダー": 2,
+          "フォーシーム": 5
+        },
+        "list": [
+          {
+            "angle": 37,
+            "d": "2026-07-07",
+            "dist": 378,
+            "ev": 101.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 102.4
+          },
+          {
+            "angle": 23,
+            "d": "2026-07-07",
+            "dist": 386,
+            "ev": 105.6,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 95.1
+          },
+          {
+            "angle": 41,
+            "d": "2026-07-02",
+            "dist": 358,
+            "ev": 98.5,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 95.6
+          },
+          {
+            "angle": 27,
+            "d": "2026-07-02",
+            "dist": 402,
+            "ev": 102.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 102.3
+          },
+          {
+            "angle": 24,
+            "d": "2026-06-26",
+            "dist": 409,
+            "ev": 103.8,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 90.1
+          },
+          {
+            "angle": 30,
+            "d": "2026-04-14",
+            "dist": 378,
+            "ev": 96.6,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 92.5
+          },
+          {
+            "angle": 33,
+            "d": "2026-04-14",
+            "dist": 392,
+            "ev": 101.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.9
+          },
+          {
+            "angle": 28,
+            "d": "2026-04-01",
+            "dist": 364,
+            "ev": 102.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.5
+          },
+          {
+            "angle": 28,
+            "d": "2026-03-26",
+            "dist": 417,
+            "ev": 107.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 99.5
+          }
+        ],
+        "total": 9
+      },
+      "league": "NL",
+      "nameJa": "ミシオロウスキー",
+      "pitches": [
+        {
+          "ba": 0.171,
+          "hardHit": 38.2,
+          "hr": 5,
+          "nameJa": "フォーシーム",
+          "putAway": 35.2,
+          "rv100": 2,
+          "type": "FF",
+          "usage": 63.1,
+          "velo": 100.5,
+          "whiff": 41,
+          "woba": 0.244,
+          "xwoba": 0.228
+        },
+        {
+          "ba": 0.094,
+          "hardHit": 34.9,
+          "hr": 2,
+          "nameJa": "カッター",
+          "putAway": 30.6,
+          "rv100": 3.7,
+          "type": "FC",
+          "usage": 13.6,
+          "velo": 96,
+          "whiff": 20.7,
+          "woba": 0.17,
+          "xwoba": 0.255
+        },
+        {
+          "ba": 0.082,
+          "hardHit": 25,
+          "hr": 0,
+          "nameJa": "カーブ",
+          "putAway": 29.9,
+          "rv100": 1.5,
+          "type": "CU",
+          "usage": 11.2,
+          "velo": 87.9,
+          "whiff": 47.4,
+          "woba": 0.158,
+          "xwoba": 0.167
+        },
+        {
+          "ba": 0.189,
+          "hardHit": 28.6,
+          "hr": 2,
+          "nameJa": "スライダー",
+          "putAway": 22.4,
+          "rv100": 2.1,
+          "type": "SL",
+          "usage": 10.4,
+          "velo": 92.6,
+          "whiff": 31.7,
+          "woba": 0.233,
+          "xwoba": 0.236
+        }
+      ],
+      "team": "ブルワーズ",
+      "totalPitches": 1632,
+      "xera": 2.06
+    },
+    "694973": {
+      "era": 3.58,
+      "hrAllowed": {
+        "byPitch": {
+          "シンカー": 2,
+          "スイーパー": 2,
+          "スライダー": 1,
+          "チェンジアップ": 1,
+          "フォーシーム": 5
+        },
+        "list": [
+          {
+            "angle": 27,
+            "d": "2026-07-01",
+            "dist": 351,
+            "ev": 99.2,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 85.8
+          },
+          {
+            "angle": 35,
+            "d": "2026-07-01",
+            "dist": 372,
+            "ev": 93.8,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "type": "ST",
+            "velo": 85
+          },
+          {
+            "angle": 18,
+            "d": "2026-06-20",
+            "dist": 341,
+            "ev": 104.9,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95
+          },
+          {
+            "angle": 27,
+            "d": "2026-06-14",
+            "dist": 424,
+            "ev": 102.3,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 87.8
+          },
+          {
+            "angle": 31,
+            "d": "2026-06-14",
+            "dist": 403,
+            "ev": 104.4,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 96.2
+          },
+          {
+            "angle": 25,
+            "d": "2026-05-23",
+            "dist": 396,
+            "ev": 106.8,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.8
+          },
+          {
+            "angle": 35,
+            "d": "2026-05-17",
+            "dist": 401,
+            "ev": 103.7,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 95.5
+          },
+          {
+            "angle": 40,
+            "d": "2026-04-30",
+            "dist": 383,
+            "ev": 107,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "type": "ST",
+            "velo": 83.6
+          },
+          {
+            "angle": 28,
+            "d": "2026-04-30",
+            "dist": 391,
+            "ev": 107.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.7
+          },
+          {
+            "angle": 23,
+            "d": "2026-04-13",
+            "dist": 379,
+            "ev": 104.6,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 99.5
+          },
+          {
+            "angle": 26,
+            "d": "2026-04-07",
+            "dist": 383,
+            "ev": 105.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.4
+          }
+        ],
+        "total": 11
+      },
+      "league": "NL",
+      "nameJa": "ポール・スキーンズ",
+      "pitches": [
+        {
+          "ba": 0.187,
+          "hardHit": 44.9,
+          "hr": 5,
+          "nameJa": "フォーシーム",
+          "putAway": 25.6,
+          "rv100": 1.6,
+          "type": "FF",
+          "usage": 39.1,
+          "velo": 97,
+          "whiff": 29.4,
+          "woba": 0.266,
+          "xwoba": 0.259
+        },
+        {
+          "ba": 0.242,
+          "hardHit": 17.1,
+          "hr": 1,
+          "nameJa": "チェンジアップ",
+          "putAway": 18.4,
+          "rv100": -1.5,
+          "type": "CH",
+          "usage": 15.9,
+          "velo": 88.8,
+          "whiff": 38.4,
+          "woba": 0.292,
+          "xwoba": 0.235
+        },
+        {
+          "ba": 0.1,
+          "hardHit": 20.7,
+          "hr": 2,
+          "nameJa": "スイーパー",
+          "putAway": 17.1,
+          "rv100": 1.3,
+          "type": "ST",
+          "usage": 15.6,
+          "velo": 84.2,
+          "whiff": 26.9,
+          "woba": 0.198,
+          "xwoba": 0.162
+        },
+        {
+          "ba": 0.298,
+          "hardHit": 52.5,
+          "hr": 2,
+          "nameJa": "シンカー",
+          "putAway": 17.9,
+          "rv100": 0.1,
+          "type": "SI",
+          "usage": 11.4,
+          "velo": 96.7,
+          "whiff": 8.4,
+          "woba": 0.376,
+          "xwoba": 0.339
+        },
+        {
+          "ba": 0.349,
+          "hardHit": 37.8,
+          "hr": 0,
+          "nameJa": "スプリット",
+          "putAway": 21.2,
+          "rv100": 0.4,
+          "type": "FS",
+          "usage": 11.4,
+          "velo": 93.4,
+          "whiff": 19.8,
+          "woba": 0.362,
+          "xwoba": 0.305
+        },
+        {
+          "ba": 0.189,
+          "hardHit": 40,
+          "hr": 1,
+          "nameJa": "スライダー",
+          "putAway": 30.4,
+          "rv100": 0.7,
+          "type": "SL",
+          "usage": 6.1,
+          "velo": 86.7,
+          "whiff": 36.9,
+          "woba": 0.296,
+          "xwoba": 0.253
+        }
+      ],
+      "team": "パイレーツ",
+      "totalPitches": 1718,
+      "xera": 2.74
+    },
+    "695243": {
+      "era": 0.96,
+      "hrAllowed": {
+        "byPitch": {},
+        "list": [],
+        "total": 0
+      },
+      "league": "NL",
+      "nameJa": "メイソン・ミラー",
+      "pitches": [
+        {
+          "ba": 0.137,
+          "hardHit": 7.7,
+          "hr": 0,
+          "nameJa": "スライダー",
+          "putAway": 39.8,
+          "rv100": 2.5,
+          "type": "SL",
+          "usage": 54.2,
+          "velo": 87.8,
+          "whiff": 56.4,
+          "woba": 0.176,
+          "xwoba": 0.125
+        },
+        {
+          "ba": 0.135,
+          "hardHit": 31.3,
+          "hr": 0,
+          "nameJa": "フォーシーム",
+          "putAway": 26.3,
+          "rv100": 2.7,
+          "type": "FF",
+          "usage": 42.8,
+          "velo": 101.3,
+          "whiff": 39.9,
+          "woba": 0.195,
+          "xwoba": 0.259
+        }
+      ],
+      "team": "パドレス",
+      "totalPitches": 594,
+      "xera": 1.32
+    },
+    "808963": {
+      "era": 5.4,
+      "hrAllowed": {
+        "byPitch": {
+          "スプリット": 3,
+          "スライダー": 3,
+          "フォーク": 2,
+          "フォーシーム": 9
+        },
+        "list": [
+          {
+            "angle": 25,
+            "d": "2026-07-02",
+            "dist": 383,
+            "ev": 100.1,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 90.3
+          },
+          {
+            "angle": 29,
+            "d": "2026-07-02",
+            "dist": 383,
+            "ev": 99.2,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 84.9
+          },
+          {
+            "angle": 31,
+            "d": "2026-07-02",
+            "dist": 408,
+            "ev": 103.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.2
+          },
+          {
+            "angle": 30,
+            "d": "2026-06-26",
+            "dist": 372,
+            "ev": 98.1,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 86.8
+          },
+          {
+            "angle": 34,
+            "d": "2026-06-19",
+            "dist": 375,
+            "ev": 97.5,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 98
+          },
+          {
+            "angle": 40,
+            "d": "2026-06-19",
+            "dist": 375,
+            "ev": 106.6,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 88.2
+          },
+          {
+            "angle": 27,
+            "d": "2026-06-12",
+            "dist": 387,
+            "ev": 99.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 99
+          },
+          {
+            "angle": 27,
+            "d": "2026-05-30",
+            "dist": 406,
+            "ev": 103,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 98.9
+          },
+          {
+            "angle": 26,
+            "d": "2026-05-11",
+            "dist": 401,
+            "ev": 102.7,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 91.9
+          },
+          {
+            "angle": 17,
+            "d": "2026-05-02",
+            "dist": 372,
+            "ev": 110,
+            "name": "Forkball",
+            "nameJa": "フォーク",
+            "type": "FO",
+            "velo": 84.2
+          },
+          {
+            "angle": 23,
+            "d": "2026-04-25",
+            "dist": 390,
+            "ev": 105.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.5
+          },
+          {
+            "angle": 26,
+            "d": "2026-04-25",
+            "dist": 374,
+            "ev": 97,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 83.7
+          },
+          {
+            "angle": 25,
+            "d": "2026-04-25",
+            "dist": 404,
+            "ev": 103.8,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 98.5
+          },
+          {
+            "angle": 30,
+            "d": "2026-04-19",
+            "dist": 448,
+            "ev": 105.9,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.4
+          },
+          {
+            "angle": 33,
+            "d": "2026-04-12",
+            "dist": 388,
+            "ev": 101.7,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.1
+          },
+          {
+            "angle": 34,
+            "d": "2026-04-05",
+            "dist": 416,
+            "ev": 107.6,
+            "name": "Forkball",
+            "nameJa": "フォーク",
+            "type": "FO",
+            "velo": 85.3
+          },
+          {
+            "angle": 30,
+            "d": "2026-04-05",
+            "dist": 405,
+            "ev": 107.4,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.5
+          }
+        ],
+        "total": 17
+      },
+      "league": "NL",
+      "nameJa": "佐々木朗希",
+      "pitches": [
+        {
+          "ba": 0.315,
+          "hardHit": 60.2,
+          "hr": 9,
+          "nameJa": "フォーシーム",
+          "putAway": 16.6,
+          "rv100": -1.4,
+          "type": "FF",
+          "usage": 43.2,
+          "velo": 97.5,
+          "whiff": 18.8,
+          "woba": 0.433,
+          "xwoba": 0.417
+        },
+        {
+          "ba": 0.189,
+          "hardHit": 32.9,
+          "hr": 3,
+          "nameJa": "スプリット",
+          "putAway": 17.4,
+          "rv100": -0.4,
+          "type": "FS",
+          "usage": 34.8,
+          "velo": 90.2,
+          "whiff": 33.5,
+          "woba": 0.28,
+          "xwoba": 0.271
+        },
+        {
+          "ba": 0.226,
+          "hardHit": 31.6,
+          "hr": 3,
+          "nameJa": "スライダー",
+          "putAway": 22.9,
+          "rv100": -0.7,
+          "type": "SL",
+          "usage": 21.9,
+          "velo": 86.6,
+          "whiff": 38.9,
+          "woba": 0.346,
+          "xwoba": 0.26
+        }
+      ],
+      "team": "ドジャース",
+      "totalPitches": 1344,
+      "xera": 4.78
+    },
+    "808967": {
+      "era": 2.49,
+      "hrAllowed": {
+        "byPitch": {
+          "カッター": 2,
+          "カーブ": 1,
+          "スプリット": 3,
+          "フォーシーム": 5
+        },
+        "list": [
+          {
+            "angle": 26,
+            "d": "2026-06-27",
+            "dist": 414,
+            "ev": 104.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.9
+          },
+          {
+            "angle": 26,
+            "d": "2026-06-13",
+            "dist": 388,
+            "ev": 108.5,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.6
+          },
+          {
+            "angle": 23,
+            "d": "2026-05-18",
+            "dist": 376,
+            "ev": 98.1,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 92
+          },
+          {
+            "angle": 27,
+            "d": "2026-05-12",
+            "dist": 384,
+            "ev": 102.4,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.4
+          },
+          {
+            "angle": 23,
+            "d": "2026-05-12",
+            "dist": 360,
+            "ev": 99.4,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 90.8
+          },
+          {
+            "angle": 26,
+            "d": "2026-05-12",
+            "dist": 393,
+            "ev": 102.1,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 93
+          },
+          {
+            "angle": 27,
+            "d": "2026-05-04",
+            "dist": 390,
+            "ev": 107,
+            "name": "Cutter",
+            "nameJa": "カッター",
+            "type": "FC",
+            "velo": 90.1
+          },
+          {
+            "angle": 23,
+            "d": "2026-04-27",
+            "dist": 348,
+            "ev": 101.1,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 92.3
+          },
+          {
+            "angle": 37,
+            "d": "2026-04-14",
+            "dist": 402,
+            "ev": 111.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.3
+          },
+          {
+            "angle": 35,
+            "d": "2026-04-01",
+            "dist": 407,
+            "ev": 107.4,
+            "name": "Curveball",
+            "nameJa": "カーブ",
+            "type": "CU",
+            "velo": 79.2
+          },
+          {
+            "angle": 34,
+            "d": "2026-03-26",
+            "dist": 398,
+            "ev": 102,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.2
+          }
+        ],
+        "total": 11
+      },
+      "league": "NL",
+      "nameJa": "山本由伸",
+      "pitches": [
+        {
+          "ba": 0.173,
+          "hardHit": 53.7,
+          "hr": 5,
+          "nameJa": "フォーシーム",
+          "putAway": 22.5,
+          "rv100": 1.7,
+          "type": "FF",
+          "usage": 27.1,
+          "velo": 96.1,
+          "whiff": 30.5,
+          "woba": 0.287,
+          "xwoba": 0.371
+        },
+        {
+          "ba": 0.149,
+          "hardHit": 33.3,
+          "hr": 3,
+          "nameJa": "スプリット",
+          "putAway": 18.4,
+          "rv100": 1.4,
+          "type": "FS",
+          "usage": 26.9,
+          "velo": 91.5,
+          "whiff": 32.3,
+          "woba": 0.18,
+          "xwoba": 0.202
+        },
+        {
+          "ba": 0.292,
+          "hardHit": 23.7,
+          "hr": 2,
+          "nameJa": "カッター",
+          "putAway": 25,
+          "rv100": -0.4,
+          "type": "FC",
+          "usage": 13.3,
+          "velo": 91.4,
+          "whiff": 27.5,
+          "woba": 0.352,
+          "xwoba": 0.343
+        },
+        {
+          "ba": 0.302,
+          "hardHit": 26.5,
+          "hr": 1,
+          "nameJa": "カーブ",
+          "putAway": 16.4,
+          "rv100": 0,
+          "type": "CU",
+          "usage": 13.2,
+          "velo": 77.1,
+          "whiff": 24.4,
+          "woba": 0.339,
+          "xwoba": 0.346
+        },
+        {
+          "ba": 0.132,
+          "hardHit": 34.2,
+          "hr": 0,
+          "nameJa": "シンカー",
+          "putAway": 28.8,
+          "rv100": 4.3,
+          "type": "SI",
+          "usage": 12.7,
+          "velo": 95.4,
+          "whiff": 13.3,
+          "woba": 0.16,
+          "xwoba": 0.221
+        },
+        {
+          "ba": 0.182,
+          "hardHit": 38.5,
+          "hr": 0,
+          "nameJa": "スライダー",
+          "putAway": 18.9,
+          "rv100": 2.6,
+          "type": "SL",
+          "usage": 6.8,
+          "velo": 87.2,
+          "whiff": 33.3,
+          "woba": 0.253,
+          "xwoba": 0.268
+        }
+      ],
+      "team": "ドジャース",
+      "totalPitches": 1555,
+      "xera": 3.31
+    },
+    "837227": {
+      "era": 6.06,
+      "hrAllowed": {
+        "byPitch": {
+          "スライダー": 6,
+          "チェンジアップ": 1,
+          "フォーシーム": 2
+        },
+        "list": [
+          {
+            "angle": 24,
+            "d": "2026-07-07",
+            "dist": 419,
+            "ev": 111.4,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 83.1
+          },
+          {
+            "angle": 25,
+            "d": "2026-07-01",
+            "dist": 399,
+            "ev": 104,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 93.4
+          },
+          {
+            "angle": 26,
+            "d": "2026-07-01",
+            "dist": 452,
+            "ev": 112.6,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 87.1
+          },
+          {
+            "angle": 30,
+            "d": "2026-06-19",
+            "dist": 376,
+            "ev": 100.8,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 88.3
+          },
+          {
+            "angle": 35,
+            "d": "2026-05-31",
+            "dist": 347,
+            "ev": 100.4,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 87.8
+          },
+          {
+            "angle": 26,
+            "d": "2026-05-18",
+            "dist": 381,
+            "ev": 104,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.2
+          },
+          {
+            "angle": 21,
+            "d": "2026-05-18",
+            "dist": 429,
+            "ev": 112.3,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 87.8
+          },
+          {
+            "angle": 25,
+            "d": "2026-05-12",
+            "dist": 381,
+            "ev": 105.5,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 87.1
+          },
+          {
+            "angle": 34,
+            "d": "2026-05-12",
+            "dist": 369,
+            "ev": 101.7,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 86.1
+          }
+        ],
+        "total": 9
+      },
+      "league": "AL",
+      "nameJa": "今井達也",
+      "pitches": [
+        {
+          "ba": 0.186,
+          "hardHit": 38.5,
+          "hr": 6,
+          "nameJa": "スライダー",
+          "putAway": 26.1,
+          "rv100": 0.4,
+          "type": "SL",
+          "usage": 45,
+          "velo": 86.6,
+          "whiff": 39.9,
+          "woba": 0.286,
+          "xwoba": 0.271
+        },
+        {
+          "ba": 0.313,
+          "hardHit": 51.8,
+          "hr": 2,
+          "nameJa": "フォーシーム",
+          "putAway": 11.8,
+          "rv100": -0.4,
+          "type": "FF",
+          "usage": 43.2,
+          "velo": 94.8,
+          "whiff": 17.8,
+          "woba": 0.4,
+          "xwoba": 0.419
+        },
+        {
+          "ba": 0.182,
+          "hardHit": 50,
+          "hr": 0,
+          "nameJa": "シンカー",
+          "putAway": 11.1,
+          "rv100": 2,
+          "type": "SI",
+          "usage": 6.1,
+          "velo": 94.5,
+          "whiff": 17.9,
+          "woba": 0.307,
+          "xwoba": 0.455
+        }
+      ],
+      "team": "アストロズ",
+      "totalPitches": 964,
+      "xera": 5.07
+    }
+  },
+  "season": 2026
+}
