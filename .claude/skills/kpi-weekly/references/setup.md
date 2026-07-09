@@ -2,7 +2,7 @@
 
 > ✅ **両店とも設定済み（2026-07-02 開通確認）**。以下は再発行・3号店追加時の手順。
 > 確定値: SA=`kpi-weekly@gen-lang-client-0996954181.iam.gserviceaccount.com`（鍵は
-> `~/secrets/kpi-weekly-sa.json`）/ GA4 プロパティID: 1号店=541315640・2号店=541564295
+> `~/鍵/gen-lang-client-0996954181-150a15682335.json`）/ GA4 プロパティID: 1号店=541315640・2号店=541564295
 > （※397718724 は**アカウントID**なので使わない＝初回に403でハマった原因）/
 > GSC: 両ドメインとも sc-domain 型で SA に制限付き権限付与済み。
 
@@ -18,7 +18,7 @@
 3. 「APIとサービス」→「認証情報」→「認証情報を作成」→「サービスアカウント」
    - 名前: `kpi-weekly`（任意）。ロールは**付けなくてよい**（GA4/GSC側で権限を付けるため）
 4. 作ったサービスアカウントを開く →「キー」タブ →「鍵を追加」→「新しい鍵を作成」→ **JSON**
-   - ダウンロードされた JSON を安全な場所に置く（例: `~/secrets/kpi-weekly-sa.json`）
+   - ダウンロードされた JSON を安全な場所に置く（例: `~/鍵/gen-lang-client-0996954181-150a15682335.json`）
    - ⚠️ この JSON は**絶対にリポジトリに置かない・コミットしない**
 5. サービスアカウントの**メールアドレス**（`kpi-weekly@〜.iam.gserviceaccount.com`）をコピーしておく
 
@@ -39,7 +39,7 @@
 
 ```
 GA4_PROPERTY_ID=（§2-2 の数値）
-GOOGLE_APPLICATION_CREDENTIALS=/Users/rt_murayama/secrets/kpi-weekly-sa.json
+GOOGLE_APPLICATION_CREDENTIALS=/Users/rt_murayama/鍵/gen-lang-client-0996954181-150a15682335.json
 # GSC のプロパティが URL プレフィックス型の場合のみ（既定は sc-domain:matome-mlb-kaigai.jp）
 # GSC_SITE=https://matome-mlb-kaigai.jp/
 ```
@@ -58,7 +58,7 @@ jp-games ルーティンと同じ環境シークレットに登録:
 - `GA4_PROPERTY_ID` = 数値ID
 - `GOOGLE_SERVICE_ACCOUNT_JSON_B64` = JSONキーの base64。作り方:
   ```bash
-  base64 -i ~/secrets/kpi-weekly-sa.json | pbcopy
+  base64 -i ~/鍵/gen-lang-client-0996954181-150a15682335.json | pbcopy
   ```
 - （必要なら）`GSC_SITE`
 
