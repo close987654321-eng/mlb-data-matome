@@ -83,16 +83,14 @@ export async function getCyYoungBoard(): Promise<CyYoungBoard | null> {
   return cache;
 }
 
-/** 詳細ページを作る投手＝各リーグ上位 N（既定5）。generateStaticParams と相互に使う。 */
-export const CY_DETAIL_TOP = 5;
-
+/** 詳細ページを作る投手＝ボードの全行（規定到達の全投手）。generateStaticParams と相互に使う。 */
 export async function getCyDetailRows(): Promise<CyRow[]> {
   const board = await getCyYoungBoard();
   if (!board) return [];
-  return [...board.leagues.NL.slice(0, CY_DETAIL_TOP), ...board.leagues.AL.slice(0, CY_DETAIL_TOP)];
+  return [...board.leagues.NL, ...board.leagues.AL];
 }
 
-/** 指定 mlbId の投手が「詳細ページ対象（上位N）」ならその行を返す。対象外/未生成は null。 */
+/** 指定 mlbId の投手がボードに載っていればその行を返す。対象外/未生成は null。 */
 export async function getCyPitcher(mlbId: number): Promise<{ row: CyRow; board: CyYoungBoard } | null> {
   const board = await getCyYoungBoard();
   if (!board) return null;

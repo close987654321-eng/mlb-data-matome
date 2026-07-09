@@ -1359,12 +1359,12 @@ async function runArsenal(season, asOf) {
     // snapshot 未生成のフォールバック＝日本人投手＋ライバル（team は空でも壊さない）。
     targets = [...new Set([...RIVAL_IDS, ...Object.keys(JP_NAMES).map(Number)])];
   }
-  // サイヤング予測ボードの各リーグ上位5名（詳細ページ /cy-young/[id] 用）＝tracked に無い候補にも球種を持たせる。
-  // cyyoung を先に実行しておくと拾える（CI は cyyoung→arsenal の順）。
+  // サイヤング予測ボードの各リーグ上位12名（＝ボードで表示する行・詳細ページ /cy-young/[id] 用）
+  // ＝tracked に無い候補にも球種を持たせる。cyyoung を先に実行しておくと拾える（CI は cyyoung→arsenal の順）。
   try {
     const board = JSON.parse(readFileSync(path.join(process.cwd(), 'data', 'cy-young-board.json'), 'utf8'));
     for (const lg of ['NL', 'AL']) {
-      for (const r of (board.leagues?.[lg] ?? []).slice(0, 5)) if (r.id) targets.push(Number(r.id));
+      for (const r of (board.leagues?.[lg] ?? []).slice(0, 12)) if (r.id) targets.push(Number(r.id));
     }
   } catch {
     /* ボード未生成なら tracked のみ */
@@ -1516,11 +1516,11 @@ function cyWhy(g, en) {
     .sort((a, b) => b.v - a.v)
     .slice(0, 2);
   const parts = [];
-  parts.push(cand.length ? (en ? 'League-best ' : 'リーグ上位の ') + cand.map((c) => (en ? c.en : c.ja)).join(en ? ', ' : '・') : en ? 'Solid all-around' : '総合力で上位');
+  parts.push(cand.length ? (en ? 'League-best ' : '') + cand.map((c) => (en ? c.en : c.ja)).join(en ? ', ' : '・') + (en ? '' : 'はリーグ上位') : en ? 'Solid all-around' : '総合力で上位');
   if (g.xera != null) {
     const d = Math.round((Number(g.era) - g.xera) * 100) / 100;
-    if (d > 0.5) parts.push(en ? `stuff even better (xERA ${g.xera})` : `中身はさらに good（xERA${g.xera}）`);
-    else if (d < -0.5) parts.push(en ? `riding luck (xERA ${g.xera})` : `やや幸運（xERA${g.xera}）`);
+    if (d > 0.5) parts.push(en ? `stuff even better (xERA ${g.xera})` : `内容はもっと良い（xERA${g.xera}）`);
+    else if (d < -0.5) parts.push(en ? `riding luck (xERA ${g.xera})` : `数字は出来すぎ気味（xERA${g.xera}）`);
   }
   return parts.join(en ? ' · ' : ' / ');
 }

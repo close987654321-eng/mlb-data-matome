@@ -18,7 +18,7 @@ import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
 
-/** 詳細ページを作る投手＝各リーグ上位N。全 locale × 10投手を静的化。 */
+/** 詳細ページを作る投手＝ボードの全行（規定到達の全投手）。全 locale × 全投手を静的化。 */
 export async function generateStaticParams() {
   const rows = await getCyDetailRows();
   return locales.flatMap((locale) => rows.map((r) => ({ locale, id: String(r.id) })));
@@ -27,9 +27,9 @@ export async function generateStaticParams() {
 // スコア内訳の指標定義（per-metric の重み＝防御率+xERA が prevention 0.40 を折半、他はそのまま）。
 const METRICS: { key: keyof CyRow['pct']; ja: string; en: string; w: number }[] = [
   { key: 'era', ja: '防御率', en: 'ERA', w: 0.2 },
-  { key: 'xera', ja: 'xERA（中身）', en: 'xERA', w: 0.2 },
-  { key: 'kbb', ja: 'K-BB%（支配力）', en: 'K-BB%', w: 0.25 },
-  { key: 'ip', ja: '投球回（負担）', en: 'Innings', w: 0.2 },
+  { key: 'xera', ja: 'xERA', en: 'xERA', w: 0.2 },
+  { key: 'kbb', ja: 'K-BB%', en: 'K-BB%', w: 0.25 },
+  { key: 'ip', ja: '投球回', en: 'Innings', w: 0.2 },
   { key: 'whip', ja: 'WHIP', en: 'WHIP', w: 0.1 },
   { key: 'hr9', ja: '被弾の少なさ', en: 'HR prevention', w: 0.05 },
 ];
@@ -42,8 +42,8 @@ function copy(en: boolean, r: CyRow, season: number) {
         metaTitle: `${r.nameEn} — Cy Young ${season} projection & pitch arsenal`,
         metaDesc: `${r.nameEn} (${r.teamEn}) ranks #${r.rank} in our ${lgWord} Cy Young projection: ERA ${r.era}, xERA ${r.xera ?? '—'}, ${r.ipDisp} IP. Pitch arsenal and overseas fan reactions.`,
         eyebrow: `${lgWord} Cy Young · projected #${r.rank}`,
-        scoreTitle: 'Why this rank — score breakdown',
-        scoreLead: `Percentile within ${lgWord} qualified starters × weight. Higher = more dominant in that category.`,
+        scoreTitle: 'Score breakdown',
+        scoreLead: `Each bar shows where he ranks among ${lgWord} qualified starters (0–100). Longer = better in that category; the weighted sum is the projection score.`,
         statsTitle: 'Season line',
         reactTitle: 'Overseas reactions',
         reactEmpty: 'No reaction articles yet for this pitcher.',
@@ -56,8 +56,8 @@ function copy(en: boolean, r: CyRow, season: number) {
         metaTitle: `${r.nameJa} サイ・ヤング賞予測${season}｜成績と球種の分析`,
         metaDesc: `${r.nameJa}（${r.teamJa}）は当サイトの${lgWord}サイ・ヤング賞予測で${r.rank}位。防御率${r.era}・xERA${r.xera ?? '—'}・${r.ipDisp}回。球種の設計図と海外ファンの反応まで。`,
         eyebrow: `${lgWord} サイ・ヤング賞 予測 ${r.rank}位`,
-        scoreTitle: 'この順位の理由（スコア内訳）',
-        scoreLead: `${lgWord}の規定投手内でのパーセンタイル×重み。右にいくほどその項目でリーグ上位。`,
+        scoreTitle: 'スコア内訳',
+        scoreLead: `各項目は、${lgWord}の規定投手の中でどの位置にいるかを0〜100で表した値。バーが長いほどリーグ上位で、これに重みを掛けて合算したものが予測スコアです。`,
         statsTitle: '今季成績',
         reactTitle: '海外の反応',
         reactEmpty: 'この投手の海外の反応記事はまだありません。',
@@ -187,7 +187,7 @@ export default async function CyYoungPitcherPage({
         </div>
       </section>
 
-      {/* スコア内訳＝この順位の理由（percentile バー×重み）。 */}
+      {/* スコア内訳（percentile バー×重み）＝この順位になっている根拠。 */}
       <section>
         <SectionHeading label={c.scoreTitle} lead level="h2" />
         <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{c.scoreLead}</p>
@@ -232,7 +232,7 @@ export default async function CyYoungPitcherPage({
         </dl>
       </section>
 
-      {/* 球種の設計図（arsenal がある投手のみ＝上位5は取得済み）。既存コンポーネントを再利用。 */}
+      {/* 球種の設計図（arsenal がある投手のみ＝表示上位＋日本人は取得済み・下位は無ければ出さない）。既存コンポーネントを再利用。 */}
       {arsenal && arsenal.pitches.length > 0 ? <PitchArsenal arsenal={arsenal} season={season} locale={locale} /> : null}
 
       {/* この投手の海外の反応。 */}

@@ -11,7 +11,7 @@ const fmt3 = (v: number | null | undefined) => (v == null ? '—' : v.toFixed(3)
 const pct = (v: number | null | undefined) => (v == null ? '—' : `${v.toFixed(1)}%`);
 const mph = (v: number | null | undefined) => (v == null ? '—' : v.toFixed(1));
 
-/** 要点セル（決め球 / 穴 / 数字vs中身）。gap-px + bg-line のヘアラインで区切る。 */
+/** 要点セル（決め球 / 一番打たれている球 / ERAとxERAの差）。gap-px + bg-line のヘアラインで区切る。 */
 function KeyCell({ label, value, sub }: { label: string; value: string; sub?: string }) {
   return (
     <div className="bg-paper px-4 py-3">
@@ -67,13 +67,13 @@ export default function PitchArsenal({
       }
     : {
         title: '球種の設計図',
-        sub: '球種ごとの投球割合・球速・空振り率・被wOBA/期待被wOBA、そして「どの球を本塁打にされたか」。数字（ERA）と中身（xERA）の乖離で、サイヤング級の“実力”を測る。',
-        putout: '決め球（最多空振り）',
-        hole: '穴（最も打たれる球）',
-        luck: '数字 vs 中身',
-        pitch: '球種', usage: '割合', velo: '球速', whiff: '空振り', woba: '被wOBA', xwoba: '期待', hard: 'ハード%', hr: '被弾',
+        sub: '球種ごとの投球割合・球速・空振り率・被wOBAと、「どの球を本塁打にされたか」の内訳。ERAとxERA（打球の質から計算した期待防御率）の差からは、数字と投球内容のズレも見えてきます。',
+        putout: '決め球',
+        hole: '一番打たれている球',
+        luck: 'ERAとxERAの差',
+        pitch: '球種', usage: '割合', velo: '球速', whiff: '空振り', woba: '被wOBA', xwoba: 'xwOBA', hard: 'ハード%', hr: '被弾',
         whiffTop: '空振り', hrTitle: '被弾の球種内訳', longest: '最も飛ばされた1本',
-        lucky: '幸運（中身より良い数字）', unlucky: '不運（中身はもっと良い）',
+        lucky: '数字は出来すぎ気味', unlucky: '内容はもっと良い',
         source: `出典: Baseball Savant（Statcast・MLB公式）${season ? `・${season}シーズン` : ''}。数値は公知の事実。`,
       };
 
@@ -84,7 +84,7 @@ export default function PitchArsenal({
         <p className="mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{t.sub}</p>
       </div>
 
-      {/* 要点＝決め球 / 穴 / 数字vs中身（記事フックの素） */}
+      {/* 要点＝決め球 / 一番打たれている球 / ERAとxERAの差（記事フックの素） */}
       <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-[2px] border border-line bg-line sm:grid-cols-3">
         <KeyCell label={t.putout} value={best ? best.nameJa : '—'} sub={best ? `${t.whiffTop} ${pct(best.whiff)}` : undefined} />
         <KeyCell label={t.hole} value={leak ? leak.nameJa : '—'} sub={leak ? `${t.woba} ${fmt3(leak.woba)}` : undefined} />

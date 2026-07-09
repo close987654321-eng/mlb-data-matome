@@ -22,7 +22,7 @@ function copy(en: boolean, year: number | string) {
         crumb: 'Cy Young Board',
         eyebrow: `${year} Season`,
         title: 'Cy Young Prediction Board & Reactions',
-        lead: 'Qualified starters ranked by a blended, within-league score (ERA + xERA, K-BB%, innings, WHIP, HR/9). A data-driven read on the AL & NL Cy Young races — with Shohei Ohtani, Yoshinobu Yamamoto and Japan’s rotation highlighted, plus overseas fan reactions. Tap any name for the pitch-by-pitch breakdown.',
+        lead: 'Qualified starters ranked by a blended, within-league score (ERA + xERA, K-BB%, innings, WHIP, HR/9). A data-driven read on the AL & NL Cy Young races — with Shohei Ohtani, Yoshinobu Yamamoto and Japan’s rotation highlighted, plus overseas fan reactions. Tap any row for the full breakdown.',
         metaTitle: `Cy Young ${year} Prediction & Overseas Reactions | AL/NL Pitchers`,
         metaDesc: `Who wins the ${year} Cy Young? Qualified starters scored by ERA, xERA, K-BB% and innings across AL & NL — plus overseas fan reactions to Ohtani, Yamamoto and Japan’s starters.`,
       }
@@ -30,7 +30,7 @@ function copy(en: boolean, year: number | string) {
         crumb: 'サイヤング予測',
         eyebrow: `${year} シーズン`,
         title: 'サイ・ヤング賞 予測ボード＆海外の反応',
-        lead: '規定到達の先発を、防御率＋xERA・K-BB%・投球回・WHIP・被弾率でリーグ内スコア化した“予測ボード”。ア・リーグ／ナ・リーグのサイヤング賞争いをデータで読み、大谷翔平・山本由伸ら日本人投手の現在地と、海外ファンの反応まで一枚に。名前をタップすると球種の設計図と海外の反応へ。',
+        lead: '規定投球回に到達した先発投手を、防御率・xERA・K-BB%・投球回・WHIP・被弾率をもとにリーグ内でスコア化した予測ランキング。ア・リーグとナ・リーグのサイ・ヤング賞争いを、大谷翔平・山本由伸ら日本人投手の順位や海外ファンの反応とあわせて追えます。気になる投手の行をタップすると詳細ページへ。',
         metaTitle: `サイ・ヤング賞 予測 ${year}｜AL/NL投手スコアランキング`,
         metaDesc: `${year}サイ・ヤング賞は誰が獲る？規定投手を防御率・xERA・K-BB%・投球回で総合スコア化したAL/NL予測ランキングと、大谷翔平・山本由伸ら日本人投手への海外の反応をまとめて。`,
       };

@@ -2,7 +2,7 @@ import { Link } from '@/lib/navigation';
 import { PLAYERS } from '@/lib/players';
 import SectionHeading from '@/components/SectionHeading';
 import { headshotUrl, teamLogoUrl } from '@/lib/teams';
-import { type CyYoungBoard as Board, type CyRow, type CyWatch, CY_DETAIL_TOP } from '@/lib/cyYoungBoard';
+import { type CyYoungBoard as Board, type CyRow, type CyWatch } from '@/lib/cyYoungBoard';
 
 const TOP_N = 12; // 各リーグで通常表示する上位数（＋圏外の日本人は別途 append）
 
@@ -46,14 +46,12 @@ function JpChip({ label }: { label: string }) {
 function LeagueTable({
   league,
   rows,
-  slugByMlbId,
   maxScore,
   en,
   t,
 }: {
   league: string;
   rows: CyRow[];
-  slugByMlbId: Map<number, string>;
   maxScore: number;
   en: boolean;
   t: { pitcher: string; score: string; era: string; xera: string; ip: string; kbb: string; jp: string; more: string };
@@ -77,18 +75,19 @@ function LeagueTable({
               <th className="px-3 py-2 text-right font-medium">{t.xera}</th>
               <th className="px-3 py-2 text-right font-medium">{t.ip}</th>
               <th className="px-3 py-2 text-right font-medium">{t.kbb}</th>
+              <th className="w-6 px-2 py-2" aria-hidden />
             </tr>
           </thead>
           <tbody>
             {shown.map((row, i) =>
               row === 'gap' ? (
                 <tr key="gap" className="border-b border-line">
-                  <td colSpan={7} className="px-3 py-1 text-center text-xs text-ink-mute">
+                  <td colSpan={8} className="px-3 py-1 text-center text-xs text-ink-mute">
                     ⋯ {t.more}
                   </td>
                 </tr>
               ) : (
-                <Row key={row.id} row={row} slug={slugByMlbId.get(row.id)} maxScore={maxScore} en={en} jpLabel={t.jp} />
+                <Row key={row.id} row={row} maxScore={maxScore} en={en} jpLabel={t.jp} />
               ),
             )}
           </tbody>
@@ -98,29 +97,25 @@ function LeagueTable({
   );
 }
 
-function Row({ row, slug, maxScore, en, jpLabel }: { row: CyRow; slug?: string; maxScore: number; en: boolean; jpLabel: string }) {
+function Row({ row, maxScore, en, jpLabel }: { row: CyRow; maxScore: number; en: boolean; jpLabel: string }) {
   const name = en ? row.nameEn : row.nameJa;
   const team = en ? row.teamEn : row.teamJa;
   const why = en ? row.whyEn : row.why;
-  // リンク先: 上位N（詳細ページあり）→ /cy-young/{id} ／ それ以外で追跡選手 → 選手ハブ ／ 他は素テキスト。
-  const detail = row.rank <= CY_DETAIL_TOP;
-  const href = detail ? `/cy-young/${row.id}` : slug ? `/player/${slug}` : null;
+  // 行全体がリンク: 名前の Link を after:inset-0 で行いっぱいに広げる（tr は relative）。全投手に詳細ページあり。
   const nameCls = row.isJp ? 'font-bold text-ink' : 'font-medium text-ink';
   return (
-    <tr className={`border-b border-line last:border-0 ${row.isJp ? 'bg-ink/[0.04]' : ''}`}>
+    <tr
+      className={`group relative border-b border-line transition-colors last:border-0 hover:bg-ink/[0.06] ${row.isJp ? 'bg-ink/[0.04]' : ''}`}
+    >
       <td className="px-3 py-2 align-top text-ink-mute">{row.rank}</td>
       <td className="px-3 py-2 align-top">
         <div className="flex items-start gap-2.5">
           <Avatar mlbId={row.id} teamId={row.teamId} name={name} />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              {href ? (
-                <Link href={href} className={`hover:underline ${nameCls}`}>
-                  {name}
-                </Link>
-              ) : (
-                <span className={nameCls}>{name}</span>
-              )}
+              <Link href={`/cy-young/${row.id}`} className={`${nameCls} after:absolute after:inset-0 group-hover:underline`}>
+                {name}
+              </Link>
               {row.isJp && <JpChip label={jpLabel} />}
             </div>
             <div className="mt-0.5 text-xs leading-relaxed text-ink-mute">
@@ -140,14 +135,17 @@ function Row({ row, slug, maxScore, en, jpLabel }: { row: CyRow; slug?: string; 
       <td className="px-3 py-2 align-top text-right text-ink-soft">{row.xera != null ? row.xera.toFixed(2) : '—'}</td>
       <td className="px-3 py-2 align-top text-right text-ink-soft">{row.ipDisp}</td>
       <td className="px-3 py-2 align-top text-right text-ink-soft">{row.kbbPct != null ? `${row.kbbPct.toFixed(1)}%` : '—'}</td>
+      <td className="px-2 py-2 text-right align-middle text-ink-mute transition-colors group-hover:text-ink" aria-hidden>
+        ›
+      </td>
     </tr>
   );
 }
 
 /**
  * サイ・ヤング賞 予測ボード＝規定到達投手を AL/NL 別に合成スコアで順位予測し、日本人投手を強調。
- * 各行→選手ハブ（球種の設計図で“中身”を確認）へ送客＝「徹底分析→予測」の締め。
- * スコアは断定でなく“データからの見立て”＝式と出典を明示する。サーバーコンポーネント（静的）。
+ * 行全体がリンク＝各行→ /cy-young/{id} 詳細ページ（スコア内訳＋球種の設計図）へ送客。
+ * スコアは断定でなく予測＝式と出典を明示する。サーバーコンポーネント（静的）。
  */
 export default function CyYoungBoard({ board, locale }: { board: Board; locale: string }) {
   const en = locale === 'en';
@@ -168,10 +166,10 @@ export default function CyYoungBoard({ board, locale }: { board: Board; locale: 
       }
     : {
         methodTitle: '予測スコアの出し方',
-        method: `予測スコア＝各投手のリーグ内パーセンタイルを、防御率+xERA（${pct(w.prevention)}）・K-BB%（${pct(w.kbb)}）・投球回（${pct(w.ip)}）・WHIP（${pct(w.whip)}）・被弾率HR9（${pct(w.hr9)}）で重み付き合算した“データからの見立て”（断定ではない）。サイヤングはリーグ内争いなので league 別に、投球回を入れて救援を除外。対象は規定到達の先発（目安 約${board.qualifyIp}回）。`,
-        cols: { pitcher: '投手', score: '予測スコア', era: '防御率', xera: 'xERA', ip: '投球回', kbb: 'K-BB%', jp: '日本', more: '同リーグの下位' },
-        watchTitle: '圏外の注目日本人（規定投球回 未達）',
-        watchSub: 'レートは支配的だが規定投球回にまだ届かない＝現時点では投票圏外。日本人先発の“現在地”。',
+        method: `各指標が同じリーグの規定投手の中でどの位置にいるかを0〜100で数値化し、防御率＋xERA（${pct(w.prevention)}）・K-BB%（${pct(w.kbb)}）・投球回（${pct(w.ip)}）・WHIP（${pct(w.whip)}）・HR/9（${pct(w.hr9)}）の重みをつけて合算したものが予測スコアです。サイ・ヤング賞はリーグ内での争いなのでAL/NL別に集計し、対象は規定投球回（目安 約${board.qualifyIp}回）に到達した先発に絞っています。現時点の成績にもとづく予測です。`,
+        cols: { pitcher: '投手', score: '予測スコア', era: '防御率', xera: 'xERA', ip: '投球回', kbb: 'K-BB%', jp: '日本', more: 'この間の投手は省略' },
+        watchTitle: '規定投球回に届いていない日本人先発',
+        watchSub: '投球内容は上位級でも、投球回がまだ規定に届かずランキングの対象外の投手たち。規定に到達すれば上の表に入ってきます。',
         watchGap: (n: number) => `規定まであと約${n}回`,
         na: '防御率', naSub: '先発',
         source: `出典: MLB公式Stats API＋Baseball Savant（公知の数値）。${board.season}シーズン・${board.asOf}時点。`,
@@ -194,7 +192,7 @@ export default function CyYoungBoard({ board, locale }: { board: Board; locale: 
       {/* NL → AL の順（大谷・山本ら日本人はほぼ NL）。 */}
       {(['NL', 'AL'] as const).map((lg) => (
         <section key={lg} className="space-y-2" aria-label={lg}>
-          <LeagueTable league={lg} rows={board.leagues[lg]} slugByMlbId={slugByMlbId} maxScore={maxScore} en={en} t={t.cols} />
+          <LeagueTable league={lg} rows={board.leagues[lg]} maxScore={maxScore} en={en} t={t.cols} />
         </section>
       ))}
 

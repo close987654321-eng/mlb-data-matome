@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-09 16:32",
+  "asOf": "2026-07-09 18:49",
   "leagues": {
     "AL": [
       {
@@ -29,7 +29,7 @@
         "teamJa": "ヤンキース",
         "w": 9,
         "whip": "0.93",
-        "why": "リーグ上位の 防御率2.01・112.0回 / やや幸運（xERA2.92）",
+        "why": "防御率2.01・112.0回はリーグ上位 / 数字は出来すぎ気味（xERA2.92）",
         "whyEn": "League-best 2.01 ERA, 112.0 IP · riding luck (xERA 2.92)",
         "xera": 2.92
       },
@@ -60,7 +60,7 @@
         "teamJa": "ツインズ",
         "w": 6,
         "whip": "1.04",
-        "why": "リーグ上位の K-BB%23.3・防御率2.85",
+        "why": "K-BB%23.3・防御率2.85はリーグ上位",
         "whyEn": "League-best 23.3% K-BB, 2.85 ERA",
         "xera": 3.08
       },
@@ -91,7 +91,7 @@
         "teamJa": "ブルージェイズ",
         "w": 6,
         "whip": "1.13",
-        "why": "リーグ上位の K-BB%25.9・被弾の少なさ",
+        "why": "K-BB%25.9・被弾の少なさはリーグ上位",
         "whyEn": "League-best 25.9% K-BB, HR suppression",
         "xera": 2.9
       },
@@ -122,7 +122,7 @@
         "teamJa": "マリナーズ",
         "w": 7,
         "whip": "0.95",
-        "why": "リーグ上位の WHIP0.95・107.1回",
+        "why": "WHIP0.95・107.1回はリーグ上位",
         "whyEn": "League-best 0.95 WHIP, 107.1 IP",
         "xera": 3.62
       },
@@ -153,7 +153,7 @@
         "teamJa": "ガーディアンズ",
         "w": 7,
         "whip": "1.08",
-        "why": "リーグ上位の 防御率2.80・被弾の少なさ",
+        "why": "防御率2.80・被弾の少なさはリーグ上位",
         "whyEn": "League-best 2.80 ERA, HR suppression",
         "xera": 3.22
       },
@@ -184,7 +184,7 @@
         "teamJa": "レイズ",
         "w": 7,
         "whip": "0.90",
-        "why": "リーグ上位の WHIP0.90・防御率2.78",
+        "why": "WHIP0.90・防御率2.78はリーグ上位",
         "whyEn": "League-best 0.90 WHIP, 2.78 ERA",
         "xera": 3.17
       },
@@ -215,7 +215,7 @@
         "teamJa": "レンジャーズ",
         "w": 7,
         "whip": "1.01",
-        "why": "リーグ上位の K-BB%24.9・WHIP1.01",
+        "why": "K-BB%24.9・WHIP1.01はリーグ上位",
         "whyEn": "League-best 24.9% K-BB, 1.01 WHIP",
         "xera": 3.44
       },
@@ -246,7 +246,7 @@
         "teamJa": "エンゼルス",
         "w": 3,
         "whip": "1.11",
-        "why": "リーグ上位の 被弾の少なさ / 中身はさらに good（xERA3.19）",
+        "why": "被弾の少なさはリーグ上位 / 内容はもっと良い（xERA3.19）",
         "whyEn": "League-best HR suppression · stuff even better (xERA 3.19)",
         "xera": 3.19
       },
@@ -277,7 +277,7 @@
         "teamJa": "マリナーズ",
         "w": 7,
         "whip": "1.07",
-        "why": "リーグ上位の WHIP1.07 / 中身はさらに good（xERA3.51）",
+        "why": "WHIP1.07はリーグ上位 / 内容はもっと良い（xERA3.51）",
         "whyEn": "League-best 1.07 WHIP · stuff even better (xERA 3.51)",
         "xera": 3.51
       },
@@ -308,7 +308,7 @@
         "teamJa": "レッドソックス",
         "w": 4,
         "whip": "1.16",
-        "why": "リーグ上位の 被弾の少なさ・防御率3.15",
+        "why": "被弾の少なさ・防御率3.15はリーグ上位",
         "whyEn": "League-best HR suppression, 3.15 ERA",
         "xera": 3.29
       },
@@ -339,7 +339,7 @@
         "teamJa": "マリナーズ",
         "w": 7,
         "whip": "1.32",
-        "why": "リーグ上位の 110.0回",
+        "why": "110.0回はリーグ上位",
         "whyEn": "League-best 110.0 IP",
         "xera": 3.72
       },
@@ -370,7 +370,7 @@
         "teamJa": "ロイヤルズ",
         "w": 5,
         "whip": "1.16",
-        "why": "リーグ上位の 114.2回 / やや幸運（xERA4.05）",
+        "why": "114.2回はリーグ上位 / 数字は出来すぎ気味（xERA4.05）",
         "whyEn": "League-best 114.2 IP · riding luck (xERA 4.05)",
         "xera": 4.05
       },
@@ -401,7 +401,7 @@
         "teamJa": "レンジャーズ",
         "w": 9,
         "whip": "1.17",
-        "why": "リーグ上位の K-BB%19.7",
+        "why": "K-BB%19.7はリーグ上位",
         "whyEn": "League-best 19.7% K-BB",
         "xera": 4.02
       },
@@ -432,7 +432,7 @@
         "teamJa": "ガーディアンズ",
         "w": 9,
         "whip": "1.18",
-        "why": "リーグ上位の K-BB%20.0・106.1回 / やや幸運（xERA4.56）",
+        "why": "K-BB%20.0・106.1回はリーグ上位 / 数字は出来すぎ気味（xERA4.56）",
         "whyEn": "League-best 20.0% K-BB, 106.1 IP · riding luck (xERA 4.56)",
         "xera": 4.56
       },
@@ -494,7 +494,7 @@
         "teamJa": "エンゼルス",
         "w": 8,
         "whip": "1.28",
-        "why": "総合力で上位 / やや幸運（xERA4.28）",
+        "why": "総合力で上位 / 数字は出来すぎ気味（xERA4.28）",
         "whyEn": "Solid all-around · riding luck (xERA 4.28)",
         "xera": 4.28
       },
@@ -525,7 +525,7 @@
         "teamJa": "マリナーズ",
         "w": 6,
         "whip": "1.01",
-        "why": "リーグ上位の WHIP1.01 / やや幸運（xERA4.34）",
+        "why": "WHIP1.01はリーグ上位 / 数字は出来すぎ気味（xERA4.34）",
         "whyEn": "League-best 1.01 WHIP · riding luck (xERA 4.34)",
         "xera": 4.34
       },
@@ -556,7 +556,7 @@
         "teamJa": "ブルージェイズ",
         "w": 4,
         "whip": "1.22",
-        "why": "リーグ上位の 106.1回",
+        "why": "106.1回はリーグ上位",
         "whyEn": "League-best 106.1 IP",
         "xera": 3.89
       },
@@ -587,7 +587,7 @@
         "teamJa": "タイガース",
         "w": 5,
         "whip": "0.99",
-        "why": "リーグ上位の WHIP0.99・防御率3.15",
+        "why": "WHIP0.99・防御率3.15はリーグ上位",
         "whyEn": "League-best 0.99 WHIP, 3.15 ERA",
         "xera": 3.57
       },
@@ -649,7 +649,7 @@
         "teamJa": "ホワイトソックス",
         "w": 9,
         "whip": "1.29",
-        "why": "リーグ上位の 被弾の少なさ / やや幸運（xERA4.11）",
+        "why": "被弾の少なさはリーグ上位 / 数字は出来すぎ気味（xERA4.11）",
         "whyEn": "League-best HR suppression · riding luck (xERA 4.11)",
         "xera": 4.11
       },
@@ -680,7 +680,7 @@
         "teamJa": "レンジャーズ",
         "w": 5,
         "whip": "1.31",
-        "why": "総合力で上位 / 中身はさらに good（xERA3.86）",
+        "why": "総合力で上位 / 内容はもっと良い（xERA3.86）",
         "whyEn": "Solid all-around · stuff even better (xERA 3.86)",
         "xera": 3.86
       },
@@ -711,7 +711,7 @@
         "teamJa": "レイズ",
         "w": 7,
         "whip": "1.13",
-        "why": "リーグ上位の 防御率2.61 / やや幸運（xERA4.68）",
+        "why": "防御率2.61はリーグ上位 / 数字は出来すぎ気味（xERA4.68）",
         "whyEn": "League-best 2.61 ERA · riding luck (xERA 4.68)",
         "xera": 4.68
       },
@@ -742,7 +742,7 @@
         "teamJa": "アスレチックス",
         "w": 7,
         "whip": "1.22",
-        "why": "リーグ上位の 防御率3.10 / やや幸運（xERA4.05）",
+        "why": "防御率3.10はリーグ上位 / 数字は出来すぎ気味（xERA4.05）",
         "whyEn": "League-best 3.10 ERA · riding luck (xERA 4.05)",
         "xera": 4.05
       },
@@ -804,7 +804,7 @@
         "teamJa": "ガーディアンズ",
         "w": 2,
         "whip": "1.14",
-        "why": "リーグ上位の 106.1回 / やや幸運（xERA4.78）",
+        "why": "106.1回はリーグ上位 / 数字は出来すぎ気味（xERA4.78）",
         "whyEn": "League-best 106.1 IP · riding luck (xERA 4.78)",
         "xera": 4.78
       },
@@ -835,7 +835,7 @@
         "teamJa": "レッドソックス",
         "w": 7,
         "whip": "1.25",
-        "why": "総合力で上位 / やや幸運（xERA4.31）",
+        "why": "総合力で上位 / 数字は出来すぎ気味（xERA4.31）",
         "whyEn": "Solid all-around · riding luck (xERA 4.31)",
         "xera": 4.31
       },
@@ -866,7 +866,7 @@
         "teamJa": "オリオールズ",
         "w": 4,
         "whip": "1.37",
-        "why": "リーグ上位の 107.0回・被弾の少なさ",
+        "why": "107.0回・被弾の少なさはリーグ上位",
         "whyEn": "League-best 107.0 IP, HR suppression",
         "xera": 4.53
       },
@@ -928,7 +928,7 @@
         "teamJa": "ヤンキース",
         "w": 3,
         "whip": "1.25",
-        "why": "リーグ上位の K-BB%19.9",
+        "why": "K-BB%19.9はリーグ上位",
         "whyEn": "League-best 19.9% K-BB",
         "xera": 4.62
       },
@@ -1052,7 +1052,7 @@
         "teamJa": "ロイヤルズ",
         "w": 3,
         "whip": "1.43",
-        "why": "総合力で上位 / やや幸運（xERA5.45）",
+        "why": "総合力で上位 / 数字は出来すぎ気味（xERA5.45）",
         "whyEn": "Solid all-around · riding luck (xERA 5.45)",
         "xera": 5.45
       },
@@ -1083,7 +1083,7 @@
         "teamJa": "アスレチックス",
         "w": 3,
         "whip": "1.42",
-        "why": "総合力で上位 / 中身はさらに good（xERA4.62）",
+        "why": "総合力で上位 / 内容はもっと良い（xERA4.62）",
         "whyEn": "Solid all-around · stuff even better (xERA 4.62)",
         "xera": 4.62
       }
@@ -1116,7 +1116,7 @@
         "teamJa": "ブルワーズ",
         "w": 10,
         "whip": "0.76",
-        "why": "リーグ上位の 防御率1.62・K-BB%33.2",
+        "why": "防御率1.62・K-BB%33.2はリーグ上位",
         "whyEn": "League-best 1.62 ERA, 33.2% K-BB",
         "xera": 2.06
       },
@@ -1147,7 +1147,7 @@
         "teamJa": "フィリーズ",
         "w": 10,
         "whip": "1.16",
-        "why": "リーグ上位の 120.1回・K-BB%22.8 / やや幸運（xERA3.19）",
+        "why": "120.1回・K-BB%22.8はリーグ上位 / 数字は出来すぎ気味（xERA3.19）",
         "whyEn": "League-best 120.1 IP, 22.8% K-BB · riding luck (xERA 3.19)",
         "xera": 3.19
       },
@@ -1178,7 +1178,7 @@
         "teamJa": "ドジャース",
         "w": 9,
         "whip": "0.88",
-        "why": "リーグ上位の WHIP0.88・防御率2.49 / やや幸運（xERA3.31）",
+        "why": "WHIP0.88・防御率2.49はリーグ上位 / 数字は出来すぎ気味（xERA3.31）",
         "whyEn": "League-best 0.88 WHIP, 2.49 ERA · riding luck (xERA 3.31)",
         "xera": 3.31
       },
@@ -1209,7 +1209,7 @@
         "teamJa": "パイレーツ",
         "w": 9,
         "whip": "1.10",
-        "why": "リーグ上位の K-BB%22.1・108.1回",
+        "why": "K-BB%22.1・108.1回はリーグ上位",
         "whyEn": "League-best 22.1% K-BB, 108.1 IP",
         "xera": 3.17
       },
@@ -1240,7 +1240,7 @@
         "teamJa": "パイレーツ",
         "w": 7,
         "whip": "1.04",
-        "why": "リーグ上位の K-BB%23.8・WHIP1.04 / 中身はさらに good（xERA2.74）",
+        "why": "K-BB%23.8・WHIP1.04はリーグ上位 / 内容はもっと良い（xERA2.74）",
         "whyEn": "League-best 23.8% K-BB, 1.04 WHIP · stuff even better (xERA 2.74)",
         "xera": 2.74
       },
@@ -1271,7 +1271,7 @@
         "teamJa": "レッズ",
         "w": 11,
         "whip": "1.11",
-        "why": "リーグ上位の 防御率2.54",
+        "why": "防御率2.54はリーグ上位",
         "whyEn": "League-best 2.54 ERA",
         "xera": 3.03
       },
@@ -1302,7 +1302,7 @@
         "teamJa": "フィリーズ",
         "w": 7,
         "whip": "1.27",
-        "why": "リーグ上位の K-BB%21.1・被弾の少なさ / 中身はさらに good（xERA3.05）",
+        "why": "K-BB%21.1・被弾の少なさはリーグ上位 / 内容はもっと良い（xERA3.05）",
         "whyEn": "League-best 21.1% K-BB, HR suppression · stuff even better (xERA 3.05)",
         "xera": 3.05
       },
@@ -1333,7 +1333,7 @@
         "teamJa": "ブレーブス",
         "w": 9,
         "whip": "1.12",
-        "why": "リーグ上位の 防御率2.27・K-BB%22.4 / やや幸運（xERA3.44）",
+        "why": "防御率2.27・K-BB%22.4はリーグ上位 / 数字は出来すぎ気味（xERA3.44）",
         "whyEn": "League-best 2.27 ERA, 22.4% K-BB · riding luck (xERA 3.44)",
         "xera": 3.44
       },
@@ -1364,7 +1364,7 @@
         "teamJa": "ナショナルズ",
         "w": 10,
         "whip": "1.02",
-        "why": "リーグ上位の 110.1回・WHIP1.02 / やや幸運（xERA4.02）",
+        "why": "110.1回・WHIP1.02はリーグ上位 / 数字は出来すぎ気味（xERA4.02）",
         "whyEn": "League-best 110.1 IP, 1.02 WHIP · riding luck (xERA 4.02)",
         "xera": 4.02
       },
@@ -1395,7 +1395,7 @@
         "teamJa": "マーリンズ",
         "w": 9,
         "whip": "1.11",
-        "why": "リーグ上位の 防御率2.58 / やや幸運（xERA3.78）",
+        "why": "防御率2.58はリーグ上位 / 数字は出来すぎ気味（xERA3.78）",
         "whyEn": "League-best 2.58 ERA · riding luck (xERA 3.78)",
         "xera": 3.78
       },
@@ -1457,7 +1457,7 @@
         "teamJa": "ドジャース",
         "w": 10,
         "whip": "1.02",
-        "why": "リーグ上位の 被弾の少なさ・WHIP1.02 / やや幸運（xERA4.11）",
+        "why": "被弾の少なさ・WHIP1.02はリーグ上位 / 数字は出来すぎ気味（xERA4.11）",
         "whyEn": "League-best HR suppression, 1.02 WHIP · riding luck (xERA 4.11)",
         "xera": 4.11
       },
@@ -1488,7 +1488,7 @@
         "teamJa": "パドレス",
         "w": 6,
         "whip": "1.15",
-        "why": "リーグ上位の 108.1回 / やや幸運（xERA4.56）",
+        "why": "108.1回はリーグ上位 / 数字は出来すぎ気味（xERA4.56）",
         "whyEn": "League-best 108.1 IP · riding luck (xERA 4.56)",
         "xera": 4.56
       },
@@ -1519,7 +1519,7 @@
         "teamJa": "カブス",
         "w": 5,
         "whip": "1.10",
-        "why": "総合力で上位 / 中身はさらに good（xERA3.67）",
+        "why": "総合力で上位 / 内容はもっと良い（xERA3.67）",
         "whyEn": "Solid all-around · stuff even better (xERA 3.67)",
         "xera": 3.67
       },
@@ -1550,7 +1550,7 @@
         "teamJa": "マーリンズ",
         "w": 10,
         "whip": "1.25",
-        "why": "リーグ上位の 123.2回",
+        "why": "123.2回はリーグ上位",
         "whyEn": "League-best 123.2 IP",
         "xera": 3.78
       },
@@ -1581,7 +1581,7 @@
         "teamJa": "ダイヤモンドバックス",
         "w": 7,
         "whip": "1.16",
-        "why": "リーグ上位の 防御率2.25 / やや幸運（xERA5.01）",
+        "why": "防御率2.25はリーグ上位 / 数字は出来すぎ気味（xERA5.01）",
         "whyEn": "League-best 2.25 ERA · riding luck (xERA 5.01)",
         "xera": 5.01
       },
@@ -1612,7 +1612,7 @@
         "teamJa": "ジャイアンツ",
         "w": 6,
         "whip": "1.31",
-        "why": "リーグ上位の 被弾の少なさ / 中身はさらに good（xERA3.36）",
+        "why": "被弾の少なさはリーグ上位 / 内容はもっと良い（xERA3.36）",
         "whyEn": "League-best HR suppression · stuff even better (xERA 3.36)",
         "xera": 3.36
       },
@@ -1643,7 +1643,7 @@
         "teamJa": "ジャイアンツ",
         "w": 5,
         "whip": "1.16",
-        "why": "リーグ上位の 被弾の少なさ",
+        "why": "被弾の少なさはリーグ上位",
         "whyEn": "League-best HR suppression",
         "xera": 4
       },
@@ -1674,7 +1674,7 @@
         "teamJa": "カージナルス",
         "w": 4,
         "whip": "1.10",
-        "why": "総合力で上位 / やや幸運（xERA5.6）",
+        "why": "総合力で上位 / 数字は出来すぎ気味（xERA5.6）",
         "whyEn": "Solid all-around · riding luck (xERA 5.6)",
         "xera": 5.6
       },
@@ -1767,7 +1767,7 @@
         "teamJa": "ジャイアンツ",
         "w": 8,
         "whip": "1.23",
-        "why": "総合力で上位 / やや幸運（xERA4.56）",
+        "why": "総合力で上位 / 数字は出来すぎ気味（xERA4.56）",
         "whyEn": "Solid all-around · riding luck (xERA 4.56)",
         "xera": 4.56
       },
@@ -1798,7 +1798,7 @@
         "teamJa": "メッツ",
         "w": 5,
         "whip": "1.42",
-        "why": "総合力で上位 / 中身はさらに good（xERA3.75）",
+        "why": "総合力で上位 / 内容はもっと良い（xERA3.75）",
         "whyEn": "Solid all-around · stuff even better (xERA 3.75)",
         "xera": 3.75
       },
@@ -1829,7 +1829,7 @@
         "teamJa": "レッズ",
         "w": 5,
         "whip": "1.41",
-        "why": "総合力で上位 / やや幸運（xERA4.81）",
+        "why": "総合力で上位 / 数字は出来すぎ気味（xERA4.81）",
         "whyEn": "Solid all-around · riding luck (xERA 4.81)",
         "xera": 4.81
       },
@@ -1891,7 +1891,7 @@
         "teamJa": "カブス",
         "w": 7,
         "whip": "1.45",
-        "why": "総合力で上位 / やや幸運（xERA5.49）",
+        "why": "総合力で上位 / 数字は出来すぎ気味（xERA5.49）",
         "whyEn": "Solid all-around · riding luck (xERA 5.49)",
         "xera": 5.49
       },
