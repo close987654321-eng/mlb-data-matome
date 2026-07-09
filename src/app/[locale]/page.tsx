@@ -9,6 +9,8 @@ import { getPlayersSnapshot, type PlayerSeason } from '@/lib/playerStats';
 import { pickHero } from '@/lib/playerHero';
 import { SPORTS, SPORT_INFO, type Sport } from '@/lib/sports';
 import { getTeam } from '@/lib/teams';
+import { getMvpBoard } from '@/lib/mvpBoard';
+import { getCyYoungBoard } from '@/lib/cyYoungBoard';
 import FeedCard from '@/components/FeedCard';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
@@ -17,6 +19,7 @@ import SectionHeading from '@/components/SectionHeading';
 import SearchConsole from '@/components/home/SearchConsole';
 import TwoPillars from '@/components/home/TwoPillars';
 import PlayerRail, { type PlayerRailItem } from '@/components/home/PlayerRail';
+import RaceBoards, { type RaceBoardCard, type RaceRow } from '@/components/home/RaceBoards';
 import SportZones, { type SportZone } from '@/components/home/SportZones';
 import { localeAlternates, absoluteUrl, SITE_URL } from '@/lib/site';
 import type { Locale } from '@/lib/i18n';
@@ -36,11 +39,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   unstable_setRequestLocale(locale);
   const t = await getTranslations();
-  const [threads, columns, snap, allTags] = await Promise.all([
+  const [threads, columns, snap, allTags, mvpBoard, cyBoard] = await Promise.all([
     getAllThreads(),
     getAllColumns(),
     getPlayersSnapshot(),
     getAllTags(),
+    getMvpBoard(),
+    getCyYoungBoard(),
   ]);
 
   // 新着フィード（反応まとめ＋コラムを日付順に混ぜる）。
@@ -79,6 +84,44 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         teamColor: getTeam((s as PlayerSeason).team)?.color,
       };
     });
+
+  // アワードレース枠＝MVP／サイヤング予測ボードの各リーグ上位3人だけのダイジェスト（本体へ送客）。
+  // スコアはリーグ内パーセンタイルの合成値なので AL/NL を混ぜて並べない（ボード本体と同じ規律）。
+  const en = locale === 'en';
+  const toRaceRows = (
+    rows: { id: number; rank: number; nameJa: string; nameEn: string; score: number; isJp: boolean; teamId: number | null }[],
+  ): RaceRow[] =>
+    rows.slice(0, 3).map((r) => ({
+      id: r.id,
+      rank: r.rank,
+      name: en ? r.nameEn : r.nameJa,
+      score: r.score,
+      isJp: r.isJp,
+      teamId: r.teamId,
+    }));
+  const raceCards: RaceBoardCard[] = [];
+  if (mvpBoard) {
+    raceCards.push({
+      title: t('home.raceMvp'),
+      href: '/mvp',
+      asOfText: mvpBoard.asOf ? t('player.asOf', { date: mvpBoard.asOf }) : null,
+      leagues: [
+        { label: 'NL', rows: toRaceRows(mvpBoard.leagues.NL) },
+        { label: 'AL', rows: toRaceRows(mvpBoard.leagues.AL) },
+      ],
+    });
+  }
+  if (cyBoard) {
+    raceCards.push({
+      title: t('home.raceCy'),
+      href: '/cy-young',
+      asOfText: cyBoard.asOf ? t('player.asOf', { date: cyBoard.asOf }) : null,
+      leagues: [
+        { label: 'NL', rows: toRaceRows(cyBoard.leagues.NL) },
+        { label: 'AL', rows: toRaceRows(cyBoard.leagues.AL) },
+      ],
+    });
+  }
 
   // 競技別ゾーン。主役 MLB は枠を 2 倍（8件）＋見出し大、ボクシング/MMA は各4件で専用ゾーンを確保。
   // 「MLB を強調しつつ少数競技も埋もれさせない」両立。SoT=sports.ts（MLB が先頭）。
@@ -175,6 +218,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       <TwoPillars watchCount={watchCount} asOf={snap.asOf || undefined} />
 
       <PlayerRail items={railItems} />
+
+      <RaceBoards
+        heading={t('home.races')}
+        boardLabel={t('home.raceBoard')}
+        scoreLabel={t('home.raceScore')}
+        cards={raceCards}
+      />
 
       <SportZones zones={zones} locale={locale} />
 
