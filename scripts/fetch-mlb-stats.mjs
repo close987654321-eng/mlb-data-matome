@@ -1669,14 +1669,17 @@ async function runCyYoung(season, asOf) {
 // mvp … MVP「予測ボード」を data/mvp-board.json に書き出す（cyyoung の野手版）。
 // 用途: /mvp＝規定到達打者をAL/NL別に合成スコアで順位予測し、日本人を強調。
 // スコア: リーグ内パーセンタイルの重み付き合算（透明・相対＝MVPはリーグ内争い）。
-//   打撃 wRC+ ＋ xwOBA 折半(45%) / 本塁打(10%) / 走塁run(10%) / 守備+位置補正run(15%) / WAR(20%)。
+//   打撃 wRC+ ＋ xwOBA 折半(50%) / 本塁打(15%) / WAR(25%) / 走塁run(5%) / 守備+位置補正run(5%)。
+//   重みは実際のMVP投票・MLB公式の定期予測と傾向が合うよう較正（2026-07-09 村山依頼）＝投票は打撃成績が
+//   最重視で、守備・走塁は僅差のときの決め手程度。DH でも打撃が圧倒的なら選ばれる（大谷・アルバレスが実例）。
 //   WAR は statsapi の sabermetrics グループ（打撃/守備/走塁/位置補正の内訳つき）。二刀流（大谷）は
-//   投手WARを合算した warTotal で評価＝MVP投票の実態（総合価値）に合わせる。
+//   投手WARを合算した warTotal で評価し、さらに守備の重みを WAR に振り替える＝守備に就かない代わりに
+//   マウンドで貢献しており、DH位置補正（WARに織り込み済み）との二重減点を避けるため。
 // データ源: statsapi 一括打撃スタッツ＋sabermetrics ＋ Savant 野手CSV
 //   （expected_statistics=xwOBA / statcast=打球速度・バレル / bat-tracking=バットスピード / OAA・走力）。
 //   すべてキー不要・公知の数値のみ・サイト本体は叩かない（編集時/CI取得）。
 // ─────────────────────────────────────────────────────────────────────────────
-const MVP_WEIGHTS = { batting: 0.45, hr: 0.1, run: 0.1, def: 0.15, war: 0.2 };
+const MVP_WEIGHTS = { batting: 0.5, hr: 0.15, run: 0.05, def: 0.05, war: 0.25 };
 
 /** 規定打者の一括打撃スタッツ（league.id・守備位置付き）。1リクエストで全規定打者が返る。 */
 async function fetchQualifiedHitters(season) {
@@ -1761,6 +1764,61 @@ async function fetchBatTracking(season) {
   return map;
 }
 
+/** 打者の球種別 打撃成績（見た割合・wOBA・xwOBA・空振り率・ハードヒット率・run value）。id→配列。 */
+async function fetchBatterVsPitch(season) {
+  const map = new Map();
+  try {
+    const rows = await getCsv(`${SAVANT}/pitch-arsenal-stats?type=batter&pitchType=&year=${season}&team=&min=10&csv=true`);
+    for (const r of rows) {
+      const id = Number(r.player_id);
+      const pa = toNum(r.pa);
+      if (!id || pa == null || pa < 20) continue; // サンプルが薄い球種は出さない
+      if (!map.has(id)) map.set(id, []);
+      map.get(id).push({
+        type: r.pitch_type,
+        name: r.pitch_name,
+        nameJa: PITCH_JA[r.pitch_type] ?? r.pitch_name,
+        usage: toNum(r.pitch_usage),
+        pa,
+        ba: r.ba,
+        slg: r.slg,
+        woba: toNum(r.woba),
+        xwoba: toNum(r.est_woba),
+        whiff: toNum(r.whiff_percent),
+        hardHit: toNum(r.hard_hit_percent),
+        rv100: toNum(r.run_value_per_100),
+      });
+    }
+    for (const list of map.values()) list.sort((a, b) => (b.usage ?? 0) - (a.usage ?? 0));
+  } catch (e) {
+    console.warn(`球種別打撃 取得スキップ（コアは継続）: ${e.message}`);
+  }
+  return map;
+}
+
+/** スイング判断（Savant Swing/Take）＝ゾーン別のスイング/見送り判断 run value。id→{all,heart,shadow,chase,waste}。 */
+async function fetchSwingTake(season) {
+  const map = new Map();
+  try {
+    const rows = await getCsv(`${SAVANT}/swing-take?year=${season}&csv=true`);
+    const r1 = (v) => (v != null ? Math.round(v * 10) / 10 : null);
+    for (const r of rows) {
+      const id = Number(r.player_id);
+      if (!id) continue;
+      map.set(id, {
+        all: r1(toNum(r.runs_all)),
+        heart: r1(toNum(r.runs_heart)),
+        shadow: r1(toNum(r.runs_shadow)),
+        chase: r1(toNum(r.runs_chase)),
+        waste: r1(toNum(r.runs_waste)),
+      });
+    }
+  } catch (e) {
+    console.warn(`swing-take 取得スキップ（コアは継続）: ${e.message}`);
+  }
+  return map;
+}
+
 /** ランク行の「なぜ」を data から一言生成（percentile>=75 の強みを最大2つ＋xwOBA乖離の注記）。捏造しない。 */
 function mvpWhy(g, en) {
   const p = g.pct;
@@ -1786,12 +1844,14 @@ function mvpWhy(g, en) {
 }
 
 async function runMvp(season, asOf) {
-  const [rows, saber, xMap, scMap, btMap, savant, jpPeople] = await Promise.all([
+  const [rows, saber, xMap, scMap, btMap, vsMap, stMap, savant, jpPeople] = await Promise.all([
     fetchQualifiedHitters(season),
     fetchSaberHitting(season),
     fetchBatterExpected(season),
     fetchBatterStatcast(season),
     fetchBatTracking(season),
+    fetchBatterVsPitch(season),
+    fetchSwingTake(season),
     fetchSavant(season), // OAA・走力（snapshot と同じ取得を再利用）
     fetchStats([...JP_ID_SET], season), // 圏外の注目日本人（規定未達の野手）を拾うため
   ]);
@@ -1849,6 +1909,8 @@ async function runMvp(season, asOf) {
         sprint: savant.sprint.get(r.id) ?? null,
         oaa: savant.oaa.get(r.id)?.oaa ?? null,
       },
+      vsPitch: vsMap.get(r.id) ?? [], // 球種別の打撃成績（詳細ページ「得意・苦手球種」）
+      st: stMap.get(r.id) ?? null, // スイング判断（ゾーン別 run value）
     };
   };
   const all = rows.map(build);
@@ -1895,13 +1957,16 @@ async function runMvp(season, asOf) {
       g.pct = { wrc: wrcP[i], xwoba: xwP[i], hr: hrP[i], run: runP[i], def: defP[i], war: warP[i] };
       // wRC+ ＋ xwOBA ブレンド（xwOBA 欠損時は wRC+ のみ）＝「数字と中身」の折半。
       const batting = g.xwoba != null ? wrcP[i] * 0.5 + xwP[i] * 0.5 : wrcP[i];
+      // 二刀流は守備の重みを WAR へ振替（守備に就かない代わりにマウンドで貢献。DH位置補正はWARに織り込み済み＝二重減点を避ける）。
+      const defW = g.pos === 'TWP' ? 0 : MVP_WEIGHTS.def;
+      const warW = g.pos === 'TWP' ? MVP_WEIGHTS.war + MVP_WEIGHTS.def : MVP_WEIGHTS.war;
       g.score =
         Math.round(
           (batting * MVP_WEIGHTS.batting +
             hrP[i] * MVP_WEIGHTS.hr +
             runP[i] * MVP_WEIGHTS.run +
-            defP[i] * MVP_WEIGHTS.def +
-            warP[i] * MVP_WEIGHTS.war) *
+            defP[i] * defW +
+            warP[i] * warW) *
             10,
         ) / 10;
     });

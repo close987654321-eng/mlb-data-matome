@@ -27,6 +27,31 @@ export type MvpStatcast = {
   oaa: number | null; // 守備範囲 OAA（守備位置に就く野手のみ）
 };
 
+/** 球種別の打撃成績（Savant pitch-arsenal-stats type=batter）＝得意・苦手球種。 */
+export type MvpVsPitch = {
+  type: string; // 球種コード（FF/SL…）
+  name: string; // 英語名
+  nameJa: string;
+  usage: number | null; // その球種を見た割合 %
+  pa: number; // 打席（結果がその球種で終わった打席）
+  ba: string;
+  slg: string;
+  woba: number | null;
+  xwoba: number | null;
+  whiff: number | null; // 空振り率 %
+  hardHit: number | null; // ハードヒット率 %
+  rv100: number | null; // 100球あたり run value（打者視点・プラスが得）
+};
+
+/** スイング判断（Savant Swing/Take）＝ゾーン別のスイング/見送り判断で稼いだ run。 */
+export type MvpSwingTake = {
+  all: number | null;
+  heart: number | null; // ど真ん中（甘い球）
+  shadow: number | null; // ゾーン境界
+  chase: number | null; // ボール球
+  waste: number | null; // 大きく外れた球
+};
+
 /** ランク表の1行（規定到達打者）。 */
 export type MvpRow = {
   rank: number;
@@ -60,6 +85,8 @@ export type MvpRow = {
   score: number; // 合成スコア（0-100）
   pct: MvpPct; // 各指標のリーグ内パーセンタイル（詳細ページのスコア内訳バー）
   sc: MvpStatcast;
+  vsPitch: MvpVsPitch[]; // 球種別の打撃成績（usage 降順）
+  st: MvpSwingTake | null;
   why: string; // データ由来の一言（日本語）
   whyEn: string;
 };

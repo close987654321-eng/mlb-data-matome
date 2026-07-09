@@ -24,12 +24,12 @@ export async function generateStaticParams() {
 
 // スコア内訳の指標定義（per-metric の重み＝wRC+ + xwOBA が batting 0.45 を折半、他はそのまま）。
 const METRICS: { key: keyof MvpRow['pct']; ja: string; en: string; w: number }[] = [
-  { key: 'wrc', ja: 'wRC+', en: 'wRC+', w: 0.225 },
-  { key: 'xwoba', ja: 'xwOBA', en: 'xwOBA', w: 0.225 },
-  { key: 'hr', ja: '本塁打', en: 'Home runs', w: 0.1 },
-  { key: 'run', ja: '走塁', en: 'Baserunning', w: 0.1 },
-  { key: 'def', ja: '守備＋位置補正', en: 'Defense + positional', w: 0.15 },
-  { key: 'war', ja: 'WAR', en: 'WAR', w: 0.2 },
+  { key: 'wrc', ja: 'wRC+', en: 'wRC+', w: 0.25 },
+  { key: 'xwoba', ja: 'xwOBA', en: 'xwOBA', w: 0.25 },
+  { key: 'hr', ja: '本塁打', en: 'Home runs', w: 0.15 },
+  { key: 'run', ja: '走塁', en: 'Baserunning', w: 0.05 },
+  { key: 'def', ja: '守備＋位置補正', en: 'Defense + positional', w: 0.05 },
+  { key: 'war', ja: 'WAR', en: 'WAR', w: 0.25 },
 ];
 
 function copy(en: boolean, r: MvpRow, season: number) {
@@ -45,6 +45,12 @@ function copy(en: boolean, r: MvpRow, season: number) {
         statsTitle: 'Season line',
         scTitle: 'Batted-ball quality & swing (Statcast)',
         scLead: 'How hard and how well he hits the ball — the “stuff” behind the batting line.',
+        vsTitle: 'Performance by pitch type',
+        vsLead: 'How pitchers attack him and what he punishes — strengths and holes by pitch type.',
+        vsCols: { pitch: 'Pitch', usage: 'Seen%', pa: 'PA', woba: 'wOBA', xwoba: 'xwOBA', whiff: 'Whiff%', hard: 'Hard-hit%' },
+        stTitle: 'Swing decisions (Swing/Take)',
+        stLead: 'Runs gained from swing-or-take decisions by zone. Positive = better judgment.',
+        stZones: { all: 'Total', heart: 'Heart', shadow: 'Shadow', chase: 'Chase', waste: 'Waste' },
         twoWay: (h: number, p: number) => `Two-way: ${h} batting WAR + ${p} pitching WAR`,
         reactTitle: 'Overseas reactions',
         reactEmpty: 'No reaction articles yet for this hitter.',
@@ -62,6 +68,12 @@ function copy(en: boolean, r: MvpRow, season: number) {
         statsTitle: '今季成績',
         scTitle: '打球の質・スイング（Statcast）',
         scLead: 'どれだけ強く・どれだけ良い角度で打てているか＝打撃成績の“中身”。',
+        vsTitle: '球種別の打撃成績',
+        vsLead: 'どの球種を打ち、どの球種に空振りしているか＝投手からの攻められ方と得意・苦手。',
+        vsCols: { pitch: '球種', usage: '見た割合', pa: '打席', woba: 'wOBA', xwoba: 'xwOBA', whiff: '空振り率', hard: 'ハードヒット率' },
+        stTitle: 'スイング判断（Swing/Take）',
+        stLead: '「振るか・見送るか」の判断で稼いだ得点をゾーン別に。プラスほど選球・判断が良い。',
+        stZones: { all: '合計', heart: 'ハート（甘い球）', shadow: 'シャドー（境界）', chase: 'チェイス（ボール球）', waste: 'ウェイスト（大外れ）' },
         twoWay: (h: number, p: number) => `二刀流＝打撃WAR${h}＋投手WAR${p}を合算して評価`,
         reactTitle: '海外の反応',
         reactEmpty: 'この打者の海外の反応記事はまだありません。',
@@ -120,6 +132,11 @@ export default async function MvpHitterPage({
   const teamName = en ? row.teamEn : row.teamJa;
   const sc = row.sc;
   const fmt = (v: number | null, unit = '', digits = 1) => (v != null ? `${v.toFixed(digits)}${unit}` : '—');
+  const fmtSigned = (v: number | null) => (v == null ? '—' : `${v > 0 ? '+' : ''}${v.toFixed(1)}`);
+  // 二刀流は守備の重みを WAR に振替（スコア計算と同じ扱いを表示にも反映）。
+  const metrics = METRICS.map((m) =>
+    row.pos === 'TWP' && m.key === 'def' ? { ...m, w: 0 } : row.pos === 'TWP' && m.key === 'war' ? { ...m, w: 0.3 } : m,
+  );
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -201,7 +218,7 @@ export default async function MvpHitterPage({
         <SectionHeading label={c.scoreTitle} lead level="h2" />
         <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{c.scoreLead}</p>
         <ul className="space-y-2.5">
-          {METRICS.map((m) => {
+          {metrics.map((m) => {
             const v = row.pct[m.key] ?? 0;
             return (
               <li key={m.key} className="grid grid-cols-[7.5rem_1fr_2.5rem] items-center gap-3 text-sm sm:grid-cols-[10rem_1fr_3rem]">
@@ -265,6 +282,66 @@ export default async function MvpHitterPage({
           ))}
         </dl>
       </section>
+
+      {/* 球種別の打撃成績＝投手の球種の設計図に対応する「攻められ方」の厚み。 */}
+      {row.vsPitch.length > 0 ? (
+        <section>
+          <SectionHeading label={c.vsTitle} lead level="h2" />
+          <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{c.vsLead}</p>
+          <div className="overflow-x-auto rounded-[2px] border border-line">
+            <table className="w-full min-w-[560px] text-sm tabular-nums">
+              <thead>
+                <tr className="border-b border-line text-xs text-ink-mute">
+                  <th className="px-3 py-2 text-left font-medium">{c.vsCols.pitch}</th>
+                  <th className="px-3 py-2 text-right font-medium">{c.vsCols.usage}</th>
+                  <th className="px-3 py-2 text-right font-medium">{c.vsCols.pa}</th>
+                  <th className="px-3 py-2 text-right font-semibold text-ink">{c.vsCols.woba}</th>
+                  <th className="px-3 py-2 text-right font-medium">{c.vsCols.xwoba}</th>
+                  <th className="px-3 py-2 text-right font-medium">{c.vsCols.whiff}</th>
+                  <th className="px-3 py-2 text-right font-medium">{c.vsCols.hard}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {row.vsPitch.map((v) => (
+                  <tr key={v.type} className="border-b border-line last:border-0">
+                    <td className="px-3 py-2 font-medium text-ink">{en ? v.name : v.nameJa}</td>
+                    <td className="px-3 py-2 text-right text-ink-soft">{v.usage != null ? `${v.usage.toFixed(1)}%` : '—'}</td>
+                    <td className="px-3 py-2 text-right text-ink-soft">{v.pa}</td>
+                    <td className="px-3 py-2 text-right font-bold text-ink">{v.woba != null ? v.woba.toFixed(3) : '—'}</td>
+                    <td className="px-3 py-2 text-right text-ink-soft">{v.xwoba != null ? v.xwoba.toFixed(3) : '—'}</td>
+                    <td className="px-3 py-2 text-right text-ink-soft">{v.whiff != null ? `${v.whiff.toFixed(1)}%` : '—'}</td>
+                    <td className="px-3 py-2 text-right text-ink-soft">{v.hardHit != null ? `${v.hardHit.toFixed(1)}%` : '—'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ) : null}
+
+      {/* スイング判断（Swing/Take）＝選球眼をゾーン別 run value で。 */}
+      {row.st ? (
+        <section>
+          <SectionHeading label={c.stTitle} lead level="h2" />
+          <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{c.stLead}</p>
+          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-line bg-line sm:grid-cols-5">
+            {([
+              { k: 'all', v: row.st.all, strong: true },
+              { k: 'heart', v: row.st.heart },
+              { k: 'shadow', v: row.st.shadow },
+              { k: 'chase', v: row.st.chase },
+              { k: 'waste', v: row.st.waste },
+            ] as const).map((z) => (
+              <div key={z.k} className="bg-paper px-4 py-3">
+                <dt className="text-xs text-ink-mute">{c.stZones[z.k]}</dt>
+                <dd className={`mt-0.5 text-lg font-bold tabular-nums ${'strong' in z && z.strong ? 'text-ink' : 'text-ink-soft'}`}>
+                  {fmtSigned(z.v)}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      ) : null}
 
       {/* この打者の海外の反応。 */}
       <section>
