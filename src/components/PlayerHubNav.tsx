@@ -23,6 +23,9 @@ export default function PlayerHubNav() {
       <NavLink href="/ranking" className={item}>
         {t('nav.ranking')}
       </NavLink>
+      <NavLink href="/cy-young" className={item}>
+        {t('nav.cyYoung')}
+      </NavLink>
       {ALLSTAR.enabled && (
         <NavLink href="/allstar" className={item}>
           {t('nav.allstar')}

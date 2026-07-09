@@ -1,0 +1,219 @@
+import { Link } from '@/lib/navigation';
+import { PLAYERS } from '@/lib/players';
+import SectionHeading from '@/components/SectionHeading';
+import type { CyYoungBoard as Board, CyRow, CyWatch } from '@/lib/cyYoungBoard';
+
+const TOP_N = 12; // 各リーグで通常表示する上位数（＋圏外の日本人は別途 append）
+
+/** 小さな「日本」チップ（無彩色）。日本人投手の行に添える。 */
+function JpChip({ label }: { label: string }) {
+  return (
+    <span className="inline-flex items-center rounded-[2px] border border-ink/30 px-1 py-px text-[10px] font-medium leading-none text-ink-mute">
+      {label}
+    </span>
+  );
+}
+
+function LeagueTable({
+  league,
+  rows,
+  slugByMlbId,
+  maxScore,
+  en,
+  t,
+}: {
+  league: string;
+  rows: CyRow[];
+  slugByMlbId: Map<number, string>;
+  maxScore: number;
+  en: boolean;
+  t: { pitcher: string; score: string; era: string; xera: string; ip: string; kbb: string; jp: string; more: string };
+}) {
+  // 上位 TOP_N ＋ それ以下に居る日本人（強調）を append。境目に区切りを出す。
+  const top = rows.slice(0, TOP_N);
+  const extraJp = rows.slice(TOP_N).filter((r) => r.isJp);
+  const shown: (CyRow | 'gap')[] = extraJp.length ? [...top, 'gap', ...extraJp] : top;
+
+  return (
+    <div>
+      <h3 className="mb-2 text-sm font-bold tracking-wide text-ink">{league}</h3>
+      <div className="overflow-x-auto rounded-[2px] border border-line">
+        <table className="w-full min-w-[560px] text-sm tabular-nums">
+          <thead>
+            <tr className="border-b border-line text-xs text-ink-mute">
+              <th className="px-3 py-2 text-left font-medium">#</th>
+              <th className="px-3 py-2 text-left font-medium">{t.pitcher}</th>
+              <th className="px-3 py-2 text-right font-semibold text-ink">{t.score}</th>
+              <th className="px-3 py-2 text-right font-medium">{t.era}</th>
+              <th className="px-3 py-2 text-right font-medium">{t.xera}</th>
+              <th className="px-3 py-2 text-right font-medium">{t.ip}</th>
+              <th className="px-3 py-2 text-right font-medium">{t.kbb}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {shown.map((row, i) =>
+              row === 'gap' ? (
+                <tr key="gap" className="border-b border-line">
+                  <td colSpan={7} className="px-3 py-1 text-center text-xs text-ink-mute">
+                    ⋯ {t.more}
+                  </td>
+                </tr>
+              ) : (
+                <Row key={row.id} row={row} slug={slugByMlbId.get(row.id)} maxScore={maxScore} en={en} jpLabel={t.jp} />
+              ),
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function Row({ row, slug, maxScore, en, jpLabel }: { row: CyRow; slug?: string; maxScore: number; en: boolean; jpLabel: string }) {
+  const name = en ? row.nameEn : row.nameJa;
+  const team = en ? row.teamEn : row.teamJa;
+  const why = en ? row.whyEn : row.why;
+  return (
+    <tr className={`border-b border-line last:border-0 ${row.isJp ? 'bg-ink/[0.04]' : ''}`}>
+      <td className="px-3 py-2 align-top text-ink-mute">{row.rank}</td>
+      <td className="px-3 py-2 align-top">
+        <div className="flex items-center gap-1.5">
+          {slug ? (
+            <Link href={`/player/${slug}`} className={`hover:underline ${row.isJp ? 'font-bold text-ink' : 'font-medium text-ink'}`}>
+              {name}
+            </Link>
+          ) : (
+            <span className={row.isJp ? 'font-bold text-ink' : 'font-medium text-ink'}>{name}</span>
+          )}
+          {row.isJp && <JpChip label={jpLabel} />}
+        </div>
+        <div className="mt-0.5 text-xs leading-relaxed text-ink-mute">
+          {team}
+          {why ? <> · {why}</> : null}
+        </div>
+      </td>
+      <td className="px-3 py-2 align-top text-right">
+        <span className="font-bold text-ink">{row.score.toFixed(1)}</span>
+        <span className="mt-1 block h-1 w-14 overflow-hidden rounded-[1px] bg-line" aria-hidden>
+          <span className="block h-full bg-ink" style={{ width: `${Math.round((row.score / maxScore) * 100)}%` }} />
+        </span>
+      </td>
+      <td className="px-3 py-2 align-top text-right font-medium text-ink">{row.era}</td>
+      <td className="px-3 py-2 align-top text-right text-ink-soft">{row.xera != null ? row.xera.toFixed(2) : '—'}</td>
+      <td className="px-3 py-2 align-top text-right text-ink-soft">{row.ipDisp}</td>
+      <td className="px-3 py-2 align-top text-right text-ink-soft">{row.kbbPct != null ? `${row.kbbPct.toFixed(1)}%` : '—'}</td>
+    </tr>
+  );
+}
+
+/**
+ * サイ・ヤング賞 予測ボード＝規定到達投手を AL/NL 別に合成スコアで順位予測し、日本人投手を強調。
+ * 各行→選手ハブ（球種の設計図で“中身”を確認）へ送客＝「徹底分析→予測」の締め。
+ * スコアは断定でなく“データからの見立て”＝式と出典を明示する。サーバーコンポーネント（静的）。
+ */
+export default function CyYoungBoard({ board, locale }: { board: Board; locale: string }) {
+  const en = locale === 'en';
+  const slugByMlbId = new Map(PLAYERS.map((p) => [p.mlbId, p.slug]));
+  const w = board.weights;
+  const pct = (v: number) => `${Math.round(v * 100)}%`;
+
+  const t = en
+    ? {
+        methodTitle: 'How the score works',
+        method: `Prediction score = each pitcher’s within-league percentile in ERA + xERA (${pct(w.prevention)}), K-BB% (${pct(w.kbb)}), innings (${pct(w.ip)}), WHIP (${pct(w.whip)}) and HR/9 (${pct(w.hr9)}), blended. It’s our data-driven read, not a verdict — Cy Young is a within-league race, and volume (innings) keeps relievers out. Qualified starters only (~${board.qualifyIp} IP).`,
+        cols: { pitcher: 'Pitcher', score: 'Score', era: 'ERA', xera: 'xERA', ip: 'IP', kbb: 'K-BB%', jp: 'JP', more: 'lower in the field' },
+        watchTitle: 'Japanese starters on the cusp',
+        watchSub: 'Dominant by rate, but not yet innings-qualified — where the rest of Japan’s rotation stands.',
+        watchGap: (n: number) => `~${n} IP to qualify`,
+        na: 'ERA', naSub: 'GS',
+        source: `Data: MLB Stats API + Baseball Savant (public factual figures). ${board.season} season, as of ${board.asOf}.`,
+      }
+    : {
+        methodTitle: '予測スコアの出し方',
+        method: `予測スコア＝各投手のリーグ内パーセンタイルを、防御率+xERA（${pct(w.prevention)}）・K-BB%（${pct(w.kbb)}）・投球回（${pct(w.ip)}）・WHIP（${pct(w.whip)}）・被弾率HR9（${pct(w.hr9)}）で重み付き合算した“データからの見立て”（断定ではない）。サイヤングはリーグ内争いなので league 別に、投球回を入れて救援を除外。対象は規定到達の先発（目安 約${board.qualifyIp}回）。`,
+        cols: { pitcher: '投手', score: '予測スコア', era: '防御率', xera: 'xERA', ip: '投球回', kbb: 'K-BB%', jp: '日本', more: '同リーグの下位' },
+        watchTitle: '圏外の注目日本人（規定投球回 未達）',
+        watchSub: 'レートは支配的だが規定投球回にまだ届かない＝現時点では投票圏外。日本人先発の“現在地”。',
+        watchGap: (n: number) => `規定まであと約${n}回`,
+        na: '防御率', naSub: '先発',
+        source: `出典: MLB公式Stats API＋Baseball Savant（公知の数値）。${board.season}シーズン・${board.asOf}時点。`,
+      };
+
+  const maxScore = Math.max(
+    ...board.leagues.NL.map((r) => r.score),
+    ...board.leagues.AL.map((r) => r.score),
+    1,
+  );
+
+  return (
+    <div className="space-y-8">
+      {/* スコアの作り方（透明性＝断定でないことを明示） */}
+      <div className="rounded-[2px] border border-line p-4">
+        <h2 className="text-sm font-bold text-ink">{t.methodTitle}</h2>
+        <p className="mt-1.5 max-w-prose text-xs leading-relaxed text-ink-soft">{t.method}</p>
+      </div>
+
+      {/* NL → AL の順（大谷・山本ら日本人はほぼ NL）。 */}
+      {(['NL', 'AL'] as const).map((lg) => (
+        <section key={lg} className="space-y-2" aria-label={lg}>
+          <LeagueTable league={lg} rows={board.leagues[lg]} slugByMlbId={slugByMlbId} maxScore={maxScore} en={en} t={t.cols} />
+        </section>
+      ))}
+
+      {/* 圏外の注目日本人（大谷ら規定未達の先発）。 */}
+      {board.watch.length > 0 && (
+        <section>
+          <SectionHeading label={t.watchTitle} lead level="h2" />
+          <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{t.watchSub}</p>
+          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+            {board.watch.map((wp) => (
+              <WatchCard key={wp.id} wp={wp} slug={slugByMlbId.get(wp.id)} en={en} gapLabel={t.watchGap} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <p className="text-[11px] leading-relaxed text-ink-mute">{t.source}</p>
+    </div>
+  );
+}
+
+function WatchCard({ wp, slug, en, gapLabel }: { wp: CyWatch; slug?: string; en: boolean; gapLabel: (n: number) => string }) {
+  const team = en ? wp.teamEn : wp.teamJa;
+  return (
+    <div className="bg-paper px-4 py-3">
+      <div className="flex items-baseline justify-between gap-2">
+        {slug ? (
+          <Link href={`/player/${slug}`} className="font-bold text-ink hover:underline">
+            {wp.nameJa}
+          </Link>
+        ) : (
+          <span className="font-bold text-ink">{wp.nameJa}</span>
+        )}
+        {wp.league ? <span className="text-xs text-ink-mute">{wp.league}</span> : null}
+      </div>
+      <div className="mt-0.5 text-xs text-ink-mute">{team}</div>
+      <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-sm tabular-nums text-ink-soft">
+        <div>
+          <span className="text-ink-mute">{en ? 'ERA ' : '防御率 '}</span>
+          <span className="font-medium text-ink">{wp.era}</span>
+        </div>
+        {wp.xera != null ? (
+          <div>
+            <span className="text-ink-mute">xERA </span>
+            {wp.xera.toFixed(2)}
+          </div>
+        ) : null}
+        <div>
+          <span className="text-ink-mute">{en ? 'IP ' : '回 '}</span>
+          {wp.ipDisp}
+        </div>
+        <div>
+          <span className="text-ink-mute">WHIP </span>
+          {wp.whip}
+        </div>
+      </dl>
+      <p className="mt-1.5 text-xs text-ink-mute">{gapLabel(wp.ipGap)}</p>
+    </div>
+  );
+}

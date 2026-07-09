@@ -1432,6 +1432,205 @@ async function runArsenal(season, asOf) {
   console.log(`arsenal 書き出し: ${Object.keys(pitchers).length}投手 / asOf ${stampedAsOf} → ${file}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// cyyoung … サイ・ヤング賞「予測ボード」を data/cy-young-board.json に書き出す。
+// 用途: /cy-young＝規定到達投手をAL/NL別に合成スコアで順位予測し、日本人を強調。各行→選手ハブ
+//   （球種の設計図で“中身”を確認）へ送客＝「徹底分析→予測」の締め。
+// スコア: 各指標をリーグ内パーセンタイルに直し、重み付き合算（透明・相対＝サイヤングはリーグ内争い）。
+//   防御率+xERA(40%) / K-BB%(25%) / 投球回(20%) / WHIP(10%) / HR9(5%)。勝敗はスコアに入れず表に併記のみ。
+// データ源: statsapi 一括投球スタッツ（規定・league.id 付き）＋ Savant expected_statistics(xERA)。
+//   キー不要・公知の数値のみ・サイト本体は叩かない（編集時/CI取得）。
+// 圏外の注目日本人（大谷ら規定投球回“未達”の先発）は watch 枠に別掲＝「数字は支配的だが規定未達」を正しく示す。
+// ─────────────────────────────────────────────────────────────────────────────
+const CY_WEIGHTS = { prevention: 0.4, kbb: 0.25, ip: 0.2, whip: 0.1, hr9: 0.05 };
+const JP_ID_SET = new Set(Object.keys(JP_NAMES).map(Number)); // 日本人（強調フラグ isJp 用）
+
+/** 投球回の野球表記（"104.2"=104と2/3）を実イニング float に直す（スコア計算用）。 */
+function ipToFloat(s) {
+  if (s == null || s === '') return null;
+  const [whole, frac] = String(s).split('.');
+  return Number(whole) + (frac ? Number(frac) / 3 : 0);
+}
+
+/** 規定投手の一括投球スタッツ（league.id 付き）。statsapi は1リクエストで全規定投手を返す。 */
+async function fetchQualifiedPitchers(season) {
+  const url = `${BASE}/stats?stats=season&group=pitching&season=${season}&sportId=1&limit=200&playerPool=qualified&sortStat=earnedRunAverage`;
+  const d = await getJson(url);
+  return (d.stats?.[0]?.splits ?? [])
+    .map((s) => ({ id: s.player?.id, nameEn: s.player?.fullName, teamEn: s.team?.name, leagueId: s.league?.id, stat: s.stat ?? {} }))
+    .filter((p) => p.id && p.leagueId);
+}
+
+/**
+ * 各値のリーグ内パーセンタイル（0-100）。higherBetter=false は小さいほど高得点（ERA/WHIP/HR9）。
+ * null は計算から除外し、その要素は 0 点扱い（欠測を上位に誤って押し上げない）。
+ */
+function percentiles(values, higherBetter) {
+  const valid = values.filter((v) => v != null);
+  const n = valid.length;
+  return values.map((v) => {
+    if (v == null || n <= 1) return v == null ? 0 : 100;
+    const worse = valid.filter((o) => (higherBetter ? o < v : o > v)).length; // 自分より劣る数
+    return Math.round((worse / (n - 1)) * 100);
+  });
+}
+
+/** ランク行の「なぜ」を data から一言生成（percentile>=75 の強みを最大2つ＋xERA乖離の注記）。捏造しない。 */
+function cyWhy(g, en) {
+  const p = g.pct;
+  const cand = [
+    { v: p.era, ja: `防御率${g.era}`, en: `${g.era} ERA` },
+    { v: p.kbb, ja: `K-BB%${(g.kbbPct * 100).toFixed(1)}`, en: `${(g.kbbPct * 100).toFixed(1)}% K-BB` },
+    { v: p.ip, ja: `${g.ipDisp}回`, en: `${g.ipDisp} IP` },
+    { v: p.whip, ja: `WHIP${g.whip}`, en: `${g.whip} WHIP` },
+    { v: p.hr9, ja: '被弾の少なさ', en: 'HR suppression' },
+  ]
+    .filter((c) => c.v >= 75)
+    .sort((a, b) => b.v - a.v)
+    .slice(0, 2);
+  const parts = [];
+  parts.push(cand.length ? (en ? 'League-best ' : 'リーグ上位の ') + cand.map((c) => (en ? c.en : c.ja)).join(en ? ', ' : '・') : en ? 'Solid all-around' : '総合力で上位');
+  if (g.xera != null) {
+    const d = Math.round((Number(g.era) - g.xera) * 100) / 100;
+    if (d > 0.5) parts.push(en ? `stuff even better (xERA ${g.xera})` : `中身はさらに good（xERA${g.xera}）`);
+    else if (d < -0.5) parts.push(en ? `riding luck (xERA ${g.xera})` : `やや幸運（xERA${g.xera}）`);
+  }
+  return parts.join(en ? ' · ' : ' / ');
+}
+
+async function runCyYoung(season, asOf) {
+  const [rows, xeraMap, jpPeople] = await Promise.all([
+    fetchQualifiedPitchers(season),
+    fetchXera(season), // Savant xERA（id→{era,xera}）
+    fetchStats([...JP_ID_SET], season), // 圏外の注目日本人（規定未達の先発）を拾うため
+  ]);
+  if (!rows.length) return console.error('cyyoung: 規定投手が取得できない（season/API を確認）');
+
+  // 規定到達投手のメトリクス行に整形。
+  const qualIds = new Set(rows.map((r) => r.id));
+  const build = (r) => {
+    const s = r.stat;
+    const bf = Number(s.battersFaced) || 0;
+    const kbbPct = bf > 0 ? (Number(s.strikeOuts) - Number(s.baseOnBalls)) / bf : null;
+    const x = xeraMap.get(r.id);
+    return {
+      id: r.id,
+      nameJa: DISPLAY_NAMES[r.id] ?? r.nameEn,
+      nameEn: r.nameEn,
+      teamJa: TEAM_JA[r.teamEn] ?? r.teamEn,
+      teamEn: r.teamEn,
+      league: r.leagueId === 103 ? 'AL' : 'NL',
+      isJp: JP_ID_SET.has(r.id),
+      era: s.era,
+      xera: x?.xera ?? null,
+      ip: ipToFloat(s.inningsPitched),
+      ipDisp: s.inningsPitched,
+      w: Number(s.wins) || 0,
+      l: Number(s.losses) || 0,
+      so: Number(s.strikeOuts) || 0,
+      whip: s.whip,
+      hr9: s.homeRunsPer9 != null ? Number(s.homeRunsPer9) : null,
+      kbbPct,
+    };
+  };
+  const all = rows.map(build);
+  const qualifyIp = Math.min(...all.map((g) => g.ip).filter((v) => v != null)); // 表示用の規定IP目安（最少規定IP≒カットオフ）
+
+  const leagues = {};
+  for (const lg of ['AL', 'NL']) {
+    const group = all.filter((g) => g.league === lg);
+    const eraP = percentiles(group.map((g) => (g.era != null ? Number(g.era) : null)), false);
+    const xeraP = percentiles(group.map((g) => g.xera), false);
+    const kbbP = percentiles(group.map((g) => g.kbbPct), true);
+    const ipP = percentiles(group.map((g) => g.ip), true);
+    const whipP = percentiles(group.map((g) => (g.whip != null ? Number(g.whip) : null)), false);
+    const hr9P = percentiles(group.map((g) => g.hr9), false);
+    group.forEach((g, i) => {
+      g.pct = { era: eraP[i], xera: xeraP[i], kbb: kbbP[i], ip: ipP[i], whip: whipP[i], hr9: hr9P[i] };
+      // 防御率+xERA ブレンド（xERA 欠損時は ERA のみ）。
+      const prevention = g.xera != null ? eraP[i] * 0.5 + xeraP[i] * 0.5 : eraP[i];
+      g.score =
+        Math.round(
+          (prevention * CY_WEIGHTS.prevention +
+            kbbP[i] * CY_WEIGHTS.kbb +
+            ipP[i] * CY_WEIGHTS.ip +
+            whipP[i] * CY_WEIGHTS.whip +
+            hr9P[i] * CY_WEIGHTS.hr9) *
+            10,
+        ) / 10;
+    });
+    group.sort((a, b) => b.score - a.score);
+    leagues[lg] = group.map((g, i) => ({
+      rank: i + 1,
+      id: g.id,
+      nameJa: g.nameJa,
+      nameEn: g.nameEn,
+      teamJa: g.teamJa,
+      teamEn: g.teamEn,
+      league: g.league,
+      isJp: g.isJp,
+      era: g.era,
+      xera: g.xera,
+      ipDisp: g.ipDisp,
+      w: g.w,
+      l: g.l,
+      so: g.so,
+      whip: g.whip,
+      hr9: g.hr9,
+      kbbPct: g.kbbPct != null ? Math.round(g.kbbPct * 1000) / 10 : null, // % 表示（小数1桁）
+      score: g.score,
+      why: cyWhy(g, false),
+      whyEn: cyWhy(g, true),
+    }));
+  }
+
+  // 圏外の注目日本人＝規定未達だが先発として意味のあるイニングを投げている日本人（大谷ら）。
+  const watch = [];
+  for (const p of jpPeople) {
+    if (qualIds.has(p.id)) continue; // 規定到達者はランク表に載る
+    const pit = pickSplit(p, 'pitching');
+    if (!pit || !pit.gamesStarted || pit.gamesStarted < 5) continue; // 先発として一定量投げた者のみ
+    const ipF = ipToFloat(pit.inningsPitched);
+    if (ipF == null || ipF < 50) continue; // サンプルが薄すぎる登板は出さない（捏造しない）
+    const bf = Number(pit.battersFaced) || 0;
+    const teamEn = p.currentTeam?.name;
+    const x = xeraMap.get(p.id);
+    const gap = Math.max(0, Math.ceil(qualifyIp - ipF));
+    if (gap > 25) continue; // 規定まで遠すぎる先発は「現時点で到達しうる注目」でないので出さない（大谷・菅野・佐々木級に絞る）
+    watch.push({
+      id: p.id,
+      nameJa: jpName(p),
+      teamJa: teamJa(p),
+      teamEn: teamEn ?? null,
+      league: LEAGUE_BY_TEAM[teamEn] ?? null,
+      gs: pit.gamesStarted,
+      ipDisp: pit.inningsPitched,
+      era: pit.era,
+      xera: x?.xera ?? null,
+      whip: pit.whip,
+      hr9: pit.homeRunsPer9 != null ? Number(pit.homeRunsPer9) : null,
+      so: Number(pit.strikeOuts) || 0,
+      kbbPct: bf > 0 ? Math.round(((Number(pit.strikeOuts) - Number(pit.baseOnBalls)) / bf) * 1000) / 10 : null,
+      ipGap: gap, // 規定まであと約N回（0 は実質到達）
+    });
+  }
+  watch.sort((a, b) => Number(a.era) - Number(b.era)); // 防御率の良い順（大谷が先頭に来る）
+
+  const file = path.join(process.cwd(), 'data', 'cy-young-board.json');
+  const content = { season, qualifyIp: Math.round(qualifyIp * 10) / 10, weights: CY_WEIGHTS, leagues, watch };
+  // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（CI の無駄コミット防止）。
+  let stampedAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    const { asOf: _a, ...rest } = prev;
+    if (stableStringify(rest) === stableStringify(content)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 初回作成 */
+  }
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
+  console.log(`cyyoung 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}`);
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -1486,6 +1685,10 @@ async function main() {
     // arsenal [season]：snapshot の MLB投手の球種別 徹底分析を data/pitch-arsenals.json へ（snapshot後に実行）。
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     await runArsenal(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
+  } else if (cmd === 'cyyoung') {
+    // cyyoung [season]：規定投手をAL/NL別に合成スコアで順位予測（＋圏外の注目日本人）を data/cy-young-board.json へ。
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    await runCyYoung(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
   } else if (cmd === 'backfill-games') {
     // backfill-games [--apply]：既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用）。
     await runBackfillGames({ apply: raw.includes('--apply') });
@@ -1502,6 +1705,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs gamelogs [season]  # MLBロースター級 全選手の試合別ログを一括更新（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
+        '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs backfill-games [--apply] # 既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用・既定dry-run）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),

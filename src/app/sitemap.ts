@@ -79,6 +79,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/player', playerHubLatest),
     // 日本人選手 成績ランキング（WAR/本塁打/防御率…の順位づけ面）。lastmod は成績スナップショットの日付。
     entry('/ranking', statDate),
+    // サイ・ヤング賞 予測ボード（規定投手をAL/NL別にスコア化）。lastmod は成績スナップショットの日付。
+    entry('/cy-young', statDate),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     ...playerEntries,
