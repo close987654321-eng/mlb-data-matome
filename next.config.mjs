@@ -20,7 +20,14 @@ const nextConfig = {
   // Vercel のサーバーレス関数バンドルに同梱されず実行時 500 になる（ローカルは cwd に実在し 200）。
   // → 該当ファイルを明示同梱して「ローカルで動く＝Vercel でも動く」状態に揃える。
   outputFileTracingIncludes: {
-    '/**': ['./src/assets/fonts/*.ttf', './src/assets/og/*.jpg', './data/jp-players-stats.json'],
+    '/**': [
+      './src/assets/fonts/*.ttf',
+      './src/assets/og/*.jpg',
+      './data/jp-players-stats.json',
+      // 予測ボードの OG（cy-young/[id]・mvp/[id] も generateImageMetadata 由来で動的）が実行時に読む
+      './data/cy-young-board.json',
+      './data/mvp-board.json',
+    ],
   },
   // CSS を <style> で HTML にインライン化し、描画をブロックする外部 CSS <link> を無くす
   // （Next 15.2+ 第一者機能。critters/optimizeCss と違い追加依存なし）。本サイトは Discover
