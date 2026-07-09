@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 
 // スコア内訳の指標定義（per-metric の重み＝防御率+xERA が prevention 0.40 を折半、他はそのまま）。
 const METRICS: { key: keyof CyRow['pct']; ja: string; en: string; w: number }[] = [
-  { key: 'era', ja: '防御率', en: 'ERA', w: 0.2 },
+  { key: 'era', ja: 'ERA', en: 'ERA', w: 0.2 },
   { key: 'xera', ja: 'xERA', en: 'xERA', w: 0.2 },
   { key: 'kbb', ja: 'K-BB%', en: 'K-BB%', w: 0.25 },
   { key: 'ip', ja: '投球回', en: 'Innings', w: 0.2 },
@@ -215,8 +215,8 @@ export default async function CyYoungPitcherPage({
         <SectionHeading label={c.statsTitle} lead level="h2" />
         <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-line bg-line sm:grid-cols-4">
           {[
-            { l: en ? 'ERA' : '防御率', v: row.era },
-            { l: 'xERA', v: row.xera != null ? row.xera.toFixed(2) : '—' },
+            { l: en ? 'ERA' : 'ERA（防御率）', v: row.era },
+            { l: en ? 'xERA' : 'xERA（期待防御率）', v: row.xera != null ? row.xera.toFixed(2) : '—' },
             { l: en ? 'IP' : '投球回', v: row.ipDisp },
             { l: en ? 'W-L' : '勝敗', v: `${row.w}-${row.l}` },
             { l: en ? 'K' : '奪三振', v: String(row.so) },

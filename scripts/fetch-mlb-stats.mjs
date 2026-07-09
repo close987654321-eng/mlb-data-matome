@@ -1506,7 +1506,7 @@ function percentiles(values, higherBetter) {
 function cyWhy(g, en) {
   const p = g.pct;
   const cand = [
-    { v: p.era, ja: `防御率${g.era}`, en: `${g.era} ERA` },
+    { v: p.era, ja: `ERA${g.era}`, en: `${g.era} ERA` },
     { v: p.kbb, ja: `K-BB%${(g.kbbPct * 100).toFixed(1)}`, en: `${(g.kbbPct * 100).toFixed(1)}% K-BB` },
     { v: p.ip, ja: `${g.ipDisp}回`, en: `${g.ipDisp} IP` },
     { v: p.whip, ja: `WHIP${g.whip}`, en: `${g.whip} WHIP` },
@@ -1519,8 +1519,8 @@ function cyWhy(g, en) {
   parts.push(cand.length ? (en ? 'League-best ' : '') + cand.map((c) => (en ? c.en : c.ja)).join(en ? ', ' : '・') + (en ? '' : 'はリーグ上位') : en ? 'Solid all-around' : '総合力で上位');
   if (g.xera != null) {
     const d = Math.round((Number(g.era) - g.xera) * 100) / 100;
-    if (d > 0.5) parts.push(en ? `stuff even better (xERA ${g.xera})` : `内容はもっと良い（xERA${g.xera}）`);
-    else if (d < -0.5) parts.push(en ? `riding luck (xERA ${g.xera})` : `数字は出来すぎ気味（xERA${g.xera}）`);
+    if (d > 0.5) parts.push(en ? `unlucky by ${d.toFixed(2)} (xERA ${g.xera})` : `${d.toFixed(2)}損してる（xERA${g.xera}）`);
+    else if (d < -0.5) parts.push(en ? `lucky by ${Math.abs(d).toFixed(2)} (xERA ${g.xera})` : `${Math.abs(d).toFixed(2)}得してる（xERA${g.xera}）`);
   }
   return parts.join(en ? ' · ' : ' / ');
 }

@@ -166,12 +166,12 @@ export default function CyYoungBoard({ board, locale }: { board: Board; locale: 
       }
     : {
         methodTitle: '予測スコアの出し方',
-        method: `各指標が同じリーグの規定投手の中でどの位置にいるかを0〜100で数値化し、防御率＋xERA（${pct(w.prevention)}）・K-BB%（${pct(w.kbb)}）・投球回（${pct(w.ip)}）・WHIP（${pct(w.whip)}）・HR/9（${pct(w.hr9)}）の重みをつけて合算したものが予測スコアです。サイ・ヤング賞はリーグ内での争いなのでAL/NL別に集計し、対象は規定投球回（目安 約${board.qualifyIp}回）に到達した先発に絞っています。現時点の成績にもとづく予測です。`,
-        cols: { pitcher: '投手', score: '予測スコア', era: '防御率', xera: 'xERA', ip: '投球回', kbb: 'K-BB%', jp: '日本', more: 'この間の投手は省略' },
+        method: `各指標が同じリーグの規定投手の中でどの位置にいるかを0〜100で数値化し、ERA＋xERA（${pct(w.prevention)}）・K-BB%（${pct(w.kbb)}）・投球回（${pct(w.ip)}）・WHIP（${pct(w.whip)}）・HR/9（${pct(w.hr9)}）の重みをつけて合算したものが予測スコアです。サイ・ヤング賞はリーグ内での争いなのでAL/NL別に集計し、対象は規定投球回（目安 約${board.qualifyIp}回）に到達した先発に絞っています。現時点の成績にもとづく予測です。`,
+        cols: { pitcher: '投手', score: '予測スコア', era: 'ERA', xera: 'xERA', ip: '投球回', kbb: 'K-BB%', jp: '日本', more: 'この間の投手は省略' },
         watchTitle: '規定投球回に届いていない日本人先発',
         watchSub: '投球内容は上位級でも、投球回がまだ規定に届かずランキングの対象外の投手たち。規定に到達すれば上の表に入ってきます。',
         watchGap: (n: number) => `規定まであと約${n}回`,
-        na: '防御率', naSub: '先発',
+        na: 'ERA', naSub: '先発',
         source: `出典: MLB公式Stats API＋Baseball Savant（公知の数値）。${board.season}シーズン・${board.asOf}時点。`,
       };
 
@@ -236,7 +236,7 @@ function WatchCard({ wp, slug, en, gapLabel }: { wp: CyWatch; slug?: string; en:
       </div>
       <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-sm tabular-nums text-ink-soft">
         <div>
-          <span className="text-ink-mute">{en ? 'ERA ' : '防御率 '}</span>
+          <span className="text-ink-mute">ERA </span>
           <span className="font-medium text-ink">{wp.era}</span>
         </div>
         {wp.xera != null ? (

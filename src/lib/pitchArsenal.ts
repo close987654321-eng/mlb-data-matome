@@ -87,17 +87,6 @@ export async function getArsenalFile(): Promise<ArsenalFile> {
 
 // ─── 表示補助（fs 非依存＝サーバー/クライアント両方から呼べる） ───────────────
 
-/**
- * ERA と xERA の乖離を返す（表示側で日本語/英語にする）。unlucky=true は「実ERAの方が悪い＝
- * 中身(xERA)はもっと良いはず＝不運」。差が小さい時は中立（null＝語らない＝捏造しない）。
- */
-export function luckVerdict(era?: number, xera?: number): { gap: number; unlucky: boolean } | null {
-  if (era == null || xera == null) return null;
-  const gap = Math.round((era - xera) * 100) / 100;
-  if (Math.abs(gap) < 0.4) return null; // 誤差の範囲は語らない
-  return { gap, unlucky: gap > 0 };
-}
-
 /** 空振り率の高い「決め球」を1つ返す（武器＝記事フックの素）。稀にしか投げない球のノイズは除く。 */
 export function bestWhiffPitch(pitches: ArsenalPitch[]): ArsenalPitch | null {
   const usable = pitches.filter((p) => p.whiff != null && (p.usage ?? 0) >= 5);
