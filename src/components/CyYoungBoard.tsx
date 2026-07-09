@@ -1,9 +1,38 @@
 import { Link } from '@/lib/navigation';
 import { PLAYERS } from '@/lib/players';
 import SectionHeading from '@/components/SectionHeading';
-import type { CyYoungBoard as Board, CyRow, CyWatch } from '@/lib/cyYoungBoard';
+import { headshotUrl, teamLogoUrl } from '@/lib/teams';
+import { type CyYoungBoard as Board, type CyRow, type CyWatch, CY_DETAIL_TOP } from '@/lib/cyYoungBoard';
 
 const TOP_N = 12; // 各リーグで通常表示する上位数（＋圏外の日本人は別途 append）
+
+/** 顔写真（丸アバター・公式CDN直リンク）＋ チームロゴのバッジ。小さく添える（無彩色規律への例外＝村山依頼）。 */
+function Avatar({ mlbId, teamId, name, size = 40 }: { mlbId: number; teamId: number | null; name: string; size?: number }) {
+  return (
+    <span className="relative inline-block shrink-0" style={{ width: size, height: size }}>
+      {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式CDNの顔写真を直リンク（再ホストしない） */}
+      <img
+        src={headshotUrl(mlbId, 'spot')}
+        alt={name}
+        width={size}
+        height={size}
+        loading="lazy"
+        className="h-full w-full rounded-full bg-line object-cover object-top"
+      />
+      {teamId ? (
+        // eslint-disable-next-line @next/next/no-img-element -- MLB公式チームロゴSVGを直リンク
+        <img
+          src={teamLogoUrl(teamId)}
+          alt=""
+          width={16}
+          height={16}
+          loading="lazy"
+          className="absolute -bottom-1 -right-1 h-4 w-4 rounded-[2px] bg-paper object-contain p-px ring-1 ring-line"
+        />
+      ) : null}
+    </span>
+  );
+}
 
 /** 小さな「日本」チップ（無彩色）。日本人投手の行に添える。 */
 function JpChip({ label }: { label: string }) {
@@ -73,23 +102,32 @@ function Row({ row, slug, maxScore, en, jpLabel }: { row: CyRow; slug?: string; 
   const name = en ? row.nameEn : row.nameJa;
   const team = en ? row.teamEn : row.teamJa;
   const why = en ? row.whyEn : row.why;
+  // リンク先: 上位N（詳細ページあり）→ /cy-young/{id} ／ それ以外で追跡選手 → 選手ハブ ／ 他は素テキスト。
+  const detail = row.rank <= CY_DETAIL_TOP;
+  const href = detail ? `/cy-young/${row.id}` : slug ? `/player/${slug}` : null;
+  const nameCls = row.isJp ? 'font-bold text-ink' : 'font-medium text-ink';
   return (
     <tr className={`border-b border-line last:border-0 ${row.isJp ? 'bg-ink/[0.04]' : ''}`}>
       <td className="px-3 py-2 align-top text-ink-mute">{row.rank}</td>
       <td className="px-3 py-2 align-top">
-        <div className="flex items-center gap-1.5">
-          {slug ? (
-            <Link href={`/player/${slug}`} className={`hover:underline ${row.isJp ? 'font-bold text-ink' : 'font-medium text-ink'}`}>
-              {name}
-            </Link>
-          ) : (
-            <span className={row.isJp ? 'font-bold text-ink' : 'font-medium text-ink'}>{name}</span>
-          )}
-          {row.isJp && <JpChip label={jpLabel} />}
-        </div>
-        <div className="mt-0.5 text-xs leading-relaxed text-ink-mute">
-          {team}
-          {why ? <> · {why}</> : null}
+        <div className="flex items-start gap-2.5">
+          <Avatar mlbId={row.id} teamId={row.teamId} name={name} />
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5">
+              {href ? (
+                <Link href={href} className={`hover:underline ${nameCls}`}>
+                  {name}
+                </Link>
+              ) : (
+                <span className={nameCls}>{name}</span>
+              )}
+              {row.isJp && <JpChip label={jpLabel} />}
+            </div>
+            <div className="mt-0.5 text-xs leading-relaxed text-ink-mute">
+              {team}
+              {why ? <> · {why}</> : null}
+            </div>
+          </div>
         </div>
       </td>
       <td className="px-3 py-2 align-top text-right">
@@ -182,17 +220,22 @@ function WatchCard({ wp, slug, en, gapLabel }: { wp: CyWatch; slug?: string; en:
   const team = en ? wp.teamEn : wp.teamJa;
   return (
     <div className="bg-paper px-4 py-3">
-      <div className="flex items-baseline justify-between gap-2">
-        {slug ? (
-          <Link href={`/player/${slug}`} className="font-bold text-ink hover:underline">
-            {wp.nameJa}
-          </Link>
-        ) : (
-          <span className="font-bold text-ink">{wp.nameJa}</span>
-        )}
-        {wp.league ? <span className="text-xs text-ink-mute">{wp.league}</span> : null}
+      <div className="flex items-start gap-2.5">
+        <Avatar mlbId={wp.id} teamId={wp.teamId} name={wp.nameJa} size={36} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline justify-between gap-2">
+            {slug ? (
+              <Link href={`/player/${slug}`} className="font-bold text-ink hover:underline">
+                {wp.nameJa}
+              </Link>
+            ) : (
+              <span className="font-bold text-ink">{wp.nameJa}</span>
+            )}
+            {wp.league ? <span className="text-xs text-ink-mute">{wp.league}</span> : null}
+          </div>
+          <div className="mt-0.5 text-xs text-ink-mute">{team}</div>
+        </div>
       </div>
-      <div className="mt-0.5 text-xs text-ink-mute">{team}</div>
       <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-sm tabular-nums text-ink-soft">
         <div>
           <span className="text-ink-mute">{en ? 'ERA ' : '防御率 '}</span>

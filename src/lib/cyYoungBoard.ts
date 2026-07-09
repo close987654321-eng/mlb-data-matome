@@ -17,6 +17,7 @@ export type CyRow = {
   nameEn: string;
   teamJa: string;
   teamEn: string;
+  teamId: number | null; // 公式ロゴ引き当て用（teams.ts）
   league: 'AL' | 'NL';
   isJp: boolean; // 日本人＝行を強調
   era: string;
@@ -29,9 +30,13 @@ export type CyRow = {
   hr9: number | null;
   kbbPct: number | null; // K-BB%（既に % 値）
   score: number; // 合成スコア（0-100）
+  pct: CyPct; // 各指標のリーグ内パーセンタイル（詳細ページのスコア内訳バー）
   why: string; // データ由来の一言（日本語）
   whyEn: string;
 };
+
+/** 各指標のリーグ内パーセンタイル（0-100・大きいほどそのリーグで優秀）。 */
+export type CyPct = { era: number; xera: number; kbb: number; ip: number; whip: number; hr9: number };
 
 /** 圏外の注目日本人（規定投球回“未達”だが到達しうる先発＝大谷ら）。 */
 export type CyWatch = {
@@ -39,6 +44,7 @@ export type CyWatch = {
   nameJa: string;
   teamJa: string;
   teamEn: string | null;
+  teamId: number | null;
   league: 'AL' | 'NL' | null;
   gs: number;
   ipDisp: string;
@@ -75,4 +81,21 @@ export async function getCyYoungBoard(): Promise<CyYoungBoard | null> {
     return null;
   }
   return cache;
+}
+
+/** 詳細ページを作る投手＝各リーグ上位 N（既定5）。generateStaticParams と相互に使う。 */
+export const CY_DETAIL_TOP = 5;
+
+export async function getCyDetailRows(): Promise<CyRow[]> {
+  const board = await getCyYoungBoard();
+  if (!board) return [];
+  return [...board.leagues.NL.slice(0, CY_DETAIL_TOP), ...board.leagues.AL.slice(0, CY_DETAIL_TOP)];
+}
+
+/** 指定 mlbId の投手が「詳細ページ対象（上位N）」ならその行を返す。対象外/未生成は null。 */
+export async function getCyPitcher(mlbId: number): Promise<{ row: CyRow; board: CyYoungBoard } | null> {
+  const board = await getCyYoungBoard();
+  if (!board) return null;
+  const row = (await getCyDetailRows()).find((r) => r.id === mlbId);
+  return row ? { row, board } : null;
 }

@@ -32,21 +32,21 @@ jobs:
         with:
           node-version: 22 # スクリプトは Node 組み込み(fs/path)＋global fetch のみ。依存インストール不要
 
-      - name: 球種別 徹底分析を更新（球種ごとの投球割合/空振り/被wOBA/被弾内訳）
-        run: |
-          set -euo pipefail
-          SEASON=$(TZ=Asia/Tokyo date +%Y)
-          # arsenal は snapshot の MLBロースター級 投手を対象に Savant から球種データを取り直す。
-          # pipefail で node の失敗が tail に飲まれて no-op と誤認されないようにする。
-          node scripts/fetch-mlb-stats.mjs arsenal "$SEASON" | tail -2
-
       - name: サイヤング予測ボードを更新（規定投手をAL/NL別にスコア化＋圏外の日本人）
         run: |
           set -euo pipefail
           SEASON=$(TZ=Asia/Tokyo date +%Y)
-          # cyyoung は statsapi 規定投手＋Savant xERA から自前で組む（snapshot 非依存）。
-          # 失敗しても arsenal の更新は活かす（|| でメッセージのみ、続行）。
-          node scripts/fetch-mlb-stats.mjs cyyoung "$SEASON" | tail -2 || echo "cyyoung スキップ（arsenal は反映済み）"
+          # cyyoung は statsapi 規定投手＋Savant xERA から自前で組む。arsenal より先に走らせる
+          # ＝arsenal がボード上位5名（詳細ページ用）を対象に取り込めるようにするため。
+          node scripts/fetch-mlb-stats.mjs cyyoung "$SEASON" | tail -2
+
+      - name: 球種別 徹底分析を更新（球種ごとの投球割合/空振り/被wOBA/被弾内訳）
+        run: |
+          set -euo pipefail
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          # arsenal は tracked投手＋ボード各リーグ上位5名を対象に Savant から球種データを取り直す
+          # （直前の cyyoung が書いた data/cy-young-board.json を読む）。失敗しても cyyoung は活かす。
+          node scripts/fetch-mlb-stats.mjs arsenal "$SEASON" | tail -2 || echo "arsenal スキップ（cyyoung は反映済み）"
 
       - name: 変化があればコミット＆push
         run: |

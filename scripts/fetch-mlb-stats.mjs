@@ -1359,7 +1359,19 @@ async function runArsenal(season, asOf) {
     // snapshot 未生成のフォールバック＝日本人投手＋ライバル（team は空でも壊さない）。
     targets = [...new Set([...RIVAL_IDS, ...Object.keys(JP_NAMES).map(Number)])];
   }
+  // サイヤング予測ボードの各リーグ上位5名（詳細ページ /cy-young/[id] 用）＝tracked に無い候補にも球種を持たせる。
+  // cyyoung を先に実行しておくと拾える（CI は cyyoung→arsenal の順）。
+  try {
+    const board = JSON.parse(readFileSync(path.join(process.cwd(), 'data', 'cy-young-board.json'), 'utf8'));
+    for (const lg of ['NL', 'AL']) {
+      for (const r of (board.leagues?.[lg] ?? []).slice(0, 5)) if (r.id) targets.push(Number(r.id));
+    }
+  } catch {
+    /* ボード未生成なら tracked のみ */
+  }
+  targets = [...new Set(targets)];
   if (!targets.length) return console.error('arsenal: 対象投手が見つからない（先に snapshot を実行）');
+  const KATAKANA = loadPitcherNamesJa(); // 非追跡候補（詳細ページ用）も英語でなくカタカナ表示に
 
   // league全体のリーダーボードは1回ずつ取得して id で引く（対象投手ぶんだけ組み立てる＝バルクにしない）。
   const [statsMap, speedMap, xeraMap] = await Promise.all([
@@ -1408,7 +1420,7 @@ async function runArsenal(season, asOf) {
         }
       : null;
     pitchers[id] = {
-      nameJa: DISPLAY_NAMES[id] ?? entry.nameEn,
+      nameJa: DISPLAY_NAMES[id] ?? KATAKANA[id] ?? entry.nameEn,
       team: snapP?.team ?? '',
       league: snapP?.league ?? null,
       totalPitches,
@@ -1445,6 +1457,21 @@ async function runArsenal(season, asOf) {
 const CY_WEIGHTS = { prevention: 0.4, kbb: 0.25, ip: 0.2, whip: 0.1, hr9: 0.05 };
 const JP_ID_SET = new Set(Object.keys(JP_NAMES).map(Number)); // 日本人（強調フラグ isJp 用）
 
+/**
+ * MLB投手の日本語カタカナ表記（data/pitcher-names-ja.json）を id→カタカナ で返す。無ければ {}。
+ * DISPLAY_NAMES（日本人＋追跡ライバル）に無い規定投手も、これで英語でなくカタカナ表示にする。
+ */
+function loadPitcherNamesJa() {
+  try {
+    const raw = JSON.parse(readFileSync(path.join(process.cwd(), 'data', 'pitcher-names-ja.json'), 'utf8'));
+    const out = {};
+    for (const [k, v] of Object.entries(raw)) if (/^\d+$/.test(k)) out[Number(k)] = v;
+    return out;
+  } catch {
+    return {};
+  }
+}
+
 /** 投球回の野球表記（"104.2"=104と2/3）を実イニング float に直す（スコア計算用）。 */
 function ipToFloat(s) {
   if (s == null || s === '') return null;
@@ -1457,7 +1484,7 @@ async function fetchQualifiedPitchers(season) {
   const url = `${BASE}/stats?stats=season&group=pitching&season=${season}&sportId=1&limit=200&playerPool=qualified&sortStat=earnedRunAverage`;
   const d = await getJson(url);
   return (d.stats?.[0]?.splits ?? [])
-    .map((s) => ({ id: s.player?.id, nameEn: s.player?.fullName, teamEn: s.team?.name, leagueId: s.league?.id, stat: s.stat ?? {} }))
+    .map((s) => ({ id: s.player?.id, nameEn: s.player?.fullName, teamEn: s.team?.name, teamId: s.team?.id, leagueId: s.league?.id, stat: s.stat ?? {} }))
     .filter((p) => p.id && p.leagueId);
 }
 
@@ -1506,6 +1533,8 @@ async function runCyYoung(season, asOf) {
   ]);
   if (!rows.length) return console.error('cyyoung: 規定投手が取得できない（season/API を確認）');
 
+  const KATAKANA = loadPitcherNamesJa(); // 非日本人投手も英語でなくカタカナ表示にする
+
   // 規定到達投手のメトリクス行に整形。
   const qualIds = new Set(rows.map((r) => r.id));
   const build = (r) => {
@@ -1515,10 +1544,11 @@ async function runCyYoung(season, asOf) {
     const x = xeraMap.get(r.id);
     return {
       id: r.id,
-      nameJa: DISPLAY_NAMES[r.id] ?? r.nameEn,
+      nameJa: DISPLAY_NAMES[r.id] ?? KATAKANA[r.id] ?? r.nameEn,
       nameEn: r.nameEn,
       teamJa: TEAM_JA[r.teamEn] ?? r.teamEn,
       teamEn: r.teamEn,
+      teamId: r.teamId ?? null,
       league: r.leagueId === 103 ? 'AL' : 'NL',
       isJp: JP_ID_SET.has(r.id),
       era: s.era,
@@ -1567,6 +1597,7 @@ async function runCyYoung(season, asOf) {
       nameEn: g.nameEn,
       teamJa: g.teamJa,
       teamEn: g.teamEn,
+      teamId: g.teamId,
       league: g.league,
       isJp: g.isJp,
       era: g.era,
@@ -1579,6 +1610,8 @@ async function runCyYoung(season, asOf) {
       hr9: g.hr9,
       kbbPct: g.kbbPct != null ? Math.round(g.kbbPct * 1000) / 10 : null, // % 表示（小数1桁）
       score: g.score,
+      // 各指標のリーグ内パーセンタイル（詳細ページのスコア内訳バー用）。
+      pct: g.pct,
       why: cyWhy(g, false),
       whyEn: cyWhy(g, true),
     }));
@@ -1602,6 +1635,7 @@ async function runCyYoung(season, asOf) {
       nameJa: jpName(p),
       teamJa: teamJa(p),
       teamEn: teamEn ?? null,
+      teamId: p.currentTeam?.id ?? null,
       league: LEAGUE_BY_TEAM[teamEn] ?? null,
       gs: pit.gamesStarted,
       ipDisp: pit.inningsPitched,
