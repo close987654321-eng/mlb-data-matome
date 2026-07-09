@@ -1775,12 +1775,12 @@ function mvpWhy(g, en) {
     .sort((a, b) => b.v - a.v)
     .slice(0, 2);
   const parts = [];
-  parts.push(cand.length ? (en ? 'League-best ' : 'リーグ上位の ') + cand.map((c) => (en ? c.en : c.ja)).join(en ? ', ' : '・') : en ? 'Solid all-around' : '総合力で上位');
+  parts.push(cand.length ? (en ? 'League-best ' : '') + cand.map((c) => (en ? c.en : c.ja)).join(en ? ', ' : '・') + (en ? '' : 'はリーグ上位') : en ? 'Solid all-around' : '総合力で上位');
   if (g.warPitch != null) parts.push(en ? `two-way (+${g.warPitch} pitching WAR)` : `二刀流（投手WAR+${g.warPitch}）`);
   else if (g.xwoba != null && g.woba != null) {
     const d = Math.round((g.woba - g.xwoba) * 1000) / 1000;
-    if (d < -0.02) parts.push(en ? `contact even better (xwOBA ${g.xwoba.toFixed(3)})` : `中身はさらに good（xwOBA${g.xwoba.toFixed(3)}）`);
-    else if (d > 0.02) parts.push(en ? `riding luck (xwOBA ${g.xwoba.toFixed(3)})` : `やや出来すぎ（xwOBA${g.xwoba.toFixed(3)}）`);
+    if (d < -0.02) parts.push(en ? `contact even better (xwOBA ${g.xwoba.toFixed(3)})` : `内容はもっと良い（xwOBA${g.xwoba.toFixed(3)}）`);
+    else if (d > 0.02) parts.push(en ? `riding luck (xwOBA ${g.xwoba.toFixed(3)})` : `数字は出来すぎ気味（xwOBA${g.xwoba.toFixed(3)}）`);
   }
   return parts.join(en ? ' · ' : ' / ');
 }

@@ -107,16 +107,14 @@ export async function getMvpBoard(): Promise<MvpBoard | null> {
   return cache;
 }
 
-/** 詳細ページを作る打者＝各リーグ上位 N（既定5）。generateStaticParams と相互に使う。 */
-export const MVP_DETAIL_TOP = 5;
-
+/** 詳細ページを作る打者＝ボードの全行（規定到達の全打者）。generateStaticParams と相互に使う。 */
 export async function getMvpDetailRows(): Promise<MvpRow[]> {
   const board = await getMvpBoard();
   if (!board) return [];
-  return [...board.leagues.NL.slice(0, MVP_DETAIL_TOP), ...board.leagues.AL.slice(0, MVP_DETAIL_TOP)];
+  return [...board.leagues.NL, ...board.leagues.AL];
 }
 
-/** 指定 mlbId の打者が「詳細ページ対象（上位N）」ならその行を返す。対象外/未生成は null。 */
+/** 指定 mlbId の打者がボードに載っていればその行を返す。対象外/未生成は null。 */
 export async function getMvpHitter(mlbId: number): Promise<{ row: MvpRow; board: MvpBoard } | null> {
   const board = await getMvpBoard();
   if (!board) return null;

@@ -22,7 +22,7 @@ function copy(en: boolean, year: number | string) {
         crumb: 'MVP Board',
         eyebrow: `${year} Season`,
         title: 'MVP Prediction Board & Reactions',
-        lead: 'Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR — two-way pitching WAR included). A data-driven read on the AL & NL MVP races — with Shohei Ohtani and Japan’s bats highlighted, plus overseas fan reactions. Tap any name for the batted-ball breakdown.',
+        lead: 'Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR — two-way pitching WAR included). A data-driven read on the AL & NL MVP races — with Shohei Ohtani and Japan’s bats highlighted, plus overseas fan reactions. Tap any row for the full breakdown.',
         metaTitle: `MVP ${year} Prediction & Overseas Reactions | AL/NL Hitters`,
         metaDesc: `Who wins the ${year} MVP? Qualified hitters scored by wRC+, xwOBA, homers, baserunning, defense and WAR across AL & NL — plus overseas fan reactions to Ohtani and Japan’s hitters.`,
       }
@@ -30,7 +30,7 @@ function copy(en: boolean, year: number | string) {
         crumb: 'MVP予測',
         eyebrow: `${year} シーズン`,
         title: 'MVP 予測ボード＆海外の反応',
-        lead: '規定打席到達の打者を、wRC+＋xwOBA・本塁打・走塁・守備・WARでリーグ内スコア化した“予測ボード”（二刀流の大谷は投手WARも合算）。ア・リーグ／ナ・リーグのMVP争いをデータで読み、大谷翔平ら日本人打者の現在地と、海外ファンの反応まで一枚に。名前をタップすると打球の質・バットスピードの分析へ。',
+        lead: '規定打席に到達した打者を、wRC+・xwOBA・本塁打・走塁・守備・WARをもとにリーグ内でスコア化した予測ランキング（二刀流の大谷翔平は投手WARも合算）。ア・リーグとナ・リーグのMVP争いを、日本人打者の順位や海外ファンの反応とあわせて追えます。気になる打者の行をタップすると、打球の質・バットスピードまで分かる詳細ページへ。',
         metaTitle: `MVP 予測 ${year}｜AL/NL打者スコアランキング`,
         metaDesc: `${year}MVPは誰が獲る？規定打者をwRC+・xwOBA・本塁打・走塁・守備・WARで総合スコア化したAL/NL予測ランキングと、大谷翔平ら日本人打者への海外の反応をまとめて。`,
       };

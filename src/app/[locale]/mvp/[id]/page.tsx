@@ -16,7 +16,7 @@ import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
 
-/** 詳細ページを作る打者＝各リーグ上位N。全 locale × 10打者を静的化。 */
+/** 詳細ページを作る打者＝ボードの全行（規定到達の全打者）。全 locale × 全打者を静的化。 */
 export async function generateStaticParams() {
   const rows = await getMvpDetailRows();
   return locales.flatMap((locale) => rows.map((r) => ({ locale, id: String(r.id) })));
@@ -24,12 +24,12 @@ export async function generateStaticParams() {
 
 // スコア内訳の指標定義（per-metric の重み＝wRC+ + xwOBA が batting 0.45 を折半、他はそのまま）。
 const METRICS: { key: keyof MvpRow['pct']; ja: string; en: string; w: number }[] = [
-  { key: 'wrc', ja: 'wRC+（打撃）', en: 'wRC+', w: 0.225 },
-  { key: 'xwoba', ja: 'xwOBA（中身）', en: 'xwOBA', w: 0.225 },
+  { key: 'wrc', ja: 'wRC+', en: 'wRC+', w: 0.225 },
+  { key: 'xwoba', ja: 'xwOBA', en: 'xwOBA', w: 0.225 },
   { key: 'hr', ja: '本塁打', en: 'Home runs', w: 0.1 },
-  { key: 'run', ja: '走塁run', en: 'Baserunning', w: 0.1 },
-  { key: 'def', ja: '守備run＋位置補正', en: 'Defense + positional', w: 0.15 },
-  { key: 'war', ja: 'WAR（総合）', en: 'WAR', w: 0.2 },
+  { key: 'run', ja: '走塁', en: 'Baserunning', w: 0.1 },
+  { key: 'def', ja: '守備＋位置補正', en: 'Defense + positional', w: 0.15 },
+  { key: 'war', ja: 'WAR', en: 'WAR', w: 0.2 },
 ];
 
 function copy(en: boolean, r: MvpRow, season: number) {
@@ -40,8 +40,8 @@ function copy(en: boolean, r: MvpRow, season: number) {
         metaTitle: `${r.nameEn} — MVP ${season} projection & batted-ball profile`,
         metaDesc: `${r.nameEn} (${r.teamEn}) ranks #${r.rank} in our ${lgWord} MVP projection: ${r.wrcPlus ?? '—'} wRC+, ${r.hr} HR, ${r.warTotal ?? '—'} WAR. Batted-ball quality, bat speed and overseas fan reactions.`,
         eyebrow: `${lgWord} MVP · projected #${r.rank}`,
-        scoreTitle: 'Why this rank — score breakdown',
-        scoreLead: `Percentile within ${lgWord} qualified hitters × weight. Higher = more dominant in that category.`,
+        scoreTitle: 'Score breakdown',
+        scoreLead: `Each bar shows where he ranks among ${lgWord} qualified hitters (0–100). Longer = better in that category; the weighted sum is the projection score.`,
         statsTitle: 'Season line',
         scTitle: 'Batted-ball quality & swing (Statcast)',
         scLead: 'How hard and how well he hits the ball — the “stuff” behind the batting line.',
@@ -57,8 +57,8 @@ function copy(en: boolean, r: MvpRow, season: number) {
         metaTitle: `${r.nameJa} MVP予測${season}｜成績と打球の質の分析`,
         metaDesc: `${r.nameJa}（${r.teamJa}）は当サイトの${lgWord}MVP予測で${r.rank}位。wRC+${r.wrcPlus ?? '—'}・${r.hr}本塁打・WAR${r.warTotal ?? '—'}。打球の質・バットスピードと海外ファンの反応まで。`,
         eyebrow: `${lgWord} MVP 予測 ${r.rank}位`,
-        scoreTitle: 'この順位の理由（スコア内訳）',
-        scoreLead: `${lgWord}の規定打者内でのパーセンタイル×重み。右にいくほどその項目でリーグ上位。`,
+        scoreTitle: 'スコア内訳',
+        scoreLead: `各項目は、${lgWord}の規定打者の中でどの位置にいるかを0〜100で表した値。バーが長いほどリーグ上位で、これに重みを掛けて合算したものが予測スコアです。`,
         statsTitle: '今季成績',
         scTitle: '打球の質・スイング（Statcast）',
         scLead: 'どれだけ強く・どれだけ良い角度で打てているか＝打撃成績の“中身”。',
@@ -196,7 +196,7 @@ export default async function MvpHitterPage({
         </div>
       </section>
 
-      {/* スコア内訳＝この順位の理由（percentile バー×重み）。 */}
+      {/* スコア内訳（percentile バー×重み）＝この順位になっている根拠。 */}
       <section>
         <SectionHeading label={c.scoreTitle} lead level="h2" />
         <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{c.scoreLead}</p>

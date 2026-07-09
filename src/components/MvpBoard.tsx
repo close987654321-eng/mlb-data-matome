@@ -2,7 +2,7 @@ import { Link } from '@/lib/navigation';
 import { PLAYERS } from '@/lib/players';
 import SectionHeading from '@/components/SectionHeading';
 import { headshotUrl, teamLogoUrl } from '@/lib/teams';
-import { type MvpBoard as Board, type MvpRow, type MvpWatch, MVP_DETAIL_TOP } from '@/lib/mvpBoard';
+import { type MvpBoard as Board, type MvpRow, type MvpWatch } from '@/lib/mvpBoard';
 
 const TOP_N = 12; // 各リーグで通常表示する上位数（＋圏外の日本人は別途 append）
 
@@ -46,14 +46,12 @@ function JpChip({ label }: { label: string }) {
 function LeagueTable({
   league,
   rows,
-  slugByMlbId,
   maxScore,
   en,
   t,
 }: {
   league: string;
   rows: MvpRow[];
-  slugByMlbId: Map<number, string>;
   maxScore: number;
   en: boolean;
   t: { hitter: string; score: string; wrc: string; ops: string; hr: string; war: string; jp: string; more: string };
@@ -77,18 +75,19 @@ function LeagueTable({
               <th className="px-3 py-2 text-right font-medium">{t.ops}</th>
               <th className="px-3 py-2 text-right font-medium">{t.hr}</th>
               <th className="px-3 py-2 text-right font-medium">{t.war}</th>
+              <th className="w-6 px-2 py-2" aria-hidden />
             </tr>
           </thead>
           <tbody>
             {shown.map((row) =>
               row === 'gap' ? (
                 <tr key="gap" className="border-b border-line">
-                  <td colSpan={7} className="px-3 py-1 text-center text-xs text-ink-mute">
+                  <td colSpan={8} className="px-3 py-1 text-center text-xs text-ink-mute">
                     ⋯ {t.more}
                   </td>
                 </tr>
               ) : (
-                <Row key={row.id} row={row} slug={slugByMlbId.get(row.id)} maxScore={maxScore} en={en} jpLabel={t.jp} />
+                <Row key={row.id} row={row} maxScore={maxScore} en={en} jpLabel={t.jp} />
               ),
             )}
           </tbody>
@@ -98,29 +97,25 @@ function LeagueTable({
   );
 }
 
-function Row({ row, slug, maxScore, en, jpLabel }: { row: MvpRow; slug?: string; maxScore: number; en: boolean; jpLabel: string }) {
+function Row({ row, maxScore, en, jpLabel }: { row: MvpRow; maxScore: number; en: boolean; jpLabel: string }) {
   const name = en ? row.nameEn : row.nameJa;
   const team = en ? row.teamEn : row.teamJa;
   const why = en ? row.whyEn : row.why;
-  // リンク先: 上位N（詳細ページあり）→ /mvp/{id} ／ それ以外で追跡選手 → 選手ハブ ／ 他は素テキスト。
-  const detail = row.rank <= MVP_DETAIL_TOP;
-  const href = detail ? `/mvp/${row.id}` : slug ? `/player/${slug}` : null;
+  // 行全体がリンク: 名前の Link を after:inset-0 で行いっぱいに広げる（tr は relative）。全打者に詳細ページあり。
   const nameCls = row.isJp ? 'font-bold text-ink' : 'font-medium text-ink';
   return (
-    <tr className={`border-b border-line last:border-0 ${row.isJp ? 'bg-ink/[0.04]' : ''}`}>
+    <tr
+      className={`group relative border-b border-line transition-colors last:border-0 hover:bg-ink/[0.06] ${row.isJp ? 'bg-ink/[0.04]' : ''}`}
+    >
       <td className="px-3 py-2 align-top text-ink-mute">{row.rank}</td>
       <td className="px-3 py-2 align-top">
         <div className="flex items-start gap-2.5">
           <Avatar mlbId={row.id} teamId={row.teamId} name={name} />
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              {href ? (
-                <Link href={href} className={`hover:underline ${nameCls}`}>
-                  {name}
-                </Link>
-              ) : (
-                <span className={nameCls}>{name}</span>
-              )}
+              <Link href={`/mvp/${row.id}`} className={`${nameCls} after:absolute after:inset-0 group-hover:underline`}>
+                {name}
+              </Link>
               {row.isJp && <JpChip label={jpLabel} />}
             </div>
             <div className="mt-0.5 text-xs leading-relaxed text-ink-mute">
@@ -140,14 +135,17 @@ function Row({ row, slug, maxScore, en, jpLabel }: { row: MvpRow; slug?: string;
       <td className="px-3 py-2 align-top text-right text-ink-soft">{row.ops}</td>
       <td className="px-3 py-2 align-top text-right text-ink-soft">{row.hr}</td>
       <td className="px-3 py-2 align-top text-right text-ink-soft">{row.warTotal != null ? row.warTotal.toFixed(1) : '—'}</td>
+      <td className="px-2 py-2 text-right align-middle text-ink-mute transition-colors group-hover:text-ink" aria-hidden>
+        ›
+      </td>
     </tr>
   );
 }
 
 /**
  * MVP 予測ボード＝規定到達打者を AL/NL 別に合成スコアで順位予測し、日本人を強調（CyYoungBoard の野手版）。
- * 各行→詳細（打球の質・バットスピード）や選手ハブへ送客＝「徹底分析→予測」の締め。
- * スコアは断定でなく“データからの見立て”＝式と出典を明示する。サーバーコンポーネント（静的）。
+ * 行全体がリンク＝各行→ /mvp/{id} 詳細ページ（スコア内訳＋打球の質・スイング）へ送客。
+ * スコアは断定でなく予測＝式と出典を明示する。サーバーコンポーネント（静的）。
  */
 export default function MvpBoard({ board, locale }: { board: Board; locale: string }) {
   const en = locale === 'en';
@@ -167,10 +165,10 @@ export default function MvpBoard({ board, locale }: { board: Board; locale: stri
       }
     : {
         methodTitle: '予測スコアの出し方',
-        method: `予測スコア＝各打者のリーグ内パーセンタイルを、打撃 wRC+ ＋ xwOBA（${pct(w.batting)}）・本塁打（${pct(w.hr)}）・走塁run（${pct(w.run)}）・守備run＋位置補正（${pct(w.def)}）・WAR（${pct(w.war)}）で重み付き合算した“データからの見立て”（断定ではない）。MVPはリーグ内争いなので league 別に。二刀流（大谷）は投手WARも合算して評価する。対象は規定打席到達の打者（目安 約${board.qualifyPa}打席）。`,
-        cols: { hitter: '打者', score: '予測スコア', wrc: 'wRC+', ops: 'OPS', hr: '本塁打', war: 'WAR', jp: '日本', more: '同リーグの下位' },
-        watchTitle: '圏外の注目日本人（規定打席 未達）',
-        watchSub: '規定打席にまだ届かない＝現時点では集計圏外。日本人野手の“現在地”。',
+        method: `各指標が同じリーグの規定打者の中でどの位置にいるかを0〜100で数値化し、打撃 wRC+＋xwOBA（${pct(w.batting)}）・本塁打（${pct(w.hr)}）・走塁（${pct(w.run)}）・守備＋位置補正（${pct(w.def)}）・WAR（${pct(w.war)}）の重みをつけて合算したものが予測スコアです。MVPはリーグ内での争いなのでAL/NL別に集計し、対象は規定打席（目安 約${board.qualifyPa}打席）に到達した打者に絞っています。二刀流の大谷翔平は投手WARも合算して評価。現時点の成績にもとづく予測です。`,
+        cols: { hitter: '打者', score: '予測スコア', wrc: 'wRC+', ops: 'OPS', hr: '本塁打', war: 'WAR', jp: '日本', more: 'この間の打者は省略' },
+        watchTitle: '規定打席に届いていない日本人野手',
+        watchSub: '打席数がまだ規定に届かずランキングの対象外の野手たち。規定に到達すれば上の表に入ってきます。',
         watchGap: (n: number) => `規定まであと約${n}打席`,
         source: `出典: MLB公式Stats API＋Baseball Savant（公知の数値）。${board.season}シーズン・${board.asOf}時点。`,
       };
@@ -192,7 +190,7 @@ export default function MvpBoard({ board, locale }: { board: Board; locale: stri
       {/* NL → AL の順（大谷・鈴木ら日本人野手の多くは NL）。 */}
       {(['NL', 'AL'] as const).map((lg) => (
         <section key={lg} className="space-y-2" aria-label={lg}>
-          <LeagueTable league={lg} rows={board.leagues[lg]} slugByMlbId={slugByMlbId} maxScore={maxScore} en={en} t={t.cols} />
+          <LeagueTable league={lg} rows={board.leagues[lg]} maxScore={maxScore} en={en} t={t.cols} />
         </section>
       ))}
 
