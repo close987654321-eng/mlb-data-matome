@@ -145,16 +145,19 @@ export default async function ThreadDetailPage({
     .filter((p, i, arr) => arr.findIndex((x) => x.slug === p.slug) === i);
 
   // 成績ボックスは「注目選手の成績」＝日本人とは限らない（対戦相手の主役なども載る）。
-  // watch-along シリーズ戦（ドジャース等）は打線全員(stats)が積まれて長くなるので、日本人選手（カタログの
-  // 非 rival）だけに絞り、残りのチームメイトは件数だけ数えて「{自軍}選手の成績を見る」で /player 一覧へ畳む。
-  // 単発の試合は編集者が選んだ注目選手(stats 全件)をそのまま出す＝Wood/Abrams のような非日本人も表示する。
+  // ドジャース枠だけは打線全員(stats)が積まれて長くなるので、日本人選手（カタログの非 rival）だけに絞り、
+  // 残りのチームメイトは件数だけ数えて「{自軍}選手の成績を見る」で /player 一覧へ畳む（series.ts の
+  // statsJpOnly が正）。他のシリーズ・単発の試合は編集者が選んだ注目選手(stats 全件)をそのまま出す
+  // ＝PCA/Wood/Abrams のような非日本人スターも表示する（matome R10）。
   const jpStats = (thread.stats ?? []).filter((s) => {
     const pl = getPlayerByJaName(s.player);
     return pl != null && !pl.rival;
   });
-  const seriesTeam = thread.series ? getSeries(thread.series.id)?.team : undefined;
-  const boxStats = seriesTeam ? jpStats : (thread.stats ?? []);
-  const hiddenTeammates = (thread.stats ?? []).length - jpStats.length;
+  const seriesInfo = thread.series ? getSeries(thread.series.id) : null;
+  const seriesTeam = seriesInfo?.team;
+  const jpOnlyBox = Boolean(seriesInfo?.statsJpOnly);
+  const boxStats = jpOnlyBox ? jpStats : (thread.stats ?? []);
+  const hiddenTeammates = jpOnlyBox ? (thread.stats ?? []).length - jpStats.length : 0;
   const seriesId = thread.series?.id; // 一覧リンクの自軍アンカー（/player#dodgers 等）
   // 試合ページ→選手ハブの個別リンクは日本人選手だけに絞る（打線全員のチップで埋めない。
   // 非日本人は「{自軍}選手の成績を見る」一覧リンクに集約）。JSON-LD の about は全員のまま（SEO）。

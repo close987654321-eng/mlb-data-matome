@@ -12,6 +12,10 @@ export type SeriesInfo = {
   team: LocalizedName; // 自軍名（タイトルの "vs" の左）。例: ドジャース
   titlePrefix: LocalizedName; // タイトル接頭辞。例: 「海外ドジャースファンと見る」
   badge: LocalizedName; // カード/記事に出すシリーズバッジ表示
+  // 成績ボックス（StatBox）を日本人選手だけに絞るか。日本人が複数いて打線全員で箱が溢れる
+  // ドジャース枠のみ true。他のシリーズは PCA のような自軍の非日本人スターが主役になるため
+  // stats 全件を出す（matome R10「他の試合＝主役スターなら外国人も可」の表示側）。
+  statsJpOnly?: boolean;
 };
 
 export const SERIES: Record<string, SeriesInfo> = {
@@ -20,6 +24,7 @@ export const SERIES: Record<string, SeriesInfo> = {
     team: { ja: 'ドジャース', en: 'Dodgers' },
     titlePrefix: { ja: '海外ドジャースファンと見る', en: 'Watch w/ overseas Dodgers fans' },
     badge: { ja: '海外ドジャースファンと見る', en: 'Dodgers Watch-Along' },
+    statsJpOnly: true,
   },
   cubs: {
     id: 'cubs',
