@@ -15,9 +15,15 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=rZAVGTVyDns",
+    "thumbUrl": "/media/2026-07-09-dbacks-vs-padres-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ダイヤモンドバックス", "パドレス", "コービン・キャロル", "海外の反応"],
+  "tags": [
+    "ダイヤモンドバックス",
+    "パドレス",
+    "コービン・キャロル",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "コービン・キャロル",
@@ -90,7 +96,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 4 },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 10 }
+    "away": {
+      "ja": "ダイヤモンドバックス",
+      "en": "Arizona Diamondbacks",
+      "score": 4
+    },
+    "home": {
+      "ja": "パドレス",
+      "en": "San Diego Padres",
+      "score": 10
+    }
   }
 }

@@ -22,9 +22,16 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=KOlIUoCxh_s",
+    "thumbUrl": "/media/2026-07-09-whitesox-vs-redsox-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ホワイトソックス", "レッドソックス", "吉田正尚", "ミゲル・バルガス", "海外の反応"],
+  "tags": [
+    "ホワイトソックス",
+    "レッドソックス",
+    "吉田正尚",
+    "ミゲル・バルガス",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "吉田正尚",
@@ -176,7 +183,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 5 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 0 }
+    "away": {
+      "ja": "レッドソックス",
+      "en": "Boston Red Sox",
+      "score": 5
+    },
+    "home": {
+      "ja": "ホワイトソックス",
+      "en": "Chicago White Sox",
+      "score": 0
+    }
   }
 }
