@@ -25,13 +25,13 @@ export async function generateStaticParams() {
 }
 
 // スコア内訳の指標定義（per-metric の重み＝防御率+xERA が prevention 0.40 を折半、他はそのまま）。
-const METRICS: { key: keyof CyRow['pct']; ja: string; en: string; w: number }[] = [
-  { key: 'era', ja: 'ERA', en: 'ERA', w: 0.2 },
-  { key: 'xera', ja: 'xERA', en: 'xERA', w: 0.2 },
-  { key: 'kbb', ja: 'K-BB%', en: 'K-BB%', w: 0.25 },
-  { key: 'ip', ja: '投球回', en: 'Innings', w: 0.2 },
-  { key: 'whip', ja: 'WHIP', en: 'WHIP', w: 0.1 },
-  { key: 'hr9', ja: '被弾の少なさ', en: 'HR prevention', w: 0.05 },
+const METRICS: { key: keyof CyRow['pct']; ja: string; en: string }[] = [
+  { key: 'era', ja: 'ERA', en: 'ERA' },
+  { key: 'xera', ja: 'xERA', en: 'xERA' },
+  { key: 'kbb', ja: 'K-BB%', en: 'K-BB%' },
+  { key: 'ip', ja: '投球回', en: 'Innings' },
+  { key: 'whip', ja: 'WHIP', en: 'WHIP' },
+  { key: 'hr9', ja: '被弾の少なさ', en: 'HR prevention' },
 ];
 
 function copy(en: boolean, r: CyRow, season: number) {
@@ -196,10 +196,7 @@ export default async function CyYoungPitcherPage({
             const v = row.pct[m.key] ?? 0;
             return (
               <li key={m.key} className="grid grid-cols-[7.5rem_1fr_2.5rem] items-center gap-3 text-sm sm:grid-cols-[9rem_1fr_3rem]">
-                <span className="truncate text-ink-soft">
-                  {en ? m.en : m.ja}
-                  <span className="ml-1 text-[10px] text-ink-mute">{Math.round(m.w * 100)}%</span>
-                </span>
+                <span className="truncate text-ink-soft">{en ? m.en : m.ja}</span>
                 <span className="h-2 overflow-hidden rounded-[1px] bg-line" aria-hidden>
                   <span className="block h-full bg-ink" style={{ width: `${v}%` }} />
                 </span>

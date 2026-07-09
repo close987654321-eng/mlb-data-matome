@@ -23,13 +23,13 @@ export async function generateStaticParams() {
 }
 
 // スコア内訳の指標定義（per-metric の重み＝wRC+ + xwOBA が batting 0.45 を折半、他はそのまま）。
-const METRICS: { key: keyof MvpRow['pct']; ja: string; en: string; w: number }[] = [
-  { key: 'wrc', ja: 'wRC+', en: 'wRC+', w: 0.25 },
-  { key: 'xwoba', ja: 'xwOBA', en: 'xwOBA', w: 0.25 },
-  { key: 'hr', ja: '本塁打', en: 'Home runs', w: 0.15 },
-  { key: 'run', ja: '走塁', en: 'Baserunning', w: 0.05 },
-  { key: 'def', ja: '守備＋位置補正', en: 'Defense + positional', w: 0.05 },
-  { key: 'war', ja: 'WAR', en: 'WAR', w: 0.25 },
+const METRICS: { key: keyof MvpRow['pct']; ja: string; en: string }[] = [
+  { key: 'wrc', ja: 'wRC+', en: 'wRC+' },
+  { key: 'xwoba', ja: 'xwOBA', en: 'xwOBA' },
+  { key: 'hr', ja: '本塁打', en: 'Home runs' },
+  { key: 'run', ja: '走塁', en: 'Baserunning' },
+  { key: 'def', ja: '守備＋位置補正', en: 'Defense + positional' },
+  { key: 'war', ja: 'WAR', en: 'WAR' },
 ];
 
 function copy(en: boolean, r: MvpRow, season: number) {
@@ -147,10 +147,6 @@ export default async function MvpHitterPage({
   const sc = row.sc;
   const fmt = (v: number | null, unit = '', digits = 1) => (v != null ? `${v.toFixed(digits)}${unit}` : '—');
   const fmtSigned = (v: number | null) => (v == null ? '—' : `${v > 0 ? '+' : ''}${v.toFixed(1)}`);
-  // 二刀流は守備の重みを WAR に振替（スコア計算と同じ扱いを表示にも反映）。
-  const metrics = METRICS.map((m) =>
-    row.pos === 'TWP' && m.key === 'def' ? { ...m, w: 0 } : row.pos === 'TWP' && m.key === 'war' ? { ...m, w: 0.3 } : m,
-  );
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -232,14 +228,11 @@ export default async function MvpHitterPage({
         <SectionHeading label={c.scoreTitle} lead level="h2" />
         <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{c.scoreLead}</p>
         <ul className="space-y-2.5">
-          {metrics.map((m) => {
+          {METRICS.map((m) => {
             const v = row.pct[m.key] ?? 0;
             return (
               <li key={m.key} className="grid grid-cols-[7.5rem_1fr_2.5rem] items-center gap-3 text-sm sm:grid-cols-[10rem_1fr_3rem]">
-                <span className="truncate text-ink-soft">
-                  {en ? m.en : m.ja}
-                  <span className="ml-1 text-[10px] text-ink-mute">{Math.round(m.w * 1000) / 10}%</span>
-                </span>
+                <span className="truncate text-ink-soft">{en ? m.en : m.ja}</span>
                 <span className="h-2 overflow-hidden rounded-[1px] bg-line" aria-hidden>
                   <span className="block h-full bg-ink" style={{ width: `${v}%` }} />
                 </span>
