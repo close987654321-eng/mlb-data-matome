@@ -174,5 +174,9 @@
       "bodyJa": "こんな弱いチームに地元のボールパークでシリーズを勝ち越されるとか、ソックスは恥を知れ",
       "isHighlight": true
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 5 },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 0 }
+  }
 }
