@@ -115,9 +115,9 @@ export default function PitchArsenal({
         unluckyBy: (n: string) => `運が悪く ${n} 損`,
         luckyBy: (n: string) => `運も味方して ${n} 得`,
         even: (n: string) => `差 ${n}・ほぼ数字どおり`,
-        pitch: '球種', usage: '割合', velo: '球速', whiff: '空振り', woba: '被wOBA', xwoba: 'xwOBA', hard: '強い打球%', hr: '被弾',
+        pitch: '球種', usage: '割合', velo: '球速', whiff: '空振り', woba: '被wOBA', xwoba: 'xwOBA', hard: '被ハードHIT%', hr: '被弾',
         whiffTop: '空振り', hrTitle: '被弾の球種内訳', longest: '最も飛ばされた1本',
-        legend: '※ 被wOBA＝どれだけ打たれたかを1つにまとめた率（低いほど良い）／xwOBA＝打球の質から見たその期待値／強い打球%＝打球速度153km/h（95mph）以上を打たれた割合（少ないほど良い）',
+        legend: '※ 被wOBA＝どれだけ打たれたかを1つにまとめた率（低いほど良い）／xwOBA＝打球の質から見たその期待値／被ハードHIT%＝打球速度153km/h（95mph）以上を打たれた割合（少ないほど良い）',
         source: `出典: Baseball Savant（Statcast・MLB公式）${season ? `・${season}シーズン` : ''}。数値は公知の事実。`,
       };
 
