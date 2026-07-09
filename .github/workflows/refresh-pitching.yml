@@ -1,18 +1,17 @@
-name: 投手データ自動更新（球種＋サイヤング予測）
+name: 投手データ更新（球種＋サイヤング予測・手動）
 
 # 投手の「球種の設計図」(data/pitch-arsenals.json) と「サイヤング予測ボード」(data/cy-young-board.json)
 # を取り直し、変化があればコミット→push（Vercel が自動デプロイ）。
 # データ源は Baseball Savant（Statcast）と MLB公式 Stats API＝キー不要・公知の数値のみ。
-# 球種/被弾は登板ごとにしか動かない＝毎時は過剰（かつ被弾HRは投手ごと約15リクエスト）。
-# なので「試合が確定した後に 1日1回」だけ回す（規約§4.1：恒常データ源にしない・低頻度に抑える）。
+#
+# ⚠️ 日次の自動更新は refresh-stats.yml に相乗り（UTC 08時台のゲート付きステップ）で回す。
+#    理由: このリポの GitHub ネイティブ schedule cron は不発で、毎時ジョブは cron-job.org の
+#    workflow_dispatch で駆動されている。だから独立 schedule は当てにならないので撤去し、
+#    このワークフローは「登板直後などに即更新したいときの手動実行」専用にする。
 # 値が変わらなければ no-op でコミットしない（安定ソート＋asOf据え置きで byte 一致）。
 
 on:
-  schedule:
-    # 1日1回。08:35 UTC = JST 17:35 = ET 04:35＝前日のMLB全試合が確定し、
-    # 毎時 snapshot（refresh-stats.yml の :17）も入った後に走らせる（arsenal が読む名簿を最新に）。
-    - cron: '35 8 * * *'
-  workflow_dispatch: {} # 手動実行も可（登板直後に即更新したいとき）
+  workflow_dispatch: {} # 手動実行専用（GitHub UI の Run workflow / gh workflow run）。日次は refresh-stats に相乗り。
 
 permissions:
   contents: write

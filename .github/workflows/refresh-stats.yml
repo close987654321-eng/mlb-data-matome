@@ -53,16 +53,32 @@ jobs:
           # snapshot を読んで war-race.json に当日の点を upsert（API は叩かない）。失敗しても他は活かす。
           node scripts/fetch-mlb-stats.mjs warrace | tail -2 || echo "warrace スキップ（snapshot は反映済み）"
 
+      - name: 投手データ（球種＋サイヤング予測）を1日1回だけ更新
+        run: |
+          set -euo pipefail
+          # このリポの GitHub ネイティブ cron は不発（毎時ジョブは cron-job.org の workflow_dispatch で駆動）。
+          # なので日次の投手データ更新は独立 schedule でなく、確実に回るこの毎時ジョブに相乗りさせる。
+          # UTC 08時台の実行のときだけ走らせる＝実質1日1回（球種/被弾は登板ごとにしか動かない・§4.1 低頻度）。
+          # 前日のMLB全試合が確定した後（08 UTC = JST 17時 = ET 4時）。他の時間帯は即スキップ。
+          if [ "$(date -u +%H)" != "08" ]; then
+            echo "投手データ更新は 08 UTC の実行時のみ（現在 $(date -u +%H) UTC）→ スキップ"
+            exit 0
+          fi
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          # cyyoung を先に（arsenal がボード上位5名を詳細ページ用に取り込むため）。失敗しても他は活かす。
+          node scripts/fetch-mlb-stats.mjs cyyoung "$SEASON" | tail -2 || echo "cyyoung スキップ"
+          node scripts/fetch-mlb-stats.mjs arsenal "$SEASON" | tail -2 || echo "arsenal スキップ（cyyoung は反映済み）"
+
       - name: 変化があればコミット＆push
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json; then
+          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json
+          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json
           git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
           # 記事の自動マージ等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
           for i in 1 2 3 4 5; do
