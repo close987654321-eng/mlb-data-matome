@@ -1,11 +1,14 @@
 import type { Metadata } from 'next';
 import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
-import { PLAYERS, hubEligible } from '@/lib/players';
+import { PLAYERS, hubEligible, type Player } from '@/lib/players';
 import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
+import { getMvpBoard } from '@/lib/mvpBoard';
+import { getCyYoungBoard } from '@/lib/cyYoungBoard';
+import { ALLSTAR } from '@/lib/allstar';
 import CompareTable, { type CompareCol, type CompareRow } from '@/components/CompareTable';
 import SectionHeading from '@/components/SectionHeading';
-import { getTeam } from '@/lib/teams';
+import { getTeam, headshotUrl } from '@/lib/teams';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import { Link } from '@/lib/navigation';
@@ -68,6 +71,9 @@ const PIT_COLS: CompareCol[] = [
   { key: 'war', label: 'WAR', better: 'high' },
 ];
 
+// 予測ボード（MVP/サイヤング）の日本人ハイライトに使う最小形。MvpRow / CyRow の共通部分。
+type JpRankRow = { isJp: boolean; rank: number; league: 'AL' | 'NL'; nameJa: string; nameEn: string };
+
 export default async function PlayerIndexPage({
   params,
 }: {
@@ -76,7 +82,13 @@ export default async function PlayerIndexPage({
   const { locale } = await params;
   unstable_setRequestLocale(locale);
   const t = await getTranslations();
-  const [snap, all] = await Promise.all([getPlayersSnapshot(), getAllThreads()]);
+  const en = locale === 'en';
+  const [snap, all, mvpBoard, cyBoard] = await Promise.all([
+    getPlayersSnapshot(),
+    getAllThreads(),
+    getMvpBoard(),
+    getCyYoungBoard(),
+  ]);
   const year = seasonYear(snap);
 
   // 比較に出すのは MLBロースターで今季成績がある選手（＝ハブが必ず存在＝行クリックが必ず有効）。
@@ -85,7 +97,7 @@ export default async function PlayerIndexPage({
     (x) => x.s && x.s.league,
   );
 
-  // 投手1行ぶんの値（日本人投手表とサイヤング争いブロックで共用）。
+  // 投手1行ぶんの値（日本人投手表で使う）。
   const pitValues = (s: PlayerSeason) => {
     const pi = s.pitching!;
     const sb = s.saber;
@@ -100,7 +112,7 @@ export default async function PlayerIndexPage({
     };
   };
 
-  // 打者1行ぶんの値（日本人打者表とスター野手比較ブロックで共用）。
+  // 打者1行ぶんの値（日本人打者表とドジャース打線で共用）。
   const batValues = (s: PlayerSeason) => {
     const h = s.hitting!;
     const sb = s.saber;
@@ -115,7 +127,7 @@ export default async function PlayerIndexPage({
     };
   };
 
-  // 行オブジェクトの共通形（CompareRow）。5つの表で同形なので1か所にまとめる。
+  // 行オブジェクトの共通形（CompareRow）。3つの表で同形なので1か所にまとめる。
   const toRow = (p: (typeof withStats)[number]['p'], s: PlayerSeason, values: CompareRow['values']): CompareRow => ({
     slug: p.slug,
     name: p.nameJa,
@@ -130,10 +142,6 @@ export default async function PlayerIndexPage({
   const isRealPitcher = (s: PlayerSeason) =>
     !!s.pitching && (Number(s.pitching.gamesStarted) >= 1 || Number(s.pitching.inningsPitched) >= 10);
 
-  // サイ・ヤング賞レースの“当事者”集合（日本人エース）。大谷・山本はここの主役だが、日本人投手表にも出す
-  // ＝大谷は二刀流・両当事者という唯一の主役なので各表に正当に再登場させる（議論の最終結論＝重複は許容）。
-  const cyJpSlugs = new Set(['shohei-ohtani', 'yoshinobu-yamamoto']);
-
   // 日本人 野手：日本人の野手（大谷を含む＝最上段の表に主役を置く）。
   const batRows: CompareRow[] = withStats
     .filter((x) => x.s!.hitting && !x.p.rival)
@@ -144,33 +152,48 @@ export default async function PlayerIndexPage({
     .filter((x) => isRealPitcher(x.s!) && !x.p.rival)
     .map(({ p, s }) => toRow(p, s!, pitValues(s!)));
 
-  // サイ・ヤング賞レース：投手ゲートを通った rival 投手＋大谷・山本。野手の火消し登板は弾く。
-  const cyRows: CompareRow[] = withStats
-    .filter((x) => isRealPitcher(x.s!) && (x.p.rival || cyJpSlugs.has(x.p.slug)))
-    .map(({ p, s }) => toRow(p, s!, pitValues(s!)));
-
   // ドジャース打線：所属＝ドジャース（teamId 119）の野手全員（大谷＋同僚）。rival フラグでなく
   // 「今どこに居るか」の事実で引く＝トレードでもデータ追従で自動更新される。
   const dodgersRows: CompareRow[] = withStats
     .filter((x) => x.s!.hitting && getTeam(x.s!.team)?.id === 119)
     .map(({ p, s }) => toRow(p, s!, batValues(s!)));
 
-  // クロスリーグの強打者：大谷（比較のアンカー）＋ドジャース以外の rival 野手（リード文と一致）。
-  const leagueRows: CompareRow[] = withStats
-    .filter((x) => x.s!.hitting && (x.p.slug === 'shohei-ohtani' || (x.p.rival && getTeam(x.s!.team)?.id !== 119)))
-    .map(({ p, s }) => toRow(p, s!, batValues(s!)));
-
   // ドジャース打線は当面全件。将来15人超で初期高さを抑えたくなったら数値1つ（例 10）にするだけ。
   const DODGERS_CAP: number | null = null;
   const dodgersShown = DODGERS_CAP ? dodgersRows.slice(0, DODGERS_CAP) : dodgersRows;
 
-  // ピラー（/player）から全ハブへ内部リンクを閉じる。比較表に出ない（MLB今季成績が無い）が記事のある
-  // 選手（村上・岡本・ヌートバー等）への入口を一覧に持たせ、子ハブに評価・回遊を届ける。
+  // 選手名鑑：日本人（非 rival）のハブ対象全員＝「目当ての選手へ1タップ」の最速ルート。
+  // 比較表は野手/投手に分かれ、記事のみの選手（村上ら）はどの表にも出ない＝探すジョブはここが一手に受ける。
+  // 並びは MLB今季成績あり（WAR合計降順＝大谷が先頭）→ 成績なし（カタログ順）。
+  const warOf = (s?: PlayerSeason) => (s?.saber?.hit ?? 0) + (s?.saber?.pit ?? 0);
+  const directory: { p: Player; s?: PlayerSeason }[] = PLAYERS.filter((p) => !p.rival)
+    .map((p) => ({ p, s: snap.players[String(p.mlbId)] as PlayerSeason | undefined }))
+    .filter((x) => hubEligible(x.p, all, x.s))
+    .sort((a, b) => {
+      const am = a.s?.league ? 1 : 0;
+      const bm = b.s?.league ? 1 : 0;
+      if (am !== bm) return bm - am;
+      return warOf(b.s) - warOf(a.s);
+    });
+
+  // 予測ボードの日本人最上位（例: 大谷 ナ・リーグ1位）。レース分析は /mvp・/cy-young に一本化し、
+  // /player は「いま日本人が何位か」だけ見せて送客する（劣化コピーの表を持たない）。
+  const bestJp = (rows: JpRankRow[]): JpRankRow | null =>
+    rows.filter((r) => r.isJp).sort((a, b) => a.rank - b.rank)[0] ?? null;
+  const mvpJp = mvpBoard ? bestJp([...mvpBoard.leagues.NL, ...mvpBoard.leagues.AL]) : null;
+  const cyJp = cyBoard ? bestJp([...cyBoard.leagues.NL, ...cyBoard.leagues.AL]) : null;
+
+  // 専門ボードへの入口カード。オールスターは会期フラグで自動的に消える（PlayerHubNav と同じ流儀）。
+  const boardCards: { href: string; title: string; desc: string; jp?: JpRankRow | null }[] = [
+    { href: '/mvp', title: t('player.boardMvp'), desc: t('player.boardMvpDesc'), jp: mvpJp },
+    { href: '/cy-young', title: t('player.boardCy'), desc: t('player.boardCyDesc'), jp: cyJp },
+    { href: '/ranking', title: t('nav.ranking'), desc: t('player.boardRankingDesc') },
+    ...(ALLSTAR.enabled ? [{ href: '/allstar', title: t('nav.allstar'), desc: t('player.boardAllstarDesc') }] : []),
+  ];
+
+  // ピラー（/player）から全ハブへ内部リンクを閉じる。名鑑は日本人のみだが、rival のハブ（ボード・
+  // ドジャース打線から回遊で届く）も ItemList には列挙して評価を渡す。
   const hubPlayers = PLAYERS.filter((p) => hubEligible(p, all, snap.players[String(p.mlbId)]));
-  const tableSlugs = new Set(
-    [...cyRows, ...dodgersRows, ...leagueRows, ...pitRows, ...batRows].map((r) => r.slug),
-  );
-  const moreHubs = hubPlayers.filter((p) => !tableSlugs.has(p.slug));
 
   // 一覧（GA4最強回遊面）の構造化データ。CollectionPage＋ItemList（全ハブを列挙）＋パンくず。
   const indexTitle = t('player.indexTitleYear', { year: String(year) });
@@ -221,7 +244,43 @@ export default async function PlayerIndexPage({
         )}
       </section>
 
-      {/* 事業の主眼＝日本人ハブ（検索母艦）を最上段に。① 日本人 野手（大谷を含む＝先頭に主役）。 */}
+      {/* ① 選手名鑑＝個別ハブ（滞在5分の母艦）への最速ルート。顔＋名前＋所属の1タップ導線を最上段に。 */}
+      {directory.length > 0 && (
+        <section>
+          <SectionHeading label={t('player.directory')} count={directory.length} />
+          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.directoryLead')}</p>
+          <ul className="flex flex-wrap gap-2">
+            {directory.map(({ p, s }) => {
+              const teamColor = s?.team ? getTeam(s.team)?.color : undefined;
+              return (
+                <li key={p.slug}>
+                  <Link
+                    href={`/player/${p.slug}`}
+                    className="flex items-center gap-2 rounded-[3px] border border-line py-1.5 pl-1.5 pr-3.5 transition-colors hover:border-ink hover:bg-paper"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式CDNの顔写真を直リンク（CompareTable と同じ流儀・再ホストしない） */}
+                    <img
+                      src={headshotUrl(p.mlbId, 'spot')}
+                      alt=""
+                      width={28}
+                      height={28}
+                      loading="lazy"
+                      className="h-7 w-7 shrink-0 rounded-full bg-paper object-cover"
+                      style={teamColor ? { boxShadow: `0 0 0 1.5px ${teamColor}` } : undefined}
+                    />
+                    <span className="flex flex-col leading-tight">
+                      <span className="text-sm font-medium text-ink">{en ? p.nameEn : p.nameJa}</span>
+                      {s?.team && <span className="text-[10px] text-ink-soft">{s.team}</span>}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
+      {/* ② 日本人 野手（大谷を含む＝先頭に主役）。 */}
       {batRows.length > 0 && (
         <section>
           <SectionHeading label={t('player.batting')} count={batRows.length} />
@@ -230,7 +289,7 @@ export default async function PlayerIndexPage({
         </section>
       )}
 
-      {/* ② 日本人 投手（大谷・山本を含む）。 */}
+      {/* ③ 日本人 投手（大谷・山本を含む）。 */}
       {pitRows.length > 0 && (
         <section>
           <SectionHeading label={t('player.pitching')} count={pitRows.length} />
@@ -239,53 +298,48 @@ export default async function PlayerIndexPage({
         </section>
       )}
 
-      {/* ③ 二刀流で投げる大谷のサイ・ヤング賞挑戦＝レースの当事者を1表に。 */}
-      {cyRows.length > 0 && (
-        <section>
-          <SectionHeading label={t('player.cyYoung')} count={cyRows.length} />
-          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.cyYoungLead')}</p>
-          <CompareTable rows={cyRows} cols={PIT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
-        </section>
-      )}
+      {/* ④ 予測ボード・ランキングへの交通整理。レースの表そのものは持たず（/mvp・/cy-young が正）、
+          日本人の現在地ハイライトつきカードで送客する。 */}
+      <section>
+        <SectionHeading label={t('player.boardsTitle')} count={boardCards.length} />
+        <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.boardsLead')}</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {boardCards.map((c) => (
+            <Link
+              key={c.href}
+              href={c.href}
+              className="group flex flex-col rounded-[3px] border border-line p-4 transition-colors hover:border-ink"
+            >
+              <span className="flex items-center justify-between gap-2 text-base font-bold text-ink">
+                {c.title}
+                <span aria-hidden className="shrink-0 text-ink-mute transition-transform duration-300 group-hover:translate-x-1">
+                  →
+                </span>
+              </span>
+              <span className="mt-1 text-xs leading-relaxed text-ink-soft">{c.desc}</span>
+              {c.jp && (
+                <span className="mt-3 flex items-baseline justify-between gap-2 border-t border-line pt-2.5">
+                  <span className="text-sm font-semibold text-ink">{en ? c.jp.nameEn : c.jp.nameJa}</span>
+                  <span className="text-xs tabular-nums text-ink-soft">
+                    {t('player.boardJpRank', {
+                      league: c.jp.league === 'AL' ? t('player.lgAL') : t('player.lgNL'),
+                      rank: String(c.jp.rank),
+                    })}
+                  </span>
+                </span>
+              )}
+            </Link>
+          ))}
+        </div>
+      </section>
 
-      {/* ④ 看板「海外ファンと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。
+      {/* ⑤ 看板「海外ファンと見る」で毎試合追うドジャース打線＝大谷＋同僚を所属で一括り。
           id=dodgers＝試合記事の「ドジャース選手の成績を見る」(/player#dodgers) の着地点。 */}
       {dodgersRows.length > 0 && (
         <section id="dodgers" className="scroll-mt-24">
           <SectionHeading label={t('player.dodgersLineup')} count={dodgersRows.length} />
           <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.dodgersLineupLead')}</p>
           <CompareTable rows={dodgersShown} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
-        </section>
-      )}
-
-      {/* ⑤ 大谷の打撃を測る、リーグ横断の強打者（大谷＋他球団のライバル野手）。 */}
-      {leagueRows.length > 0 && (
-        <section>
-          <SectionHeading label={t('player.leagueSluggers')} count={leagueRows.length} />
-          <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">{t('player.leagueSluggersLead')}</p>
-          <CompareTable rows={leagueRows} cols={BAT_COLS} defaultKey="war" hint={t('player.swipeHint')} />
-        </section>
-      )}
-
-      {moreHubs.length > 0 && (
-        <section>
-          <SectionHeading label={t('player.moreTitle')} count={moreHubs.length} />
-          <div className="mt-3 flex flex-wrap gap-2">
-            {moreHubs.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/player/${p.slug}`}
-                className="inline-flex items-center gap-1.5 rounded-[3px] border border-line px-3.5 py-1.5 text-sm text-ink transition-colors hover:border-ink hover:bg-paper"
-              >
-                <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current text-ink-mute" aria-hidden>
-                  <rect x="3" y="13" width="4" height="8" />
-                  <rect x="10" y="8" width="4" height="13" />
-                  <rect x="17" y="4" width="4" height="17" />
-                </svg>
-                {locale === 'en' ? p.nameEn : p.nameJa}
-              </Link>
-            ))}
-          </div>
         </section>
       )}
 
