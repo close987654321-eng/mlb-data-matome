@@ -2,6 +2,7 @@ import { Link } from '@/lib/navigation';
 import { PLAYERS } from '@/lib/players';
 import SectionHeading from '@/components/SectionHeading';
 import { headshotUrl, teamLogoUrl } from '@/lib/teams';
+import { getPlayersSnapshot } from '@/lib/playerStats';
 import { type MvpBoard as Board, type MvpRow, type MvpWatch } from '@/lib/mvpBoard';
 
 const TOP_N = 12; // 各リーグで通常表示する上位数（＋圏外の日本人は別途 append）
@@ -147,9 +148,17 @@ function Row({ row, maxScore, en, jpLabel }: { row: MvpRow; maxScore: number; en
  * 行全体がリンク＝各行→ /mvp/{id} 詳細ページ（スコア内訳＋打球の質・スイング）へ送客。
  * スコアは断定でなく予測＝式と出典を明示する。サーバーコンポーネント（静的）。
  */
-export default function MvpBoard({ board, locale }: { board: Board; locale: string }) {
+export default async function MvpBoard({ board, locale }: { board: Board; locale: string }) {
   const en = locale === 'en';
   const slugByMlbId = new Map(PLAYERS.map((p) => [p.mlbId, p.slug]));
+  // 圏外の注目日本人の wRC+ は snapshot（jp-players-stats.json）から引く＝AAA も含む公知の値。
+  // ボード生成（fetch mvp）は MLB 規定打者の一括セイバーしか持たず AAA を拾えないため、ここで補う。
+  const snap = await getPlayersSnapshot();
+  const watchWrc = new Map<number, number | null>();
+  for (const wp of board.watch) {
+    const wrc = snap.players[String(wp.id)]?.saber?.wrcplus;
+    watchWrc.set(wp.id, wrc != null ? Math.round(wrc) : null);
+  }
   const w = board.weights;
   const pct = (v: number) => `${Math.round(v * 100)}%`;
 
@@ -201,7 +210,14 @@ export default function MvpBoard({ board, locale }: { board: Board; locale: stri
           <p className="mb-3 mt-1 max-w-prose text-xs leading-relaxed text-ink-mute">{t.watchSub}</p>
           <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[2px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {board.watch.map((wp) => (
-              <WatchCard key={wp.id} wp={wp} slug={slugByMlbId.get(wp.id)} en={en} gapLabel={t.watchGap} />
+              <WatchCard
+                key={wp.id}
+                wp={wp}
+                slug={slugByMlbId.get(wp.id)}
+                wrcPlus={watchWrc.get(wp.id) ?? null}
+                en={en}
+                gapLabel={t.watchGap}
+              />
             ))}
           </div>
         </section>
@@ -212,16 +228,30 @@ export default function MvpBoard({ board, locale }: { board: Board; locale: stri
   );
 }
 
-function WatchCard({ wp, slug, en, gapLabel }: { wp: MvpWatch; slug?: string; en: boolean; gapLabel: (n: number) => string }) {
+function WatchCard({
+  wp,
+  slug,
+  wrcPlus,
+  en,
+  gapLabel,
+}: {
+  wp: MvpWatch;
+  slug?: string;
+  wrcPlus: number | null;
+  en: boolean;
+  gapLabel: (n: number) => string;
+}) {
   const team = en ? wp.teamEn : wp.teamJa;
+  // slug があればカード全体を選手ハブ（＝詳細）への1リンクにする。名前 Link を after:inset-0 で
+  // カードいっぱいに広げる（ランク表の行と同じ流儀）。詳細は選手ページ側（AAA成績の MinorSeason）。
   return (
-    <div className="bg-paper px-4 py-3">
+    <div className={`group relative bg-paper px-4 py-3 transition-colors ${slug ? 'hover:bg-ink/[0.05]' : ''}`}>
       <div className="flex items-start gap-2.5">
         <Avatar mlbId={wp.id} teamId={wp.teamId} name={wp.nameJa} size={36} />
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline justify-between gap-2">
             {slug ? (
-              <Link href={`/player/${slug}`} className="font-bold text-ink hover:underline">
+              <Link href={`/player/${slug}`} className="font-bold text-ink after:absolute after:inset-0 group-hover:underline">
                 {wp.nameJa}
               </Link>
             ) : (
@@ -231,6 +261,11 @@ function WatchCard({ wp, slug, en, gapLabel }: { wp: MvpWatch; slug?: string; en
           </div>
           <div className="mt-0.5 text-xs text-ink-mute">{team}</div>
         </div>
+        {slug ? (
+          <span className="mt-0.5 shrink-0 text-ink-mute transition-colors group-hover:text-ink" aria-hidden>
+            ›
+          </span>
+        ) : null}
       </div>
       <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-sm tabular-nums text-ink-soft">
         <div>
@@ -245,6 +280,12 @@ function WatchCard({ wp, slug, en, gapLabel }: { wp: MvpWatch; slug?: string; en
           <span className="text-ink-mute">{en ? 'RBI ' : '打点 '}</span>
           {wp.rbi}
         </div>
+        {wrcPlus != null ? (
+          <div>
+            <span className="text-ink-mute">wRC+ </span>
+            <span className="font-medium text-ink">{wrcPlus}</span>
+          </div>
+        ) : null}
         <div>
           <span className="text-ink-mute">{en ? 'PA ' : '打席 '}</span>
           {wp.pa}
