@@ -81,6 +81,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/ranking', statDate),
     // サイ・ヤング賞 予測ボード（規定投手をAL/NL別にスコア化）。lastmod は成績スナップショットの日付。
     entry('/cy-young', statDate),
+    // MVP 予測ボード（規定打者をAL/NL別にスコア化・二刀流は投手WAR合算）。lastmod は成績スナップショットの日付。
+    entry('/mvp', statDate),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     ...playerEntries,

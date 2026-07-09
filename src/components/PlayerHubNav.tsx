@@ -20,8 +20,8 @@ export default function PlayerHubNav() {
       <NavLink href="/player" className={item}>
         {t('nav.players')}
       </NavLink>
-      <NavLink href="/ranking" className={item}>
-        {t('nav.ranking')}
+      <NavLink href="/mvp" className={item}>
+        {t('nav.mvp')}
       </NavLink>
       <NavLink href="/cy-young" className={item}>
         {t('nav.cyYoung')}
@@ -31,6 +31,9 @@ export default function PlayerHubNav() {
           {t('nav.allstar')}
         </NavLink>
       )}
+      <NavLink href="/ranking" className={item}>
+        {t('nav.ranking')}
+      </NavLink>
       <NavLink href="/prospects" className={item}>
         {t('nav.prospects')}
       </NavLink>

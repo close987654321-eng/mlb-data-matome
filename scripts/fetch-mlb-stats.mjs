@@ -1371,7 +1371,7 @@ async function runArsenal(season, asOf) {
   }
   targets = [...new Set(targets)];
   if (!targets.length) return console.error('arsenal: 対象投手が見つからない（先に snapshot を実行）');
-  const KATAKANA = loadPitcherNamesJa(); // 非追跡候補（詳細ページ用）も英語でなくカタカナ表示に
+  const KATAKANA = loadNamesJa('pitcher-names-ja.json'); // 非追跡候補（詳細ページ用）も英語でなくカタカナ表示に
 
   // league全体のリーダーボードは1回ずつ取得して id で引く（対象投手ぶんだけ組み立てる＝バルクにしない）。
   const [statsMap, speedMap, xeraMap] = await Promise.all([
@@ -1458,12 +1458,12 @@ const CY_WEIGHTS = { prevention: 0.4, kbb: 0.25, ip: 0.2, whip: 0.1, hr9: 0.05 }
 const JP_ID_SET = new Set(Object.keys(JP_NAMES).map(Number)); // 日本人（強調フラグ isJp 用）
 
 /**
- * MLB投手の日本語カタカナ表記（data/pitcher-names-ja.json）を id→カタカナ で返す。無ければ {}。
+ * MLB選手の日本語カタカナ表記（data/{pitcher,batter}-names-ja.json）を id→カタカナ で返す。無ければ {}。
  * DISPLAY_NAMES（日本人＋追跡ライバル）に無い規定投手も、これで英語でなくカタカナ表示にする。
  */
-function loadPitcherNamesJa() {
+function loadNamesJa(fileName) {
   try {
-    const raw = JSON.parse(readFileSync(path.join(process.cwd(), 'data', 'pitcher-names-ja.json'), 'utf8'));
+    const raw = JSON.parse(readFileSync(path.join(process.cwd(), 'data', fileName), 'utf8'));
     const out = {};
     for (const [k, v] of Object.entries(raw)) if (/^\d+$/.test(k)) out[Number(k)] = v;
     return out;
@@ -1533,7 +1533,7 @@ async function runCyYoung(season, asOf) {
   ]);
   if (!rows.length) return console.error('cyyoung: 規定投手が取得できない（season/API を確認）');
 
-  const KATAKANA = loadPitcherNamesJa(); // 非日本人投手も英語でなくカタカナ表示にする
+  const KATAKANA = loadNamesJa('pitcher-names-ja.json'); // 非日本人投手も英語でなくカタカナ表示にする
 
   // 規定到達投手のメトリクス行に整形。
   const qualIds = new Set(rows.map((r) => r.id));
@@ -1665,6 +1665,291 @@ async function runCyYoung(season, asOf) {
   console.log(`cyyoung 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// mvp … MVP「予測ボード」を data/mvp-board.json に書き出す（cyyoung の野手版）。
+// 用途: /mvp＝規定到達打者をAL/NL別に合成スコアで順位予測し、日本人を強調。
+// スコア: リーグ内パーセンタイルの重み付き合算（透明・相対＝MVPはリーグ内争い）。
+//   打撃 wRC+ ＋ xwOBA 折半(45%) / 本塁打(10%) / 走塁run(10%) / 守備+位置補正run(15%) / WAR(20%)。
+//   WAR は statsapi の sabermetrics グループ（打撃/守備/走塁/位置補正の内訳つき）。二刀流（大谷）は
+//   投手WARを合算した warTotal で評価＝MVP投票の実態（総合価値）に合わせる。
+// データ源: statsapi 一括打撃スタッツ＋sabermetrics ＋ Savant 野手CSV
+//   （expected_statistics=xwOBA / statcast=打球速度・バレル / bat-tracking=バットスピード / OAA・走力）。
+//   すべてキー不要・公知の数値のみ・サイト本体は叩かない（編集時/CI取得）。
+// ─────────────────────────────────────────────────────────────────────────────
+const MVP_WEIGHTS = { batting: 0.45, hr: 0.1, run: 0.1, def: 0.15, war: 0.2 };
+
+/** 規定打者の一括打撃スタッツ（league.id・守備位置付き）。1リクエストで全規定打者が返る。 */
+async function fetchQualifiedHitters(season) {
+  const url = `${BASE}/stats?stats=season&group=hitting&season=${season}&sportId=1&limit=200&playerPool=qualified&sortStat=onBasePlusSlugging`;
+  const d = await getJson(url);
+  return (d.stats?.[0]?.splits ?? [])
+    .map((s) => ({
+      id: s.player?.id,
+      nameEn: s.player?.fullName,
+      teamEn: s.team?.name,
+      teamId: s.team?.id,
+      leagueId: s.league?.id,
+      pos: s.position?.abbreviation ?? null,
+      stat: s.stat ?? {},
+    }))
+    .filter((p) => p.id && p.leagueId);
+}
+
+/** 規定打者の sabermetrics（WAR と打撃/守備/走塁/位置補正の run 内訳・wRC+/wOBA）。id→stat。 */
+async function fetchSaberHitting(season) {
+  const url = `${BASE}/stats?stats=sabermetrics&group=hitting&season=${season}&sportId=1&limit=200&playerPool=qualified`;
+  const d = await getJson(url);
+  const map = new Map();
+  for (const s of d.stats?.[0]?.splits ?? []) if (s.player?.id) map.set(s.player.id, s.stat ?? {});
+  return map;
+}
+
+/** 野手の xwOBA/xBA/xSLG（“数字 vs 中身”）。規定到達のみ。失敗してもコアは継続。 */
+async function fetchBatterExpected(season) {
+  const map = new Map();
+  try {
+    const rows = await getCsv(`${SAVANT}/expected_statistics?type=batter&year=${season}&position=&team=&min=q&csv=true`);
+    for (const r of rows) {
+      const id = Number(r.player_id);
+      if (id) map.set(id, { xwoba: toNum(r.est_woba), xba: toNum(r.est_ba), xslg: toNum(r.est_slg) });
+    }
+  } catch (e) {
+    console.warn(`xwOBA取得スキップ（コアは継続）: ${e.message}`);
+  }
+  return map;
+}
+
+/** 野手の打球の質（平均/最大打球速度・バレル率・ハードヒット率・スイートスポット率）。 */
+async function fetchBatterStatcast(season) {
+  const map = new Map();
+  try {
+    const rows = await getCsv(`${SAVANT}/statcast?type=batter&year=${season}&position=&team=&min=q&csv=true`);
+    for (const r of rows) {
+      const id = Number(r.player_id);
+      if (id)
+        map.set(id, {
+          ev: toNum(r.avg_hit_speed),
+          maxEv: toNum(r.max_hit_speed),
+          barrel: toNum(r.brl_percent),
+          hardHit: toNum(r.ev95percent),
+          sweetSpot: toNum(r.anglesweetspotpercent),
+        });
+    }
+  } catch (e) {
+    console.warn(`打球の質 取得スキップ（コアは継続）: ${e.message}`);
+  }
+  return map;
+}
+
+/** バットトラッキング（平均バットスピード・強スイング率・squared-up率）。2024〜の計測。 */
+async function fetchBatTracking(season) {
+  const map = new Map();
+  try {
+    const rows = await getCsv(`${SAVANT}/bat-tracking?year=${season}&min=q&type=batter&csv=true`);
+    for (const r of rows) {
+      const id = Number(r.id);
+      if (id)
+        map.set(id, {
+          batSpeed: toNum(r.avg_bat_speed),
+          hardSwing: toNum(r.hard_swing_rate), // 0-1
+          squaredUp: toNum(r.squared_up_per_swing), // 0-1
+        });
+    }
+  } catch (e) {
+    console.warn(`bat-tracking取得スキップ（コアは継続）: ${e.message}`);
+  }
+  return map;
+}
+
+/** ランク行の「なぜ」を data から一言生成（percentile>=75 の強みを最大2つ＋xwOBA乖離の注記）。捏造しない。 */
+function mvpWhy(g, en) {
+  const p = g.pct;
+  const cand = [
+    { v: p.wrc, ja: `wRC+${g.wrcPlus}`, en: `${g.wrcPlus} wRC+` },
+    { v: p.hr, ja: `${g.hr}本塁打`, en: `${g.hr} HR` },
+    { v: p.run, ja: '走塁', en: 'baserunning' },
+    { v: p.def, ja: '守備', en: 'defense' },
+    { v: p.war, ja: `WAR${g.warTotal}`, en: `${g.warTotal} WAR` },
+  ]
+    .filter((c) => c.v >= 75)
+    .sort((a, b) => b.v - a.v)
+    .slice(0, 2);
+  const parts = [];
+  parts.push(cand.length ? (en ? 'League-best ' : 'リーグ上位の ') + cand.map((c) => (en ? c.en : c.ja)).join(en ? ', ' : '・') : en ? 'Solid all-around' : '総合力で上位');
+  if (g.warPitch != null) parts.push(en ? `two-way (+${g.warPitch} pitching WAR)` : `二刀流（投手WAR+${g.warPitch}）`);
+  else if (g.xwoba != null && g.woba != null) {
+    const d = Math.round((g.woba - g.xwoba) * 1000) / 1000;
+    if (d < -0.02) parts.push(en ? `contact even better (xwOBA ${g.xwoba.toFixed(3)})` : `中身はさらに good（xwOBA${g.xwoba.toFixed(3)}）`);
+    else if (d > 0.02) parts.push(en ? `riding luck (xwOBA ${g.xwoba.toFixed(3)})` : `やや出来すぎ（xwOBA${g.xwoba.toFixed(3)}）`);
+  }
+  return parts.join(en ? ' · ' : ' / ');
+}
+
+async function runMvp(season, asOf) {
+  const [rows, saber, xMap, scMap, btMap, savant, jpPeople] = await Promise.all([
+    fetchQualifiedHitters(season),
+    fetchSaberHitting(season),
+    fetchBatterExpected(season),
+    fetchBatterStatcast(season),
+    fetchBatTracking(season),
+    fetchSavant(season), // OAA・走力（snapshot と同じ取得を再利用）
+    fetchStats([...JP_ID_SET], season), // 圏外の注目日本人（規定未達の野手）を拾うため
+  ]);
+  if (!rows.length) return console.error('mvp: 規定打者が取得できない（season/API を確認）');
+
+  const KATAKANA = loadNamesJa('batter-names-ja.json'); // 非日本人打者も英語でなくカタカナ表示にする
+  const r1 = (v) => (v != null ? Math.round(v * 10) / 10 : null);
+
+  const qualIds = new Set(rows.map((r) => r.id));
+  const build = (r) => {
+    const s = r.stat;
+    const sb = saber.get(r.id) ?? {};
+    const x = xMap.get(r.id);
+    const sc = scMap.get(r.id);
+    const bt = btMap.get(r.id);
+    return {
+      id: r.id,
+      nameJa: DISPLAY_NAMES[r.id] ?? KATAKANA[r.id] ?? r.nameEn,
+      nameEn: r.nameEn,
+      teamJa: TEAM_JA[r.teamEn] ?? r.teamEn,
+      teamEn: r.teamEn,
+      teamId: r.teamId ?? null,
+      league: r.leagueId === 103 ? 'AL' : 'NL',
+      pos: r.pos,
+      isJp: JP_ID_SET.has(r.id),
+      avg: s.avg,
+      obp: s.obp,
+      slg: s.slg,
+      ops: s.ops,
+      hr: Number(s.homeRuns) || 0,
+      rbi: Number(s.rbi) || 0,
+      sbs: Number(s.stolenBases) || 0,
+      pa: Number(s.plateAppearances) || 0,
+      wrcPlus: sb.wRcPlus != null ? Math.round(sb.wRcPlus) : null,
+      woba: sb.woba != null ? Math.round(sb.woba * 1000) / 1000 : null,
+      xwoba: x?.xwoba ?? null,
+      xslg: x?.xslg ?? null,
+      war: r1(sb.war),
+      warPitch: null, // 二刀流のみ後段で埋める
+      warTotal: r1(sb.war),
+      // run value 内訳（守備は位置補正込み＝DH のマイナスも正しく効かせる）
+      runBat: r1(sb.batting),
+      runBsr: r1(sb.baseRunning),
+      runDef: sb.fielding != null || sb.positional != null ? r1((sb.fielding ?? 0) + (sb.positional ?? 0)) : null,
+      // 打球の質・スイング・走守（詳細ページの「野手の厚いデータ」）
+      sc: {
+        ev: sc?.ev ?? null,
+        maxEv: sc?.maxEv ?? null,
+        barrel: sc?.barrel ?? null,
+        hardHit: sc?.hardHit ?? null,
+        sweetSpot: sc?.sweetSpot ?? null,
+        batSpeed: r1(bt?.batSpeed),
+        hardSwing: bt?.hardSwing != null ? r1(bt.hardSwing * 100) : null,
+        squaredUp: bt?.squaredUp != null ? r1(bt.squaredUp * 100) : null,
+        sprint: savant.sprint.get(r.id) ?? null,
+        oaa: savant.oaa.get(r.id)?.oaa ?? null,
+      },
+    };
+  };
+  const all = rows.map(build);
+  const qualifyPa = Math.min(...all.map((g) => g.pa).filter((v) => v > 0)); // 表示用の規定打席目安（最少PA≒カットオフ）
+
+  // 二刀流（大谷）＝投手WARを合算。打撃スプリットの position は DH になるので、
+  // 人物の primaryPosition（TWP）で検出する（1リクエスト）→ 該当者のみ投手WARを取得（実質1名）。
+  try {
+    const ppl = await getJson(
+      `${BASE}/people?personIds=${all.map((g) => g.id).join(',')}&fields=people,id,primaryPosition,abbreviation`,
+    );
+    for (const p of ppl.people ?? []) {
+      if (p.primaryPosition?.abbreviation === 'TWP') {
+        const g = all.find((v) => v.id === p.id);
+        if (g) g.pos = 'TWP';
+      }
+    }
+  } catch {
+    /* 検出失敗時は打撃スプリットの pos のまま（合算なしで続行） */
+  }
+  for (const g of all.filter((v) => v.pos === 'TWP')) {
+    try {
+      const d = await getJson(`${BASE}/people/${g.id}/stats?stats=sabermetrics&group=pitching&season=${season}`);
+      const pw = d.stats?.[0]?.splits?.[0]?.stat?.war;
+      if (pw != null && pw > 0) {
+        g.warPitch = r1(pw);
+        g.warTotal = r1((g.war ?? 0) + pw);
+      }
+    } catch {
+      /* 投手WAR欠落でも打者WARで続行 */
+    }
+  }
+
+  const leagues = {};
+  for (const lg of ['AL', 'NL']) {
+    const group = all.filter((g) => g.league === lg);
+    const wrcP = percentiles(group.map((g) => g.wrcPlus), true);
+    const xwP = percentiles(group.map((g) => g.xwoba), true);
+    const hrP = percentiles(group.map((g) => g.hr), true);
+    const runP = percentiles(group.map((g) => g.runBsr), true);
+    const defP = percentiles(group.map((g) => g.runDef), true);
+    const warP = percentiles(group.map((g) => g.warTotal), true);
+    group.forEach((g, i) => {
+      g.pct = { wrc: wrcP[i], xwoba: xwP[i], hr: hrP[i], run: runP[i], def: defP[i], war: warP[i] };
+      // wRC+ ＋ xwOBA ブレンド（xwOBA 欠損時は wRC+ のみ）＝「数字と中身」の折半。
+      const batting = g.xwoba != null ? wrcP[i] * 0.5 + xwP[i] * 0.5 : wrcP[i];
+      g.score =
+        Math.round(
+          (batting * MVP_WEIGHTS.batting +
+            hrP[i] * MVP_WEIGHTS.hr +
+            runP[i] * MVP_WEIGHTS.run +
+            defP[i] * MVP_WEIGHTS.def +
+            warP[i] * MVP_WEIGHTS.war) *
+            10,
+        ) / 10;
+    });
+    group.sort((a, b) => b.score - a.score);
+    leagues[lg] = group.map((g, i) => ({ ...g, rank: i + 1, why: mvpWhy(g, false), whyEn: mvpWhy(g, true) }));
+  }
+
+  // 圏外の注目日本人＝規定打席未達だが一定量出場している日本人野手（現在地を正しく示す）。
+  const watch = [];
+  for (const p of jpPeople) {
+    if (qualIds.has(p.id)) continue; // 規定到達者はランク表に載る
+    const hit = pickSplit(p, 'hitting');
+    if (!hit || !hit.plateAppearances || Number(hit.plateAppearances) < 100) continue; // サンプルが薄すぎる打席は出さない
+    const teamEn = p.currentTeam?.name;
+    const x = xMap.get(p.id);
+    watch.push({
+      id: p.id,
+      nameJa: jpName(p),
+      teamJa: teamJa(p),
+      teamEn: teamEn ?? null,
+      teamId: p.currentTeam?.id ?? null,
+      league: LEAGUE_BY_TEAM[teamEn] ?? null,
+      pa: Number(hit.plateAppearances),
+      avg: hit.avg,
+      ops: hit.ops,
+      hr: Number(hit.homeRuns) || 0,
+      rbi: Number(hit.rbi) || 0,
+      xwoba: x?.xwoba ?? null,
+      paGap: Math.max(0, Math.ceil(qualifyPa - Number(hit.plateAppearances))), // 規定まであと約N打席
+    });
+  }
+  watch.sort((a, b) => Number(b.ops ?? 0) - Number(a.ops ?? 0)); // OPS の良い順
+
+  const file = path.join(process.cwd(), 'data', 'mvp-board.json');
+  const content = { season, qualifyPa, weights: MVP_WEIGHTS, leagues, watch };
+  // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（CI の無駄コミット防止）。
+  let stampedAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    const { asOf: _a, ...rest } = prev;
+    if (stableStringify(rest) === stableStringify(content)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 初回作成 */
+  }
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
+  console.log(`mvp 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}`);
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -1723,6 +2008,10 @@ async function main() {
     // cyyoung [season]：規定投手をAL/NL別に合成スコアで順位予測（＋圏外の注目日本人）を data/cy-young-board.json へ。
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     await runCyYoung(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
+  } else if (cmd === 'mvp') {
+    // mvp [season]：規定打者をAL/NL別に合成スコアで順位予測（＋圏外の注目日本人野手）を data/mvp-board.json へ。
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    await runMvp(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
   } else if (cmd === 'backfill-games') {
     // backfill-games [--apply]：既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用）。
     await runBackfillGames({ apply: raw.includes('--apply') });
@@ -1740,6 +2029,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',
+        '  node scripts/fetch-mlb-stats.mjs mvp [season]       # MVP予測ボード(規定打者をAL/NL別にスコア化・二刀流は投手WAR合算＋打球の質/バットスピード)を data/mvp-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs backfill-games [--apply] # 既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用・既定dry-run）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
