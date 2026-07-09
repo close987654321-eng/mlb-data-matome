@@ -51,6 +51,13 @@ function copy(en: boolean, r: MvpRow, season: number) {
         stTitle: 'Swing decisions (Swing/Take)',
         stLead: 'Runs gained from swing-or-take decisions by zone. Positive = better judgment.',
         stZones: { all: 'Total', heart: 'Heart', shadow: 'Shadow', chase: 'Chase', waste: 'Waste' },
+        stNotes: [
+          'Total — runs added purely by swing-or-take decisions across all zones this season.',
+          'Heart — hittable pitches over the middle. Swinging is the right call; taking them costs runs.',
+          'Shadow — pitches on the edges of the zone. The toughest calls, where judgment separates hitters.',
+          'Chase — clear balls off the plate. Laying off earns runs; chasing gives them back.',
+          'Waste — pitches far outside the zone. Almost everyone takes these, so little separation.',
+        ],
         twoWay: (h: number, p: number) => `Two-way: ${h} batting WAR + ${p} pitching WAR`,
         reactTitle: 'Overseas reactions',
         reactEmpty: 'No reaction articles yet for this hitter.',
@@ -74,6 +81,13 @@ function copy(en: boolean, r: MvpRow, season: number) {
         stTitle: 'スイング判断（Swing/Take）',
         stLead: '「振るか・見送るか」の判断で稼いだ得点をゾーン別に。プラスほど選球・判断が良い。',
         stZones: { all: '合計', heart: 'ハート（甘い球）', shadow: 'シャドー（境界）', chase: 'チェイス（ボール球）', waste: 'ウェイスト（大外れ）' },
+        stNotes: [
+          '合計＝4ゾーンぶんの合算。今季「振るか見送るか」の判断だけでどれだけ得点を積んだか。',
+          'ハート（甘い球）＝ど真ん中付近の打ちごろの球。振るのが正解で、見逃すほどマイナスになりやすい。',
+          'シャドー（境界）＝ストライクゾーンの縁ギリギリ。振る/見送るの判断が最も難しく、打者の差が出やすい。',
+          'チェイス（ボール球）＝明らかなボール球。振らされずに見送れるほどプラス＝選球眼がそのまま出る。',
+          'ウェイスト（大外れ）＝大きく外れた球。ほぼ誰でも見送るので差はつきにくい。',
+        ],
         twoWay: (h: number, p: number) => `二刀流＝打撃WAR${h}＋投手WAR${p}を合算して評価`,
         reactTitle: '海外の反応',
         reactEmpty: 'この打者の海外の反応記事はまだありません。',
@@ -239,15 +253,17 @@ export default async function MvpHitterPage({
       {/* 今季成績ライン。 */}
       <section>
         <SectionHeading label={c.statsTitle} lead level="h2" />
-        <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-line bg-line sm:grid-cols-4">
+        <dl className="mt-3 grid grid-cols-2 gap-px overflow-hidden rounded-[2px] border border-line bg-line sm:grid-cols-5">
           {[
             { l: en ? 'AVG' : '打率', v: row.avg },
+            { l: en ? 'wOBA' : 'wOBA（出塁率）', v: row.woba != null ? row.woba.toFixed(3) : '—' },
+            { l: en ? 'SLG' : '長打率', v: row.slg },
             { l: 'OPS', v: row.ops },
+            { l: 'wRC+', v: row.wrcPlus != null ? String(row.wrcPlus) : '—' },
             { l: en ? 'HR' : '本塁打', v: String(row.hr) },
             { l: en ? 'RBI' : '打点', v: String(row.rbi) },
-            { l: 'wRC+', v: row.wrcPlus != null ? String(row.wrcPlus) : '—' },
-            { l: 'xwOBA', v: row.xwoba != null ? row.xwoba.toFixed(3) : '—' },
             { l: en ? 'SB' : '盗塁', v: String(row.sbs) },
+            { l: en ? 'xwOBA' : 'xwOBA（期待出塁率）', v: row.xwoba != null ? row.xwoba.toFixed(3) : '—' },
             { l: 'WAR', v: row.warTotal != null ? row.warTotal.toFixed(1) : '—' },
           ].map((s) => (
             <div key={s.l} className="bg-paper px-4 py-3">
@@ -340,6 +356,12 @@ export default async function MvpHitterPage({
               </div>
             ))}
           </dl>
+          {/* ゾーンの意味＝初見の読者向けの脚注（村山依頼: よくわからないので説明を）。 */}
+          <ul className="mt-3 space-y-1 text-xs leading-relaxed text-ink-mute">
+            {c.stNotes.map((n) => (
+              <li key={n}>{n}</li>
+            ))}
+          </ul>
         </section>
       ) : null}
 
