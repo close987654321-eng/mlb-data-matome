@@ -15,9 +15,16 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=xZeNsRoShIs",
+    "thumbUrl": "/media/2026-07-10-royals-vs-mets-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["メッツ", "ロイヤルズ", "フアン・ソト", "ボビー・ウィットJr.", "海外の反応"],
+  "tags": [
+    "メッツ",
+    "ロイヤルズ",
+    "フアン・ソト",
+    "ボビー・ウィットJr.",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "フアン・ソト",
@@ -40,8 +47,16 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 3 },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 7 }
+    "away": {
+      "ja": "ロイヤルズ",
+      "en": "Kansas City Royals",
+      "score": 3
+    },
+    "home": {
+      "ja": "メッツ",
+      "en": "New York Mets",
+      "score": 7
+    }
   },
   "comments": [
     {

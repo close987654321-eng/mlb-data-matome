@@ -14,14 +14,24 @@
   "series": {
     "id": "cubs",
     "date": "2026-07-10",
-    "opponent": { "ja": "オリオールズ", "en": "Orioles" }
+    "opponent": {
+      "ja": "オリオールズ",
+      "en": "Orioles"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=Y0Vx8WMLnM0",
+    "thumbUrl": "/media/2026-07-10-cubs-vs-orioles-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["カブス", "オリオールズ", "鈴木誠也", "ピート・クロウアームストロング", "海外の反応"],
+  "tags": [
+    "カブス",
+    "オリオールズ",
+    "鈴木誠也",
+    "ピート・クロウアームストロング",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "鈴木誠也",
@@ -43,8 +53,16 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 2 },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3 }
+    "away": {
+      "ja": "カブス",
+      "en": "Chicago Cubs",
+      "score": 2
+    },
+    "home": {
+      "ja": "オリオールズ",
+      "en": "Baltimore Orioles",
+      "score": 3
+    }
   },
   "comments": [
     {
