@@ -8,11 +8,20 @@
  * 自サイトに再ホスト（コピー保存）しない。商用利用は規約グレー〜商標領域だが、運営判断で
  * 「引用の範囲＋直リンク」で運用する（2026-06-29 合意）。数値は従来どおり公知の事実。
  */
-export type TeamInfo = { id: number; color: string; slug: string; nameEn: string; nameFull: string };
+export type TeamInfo = {
+  id: number;
+  color: string;
+  slug: string;
+  nameEn: string;
+  nameFull: string;
+  /** 日本語検索で主流の別表記（GSC実測）。チームLPの title/H1/description に併記する。 */
+  aliasJa?: string;
+};
 
 const TEAMS: Record<string, TeamInfo> = {
   エンゼルス: { id: 108, color: '#BA0021', slug: 'angels', nameEn: 'Angels', nameFull: 'Los Angeles Angels' },
-  ダイヤモンドバックス: { id: 109, color: '#A71930', slug: 'dbacks', nameEn: 'D-backs', nameFull: 'Arizona Diamondbacks' },
+  // 検索は「Dバックス」表記が主流（GSC 2026-07: 「dバックス 対 ジャイアンツ」1,604表示）。
+  ダイヤモンドバックス: { id: 109, color: '#A71930', slug: 'dbacks', nameEn: 'D-backs', nameFull: 'Arizona Diamondbacks', aliasJa: 'Dバックス' },
   オリオールズ: { id: 110, color: '#DF4601', slug: 'orioles', nameEn: 'Orioles', nameFull: 'Baltimore Orioles' },
   レッドソックス: { id: 111, color: '#BD3039', slug: 'redsox', nameEn: 'Red Sox', nameFull: 'Boston Red Sox' },
   カブス: { id: 112, color: '#0E3386', slug: 'cubs', nameEn: 'Cubs', nameFull: 'Chicago Cubs' },

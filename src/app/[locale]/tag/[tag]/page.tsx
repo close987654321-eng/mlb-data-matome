@@ -11,6 +11,7 @@ import {
   teamHubDescriptionJa,
   teamHubTopics,
   teamJpPlayers,
+  teamDisplayJa,
   TEAM_HUB_MIN_ARTICLES,
   type TeamHub,
 } from '@/lib/teamHub';
@@ -44,7 +45,10 @@ function tagsOfItem(item: FeedItem): string[] {
   return (item.kind === 'thread' ? item.thread.tags : item.column.tags) ?? [];
 }
 
-/** タグLPの H1 ＝ meta title（選手・チームタグは「{名前}の海外の反応まとめ」で KW を正面に）。 */
+/**
+ * タグLPの H1 ＝ meta title（選手・チームタグは「{名前}の海外の反応まとめ」で KW を正面に）。
+ * チームLPは検索の主流表記（teams.ts の aliasJa・例「Dバックス」）を併記してクエリと文字列一致させる。
+ */
 async function headingOf(locale: Locale, tag: string, teamLp: TeamHub | null): Promise<string> {
   const hub = tagHubOf(tag);
   const t = await getTranslations({ locale });
@@ -52,7 +56,7 @@ async function headingOf(locale: Locale, tag: string, teamLp: TeamHub | null): P
     if (hub) return `${hub.nameEn} — Overseas Fan Reactions`;
     if (teamLp) return `${teamLp.info.nameEn} — Overseas Fan Reactions`;
   }
-  return t('tag.heading', { tag });
+  return t('tag.heading', { tag: teamLp ? teamDisplayJa(teamLp) : tag });
 }
 
 export async function generateMetadata({
@@ -70,7 +74,9 @@ export async function generateMetadata({
   // 選手・チームタグLPは absolute でテンプレート接尾辞（｜海外の反応）を外す＝「海外の反応」の重複を
   // 避け、「{選手名/チーム名} 海外の反応」クエリに正面から当てる title に固定する。
   const isJaHub = Boolean(hub || teamLp) && locale !== 'en';
-  const fullTitle = isJaHub ? `${decoded}の海外の反応まとめ【MLB現地ファンの声を日本語訳】` : heading;
+  // チームLPは alias 併記（例「ダイヤモンドバックス（Dバックス）」）＝実際に打たれるクエリに一致させる。
+  const nameJa = teamLp ? teamDisplayJa(teamLp) : decoded;
+  const fullTitle = isJaHub ? `${nameJa}の海外の反応まとめ【MLB現地ファンの声を日本語訳】` : heading;
   const title = isJaHub ? { absolute: fullTitle } : fullTitle;
   let description = t('tag.lead', { tag: decoded });
   const updated = feed[0]?.date.slice(0, 10);
@@ -174,7 +180,11 @@ export default async function TagPage({
               about: {
                 '@type': 'SportsTeam',
                 name: teamLp.info.nameFull,
-                alternateName: [teamLp.nameJa, teamLp.info.nameEn],
+                alternateName: [
+                  teamLp.nameJa,
+                  ...(teamLp.info.aliasJa ? [teamLp.info.aliasJa] : []),
+                  teamLp.info.nameEn,
+                ],
                 sport: 'Baseball',
                 logo: teamLogoUrl(teamLp.info.id),
                 sameAs: [teamOfficialUrl(teamLp.info.slug)],

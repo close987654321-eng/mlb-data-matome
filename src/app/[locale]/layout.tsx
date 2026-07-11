@@ -9,7 +9,7 @@ import ScrollToTop from '@/components/ScrollToTop';
 import SearchPill from '@/components/home/SearchPill';
 import NavLink from '@/components/NavLink';
 import { Link } from '@/lib/navigation';
-import { locales } from '@/lib/i18n';
+import { locales, defaultLocale } from '@/lib/i18n';
 import { SPORTS, SPORT_INFO } from '@/lib/sports';
 import { ALLSTAR } from '@/lib/allstar';
 import { SITE_URL } from '@/lib/site';
@@ -22,40 +22,53 @@ const TITLE = '海外の反応 — MLB / ボクシング / MMA';
 const DESCRIPTION =
   'MLB・ボクシング・MMA（UFC・RIZIN）の海外掲示板や YouTube の反応を、現地の生のコメントつきで日本語まとめ';
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  // 子ページのタイトルにブランドを自動接尾（ブランド想起・Discover/検索の一貫性）。
-  // トップは default をそのまま使い二重ブランドを避ける（template は子ページにだけ効く）。
-  title: { default: TITLE, template: '%s｜海外の反応' },
-  description: DESCRIPTION,
-  // Discover の大画像カード（高CTR枠）に載るための前提。これが無いと Google は大サムネを出さない。
-  // 全ページの既定。検索ページ等の noindex は各ページ側の robots で個別に上書きする。
-  robots: {
-    index: true,
-    follow: true,
-    'max-image-preview': 'large',
-    'max-snippet': -1,
-    'max-video-preview': -1,
-  },
-  // OG/Twitter カードにブランドロゴを表示（SNS 送客時の見栄え）
-  openGraph: {
-    title: TITLE,
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    metadataBase: new URL(SITE_URL),
+    // 子ページのタイトルにブランドを自動接尾（ブランド想起・Discover/検索の一貫性）。
+    // トップは default をそのまま使い二重ブランドを避ける（template は子ページにだけ効く）。
+    title: { default: TITLE, template: '%s｜海外の反応' },
     description: DESCRIPTION,
-    siteName: '海外の反応',
-    type: 'website',
-    images: [{ url: '/og.png', width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: TITLE,
-    description: DESCRIPTION,
-    images: ['/og.png'],
-  },
-  // RSS 自動検出（リーダー・アンテナサイトがフィードを見つけられるように）
-  alternates: {
-    types: { 'application/rss+xml': [{ url: '/feed.xml', title: TITLE }] },
-  },
-};
+    // Discover の大画像カード（高CTR枠）に載るための前提。これが無いと Google は大サムネを出さない。
+    // 全ページの既定。検索ページ等の noindex は各ページ側の robots で個別に上書きする。
+    // en は全ページ noindex（GSC実測 2026-07-11: 日本語クエリで /en が ja 版と食い合い
+    // 84ページ・186表示でクリックほぼ0＝薄い複製として品質を毀損）。ページ・内部導線・
+    // LocaleSwitcher は残し、検索インデックスからだけ外す（薄タグLPと同じ posture）。
+    robots:
+      locale === defaultLocale
+        ? {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+          }
+        : { index: false, follow: true },
+    // OG/Twitter カードにブランドロゴを表示（SNS 送客時の見栄え）
+    openGraph: {
+      title: TITLE,
+      description: DESCRIPTION,
+      siteName: '海外の反応',
+      type: 'website',
+      images: [{ url: '/og.png', width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: TITLE,
+      description: DESCRIPTION,
+      images: ['/og.png'],
+    },
+    // RSS 自動検出（リーダー・アンテナサイトがフィードを見つけられるように）
+    alternates: {
+      types: { 'application/rss+xml': [{ url: '/feed.xml', title: TITLE }] },
+    },
+  };
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));

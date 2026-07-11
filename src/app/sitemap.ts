@@ -23,14 +23,13 @@ function localeUrl(locale: (typeof locales)[number], path: string): string {
   return `${BASE_URL}${prefix}${path}` || `${BASE_URL}/`;
 }
 
-// 1 ページにつき 1 エントリ（ja を正規 URL）。hreflang で ja/en を相互に示す。
+// 1 ページにつき 1 エントリ（ja を正規 URL）。
+// hreflang（alternates.languages）は載せない: en は全ページ noindex（GSC実測 2026-07-11 で
+// 日本語クエリを ja 版と食い合った）ため、sitemap で /en を Google に宣伝しない。
 function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitemap[number] {
   return {
     url: localeUrl(defaultLocale, path) || `${BASE_URL}/`,
     lastModified,
-    alternates: {
-      languages: Object.fromEntries(locales.map((l) => [l, localeUrl(l, path)])),
-    },
   };
 }
 

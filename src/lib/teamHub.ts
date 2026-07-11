@@ -24,6 +24,14 @@ export function teamHubOf(tag: string): TeamHub | null {
 }
 
 /**
+ * チームLPの表示名（ja）。検索の表記ゆれ（例: ダイヤモンドバックスは「Dバックス」が主流・
+ * GSC実測）を title/H1 に併記して、実際に打たれるクエリと文字列一致させる。
+ */
+export function teamDisplayJa(hub: TeamHub): string {
+  return hub.info.aliasJa ? `${hub.nameJa}（${hub.info.aliasJa}）` : hub.nameJa;
+}
+
+/**
  * そのチームに今季所属している日本人選手（rival は除外）。所属は snapshot の team が唯一の正
  * （players.ts は所属を持たない＝古くなる情報を二重管理しない方針）。
  * ⚠️ snapshot の team は出場0試合（昇格直後・IL）でも書かれる＝team があっても hubEligible とは
@@ -70,8 +78,9 @@ export function teamHubIntroJa(
   articleCount: number,
 ): string {
   const sentences: string[] = [];
+  const names = [hub.info.aliasJa, hub.info.nameFull].filter(Boolean).join('／');
   sentences.push(
-    `${hub.nameJa}（${hub.info.nameFull}）の試合・選手に対する海外の反応・現地ファンのコメントを日本語訳でまとめたページ。`,
+    `${hub.nameJa}（${names}）の試合・選手に対する海外の反応・現地ファンのコメントを日本語訳でまとめたページ。`,
   );
   if (jpPlayers.length) {
     sentences.push(
@@ -98,7 +107,7 @@ export function teamHubDescriptionJa(
   updated?: string,
 ): string {
   const parts: string[] = [
-    `${hub.nameJa}（${hub.info.nameFull}）への海外の反応・現地ファンのコメントを日本語訳でまとめて紹介。`,
+    `${hub.nameJa}（${[hub.info.aliasJa, hub.info.nameFull].filter(Boolean).join('／')}）への海外の反応・現地ファンのコメントを日本語訳でまとめて紹介。`,
   ];
   if (jpPlayers.length) parts.push(`${year}年は${jpPlayers.map((p) => p.nameJa).join('・')}が所属。`);
   parts.push(`全${articleCount}件を新着順で掲載${updated ? `・最終更新 ${updated}` : ''}。`);

@@ -10,6 +10,7 @@ import { getTagsBySport } from '@/lib/tags';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
+import TeamHubLinks from '@/components/TeamHubLinks';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
@@ -166,6 +167,9 @@ export default async function SportPage({
       )}
 
       <PopularTags sport={sport} />
+
+      {/* 球団別チームLPへの導線（チームタグの無い競技では自動的に非表示）。 */}
+      <TeamHubLinks sport={sport} />
 
       {feed.length === 0 ? (
         <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">
