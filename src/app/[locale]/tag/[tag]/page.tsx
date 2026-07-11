@@ -16,9 +16,11 @@ import {
   type TeamHub,
 } from '@/lib/teamHub';
 import { teamLogoUrl, teamOfficialUrl } from '@/lib/teams';
+import { standingOfTeam, standingPhraseJa } from '@/lib/standings';
 import type { Player } from '@/lib/players';
-import { getPlayerSeason, getPlayersSnapshot, seasonYear } from '@/lib/playerStats';
+import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import FeedCard from '@/components/FeedCard';
+import TeamStandings from '@/components/TeamStandings';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -43,6 +45,26 @@ function teamLpOf(tag: string, feedCount: number): TeamHub | null {
 /** フィード1件のタグ（チームLPの話題集計用）。 */
 function tagsOfItem(item: FeedItem): string[] {
   return (item.kind === 'thread' ? item.thread.tags : item.column.tags) ?? [];
+}
+
+/**
+ * 所属日本人選手リンクに添える成績1行（snapshot の公知の数値のみ）。野手は打撃3値・投手は勝敗と
+ * 防御率。二刀流（大谷）は打撃を優先＝1行に収める。数値が無ければ出さない（捏造しない）。
+ */
+function statLineOf(season: PlayerSeason | null | undefined, locale: Locale): string | null {
+  const h = season?.hitting;
+  if (h?.avg != null) {
+    return locale === 'en'
+      ? `AVG ${h.avg} · ${h.homeRuns ?? 0} HR · OPS ${h.ops ?? '-'}`
+      : `打率${h.avg}・${h.homeRuns ?? 0}本塁打・OPS ${h.ops ?? '-'}`;
+  }
+  const p = season?.pitching;
+  if (p?.era != null) {
+    return locale === 'en'
+      ? `${p.wins ?? 0}-${p.losses ?? 0} · ERA ${p.era}`
+      : `${p.wins ?? 0}勝${p.losses ?? 0}敗・防御率${p.era}`;
+  }
+  return null;
 }
 
 /**
@@ -85,10 +107,17 @@ export async function generateMetadata({
     const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(hub.mlbId)]);
     description = `${tagHubIntroJa(hub, season, seasonYear(snap), feed.length)}${updated ? `最終更新: ${updated}。` : ''}`;
   } else if (teamLp && locale !== 'en') {
-    // チームタグLP: 所属日本人選手・件数・最終更新入りの短縮文（移籍・新記事で変わる＝鮮度）。
-    const snap = await getPlayersSnapshot();
+    // チームタグLP: 所属日本人選手・地区順位・件数・最終更新入りの短縮文（毎日動く実データ＝鮮度）。
+    const [snap, standing] = await Promise.all([getPlayersSnapshot(), standingOfTeam(teamLp.info.id)]);
     const jp = teamJpPlayers(snap, decoded);
-    description = teamHubDescriptionJa(teamLp, seasonYear(snap), jp, feed.length, updated);
+    description = teamHubDescriptionJa(
+      teamLp,
+      seasonYear(snap),
+      jp,
+      feed.length,
+      updated,
+      standing ? standingPhraseJa(standing.row, standing.division) : undefined,
+    );
   }
   const url = absoluteUrl(locale, `/tag/${encodeURIComponent(decoded)}`);
   // 薄い長尾タグ・汎用総称タグは noindex（ページは残すが検索対象から外す。sitemap 掲載条件と一致）。
@@ -134,12 +163,17 @@ export default async function TagPage({
   // 選手・チームタグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
   let intro: string | undefined;
   let teamPlayers: Player[] = [];
+  const statLines = new Map<string, string>(); // slug → 成績1行（所属日本人選手リンクに添える）
   if (hub && locale !== 'en') {
     const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(hub.mlbId)]);
     intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
   } else if (teamLp) {
-    const snap = await getPlayersSnapshot();
+    const [snap, standing] = await Promise.all([getPlayersSnapshot(), standingOfTeam(teamLp.info.id)]);
     teamPlayers = teamJpPlayers(snap, decoded);
+    for (const p of teamPlayers) {
+      const line = statLineOf(snap.players[String(p.mlbId)], locale);
+      if (line) statLines.set(p.slug, line);
+    }
     if (locale !== 'en') {
       intro = teamHubIntroJa(
         teamLp,
@@ -147,6 +181,7 @@ export default async function TagPage({
         teamPlayers,
         teamHubTopics(feed.map(tagsOfItem), decoded, teamPlayers),
         feed.length,
+        standing ? standingPhraseJa(standing.row, standing.division) : undefined,
       );
     }
   }
@@ -220,7 +255,19 @@ export default async function TagPage({
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
           {t('tag.eyebrow')}
         </span>
-        <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{heading}</h1>
+        <div className="mt-2 flex items-center gap-4">
+          {teamLp && (
+            // eslint-disable-next-line @next/next/no-img-element -- MLB公式チームロゴSVGを直リンク（再ホストしない）
+            <img
+              src={teamLogoUrl(teamLp.info.id)}
+              alt={`${teamLp.info.nameEn} logo`}
+              width={56}
+              height={56}
+              className="h-12 w-12 shrink-0 object-contain sm:h-14 sm:w-14"
+            />
+          )}
+          <h1 className="text-3xl font-bold text-ink sm:text-4xl">{heading}</h1>
+        </div>
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">
           {intro ?? t('tag.lead', { tag: decoded })}
         </p>
@@ -251,7 +298,13 @@ export default async function TagPage({
                 href={`/player/${p.slug}`}
                 className="group flex items-center justify-between py-3.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
               >
-                <span>{t('tag.statsHub', { name: locale === 'en' ? p.nameEn : p.nameJa })}</span>
+                <span className="flex flex-col gap-0.5">
+                  <span>{t('tag.statsHub', { name: locale === 'en' ? p.nameEn : p.nameJa })}</span>
+                  {/* 今季成績1行（snapshot の公知の数値）＝リンク先（成績ハブ）の中身を予告する */}
+                  {statLines.has(p.slug) && (
+                    <span className="text-xs font-normal text-ink-mute">{statLines.get(p.slug)}</span>
+                  )}
+                </span>
                 <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
                   →
                 </span>
@@ -260,6 +313,9 @@ export default async function TagPage({
           </div>
         )}
       </section>
+
+      {/* チームLP: 地区順位表（CI が毎時更新する静的JSON。ライバルのLPへの回遊網も兼ねる）。 */}
+      {teamLp && <TeamStandings teamId={teamLp.info.id} locale={locale} />}
 
       <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
         {feed.map((item, i) => (

@@ -76,12 +76,15 @@ export function teamHubIntroJa(
   jpPlayers: Player[],
   topics: string[],
   articleCount: number,
+  /** 「ナ・リーグ西地区首位（61勝33敗）」等（standings.ts の standingPhraseJa）。未生成なら省略。 */
+  standingPhrase?: string,
 ): string {
   const sentences: string[] = [];
   const names = [hub.info.aliasJa, hub.info.nameFull].filter(Boolean).join('／');
   sentences.push(
     `${hub.nameJa}（${names}）の試合・選手に対する海外の反応・現地ファンのコメントを日本語訳でまとめたページ。`,
   );
+  if (standingPhrase) sentences.push(`現在${standingPhrase}。`);
   if (jpPlayers.length) {
     sentences.push(
       `${year}年は${jpPlayers.map((p) => p.nameJa).join('・')}が所属し、その一挙一動が現地で話題になる。`,
@@ -105,10 +108,13 @@ export function teamHubDescriptionJa(
   jpPlayers: Player[],
   articleCount: number,
   updated?: string,
+  /** 「ナ・リーグ西地区首位（61勝33敗）」等。順位＝毎日動く実データがスニペットの鮮度を担う。 */
+  standingPhrase?: string,
 ): string {
   const parts: string[] = [
     `${hub.nameJa}（${[hub.info.aliasJa, hub.info.nameFull].filter(Boolean).join('／')}）への海外の反応・現地ファンのコメントを日本語訳でまとめて紹介。`,
   ];
+  if (standingPhrase) parts.push(`現在${standingPhrase}。`);
   if (jpPlayers.length) parts.push(`${year}年は${jpPlayers.map((p) => p.nameJa).join('・')}が所属。`);
   parts.push(`全${articleCount}件を新着順で掲載${updated ? `・最終更新 ${updated}` : ''}。`);
   return parts.join('');

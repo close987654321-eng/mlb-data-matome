@@ -200,6 +200,27 @@ const LEAGUE_BY_TEAM = {
 
 const RANK_MAX = 30; // この順位以内のときだけ「MLB○位」を出す（下位の順位はノイズなので出さない）
 
+/** チームID → 日本語短縮名（順位表用。TEAM_JA は英語名キーなので、名前の表記ブレに依らず ID で引く）。 */
+const TEAM_ID_JA = {
+  108: 'エンゼルス', 109: 'ダイヤモンドバックス', 110: 'オリオールズ', 111: 'レッドソックス',
+  112: 'カブス', 113: 'レッズ', 114: 'ガーディアンズ', 115: 'ロッキーズ', 116: 'タイガース',
+  117: 'アストロズ', 118: 'ロイヤルズ', 119: 'ドジャース', 120: 'ナショナルズ', 121: 'メッツ',
+  133: 'アスレチックス', 134: 'パイレーツ', 135: 'パドレス', 136: 'マリナーズ', 137: 'ジャイアンツ',
+  138: 'カージナルス', 139: 'レイズ', 140: 'レンジャーズ', 141: 'ブルージェイズ', 142: 'ツインズ',
+  143: 'フィリーズ', 144: 'ブレーブス', 145: 'ホワイトソックス', 146: 'マーリンズ', 147: 'ヤンキース',
+  158: 'ブルワーズ',
+};
+
+/** 地区ID → リーグ/地区（statsapi /divisions の実測値。203=NL西に注意＝East ではない）。 */
+const DIVISION_INFO = {
+  201: { league: 'AL', division: 'East' },
+  202: { league: 'AL', division: 'Central' },
+  200: { league: 'AL', division: 'West' },
+  204: { league: 'NL', division: 'East' },
+  205: { league: 'NL', division: 'Central' },
+  203: { league: 'NL', division: 'West' },
+};
+
 /**
  * キーを再帰的にソートして安定した JSON 文字列にする（配列順は保持）。
  * MLB API は順位オブジェクト等のキー順を呼び出しごとに変えるため、そのまま書くと
@@ -2015,6 +2036,58 @@ async function runMvp(season, asOf) {
   console.log(`mvp 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}`);
 }
 
+/**
+ * standings: AL/NL 全6地区の順位表を data/standings.json へ書き出す（チームLPの順位表用）。
+ * statsapi 1コールのみ・公知の事実（勝敗・勝率・ゲーム差）だけを残す。サイト本体は静的JSONを読む。
+ * 6地区×30球団が揃わないレスポンスは異常とみなして書かない（既存JSONを保持＝壊さない）。
+ */
+async function runStandings(season, asOf) {
+  const data = await getJson(
+    `${BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason`,
+  );
+  const records = data.records ?? [];
+  const order = [201, 202, 200, 204, 205, 203]; // 表示順: AL東/中/西 → NL東/中/西
+  const byId = new Map(records.map((r) => [r.division?.id, r]));
+  const divisions = order.map((divId) => {
+    const rec = byId.get(divId);
+    const info = DIVISION_INFO[divId];
+    if (!rec || !info) throw new Error(`standings: 地区 ${divId} がレスポンスに無い（書き込み中止）`);
+    const teams = (rec.teamRecords ?? [])
+      .map((t) => {
+        const lastTen = (t.records?.splitRecords ?? []).find((s) => s.type === 'lastTen');
+        return {
+          id: t.team?.id,
+          nameJa: TEAM_ID_JA[t.team?.id] ?? t.team?.name ?? '',
+          w: t.wins,
+          l: t.losses,
+          pct: t.winningPercentage,
+          gb: t.gamesBack,
+          rank: Number(t.divisionRank),
+          ...(t.streak?.streakCode ? { streak: t.streak.streakCode } : {}),
+          ...(lastTen ? { last10: `${lastTen.wins}-${lastTen.losses}` } : {}),
+        };
+      })
+      .sort((a, b) => a.rank - b.rank);
+    return { league: info.league, division: info.division, teams };
+  });
+  const total = divisions.reduce((n, d) => n + d.teams.length, 0);
+  if (total !== 30) throw new Error(`standings: 球団数が ${total}（30想定）＝異常とみなし書き込み中止`);
+
+  const file = path.join(process.cwd(), 'data', 'standings.json');
+  const content = { season, divisions };
+  // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（毎時 cron の無駄コミット防止）。
+  let stampedAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    const { asOf: _a, ...rest } = prev;
+    if (stableStringify(rest) === stableStringify(content)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 初回作成 */
+  }
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
+  console.log(`standings 書き出し: 6地区${total}球団 / asOf ${stampedAsOf} → ${file}`);
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -2077,6 +2150,11 @@ async function main() {
     // mvp [season]：規定打者をAL/NL別に合成スコアで順位予測（＋圏外の注目日本人野手）を data/mvp-board.json へ。
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     await runMvp(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
+  } else if (cmd === 'standings') {
+    // standings ["YYYY-MM-DD HH:MM"(=asOf)] [season]：AL/NL全6地区の順位表を data/standings.json へ（チームLP用）。
+    const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    await runStandings(seasonArg ? Number(seasonArg) : defaultSeason(), asOf);
   } else if (cmd === 'backfill-games') {
     // backfill-games [--apply]：既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用）。
     await runBackfillGames({ apply: raw.includes('--apply') });
@@ -2092,6 +2170,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs gamelog [選手|ID] [season] # 1選手の試合別ログ＋WAR推移を data/gamelogs/{id}.json へ（既定=大谷）',
         '  node scripts/fetch-mlb-stats.mjs gamelogs [season]  # MLBロースター級 全選手の試合別ログを一括更新（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
+        '  node scripts/fetch-mlb-stats.mjs standings          # AL/NL全6地区の順位表を data/standings.json へ（チームLP用）',
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs mvp [season]       # MVP予測ボード(規定打者をAL/NL別にスコア化・二刀流は投手WAR合算＋打球の質/バットスピード)を data/mvp-board.json へ',

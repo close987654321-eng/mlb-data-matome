@@ -242,6 +242,17 @@
   "teamTags": {
     "heading": "Reactions by team"
   },
+  "standings": {
+    "heading": "{division} Standings",
+    "rank": "Rk",
+    "team": "Team",
+    "w": "W",
+    "l": "L",
+    "pct": "PCT",
+    "gb": "GB",
+    "last10": "L10",
+    "asOf": "As of {date} · Source: MLB"
+  },
   "tags": {
     "allTitle": "All tags",
     "allLead": "Browse every player and topic across the digests.",
