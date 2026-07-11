@@ -14,9 +14,15 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=nPrbZz83v0U",
+    "thumbUrl": "/media/2026-07-11-royals-vs-orioles-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ロイヤルズ", "オリオールズ", "ボビー・ウィットJr.", "海外の反応"],
+  "tags": [
+    "ロイヤルズ",
+    "オリオールズ",
+    "ボビー・ウィットJr.",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "ボビー・ウィットJr.",
@@ -75,7 +81,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 3 },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 5 }
+    "away": {
+      "ja": "ロイヤルズ",
+      "en": "Kansas City Royals",
+      "score": 3
+    },
+    "home": {
+      "ja": "オリオールズ",
+      "en": "Baltimore Orioles",
+      "score": 5
+    }
   }
 }

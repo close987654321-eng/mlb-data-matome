@@ -8,7 +8,10 @@
   "series": {
     "id": "cubs",
     "date": "2026-07-11",
-    "opponent": { "ja": "レッズ", "en": "Reds" }
+    "opponent": {
+      "ja": "レッズ",
+      "en": "Reds"
+    }
   },
   "title": {
     "en": "Cubs vs. Reds: Official Full Game Highlights (July 10) | 2026 MLB Season",
@@ -19,9 +22,17 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=dZw4IyOpZ3Q",
+    "thumbUrl": "/media/2026-07-11-cubs-vs-reds-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["カブス", "レッズ", "今永昇太", "鈴木誠也", "ピート・クロウアームストロング", "海外の反応"],
+  "tags": [
+    "カブス",
+    "レッズ",
+    "今永昇太",
+    "鈴木誠也",
+    "ピート・クロウアームストロング",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "今永昇太",
@@ -141,7 +152,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 0 },
-    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 4 }
+    "away": {
+      "ja": "カブス",
+      "en": "Chicago Cubs",
+      "score": 0
+    },
+    "home": {
+      "ja": "レッズ",
+      "en": "Cincinnati Reds",
+      "score": 4
+    }
   }
 }

@@ -8,7 +8,10 @@
   "series": {
     "id": "whitesox",
     "date": "2026-07-11",
-    "opponent": { "ja": "アスレチックス", "en": "Athletics" }
+    "opponent": {
+      "ja": "アスレチックス",
+      "en": "Athletics"
+    }
   },
   "title": {
     "en": "Athletics vs. White Sox: Official Full Game Highlights (July 10) | 2026 MLB Season",
@@ -19,9 +22,16 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=VtdDwxVxlfc",
+    "thumbUrl": "/media/2026-07-11-whitesox-vs-athletics-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ホワイトソックス", "アスレチックス", "村上宗隆", "ミゲル・バルガス", "海外の反応"],
+  "tags": [
+    "ホワイトソックス",
+    "アスレチックス",
+    "村上宗隆",
+    "ミゲル・バルガス",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "村上宗隆",
@@ -233,7 +243,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 1 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 14 }
+    "away": {
+      "ja": "アスレチックス",
+      "en": "Athletics",
+      "score": 1
+    },
+    "home": {
+      "ja": "ホワイトソックス",
+      "en": "Chicago White Sox",
+      "score": 14
+    }
   }
 }

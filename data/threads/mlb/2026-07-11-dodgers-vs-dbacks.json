@@ -8,7 +8,10 @@
   "series": {
     "id": "dodgers",
     "date": "2026-07-11",
-    "opponent": { "ja": "Dバックス", "en": "D-backs" }
+    "opponent": {
+      "ja": "Dバックス",
+      "en": "D-backs"
+    }
   },
   "title": {
     "en": "D-backs vs. Dodgers: Official Full Game Highlights (July 10) | 2026 MLB Season",
@@ -19,9 +22,15 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=9NDHIyojXUY",
+    "thumbUrl": "/media/2026-07-11-dodgers-vs-dbacks-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ドジャース", "Dバックス", "大谷翔平", "海外の反応"],
+  "tags": [
+    "ドジャース",
+    "Dバックス",
+    "大谷翔平",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "大谷翔平",
@@ -223,7 +232,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 9 },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 3 }
+    "away": {
+      "ja": "ダイヤモンドバックス",
+      "en": "Arizona Diamondbacks",
+      "score": 9
+    },
+    "home": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 3
+    }
   }
 }
