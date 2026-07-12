@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-12 09:13",
+  "asOf": "2026-07-12 09:17",
   "players": {
     "500743": {
       "fielding": {
@@ -480,7 +480,7 @@
           },
           "homeRuns": {
             "lg": 49,
-            "mlb": 90
+            "mlb": 91
           },
           "rbi": {
             "lg": 95
@@ -718,13 +718,13 @@
       "hitting": null,
       "league": "NL",
       "pitching": {
-        "avg": ".253",
-        "baseOnBalls": 24,
+        "avg": ".254",
+        "baseOnBalls": 25,
         "earnedRuns": 36,
         "era": "2.54",
         "gamesPlayed": 20,
         "gamesStarted": 20,
-        "hits": 125,
+        "hits": 126,
         "holds": 0,
         "homeRuns": 12,
         "homeRunsPer9": "0.85",
@@ -733,10 +733,10 @@
         "runs": 41,
         "saves": 0,
         "strikeOuts": 144,
-        "strikeoutWalkRatio": "6.00",
+        "strikeoutWalkRatio": "5.76",
         "strikeoutsPer9Inn": "10.18",
-        "walksPer9Inn": "1.70",
-        "whip": "1.17",
+        "walksPer9Inn": "1.77",
+        "whip": "1.19",
         "winPercentage": ".714",
         "wins": 10
       },
@@ -756,7 +756,7 @@
           },
           "whip": {
             "lg": 16,
-            "mlb": 30
+            "mlb": 32
           },
           "winPercentage": {
             "lg": 7,
@@ -1019,7 +1019,7 @@
         "rbi": 12,
         "runs": 14,
         "slg": ".436",
-        "stolenBases": 0,
+        "stolenBases": 1,
         "strikeOuts": 25,
         "triples": 1
       },
@@ -1364,7 +1364,7 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 50
+            "lg": 49
           },
           "baseOnBalls": {
             "lg": 35,
@@ -1564,7 +1564,7 @@
           },
           "ops": {
             "lg": 28,
-            "mlb": 43
+            "mlb": 44
           },
           "rbi": {
             "lg": 35,
