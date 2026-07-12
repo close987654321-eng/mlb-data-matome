@@ -15,14 +15,25 @@
   "series": {
     "id": "dodgers",
     "date": "2026-07-12",
-    "opponent": { "ja": "ダイヤモンドバックス", "en": "Diamondbacks" }
+    "opponent": {
+      "ja": "ダイヤモンドバックス",
+      "en": "Diamondbacks"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=swYP2K6749o",
+    "thumbUrl": "/media/2026-07-12-dodgers-vs-dbacks-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ドジャース", "ダイヤモンドバックス", "大谷翔平", "山本由伸", "コービン・キャロル", "海外の反応"],
+  "tags": [
+    "ドジャース",
+    "ダイヤモンドバックス",
+    "大谷翔平",
+    "山本由伸",
+    "コービン・キャロル",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "山本由伸",
@@ -227,7 +238,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 9 },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2 }
+    "away": {
+      "ja": "ダイヤモンドバックス",
+      "en": "Arizona Diamondbacks",
+      "score": 9
+    },
+    "home": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 2
+    }
   }
 }

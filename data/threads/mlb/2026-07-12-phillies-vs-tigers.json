@@ -15,9 +15,16 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=pgaXrEu6lu0",
+    "thumbUrl": "/media/2026-07-12-phillies-vs-tigers-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["フィリーズ", "タイガース", "クリストファー・サンチェス", "カイル・シュワーバー", "海外の反応"],
+  "tags": [
+    "フィリーズ",
+    "タイガース",
+    "クリストファー・サンチェス",
+    "カイル・シュワーバー",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "クリストファー・サンチェス",
@@ -174,7 +181,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 4 },
-    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 2 }
+    "away": {
+      "ja": "フィリーズ",
+      "en": "Philadelphia Phillies",
+      "score": 4
+    },
+    "home": {
+      "ja": "タイガース",
+      "en": "Detroit Tigers",
+      "score": 2
+    }
   }
 }

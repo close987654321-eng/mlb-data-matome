@@ -15,9 +15,16 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=CvAaq-jK9Z8",
+    "thumbUrl": "/media/2026-07-12-redsox-vs-mets-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["レッドソックス", "メッツ", "吉田正尚", "フアン・ソト", "海外の反応"],
+  "tags": [
+    "レッドソックス",
+    "メッツ",
+    "吉田正尚",
+    "フアン・ソト",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "吉田正尚",
@@ -199,7 +206,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4 },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 0 }
+    "away": {
+      "ja": "レッドソックス",
+      "en": "Boston Red Sox",
+      "score": 4
+    },
+    "home": {
+      "ja": "メッツ",
+      "en": "New York Mets",
+      "score": 0
+    }
   }
 }
