@@ -204,5 +204,9 @@
       "bodyEn": "Let's go White Sox 49-45",
       "bodyJa": "行けホワイトソックス 49-45！"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 0 },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1 }
+  }
 }
