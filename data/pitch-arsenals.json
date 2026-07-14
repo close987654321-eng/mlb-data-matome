@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-13 17:17",
+  "asOf": "2026-07-14 17:17",
   "pitchers": {
     "519242": {
       "era": 2.2,
@@ -2440,7 +2440,7 @@
           "hr": 4,
           "nameJa": "フォーシーム",
           "putAway": 26.9,
-          "rv100": 1.8,
+          "rv100": 1.7,
           "type": "FF",
           "usage": 45.2,
           "velo": 98.1,
@@ -3451,7 +3451,7 @@
           "putAway": 17.5,
           "rv100": -1.8,
           "type": "FF",
-          "usage": 38.3,
+          "usage": 38.1,
           "velo": 91.9,
           "whiff": 26,
           "woba": 0.418,
@@ -3487,7 +3487,7 @@
         }
       ],
       "team": "パドレス",
-      "totalPitches": 516,
+      "totalPitches": 515,
       "xera": 4.07
     },
     "673540": {
@@ -4065,7 +4065,7 @@
           "hr": 7,
           "nameJa": "フォーシーム",
           "putAway": 21,
-          "rv100": -0.2,
+          "rv100": -0.3,
           "type": "FF",
           "usage": 31.6,
           "velo": 97.2,
@@ -5583,7 +5583,7 @@
       "xera": 2.05
     },
     "694973": {
-      "era": 3.58,
+      "era": 3.57,
       "hrAllowed": {
         "byPitch": {
           "シンカー": 2,
@@ -5710,46 +5710,60 @@
       "nameJa": "ポール・スキーンズ",
       "pitches": [
         {
-          "ba": 0.187,
-          "hardHit": 44.9,
+          "ba": 0.195,
+          "hardHit": 45.2,
           "hr": 5,
           "nameJa": "フォーシーム",
-          "putAway": 25.6,
-          "rv100": 1.6,
+          "putAway": 25.4,
+          "rv100": 1.5,
           "type": "FF",
-          "usage": 39.1,
-          "velo": 97,
-          "whiff": 29.4,
-          "woba": 0.266,
-          "xwoba": 0.26
+          "usage": 40,
+          "velo": 96.9,
+          "whiff": 28.8,
+          "woba": 0.272,
+          "xwoba": 0.262
         },
         {
-          "ba": 0.242,
-          "hardHit": 17.1,
-          "hr": 1,
-          "nameJa": "チェンジアップ",
-          "putAway": 18.4,
-          "rv100": -1.5,
-          "type": "CH",
-          "usage": 15.9,
-          "velo": 88.8,
-          "whiff": 38.4,
-          "woba": 0.292,
-          "xwoba": 0.235
-        },
-        {
-          "ba": 0.1,
+          "ba": 0.095,
           "hardHit": 20.7,
           "hr": 2,
           "nameJa": "スイーパー",
-          "putAway": 17.1,
-          "rv100": 1.3,
+          "putAway": 18.2,
+          "rv100": 1.4,
           "type": "ST",
-          "usage": 15.6,
+          "usage": 15.5,
           "velo": 84.2,
-          "whiff": 26.9,
-          "woba": 0.198,
-          "xwoba": 0.162
+          "whiff": 28.4,
+          "woba": 0.189,
+          "xwoba": 0.155
+        },
+        {
+          "ba": 0.239,
+          "hardHit": 16.7,
+          "hr": 1,
+          "nameJa": "チェンジアップ",
+          "putAway": 18.3,
+          "rv100": -1.4,
+          "type": "CH",
+          "usage": 15.3,
+          "velo": 88.8,
+          "whiff": 37.9,
+          "woba": 0.288,
+          "xwoba": 0.234
+        },
+        {
+          "ba": 0.319,
+          "hardHit": 36.6,
+          "hr": 0,
+          "nameJa": "スプリット",
+          "putAway": 21.2,
+          "rv100": 0.9,
+          "type": "FS",
+          "usage": 11.3,
+          "velo": 93.4,
+          "whiff": 19,
+          "woba": 0.333,
+          "xwoba": 0.301
         },
         {
           "ba": 0.298,
@@ -5759,47 +5773,33 @@
           "putAway": 17.9,
           "rv100": 0.1,
           "type": "SI",
-          "usage": 11.4,
+          "usage": 10.9,
           "velo": 96.7,
           "whiff": 8.4,
           "woba": 0.376,
           "xwoba": 0.339
         },
         {
-          "ba": 0.349,
-          "hardHit": 37.8,
-          "hr": 0,
-          "nameJa": "スプリット",
-          "putAway": 21.2,
-          "rv100": 0.4,
-          "type": "FS",
-          "usage": 11.4,
-          "velo": 93.4,
-          "whiff": 19.8,
-          "woba": 0.362,
-          "xwoba": 0.305
-        },
-        {
-          "ba": 0.189,
-          "hardHit": 40,
+          "ba": 0.175,
+          "hardHit": 38.1,
           "hr": 1,
           "nameJa": "スライダー",
-          "putAway": 30.4,
-          "rv100": 0.7,
+          "putAway": 31.7,
+          "rv100": 1.1,
           "type": "SL",
-          "usage": 6.1,
-          "velo": 86.7,
-          "whiff": 36.9,
-          "woba": 0.296,
-          "xwoba": 0.253
+          "usage": 6.5,
+          "velo": 86.6,
+          "whiff": 36.6,
+          "woba": 0.286,
+          "xwoba": 0.25
         }
       ],
       "team": "パイレーツ",
-      "totalPitches": 1718,
-      "xera": 2.74
+      "totalPitches": 1800,
+      "xera": 2.71
     },
     "695243": {
-      "era": 0.93,
+      "era": 0.91,
       "hrAllowed": {
         "byPitch": {},
         "list": [],
@@ -5809,37 +5809,37 @@
       "nameJa": "メイソン・ミラー",
       "pitches": [
         {
-          "ba": 0.147,
-          "hardHit": 11.1,
+          "ba": 0.143,
+          "hardHit": 10.7,
           "hr": 0,
           "nameJa": "スライダー",
-          "putAway": 40.3,
-          "rv100": 2.3,
+          "putAway": 40.5,
+          "rv100": 2.4,
           "type": "SL",
-          "usage": 54.2,
+          "usage": 53.9,
           "velo": 87.8,
-          "whiff": 55.9,
-          "woba": 0.183,
-          "xwoba": 0.129
+          "whiff": 56.2,
+          "woba": 0.178,
+          "xwoba": 0.127
         },
         {
-          "ba": 0.13,
-          "hardHit": 33.3,
+          "ba": 0.127,
+          "hardHit": 32.4,
           "hr": 0,
           "nameJa": "フォーシーム",
           "putAway": 27.2,
-          "rv100": 2.9,
+          "rv100": 3,
           "type": "FF",
-          "usage": 43,
+          "usage": 43.2,
           "velo": 101.3,
-          "whiff": 40.1,
-          "woba": 0.189,
-          "xwoba": 0.268
+          "whiff": 39.6,
+          "woba": 0.186,
+          "xwoba": 0.263
         }
       ],
       "team": "パドレス",
-      "totalPitches": 608,
-      "xera": 1.4
+      "totalPitches": 616,
+      "xera": 1.38
     },
     "695505": {
       "era": 2.54,
@@ -6188,7 +6188,7 @@
           "hr": 1,
           "nameJa": "カーブ",
           "putAway": 0,
-          "rv100": -0.7,
+          "rv100": -0.8,
           "type": "CU",
           "usage": 11.3,
           "velo": 79.1,
