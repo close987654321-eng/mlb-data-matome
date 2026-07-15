@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-14 17:17",
+  "asOf": "2026-07-15 17:17",
   "leagues": {
     "AL": [
       {
@@ -778,7 +778,7 @@
         "xera": 3.88
       },
       {
-        "era": "4.11",
+        "era": "4.19",
         "hr9": 0.73,
         "id": 669358,
         "ipDisp": "111.2",
@@ -789,7 +789,7 @@
         "nameEn": "Shane Baz",
         "nameJa": "シェーン・バズ",
         "pct": {
-          "era": 24,
+          "era": 21,
           "hr9": 94,
           "ip": 79,
           "kbb": 24,
@@ -797,13 +797,13 @@
           "xera": 27
         },
         "rank": 26,
-        "score": 37.9,
+        "score": 37.3,
         "so": 99,
         "teamEn": "Baltimore Orioles",
         "teamId": 110,
         "teamJa": "オリオールズ",
         "w": 4,
-        "whip": "1.38",
+        "whip": "1.39",
         "why": "被弾の少なさ・111.2回はリーグ上位",
         "whyEn": "League-best HR suppression, 111.2 IP",
         "xera": 4.33
@@ -840,6 +840,37 @@
         "xera": 4.64
       },
       {
+        "era": "4.15",
+        "hr9": 1.47,
+        "id": 677960,
+        "ipDisp": "97.2",
+        "isJp": false,
+        "kbbPct": 20.3,
+        "l": 7,
+        "league": "AL",
+        "nameEn": "Ryan Weathers",
+        "nameJa": "ライアン・ウェザーズ",
+        "pct": {
+          "era": 24,
+          "hr9": 9,
+          "ip": 6,
+          "kbb": 76,
+          "whip": 39,
+          "xera": 18
+        },
+        "rank": 28,
+        "score": 33,
+        "so": 110,
+        "teamEn": "New York Yankees",
+        "teamId": 147,
+        "teamJa": "ヤンキース",
+        "w": 3,
+        "whip": "1.24",
+        "why": "K-BB%20.3はリーグ上位",
+        "whyEn": "League-best 20.3% K-BB",
+        "xera": 4.39
+      },
+      {
         "era": "4.10",
         "hr9": 0.92,
         "id": 664285,
@@ -858,7 +889,7 @@
           "whip": 21,
           "xera": 36
         },
-        "rank": 28,
+        "rank": 29,
         "score": 32.8,
         "so": 87,
         "teamEn": "Detroit Tigers",
@@ -889,7 +920,7 @@
           "whip": 36,
           "xera": 42
         },
-        "rank": 29,
+        "rank": 30,
         "score": 32.6,
         "so": 93,
         "teamEn": "Athletics",
@@ -900,37 +931,6 @@
         "why": "総合力で上位",
         "whyEn": "Solid all-around",
         "xera": 4.07
-      },
-      {
-        "era": "4.15",
-        "hr9": 1.47,
-        "id": 677960,
-        "ipDisp": "97.2",
-        "isJp": false,
-        "kbbPct": 20.3,
-        "l": 7,
-        "league": "AL",
-        "nameEn": "Ryan Weathers",
-        "nameJa": "ライアン・ウェザーズ",
-        "pct": {
-          "era": 21,
-          "hr9": 9,
-          "ip": 6,
-          "kbb": 76,
-          "whip": 39,
-          "xera": 18
-        },
-        "rank": 30,
-        "score": 32.4,
-        "so": 110,
-        "teamEn": "New York Yankees",
-        "teamId": 147,
-        "teamJa": "ヤンキース",
-        "w": 3,
-        "whip": "1.24",
-        "why": "K-BB%20.3はリーグ上位",
-        "whyEn": "League-best 20.3% K-BB",
-        "xera": 4.39
       },
       {
         "era": "4.03",
@@ -1550,9 +1550,9 @@
         "teamJa": "パドレス",
         "w": 6,
         "whip": "1.15",
-        "why": "総合力で上位 / 1.10得してる（xERA4.51）",
-        "whyEn": "Solid all-around · lucky by 1.10 (xERA 4.51)",
-        "xera": 4.51
+        "why": "総合力で上位 / 1.14得してる（xERA4.55）",
+        "whyEn": "Solid all-around · lucky by 1.14 (xERA 4.55)",
+        "xera": 4.55
       },
       {
         "era": "3.86",
@@ -1664,10 +1664,10 @@
           "ip": 30,
           "kbb": 22,
           "whip": 81,
-          "xera": 4
+          "xera": 7
         },
         "rank": 20,
-        "score": 35.3,
+        "score": 35.9,
         "so": 66,
         "teamEn": "St. Louis Cardinals",
         "teamId": 138,
@@ -1893,7 +1893,7 @@
         "whip": "1.33",
         "why": "総合力で上位",
         "whyEn": "Solid all-around",
-        "xera": 5.34
+        "xera": 5.37
       },
       {
         "era": "6.34",
