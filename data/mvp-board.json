@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-15 17:18",
+  "asOf": "2026-07-16 17:18",
   "leagues": {
     "AL": [
       {
@@ -369,7 +369,7 @@
           "hardHit": 47.6,
           "hardSwing": 24,
           "maxEv": 110.9,
-          "oaa": -6,
+          "oaa": -5,
           "sprint": 26.7,
           "squaredUp": 28.9,
           "sweetSpot": 39.5
@@ -527,7 +527,7 @@
           "batSpeed": 73.7,
           "ev": 93.2,
           "hardHit": 52.7,
-          "hardSwing": 40.2,
+          "hardSwing": 40.3,
           "maxEv": 117.2,
           "oaa": 18,
           "sprint": 30.2,
@@ -910,18 +910,18 @@
             "xwoba": 0.382
           },
           {
-            "ba": "0.27",
-            "hardHit": 55.6,
+            "ba": "0.278",
+            "hardHit": 53.8,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 40,
-            "rv100": 3,
-            "slg": "0.486",
+            "pa": 39,
+            "rv100": 2.8,
+            "slg": "0.5",
             "type": "CH",
-            "usage": 10.5,
-            "whiff": 35.7,
-            "woba": 0.36,
-            "xwoba": 0.307
+            "usage": 10.3,
+            "whiff": 36.1,
+            "woba": 0.346,
+            "xwoba": 0.301
           },
           {
             "ba": "0.313",
@@ -1167,11 +1167,11 @@
           "batSpeed": 77,
           "ev": 90.6,
           "hardHit": 46.7,
-          "hardSwing": 70.9,
+          "hardSwing": 71,
           "maxEv": 114.4,
           "oaa": -1,
           "sprint": 27.3,
-          "squaredUp": 19,
+          "squaredUp": 18.9,
           "sweetSpot": 32
         },
         "score": 83,
@@ -1230,18 +1230,18 @@
             "xwoba": 0.407
           },
           {
-            "ba": "0.31",
+            "ba": "0.317",
             "hardHit": 48,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 43,
-            "rv100": 2.6,
-            "slg": "0.619",
+            "pa": 42,
+            "rv100": 2.8,
+            "slg": "0.634",
             "type": "CH",
-            "usage": 11.8,
-            "whiff": 41.3,
-            "woba": 0.398,
-            "xwoba": 0.35
+            "usage": 11.6,
+            "whiff": 40,
+            "woba": 0.407,
+            "xwoba": 0.358
           },
           {
             "ba": "0.12",
@@ -1313,7 +1313,7 @@
           "batSpeed": 75.1,
           "ev": 90.7,
           "hardHit": 49,
-          "hardSwing": 53.4,
+          "hardSwing": 53.5,
           "maxEv": 114.6,
           "oaa": -3,
           "sprint": 28.7,
@@ -1795,7 +1795,7 @@
           "hardHit": 54.8,
           "hardSwing": 48.7,
           "maxEv": 114.6,
-          "oaa": 3,
+          "oaa": 2,
           "sprint": 25.2,
           "squaredUp": 23.9,
           "sweetSpot": 34.1
@@ -2729,7 +2729,7 @@
           "maxEv": 109.3,
           "oaa": 5,
           "sprint": 27.4,
-          "squaredUp": 32.4,
+          "squaredUp": 32.5,
           "sweetSpot": 39.4
         },
         "score": 64.6,
@@ -2917,7 +2917,7 @@
             "usage": 25,
             "whiff": 17.2,
             "woba": 0.388,
-            "xwoba": 0.359
+            "xwoba": 0.36
           },
           {
             "ba": "0.278",
@@ -5273,7 +5273,7 @@
             "slg": "0.283",
             "type": "CH",
             "usage": 10.4,
-            "whiff": 32,
+            "whiff": 32.3,
             "woba": 0.228,
             "xwoba": 0.292
           },
@@ -5474,7 +5474,7 @@
             "rv100": 1.2,
             "slg": "0.467",
             "type": "CH",
-            "usage": 7.9,
+            "usage": 7.8,
             "whiff": 37.7,
             "woba": 0.32,
             "xwoba": 0.3
@@ -7779,7 +7779,7 @@
             "usage": 9.4,
             "whiff": 35.5,
             "woba": 0.232,
-            "xwoba": 0.176
+            "xwoba": 0.175
           },
           {
             "ba": "0.368",
@@ -7839,7 +7839,7 @@
           "hardHit": 44.3,
           "hardSwing": 62.2,
           "maxEv": 116,
-          "oaa": 4,
+          "oaa": 5,
           "sprint": 26.1,
           "squaredUp": 25.2,
           "sweetSpot": 29.9
@@ -8449,11 +8449,11 @@
           "batSpeed": 67.4,
           "ev": 85.2,
           "hardHit": 22.4,
-          "hardSwing": 3.2,
+          "hardSwing": 3.1,
           "maxEv": 109.7,
           "oaa": -6,
           "sprint": 27.8,
-          "squaredUp": 35.4,
+          "squaredUp": 35.3,
           "sweetSpot": 33.4
         },
         "score": 25.8,
@@ -10427,10 +10427,10 @@
         "score": 16.3,
         "slg": ".387",
         "st": {
-          "all": 0,
+          "all": 0.1,
           "chase": 5.6,
           "heart": 1,
-          "shadow": -12.9,
+          "shadow": -12.8,
           "waste": 6.3
         },
         "teamEn": "Los Angeles Angels",
@@ -10452,13 +10452,13 @@
             "xwoba": 0.298
           },
           {
-            "ba": "0.25",
+            "ba": "0.231",
             "hardHit": 40.9,
             "name": "Sinker",
             "nameJa": "シンカー",
             "pa": 66,
             "rv100": 0.3,
-            "slg": "0.423",
+            "slg": "0.404",
             "type": "SI",
             "usage": 18.1,
             "whiff": 15.7,
@@ -10782,8 +10782,8 @@
             "rv100": 2.9,
             "slg": "0.571",
             "type": "CH",
-            "usage": 14.8,
-            "whiff": 35.1,
+            "usage": 14.6,
+            "whiff": 35.5,
             "woba": 0.416,
             "xwoba": 0.374
           },
@@ -11059,7 +11059,7 @@
           "batSpeed": 74.8,
           "ev": 90.2,
           "hardHit": 48.6,
-          "hardSwing": 50.9,
+          "hardSwing": 51,
           "maxEv": 114.6,
           "oaa": 16,
           "sprint": 29.5,
@@ -11699,7 +11699,7 @@
           "batSpeed": 75,
           "ev": 92.9,
           "hardHit": 51.6,
-          "hardSwing": 51.7,
+          "hardSwing": 51.6,
           "maxEv": 111.6,
           "oaa": 4,
           "sprint": 25.4,
@@ -12048,24 +12048,24 @@
             "rv100": 1.2,
             "slg": "0.562",
             "type": "FF",
-            "usage": 31.5,
+            "usage": 31.4,
             "whiff": 19.3,
             "woba": 0.389,
             "xwoba": 0.413
           },
           {
-            "ba": "0.375",
-            "hardHit": 43.6,
+            "ba": "0.37",
+            "hardHit": 45.9,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 53,
-            "rv100": 2.5,
-            "slg": "0.521",
+            "pa": 51,
+            "rv100": 2.1,
+            "slg": "0.478",
             "type": "CH",
-            "usage": 16.7,
-            "whiff": 34.8,
-            "woba": 0.434,
-            "xwoba": 0.357
+            "usage": 16.5,
+            "whiff": 35.5,
+            "woba": 0.419,
+            "xwoba": 0.369
           },
           {
             "ba": "0.22",
@@ -12233,7 +12233,7 @@
             "name": "Changeup",
             "nameJa": "チェンジアップ",
             "pa": 46,
-            "rv100": -1.1,
+            "rv100": -1.2,
             "slg": "0.19",
             "type": "CH",
             "usage": 12,
@@ -12253,7 +12253,7 @@
             "usage": 9.9,
             "whiff": 20.7,
             "woba": 0.547,
-            "xwoba": 0.464
+            "xwoba": 0.463
           },
           {
             "ba": "0.2",
@@ -12965,11 +12965,11 @@
           "batSpeed": 72.8,
           "ev": 89.9,
           "hardHit": 41.7,
-          "hardSwing": 27.1,
+          "hardSwing": 27,
           "maxEv": 110.8,
           "oaa": -11,
           "sprint": 28.4,
-          "squaredUp": 24.2,
+          "squaredUp": 24.3,
           "sweetSpot": 33.8
         },
         "score": 72.9,
@@ -13127,7 +13127,7 @@
           "hardHit": 46.9,
           "hardSwing": 37.2,
           "maxEv": 114,
-          "oaa": 0,
+          "oaa": 1,
           "sprint": 26.4,
           "squaredUp": 28.5,
           "sweetSpot": 34.4
@@ -14746,18 +14746,18 @@
             "xwoba": 0.387
           },
           {
-            "ba": "0.328",
-            "hardHit": 34.6,
+            "ba": "0.333",
+            "hardHit": 35.3,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 65,
-            "rv100": 2.4,
-            "slg": "0.508",
+            "pa": 64,
+            "rv100": 2.5,
+            "slg": "0.517",
             "type": "CH",
-            "usage": 13.6,
-            "whiff": 20,
-            "woba": 0.383,
-            "xwoba": 0.308
+            "usage": 13.5,
+            "whiff": 20.2,
+            "woba": 0.389,
+            "xwoba": 0.312
           },
           {
             "ba": "0.27",
@@ -17376,7 +17376,7 @@
             "rv100": 0.5,
             "slg": "0.5",
             "type": "FF",
-            "usage": 40.6,
+            "usage": 40.5,
             "whiff": 39.2,
             "woba": 0.348,
             "xwoba": 0.335
@@ -17429,10 +17429,10 @@
             "name": "Cutter",
             "nameJa": "カッター",
             "pa": 37,
-            "rv100": 2.6,
+            "rv100": 2.7,
             "slg": "0.719",
             "type": "FC",
-            "usage": 8.2,
+            "usage": 8.3,
             "whiff": 28.6,
             "woba": 0.476,
             "xwoba": 0.379
@@ -17556,18 +17556,18 @@
             "xwoba": 0.284
           },
           {
-            "ba": "0.326",
-            "hardHit": 28.2,
+            "ba": "0.333",
+            "hardHit": 26.3,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 44,
-            "rv100": 2.2,
-            "slg": "0.512",
+            "pa": 43,
+            "rv100": 2.4,
+            "slg": "0.524",
             "type": "CH",
-            "usage": 12.2,
-            "whiff": 18.9,
-            "woba": 0.373,
-            "xwoba": 0.283
+            "usage": 12,
+            "whiff": 19.2,
+            "woba": 0.381,
+            "xwoba": 0.285
           },
           {
             "ba": "0.333",
@@ -18308,7 +18308,7 @@
             "rv100": 0.4,
             "slg": "0.43",
             "type": "FF",
-            "usage": 26.7,
+            "usage": 26.6,
             "whiff": 27.2,
             "woba": 0.325,
             "xwoba": 0.344
@@ -18356,18 +18356,18 @@
             "xwoba": 0.286
           },
           {
-            "ba": "0.194",
-            "hardHit": 37.5,
+            "ba": "0.171",
+            "hardHit": 34.8,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 38,
-            "rv100": 0,
-            "slg": "0.361",
+            "pa": 37,
+            "rv100": -0.3,
+            "slg": "0.343",
             "type": "CH",
-            "usage": 9.1,
-            "whiff": 33.8,
-            "woba": 0.289,
-            "xwoba": 0.242
+            "usage": 9,
+            "whiff": 34.3,
+            "woba": 0.271,
+            "xwoba": 0.231
           },
           {
             "ba": "0.3",
@@ -18392,7 +18392,7 @@
             "rv100": 2.8,
             "slg": "0.636",
             "type": "FC",
-            "usage": 6.3,
+            "usage": 6.4,
             "whiff": 20.9,
             "woba": 0.507,
             "xwoba": 0.426
@@ -18443,7 +18443,7 @@
           "maxEv": 112.7,
           "oaa": null,
           "sprint": 25.6,
-          "squaredUp": 33.2,
+          "squaredUp": 33.3,
           "sweetSpot": 31.3
         },
         "score": 42.8,
@@ -18701,7 +18701,7 @@
             "usage": 6.9,
             "whiff": 35,
             "woba": 0.223,
-            "xwoba": 0.267
+            "xwoba": 0.266
           },
           {
             "ba": "0.263",
@@ -19487,7 +19487,7 @@
             "usage": 8.5,
             "whiff": 24.2,
             "woba": 0.301,
-            "xwoba": 0.359
+            "xwoba": 0.36
           },
           {
             "ba": "0.348",
@@ -19580,18 +19580,18 @@
             "xwoba": 0.378
           },
           {
-            "ba": "0.148",
-            "hardHit": 29.8,
+            "ba": "0.15",
+            "hardHit": 28.3,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 67,
-            "rv100": -1.5,
-            "slg": "0.23",
+            "pa": 66,
+            "rv100": -1.4,
+            "slg": "0.233",
             "type": "CH",
-            "usage": 16.4,
-            "whiff": 28.4,
-            "woba": 0.221,
-            "xwoba": 0.233
+            "usage": 16.3,
+            "whiff": 28.7,
+            "woba": 0.224,
+            "xwoba": 0.234
           },
           {
             "ba": "0.182",
@@ -21505,10 +21505,10 @@
             "name": "Changeup",
             "nameJa": "チェンジアップ",
             "pa": 24,
-            "rv100": -1.5,
+            "rv100": -1.6,
             "slg": "0.182",
             "type": "CH",
-            "usage": 7.1,
+            "usage": 7,
             "whiff": 40,
             "woba": 0.223,
             "xwoba": 0.245
@@ -22210,7 +22210,7 @@
             "rv100": 3.2,
             "slg": "0.548",
             "type": "CH",
-            "usage": 9.1,
+            "usage": 9,
             "whiff": 30.4,
             "woba": 0.426,
             "xwoba": 0.385
