@@ -14,14 +14,24 @@
   "series": {
     "id": "cardinals",
     "date": "2026-07-18",
-    "opponent": { "ja": "ダイヤモンドバックス", "en": "Diamondbacks" }
+    "opponent": {
+      "ja": "ダイヤモンドバックス",
+      "en": "Diamondbacks"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=1gmiz8PQcxo",
+    "thumbUrl": "/media/2026-07-18-cardinals-vs-dbacks-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["カージナルス", "ダイヤモンドバックス", "ヌートバー", "コービン・キャロル", "海外の反応"],
+  "tags": [
+    "カージナルス",
+    "ダイヤモンドバックス",
+    "ヌートバー",
+    "コービン・キャロル",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "ヌートバー",
@@ -181,7 +191,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 5 },
-    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 4 }
+    "away": {
+      "ja": "カージナルス",
+      "en": "St. Louis Cardinals",
+      "score": 5
+    },
+    "home": {
+      "ja": "ダイヤモンドバックス",
+      "en": "Arizona Diamondbacks",
+      "score": 4
+    }
   }
 }

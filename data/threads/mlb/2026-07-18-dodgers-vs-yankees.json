@@ -14,14 +14,26 @@
   "series": {
     "id": "dodgers",
     "date": "2026-07-18",
-    "opponent": { "ja": "ヤンキース", "en": "Yankees" }
+    "opponent": {
+      "ja": "ヤンキース",
+      "en": "Yankees"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=gU7ICLhpX_E",
+    "thumbUrl": "/media/2026-07-18-dodgers-vs-yankees-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ドジャース", "ヤンキース", "大谷翔平", "佐々木朗希", "マックス・マンシー", "ベン・ライス", "海外の反応"],
+  "tags": [
+    "ドジャース",
+    "ヤンキース",
+    "大谷翔平",
+    "佐々木朗希",
+    "マックス・マンシー",
+    "ベン・ライス",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "佐々木朗希",
@@ -202,7 +214,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2 },
-    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 1 }
+    "away": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 2
+    },
+    "home": {
+      "ja": "ヤンキース",
+      "en": "New York Yankees",
+      "score": 1
+    }
   }
 }

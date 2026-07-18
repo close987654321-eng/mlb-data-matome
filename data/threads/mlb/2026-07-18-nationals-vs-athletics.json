@@ -14,9 +14,16 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=HDZ4Q1x9YUI",
+    "thumbUrl": "/media/2026-07-18-nationals-vs-athletics-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ナショナルズ", "アスレチックス", "CJ・エイブラムス", "ジェームズ・ウッド", "海外の反応"],
+  "tags": [
+    "ナショナルズ",
+    "アスレチックス",
+    "CJ・エイブラムス",
+    "ジェームズ・ウッド",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "CJ・エイブラムス",
@@ -152,7 +159,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 23 },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 4 }
+    "away": {
+      "ja": "ナショナルズ",
+      "en": "Washington Nationals",
+      "score": 23
+    },
+    "home": {
+      "ja": "アスレチックス",
+      "en": "Athletics",
+      "score": 4
+    }
   }
 }

@@ -14,14 +14,24 @@
   "series": {
     "id": "cubs",
     "date": "2026-07-18",
-    "opponent": { "ja": "ツインズ", "en": "Twins" }
+    "opponent": {
+      "ja": "ツインズ",
+      "en": "Twins"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=n-u5CVzrmVU",
+    "thumbUrl": "/media/2026-07-18-cubs-vs-twins-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["カブス", "ツインズ", "鈴木誠也", "ピート・クロウアームストロング", "海外の反応"],
+  "tags": [
+    "カブス",
+    "ツインズ",
+    "鈴木誠也",
+    "ピート・クロウアームストロング",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "鈴木誠也",
@@ -132,7 +142,15 @@
     }
   ],
   "game": {
-    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 5 },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 2 }
+    "away": {
+      "ja": "ツインズ",
+      "en": "Minnesota Twins",
+      "score": 5
+    },
+    "home": {
+      "ja": "カブス",
+      "en": "Chicago Cubs",
+      "score": 2
+    }
   }
 }
