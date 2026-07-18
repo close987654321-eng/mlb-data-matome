@@ -21,6 +21,13 @@ description: ネタ発見レーダー。狙う検索クエリ5クラス（選手
   増産提案をしない（ボクシングは興行前後のみ・MMA は月2〜4本目安。jp-games の日本人試合は枠外）。
 
 ## Step 0 — 燃料ゲージ（クラス別の在庫と鮮度）
+> ⚠️ **集計の前に必ず `git fetch origin main` して `origin/main` を基準にする**（2026-07-18 事故）。この repo は
+> 複数の Claude セッション＋毎日16時のクラウド jp-games ルーティンが並行で書くので、ローカル作業ツリーは
+> 平気で数百コミット遅れる。遅れた木で数えると **①在庫を過少に見て枯れ判定を誤り ②既存記事を見落として
+> 重複記事を作り ③回収済みの興行を「回収漏れ」と誤報する**（実際に3つとも同時に起きた）。
+> 数え方は `git ls-tree -r --name-only origin/main data/threads/` か、`git worktree add <tmp> origin/main` した
+> クリーンな木で ls/grep する。同じ理由で **Step 1-B の既記事化チェック（videoId の grep）も origin/main 基準**で走らせる。
+
 `data/threads/` を ls / grep で集計する（コード新設不要）:
 - 競技別の直近7日の本数・最終記事日
 - チームタグ出現数（`grep -l '"カブス"' data/threads/mlb/*.json | wc -l` 方式）→ 3件未満＝
