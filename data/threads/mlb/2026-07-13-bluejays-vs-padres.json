@@ -198,5 +198,9 @@
       "bodyEn": "Check the managers betting slips.",
       "bodyJa": "監督の馬券（賭けの証拠）を確認しろよ。"
     }
-  ]
+  ],
+  "game": {
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4 },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 5 }
+  }
 }
