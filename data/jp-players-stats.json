@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-20 06:09",
+  "asOf": "2026-07-20 06:17",
   "players": {
     "500743": {
       "fielding": {
@@ -677,8 +677,8 @@
             "mlb": 59
           },
           "ops": {
-            "lg": 7,
-            "mlb": 13
+            "lg": 6,
+            "mlb": 12
           },
           "rbi": {
             "lg": 13,
@@ -811,7 +811,7 @@
         "hitting": {
           "avg": {
             "lg": 45,
-            "mlb": 76
+            "mlb": 77
           },
           "baseOnBalls": {
             "lg": 4,
@@ -822,15 +822,15 @@
           },
           "hits": {
             "lg": 34,
-            "mlb": 52
+            "mlb": 53
           },
           "homeRuns": {
             "lg": 1,
             "mlb": 1
           },
           "obp": {
-            "lg": 13,
-            "mlb": 26
+            "lg": 12,
+            "mlb": 25
           },
           "ops": {
             "lg": 4,
@@ -1081,7 +1081,7 @@
         "hitting": {
           "avg": {
             "lg": 58,
-            "mlb": 98
+            "mlb": 97
           },
           "baseOnBalls": {
             "lg": 16,
@@ -1385,7 +1385,7 @@
           },
           "ops": {
             "lg": 27,
-            "mlb": 69
+            "mlb": 68
           },
           "rbi": {
             "lg": 7,
@@ -1540,7 +1540,7 @@
         "hitting": {
           "avg": {
             "lg": 28,
-            "mlb": 45
+            "mlb": 44
           },
           "baseOnBalls": {
             "lg": 30,
@@ -1627,8 +1627,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 14,
-            "mlb": 36
+            "lg": 13,
+            "mlb": 35
           },
           "baseOnBalls": {
             "lg": 25,
@@ -1742,11 +1742,11 @@
           },
           "obp": {
             "lg": 16,
-            "mlb": 44
+            "mlb": 43
           },
           "ops": {
-            "lg": 11,
-            "mlb": 31
+            "lg": 10,
+            "mlb": 30
           },
           "rbi": {
             "lg": 11,
@@ -1951,7 +1951,7 @@
         "fielding": ".959",
         "gamesPlayed": 93,
         "gamesStarted": 92,
-        "innings": "807.2",
+        "innings": "808.2",
         "oaa": -11,
         "position": "遊撃",
         "putOuts": 132,
@@ -2047,7 +2047,7 @@
         "fielding": ".987",
         "gamesPlayed": 93,
         "gamesStarted": 93,
-        "innings": "792.2",
+        "innings": "793.1",
         "oaa": 9,
         "position": "右翼",
         "putOuts": 217,
@@ -2102,7 +2102,7 @@
           },
           "ops": {
             "lg": 24,
-            "mlb": 38
+            "mlb": 37
           },
           "rbi": {
             "lg": 41,
@@ -2572,20 +2572,20 @@
         "runsPrevented": -5
       },
       "hitting": {
-        "atBats": 380,
-        "avg": ".274",
-        "babip": ".352",
+        "atBats": 381,
+        "avg": ".273",
+        "babip": ".350",
         "baseOnBalls": 80,
         "doubles": 23,
         "gamesPlayed": 100,
         "hits": 104,
         "homeRuns": 28,
         "obp": ".403",
-        "ops": ".964",
-        "plateAppearances": 466,
+        "ops": ".962",
+        "plateAppearances": 467,
         "rbi": 66,
         "runs": 91,
-        "slg": ".561",
+        "slg": ".559",
         "stolenBases": 15,
         "strikeOuts": 138,
         "triples": 1
@@ -2596,7 +2596,7 @@
         "hitting": {
           "avg": {
             "lg": 27,
-            "mlb": 44
+            "mlb": 45
           },
           "baseOnBalls": {
             "lg": 1,
@@ -2711,7 +2711,7 @@
           },
           "obp": {
             "lg": 11,
-            "mlb": 19
+            "mlb": 18
           },
           "ops": {
             "lg": 2,
@@ -3121,6 +3121,7 @@
         }
       },
       "saber": {
+        "hit": 0,
         "pit": 2.69765
       },
       "team": "ドジャース"
