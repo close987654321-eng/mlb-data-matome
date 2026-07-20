@@ -22,12 +22,27 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=5Nb08y6UgLA",
+    "thumbUrl": "/media/2026-07-20-cardinals-vs-dbacks-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["カージナルス", "ダイヤモンドバックス", "ヌートバー", "コービン・キャロル", "海外の反応"],
+  "tags": [
+    "カージナルス",
+    "ダイヤモンドバックス",
+    "ヌートバー",
+    "コービン・キャロル",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 7 },
-    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8 }
+    "away": {
+      "ja": "カージナルス",
+      "en": "St. Louis Cardinals",
+      "score": 7
+    },
+    "home": {
+      "ja": "ダイヤモンドバックス",
+      "en": "Arizona Diamondbacks",
+      "score": 8
+    }
   },
   "stats": [
     {

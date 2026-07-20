@@ -22,12 +22,28 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=5zouepKeVNk",
+    "thumbUrl": "/media/2026-07-20-cubs-vs-twins-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["カブス", "ツインズ", "今永昇太", "鈴木誠也", "ピート・クロウアームストロング", "海外の反応"],
+  "tags": [
+    "カブス",
+    "ツインズ",
+    "今永昇太",
+    "鈴木誠也",
+    "ピート・クロウアームストロング",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 1 },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 10 }
+    "away": {
+      "ja": "ツインズ",
+      "en": "Minnesota Twins",
+      "score": 1
+    },
+    "home": {
+      "ja": "カブス",
+      "en": "Chicago Cubs",
+      "score": 10
+    }
   },
   "stats": [
     {

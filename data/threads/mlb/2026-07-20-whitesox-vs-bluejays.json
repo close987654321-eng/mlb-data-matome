@@ -22,12 +22,28 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=Nx1DUBaUHfc",
+    "thumbUrl": "/media/2026-07-20-whitesox-vs-bluejays-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ホワイトソックス", "ブルージェイズ", "村上宗隆", "岡本和真", "ミゲル・バルガス", "海外の反応"],
+  "tags": [
+    "ホワイトソックス",
+    "ブルージェイズ",
+    "村上宗隆",
+    "岡本和真",
+    "ミゲル・バルガス",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 3 },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 0 }
+    "away": {
+      "ja": "ホワイトソックス",
+      "en": "Chicago White Sox",
+      "score": 3
+    },
+    "home": {
+      "ja": "ブルージェイズ",
+      "en": "Toronto Blue Jays",
+      "score": 0
+    }
   },
   "stats": [
     {

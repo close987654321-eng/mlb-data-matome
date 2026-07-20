@@ -14,12 +14,27 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=DqWtW1OcguU",
+    "thumbUrl": "/media/2026-07-20-mets-vs-phillies-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["メッツ", "フィリーズ", "フアン・ソト", "カイル・シュワーバー", "海外の反応"],
+  "tags": [
+    "メッツ",
+    "フィリーズ",
+    "フアン・ソト",
+    "カイル・シュワーバー",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 6 },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1 }
+    "away": {
+      "ja": "メッツ",
+      "en": "New York Mets",
+      "score": 6
+    },
+    "home": {
+      "ja": "フィリーズ",
+      "en": "Philadelphia Phillies",
+      "score": 1
+    }
   },
   "stats": [
     {
