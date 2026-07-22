@@ -92,6 +92,8 @@ export function videoPoster(media: ThreadMedia): string | null {
  * 球場のストック写真より、出演クリップのサムネの方が「読みたくなる」ため。
  */
 export function columnCover(column: Column): { url: string; isVideo: boolean } {
+  // 固有サムネ（週刊総括のプレート図版など scripts/column-thumb.mjs 製）が最優先。
+  if (column.thumbUrl) return { url: column.thumbUrl, isVideo: false };
   for (const b of column.blocks) {
     if (b.type === 'video') {
       const u = mediaThumb(b.media);

@@ -24,6 +24,7 @@ export type Column = {
   id: string; // "2026-06-11-freddie-freeman-2500-hits" 形式（日付プレフィックス付き kebab-case）
   sport: Sport; // キービジュアルの写真プールと競技ラベルに使う
   kind: 'interview' | 'column'; // 記事の種別（バッジ表示に使う）
+  thumbUrl?: string; // 固有サムネ（/media/{id}-og.jpg 等）。あれば動画・ストックより優先（columnCover）
   source?: string; // 出典の表示名（例: "MLB Network『MLB Central』"）
   sourceUrl?: string; // 出典 URL（あれば送客リンクを出す）
   publishedAt: string; // ISO8601（JST）

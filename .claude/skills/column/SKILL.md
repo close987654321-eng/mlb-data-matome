@@ -70,6 +70,12 @@ description: 中の人ボイスの長文コラムを書く。Xで確立した「
 - `publishedAt`: JST。新着フィードは日付降順なので、トップに出したければ既存最新より新しく打つ
   （正はメモリ `newest-fetchedat-feed-gotcha`）。
 - `source` / `sourceUrl`: 自前コラムなので**書かない**（インタビュー翻訳記事だけの項目）。
+- `thumbUrl`: 固有サムネ。**週刊総括は手描きプレート図版を毎号生成する**：
+  `node scripts/column-thumb.mjs <columnId> --vol <号数> --date <YYYY.M.D>`
+  → `public/media/{columnId}-og.jpg`（1280×720）が出るので `thumbUrl` に `/media/{columnId}-og.jpg`。
+  テイスト（紙白×墨線画×赤は縫い目一点×縦組み和文）は3号店のプレート図版の移植＝スクリプトが正。
+  縦組みは同梱フォント クレー One SemiBold（`scripts/assets/`・OFL・2026-07-23村山採用）＝
+  手描きボールと筆致を揃えるための選定。フォント変更はスクリプト側を直す。
 
 ## 手順
 
