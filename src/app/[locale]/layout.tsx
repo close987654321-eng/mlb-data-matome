@@ -18,9 +18,12 @@ import '../globals.css';
 // Google Analytics（GA4）測定 ID
 const GA_ID = 'G-XSL1S5LQH0';
 
-const TITLE = '海外の反応 — MLB / ボクシング / MMA';
+// GSC実測（2026-07-22）: 「mlb 海外の反応」系クエリ（週850表示超・掲載順位6〜7）の代表URLは
+// /mlb LP ではなくトップ「/」が選ばれ続けている（/mlb は表示ゼロ）。順位でなく CTR（0.4%）が
+// ボトルネックのため、Google が選んだ受け皿であるトップのタイトルを検索フレーズ前方一致に寄せる。
+const TITLE = 'MLBの海外の反応まとめ｜ボクシング・MMAも現地ファンの声を日本語訳';
 const DESCRIPTION =
-  'MLB・ボクシング・MMA（UFC・RIZIN）の海外掲示板や YouTube の反応を、現地の生のコメントつきで日本語まとめ';
+  '大谷翔平ら日本人選手の活躍やMLBの名場面への海外の反応を、現地ファンのコメントの日本語訳で毎日更新。ボクシング・MMA（UFC・RIZIN）の海外の反応まとめも。';
 
 export async function generateMetadata({
   params,

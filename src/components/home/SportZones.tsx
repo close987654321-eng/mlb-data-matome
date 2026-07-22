@@ -29,7 +29,10 @@ export default function SportZones({ zones, locale }: { zones: SportZone[]; loca
             label={z.label}
             count={z.count}
             seeAllHref={`/${z.sport}`}
-            seeAllLabel={t('home.seeAll')}
+            // アンカーテキストに「{競技}の海外の反応まとめ」を含める＝/{sport} LP（sportHub）へ
+            // 検索フレーズ一致の内部リンクを張り、トップに集中している「◯◯ 海外の反応」クエリの
+            // 受け皿として LP を押し上げる（GSC実測 2026-07-22: /mlb LP は表示ゼロ）
+            seeAllLabel={t('home.seeAllSport', { label: z.label })}
             lead={z.lead}
           />
           <ul className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
