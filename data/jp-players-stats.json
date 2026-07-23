@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-07-24 04:17",
+  "asOf": "2026-07-24 04:48",
   "players": {
     "500743": {
       "fielding": {
@@ -229,7 +229,6 @@
         }
       },
       "saber": {
-        "hit": 0,
         "pit": 3.13277
       },
       "team": "ブレーブス"
@@ -406,8 +405,8 @@
       "ranks": {
         "hitting": {
           "baseOnBalls": {
-            "lg": 21,
-            "mlb": 48
+            "lg": 22,
+            "mlb": 49
           },
           "doubles": {
             "lg": 95
@@ -1324,20 +1323,20 @@
     "672960": {
       "fielding": {
         "arm": 82.4,
-        "assists": 144,
+        "assists": 146,
         "doublePlays": 9,
         "errors": 13,
-        "fielding": ".939",
+        "fielding": ".940",
         "gamesPlayed": 98,
         "gamesStarted": 96,
-        "innings": "842.0",
+        "innings": "843.2",
         "oaa": -1,
         "position": "三塁",
         "putOuts": 57,
         "runsPrevented": -1
       },
       "hitting": {
-        "atBats": 358,
+        "atBats": 359,
         "avg": ".226",
         "babip": ".276",
         "baseOnBalls": 38,
@@ -1346,13 +1345,13 @@
         "hits": 81,
         "homeRuns": 22,
         "obp": ".309",
-        "ops": ".753",
-        "plateAppearances": 404,
+        "ops": ".752",
+        "plateAppearances": 405,
         "rbi": 62,
         "runs": 50,
-        "slg": ".444",
+        "slg": ".443",
         "stolenBases": 0,
-        "strikeOuts": 124,
+        "strikeOuts": 125,
         "triples": 0
       },
       "league": "AL",
@@ -1377,10 +1376,10 @@
             "mlb": 12
           },
           "obp": {
-            "lg": 46
+            "lg": 47
           },
           "ops": {
-            "lg": 34,
+            "lg": 33,
             "mlb": 80
           },
           "rbi": {
@@ -1392,8 +1391,8 @@
             "mlb": 71
           },
           "slg": {
-            "lg": 24,
-            "mlb": 60
+            "lg": 25,
+            "mlb": 61
           }
         }
       },
@@ -1643,12 +1642,12 @@
             "mlb": 87
           },
           "obp": {
-            "lg": 20,
-            "mlb": 50
+            "lg": 19,
+            "mlb": 49
           },
           "ops": {
-            "lg": 20,
-            "mlb": 49
+            "lg": 19,
+            "mlb": 48
           },
           "rbi": {
             "lg": 50
@@ -1658,8 +1657,8 @@
             "mlb": 62
           },
           "slg": {
-            "lg": 21,
-            "mlb": 56
+            "lg": 20,
+            "mlb": 55
           },
           "stolenBases": {
             "lg": 1,
@@ -1737,8 +1736,8 @@
             "mlb": 18
           },
           "obp": {
-            "lg": 21,
-            "mlb": 51
+            "lg": 20,
+            "mlb": 50
           },
           "ops": {
             "lg": 11,
