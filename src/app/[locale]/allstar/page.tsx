@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { buildFeed } from '@/lib/feed';
 import { PLAYERS } from '@/lib/players';
@@ -45,7 +45,7 @@ export default async function AllStarPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   // 会期後は enabled=false で撤去（期間限定ハブ）。
   if (!ALLSTAR.enabled) notFound();
   const t = await getTranslations();

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getCyYoungBoard } from '@/lib/cyYoungBoard';
 import { getAllThreads } from '@/lib/data';
 import { buildFeed } from '@/lib/feed';
@@ -51,7 +51,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
 
 export default async function CyYoungPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const board = await getCyYoungBoard();
   // データ未生成なら 404（cyyoung コマンド前）。通常はビルド時に data/cy-young-board.json が存在する。

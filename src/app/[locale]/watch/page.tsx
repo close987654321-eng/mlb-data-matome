@@ -1,4 +1,4 @@
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getWatchAlongThreads, getWatchSingles } from '@/lib/data';
 import { SERIES } from '@/lib/series';
 import { SPORTS, SPORT_INFO, type Sport } from '@/lib/sports';
@@ -39,7 +39,7 @@ export async function generateMetadata({
  */
 export default async function WatchPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const [threads, singles] = await Promise.all([getWatchAlongThreads(), getWatchSingles()]);
 

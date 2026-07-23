@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
@@ -151,7 +151,7 @@ export default async function TagPage({
   params: Promise<{ locale: Locale; tag: string }>;
 }) {
   const { locale, tag } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const decoded = decodeURIComponent(tag);
   const t = await getTranslations();
   const feed = await getFeedByTag(decoded);

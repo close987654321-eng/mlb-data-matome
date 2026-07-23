@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import LegalArticle from '@/components/LegalArticle';
 import { Link } from '@/lib/navigation';
 import { getAboutDoc } from '@/lib/legal';
@@ -28,7 +28,7 @@ export async function generateMetadata({
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   return (
     <LegalArticle doc={getAboutDoc(locale)}>

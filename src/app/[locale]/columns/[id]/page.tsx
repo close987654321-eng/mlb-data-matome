@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllColumns, getColumn } from '@/lib/columns';
 import { getAllThreads } from '@/lib/data';
 import { formatUpdatedAt } from '@/lib/format';
@@ -61,7 +61,7 @@ export default async function ColumnDetailPage({
   params: Promise<{ locale: Locale; id: string }>;
 }) {
   const { locale, id } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const column = await getColumn(id);
   if (!column) notFound();

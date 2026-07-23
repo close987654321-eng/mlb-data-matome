@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { PLAYERS } from '@/lib/players';
 import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import Leaderboard, { type LeaderRow } from '@/components/Leaderboard';
@@ -62,7 +62,7 @@ export default async function RankingPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const en = locale === 'en';
   const snap = await getPlayersSnapshot();

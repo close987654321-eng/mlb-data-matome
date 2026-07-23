@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { buildFeed, feedKey, type FeedItem } from '@/lib/feed';
@@ -39,7 +39,7 @@ export default async function SearchPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const { q } = await searchParams;
   const t = await getTranslations();
   const query = (q ?? '').trim();

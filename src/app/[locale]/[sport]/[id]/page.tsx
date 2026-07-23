@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Link } from '@/lib/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThread, getThreadsBySport, getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
@@ -80,7 +80,7 @@ export default async function ThreadDetailPage({
   params: Promise<{ locale: Locale; sport: string; id: string }>;
 }) {
   const { locale, sport, id } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   if (!isSport(sport)) notFound();
   const t = await getTranslations();
   const thread = await getThread(sport, id);

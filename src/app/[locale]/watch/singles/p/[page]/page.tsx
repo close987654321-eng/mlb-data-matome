@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getWatchSingles } from '@/lib/data';
 import { paginate, FEED_PER_PAGE, type FeedItem } from '@/lib/feed';
 import FeedGrid from '@/components/FeedGrid';
@@ -41,7 +41,7 @@ export default async function WatchSinglesFeedPage({
   params: Promise<{ locale: Locale; page: string }>;
 }) {
   const { locale, page } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const pageNum = Number(page);
   if (!Number.isInteger(pageNum) || pageNum < 2) notFound();
   const t = await getTranslations();

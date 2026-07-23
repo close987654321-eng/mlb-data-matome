@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getCyPitcher, getCyDetailRows, type CyRow } from '@/lib/cyYoungBoard';
 import { getPitchArsenal } from '@/lib/pitchArsenal';
 import { getAllThreads } from '@/lib/data';
@@ -91,7 +91,7 @@ export default async function CyYoungPitcherPage({
   params: Promise<{ locale: Locale; id: string }>;
 }) {
   const { locale, id } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const en = locale === 'en';
   const found = await getCyPitcher(Number(id));

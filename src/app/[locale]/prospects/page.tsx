@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
@@ -36,7 +36,7 @@ export default async function ProspectsPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const en = locale === 'en';
 

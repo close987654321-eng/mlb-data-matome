@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { PLAYERS, hubEligible, type Player } from '@/lib/players';
 import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
@@ -80,7 +80,7 @@ export default async function PlayerIndexPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const en = locale === 'en';
   const [snap, all, mvpBoard, cyBoard] = await Promise.all([

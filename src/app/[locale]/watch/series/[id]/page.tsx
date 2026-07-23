@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getWatchAlongThreads } from '@/lib/data';
 import { SERIES, getSeries } from '@/lib/series';
 import ThreadCard from '@/components/ThreadCard';
@@ -37,7 +37,7 @@ export default async function SeriesPage({
   params: Promise<{ locale: Locale; id: string }>;
 }) {
   const { locale, id } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const info = getSeries(id);
   if (!info) notFound();
   const t = await getTranslations();

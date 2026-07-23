@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { buildFeed, paginate, FEED_PER_PAGE } from '@/lib/feed';
@@ -42,7 +42,7 @@ export default async function FeedPage({
   params: Promise<{ locale: Locale; page: string }>;
 }) {
   const { locale, page } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const pageNum = Number(page);
   if (!Number.isInteger(pageNum) || pageNum < 2) notFound();
   const t = await getTranslations();

@@ -1,4 +1,4 @@
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { buildFeed, paginate, type FeedItem } from '@/lib/feed';
@@ -37,7 +37,7 @@ export async function generateMetadata({
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const [threads, columns, snap, allTags, mvpBoard, cyBoard] = await Promise.all([
     getAllThreads(),

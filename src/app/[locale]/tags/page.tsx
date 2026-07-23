@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags } from '@/lib/tags';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
@@ -35,7 +35,7 @@ export async function generateMetadata({
  */
 export default async function TagsPage({ params }: { params: Promise<{ locale: Locale }> }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const tags = await getAllTags();
 

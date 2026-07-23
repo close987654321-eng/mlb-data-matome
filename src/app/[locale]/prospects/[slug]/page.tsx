@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getNpbProspect, npbThreadsOf, NPB_PROSPECTS } from '@/lib/npbPlayers';
 import { getPlayer } from '@/lib/players';
@@ -52,7 +52,7 @@ export default async function ProspectPage({
   params: Promise<{ locale: Locale; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const p = getNpbProspect(slug);
   if (!p) notFound();
   const t = await getTranslations();

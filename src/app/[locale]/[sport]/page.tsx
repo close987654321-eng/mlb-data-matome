@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getThreadsBySport } from '@/lib/data';
 import { getColumnsBySport } from '@/lib/columns';
 import { buildFeed, paginate, type FeedItem } from '@/lib/feed';
@@ -85,7 +85,7 @@ export default async function SportPage({
   params: Promise<{ locale: Locale; sport: string }>;
 }) {
   const { locale, sport } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   if (!isSport(sport)) notFound();
   const t = await getTranslations();
   const info = SPORT_INFO[sport];

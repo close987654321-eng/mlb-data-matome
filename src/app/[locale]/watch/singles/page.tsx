@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getWatchSingles } from '@/lib/data';
 import { paginate, type FeedItem } from '@/lib/feed';
 import FeedGrid from '@/components/FeedGrid';
@@ -35,7 +35,7 @@ export default async function WatchSinglesPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const t = await getTranslations();
   const singles = await getWatchSingles();
   const feed: FeedItem[] = singles.map((th) => ({ kind: 'thread', date: th.fetchedAt, thread: th }));

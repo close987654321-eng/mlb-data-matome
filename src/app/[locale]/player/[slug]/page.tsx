@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { unstable_setRequestLocale, getTranslations } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getPlayer, PLAYERS, threadsOf, hubEligible, hasMlbStats, hasMinorStats } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, asOfIso } from '@/lib/playerStats';
@@ -77,7 +77,7 @@ export default async function PlayerHubPage({
   params: Promise<{ locale: Locale; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const player = getPlayer(slug);
   if (!player) notFound();
   const t = await getTranslations();
