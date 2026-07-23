@@ -57,6 +57,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'i.redd.it' }, // Reddit 直リンク画像
       { protocol: 'https', hostname: 'i.imgur.com' }, // imgur 直リンク画像
       { protocol: 'https', hostname: 'i.ytimg.com' }, // YouTube サムネ
+      { protocol: 'https', hostname: 'www.mlbstatic.com' }, // チームロゴ（teams.ts）
+      { protocol: 'https', hostname: 'img.mlbstatic.com' }, // 選手ヘッドショット（teams.ts）
     ],
   },
   async redirects() {
@@ -75,6 +77,18 @@ const nextConfig = {
       { source: '/ufc/:path*', destination: '/mma/:path*', permanent: true },
       { source: '/en/ufc', destination: '/en/mma', permanent: true },
       { source: '/en/ufc/:path*', destination: '/en/mma/:path*', permanent: true },
+      // 同一動画(7zappcIDCZs)を二重記事化してしまった重複コンテンツの正規化（2026-07-23）。
+      // コメント抜粋が厚い 06-21 版へ寄せる。
+      {
+        source: '/mlb/2026-06-20-ohtani-homer-second-child',
+        destination: '/mlb/2026-06-21-ohtani-homer-second-child',
+        permanent: true,
+      },
+      {
+        source: '/en/mlb/2026-06-20-ohtani-homer-second-child',
+        destination: '/en/mlb/2026-06-21-ohtani-homer-second-child',
+        permanent: true,
+      },
     ];
   },
 };
