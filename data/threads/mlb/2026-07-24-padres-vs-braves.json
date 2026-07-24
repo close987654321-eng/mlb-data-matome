@@ -15,12 +15,28 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=aB_xI30Jnck",
+    "thumbUrl": "/media/2026-07-24-padres-vs-braves-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["パドレス", "ブレーブス", "松井裕樹", "クリス・セール", "マット・オルソン", "海外の反応"],
+  "tags": [
+    "パドレス",
+    "ブレーブス",
+    "松井裕樹",
+    "クリス・セール",
+    "マット・オルソン",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 5 },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6 }
+    "away": {
+      "ja": "パドレス",
+      "en": "San Diego Padres",
+      "score": 5
+    },
+    "home": {
+      "ja": "ブレーブス",
+      "en": "Atlanta Braves",
+      "score": 6
+    }
   },
   "stats": [
     {
