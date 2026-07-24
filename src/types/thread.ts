@@ -104,6 +104,7 @@ export type Thread = {
   series?: ThreadSeries; // 「海外ファンと見る」シリーズ記事ならその情報（タイトル定型化＋バッジ＋/watch掲載）
   hideFromWatch?: boolean; // 動画つきでも /watch ハブ（注目の試合）に載せない。スタジオ解説/番組セグメント等、watch-along に馴染まない動画記事向け
   editorPick?: number; // トップ「本日の一面／編集部ピック」の優先度（小さいほど上位）。任意の手動キュレーション用。立っていない記事は自動フォールバック（直近×コメント数）で補う＝src/lib/frontpage.ts。JSONフラグだけで運用しSSGを保つ
+  noindex?: boolean; // 手動で検索から下げる旗。薄い記事の自動判定は src/lib/threadIndex.ts の isThreadIndexable が正（youtube かつコメント10件未満は旗なしでも noindex）
   isSample?: boolean; // 開発用ダミーであることを明示するフラグ
 };
 

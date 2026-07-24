@@ -9,6 +9,7 @@ import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
 import { coverImage, ogCover } from '@/lib/media';
 import { rankNextReads } from '@/lib/nextRead';
+import { isThreadIndexable } from '@/lib/threadIndex';
 import { tagCountMap } from '@/lib/tags';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
@@ -58,6 +59,9 @@ export async function generateMetadata({
   return {
     title,
     description,
+    // 薄い記事（isThreadIndexable=false）は検索に出さない。follow は残す＝リンク先の
+    // 選手ハブ・チームLPへの評価の流れは保つ（AdSense再申請の薄コンテンツ手当て）。
+    ...(isThreadIndexable(thread) ? {} : { robots: { index: false, follow: true } }),
     alternates: localeAlternates(locale, `/${sport}/${id}`),
     openGraph: {
       title,

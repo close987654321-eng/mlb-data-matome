@@ -3,6 +3,7 @@ import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { getAllTags } from '@/lib/tags';
 import { isTagIndexable } from '@/lib/tagIndex';
+import { isThreadIndexable } from '@/lib/threadIndex';
 import { PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
@@ -73,7 +74,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       const newestInSport = threads.find((t) => t.sport === sport)?.fetchedAt;
       return entry(`/${sport}`, newestInSport);
     }),
-    ...threads.map((t) => entry(`/${t.sport}/${t.id}`, t.fetchedAt)),
+    // 記事個別。noindex の薄記事は載せない（robots と sitemap の言い分を一致させる。
+    // index 可否の唯一の正は isThreadIndexable）。
+    ...threads
+      .filter(isThreadIndexable)
+      .map((t) => entry(`/${t.sport}/${t.id}`, t.fetchedAt)),
     // 選手ハブ（トピッククラスタのピラー）。lastmod は上で算出済み
     // （/player ピラー＝選手ハブ群の最新／個別＝最新記事 or 成績更新の新しい方）。
     entry('/player', playerHubLatest),
