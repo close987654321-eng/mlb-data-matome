@@ -121,6 +121,9 @@ const opt = (name, dflt) => {
 const VOL = String(opt('vol', '1')).padStart(2, '0');
 const DATE = opt('date', new Date().toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' }).replaceAll('/', '.'));
 const KANJI = Array.from(opt('kanji', '今週の総括'));
+// 上部の英字キッカー。週刊総括の既定は THIS WEEK IN MLB、データ定点分析(型④)等は
+// --kicker で差し替える（例: RACE BOARD CHECK）。同程度の文字数だとレイアウトが揃う。
+const KICKER = opt('kicker', 'THIS WEEK IN MLB');
 const GLYPH = 84;
 const TX = 806;
 const colH = KANJI.length * (GLYPH + 9) - 9;
@@ -134,7 +137,7 @@ const vtext = KANJI.map(
 const EYC = 655, EY = 92;
 const eyebrow = `
   <rect x="${EYC - 205}" y="${EY - 21}" width="7" height="27" fill="${C.accent}"/>
-  <text x="${EYC - 182}" y="${EY}" font-family="Avenir Next Condensed, Futura, Helvetica Neue, sans-serif" font-weight="600" font-size="27" letter-spacing="7" fill="${C.inkSoft}">THIS WEEK IN MLB</text>
+  <text x="${EYC - 182}" y="${EY}" font-family="Avenir Next Condensed, Futura, Helvetica Neue, sans-serif" font-weight="600" font-size="27" letter-spacing="7" fill="${C.inkSoft}">${KICKER}</text>
 `;
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
