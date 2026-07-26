@@ -14,9 +14,16 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=MF9x_f77mW0",
+    "thumbUrl": "/media/2026-07-26-yankees-vs-phillies-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["ヤンキース", "フィリーズ", "ベン・ライス", "カイル・シュワーバー", "海外の反応"],
+  "tags": [
+    "ヤンキース",
+    "フィリーズ",
+    "ベン・ライス",
+    "カイル・シュワーバー",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "ベン・ライス",
@@ -38,8 +45,16 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 3 },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1 }
+    "away": {
+      "ja": "ヤンキース",
+      "en": "New York Yankees",
+      "score": 3
+    },
+    "home": {
+      "ja": "フィリーズ",
+      "en": "Philadelphia Phillies",
+      "score": 1
+    }
   },
   "comments": [
     {
