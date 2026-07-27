@@ -1,6 +1,9 @@
 import { getPlayerByJaName, type Player } from './players';
 import { deriveRole } from './playerHero';
 import type { PlayerSeason } from './playerStats';
+import type { FeedItem } from './feed';
+import type { TagCount } from './tags';
+import type { Thread, ThreadComment } from '@/types/thread';
 
 /**
  * タグLP（リッチ化するタグページ）の判定と導入文の唯一の正。
@@ -63,4 +66,46 @@ export function tagHubIntroJa(
     `試合ハイライトへの現地実況や Reddit の話題スレから、生の反応を全${articleCount}件の記事で紹介している。`,
   );
   return sentences.join('');
+}
+
+/** タグLPに直接引用する「現地ファンの声」1件（記事＋その代表コメント）。 */
+export type TagVoice = { thread: Thread; comment: ThreadComment };
+
+/**
+ * タグLPの「現地ファンの声ピックアップ」。最新記事から1本につき代表コメント1件を抜く。
+ * 「{選手名} 海外の反応」で来た人に一覧カードだけでなく反応そのものを LP 上で即見せる＝
+ * クエリ意図と一致する実テキストが LP に載り、記事追加のたびに中身が入れ替わる（鮮度）。
+ * 代表の選び方は記事のフック引用 → 最高スコアのハイライト → 最高スコア（NextReadCard と同じ序列）。
+ */
+export function tagHubVoices(feed: FeedItem[], limit = 6): TagVoice[] {
+  const voices: TagVoice[] = [];
+  for (const item of feed) {
+    if (item.kind !== 'thread') continue;
+    const comments = item.thread.comments ?? [];
+    if (comments.length === 0) continue;
+    const byScore = (pool: ThreadComment[]) =>
+      pool.reduce<ThreadComment | null>((top, c) => (!top || c.score > top.score ? c : top), null);
+    const comment =
+      comments.find((c) => c.isHook) ??
+      byScore(comments.filter((c) => c.isHighlight)) ??
+      byScore(comments);
+    if (!comment) continue;
+    voices.push({ thread: item.thread, comment });
+    if (voices.length >= limit) break;
+  }
+  return voices;
+}
+
+/**
+ * 記事が実在する選手タグLPの一覧（件数つき）。LP 同士を相互リンクする「選手別の海外の反応」網に使う。
+ * 「{選手名} 海外の反応」系はどの選手も同型のクエリ＝LP クラスタ内の内部リンクを密にして
+ * 個々の LP のクロール深度と内部評価を底上げする。tags は getAllTags()（件数降順）を渡す。
+ */
+export function playerTagHubs(tags: TagCount[]): { player: Player; count: number }[] {
+  const hubs: { player: Player; count: number }[] = [];
+  for (const { tag, count } of tags) {
+    const player = tagHubOf(tag);
+    if (player && count > 0) hubs.push({ player, count });
+  }
+  return hubs;
 }

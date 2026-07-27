@@ -4,7 +4,8 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
-import { tagHubOf, tagHubIntroJa } from '@/lib/tagHub';
+import { tagHubOf, tagHubIntroJa, tagHubVoices, playerTagHubs, type TagVoice } from '@/lib/tagHub';
+import { threadTitle } from '@/lib/series';
 import {
   teamHubOf,
   teamHubIntroJa,
@@ -21,6 +22,7 @@ import type { Player } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import FeedCard from '@/components/FeedCard';
 import TeamStandings from '@/components/TeamStandings';
+import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -160,6 +162,13 @@ export default async function TagPage({
   const hub = tagHubOf(decoded);
   const teamLp = hub ? null : teamLpOf(decoded, feed.length);
   const heading = await headingOf(locale, decoded, teamLp);
+  // 選手タグLP: 反応そのものを LP に直接載せるピックアップ＋選手LP同士の相互リンク網。
+  let voices: TagVoice[] = [];
+  let otherHubs: { player: Player; count: number }[] = [];
+  if (hub) {
+    voices = tagHubVoices(feed);
+    otherHubs = playerTagHubs(await getAllTags()).filter(({ player }) => player.slug !== hub.slug);
+  }
   // 選手・チームタグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
   let intro: string | undefined;
   let teamPlayers: Player[] = [];
@@ -317,6 +326,52 @@ export default async function TagPage({
       {/* チームLP: 地区順位表（CI が毎時更新する静的JSON。ライバルのLPへの回遊網も兼ねる）。 */}
       {teamLp && <TeamStandings teamId={teamLp.info.id} locale={locale} />}
 
+      {/* 選手タグLP: 反応そのものを LP に直接引用する（クエリ意図との一致＋記事追加ごとに入れ替わる鮮度）。 */}
+      {hub && voices.length > 0 && (
+        <section className="space-y-5">
+          <SectionHeading
+            label={t('tag.voices', { name: locale === 'en' ? hub.nameEn : hub.nameJa })}
+          />
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {voices.map(({ thread, comment }) => {
+              const body =
+                locale === 'ja' ? comment.bodyJa : comment.bodyEn || comment.bodyJa;
+              const isYoutube = thread.format === 'youtube';
+              const isInterview = thread.format === 'interview';
+              return (
+                <li
+                  key={`${thread.sport}/${thread.id}`}
+                  className="flex flex-col rounded-[3px] border border-line bg-surface p-5"
+                >
+                  <p className="text-sm leading-relaxed text-ink">“{body}”</p>
+                  <div className="mt-3 flex items-center justify-between text-xs text-ink-soft">
+                    <span className="font-medium">
+                      {isYoutube || isInterview ? comment.author : `u/${comment.author}`}
+                    </span>
+                    {!isInterview && (
+                      <span className="tabular-nums">
+                        {isYoutube ? '👍' : '▲'} {comment.score.toLocaleString()}
+                      </span>
+                    )}
+                  </div>
+                  <Link
+                    href={`/${thread.sport}/${thread.id}`}
+                    className="group mt-4 flex items-center justify-between gap-3 border-t border-line pt-3 text-xs text-ink-mute transition-colors hover:text-ink"
+                  >
+                    <span className="line-clamp-1">
+                      {thread.fetchedAt.slice(0, 10)} ・ {threadTitle(thread, locale)}
+                    </span>
+                    <span aria-hidden className="shrink-0 transition-transform group-hover:translate-x-0.5">
+                      →
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      )}
+
       <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
         {feed.map((item, i) => (
           <li key={feedKey(item)}>
@@ -325,6 +380,28 @@ export default async function TagPage({
           </li>
         ))}
       </ul>
+
+      {/* 選手タグLP同士の相互リンク網: 「{選手名} 海外の反応」は同型クエリ＝LP クラスタの内部リンクを密にする。 */}
+      {hub && otherHubs.length > 0 && (
+        <section className="space-y-5">
+          <SectionHeading label={t('tag.otherPlayers')} />
+          <ul className="grid grid-cols-2 gap-x-6 sm:grid-cols-3 lg:grid-cols-4">
+            {otherHubs.map(({ player, count }) => (
+              <li key={player.slug}>
+                <Link
+                  href={`/tag/${encodeURIComponent(player.nameJa)}`}
+                  className="group flex items-center justify-between gap-2 border-b border-line py-3 text-sm font-medium text-ink transition-colors hover:text-ink-soft"
+                >
+                  <span className="line-clamp-1">
+                    {locale === 'en' ? player.nameEn : player.nameJa}
+                  </span>
+                  <span className="shrink-0 text-xs tabular-nums text-ink-mute">{count}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </div>
   );
 }
