@@ -16,6 +16,7 @@ import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
 import SectionHeading from '@/components/SectionHeading';
+import MlbToday from '@/components/home/MlbToday';
 import SearchConsole from '@/components/home/SearchConsole';
 import TwoPillars from '@/components/home/TwoPillars';
 import PlayerRail, { type PlayerRailItem } from '@/components/home/PlayerRail';
@@ -142,6 +143,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const consoleTags = allTags.slice(0, 8);
   const issue = issueDate(feed[0]?.date);
 
+  // きょうのMLBダイジェスト＝「mlb 海外の反応」検索の着地意図に最上段で即応する（MlbToday の docblock 参照）。
+  const mlbThreads = threads.filter((th) => th.sport === 'mlb');
+  const mlbLabel = locale === 'en' ? SPORT_INFO.mlb.labelEn : SPORT_INFO.mlb.labelJa;
+
   // サイト全体の構造化データ（JSON-LD）。Organization=ブランド実体（ロゴ・公式X）、
   // WebSite=サイト内検索ボックス（SearchAction）。検索のサイトリンク／ブランド表示に効く。
   const siteLd = {
@@ -205,6 +210,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </h1>
         <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-soft">{t('home.heroBody')}</p>
       </section>
+
+      <MlbToday
+        threads={mlbThreads.slice(0, 5)}
+        count={mlbThreads.length}
+        label={mlbLabel}
+        locale={locale}
+      />
 
       <SearchConsole tags={consoleTags} />
 

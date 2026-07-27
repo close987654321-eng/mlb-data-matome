@@ -23,7 +23,7 @@ const GA_ID = 'G-XSL1S5LQH0';
 // ボトルネックのため、Google が選んだ受け皿であるトップのタイトルを検索フレーズ前方一致に寄せる。
 const TITLE = 'MLBの海外の反応まとめ｜ボクシング・MMAも現地ファンの声を日本語訳';
 const DESCRIPTION =
-  '大谷翔平ら日本人選手の活躍やMLBの名場面への海外の反応を、現地ファンのコメントの日本語訳で毎日更新。ボクシング・MMA（UFC・RIZIN）の海外の反応まとめも。';
+  'MLBの試合直後に現地ファンの生の声を日本語訳で毎日更新。大谷翔平・佐々木朗希ら日本人選手の全試合を網羅し、今季成績・MVPレースまで追える。ボクシング・MMA（UFC・RIZIN）の海外の反応も。';
 
 export async function generateMetadata({
   params,
