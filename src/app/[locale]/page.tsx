@@ -212,7 +212,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       </section>
 
       <MlbToday
-        threads={mlbThreads.slice(0, 5)}
+        threads={mlbThreads.slice(0, 20)}
         count={mlbThreads.length}
         label={mlbLabel}
         locale={locale}
