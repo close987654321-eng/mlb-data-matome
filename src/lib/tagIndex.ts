@@ -1,4 +1,5 @@
 import { tagHubOf } from './tagHub';
+import { fighterHubOf } from './fighterHub';
 import { isStopTag } from './tags';
 import { TEAM_HUB_MIN_ARTICLES } from './teamHub';
 
@@ -17,7 +18,7 @@ import { TEAM_HUB_MIN_ARTICLES } from './teamHub';
  * 落とすのは検索インデックスと sitemap への掲載だけ。
  */
 export function isTagIndexable(tag: string, count: number): boolean {
-  if (tagHubOf(tag)) return true;
+  if (tagHubOf(tag) || fighterHubOf(tag)) return true;
   if (isStopTag(tag)) return false;
   return count >= TEAM_HUB_MIN_ARTICLES;
 }
