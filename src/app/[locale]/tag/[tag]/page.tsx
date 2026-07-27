@@ -5,6 +5,7 @@ import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
 import { tagHubOf, tagHubIntroJa, tagHubVoices, playerTagHubs, type TagVoice } from '@/lib/tagHub';
+import { getEditorNote, type EditorNote } from '@/lib/editorNotes';
 import { threadTitle } from '@/lib/series';
 import {
   teamHubOf,
@@ -171,11 +172,13 @@ export default async function TagPage({
   }
   // 選手・チームタグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
   let intro: string | undefined;
+  let editorNote: EditorNote | null = null; // 編集部ノート（ja のみ。手書きの和文要約）
   let teamPlayers: Player[] = [];
   const statLines = new Map<string, string>(); // slug → 成績1行（所属日本人選手リンクに添える）
   if (hub && locale !== 'en') {
     const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(hub.mlbId)]);
     intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
+    editorNote = await getEditorNote(hub.slug);
   } else if (teamLp) {
     const [snap, standing] = await Promise.all([getPlayersSnapshot(), standingOfTeam(teamLp.info.id)]);
     teamPlayers = teamJpPlayers(snap, decoded);
@@ -369,6 +372,19 @@ export default async function TagPage({
               );
             })}
           </ul>
+        </section>
+      )}
+
+      {/* 選手タグLP: 編集部ノート＝声ピックアップを横断した「海外でどう見られているか」の要約（ja のみ・手書き）。 */}
+      {hub && editorNote && (
+        <section className="space-y-5">
+          <SectionHeading label={t('tag.editorNote', { name: hub.nameJa })} />
+          <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
+            <p className="max-w-prose text-sm leading-relaxed text-ink">{editorNote.noteJa}</p>
+            <p className="mt-4 border-t border-line pt-3 text-xs text-ink-mute">
+              {t('tag.editorNoteBy')} ・ {t('tag.updated', { date: editorNote.updatedAt })}
+            </p>
+          </div>
         </section>
       )}
 
