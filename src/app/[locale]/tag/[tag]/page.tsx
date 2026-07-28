@@ -4,14 +4,7 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
-import {
-  tagHubOf,
-  tagHubIntroJa,
-  tagHubVoices,
-  voiceSeed,
-  playerTagHubs,
-  type TagVoice,
-} from '@/lib/tagHub';
+import { tagHubOf, tagHubIntroJa, tagHubVoices, playerTagHubs, type TagVoice } from '@/lib/tagHub';
 import {
   fighterHubOf,
   fighterHubIntroJa,
@@ -196,16 +189,15 @@ export default async function TagPage({
   const teamLp = hub || fighter ? null : teamLpOf(decoded, feed.length);
   const heading = await headingOf(locale, decoded, teamLp);
   // 選手・ファイタータグLP: 反応そのものを LP に直接載せるピックアップ＋LP同士の相互リンク網。
-  // ピックアップは日替わり（voiceSeed）＝同じ記事在庫でも毎日違う声が上に出る。
-  const seed = voiceSeed();
+  // ピックアップは「その人に言及している声」だけを質の高い順に（tagHubVoices）。
   let voices: TagVoice[] = [];
   let otherHubs: { player: Player; count: number }[] = [];
   let otherFighters: { fighter: Fighter; count: number }[] = [];
   if (hub) {
-    voices = tagHubVoices(feed, seed);
+    voices = tagHubVoices(feed, hub);
     otherHubs = playerTagHubs(await getAllTags()).filter(({ player }) => player.slug !== hub.slug);
   } else if (fighter) {
-    voices = tagHubVoices(feed, seed);
+    voices = tagHubVoices(feed, fighter);
     otherFighters = fighterTagHubs(await getAllTags()).filter(
       ({ fighter: f }) => f.slug !== fighter.slug,
     );

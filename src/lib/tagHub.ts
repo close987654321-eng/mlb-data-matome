@@ -71,62 +71,166 @@ export function tagHubIntroJa(
 /** タグLPに直接引用する「現地ファンの声」1件（記事＋その代表コメント）。 */
 export type TagVoice = { thread: Thread; comment: ThreadComment };
 
-/** LP に載せる声の総数と、開いた状態でない時に見せる件数（残りは「もっと見る」で開く）。 */
+/** LP に載せる声の総数と、畳んだ状態で見せる件数（残りは「もっと見る」で開く）。 */
 export const VOICES_LIMIT = 20;
 export const VOICES_VISIBLE = 5;
 
-/** 候補を拾う記事の窓＝直近何本の記事から声を集めるか（古い記事だけの日を作らない）。 */
-const POOL_THREADS = 24;
-/** 1記事から拾う声の上限。全記事の1番手 → 2番手 … の順で積むので1記事に偏らない。 */
-const PER_THREAD = 3;
+/** 声を探す記事の窓（この本数ぶんの記事を読む）。 */
+const POOL_THREADS = 40;
+/** 1記事から採る声の上限。1本の記事の話題でピックアップを埋めない。 */
+const PER_THREAD = 2;
+/** 一言レス（「うおおお」等）を弾く最小文字数。 */
+const MIN_BODY = 16;
 
-/** 記事内のコメントの序列: フック引用 → ハイライト → スコア降順（NextReadCard と同じ考え方）。 */
-function rankedComments(thread: Thread): ThreadComment[] {
-  const usable = (thread.comments ?? []).filter(
-    (c) => (c.bodyJa ?? '').trim() !== '' || (c.bodyEn ?? '').trim() !== '',
-  );
-  return usable.sort((a, b) => {
-    if (!!a.isHook !== !!b.isHook) return a.isHook ? -1 : 1;
-    if (!!a.isHighlight !== !!b.isHighlight) return a.isHighlight ? -1 : 1;
-    return b.score - a.score;
-  });
+/** 声の主題（選手・ファイター）。表記ゆれを集めて「その人を語っているか」を判定するのに使う。 */
+export type VoiceSubject = {
+  nameJa: string;
+  nameEn: string;
+  aliases?: string[];
+  shortJa?: string[];
+};
+
+/** 比較用の正規化: 大小文字・アクセント・中黒/空白の差を消す（Sánchez=sanchez, ラーズ・ヌートバー=ラーズヌートバー）。 */
+function normalize(s: string): string {
+  return s
+    .normalize('NFKD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[・\s]/g, '');
+}
+
+/** 絵文字・記号を除いた実質の文字数。「㊗️🇯🇵スガノ ナイスピッチ👏🎉」のような一言レスを弾くために使う。 */
+function textLength(s: string): number {
+  return s.replace(/[\p{Extended_Pictographic}\p{Regional_Indicator}\p{So}\p{Sk}\s]/gu, '').length;
+}
+
+/** 表示に使う本文（ja 優先・無ければ en）。 */
+function voiceBody(c: ThreadComment): string {
+  return (c.bodyJa ?? '').trim() || (c.bodyEn ?? '').trim();
 }
 
 /**
- * 日替わりの種＝JST の通日。SSG なのでこれはビルド時に確定するが、本サイトは成績スナップショット CI と
- * 日次の記事公開ルーチンで毎日デプロイされる＝実運用では日付が変わるたびに選び直される。
+ * その人を指す表記のゆれ一覧。日本語は姓・名の単独表記（shortJa）とタグのエイリアス、
+ * 英語はフルネームと4文字以上のトークン（Ohtani / Shohei）。カタカナ名は「・」で割った要素も足す。
  */
-export function voiceSeed(now: Date = new Date()): number {
-  return Math.floor((now.getTime() + 9 * 60 * 60 * 1000) / 86_400_000); // JST の通日
+function subjectPatterns(subject: VoiceSubject): string[] {
+  const parts = [
+    subject.nameJa,
+    subject.nameEn,
+    ...(subject.aliases ?? []),
+    ...(subject.shortJa ?? []),
+    ...subject.nameJa.split('・').filter((w) => w.length >= 3),
+    ...subject.nameEn.split(/[\s-]+/).filter((w) => w.length >= 4),
+  ];
+  return [...new Set(parts.map(normalize).filter((w) => w.length >= 2))];
 }
 
-/**
- * タグLPの「現地ファンの声ピックアップ」。直近 POOL_THREADS 本の記事から1本につき最大 PER_THREAD 件の
- * コメントを候補に積み、その日の種で切り出し位置をずらして limit 件を返す。
- * 「{選手名} 海外の反応」で来た人に一覧カードだけでなく反応そのものを LP 上で即見せる＝
- * クエリ意図と一致する実テキストが LP に載る。記事追加だけでなく**日付が変わるだけで中身が入れ替わる**ので、
- * 試合の無い時期でも LP が同じ顔にならない（QDF/再訪の鮮度）。
- * ずらし幅は VOICES_VISIBLE ＝初期表示の5件が毎日まるごと入れ替わる（1件ずつのスライドだと変化が見えない）。
- * 同一記事の n 番手同士は候補列で POOL_THREADS 件離れる＝窓幅 limit がそれ未満なら同じ記事は1日に1回しか出ない。
- */
-export function tagHubVoices(feed: FeedItem[], seed = 0, limit = VOICES_LIMIT): TagVoice[] {
-  const pool: TagVoice[] = [];
-  const threads = feed
-    .flatMap((item) => (item.kind === 'thread' ? [item.thread] : []))
-    .slice(0, POOL_THREADS)
-    .map((thread) => ({ thread, comments: rankedComments(thread) }));
-  for (let nth = 0; nth < PER_THREAD; nth++) {
-    for (const { thread, comments } of threads) {
-      const comment = comments[nth];
-      if (comment) pool.push({ thread, comment });
+/** コメント本文（日英どちらでも）のどこでその人に言及しているか。none=言及なし / lead=書き出しが本人の話。 */
+function mentionOf(comment: ThreadComment, patterns: string[]): 'none' | 'body' | 'lead' {
+  let found: 'none' | 'body' = 'none';
+  for (const text of [comment.bodyJa ?? '', comment.bodyEn ?? '']) {
+    const hay = normalize(text);
+    for (const p of patterns) {
+      const at = hay.indexOf(p);
+      if (at < 0) continue;
+      if (at <= 40) return 'lead'; // 書き出しで名前が出る＝その人が主語のコメント
+      found = 'body';
     }
   }
-  if (pool.length === 0) return [];
-  const start = (((seed * VOICES_VISIBLE) % pool.length) + pool.length) % pool.length;
-  return Array.from(
-    { length: Math.min(limit, pool.length) },
-    (_, i) => pool[(start + i) % pool.length],
-  );
+  return found;
+}
+
+/** 使えるコメント（本文があり、一言レスでない）を票数の多い順に。 */
+function usableComments(thread: Thread): ThreadComment[] {
+  return (thread.comments ?? [])
+    .filter((c) => textLength(voiceBody(c)) >= MIN_BODY)
+    .sort((a, b) => b.score - a.score);
+}
+
+/**
+ * 声1件の「読ませる度」。記事をまたいで並べるので、票数の絶対値（YouTubeは万単位・Redditは数百）ではなく
+ * **記事内での順位**を使う＝どの記事の声も同じものさしで比べられる。
+ */
+function voiceQuality(
+  comment: ThreadComment,
+  rankInThread: number,
+  totalInThread: number,
+  feedIndex: number,
+  mention: 'body' | 'lead',
+): number {
+  let q = totalInThread > 1 ? 1 - rankInThread / (totalInThread - 1) : 1; // 記事内の票数順位（1位=1）
+  if (mention === 'lead') q += 0.4; // 本人が主語＝ついでに名前が出ただけの声より上に置く
+  if (comment.isHook) q += 1.5; // 記事が冒頭に掲げた引用＝編集で選んだ一番の声
+  if (comment.isHighlight) q += 0.8;
+  const len = textLength(voiceBody(comment));
+  if (len >= 40 && len <= 400) q += 0.6; // 一言でも長文コピペでもない“読ませる”長さ
+  if (feedIndex < 8) q += 0.5; // 直近の記事を少しだけ優遇（LPの鮮度）
+  else if (feedIndex < 20) q += 0.25;
+  return q;
+}
+
+/**
+ * タグLPの「現地ファンの声ピックアップ」。
+ * **その選手/ファイターに言及しているコメントだけ**を直近 POOL_THREADS 本の記事から集め、
+ * 読ませる度（voiceQuality）の高い順に limit 件返す。
+ *
+ * 以前は記事ごとの代表コメント＝票数最上位を機械的に採っていたが、試合まとめの最上位コメントは
+ * 「チーム全体の話」「別の選手の話」であることが多く、選手LPに無関係な声が並んだ（2026-07-28 指摘）。
+ * 名前で絞ることで「{選手名} 海外の反応」で来た読者が求める“その選手について何が言われているか”に揃う。
+ * まず1記事 PER_THREAD 件までで拾って話題を散らし、枠が余ったら残りの言及コメントを質順に足す
+ * （記事が少ない選手＝言及が数本の記事に集中する選手でも埋まるように）。
+ * それでも VOICES_VISIBLE 件に満たないときだけ、記事の代表コメントで不足分を補って空欄を防ぐ。
+ */
+export function tagHubVoices(
+  feed: FeedItem[],
+  subject: VoiceSubject,
+  limit = VOICES_LIMIT,
+): TagVoice[] {
+  const patterns = subjectPatterns(subject);
+  const hits: { voice: TagVoice; q: number }[] = [];
+  const spare: TagVoice[] = []; // 言及なしの代表コメント（不足時の埋め合わせ用）
+  feed
+    .flatMap((item) => (item.kind === 'thread' ? [item.thread] : []))
+    .slice(0, POOL_THREADS)
+    .forEach((thread, feedIndex) => {
+      const comments = usableComments(thread);
+      let hitInThread = 0;
+      comments.forEach((comment, rank) => {
+        const mention = mentionOf(comment, patterns);
+        if (mention === 'none') return;
+        hitInThread++;
+        hits.push({
+          voice: { thread, comment },
+          q: voiceQuality(comment, rank, comments.length, feedIndex, mention),
+        });
+      });
+      if (hitInThread === 0 && comments[0]) spare.push({ thread, comment: comments[0] });
+    });
+
+  hits.sort((a, b) => b.q - a.q);
+  const picked: typeof hits = [];
+  const overflow: typeof hits = [];
+  const perThread = new Map<string, number>();
+  for (const hit of hits) {
+    const key = hit.voice.thread.id;
+    const n = perThread.get(key) ?? 0;
+    if (n < PER_THREAD && picked.length < limit) {
+      picked.push(hit);
+      perThread.set(key, n + 1);
+    } else {
+      overflow.push(hit); // 1記事の上限で溢れた分＝枠が余ったら質順に戻す
+    }
+  }
+  for (const hit of overflow) {
+    if (picked.length >= limit) break;
+    picked.push(hit);
+  }
+  const voices = picked.sort((a, b) => b.q - a.q).map((p) => p.voice);
+  for (const s of spare) {
+    if (voices.length >= VOICES_VISIBLE) break;
+    voices.push(s);
+  }
+  return voices;
 }
 
 /**

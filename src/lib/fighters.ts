@@ -29,6 +29,8 @@ export type Fighter = {
   slug: string;
   nameJa: string;
   nameEn: string;
+  /** 姓・名の単独表記。コメント本文の「井上」「尚弥」を拾うため（players.ts の shortJa と同じ役割）。 */
+  shortJa?: string[];
   sport: Sport;
   /** 肩書き（例「S・バンタム級4団体統一王者」）。タイトル変動時に手動更新 */
   accoladeJa: string;
@@ -45,6 +47,7 @@ export const FIGHTERS: Fighter[] = [
     slug: 'naoya-inoue',
     nameJa: '井上尚弥',
     nameEn: 'Naoya Inoue',
+    shortJa: ['井上', '尚弥'],
     sport: 'boxing',
     accoladeJa: 'プロボクシング・S・バンタム級4団体統一王者（WBA・WBC・IBF・WBO）',
     record: { wins: 33, losses: 0, draws: 0, kos: 27, asOf: '2026-05-02' },
@@ -92,6 +95,7 @@ export const FIGHTERS: Fighter[] = [
     slug: 'junto-nakatani',
     nameJa: '中谷潤人',
     nameEn: 'Junto Nakatani',
+    shortJa: ['中谷', '潤人'],
     sport: 'boxing',
     accoladeJa: 'プロボクシング・3階級制覇王者（前WBC世界バンタム級王者）',
     record: { wins: 32, losses: 1, draws: 0, kos: 24, asOf: '2026-05-02' },

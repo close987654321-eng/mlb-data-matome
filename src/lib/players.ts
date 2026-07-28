@@ -22,6 +22,10 @@ export type Player = {
   rival?: boolean; // 非日本人だが比較用に載せる選手（大谷のサイ・ヤング賞争いのライバル等）。
   // 一覧（/player）では日本人の比較表に混ぜず「サイヤング争い」専用ブロックに出す。詳細ページは通常どおり生成。
   aliases?: string[]; // 記事タグの表記ゆれ吸収（例: フルネーム表記）。threadsOf / タグのハブ振り分けで nameJa と同じ扱い。
+  // 姓・名の単独表記。コメント本文は「大谷」「翔平」のように略されるので、タグLPの声ピックアップが
+  // 「その選手を語っているコメント」を拾うために使う（tagHubVoices）。漢字名は機械分割できないので手で持つ。
+  // カタカナ名（ライバル）は nameJa を「・」で割れば足りるため不要。
+  shortJa?: string[];
 };
 
 const mlb = (slug: string, id: number) => `https://www.mlb.com/player/${slug}-${id}`;
@@ -30,45 +34,59 @@ const wiki = (nameJa: string) => `https://ja.wikipedia.org/wiki/${encodeURICompo
 export const PLAYERS: Player[] = [
   { slug: 'shohei-ohtani', nameJa: '大谷翔平', nameEn: 'Shohei Ohtani', mlbId: 660271,
     bio: '投打二刀流でMLBを代表するスーパースター。先発登板と本塁打を同時にこなす。',
+    shortJa: ['大谷', '翔平'],
     sameAs: [mlb('shohei-ohtani', 660271), wiki('大谷翔平')] },
   { slug: 'yoshinobu-yamamoto', nameJa: '山本由伸', nameEn: 'Yoshinobu Yamamoto', mlbId: 808967,
     bio: '日本球界からMLBに渡った先発右腕のエース格。多彩な変化球と制球が武器。',
+    shortJa: ['山本', '由伸'],
     sameAs: [mlb('yoshinobu-yamamoto', 808967), wiki('山本由伸_(野球)')] },
   { slug: 'roki-sasaki', nameJa: '佐々木朗希', nameEn: 'Roki Sasaki', mlbId: 808963,
     bio: '「令和の怪物」と呼ばれる剛速球右腕。',
+    shortJa: ['佐々木', '朗希'],
     sameAs: [mlb('roki-sasaki', 808963), wiki('佐々木朗希')] },
   { slug: 'shota-imanaga', nameJa: '今永昇太', nameEn: 'Shota Imanaga', mlbId: 684007,
     bio: '緩急と制球を武器にする先発左腕。',
+    shortJa: ['今永', '昇太'],
     sameAs: [mlb('shota-imanaga', 684007), wiki('今永昇太')] },
   { slug: 'kodai-senga', nameJa: '千賀滉大', nameEn: 'Kodai Senga', mlbId: 673540,
     bio: '「お化けフォーク」を操る先発右腕。',
+    shortJa: ['千賀', '滉大'],
     sameAs: [mlb('kodai-senga', 673540), wiki('千賀滉大')] },
   { slug: 'seiya-suzuki', nameJa: '鈴木誠也', nameEn: 'Seiya Suzuki', mlbId: 673548,
     bio: '長打力のある右の外野手。',
+    shortJa: ['鈴木', '誠也'],
     sameAs: [mlb('seiya-suzuki', 673548), wiki('鈴木誠也')] },
   { slug: 'masataka-yoshida', nameJa: '吉田正尚', nameEn: 'Masataka Yoshida', mlbId: 807799,
     bio: 'コンタクト力に優れた外野手／DH。',
+    shortJa: ['吉田', '正尚'],
     sameAs: [mlb('masataka-yoshida', 807799), wiki('吉田正尚')] },
   { slug: 'yusei-kikuchi', nameJa: '菊池雄星', nameEn: 'Yusei Kikuchi', mlbId: 579328,
     bio: '力のある速球を投げる先発左腕。',
+    shortJa: ['菊池', '雄星'],
     sameAs: [mlb('yusei-kikuchi', 579328), wiki('菊池雄星')] },
   { slug: 'yuki-matsui', nameJa: '松井裕樹', nameEn: 'Yuki Matsui', mlbId: 673513,
     bio: '三振を奪うリリーフ左腕。',
+    shortJa: ['松井', '裕樹'],
     sameAs: [mlb('yuki-matsui', 673513), wiki('松井裕樹')] },
   { slug: 'tomoyuki-sugano', nameJa: '菅野智之', nameEn: 'Tomoyuki Sugano', mlbId: 608372,
     bio: '日本球界で多くのタイトルを獲った実績を持つ先発右腕。',
+    shortJa: ['菅野', '智之'],
     sameAs: [mlb('tomoyuki-sugano', 608372), wiki('菅野智之')] },
   { slug: 'kazuma-okamoto', nameJa: '岡本和真', nameEn: 'Kazuma Okamoto', mlbId: 672960,
     bio: '長距離砲の内野手。',
+    shortJa: ['岡本', '和真'],
     sameAs: [mlb('kazuma-okamoto', 672960), wiki('岡本和真')] },
   { slug: 'munetaka-murakami', nameJa: '村上宗隆', nameEn: 'Munetaka Murakami', mlbId: 808959,
     bio: '日本で本塁打記録を打ち立てた強打の内野手。',
+    shortJa: ['村上', '宗隆'],
     sameAs: [mlb('munetaka-murakami', 808959), wiki('村上宗隆')] },
   { slug: 'tatsuya-imai', nameJa: '今井達也', nameEn: 'Tatsuya Imai', mlbId: 837227,
     bio: '日本球界出身の先発右腕。',
+    shortJa: ['今井', '達也'],
     sameAs: [mlb('tatsuya-imai', 837227), wiki('今井達也')] },
   { slug: 'rikuu-nishida', nameJa: '西田陸羽', nameEn: 'Rikuu Nishida', mlbId: 807747,
     bio: 'MLB組織に所属する日本人選手。',
+    shortJa: ['西田', '陸羽'],
     sameAs: [mlb('rikuu-nishida', 807747)] },
   // 日系（母が日本人）。birthCountry は米国なので jp 名簿の自動抽出には載らない＝明示で追加。
   { slug: 'lars-nootbaar', nameJa: 'ヌートバー', nameEn: 'Lars Nootbaar', mlbId: 663457,
