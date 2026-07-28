@@ -71,29 +71,62 @@ export function tagHubIntroJa(
 /** タグLPに直接引用する「現地ファンの声」1件（記事＋その代表コメント）。 */
 export type TagVoice = { thread: Thread; comment: ThreadComment };
 
+/** LP に載せる声の総数と、開いた状態でない時に見せる件数（残りは「もっと見る」で開く）。 */
+export const VOICES_LIMIT = 20;
+export const VOICES_VISIBLE = 5;
+
+/** 候補を拾う記事の窓＝直近何本の記事から声を集めるか（古い記事だけの日を作らない）。 */
+const POOL_THREADS = 24;
+/** 1記事から拾う声の上限。全記事の1番手 → 2番手 … の順で積むので1記事に偏らない。 */
+const PER_THREAD = 3;
+
+/** 記事内のコメントの序列: フック引用 → ハイライト → スコア降順（NextReadCard と同じ考え方）。 */
+function rankedComments(thread: Thread): ThreadComment[] {
+  const usable = (thread.comments ?? []).filter(
+    (c) => (c.bodyJa ?? '').trim() !== '' || (c.bodyEn ?? '').trim() !== '',
+  );
+  return usable.sort((a, b) => {
+    if (!!a.isHook !== !!b.isHook) return a.isHook ? -1 : 1;
+    if (!!a.isHighlight !== !!b.isHighlight) return a.isHighlight ? -1 : 1;
+    return b.score - a.score;
+  });
+}
+
 /**
- * タグLPの「現地ファンの声ピックアップ」。最新記事から1本につき代表コメント1件を抜く。
- * 「{選手名} 海外の反応」で来た人に一覧カードだけでなく反応そのものを LP 上で即見せる＝
- * クエリ意図と一致する実テキストが LP に載り、記事追加のたびに中身が入れ替わる（鮮度）。
- * 代表の選び方は記事のフック引用 → 最高スコアのハイライト → 最高スコア（NextReadCard と同じ序列）。
+ * 日替わりの種＝JST の通日。SSG なのでこれはビルド時に確定するが、本サイトは成績スナップショット CI と
+ * 日次の記事公開ルーチンで毎日デプロイされる＝実運用では日付が変わるたびに選び直される。
  */
-export function tagHubVoices(feed: FeedItem[], limit = 6): TagVoice[] {
-  const voices: TagVoice[] = [];
-  for (const item of feed) {
-    if (item.kind !== 'thread') continue;
-    const comments = item.thread.comments ?? [];
-    if (comments.length === 0) continue;
-    const byScore = (pool: ThreadComment[]) =>
-      pool.reduce<ThreadComment | null>((top, c) => (!top || c.score > top.score ? c : top), null);
-    const comment =
-      comments.find((c) => c.isHook) ??
-      byScore(comments.filter((c) => c.isHighlight)) ??
-      byScore(comments);
-    if (!comment) continue;
-    voices.push({ thread: item.thread, comment });
-    if (voices.length >= limit) break;
+export function voiceSeed(now: Date = new Date()): number {
+  return Math.floor((now.getTime() + 9 * 60 * 60 * 1000) / 86_400_000); // JST の通日
+}
+
+/**
+ * タグLPの「現地ファンの声ピックアップ」。直近 POOL_THREADS 本の記事から1本につき最大 PER_THREAD 件の
+ * コメントを候補に積み、その日の種で切り出し位置をずらして limit 件を返す。
+ * 「{選手名} 海外の反応」で来た人に一覧カードだけでなく反応そのものを LP 上で即見せる＝
+ * クエリ意図と一致する実テキストが LP に載る。記事追加だけでなく**日付が変わるだけで中身が入れ替わる**ので、
+ * 試合の無い時期でも LP が同じ顔にならない（QDF/再訪の鮮度）。
+ * ずらし幅は VOICES_VISIBLE ＝初期表示の5件が毎日まるごと入れ替わる（1件ずつのスライドだと変化が見えない）。
+ * 同一記事の n 番手同士は候補列で POOL_THREADS 件離れる＝窓幅 limit がそれ未満なら同じ記事は1日に1回しか出ない。
+ */
+export function tagHubVoices(feed: FeedItem[], seed = 0, limit = VOICES_LIMIT): TagVoice[] {
+  const pool: TagVoice[] = [];
+  const threads = feed
+    .flatMap((item) => (item.kind === 'thread' ? [item.thread] : []))
+    .slice(0, POOL_THREADS)
+    .map((thread) => ({ thread, comments: rankedComments(thread) }));
+  for (let nth = 0; nth < PER_THREAD; nth++) {
+    for (const { thread, comments } of threads) {
+      const comment = comments[nth];
+      if (comment) pool.push({ thread, comment });
+    }
   }
-  return voices;
+  if (pool.length === 0) return [];
+  const start = (((seed * VOICES_VISIBLE) % pool.length) + pool.length) % pool.length;
+  return Array.from(
+    { length: Math.min(limit, pool.length) },
+    (_, i) => pool[(start + i) % pool.length],
+  );
 }
 
 /**

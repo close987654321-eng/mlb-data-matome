@@ -4,7 +4,14 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
-import { tagHubOf, tagHubIntroJa, tagHubVoices, playerTagHubs, type TagVoice } from '@/lib/tagHub';
+import {
+  tagHubOf,
+  tagHubIntroJa,
+  tagHubVoices,
+  voiceSeed,
+  playerTagHubs,
+  type TagVoice,
+} from '@/lib/tagHub';
 import {
   fighterHubOf,
   fighterHubIntroJa,
@@ -15,7 +22,6 @@ import {
 import type { Fighter } from '@/lib/fighters';
 import { SPORT_INFO } from '@/lib/sports';
 import { getEditorNote, type EditorNote } from '@/lib/editorNotes';
-import { threadTitle } from '@/lib/series';
 import {
   teamHubOf,
   teamHubIntroJa,
@@ -31,6 +37,7 @@ import { standingOfTeam, standingPhraseJa } from '@/lib/standings';
 import type { Player } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import FeedCard from '@/components/FeedCard';
+import TagVoices from '@/components/TagVoices';
 import TeamStandings from '@/components/TeamStandings';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -189,14 +196,16 @@ export default async function TagPage({
   const teamLp = hub || fighter ? null : teamLpOf(decoded, feed.length);
   const heading = await headingOf(locale, decoded, teamLp);
   // 選手・ファイタータグLP: 反応そのものを LP に直接載せるピックアップ＋LP同士の相互リンク網。
+  // ピックアップは日替わり（voiceSeed）＝同じ記事在庫でも毎日違う声が上に出る。
+  const seed = voiceSeed();
   let voices: TagVoice[] = [];
   let otherHubs: { player: Player; count: number }[] = [];
   let otherFighters: { fighter: Fighter; count: number }[] = [];
   if (hub) {
-    voices = tagHubVoices(feed);
+    voices = tagHubVoices(feed, seed);
     otherHubs = playerTagHubs(await getAllTags()).filter(({ player }) => player.slug !== hub.slug);
   } else if (fighter) {
-    voices = tagHubVoices(feed);
+    voices = tagHubVoices(feed, seed);
     otherFighters = fighterTagHubs(await getAllTags()).filter(
       ({ fighter: f }) => f.slug !== fighter.slug,
     );
@@ -406,51 +415,14 @@ export default async function TagPage({
       {teamLp && <TeamStandings teamId={teamLp.info.id} locale={locale} />}
 
       {/* 選手・ファイタータグLP: 反応そのものを LP に直接引用する（クエリ意図との一致＋記事追加ごとに入れ替わる鮮度）。 */}
-      {(hub || fighter) && voices.length > 0 && (
-        <section className="space-y-5">
-          <SectionHeading
-            label={t('tag.voices', {
-              name: locale === 'en' ? (hub ?? fighter)!.nameEn : (hub ?? fighter)!.nameJa,
-            })}
-          />
-          <ul className="grid gap-4 sm:grid-cols-2">
-            {voices.map(({ thread, comment }) => {
-              const body =
-                locale === 'ja' ? comment.bodyJa : comment.bodyEn || comment.bodyJa;
-              const isYoutube = thread.format === 'youtube';
-              const isInterview = thread.format === 'interview';
-              return (
-                <li
-                  key={`${thread.sport}/${thread.id}`}
-                  className="flex flex-col rounded-[3px] border border-line bg-surface p-5"
-                >
-                  <p className="text-sm leading-relaxed text-ink">“{body}”</p>
-                  <div className="mt-3 flex items-center justify-between text-xs text-ink-soft">
-                    <span className="font-medium">
-                      {isYoutube || isInterview ? comment.author : `u/${comment.author}`}
-                    </span>
-                    {!isInterview && (
-                      <span className="tabular-nums">
-                        {isYoutube ? '👍' : '▲'} {comment.score.toLocaleString()}
-                      </span>
-                    )}
-                  </div>
-                  <Link
-                    href={`/${thread.sport}/${thread.id}`}
-                    className="group mt-4 flex items-center justify-between gap-3 border-t border-line pt-3 text-xs text-ink-mute transition-colors hover:text-ink"
-                  >
-                    <span className="line-clamp-1">
-                      {thread.fetchedAt.slice(0, 10)} ・ {threadTitle(thread, locale)}
-                    </span>
-                    <span aria-hidden className="shrink-0 transition-transform group-hover:translate-x-0.5">
-                      →
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+      {(hub || fighter) && (
+        <TagVoices
+          voices={voices}
+          locale={locale}
+          label={t('tag.voices', {
+            name: locale === 'en' ? (hub ?? fighter)!.nameEn : (hub ?? fighter)!.nameJa,
+          })}
+        />
       )}
 
       {/* 選手・ファイタータグLP: 編集部ノート＝声ピックアップを横断した「海外でどう見られているか」の要約（ja のみ・手書き）。 */}
