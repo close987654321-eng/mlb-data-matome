@@ -25,7 +25,7 @@ import {
   TEAM_HUB_MIN_ARTICLES,
   type TeamHub,
 } from '@/lib/teamHub';
-import { teamLogoUrl, teamOfficialUrl } from '@/lib/teams';
+import { getTeam, headshotUrl, teamLogoUrl, teamOfficialUrl, type TeamInfo } from '@/lib/teams';
 import { standingOfTeam, standingPhraseJa } from '@/lib/standings';
 import type { Player } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
@@ -206,11 +206,16 @@ export default async function TagPage({
   let intro: string | undefined;
   let editorNote: EditorNote | null = null; // 編集部ノート（ja のみ。手書きの和文要約）
   let teamPlayers: Player[] = [];
+  let hubTeam: TeamInfo | undefined; // 顔写真に添える所属チーム（ロゴ・カラー）。snapshot 由来＝移籍に自動追従。
   const statLines = new Map<string, string>(); // slug → 成績1行（所属日本人選手リンクに添える）
-  if (hub && locale !== 'en') {
+  if (hub) {
+    // 所属は ja/en どちらのLPでも顔写真の横に出すので、導入文（ja のみ）と切り離して取る。
     const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(hub.mlbId)]);
-    intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
-    editorNote = await getEditorNote(hub.slug);
+    hubTeam = getTeam(season?.team);
+    if (locale !== 'en') {
+      intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
+      editorNote = await getEditorNote(hub.slug);
+    }
   } else if (fighter && locale !== 'en') {
     intro = fighterHubIntroJa(fighter, feed.length);
     editorNote = await getEditorNote(fighter.slug);
@@ -251,6 +256,8 @@ export default async function TagPage({
                 '@id': `${absoluteUrl(locale, `/player/${hub.slug}`)}#person`,
                 name: hub.nameJa,
                 alternateName: hub.nameEn,
+                // ページに実際に出している公式顔写真（同じURL）＝エンティティの画像として明示する。
+                image: headshotUrl(hub.mlbId, 'spot'),
                 url: absoluteUrl(locale, `/player/${hub.slug}`),
                 ...(hub.sameAs.length ? { sameAs: hub.sameAs } : {}),
               },
@@ -332,6 +339,33 @@ export default async function TagPage({
           {t('tag.eyebrow')}
         </span>
         <div className="mt-2 flex items-center gap-4">
+          {/* 選手タグLP: 顔写真＋所属チームのロゴ／カラー。「{選手名} 海外の反応」で来た人に
+              “その人のページに来た”と一目で伝える（画像は MLB 公式CDNから直リンク＝再ホストしない）。
+              チーム情報は snapshot 由来なので移籍しても自動で追従する。 */}
+          {hub && (
+            <div className="relative shrink-0">
+              {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式CDNの顔写真を直リンク（再ホストしない） */}
+              <img
+                src={headshotUrl(hub.mlbId, 'spot')}
+                alt={hubTeam ? `${heading}（${hubTeam.nameEn}）` : heading}
+                width={64}
+                height={64}
+                className="h-14 w-14 rounded-full bg-paper object-cover sm:h-16 sm:w-16"
+                style={hubTeam ? { boxShadow: `0 0 0 2px ${hubTeam.color}` } : undefined}
+              />
+              {hubTeam && (
+                // eslint-disable-next-line @next/next/no-img-element -- MLB公式チームロゴSVGを直リンク
+                <img
+                  src={teamLogoUrl(hubTeam.id)}
+                  alt={hubTeam.nameEn}
+                  width={24}
+                  height={24}
+                  loading="lazy"
+                  className="absolute -bottom-1 -right-1 h-6 w-6 rounded-[2px] bg-surface object-contain p-0.5 ring-1 ring-line"
+                />
+              )}
+            </div>
+          )}
           {teamLp && (
             // eslint-disable-next-line @next/next/no-img-element -- MLB公式チームロゴSVGを直リンク（再ホストしない）
             <img
