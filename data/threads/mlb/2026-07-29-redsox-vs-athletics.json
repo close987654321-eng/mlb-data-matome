@@ -15,12 +15,27 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=7ZMuUhWZZDU",
+    "thumbUrl": "/media/2026-07-29-redsox-vs-athletics-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）"
   },
-  "tags": ["レッドソックス", "アスレチックス", "吉田正尚", "ニック・カーツ", "海外の反応"],
+  "tags": [
+    "レッドソックス",
+    "アスレチックス",
+    "吉田正尚",
+    "ニック・カーツ",
+    "海外の反応"
+  ],
   "game": {
-    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 3 },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 4 }
+    "away": {
+      "ja": "レッドソックス",
+      "en": "Boston Red Sox",
+      "score": 3
+    },
+    "home": {
+      "ja": "アスレチックス",
+      "en": "Athletics",
+      "score": 4
+    }
   },
   "stats": [
     {
