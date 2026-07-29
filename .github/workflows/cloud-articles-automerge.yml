@@ -61,3 +61,14 @@ jobs:
           if [ "$pushed" != "1" ]; then echo "5回リトライしても push できず" >&2; exit 1; fi
           # 公開済みのクラウドブランチは掃除（失敗は無視）
           git push origin --delete "$BRANCH" || true
+
+      # 公開直後に IndexNow へ即時通知（Bing/Yandex/Naver ほか。Google は非対応で sitemap 側が受け皿）。
+      # 鍵ファイル public/<key>.txt とスクリプトは前から用意済みだったが、どのワークフローからも
+      # 呼ばれておらず手動運用のままだった（2026-07-30 の監査で判明）。本サイトの勝ち筋は
+      # 「試合直後の鮮度（QDF）」なので、無人公開の直後に必ず叩く。
+      # Vercel のデプロイ完了を少し待ってから通知する（未デプロイのURLを送っても拾われないため）。
+      # 通知の失敗はコンテンツ公開を巻き戻す理由にはならないので非致命扱い。
+      - name: Notify IndexNow（新着記事の即時インデックス通知）
+        run: |
+          sleep 90
+          node scripts/ping-indexnow.mjs --latest 5 || echo "IndexNow通知に失敗（非致命）"

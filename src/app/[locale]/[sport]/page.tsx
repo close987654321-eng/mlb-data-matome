@@ -11,7 +11,7 @@ import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
 import TeamHubLinks from '@/components/TeamHubLinks';
-import { absoluteUrl, localeAlternates } from '@/lib/site';
+import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
 
@@ -61,8 +61,8 @@ export async function generateMetadata({
     title: { absolute: hub.titleJa },
     description,
     alternates: localeAlternates(locale, `/${sport}`),
-    openGraph: { title: hub.titleJa, description, url },
-    twitter: { card: 'summary_large_image', title: hub.titleJa, description },
+    openGraph: { title: hub.titleJa, description, url, images: OG_IMAGES },
+    twitter: { card: 'summary_large_image', title: hub.titleJa, description, images: OG_IMAGES_TW },
   };
 }
 

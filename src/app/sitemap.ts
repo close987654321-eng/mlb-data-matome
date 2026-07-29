@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { getAllThreads } from '@/lib/data';
+import { getAllThreads, getWatchAlongThreads, getWatchSingles } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { getAllTags } from '@/lib/tags';
 import { isTagIndexable } from '@/lib/tagIndex';
@@ -9,6 +9,9 @@ import { getPlayersSnapshot } from '@/lib/playerStats';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
 import { ALLSTAR } from '@/lib/allstar';
 import { SPORTS } from '@/lib/sports';
+import { SERIES } from '@/lib/series';
+import { getCyDetailRows } from '@/lib/cyYoungBoard';
+import { getMvpDetailRows } from '@/lib/mvpBoard';
 import { locales, defaultLocale } from '@/lib/i18n';
 
 // 本番ドメイン。プレビュー等で差し替えたい場合は NEXT_PUBLIC_SITE_URL で上書きする。
@@ -21,25 +24,35 @@ const BASE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://matome-mlb-kaigai
 // path は先頭 '/' 始まり（ホームは ''）。
 function localeUrl(locale: (typeof locales)[number], path: string): string {
   const prefix = locale === defaultLocale ? '' : `/${locale}`;
-  return `${BASE_URL}${prefix}${path}` || `${BASE_URL}/`;
+  return `${BASE_URL}${prefix}${path}`;
 }
 
 // 1 ページにつき 1 エントリ（ja を正規 URL）。
 // hreflang（alternates.languages）は載せない: en は全ページ noindex（GSC実測 2026-07-11 で
 // 日本語クエリを ja 版と食い合った）ため、sitemap で /en を Google に宣伝しない。
+// URL は canonical（metadataBase 由来＝ホームは末尾スラッシュなし）と必ず同じ文字列にする。
 function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitemap[number] {
   return {
-    url: localeUrl(defaultLocale, path) || `${BASE_URL}/`,
+    url: localeUrl(defaultLocale, path),
     lastModified,
   };
 }
 
+/** NPB注目株の lastmod。成績を手入力した選手はその集計時点を使う（無ければ undefined）。 */
+function prospectAsOf(p: (typeof NPB_PROSPECTS)[number]): string | undefined {
+  return p.season?.asOf;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [threads, columns, tags, snap] = await Promise.all([
+  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows] = await Promise.all([
     getAllThreads(),
     getAllColumns(),
     getAllTags(),
     getPlayersSnapshot(),
+    getWatchAlongThreads(),
+    getWatchSingles(),
+    getCyDetailRows(),
+    getMvpDetailRows(),
   ]);
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
 
@@ -91,16 +104,36 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     ...playerEntries,
-    // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。手キュレーションなので lastmod なし。
-    entry('/prospects'),
-    ...NPB_PROSPECTS.map((p) => entry(`/prospects/${p.slug}`)),
+    // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。
+    // ピラーの lastmod は配下で最も新しい成績時点（手キュレーションなので他に動く日付が無い）。
+    entry('/prospects', maxDate(NPB_PROSPECTS.map(prospectAsOf).filter(Boolean) as string[])),
+    // 個別は手入力した成績の集計時点(season.asOf)を lastmod にする（無い選手は undefined）。
+    ...NPB_PROSPECTS.map((p) => entry(`/prospects/${p.slug}`, prospectAsOf(p))),
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
+    // 「海外ファンと見る」シリーズ棚（/watch/series/{id}）と単発一覧。index 可能なのに
+    // sitemap から漏れていた（2026-07-30 実測）。lastmod はその棚の最新記事。
+    ...Object.keys(SERIES).map((id) => {
+      const newest = watchAlong.find((t) => t.series?.id === id)?.fetchedAt;
+      return entry(`/watch/series/${id}`, newest);
+    }),
+    entry('/watch/singles', singles[0]?.fetchedAt),
+    // 予測ボードの選手別詳細（/cy-young/{id}・/mvp/{id}）。ボードから内部リンクはあるが sitemap には
+    // 載っておらず、毎日成績が動くのに lastmod シグナルが無かった（再クロールが遅れる）。
+    // lastmod は成績スナップショットの日付＝ボードの更新日。
+    ...cyRows.map((r) => entry(`/cy-young/${r.id}`, statDate)),
+    ...mvpRows.map((r) => entry(`/mvp/${r.id}`, statDate)),
     // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。
     // 実質のあるタグ（選手LP／記事3本以上の通常タグ）だけ載せる＝薄い長尾タグLPを sitemap から外す
     // （index 可否の唯一の正は isTagIndexable。タグページ側の robots noindex と一致させる）。
+    // lastmod はそのタグに付く最新記事（LP の description は成績・件数で毎日動くので鮮度を渡す）。
     ...tags
       .filter(({ tag, count }) => isTagIndexable(tag, count))
-      .map(({ tag }) => entry(`/tag/${encodeURIComponent(tag)}`)),
+      .map(({ tag }) =>
+        entry(
+          `/tag/${encodeURIComponent(tag)}`,
+          threads.find((t) => (t.tags ?? []).includes(tag))?.fetchedAt,
+        ),
+      ),
   ];
 }

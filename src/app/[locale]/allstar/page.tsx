@@ -14,7 +14,7 @@ import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import { Link } from '@/lib/navigation';
-import { absoluteUrl, localeAlternates } from '@/lib/site';
+import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { type Locale } from '@/lib/i18n';
 
 export async function generateMetadata({
@@ -30,8 +30,8 @@ export async function generateMetadata({
   return {
     title,
     description,
-    openGraph: { title, description, type: 'website', url: absoluteUrl(locale, '/allstar') },
-    twitter: { card: 'summary_large_image', title, description },
+    openGraph: { title, description, type: 'website', url: absoluteUrl(locale, '/allstar'), images: OG_IMAGES },
+    twitter: { card: 'summary_large_image', title, description, images: OG_IMAGES_TW },
     alternates: localeAlternates(locale, '/allstar'),
   };
 }

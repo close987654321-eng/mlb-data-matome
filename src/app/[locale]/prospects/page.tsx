@@ -5,7 +5,7 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import SectionHeading from '@/components/SectionHeading';
 import { Link } from '@/lib/navigation';
-import { absoluteUrl, localeAlternates } from '@/lib/site';
+import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export function generateStaticParams() {
@@ -25,8 +25,8 @@ export async function generateMetadata({
     title,
     description,
     alternates: localeAlternates(locale, '/prospects'),
-    openGraph: { title, description, type: 'website', url: absoluteUrl(locale, '/prospects') },
-    twitter: { card: 'summary_large_image', title, description },
+    openGraph: { title, description, type: 'website', url: absoluteUrl(locale, '/prospects'), images: OG_IMAGES },
+    twitter: { card: 'summary_large_image', title, description, images: OG_IMAGES_TW },
   };
 }
 

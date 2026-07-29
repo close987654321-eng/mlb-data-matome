@@ -36,6 +36,23 @@ const SPORT_HUBS: Partial<Record<Sport, SportHub>> = {
     leadJa:
       '世界タイトルマッチ・注目のKO・PFP論争に対する海外の反応を、現地ファンのコメントの日本語訳でまとめたページ。翻訳元は海外掲示板 Reddit（r/Boxing）と公式ハイライトのコメント欄。',
   },
+  // mlb/boxing に続いて LP 化（2026-07-30）。未 LP 化のあいだ /mma・/npb は description を
+  // 持たず layout のトップ用コピーをそのまま継いでいた＝トップと同文の重複メタだったため。
+  mma: {
+    titleJa: 'MMA・UFCの海外の反応まとめ｜現地ファンの声を日本語訳',
+    headingJa: 'MMA・UFCの海外の反応まとめ',
+    headingEn: 'MMA — Overseas Fan Reactions',
+    leadJa:
+      'UFC・RIZIN の注目カード、衝撃のKO/一本、次の対戦相手をめぐる論争に対する海外の反応を、現地ファンのコメントの日本語訳でまとめたページ。翻訳元は海外掲示板 Reddit（r/MMA・r/ufc）と公式ハイライトのコメント欄。',
+  },
+  npb: {
+    titleJa: 'NPB注目株の海外の反応まとめ｜next メジャーリーガーへの現地の評価',
+    headingJa: 'NEXT MLB — NPB注目株の海外の反応',
+    headingEn: 'NEXT MLB — NPB Prospects Abroad',
+    // 翻訳元は実際の記事に合わせる（npb の記事は海外メディア発が主・Reddit ではない）。
+    leadJa:
+      'ポスティング・MLB挑戦が噂される NPB の選手を、海外スカウトや現地メディアがどう評価しているかを日本語訳でまとめたページ。翻訳元は MLB Trade Rumors ほか海外メディアの記事と、海外掲示板・公式ハイライトのコメント欄。',
+  },
 };
 
 export function sportHubOf(sport: Sport): SportHub | null {

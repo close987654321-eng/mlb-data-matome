@@ -9,7 +9,7 @@ import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
-import { localeAlternates } from '@/lib/site';
+import { localeAlternates, PAGINATED_ROBOTS } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -41,6 +41,7 @@ export async function generateMetadata({
   const label = locale === 'ja' ? info.labelJa : info.labelEn;
   return {
     title: `${label}（${page}）`,
+    robots: PAGINATED_ROBOTS,
     alternates: localeAlternates(locale, `/${sport}/p/${page}`),
   };
 }

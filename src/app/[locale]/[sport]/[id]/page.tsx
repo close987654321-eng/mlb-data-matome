@@ -7,7 +7,7 @@ import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
-import { coverImage, ogCover } from '@/lib/media';
+import { coverImage, ogCover, youTubeId } from '@/lib/media';
 import { rankNextReads } from '@/lib/nextRead';
 import { isThreadIndexable } from '@/lib/threadIndex';
 import { tagCountMap } from '@/lib/tags';
@@ -166,6 +166,58 @@ export default async function ThreadDetailPage({
   // 試合ページ→選手ハブの個別リンクは日本人選手だけに絞る（打線全員のチップで埋めない。
   // 非日本人は「{自軍}選手の成績を見る」一覧リンクに集約）。JSON-LD の about は全員のまま（SEO）。
   const jpTagged = taggedPlayers.filter((p) => !p.rival);
+
+  // AEO: 「海外ファンは○○を何と言ったか」に答えるのがこのサイトの中身そのものなので、
+  // 抜粋コメントを Comment として機械可読にする（回答エンジン向け。リッチリザルトは狙わない）。
+  // 全件（25〜40件）入れると JSON-LD が本文より重くなり LCP を損ねるので、編集が「効く」と
+  // 判断したコメント（フック・ハイライト）を優先し、残りをスコア順で足して上限10件に抑える。
+  // 訳文(bodyJa)を text にし、原文(bodyEn)は無理に混ぜない＝ページの主言語(ja)と揃える。
+  const AEO_COMMENT_LIMIT = 10;
+  const pickedComments = [
+    ...thread.comments.filter((c) => c.isHook || c.isHighlight),
+    ...thread.comments
+      .filter((c) => !c.isHook && !c.isHighlight)
+      .sort((a, b) => b.score - a.score),
+  ].slice(0, AEO_COMMENT_LIMIT);
+  const commentLd = pickedComments.map((c) => ({
+    '@type': 'Comment',
+    text: c.bodyJa,
+    author: { '@type': 'Person', name: c.author },
+    // score は実測値のみ（捏造しない＝matome R7）。interview 形式はスコアを持たないので出さない。
+    ...(!isInterview && c.score > 0 ? { upvoteCount: c.score } : {}),
+    ...(c.sourceUrl ? { url: c.sourceUrl } : {}),
+  }));
+
+  // AEO: 動画記事（全492本のうち460本＝93%）を VideoObject で宣言する。
+  // uploadDate は必須項目で、YouTube Data API 由来の実測値（media.publishedAt）がある記事にだけ出す
+  // ＝取れていない記事（削除・非公開動画）は捏造せず VideoObject を省く。
+  // これで動画リッチリザルト／Google の動画タブ／Discover の動画枠に載る資格ができる。
+  const ytId = thread.media?.kind === 'video' ? youTubeId(thread.media.url) : null;
+  // 要約を構造化データ用に詰める。途中でぶつ切りにせず句点で切り、無ければ … を足す。
+  const ldDescription = (s: string, max = 200): string => {
+    if (s.length <= max) return s;
+    const cut = s.slice(0, max);
+    const lastStop = cut.lastIndexOf('。');
+    return lastStop > max * 0.5 ? cut.slice(0, lastStop + 1) : cut.trimEnd() + '…';
+  };
+  const videoLd =
+    thread.media?.kind === 'video' && thread.media.publishedAt
+      ? [
+          {
+            '@type': 'VideoObject',
+            name: thread.media.videoTitle || title,
+            description: ldDescription(thread.summaryJa),
+            thumbnailUrl: cover.url,
+            uploadDate: thread.media.publishedAt,
+            embedUrl: ytId ? `https://www.youtube.com/embed/${ytId}` : undefined,
+            contentUrl: thread.media.url,
+            inLanguage: 'en', // 海外の公式ハイライト＝動画自体は英語
+            ...(thread.media.credit ? { creditText: thread.media.credit } : {}),
+            publisher: { '@id': `${SITE_URL}/#organization` },
+          },
+        ]
+      : [];
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -184,15 +236,19 @@ export default async function ThreadDetailPage({
         // 試合直後の反応まとめ＝時事コンテンツなので NewsArticle（Top Stories/News 適格の鍵）。
         '@type': 'NewsArticle',
         headline: title,
-        description: thread.summaryJa.slice(0, 200),
+        description: ldDescription(thread.summaryJa),
         image: { '@type': 'ImageObject', url: cover.url, width: cover.width, height: cover.height },
         datePublished: thread.fetchedAt,
-        dateModified: thread.fetchedAt,
+        // 公開後に直した記事は updatedAt を立てる（無ければ公開日と同値）。fetchedAt は「取得日」で
+        // 後から動かさないので、これが無いと修正・追記が鮮度シグナルとして伝わらない。
+        dateModified: thread.updatedAt ?? thread.fetchedAt,
         inLanguage: locale,
         // author/publisher は上の #organization（@id）へ名寄せ＝別実体化を防ぐ。同グラフ内で name/logo/sameAs に解決される。
         author: { '@id': `${SITE_URL}/#organization` },
         publisher: { '@id': `${SITE_URL}/#organization` },
         mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
+        // 抜粋コメント（AEO）。「現地ファンの声」がこの記事の主要な中身であることを機械可読にする。
+        ...(commentLd.length ? { comment: commentLd, commentCount: thread.totalComments } : {}),
         ...(taggedPlayers.length
           ? {
               about: taggedPlayers.map((p) => ({
@@ -205,6 +261,8 @@ export default async function ThreadDetailPage({
             }
           : {}),
       },
+      // 動画記事の VideoObject（uploadDate が取れている記事だけ）。
+      ...videoLd,
       {
         '@type': 'BreadcrumbList',
         itemListElement: [

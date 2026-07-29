@@ -9,7 +9,7 @@ import FeedCard from '@/components/FeedCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import SectionHeading from '@/components/SectionHeading';
 import { Link } from '@/lib/navigation';
-import { absoluteUrl, localeAlternates } from '@/lib/site';
+import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -41,8 +41,8 @@ export async function generateMetadata({
     title,
     description,
     alternates: localeAlternates(locale, `/prospects/${slug}`),
-    openGraph: { title, description, type: 'profile', url: absoluteUrl(locale, `/prospects/${slug}`) },
-    twitter: { card: 'summary_large_image', title, description },
+    openGraph: { title, description, type: 'profile', url: absoluteUrl(locale, `/prospects/${slug}`), images: OG_IMAGES },
+    twitter: { card: 'summary_large_image', title, description, images: OG_IMAGES_TW },
   };
 }
 

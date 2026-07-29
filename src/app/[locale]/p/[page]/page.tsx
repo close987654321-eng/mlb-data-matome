@@ -7,7 +7,7 @@ import { buildFeed, paginate, FEED_PER_PAGE } from '@/lib/feed';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
-import { localeAlternates } from '@/lib/site';
+import { localeAlternates, PAGINATED_ROBOTS } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -32,6 +32,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale });
   return {
     title: `${t('home.latest')}（${page}）`,
+    robots: PAGINATED_ROBOTS,
     alternates: localeAlternates(locale, `/p/${page}`),
   };
 }

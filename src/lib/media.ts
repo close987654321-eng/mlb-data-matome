@@ -3,7 +3,7 @@ import type { Thread, ThreadMedia } from '@/types/thread';
 import type { Column } from '@/types/column';
 
 // 視聴 URL から動画 ID を取り出す（YouTube / Streamable のみ既知。他は埋め込み非対応）。
-function youTubeId(url: string): string | null {
+export function youTubeId(url: string): string | null {
   const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/|live\/))([\w-]{11})/);
   return m ? m[1] : null;
 }

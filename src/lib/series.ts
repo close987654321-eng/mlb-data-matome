@@ -73,7 +73,12 @@ export function formatGameDate(isoDate: string): string {
   return `${y}.${Number(m)}.${Number(d)}`;
 }
 
-/** シリーズ記事の定型タイトル: 「{接頭辞} {YYYY.M.D} {自軍}対{相手}」 */
+/**
+ * シリーズ記事の定型タイトル: 「{接頭辞} {YYYY.M.D} {自軍}対{相手}」
+ * ダブルヘッダー（series.gameNo あり）だけ末尾に「第N戦」/「Game N」を足す。
+ * 定型は日付＋対戦カードだけで一意になる前提だが、同日同カードの2試合目で衝突するため
+ * （title/h1/og:title/headline が完全一致＝重複コンテンツ）、試合番号で必ず割る。
+ */
 export function seriesTitle(series: ThreadSeries, locale: Locale): string {
   const info = getSeries(series.id);
   if (!info) return '';
@@ -82,7 +87,12 @@ export function seriesTitle(series: ThreadSeries, locale: Locale): string {
     locale === 'ja'
       ? `${info.team.ja}対${series.opponent.ja}`
       : `${info.team.en} vs ${series.opponent.en}`;
-  return `${info.titlePrefix[locale]} ${formatGameDate(series.date)} ${matchup}`;
+  const game = series.gameNo
+    ? locale === 'ja'
+      ? ` 第${series.gameNo}戦`
+      : ` Game ${series.gameNo}`
+    : '';
+  return `${info.titlePrefix[locale]} ${formatGameDate(series.date)} ${matchup}${game}`;
 }
 
 /** 記事の表示タイトル。シリーズ記事は定型を自動生成し、それ以外は title をそのまま使う。 */

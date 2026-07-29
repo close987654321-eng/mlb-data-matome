@@ -12,7 +12,9 @@ import StickyVideo from '@/components/StickyVideo';
 import RelatedArticles from '@/components/RelatedArticles';
 import TagList from '@/components/TagList';
 import ShareButtons from '@/components/ShareButtons';
-import { absoluteUrl, localeAlternates } from '@/lib/site';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import { absoluteUrl, localeAlternates, SITE_URL } from '@/lib/site';
+import { getPlayerByJaName } from '@/lib/players';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -79,8 +81,89 @@ export default async function ColumnDetailPage({
   const pinnedVideoIndex = column.blocks.findIndex((block) => block.type === 'video');
   const pinnedVideo = pinnedVideoIndex >= 0 ? column.blocks[pinnedVideoIndex] : undefined;
 
+  // 構造化データ。コラムだけ JSON-LD もパンくずも無く、他の全コンテンツ型（記事/選手/タグLP）から
+  // 取り残されていた（2026-07-30 実測）。まとめ記事は時事＝NewsArticle だが、コラムは論考・週刊総括
+  // なので Article を使う。author/publisher は記事側と同じ #organization に名寄せして実体を1つに保つ。
+  const columnUrl = absoluteUrl(locale, `/columns/${column.id}`);
+  const cover = columnCover(column);
+  // 本文の段落だけを繋いで語数を出す（見出し・引用・動画は除く）。日本語なので文字数＝おおよその分量。
+  const bodyText = column.blocks
+    .filter((b): b is { type: 'paragraph'; text: string } => b.type === 'paragraph')
+    .map((b) => b.text)
+    .join('');
+  // タグに居る選手をエンティティ接続（記事側と同じ扱い＝Knowledge Graph への地ならし）。
+  const taggedPlayers = (column.tags ?? [])
+    .map((tag) => getPlayerByJaName(tag))
+    .filter((p): p is NonNullable<typeof p> => p != null)
+    .filter((p, i, arr) => arr.findIndex((x) => x.slug === p.slug) === i);
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${SITE_URL}/#organization`,
+        name: '海外の反応',
+        url: SITE_URL,
+        logo: { '@type': 'ImageObject', url: `${SITE_URL}/logo.png`, width: 1358, height: 428 },
+        sameAs: ['https://x.com/gogogo123ka'],
+      },
+      {
+        '@type': 'Article',
+        headline: title,
+        description: column.lead,
+        image: { '@type': 'ImageObject', url: cover.url },
+        datePublished: column.publishedAt,
+        dateModified: column.publishedAt,
+        inLanguage: locale,
+        author: { '@id': `${SITE_URL}/#organization` },
+        publisher: { '@id': `${SITE_URL}/#organization` },
+        mainEntityOfPage: { '@type': 'WebPage', '@id': columnUrl },
+        articleSection: kindLabel,
+        ...(bodyText ? { wordCount: bodyText.length } : {}),
+        ...(column.tags?.length ? { keywords: column.tags.join(', ') } : {}),
+        ...(taggedPlayers.length
+          ? {
+              about: taggedPlayers.map((p) => ({
+                '@type': 'Person',
+                name: p.nameJa,
+                alternateName: p.nameEn,
+                url: absoluteUrl(locale, `/player/${p.slug}`),
+                ...(p.sameAs.length ? { sameAs: p.sameAs } : {}),
+              })),
+            }
+          : {}),
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: t('nav.home'), item: absoluteUrl(locale, '') },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: sportLabel,
+            item: absoluteUrl(locale, `/${column.sport}`),
+          },
+          { '@type': 'ListItem', position: 3, name: title },
+        ],
+      },
+    ],
+  };
+
   return (
     <article className="mx-auto max-w-prose">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <div className="mb-4">
+        <Breadcrumbs
+          items={[
+            { name: t('nav.home'), href: '/' },
+            { name: sportLabel, href: `/${column.sport}` },
+            { name: title },
+          ]}
+        />
+      </div>
       <ArticleCover
         sport={column.sport}
         locale={locale}

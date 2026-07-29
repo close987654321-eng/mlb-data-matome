@@ -6,7 +6,7 @@ import { paginate, FEED_PER_PAGE, type FeedItem } from '@/lib/feed';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import { localeAlternates } from '@/lib/site';
+import { localeAlternates, PAGINATED_ROBOTS } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -31,6 +31,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale });
   return {
     title: `${t('watch.singlesTitle')}（${page}）`,
+    robots: PAGINATED_ROBOTS,
     alternates: localeAlternates(locale, `/watch/singles/p/${page}`),
   };
 }

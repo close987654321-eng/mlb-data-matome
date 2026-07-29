@@ -15,6 +15,36 @@ export function absoluteUrl(locale: Locale, path: string): string {
 }
 
 /**
+ * ブランド既定の OG 画像（1200x630）。
+ *
+ * ⚠️ Next の Metadata は openGraph / twitter を「マージではなく置換」する。ページ側で
+ * `openGraph: { title, description }` と書いた時点で layout の images が消え、og:image が
+ * 1枚も無いページになる（2026-07-30 の実測で 121 ページ＝タグLP107本＋競技LP等が該当）。
+ * og:image 不在は Discover の大画像枠（max-image-preview:large を宣言済み）に載れず、
+ * X も summary_large_image を宣言しながらカード画像が出ない＝主力チャネルを両方潰す。
+ * → 独自の openGraph を持つページは必ず images を渡す。専用の OG 画像を持たない面（一覧LP・
+ *   タグLP等）はこの既定を使う。opengraph-image.tsx があるルート（player/ranking/mvp/cy-young）は
+ *   Next が自動注入するので何も渡さなくてよい。
+ */
+export const OG_IMAGE = { url: '/og.png', width: 1200, height: 630 } as const;
+
+/** openGraph.images にそのまま渡す既定値。 */
+export const OG_IMAGES = [OG_IMAGE];
+/** twitter.images にそのまま渡す既定値（URL の配列）。 */
+export const OG_IMAGES_TW = [OG_IMAGE.url];
+
+/**
+ * ページネーション 2 ページ目以降（/p/2・/{sport}/p/2・/watch/singles/p/2 …）の robots。
+ *
+ * 中身はカードのグリッドだけで固有の本文が無く、meta description も継承（＝トップと同文）に
+ * なるため、実測 2026-07-30 時点で 102 ページが「薄い自動生成面」として検索面に並んでいた。
+ * 薄記事（threadIndex）・薄タグLP（tagIndex）・/tags・/search・/en と同じ posture に揃える＝
+ * noindex で検索面から下げ、follow は残してクロール経路として活かす。
+ * 記事の発見性は落ちない: index 対象の記事は全件 sitemap に載っている（sitemap.ts）。
+ */
+export const PAGINATED_ROBOTS = { index: false, follow: true } as const;
+
+/**
  * Metadata.alternates 用の canonical を作る。各ページの generateMetadata で使う。
  * - canonical: そのロケール自身の URL（ja版は ja を、en版は en を正規とする）
  * - hreflang（languages）は出さない: en は全ページ noindex（GSC実測 2026-07-11 で日本語クエリを

@@ -104,10 +104,22 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit ス
 - `credit` は必ず添える（例: `"u/foo · r/baseball"`）。`caption` は任意の日本語説明。
 - URL が分からない／無いときは `media` を**省略**（ストック写真にフォールバックする）。捏造しない。
 - 直リンク画像のホストを増やすときは `next.config.mjs` の `remotePatterns` に追加が必要。
+- **YouTube 動画なら `publishedAt` と `videoTitle` も入れる**（構造化データ用・画面には出ない）。
+  記事の JSON-LD に `VideoObject` を出す条件で、`uploadDate`（=`publishedAt`）が無いと
+  動画リッチリザルト／Google の動画タブに載れない。値は `fetch-youtube.mjs comments <URL>` の
+  取得結果に含まれる `publishedAt` / `title`（YouTube API 実測値）をそのまま写す＝**推測しない**。
+  取り忘れ・後追いは `node scripts/backfill-video-meta.mjs`（未設定の記事だけ一括で埋める）。
 
 ```json
 "media": { "kind": "video", "url": "https://youtu.be/XXXXXXXXXXX", "credit": "u/foo · r/baseball" }
 "media": { "kind": "image", "url": "https://i.redd.it/xxxx.jpg", "caption": "問題の絵", "credit": "u/foo · r/baseball" }
+"media": {
+  "kind": "video",
+  "url": "https://www.youtube.com/watch?v=XXXXXXXXXXX",
+  "credit": "MLB（YouTube公式ハイライト）",
+  "publishedAt": "2026-07-20T03:59:47Z",
+  "videoTitle": "DODGERS vs. YANKEES: Official Full Game 2 Highlights (July 19) | 2026 MLB Season"
+}
 ```
 
 ### R6. 「海外ファンと見る」シリーズ（看板の watch-along 企画）
@@ -126,7 +138,15 @@ description: 海外の反応まとめ記事を作成・編集する。Reddit ス
   - `opponent` = 対戦相手名（ja/en）。
 - タイトルは自動で `海外ドジャースファンと見る 2026.6.10 ドジャース vs パイレーツ` になる。
   → **`title` は自動生成に上書きされる**ので、`title.ja/en` は普通の文（保険）で良い。凝らなくてよい。
+- ⚠️ **ダブルヘッダー（同じ日・同じ相手と2試合）は `series.gameNo` を必ず入れる**（`1` / `2`）。
+  定型タイトルは「日付＋対戦カード」だけで一意になる前提なので、入れないと 2 本の記事の
+  title / h1 / og:title / JSON-LD headline が**完全に一致**して重複コンテンツになる
+  （2026-07-30 の SEO 監査で実際に2組発生し、事後修正した）。入れると「第1戦 / 第2戦」が付く。
+  ```json
+  "series": { "id": "dodgers", "date": "2026-07-20", "opponent": { "ja": "ヤンキース", "en": "Yankees" }, "gameNo": 2 }
+  ```
 - `id` は `{YYYY-MM-DD}-dodgers-vs-{相手スラッグ}` 推奨（例: `2026-06-10-dodgers-vs-pirates`）。
+  ダブルヘッダーは末尾に `-g1` / `-g2` を付ける。
 - シリーズ記事は **動画必須**（`media.kind:"video"`）。watch-along 表示になる。
 - **`/watch` ハブは動画つき記事を全部載せる**。固定シリーズはシリーズ枠＋定型タイトル、`series`
   無しの単発動画まとめは「注目の試合」枠に出る（タイトル自由）。つまり動画を付ければ自動でハブに載る。
@@ -353,6 +373,8 @@ MLB の試合まとめに、**その試合の主役選手の成績を専用ボ�
 - `summaryJa` にスレの流れ・論点を要約。`tags` は日本語（選手名・チーム名・話題）
   - タグの規則（基礎セット・正規表記・禁止事項）は **R11 が正**。
 - `id` = `{YYYY-MM-DD}-{英語スラッグ}`、`fetchedAt` は JST
+- **公開済みの記事を直したときは `updatedAt`（JST・ISO8601）を立てる**。`fetchedAt` は取得日なので
+  動かさない。`updatedAt` が JSON-LD の `dateModified` になり、修正・追記が鮮度として検索側に伝わる
 
 ## 翻訳トーン
 - 5ch まとめ風の口語。海外ファンの空気を残す（堅すぎない）

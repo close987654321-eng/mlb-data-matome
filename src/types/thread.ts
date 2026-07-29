@@ -24,6 +24,12 @@ export type ThreadMedia = {
   thumbUrl?: string; // video のカード/見出し用サムネ。無ければ自動取得かストックに退避
   caption?: string; // 日本語キャプション（任意）
   credit?: string; // 出典・帰属（例: "u/foo · r/baseball"）。必ず添える
+  // ↓ video のときだけ。JSON-LD の VideoObject に使う（構造化データ用。画面表示はしない）。
+  //   VideoObject は uploadDate が必須で、無いと動画リッチリザルト／Google動画タブに載れない。
+  //   値は YouTube Data API（scripts/fetch-youtube.mjs の snippet.publishedAt / title）由来の
+  //   実測値のみ＝捏造しない（CLAUDE.md §4.4）。取れていない記事は VideoObject を出さない。
+  publishedAt?: string; // 動画の公開日時（ISO8601・YouTube 由来）
+  videoTitle?: string; // 動画の原題（YouTube 由来）。VideoObject.name に使う
 };
 
 /**
@@ -47,6 +53,11 @@ export type ThreadSeries = {
   id: string; // series カタログのキー（例: "dodgers"）。src/lib/series.ts の SERIES と一致させる
   date: string; // 試合日 "2026-06-10"（YYYY-MM-DD・JST）。タイトルの日付に使う
   opponent: LocalizedName; // 対戦相手名（vs の右）。例: { ja: "パイレーツ", en: "Pirates" }
+  // ダブルヘッダーの試合番号（1 or 2）。シリーズ記事のタイトルは
+  // 「{接頭辞} {日付} {自軍}対{相手}」の定型なので、同じ日に同じ相手と2試合やると
+  // title/h1/og:title/JSON-LD headline が完全に一致し重複コンテンツになる（2026-07-30 実測で2組）。
+  // ダブルヘッダーのときだけ立てて「第1戦/第2戦」を足し分ける。通常の試合では未設定。
+  gameNo?: number;
 };
 
 /**
@@ -90,6 +101,10 @@ export type Thread = {
   format?: 'reddit' | 'interview' | 'youtube'; // コメントの出所。'interview'=選手/監督インタビュー（u/接頭辞と▲スコアを出さない）。'youtube'=動画コメント（author そのまま・👍スコア）。既定は 'reddit'
   sourceUrl: string; // 元スレ URL。引用要件を満たすため必須・必ず送客する
   fetchedAt: string; // ISO8601（JST）
+  // 公開後に本文を直したときだけ立てる ISO8601（JST）。JSON-LD の dateModified に出る。
+  // 立てないと dateModified=datePublished のままで、コメント差し替え・誤訳修正・追記が
+  // 鮮度シグナルとして検索側に伝わらない（fetchedAt は「取得日」なので後から動かさない）。
+  updatedAt?: string;
   title: LocalizedName; // スレタイの原文(en)と訳(ja)
   summaryJa: string; // スレの流れ・論点の日本語要約（導入文）
   flair?: string; // "Game Thread" などの Reddit フレア

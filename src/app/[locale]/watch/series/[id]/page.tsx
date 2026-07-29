@@ -6,7 +6,7 @@ import { SERIES, getSeries } from '@/lib/series';
 import ThreadCard from '@/components/ThreadCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
-import { localeAlternates } from '@/lib/site';
+import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -24,9 +24,19 @@ export async function generateMetadata({
   const { locale, id } = await params;
   const info = getSeries(id);
   if (!info) return {};
+  // 固有の description（無いと layout のトップ用コピーをそのまま継ぐ＝6シリーズ棚が同文になる）。
+  // 掲載本数を入れて棚の実体を示し、記事が増えるたび文面が動く＝鮮度シグナルも兼ねる。
+  const count = (await getWatchAlongThreads()).filter((th) => th.series?.id === id).length;
+  const description =
+    locale === 'ja'
+      ? `${info.titlePrefix.ja}シリーズの記事一覧。${info.team.ja}の試合を海外ファンのコメント（日本語訳）と一緒に振り返る watch-along 企画を全${count}件、新着順で掲載。`
+      : `Every ${info.badge.en} article — watch ${info.team.en} games alongside translated overseas fan comments. ${count} posts, newest first.`;
   return {
     title: info.badge[locale],
+    description,
     alternates: localeAlternates(locale, `/watch/series/${id}`),
+    openGraph: { title: info.badge[locale], description, type: 'website', url: absoluteUrl(locale, `/watch/series/${id}`), images: OG_IMAGES },
+    twitter: { card: 'summary_large_image', title: info.badge[locale], description, images: OG_IMAGES_TW },
   };
 }
 

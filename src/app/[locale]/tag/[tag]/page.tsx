@@ -35,7 +35,7 @@ import TeamStandings from '@/components/TeamStandings';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
-import { absoluteUrl, localeAlternates } from '@/lib/site';
+import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -154,8 +154,8 @@ export async function generateMetadata({
     description,
     ...(indexable ? {} : { robots: { index: false } }),
     alternates: localeAlternates(locale, `/tag/${encodeURIComponent(decoded)}`),
-    openGraph: { title: fullTitle, description, url },
-    twitter: { card: 'summary_large_image', title: fullTitle, description },
+    openGraph: { title: fullTitle, description, url, images: OG_IMAGES },
+    twitter: { card: 'summary_large_image', title: fullTitle, description, images: OG_IMAGES_TW },
   };
 }
 

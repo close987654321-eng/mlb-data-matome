@@ -1,6 +1,7 @@
 import { getAllThreads } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
 import { buildFeed, type FeedItem } from '@/lib/feed';
+import { isThreadIndexable } from '@/lib/threadIndex';
 import { SITE_URL } from '@/lib/site';
 
 // RSS は日本語（デフォルトロケール＝接頭辞なし）の本文で配信する。
@@ -55,7 +56,9 @@ function itemFields(item: FeedItem): { title: string; link: string; description:
 
 export async function GET(): Promise<Response> {
   const [threads, columns] = await Promise.all([getAllThreads(), getAllColumns()]);
-  const items = buildFeed(threads, columns).slice(0, MAX_ITEMS);
+  // noindex の薄記事はアンテナ・リーダーにも流さない（検索面から下げた記事を外部配信で
+  // 薄いまま拡散させない＝sitemap / meta robots と言い分を揃える。index 可否の正は isThreadIndexable）。
+  const items = buildFeed(threads.filter(isThreadIndexable), columns).slice(0, MAX_ITEMS);
   const lastBuild = items[0] ? new Date(items[0].date) : new Date();
 
   const itemsXml = items

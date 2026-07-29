@@ -68,6 +68,8 @@ SSG します。
     ├── fetch-mlb-stats.mjs     # 日本人選手の成績・出場試合レーダー・snapshot（§4.1）
     ├── og-thumb.mjs / check-discover-images.mjs  # OG 画像の生成・監査（§4.5）
     ├── fetch-reddit.mjs        # Reddit OAuth 取得スクリプト（承認待ち）
+    ├── backfill-video-meta.mjs # 動画記事に publishedAt/videoTitle を後追い投入（JSON-LD VideoObject 用）
+    ├── ping-indexnow.mjs       # 公開直後の即時インデックス通知（無人公開CIから自動実行）
     └── threads-update.md       # 更新手順
 ```
 
@@ -157,6 +159,26 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
 
 - `format`（`"reddit"` / `"interview"` / `"youtube"`）の使い分け・表示仕様は **matome スキルの
   R7 / R7+ が唯一の正**。`score` は実測値のみ（**捏造しない**）
+
+### 4.2+ 検索・AEO の構造化データ（2026-07-30 監査で整備）
+
+記事ページの JSON-LD は `Organization` / `NewsArticle` / `BreadcrumbList` に加えて次を出す。
+値は**実測値がある記事だけ**に出す＝取れていないものは出さない（捏造しない・§4.4）。
+
+- **`VideoObject`**: 動画記事（全492本中460本＝93%）を動画リッチリザルト／Google 動画タブの対象にする。
+  必須の `uploadDate` は `media.publishedAt`（YouTube API 実測）から取る。取り忘れは
+  `node scripts/backfill-video-meta.mjs` で未設定分だけ一括投入（`--dry-run` で下見）。
+- **`comment`（Comment型・上限10件）**: 「海外ファンは何と言ったか」という AEO のクエリ形に直接答える。
+  フック／ハイライト優先＋スコア順。全件入れると JSON-LD が本文より重くなるので上限で抑える。
+- **`dateModified`**: `updatedAt`（あれば）→ 無ければ `fetchedAt`。公開後に直したら `updatedAt` を立てる。
+- ⚠️ **Next の Metadata は `openGraph` / `twitter` を置換する**（マージしない）。ページ側でこれらを
+  書くときは `images` を必ず渡す（`src/lib/site.ts` の `OG_IMAGES` / `OG_IMAGES_TW`）。渡し忘れると
+  layout の og.png が消えて **og:image が1枚も無いページ**になり、Discover の大画像枠にも X のカードにも
+  載らない（2026-07-30 に121ページで発生＝タグLP107本＋競技LP等）。`opengraph-image.tsx` を持つ
+  ルート（player / ranking / mvp / cy-young）は Next が自動注入するので不要。
+- 薄い自動生成面の posture は一本化: 薄記事（`threadIndex`）・薄タグLP（`tagIndex`）・
+  ページネーション（`PAGINATED_ROBOTS`）・`/tags`・`/search`・`/en` は **noindex + follow**、
+  かつ **sitemap にも載せない**（robots と sitemap の言い分を必ず一致させる）。RSS も同様に薄記事を外す。
 
 ### 4.3 更新時に必ずやること
 
