@@ -20,7 +20,8 @@
     "search": "Search",
     "about": "About",
     "privacy": "Privacy Policy",
-    "contact": "Contact"
+    "contact": "Contact",
+    "daily": "Today's JP Players"
   },
   "prospects": {
     "eyebrow": "Next from NPB",
@@ -322,6 +323,18 @@
     "cardLicense": "Free to save & repost as is — no credit needed",
     "followLead": "The card drops on X at 16:00 JST daily →",
     "tomorrow": "Tomorrow's Japanese players",
-    "seasonPrefix": "Season"
+    "seasonPrefix": "Season",
+    "archiveLink": "See the full collection"
+  },
+  "dailyHub": {
+    "title": "Today's Japanese Players",
+    "metaTitle": "Today's Japanese Players in MLB — Daily Results & Overseas Reactions",
+    "metaDesc": "Daily results for every Japanese MLB player — Ohtani and all — with local fans' reactions, in one card and one article at 16:00 JST. Latest: No.{no} ({date}).",
+    "lead": "Every Japanese MLB player's results for the day, plus the game local fans buzzed about most — one card and one article, every day at 16:00 JST.",
+    "updatedDaily": "Updated daily at 16:00 JST",
+    "latest": "Latest issue",
+    "readArticle": "Read today's reactions",
+    "archive": "The collection",
+    "issueAlt": "Today's Japanese Players card No.{no}"
   }
 }

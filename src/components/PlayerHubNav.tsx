@@ -20,6 +20,9 @@ export default function PlayerHubNav() {
       <NavLink href="/player" className={item}>
         {t('nav.players')}
       </NavLink>
+      <NavLink href="/daily" className={item}>
+        {t('nav.daily')}
+      </NavLink>
       <NavLink href="/mvp" className={item}>
         {t('nav.mvp')}
       </NavLink>

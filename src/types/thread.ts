@@ -22,6 +22,10 @@ export type ThreadMedia = {
   kind: 'image' | 'video';
   url: string; // image=画像URL / video=視聴URL（埋め込みURLへは自動変換する）
   thumbUrl?: string; // video のカード/見出し用サムネ。無ければ自動取得かストックに退避
+  // image のときの実寸（任意）。OG/JSON-LD に width/height を宣言する＝Discover の 1200px 判定を
+  // 明示する。jp-daily の 16:9 カード（1200×578）などローカル画像 OG で使う。
+  width?: number;
+  height?: number;
   caption?: string; // 日本語キャプション（任意）
   credit?: string; // 出典・帰属（例: "u/foo · r/baseball"）。必ず添える
   // ↓ video のときだけ。JSON-LD の VideoObject に使う（構造化データ用。画面表示はしない）。

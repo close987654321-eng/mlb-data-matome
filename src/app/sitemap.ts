@@ -59,6 +59,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // /watch は動画つき記事のハブ。最新の動画記事の日時を lastModified にする。
   const latestWatch = threads.find((t) => t.media?.kind === 'video')?.fetchedAt;
 
+  // /daily は「きょうの日本人選手」の恒久ハブ。最新号の日時＝毎日16時に動く鮮度シグナル。
+  const latestDaily = threads.find((t) => t.daily)?.fetchedAt;
+
   // 選手ハブの lastmod。個別＝最新記事 or 成績更新(asOf)の新しい方。/player ピラーはそれら個別の最新を採用し、
   // 無関係な競技（ボクシング/MMA）の更新で /player が動かないようにする（lastmod の信頼を保つ）。
   const statDate = snap.asOf ? snap.asOf.slice(0, 10) : undefined;
@@ -79,6 +82,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
     entry('/watch', latestWatch), // 「海外ファンと見る」ハブ
+    entry('/daily', latestDaily), // 「きょうの日本人選手」恒久ハブ（毎日16時更新）
     // 運営者情報・規約系（AdSense 審査要件・更新頻度は低いので lastModified なし）
     entry('/about'),
     entry('/privacy'),

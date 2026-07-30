@@ -162,6 +162,15 @@ export default async function DailyArticle({
             saveLabel={t('daily.cardSave')}
             licenseLabel={t('daily.cardLicense')}
           />
+          {/* コレクションブック（/daily）への導線＝シリーズの恒久ハブに評価とセッションを沈める。 */}
+          <p className="mt-4 text-center text-sm">
+            <Link
+              href="/daily"
+              className="font-medium text-ink underline decoration-line underline-offset-2 hover:decoration-ink"
+            >
+              {t('daily.archiveLink')} <span aria-hidden>→</span>
+            </Link>
+          </p>
           {/* 記事読者→Xフォローへの導線。カードはXで先行して流れる＝「毎日見たければフォロー」が自然に立つ。 */}
           <p className="mt-3 text-center text-xs text-ink-soft">
             {t('daily.followLead')}{' '}

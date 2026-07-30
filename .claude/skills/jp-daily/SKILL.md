@@ -122,6 +122,8 @@ node scripts/fetch-youtube.mjs comments "<動画URL>" 200
 - 選手名を先頭10字以内／全角32〜35字／「成績まとめ」「海外の反応」の語は使わない
   （「海外の反応」はサイト共通サフィックスが付く。書くと二重になる）。
 - 誰も打たなかった日は `日本人◯人が出場` のように人数で受ける。
+- **大谷が出場した日は、主役でなくてもタイトルの2〜3枠に必ず入れる**（例:「・大谷2安打」）。
+  大谷は日本の Discover 最強エンティティ＝掲載判定に効く。
 
 ### コーナー構成（`daily` オブジェクト）
 
@@ -172,7 +174,8 @@ curl -s "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=<ETの翌日>&h
   "title": { "ja": "7/30 村上23号・岡本3安打・大谷2安打｜きょうの日本人選手", "en": "..." },
   "summaryJa": "…メタ説明用のリード（画面には出ない＝①が代わり）…",
   "totalComments": 647,            // 使った動画の総コメント数の合計（実測）
-  "media": { "kind": "image", "url": "/media/jp-daily-2026-07-30-og.jpg" },  // ← 16:9版
+  "media": { "kind": "image", "url": "/media/jp-daily-2026-07-30-og.jpg", "width": 1200, "height": 578 },  // ← 16:9版・寸法必須（JSON-LD/Discoverの1200px宣言）
+  "editorPick": 1,                 // その日の一面に固定（前日の jp-daily からは外す＝一面はきょうの1本だけ）
   "tags": ["村上宗隆", "…出場者全員…", "…主役/ざわつきの球団…", "海外の反応"],
   "comments": [],                  // ← 空。コメントは daily の blocks / quotes が持つ
   "daily": {
@@ -201,6 +204,8 @@ curl -s "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=<ETの翌日>&h
 ```
 
 - `stats` は付けない（成績は hero/shorts の `line`・`season` が持つ。StatBox と二重になる）。
+- **`editorPick: 1` を付け、前日の `-jp-daily.json` から `editorPick` を外す**（TOPの一面＝常に最新号）。
+- 恒久ハブ **/daily**（最新号＋コレクション）は `daily` を持つ記事から自動生成＝ハブ側の作業は無い。
 - `series` は付けない（「海外ファンと見る」とは別シリーズ）。
 - `thumbUrl` は `maxresdefault` が **HEAD で 200 のときだけ**（404 ならキーごと省略）。
 - `tags` は**その日出場した選手だけ**＋主役/ざわつきの球団＋「海外の反応」。
@@ -216,7 +221,8 @@ matome の Step4b に加えて、このシリーズ固有:
 - [ ] カードの主役と「②きょうの主役」が**同じ人**か／`cardNo` ＝ jpday の `day` か
 - [ ] **地の文の事実がすべて裏取りできるか**（API の数値 or コメントの証言。イニング・場面を創作していないか）
 - [ ] ②④の引用がそれぞれ**その試合の動画のコメントだけ**か（混線禁止）
-- [ ] `Thread.comments` が空配列／`stats` 無し／`media` が **16:9 の `-og.jpg`** か
+- [ ] `Thread.comments` が空配列／`stats` 無し／`media` が **16:9 の `-og.jpg`（width/height 付き）** か
+- [ ] `editorPick:1` を付けたか／**前日の jp-daily から外した**か
 - [ ] ③に主役以外の出場者が**全員**いるか。言及ゼロの選手を捏造引用で埋めていないか
 - [ ] コメント合計 25件以上／`threeLines` が3行か
 - [ ] ⑥が probables の実測か（推測の先発予定を書かない）

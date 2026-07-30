@@ -1,4 +1,5 @@
 import { pickImage } from '@/lib/sports';
+import { SITE_URL } from '@/lib/site';
 import type { Thread, ThreadMedia } from '@/types/thread';
 import type { Column } from '@/types/column';
 
@@ -44,7 +45,13 @@ export async function ogCover(
   thread: Thread,
 ): Promise<{ url: string; width?: number; height?: number }> {
   const m = thread.media;
-  if (m?.kind === 'image') return { url: m.url };
+  if (m?.kind === 'image') {
+    // ローカル画像（/media/…）は絶対URLにして返す。og:image は metadataBase が解決するが、
+    // JSON-LD（NewsArticle.image）は手組みの JSON なので相対のままだと構造化データ違反になる
+    // （jp-daily のカードOGで実際に踏んだ）。寸法があれば併せて宣言＝Discover の 1200px 判定を明示。
+    const url = m.url.startsWith('/') ? `${SITE_URL}${m.url}` : m.url;
+    return { url, ...(m.width && m.height ? { width: m.width, height: m.height } : {}) };
+  }
   if (m?.kind === 'video') {
     if (m.thumbUrl) return { url: m.thumbUrl };
     const yt = youTubeId(m.url);
