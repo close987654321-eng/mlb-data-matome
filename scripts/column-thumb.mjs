@@ -111,14 +111,17 @@ const sB = seam([BX + 94, BY - R + 44], [BX - 2, BY], [BX + 94, BY + R - 44], 31
 const args = process.argv.slice(2);
 const columnId = args.find((a) => !a.startsWith('--'));
 if (!columnId) {
-  console.error('usage: node scripts/column-thumb.mjs <columnId> [--vol N] [--date YYYY.M.D] [--kanji 今週の総括]');
+  console.error('usage: node scripts/column-thumb.mjs <columnId> [--vol N|none] [--date YYYY.M.D] [--kanji 今週の総括]');
   process.exit(1);
 }
 const opt = (name, dflt) => {
   const i = args.indexOf(`--${name}`);
   return i >= 0 && args[i + 1] ? args[i + 1] : dflt;
 };
-const VOL = String(opt('vol', '1')).padStart(2, '0');
+// 号数。定期枠（週刊総括・データ定点分析）は連番を振るが、単発の論争深掘り等は連番ではないので
+// `--vol none` で省略できる（連番でない記事に VOL.01 と入れると第1号だと誤読される）。
+const VOL_RAW = String(opt('vol', '1'));
+const VOL = /^(none|no|0|-)$/i.test(VOL_RAW) ? null : VOL_RAW.padStart(2, '0');
 const DATE = opt('date', new Date().toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo' }).replaceAll('/', '.'));
 const KANJI = Array.from(opt('kanji', '今週の総括'));
 // 上部の英字キッカー。週刊総括の既定は THIS WEEK IN MLB、データ定点分析(型④)等は
@@ -168,7 +171,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 
   <!-- 地の短い墨罫と号数 -->
   <rect x="${EYC - 32}" y="${H - 76}" width="64" height="3" fill="${C.ink}"/>
-  <text x="${EYC}" y="${H - 40}" font-family="Avenir Next Condensed, Futura, Helvetica Neue, sans-serif" font-size="20" letter-spacing="4" fill="${C.inkMute}" text-anchor="middle">VOL.${VOL} — ${DATE}</text>
+  <text x="${EYC}" y="${H - 40}" font-family="Avenir Next Condensed, Futura, Helvetica Neue, sans-serif" font-size="20" letter-spacing="4" fill="${C.inkMute}" text-anchor="middle">${VOL ? `VOL.${VOL} — ${DATE}` : DATE}</text>
 </svg>`;
 
 const out = join(process.cwd(), 'public/media', `${columnId}-og.jpg`);
