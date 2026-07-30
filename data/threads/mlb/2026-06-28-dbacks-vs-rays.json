@@ -103,8 +103,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2, "innings": [1, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 7, "errors": 0, "lob": 3, "record": { "w": 41, "l": 41 }, "rank": 3, "league": "NL", "division": "West" },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [1, 0, 0, 0, 2, 1, 0, 0, null], "hits": 8, "errors": 0, "lob": 5, "record": { "w": 47, "l": 33 }, "rank": 1, "league": "AL", "division": "East" },
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2, "innings": [1, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 7, "errors": 0, "lob": 3, "record": { "w": 41, "l": 41 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 606466, "name": "Ketel Marte", "no": 14 }] },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [1, 0, 0, 0, 2, 1, 0, 0, null], "hits": 8, "errors": 0, "lob": 5, "record": { "w": 47, "l": 33 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 666018, "name": "Jonathan Aranda", "no": 13 }, { "id": 691406, "name": "Junior Caminero", "no": 21 }] },
     "decisions": { "winner": "Michael Grove", "loser": "Jose Cabrera", "save": "Bryan Baker" }
   }
 }

@@ -146,8 +146,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 5, "innings": [3, 0, 2, 0, 0, 0, 0, 0, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 40, "l": 42 }, "rank": 3, "league": "AL", "division": "West" },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 0, 4, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 39, "l": 43 }, "rank": 3, "league": "AL", "division": "East" },
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 5, "innings": [3, 0, 2, 0, 0, 0, 0, 0, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 40, "l": 42 }, "rank": 3, "league": "AL", "division": "West", "homers": [{ "id": 679822, "name": "Justin Foscue", "no": 5 }] },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 0, 4, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 39, "l": 43 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 672960, "name": "Kazuma Okamoto", "no": 19 }] },
     "decisions": { "winner": "Nathan Eovaldi", "loser": "Patrick Corbin", "save": "Jacob Latz" }
   }
 }

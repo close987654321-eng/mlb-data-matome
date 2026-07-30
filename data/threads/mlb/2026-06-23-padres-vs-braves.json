@@ -132,7 +132,7 @@
   ],
   "game": {
     "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 8, "record": { "w": 48, "l": 29 }, "rank": 1, "league": "NL", "division": "East" },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, null], "hits": 4, "errors": 1, "lob": 9, "record": { "w": 40, "l": 37 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, null], "hits": 4, "errors": 1, "lob": 9, "record": { "w": 40, "l": 37 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 592518, "name": "Manny Machado", "no": 14 }] },
     "decisions": { "winner": "Michael King", "loser": "Grant Holmes", "save": "Mason Miller" }
   }
 }

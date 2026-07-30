@@ -33,8 +33,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 12, "innings": [0, 0, 6, 1, 0, 3, 1, 1, 0], "hits": 14, "errors": 0, "lob": 6, "record": { "w": 51, "l": 42 }, "rank": 2, "league": "AL", "division": "East" },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [1, 0, 2, 0, 0, 1, 0, 0, 0], "hits": 10, "errors": 1, "lob": 8, "record": { "w": 54, "l": 37 }, "rank": 1, "league": "AL", "division": "East" },
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 12, "innings": [0, 0, 6, 1, 0, 3, 1, 1, 0], "hits": 14, "errors": 0, "lob": 6, "record": { "w": 51, "l": 42 }, "rank": 2, "league": "AL", "division": "East", "homers": [{ "id": 669224, "name": "Austin Wells", "no": 5 }, { "id": 700250, "name": "Ben Rice", "hr": 2, "no": 28 }] },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [1, 0, 2, 0, 0, 1, 0, 0, 0], "hits": 10, "errors": 1, "lob": 8, "record": { "w": 54, "l": 37 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 691406, "name": "Junior Caminero", "no": 27 }] },
     "decisions": { "winner": "Ryan Yarbrough", "loser": "Drew Rasmussen" }
   },
   "comments": [

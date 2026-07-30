@@ -185,8 +185,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 9, "innings": [0, 0, 1, 0, 3, 0, 5, 0, 0], "hits": 8, "errors": 0, "lob": 3, "record": { "w": 52, "l": 40 }, "rank": 2, "league": "NL", "division": "Central" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 7, "innings": [0, 0, 1, 2, 0, 0, 2, 2, 0], "hits": 14, "errors": 1, "lob": 6, "record": { "w": 42, "l": 51 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 9, "innings": [0, 0, 1, 0, 3, 0, 5, 0, 0], "hits": 8, "errors": 0, "lob": 3, "record": { "w": 52, "l": 40 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 624424, "name": "Michael Conforto", "no": 8 }, { "id": 608348, "name": "Carson Kelly", "no": 5 }, { "id": 691718, "name": "Pete Crow-Armstrong", "hr": 2, "no": 21 }, { "id": 673548, "name": "Seiya Suzuki", "no": 14 }] },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 7, "innings": [0, 0, 1, 2, 0, 0, 2, 2, 0], "hits": 14, "errors": 1, "lob": 6, "record": { "w": 42, "l": 51 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 641933, "name": "Tyler O'Neill", "hr": 2, "no": 5 }, { "id": 624413, "name": "Pete Alonso", "no": 20 }, { "id": 691723, "name": "Coby Mayo", "no": 11 }] },
     "decisions": { "winner": "Colin Rea", "loser": "Dean Kremer", "save": "Jacob Webb" }
   }
 }

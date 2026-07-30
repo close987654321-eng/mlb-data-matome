@@ -787,6 +787,7 @@ async function fetchSchedule(date) {
     };
   };
   return games.map((g) => ({
+    gamePk: g.gamePk,
     etDate: g.officialDate,
     status: g.status?.detailedState ?? g.status?.abstractGameState ?? '',
     doubleHeader: g.doubleHeader === 'Y',
@@ -805,6 +806,32 @@ async function fetchSchedule(date) {
         }
       : null,
   }));
+}
+
+/**
+ * その試合の本塁打を打った選手（away/home 別）。boxscore の打者成績から homeRuns>0 を拾う。
+ * 「誰が打ったか」は日本人ファンが最も検索する情報なので、試合結果ボックスに1行そえる。
+ * `no` は seasonStats＝その試合終了時点の今季本数（「今季11号」の号数）。
+ * 取れなければ null を返し、本塁打行だけ欠けた状態で続行する（記事を壊さない）。
+ */
+async function fetchHomers(gamePk) {
+  try {
+    const j = await getJson(`${BASE}/game/${gamePk}/boxscore`);
+    const pick = (side) =>
+      Object.values(j.teams?.[side]?.players ?? {})
+        .filter((p) => (p.stats?.batting?.homeRuns ?? 0) > 0)
+        .map((p) => ({
+          id: p.person?.id,
+          name: p.person?.fullName,
+          hr: p.stats.batting.homeRuns, // その試合の本数（複数本ならまとめて出す）
+          no: p.seasonStats?.batting?.homeRuns ?? null, // その試合終了時点の今季本数
+        }))
+        .filter((p) => p.id && p.name);
+    return { away: pick('away'), home: pick('home') };
+  } catch (e) {
+    console.log(`  （gamePk ${gamePk} の boxscore を取得できず本塁打は省略: ${e.message}）`);
+    return null;
+  }
 }
 
 /**
@@ -1353,8 +1380,9 @@ async function runBackfillGames({ apply, force } = {}) {
       rankCache.set(etDate, await fetchRanksOn(Number(etDate.slice(0, 4)), etDate));
     }
     const ranks = rankCache.get(etDate);
+    const homers = await fetchHomers(g.gamePk); // 本塁打の打者（取れなければ null）
     /** API の1チーム分を JSON の1行（インライン）に組む。取れなかった項目は書かない＝捏造しない。 */
-    const sideLine = (src, enName) => {
+    const sideLine = (src, enName, hrs) => {
       const parts = [
         `"ja": ${JSON.stringify(TEAM_JA[enName] ?? enName)}`,
         `"en": ${JSON.stringify(enName)}`,
@@ -1368,6 +1396,17 @@ async function runBackfillGames({ apply, force } = {}) {
       if (src.record) parts.push(`"record": { "w": ${src.record.w}, "l": ${src.record.l} }`);
       const r = ranks.get(src.teamId);
       if (r) parts.push(`"rank": ${r.rank}, "league": "${r.league}", "division": "${r.division}"`);
+      if (hrs?.length) {
+        const list = hrs
+          .map((p) =>
+            `{ "id": ${p.id}, "name": ${JSON.stringify(p.name)}` +
+            (p.hr > 1 ? `, "hr": ${p.hr}` : '') +
+            (p.no != null ? `, "no": ${p.no}` : '') +
+            ' }',
+          )
+          .join(', ');
+        parts.push(`"homers": [${list}]`);
+      }
       return `{ ${parts.join(', ')} }`;
     };
     const d = g.decisions;
@@ -1378,8 +1417,8 @@ async function runBackfillGames({ apply, force } = {}) {
     ].filter(Boolean);
     const block =
       '  "game": {\n' +
-      `    "away": ${sideLine(g.awaySide, g.away)},\n` +
-      `    "home": ${sideLine(g.homeSide, g.home)}` +
+      `    "away": ${sideLine(g.awaySide, g.away, homers?.away)},\n` +
+      `    "home": ${sideLine(g.homeSide, g.home, homers?.home)}` +
       (decisionParts.length ? `,\n    "decisions": { ${decisionParts.join(', ')} }\n` : '\n') +
       '  }';
     const isNew = !t.game;

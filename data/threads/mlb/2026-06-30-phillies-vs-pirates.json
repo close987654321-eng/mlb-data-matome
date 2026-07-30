@@ -136,8 +136,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 11, "innings": [0, 0, 0, 2, 6, 0, 0, 0, 3], "hits": 11, "errors": 0, "lob": 5, "record": { "w": 43, "l": 42 }, "rank": 4, "league": "NL", "division": "Central" },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 7, "innings": [2, 0, 3, 0, 0, 0, 0, 2, 0], "hits": 9, "errors": 2, "lob": 6, "record": { "w": 47, "l": 38 }, "rank": 2, "league": "NL", "division": "East" },
+    "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 11, "innings": [0, 0, 0, 2, 6, 0, 0, 0, 3], "hits": 11, "errors": 0, "lob": 5, "record": { "w": 43, "l": 42 }, "rank": 4, "league": "NL", "division": "Central", "homers": [{ "id": 682848, "name": "Endy Rodríguez", "no": 4 }, { "id": 699013, "name": "Esmerlyn Valdez", "no": 6 }, { "id": 669707, "name": "Jared Triolo", "no": 1 }] },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 7, "innings": [2, 0, 3, 0, 0, 0, 0, 2, 0], "hits": 9, "errors": 2, "lob": 6, "record": { "w": 47, "l": 38 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 669016, "name": "Brandon Marsh", "hr": 2, "no": 14 }, { "id": 547180, "name": "Bryce Harper", "no": 20 }, { "id": 607208, "name": "Trea Turner", "no": 8 }] },
     "decisions": { "winner": "Braxton Ashcraft", "loser": "Aaron Nola" }
   }
 }

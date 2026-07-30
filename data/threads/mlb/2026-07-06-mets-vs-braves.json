@@ -186,8 +186,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 10, "innings": [1, 4, 0, 0, 0, 0, 0, 0, 5], "hits": 12, "errors": 3, "lob": 4, "record": { "w": 37, "l": 53 }, "rank": 5, "league": "NL", "division": "East" },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 9, "innings": [3, 0, 0, 0, 0, 0, 0, 0, 6], "hits": 12, "errors": 1, "lob": 6, "record": { "w": 52, "l": 36 }, "rank": 1, "league": "NL", "division": "East" },
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 10, "innings": [1, 4, 0, 0, 0, 0, 0, 0, 5], "hits": 12, "errors": 3, "lob": 4, "record": { "w": 37, "l": 53 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 621438, "name": "Tyrone Taylor", "no": 5 }, { "id": 805999, "name": "A.J. Ewing", "no": 5 }] },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 9, "innings": [3, 0, 0, 0, 0, 0, 0, 0, 6], "hits": 12, "errors": 1, "lob": 6, "record": { "w": 52, "l": 36 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 686948, "name": "Drake Baldwin", "no": 15 }] },
     "decisions": { "winner": "Nolan McLean", "loser": "Martín Pérez", "save": "Devin Williams" }
   }
 }

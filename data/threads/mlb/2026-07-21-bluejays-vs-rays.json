@@ -169,7 +169,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 7, "innings": [0, 1, 1, 0, 2, 1, 1, 0, 1], "hits": 13, "errors": 0, "lob": 6, "record": { "w": 57, "l": 42 }, "rank": 1, "league": "AL", "division": "East" },
+    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 7, "innings": [0, 1, 1, 0, 2, 1, 1, 0, 1], "hits": 13, "errors": 0, "lob": 6, "record": { "w": 57, "l": 42 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 663743, "name": "Nick Fortes", "no": 3 }, { "id": 683748, "name": "Victor Mesa Jr.", "no": 8 }, { "id": 656775, "name": "Cedric Mullins", "no": 12 }] },
     "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 0], "hits": 8, "errors": 3, "lob": 7, "record": { "w": 46, "l": 54 }, "rank": 5, "league": "AL", "division": "East" },
     "decisions": { "winner": "Nick Martinez", "loser": "Dylan Cease" }
   }

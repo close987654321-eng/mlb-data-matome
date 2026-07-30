@@ -97,8 +97,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 8, "innings": [0, 0, 0, 0, 0, 0, 0, 3, 5, 0], "hits": 11, "errors": 1, "lob": 8, "record": { "w": 32, "l": 50 }, "rank": 5, "league": "NL", "division": "West" },
-    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 9, "innings": [2, 2, 0, 0, 3, 0, 0, 0, 1, 1], "hits": 14, "errors": 0, "lob": 7, "record": { "w": 39, "l": 44 }, "rank": 3, "league": "AL", "division": "Central" },
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 8, "innings": [0, 0, 0, 0, 0, 0, 0, 3, 5, 0], "hits": 11, "errors": 1, "lob": 8, "record": { "w": 32, "l": 50 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 664983, "name": "Jake McCarthy", "no": 6 }, { "id": 696100, "name": "Hunter Goodman", "no": 22 }] },
+    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 9, "innings": [2, 2, 0, 0, 3, 0, 0, 0, 1, 1], "hits": 14, "errors": 0, "lob": 7, "record": { "w": 39, "l": 44 }, "rank": 3, "league": "AL", "division": "Central", "homers": [{ "id": 665019, "name": "Kody Clemens", "no": 12 }, { "id": 686797, "name": "Brooks Lee", "no": 14 }] },
     "decisions": { "winner": "Andrew Morris", "loser": "Jimmy Herget" }
   }
 }

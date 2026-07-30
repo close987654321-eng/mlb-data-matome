@@ -25,8 +25,8 @@
     "videoTitle": "DODGERS vs. METS: Official Full Game Highlights (July 24) | 2026 MLB Season"
   },
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 0, 0, 1, 0, 0, 1, 2, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 66, "l": 38 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 2, "innings": [0, 1, 0, 0, 0, 0, 0, 1, 0], "hits": 4, "errors": 0, "lob": 3, "record": { "w": 43, "l": 61 }, "rank": 5, "league": "NL", "division": "East" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 0, 0, 1, 0, 0, 1, 2, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 66, "l": 38 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 663656, "name": "Kyle Tucker", "no": 8 }] },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 2, "innings": [0, 1, 0, 0, 0, 0, 0, 1, 0], "hits": 4, "errors": 0, "lob": 3, "record": { "w": 43, "l": 61 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 682626, "name": "Francisco Alvarez", "no": 12 }, { "id": 673357, "name": "Luis Robert Jr.", "no": 4 }] },
     "decisions": { "winner": "Roki Sasaki", "loser": "Brooks Raley", "save": "Tanner Scott" }
   },
   "stats": [

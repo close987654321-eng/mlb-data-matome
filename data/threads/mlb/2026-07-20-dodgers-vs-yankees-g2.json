@@ -29,8 +29,8 @@
   },
   "tags": ["ドジャース", "ヤンキース", "大谷翔平", "トミー・エドマン", "松井裕樹", "ベン・ライス", "海外の反応"],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 63, "l": 37 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 2, "innings": [1, 0, 0, 0, 0, 0, 0, 1, null], "hits": 8, "errors": 0, "lob": 11, "record": { "w": 55, "l": 44 }, "rank": 2, "league": "AL", "division": "East" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 63, "l": 37 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 669242, "name": "Tommy Edman", "no": 2 }] },
+    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 2, "innings": [1, 0, 0, 0, 0, 0, 0, 1, null], "hits": 8, "errors": 0, "lob": 11, "record": { "w": 55, "l": 44 }, "rank": 2, "league": "AL", "division": "East", "homers": [{ "id": 665862, "name": "Jazz Chisholm Jr.", "no": 14 }] },
     "decisions": { "winner": "David Bednar", "loser": "Evan Phillips" }
   },
   "stats": [

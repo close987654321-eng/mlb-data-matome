@@ -145,7 +145,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [2, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 11, "errors": 2, "lob": 6, "record": { "w": 50, "l": 33 }, "rank": 1, "league": "AL", "division": "East" },
+    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [2, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 11, "errors": 2, "lob": 6, "record": { "w": 50, "l": 33 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 691406, "name": "Junior Caminero", "no": 24 }, { "id": 656775, "name": "Cedric Mullins", "no": 9 }] },
     "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 35, "l": 52 }, "rank": 5, "league": "AL", "division": "Central" },
     "decisions": { "winner": "Shane McClanahan", "loser": "Seth Lugo", "save": "Kevin Kelly" }
   }

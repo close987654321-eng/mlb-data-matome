@@ -12,8 +12,8 @@
   "summaryJa": "今井達也が6回8奪三振1失点の圧巻の投球でアストロズを5-3の勝利に導いた。マーリンズはトリプルプレー（三重殺）を記録する珍しいシーンがあったものの勝利には届かず、8連敗中の不振から抜け出せない。「今井加熱中。高校時代に全国制覇を達成した選手」と紹介するコメントも上がり、現地ファンは後半戦の浮上に期待を込めた。",
   "totalComments": 24,
   "game": {
-    "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 3, "innings": [0, 0, 0, 0, 1, 0, 2, 0, 0], "hits": 8, "errors": 1, "lob": 8, "record": { "w": 52, "l": 50 }, "rank": 3, "league": "NL", "division": "East" },
-    "home": { "ja": "アストロズ", "en": "Houston Astros", "score": 5, "innings": [1, 1, 0, 0, 3, 0, 0, 0, null], "hits": 8, "errors": 0, "lob": 2, "record": { "w": 49, "l": 54 }, "rank": 3, "league": "AL", "division": "West" },
+    "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 3, "innings": [0, 0, 0, 0, 1, 0, 2, 0, 0], "hits": 8, "errors": 1, "lob": 8, "record": { "w": 52, "l": 50 }, "rank": 3, "league": "NL", "division": "East", "homers": [{ "id": 691788, "name": "Joe Mack", "no": 9 }] },
+    "home": { "ja": "アストロズ", "en": "Houston Astros", "score": 5, "innings": [1, 1, 0, 0, 3, 0, 0, 0, null], "hits": 8, "errors": 0, "lob": 2, "record": { "w": 49, "l": 54 }, "rank": 3, "league": "AL", "division": "West", "homers": [{ "id": 670623, "name": "Isaac Paredes", "no": 13 }, { "id": 665161, "name": "Jeremy Peña", "no": 8 }] },
     "decisions": { "winner": "Tatsuya Imai", "loser": "Tyler Phillips", "save": "Josh Hader" }
   },
   "stats": [

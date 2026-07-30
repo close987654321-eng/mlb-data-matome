@@ -195,8 +195,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [1, 0, 0, 2, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 1, "record": { "w": 62, "l": 44 }, "rank": 1, "league": "NL", "division": "East" },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 14, "innings": [1, 0, 2, 0, 0, 2, 4, 5, null], "hits": 19, "errors": 0, "lob": 11, "record": { "w": 45, "l": 62 }, "rank": 5, "league": "NL", "division": "East" },
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [1, 0, 0, 2, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 1, "record": { "w": 62, "l": 44 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 645277, "name": "Ozzie Albies", "no": 18 }] },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 14, "innings": [1, 0, 2, 0, 0, 2, 4, 5, null], "hits": 19, "errors": 0, "lob": 11, "record": { "w": 45, "l": 62 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 621438, "name": "Tyrone Taylor", "no": 9 }, { "id": 543760, "name": "Marcus Semien", "no": 12 }, { "id": 596019, "name": "Francisco Lindor", "hr": 2, "no": 8 }] },
     "decisions": { "winner": "Zac Thornton", "loser": "Connor Thomas" }
   }
 }

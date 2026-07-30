@@ -31,8 +31,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 6, "errors": 2, "lob": 6, "record": { "w": 61, "l": 43 }, "rank": 1, "league": "NL", "division": "East" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 0, 1, 0, 1, 0, 0, 0, 1], "hits": 7, "errors": 0, "lob": 8, "record": { "w": 51, "l": 54 }, "rank": 4, "league": "AL", "division": "East" },
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 6, "errors": 2, "lob": 6, "record": { "w": 61, "l": 43 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 645277, "name": "Ozzie Albies", "no": 17 }] },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 0, 1, 0, 1, 0, 0, 0, 1], "hits": 7, "errors": 0, "lob": 8, "record": { "w": 51, "l": 54 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 683002, "name": "Gunnar Henderson", "no": 18 }] },
     "decisions": { "winner": "Yennier Cano", "loser": "Didier Fuentes" }
   },
   "comments": [

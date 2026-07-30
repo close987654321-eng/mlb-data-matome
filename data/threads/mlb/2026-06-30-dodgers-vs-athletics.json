@@ -295,8 +295,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 9, "innings": [0, 2, 0, 3, 0, 3, 0, 1, 0], "hits": 17, "errors": 0, "lob": 9, "record": { "w": 55, "l": 30 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 4, "innings": [0, 3, 0, 0, 0, 0, 0, 0, 1], "hits": 11, "errors": 0, "lob": 10, "record": { "w": 40, "l": 45 }, "rank": 4, "league": "AL", "division": "West" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 9, "innings": [0, 2, 0, 3, 0, 3, 0, 1, 0], "hits": 17, "errors": 0, "lob": 9, "record": { "w": 55, "l": 30 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 571970, "name": "Max Muncy", "no": 17 }, { "id": 660271, "name": "Shohei Ohtani", "no": 18 }, { "id": 681624, "name": "Andy Pages", "no": 16 }] },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 4, "innings": [0, 3, 0, 0, 0, 0, 0, 0, 1], "hits": 11, "errors": 0, "lob": 10, "record": { "w": 40, "l": 45 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 687515, "name": "Colby Thomas", "no": 3 }] },
     "decisions": { "winner": "Eric Lauer", "loser": "Gage Jump" }
   }
 }

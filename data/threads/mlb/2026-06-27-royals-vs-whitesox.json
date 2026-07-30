@@ -133,7 +133,7 @@
   ],
   "game": {
     "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 0], "hits": 4, "errors": 1, "lob": 4, "record": { "w": 34, "l": 49 }, "rank": 5, "league": "AL", "division": "Central" },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 22, "innings": [0, 0, 10, 1, 2, 4, 5, 0, null], "hits": 23, "errors": 0, "lob": 7, "record": { "w": 42, "l": 38 }, "rank": 1, "league": "AL", "division": "Central" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 22, "innings": [0, 0, 10, 1, 2, 4, 5, 0, null], "hits": 23, "errors": 0, "lob": 7, "record": { "w": 42, "l": 38 }, "rank": 1, "league": "AL", "division": "Central", "homers": [{ "id": 694378, "name": "Jacob Gonzalez", "no": 2 }, { "id": 671976, "name": "Tristan Peters", "no": 4 }, { "id": 691019, "name": "Kyle Teel", "no": 1 }, { "id": 643217, "name": "Andrew Benintendi", "no": 10 }, { "id": 678246, "name": "Miguel Vargas", "no": 18 }] },
     "decisions": { "winner": "David Sandlin", "loser": "Mitch Spence" }
   }
 }

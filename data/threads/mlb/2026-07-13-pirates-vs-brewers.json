@@ -193,8 +193,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 5, "innings": [0, 0, 0, 2, 0, 0, 0, 3, 0], "hits": 8, "errors": 1, "lob": 6, "record": { "w": 59, "l": 37 }, "rank": 1, "league": "NL", "division": "Central" },
-    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 14, "innings": [0, 4, 0, 10, 0, 0, 0, 0, null], "hits": 15, "errors": 0, "lob": 6, "record": { "w": 50, "l": 47 }, "rank": 4, "league": "NL", "division": "Central" },
+    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 5, "innings": [0, 0, 0, 2, 0, 0, 0, 3, 0], "hits": 8, "errors": 1, "lob": 6, "record": { "w": 59, "l": 37 }, "rank": 1, "league": "NL", "division": "Central", "homers": [{ "id": 668930, "name": "Brice Turang", "no": 14 }] },
+    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 14, "innings": [0, 4, 0, 10, 0, 0, 0, 0, null], "hits": 15, "errors": 0, "lob": 6, "record": { "w": 50, "l": 47 }, "rank": 4, "league": "NL", "division": "Central", "homers": [{ "id": 680779, "name": "Henry Davis", "no": 8 }, { "id": 542303, "name": "Marcell Ozuna", "no": 8 }] },
     "decisions": { "winner": "Paul Skenes", "loser": "Robert Gasser" }
   }
 }

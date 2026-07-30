@@ -100,8 +100,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 0], "hits": 9, "errors": 0, "lob": 9, "record": { "w": 50, "l": 29 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 6, "record": { "w": 38, "l": 42 }, "rank": 3, "league": "AL", "division": "Central" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 0], "hits": 9, "errors": 0, "lob": 9, "record": { "w": 50, "l": 29 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 518692, "name": "Freddie Freeman", "no": 13 }, { "id": 660271, "name": "Shohei Ohtani", "no": 17 }] },
+    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 6, "record": { "w": 38, "l": 42 }, "rank": 3, "league": "AL", "division": "Central", "homers": [{ "id": 621439, "name": "Byron Buxton", "no": 25 }] },
     "decisions": { "winner": "Eric Lauer", "loser": "Zebby Matthews", "save": "Tanner Scott" }
   }
 }

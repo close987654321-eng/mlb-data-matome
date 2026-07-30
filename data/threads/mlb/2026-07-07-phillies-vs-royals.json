@@ -48,7 +48,7 @@
   ],
   "game": {
     "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 10, "errors": 1, "lob": 15, "record": { "w": 50, "l": 41 }, "rank": 2, "league": "NL", "division": "East" },
-    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 15, "innings": [6, 1, 1, 1, 1, 1, 2, 2, null], "hits": 22, "errors": 0, "lob": 11, "record": { "w": 37, "l": 54 }, "rank": 5, "league": "AL", "division": "Central" },
+    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 15, "innings": [6, 1, 1, 1, 1, 1, 2, 2, null], "hits": 22, "errors": 0, "lob": 11, "record": { "w": 37, "l": 54 }, "rank": 5, "league": "AL", "division": "Central", "homers": [{ "id": 686475, "name": "Tyler Tolbert", "no": 1 }, { "id": 521692, "name": "Salvador Perez", "no": 11 }, { "id": 571912, "name": "Luke Maile", "no": 1 }, { "id": 657041, "name": "Lane Thomas", "no": 6 }] },
     "decisions": { "winner": "Noah Cameron", "loser": "Cristopher Sánchez" }
   },
   "comments": [

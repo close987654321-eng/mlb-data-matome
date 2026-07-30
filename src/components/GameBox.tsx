@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/navigation';
 import { getTeam, teamLogoUrl, teamAbbr } from '@/lib/teams';
+import { getPlayerByMlbId } from '@/lib/players';
 import { divisionRankShort } from '@/lib/standings';
 import { teamHubOf, TEAM_HUB_MIN_ARTICLES } from '@/lib/teamHub';
 import { getAllTags } from '@/lib/tags';
@@ -25,11 +26,14 @@ export default async function GameBox({
   game,
   dateLabel,
   locale,
+  children,
 }: {
   game: ThreadGame;
   /** 試合日の表示（例: 2026.7.30）。記事の series.date / id 由来＝JST */
   dateLabel: string;
   locale: Locale;
+  /** ボックス下端に置くアクション（試合結果カードの生成ボタン）。関心が一番高い位置で押せる。 */
+  children?: React.ReactNode;
 }) {
   const t = await getTranslations();
   const { away, home } = game;
@@ -189,7 +193,49 @@ export default async function GameBox({
           </div>
         )}
 
-        {/* ③ 勝敗投手・セーブ。選手名は公式表記（英語）のまま */}
+        {/* ③ 本塁打＝「誰が打ったか」。日本人選手はカタログの日本語表記＋選手ハブへリンク */}
+        {sides.some(({ side }) => side.homers?.length) && (
+          <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-line px-5 py-3 text-xs">
+            <span className="text-ink-mute">{t('game.hr')}</span>
+            {sides
+              .filter(({ side }) => side.homers?.length)
+              .map(({ side }) => {
+                const info = getTeam(side.ja);
+                return (
+                  <span key={side.en} className="text-ink-soft">
+                    <span className="mr-1.5 font-semibold text-ink-mute">
+                      {teamAbbr(info?.id) ?? side.ja}
+                    </span>
+                    {side.homers!.map((h, i) => {
+                      const pl = getPlayerByMlbId(h.id);
+                      const label = pl ? (locale === 'ja' ? pl.nameJa : pl.nameEn) : h.name;
+                      return (
+                        <span key={h.id}>
+                          {i > 0 && '、'}
+                          {pl ? (
+                            <Link
+                              href={`/player/${pl.slug}`}
+                              className="font-medium text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
+                            >
+                              {label}
+                            </Link>
+                          ) : (
+                            label
+                          )}
+                          {/* 1試合2本以上はその本数、それ以外は今季通算の号数 */}
+                          {h.hr && h.hr > 1
+                            ? `（${t('game.hrMulti', { n: h.hr })}）`
+                            : h.no != null && `（${t('game.hrNo', { n: h.no })}）`}
+                        </span>
+                      );
+                    })}
+                  </span>
+                );
+              })}
+          </div>
+        )}
+
+        {/* ④ 勝敗投手・セーブ。選手名は公式表記（英語）のまま */}
         {game.decisions && (game.decisions.winner || game.decisions.loser) && (
           <p className="flex flex-wrap gap-x-4 gap-y-1 border-t border-line px-5 py-3 text-xs text-ink-soft">
             {game.decisions.winner && (
@@ -212,6 +258,8 @@ export default async function GameBox({
             )}
           </p>
         )}
+        {/* ⑤ この結果を1枚の画像にして配る導線。結果を読み終えた直後＝関心のピークに置く */}
+        {children && <div className="border-t border-line px-5 py-4">{children}</div>}
       </div>
 
       <p className="mt-2 text-xs text-ink-mute">{t('game.asOf', { date: dateLabel })}</p>

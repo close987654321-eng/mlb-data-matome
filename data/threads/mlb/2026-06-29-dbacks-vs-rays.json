@@ -119,8 +119,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 41, "l": 42 }, "rank": 3, "league": "NL", "division": "West" },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 5, "innings": [1, 2, 0, 0, 1, 1, 0, 0, null], "hits": 10, "errors": 0, "lob": 5, "record": { "w": 48, "l": 33 }, "rank": 1, "league": "AL", "division": "East" },
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 41, "l": 42 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 606466, "name": "Ketel Marte", "no": 15 }] },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 5, "innings": [1, 2, 0, 0, 1, 1, 0, 0, null], "hits": 10, "errors": 0, "lob": 5, "record": { "w": 48, "l": 33 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 810938, "name": "Ben Williamson", "no": 2 }, { "id": 691406, "name": "Junior Caminero", "no": 22 }, { "id": 656775, "name": "Cedric Mullins", "no": 8 }] },
     "decisions": { "winner": "Drew Rasmussen", "loser": "Merrill Kelly" }
   }
 }

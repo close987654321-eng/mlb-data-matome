@@ -255,8 +255,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 7, "innings": [0, 4, 0, 0, 0, 3, 0, 0, 0], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 45, "l": 50 }, "rank": 4, "league": "AL", "division": "East" },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 8, "innings": [2, 2, 2, 1, 0, 1, 0, 0, null], "hits": 8, "errors": 1, "lob": 10, "record": { "w": 47, "l": 48 }, "rank": 3, "league": "NL", "division": "West" },
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 7, "innings": [0, 4, 0, 0, 0, 3, 0, 0, 0], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 45, "l": 50 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 682729, "name": "Jonatan Clase", "no": 2 }, { "id": 665489, "name": "Vladimir Guerrero Jr.", "no": 6 }] },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 8, "innings": [2, 2, 2, 1, 0, 1, 0, 0, null], "hits": 8, "errors": 1, "lob": 10, "record": { "w": 47, "l": 48 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 664034, "name": "Ty France", "no": 11 }] },
     "decisions": { "winner": "Bradgley Rodriguez", "loser": "Mason Fluharty", "save": "Mason Miller" }
   }
 }

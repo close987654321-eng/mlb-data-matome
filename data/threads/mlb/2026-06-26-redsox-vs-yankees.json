@@ -158,8 +158,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 3, "innings": [1, 0, 0, 1, 0, 0, 1, 0, 0], "hits": 8, "errors": 3, "lob": 8, "record": { "w": 48, "l": 32 }, "rank": 1, "league": "AL", "division": "East" },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6, "innings": [0, 0, 0, 0, 4, 0, 0, 2, null], "hits": 7, "errors": 0, "lob": 9, "record": { "w": 33, "l": 46 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 3, "innings": [1, 0, 0, 1, 0, 0, 1, 0, 0], "hits": 8, "errors": 3, "lob": 8, "record": { "w": 48, "l": 32 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 676609, "name": "José Caballero", "no": 8 }] },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6, "innings": [0, 0, 0, 0, 4, 0, 0, 2, null], "hits": 7, "errors": 0, "lob": 9, "record": { "w": 33, "l": 46 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 702332, "name": "Caleb Durbin", "no": 6 }] },
     "decisions": { "winner": "Connelly Early", "loser": "Cam Schlittler", "save": "Aroldis Chapman" }
   }
 }

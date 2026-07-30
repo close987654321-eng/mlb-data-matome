@@ -21,8 +21,8 @@
   },
   "tags": ["メッツ", "フィリーズ", "千賀滉大", "フアン・ソト", "カイル・シュワーバー", "海外の反応"],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 1, "innings": [0, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 3, "lob": 5, "record": { "w": 41, "l": 58 }, "rank": 5, "league": "NL", "division": "East" },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 6, "innings": [2, 0, 0, 0, 2, 2, 0, 0, null], "hits": 12, "errors": 1, "lob": 12, "record": { "w": 55, "l": 44 }, "rank": 2, "league": "NL", "division": "East" },
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 1, "innings": [0, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 3, "lob": 5, "record": { "w": 41, "l": 58 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 621438, "name": "Tyrone Taylor", "no": 7 }] },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 6, "innings": [2, 0, 0, 0, 2, 2, 0, 0, null], "hits": 12, "errors": 1, "lob": 12, "record": { "w": 55, "l": 44 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 656941, "name": "Kyle Schwarber", "no": 33 }, { "id": 607208, "name": "Trea Turner", "no": 12 }] },
     "decisions": { "winner": "Jesús Luzardo", "loser": "Sean Manaea" }
   },
   "stats": [

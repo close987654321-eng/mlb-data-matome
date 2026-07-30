@@ -102,7 +102,7 @@
   ],
   "game": {
     "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 1, "innings": [0, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 44, "l": 40 }, "rank": 3, "league": "NL", "division": "East" },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 2, "innings": [0, 2, 0, 0, 0, 0, 0, 0, null], "hits": 6, "errors": 0, "lob": 2, "record": { "w": 43, "l": 38 }, "rank": 3, "league": "NL", "division": "Central" },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 2, "innings": [0, 2, 0, 0, 0, 0, 0, 0, null], "hits": 6, "errors": 0, "lob": 2, "record": { "w": 43, "l": 38 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 663494, "name": "Bryan Torres", "no": 3 }] },
     "decisions": { "winner": "Kyle Leahy", "loser": "Tyler Phillips", "save": "Riley O'Brien" }
   }
 }

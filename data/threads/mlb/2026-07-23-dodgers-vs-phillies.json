@@ -20,8 +20,8 @@
   "summaryJa": "マンシー今季20号HRに加え、復帰のエドマンが3安打3打点、ラッシングも11号と若手が躍動。ドジャースがフィリーズから3戦目を9-5で制してシリーズ勝ち越し（65勝38敗）。大谷翔平は4打数0安打1四球と静かで「膝は大丈夫か」と心配の声も。エドマン復帰後の打率.360が示すように、フルヘルスのラインナップの怖さを現地ファンも実感。フィリーズは3塁への送球ミスが崩壊の引き金となり「あの走塁判断が全ての元凶」と悔やんだ。",
   "totalComments": 192,
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 9, "innings": [0, 0, 1, 0, 2, 2, 0, 4, 0], "hits": 11, "errors": 0, "lob": 4, "record": { "w": 65, "l": 38 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 5, "innings": [2, 0, 0, 0, 1, 0, 0, 1, 1], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 56, "l": 47 }, "rank": 2, "league": "NL", "division": "East" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 9, "innings": [0, 0, 1, 0, 2, 2, 0, 4, 0], "hits": 11, "errors": 0, "lob": 4, "record": { "w": 65, "l": 38 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 687221, "name": "Dalton Rushing", "no": 11 }, { "id": 571970, "name": "Max Muncy", "no": 20 }] },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 5, "innings": [2, 0, 0, 0, 1, 0, 0, 1, 1], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 56, "l": 47 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 650559, "name": "Bryan De La Cruz", "no": 1 }, { "id": 664761, "name": "Alec Bohm", "no": 13 }] },
     "decisions": { "winner": "Eric Lauer", "loser": "Aaron Nola" }
   },
   "stats": [

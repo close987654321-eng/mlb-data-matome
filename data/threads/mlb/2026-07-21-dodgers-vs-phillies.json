@@ -25,8 +25,8 @@
     "videoTitle": "DODGERS vs. PHILLIES: Official Full Game Highlights (July 20) | 2026 MLB Season"
   },
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 7, "innings": [0, 0, 0, 1, 0, 2, 1, 0, 3], "hits": 11, "errors": 0, "lob": 9, "record": { "w": 63, "l": 38 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10, "innings": [0, 4, 0, 0, 0, 4, 1, 1, null], "hits": 11, "errors": 2, "lob": 3, "record": { "w": 56, "l": 45 }, "rank": 2, "league": "NL", "division": "East" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 7, "innings": [0, 0, 0, 1, 0, 2, 1, 0, 3], "hits": 11, "errors": 0, "lob": 9, "record": { "w": 63, "l": 38 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 605141, "name": "Mookie Betts", "hr": 2, "no": 13 }] },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10, "innings": [0, 4, 0, 0, 0, 4, 1, 1, null], "hits": 11, "errors": 2, "lob": 3, "record": { "w": 56, "l": 45 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 669016, "name": "Brandon Marsh", "no": 16 }, { "id": 547180, "name": "Bryce Harper", "no": 21 }, { "id": 607208, "name": "Trea Turner", "hr": 2, "no": 14 }, { "id": 656537, "name": "Derek Hill", "no": 8 }] },
     "decisions": { "winner": "Cristopher Sánchez", "loser": "Emmet Sheehan" }
   },
   "tags": ["ドジャース", "フィリーズ", "大谷翔平", "ムーキー・ベッツ", "カイル・シュワーバー", "クリストファー・サンチェス", "海外の反応"],

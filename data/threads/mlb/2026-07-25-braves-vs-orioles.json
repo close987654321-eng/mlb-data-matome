@@ -20,8 +20,8 @@
     "videoTitle": "BRAVES vs. ORIOLES: Official Full Game Highlights (July 24) | 2026 MLB Season"
   },
   "game": {
-    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 7, "innings": [0, 0, 0, 2, 0, 0, 0, 1, 0, 4], "hits": 11, "errors": 1, "lob": 5, "record": { "w": 61, "l": 42 }, "rank": 1, "league": "NL", "division": "East" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 6, "innings": [0, 2, 0, 1, 0, 0, 0, 0, 0, 3], "hits": 9, "errors": 1, "lob": 10, "record": { "w": 50, "l": 54 }, "rank": 4, "league": "AL", "division": "East" },
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 7, "innings": [0, 0, 0, 2, 0, 0, 0, 1, 0, 4], "hits": 11, "errors": 1, "lob": 5, "record": { "w": 61, "l": 42 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 686948, "name": "Drake Baldwin", "no": 20 }, { "id": 621566, "name": "Matt Olson", "no": 27 }] },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 6, "innings": [0, 2, 0, 1, 0, 0, 0, 0, 0, 3], "hits": 9, "errors": 1, "lob": 10, "record": { "w": 50, "l": 54 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 687952, "name": "Christian Encarnacion-Strand", "no": 3 }] },
     "decisions": { "winner": "Elieser Hernández", "loser": "Andrew Kittredge" }
   },
   "stats": [

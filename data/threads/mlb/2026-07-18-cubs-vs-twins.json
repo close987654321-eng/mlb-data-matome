@@ -144,7 +144,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 5, "innings": [0, 0, 4, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 1, "lob": 4, "record": { "w": 49, "l": 49 }, "rank": 3, "league": "AL", "division": "Central" },
+    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 5, "innings": [0, 0, 4, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 1, "lob": 4, "record": { "w": 49, "l": 49 }, "rank": 3, "league": "AL", "division": "Central", "homers": [{ "id": 680777, "name": "Ryan Jeffers", "no": 8 }] },
     "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 2, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 0], "hits": 6, "errors": 1, "lob": 6, "record": { "w": 54, "l": 43 }, "rank": 2, "league": "NL", "division": "Central" },
     "decisions": { "winner": "Bailey Ober", "loser": "Colin Rea", "save": "Yoendrys Gómez" }
   }

@@ -44,8 +44,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 3, "innings": [0, 0, 0, 1, 1, 1, 0, 0, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 46, "l": 47 }, "rank": 2, "league": "NL", "division": "West" },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 1, "innings": [0, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 2, "record": { "w": 46, "l": 47 }, "rank": 3, "league": "NL", "division": "West" },
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 3, "innings": [0, 0, 0, 1, 1, 1, 0, 0, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 46, "l": 47 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 571448, "name": "Nolan Arenado", "no": 11 }] },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 1, "innings": [0, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 2, "record": { "w": 46, "l": 47 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 592518, "name": "Manny Machado", "no": 19 }] },
     "decisions": { "winner": "Merrill Kelly", "loser": "Griffin Canning", "save": "Paul Sewald" }
   },
   "comments": [

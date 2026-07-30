@@ -216,8 +216,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 23, "innings": [2, 3, 0, 3, 6, 0, 4, 5, 0], "hits": 24, "errors": 1, "lob": 6, "record": { "w": 27, "l": 45 }, "rank": 5, "league": "NL", "division": "West" },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 9, "innings": [4, 1, 0, 1, 2, 0, 1, 0, 0], "hits": 14, "errors": 1, "lob": 6, "record": { "w": 35, "l": 36 }, "rank": 2, "league": "AL", "division": "West" },
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 23, "innings": [2, 3, 0, 3, 6, 0, 4, 5, 0], "hits": 24, "errors": 1, "lob": 6, "record": { "w": 27, "l": 45 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 687859, "name": "Troy Johnston", "no": 3 }, { "id": 650489, "name": "Willi Castro", "hr": 2, "no": 5 }, { "id": 696100, "name": "Hunter Goodman", "hr": 2, "no": 20 }, { "id": 681198, "name": "TJ Rumfield", "no": 9 }] },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 9, "innings": [4, 1, 0, 1, 2, 0, 1, 0, 0], "hits": 14, "errors": 1, "lob": 6, "record": { "w": 35, "l": 36 }, "rank": 2, "league": "AL", "division": "West", "homers": [{ "id": 691777, "name": "Max Muncy", "no": 3 }, { "id": 691016, "name": "Tyler Soderstrom", "no": 12 }] },
     "decisions": { "winner": "Tomoyuki Sugano", "loser": "Jeffrey Springs", "save": "Eiberson Castellano" }
   }
 }

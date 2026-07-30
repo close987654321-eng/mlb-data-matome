@@ -225,8 +225,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 12, "innings": [0, 5, 0, 0, 3, 0, 4, 0, 0], "hits": 12, "errors": 0, "lob": 5, "record": { "w": 51, "l": 45 }, "rank": 1, "league": "AL", "division": "Central" },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 1, 1, 1, 1, 0, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 45, "l": 52 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 12, "innings": [0, 5, 0, 0, 3, 0, 4, 0, 0], "hits": 12, "errors": 0, "lob": 5, "record": { "w": 51, "l": 45 }, "rank": 1, "league": "AL", "division": "Central", "homers": [{ "id": 803011, "name": "Sam Antonacci", "no": 7 }] },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 1, 1, 1, 1, 0, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 45, "l": 52 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 649966, "name": "Luis Urías", "no": 2 }, { "id": 678218, "name": "Brandon Valenzuela", "no": 8 }, { "id": 543807, "name": "George Springer", "no": 10 }] },
     "decisions": { "winner": "Tyler Schweitzer", "loser": "Spencer Miles" }
   }
 }

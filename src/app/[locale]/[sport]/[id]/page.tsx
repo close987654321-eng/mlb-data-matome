@@ -7,6 +7,7 @@ import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
+import { gameSeoTitle, gameSeoDescription, gameDateOf, gameDateLongJa } from '@/lib/gameSeo';
 import { coverImage, ogCover, youTubeId } from '@/lib/media';
 import { rankNextReads } from '@/lib/nextRead';
 import { isThreadIndexable } from '@/lib/threadIndex';
@@ -28,6 +29,7 @@ import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
 import { absoluteUrl, SITE_URL, localeAlternates } from '@/lib/site';
 import { getPlayerByJaName, primaryPlayerOf } from '@/lib/players';
+import { getTeam, teamOfficialUrl, teamLogoUrl } from '@/lib/teams';
 import { locales, type Locale } from '@/lib/i18n';
 
 export const dynamicParams = false;
@@ -52,13 +54,23 @@ export async function generateMetadata({
   if (!thread) return {};
 
   const title = threadTitle(thread, locale);
-  const description = thread.summaryJa;
+  // 試合記事は検索結果に出すタイトル/説明文だけ組み直す＝スコアと日付を前に出して「対」クエリに答える
+  // （記事本文の見出しは title のまま。理由と実測値は src/lib/gameSeo.ts）。
+  const seoTitle = sport === 'mlb' ? gameSeoTitle(thread, locale) : null;
+  const description = sport === 'mlb' ? gameSeoDescription(thread, locale) : thread.summaryJa;
   // OGP/Discover は 1200px 幅以上を要求するので、動画は maxresdefault(1280x720) を優先する
   // 大きいカバーを使う（カード表示の coverImage=hqdefault とは別物）。
   const cover = await ogCover(thread);
 
+  // 編集タイトルの多くは末尾が【海外の反応】で、layout の '%s｜海外の反応' テンプレートと重なって
+  // 「…【海外の反応】｜海外の反応」になっていた（indexable 121ページで実測）。SERP のタイトルは
+  // 表示幅が限られるので重複語を捨てる。記事本文の見出し（h1）は編集タイトルのまま。
+  const metaTitle = seoTitle ?? title.replace(/\s*【海外の反応】\s*$/, '');
+
   return {
-    title,
+    // absolute＝layout のテンプレートを回さない。試合レポートは専用タイトル、それ以外は
+    // 「{編集タイトル}｜海外の反応」を自前で組む（ブランド語を1回だけに保つ）。
+    title: { absolute: seoTitle ?? `${metaTitle}｜海外の反応` },
     description,
     // 薄い記事（isThreadIndexable=false）は検索に出さない。follow は残す＝リンク先の
     // 選手ハブ・チームLPへの評価の流れは保つ（AdSense再申請の薄コンテンツ手当て）。
@@ -224,6 +236,44 @@ export default async function ThreadDetailPage({
         ]
       : [];
 
+  // AEO: 試合そのものを SportsEvent として宣言する。schema.org に「得点」の標準プロパティは
+  // 無いので、スコアは name / description に文章で入れる（回答エンジンが引用できる形）。
+  // 両チームは SportsTeam ＋ 公式サイトの sameAs で実体照合し、記事の about から参照させる。
+  const eventId = `${articleUrl}#game`;
+  const eventLd = (() => {
+    const g = thread.game;
+    if (sport !== 'mlb' || !g) return [];
+    const team = (side: typeof g.away) => {
+      const info = getTeam(side.ja);
+      return {
+        '@type': 'SportsTeam',
+        name: side.en,
+        alternateName: side.ja,
+        ...(info ? { sameAs: teamOfficialUrl(info.slug), logo: teamLogoUrl(info.id) } : {}),
+      };
+    };
+    const winner = g.away.score > g.home.score ? g.away : g.home;
+    return [
+      {
+        '@type': 'SportsEvent',
+        '@id': eventId,
+        name: `${g.away.ja} 対 ${g.home.ja} ${g.away.score}-${g.home.score}`,
+        description:
+          `${gameDateLongJa(gameDateOf(thread))}の MLB 公式戦。` +
+          `${g.away.ja} ${g.away.score} - ${g.home.score} ${g.home.ja} で${winner.ja}が勝利。`,
+        startDate: gameDateOf(thread),
+        sport: 'Baseball',
+        awayTeam: team(g.away),
+        homeTeam: team(g.home),
+        // 勝敗投手が取れている試合は主要な出演者として出す（公式 decisions 由来）。
+        ...(g.decisions?.winner
+          ? { performer: [{ '@type': 'Person', name: g.decisions.winner }] }
+          : {}),
+        url: articleUrl,
+      },
+    ];
+  })();
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -242,7 +292,10 @@ export default async function ThreadDetailPage({
         // 試合直後の反応まとめ＝時事コンテンツなので NewsArticle（Top Stories/News 適格の鍵）。
         '@type': 'NewsArticle',
         headline: title,
-        description: ldDescription(thread.summaryJa),
+        // 説明文は試合記事だけスコアを先頭に置いた版（メタの description と同じ文＝SERP と一致させる）。
+        description: ldDescription(
+          sport === 'mlb' ? gameSeoDescription(thread, locale) : thread.summaryJa,
+        ),
         image: { '@type': 'ImageObject', url: cover.url, width: cover.width, height: cover.height },
         datePublished: thread.fetchedAt,
         // 公開後に直した記事は updatedAt を立てる（無ければ公開日と同値）。fetchedAt は「取得日」で
@@ -255,20 +308,26 @@ export default async function ThreadDetailPage({
         mainEntityOfPage: { '@type': 'WebPage', '@id': articleUrl },
         // 抜粋コメント（AEO）。「現地ファンの声」がこの記事の主要な中身であることを機械可読にする。
         ...(commentLd.length ? { comment: commentLd, commentCount: thread.totalComments } : {}),
-        ...(taggedPlayers.length
+        // about＝この記事が何について書かれているか。選手（Person）に加え、試合記事は
+        // その試合（SportsEvent）も主題として参照させる（同グラフの @id に解決される）。
+        ...(taggedPlayers.length || eventLd.length
           ? {
-              about: taggedPlayers.map((p) => ({
-                '@type': 'Person',
-                name: p.nameJa,
-                alternateName: p.nameEn,
-                url: absoluteUrl(locale, `/player/${p.slug}`),
-                ...(p.sameAs.length ? { sameAs: p.sameAs } : {}),
-              })),
+              about: [
+                ...eventLd.map(() => ({ '@id': eventId })),
+                ...taggedPlayers.map((p) => ({
+                  '@type': 'Person',
+                  name: p.nameJa,
+                  alternateName: p.nameEn,
+                  url: absoluteUrl(locale, `/player/${p.slug}`),
+                  ...(p.sameAs.length ? { sameAs: p.sameAs } : {}),
+                })),
+              ],
             }
           : {}),
       },
       // 動画記事の VideoObject（uploadDate が取れている記事だけ）。
       ...videoLd,
+      ...eventLd,
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -375,7 +434,19 @@ export default async function ThreadDetailPage({
       {/* 試合結果ボックス。「◯◯ 対 ◯◯」で来た読者が先に知りたいのは勝敗＝結論を成績より上に置く。
           線スコア・順位・勝敗はすべて thread.game に焼き込んだ公知の数値（サイト本体は API を叩かない）。 */}
       {sport === 'mlb' && thread.game && (
-        <GameBox game={thread.game} dateLabel={gameDateLabel} locale={locale} />
+        <GameBox game={thread.game} dateLabel={gameDateLabel} locale={locale}>
+          {/* 「試合結果カードを作る」はボックス下端に同居させる＝結果を読んだ直後（関心のピーク）に
+              画像生成→X共有→UTM来訪の導線を出す。以前は記事のかなり下にあって繋がりが悪かった。 */}
+          <GameResultCard
+            game={thread.game}
+            dateLabel={gameDateLabel}
+            stats={jpStats
+              .filter((s) => s.today)
+              .map((s) => ({ player: s.player, line: s.today as string }))}
+            articleUrl={absoluteUrl(locale, `/${sport}/${thread.id}`)}
+            locale={locale}
+          />
+        </GameBox>
       )}
 
       {/* 注目選手の成績ボックス（R10）。MLB の試合まとめで summaryJa の直下に出す。数値は編集時に
@@ -424,22 +495,6 @@ export default async function ThreadDetailPage({
             </Link>
           ))}
         </p>
-      )}
-
-      {/* 試合結果カード（横展開）。最終スコア（thread.game・公知数値）がある MLB 記事だけ、Topps 調の
-          スコアボード1枚を画像出力できる＝記事＝拡散の起点。日本人選手のこの試合の成績(stats.today)も同梱。 */}
-      {sport === 'mlb' && thread.game && (
-        <div className="mt-6">
-          <GameResultCard
-            game={thread.game}
-            dateLabel={gameDateLabel}
-            stats={jpStats
-              .filter((s) => s.today)
-              .map((s) => ({ player: s.player, line: s.today as string }))}
-            articleUrl={absoluteUrl(locale, `/${sport}/${thread.id}`)}
-            locale={locale}
-          />
-        </div>
       )}
 
       {isWatchAlong ? (

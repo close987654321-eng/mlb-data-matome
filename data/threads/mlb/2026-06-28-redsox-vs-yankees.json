@@ -128,8 +128,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 1, "innings": [0, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 4, "record": { "w": 48, "l": 34 }, "rank": 2, "league": "AL", "division": "East" },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4, "innings": [1, 1, 2, 0, 0, 0, 0, 0, null], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 35, "l": 46 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 1, "innings": [0, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 4, "record": { "w": 48, "l": 34 }, "rank": 2, "league": "AL", "division": "East", "homers": [{ "id": 680474, "name": "Max Schuemann", "no": 1 }] },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4, "innings": [1, 1, 2, 0, 0, 0, 0, 0, null], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 35, "l": 46 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 678011, "name": "Anthony Seigler", "no": 1 }, { "id": 807799, "name": "Masataka Yoshida", "no": 2 }] },
     "decisions": { "winner": "Jake Bennett", "loser": "Gerrit Cole", "save": "Aroldis Chapman" }
   }
 }

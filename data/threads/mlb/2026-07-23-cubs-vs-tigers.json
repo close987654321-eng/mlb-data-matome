@@ -20,8 +20,8 @@
   "summaryJa": "タイガース先発モンテーロが好投し5-1でカブスを下し、シリーズ勝ち越し。最大の見せ場は台湾出身ハオユー・リーの3ランHR。現地ファンは「Hao-Yu LIKE THAT!🔥」と大喜び。鈴木誠也は4打数1安打1本塁打（今季17号）と意地の一発を見せたが、PCAを含む打線全体は沈黙。「タイガースは後半型のチームだということが証明された」という声が上がり、Wrigley Fieldの球場への愛も同時に語られた。",
   "totalComments": 50,
   "game": {
-    "away": { "ja": "タイガース", "en": "Detroit Tigers", "score": 5, "innings": [0, 1, 0, 3, 0, 0, 0, 0, 1], "hits": 9, "errors": 1, "lob": 4, "record": { "w": 48, "l": 54 }, "rank": 4, "league": "AL", "division": "Central" },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 57, "l": 45 }, "rank": 2, "league": "NL", "division": "Central" },
+    "away": { "ja": "タイガース", "en": "Detroit Tigers", "score": 5, "innings": [0, 1, 0, 3, 0, 0, 0, 0, 1], "hits": 9, "errors": 1, "lob": 4, "record": { "w": 48, "l": 54 }, "rank": 4, "league": "AL", "division": "Central", "homers": [{ "id": 701678, "name": "Hao-Yu Lee", "no": 5 }, { "id": 679529, "name": "Spencer Torkelson", "no": 19 }] },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 57, "l": 45 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 673548, "name": "Seiya Suzuki", "no": 17 }] },
     "decisions": { "winner": "Keider Montero", "loser": "Colin Rea" }
   },
   "stats": [

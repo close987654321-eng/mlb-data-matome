@@ -25,8 +25,8 @@
     "videoTitle": "BLUE JAYS vs. RED SOX: Official Full Game Highlights (July 24) | 2026 MLB Season"
   },
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 3, 1, 0], "hits": 9, "errors": 1, "lob": 10, "record": { "w": 47, "l": 57 }, "rank": 5, "league": "AL", "division": "East" },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6, "innings": [1, 0, 2, 0, 0, 1, 0, 2, null], "hits": 12, "errors": 1, "lob": 11, "record": { "w": 53, "l": 49 }, "rank": 3, "league": "AL", "division": "East" },
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 3, 1, 0], "hits": 9, "errors": 1, "lob": 10, "record": { "w": 47, "l": 57 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 672960, "name": "Kazuma Okamoto", "no": 23 }] },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6, "innings": [1, 0, 2, 0, 0, 1, 0, 2, null], "hits": 12, "errors": 1, "lob": 11, "record": { "w": 53, "l": 49 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 678011, "name": "Anthony Seigler", "no": 3 }, { "id": 678882, "name": "Ceddanne Rafaela", "no": 10 }] },
     "decisions": { "winner": "Garrett Whitlock", "loser": "CJ Van Eyk", "save": "Aroldis Chapman" }
   },
   "stats": [

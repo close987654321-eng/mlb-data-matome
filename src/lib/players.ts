@@ -210,6 +210,16 @@ export function getPlayerByJaName(nameJa: string): Player | undefined {
   return BY_JA.get(nameJa);
 }
 
+const BY_MLB_ID = new Map(PLAYERS.map((p) => [p.mlbId, p]));
+
+/**
+ * MLB 選手ID → 選手。API 由来のデータ（試合結果の本塁打など）に日本語表記を当てるのに使う。
+ * カタログに無い選手（大多数の現地選手）は undefined＝呼び出し側で公式英語表記のまま出す。
+ */
+export function getPlayerByMlbId(id: number): Player | undefined {
+  return BY_MLB_ID.get(id);
+}
+
 /** 日本語名 or エイリアス → ハブ slug。StatBox・TagList の選手名リンクに使う。 */
 export function playerSlugByJaName(nameJa: string): string | undefined {
   return BY_JA.get(nameJa)?.slug;

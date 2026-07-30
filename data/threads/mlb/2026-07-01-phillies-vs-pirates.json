@@ -125,7 +125,7 @@
   ],
   "game": {
     "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 8, "record": { "w": 43, "l": 43 }, "rank": 4, "league": "NL", "division": "Central" },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 8, "innings": [0, 2, 0, 0, 0, 0, 3, 3, null], "hits": 12, "errors": 0, "lob": 8, "record": { "w": 48, "l": 38 }, "rank": 2, "league": "NL", "division": "East" },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 8, "innings": [0, 2, 0, 0, 0, 0, 3, 3, null], "hits": 12, "errors": 0, "lob": 8, "record": { "w": 48, "l": 38 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 607208, "name": "Trea Turner", "no": 9 }] },
     "decisions": { "winner": "Cristopher Sánchez", "loser": "Bubba Chandler" }
   }
 }

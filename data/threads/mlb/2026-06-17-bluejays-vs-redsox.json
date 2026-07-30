@@ -281,8 +281,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 6, "innings": [0, 0, 1, 0, 2, 1, 0, 0, 2], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 35, "l": 38 }, "rank": 3, "league": "AL", "division": "East" },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 8, "errors": 0, "lob": 13, "record": { "w": 29, "l": 41 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 6, "innings": [0, 0, 1, 0, 2, 1, 0, 0, 2], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 35, "l": 38 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 665926, "name": "Andrés Giménez", "no": 7 }, { "id": 676914, "name": "Davis Schneider", "no": 3 }, { "id": 543807, "name": "George Springer", "no": 7 }] },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 8, "errors": 0, "lob": 13, "record": { "w": 29, "l": 41 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 680776, "name": "Jarren Duran", "no": 12 }] },
     "decisions": { "winner": "Dylan Cease", "loser": "Payton Tolle", "save": "Louis Varland" }
   }
 }

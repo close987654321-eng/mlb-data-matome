@@ -179,7 +179,7 @@
   ],
   "game": {
     "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [0, 0, 0, 0, 4, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 8, "record": { "w": 41, "l": 30 }, "rank": 2, "league": "AL", "division": "East" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 5, "innings": [0, 0, 0, 2, 1, 2, 0, 0, null], "hits": 9, "errors": 0, "lob": 11, "record": { "w": 48, "l": 27 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 5, "innings": [0, 0, 0, 2, 1, 2, 0, 0, null], "hits": 9, "errors": 0, "lob": 11, "record": { "w": 48, "l": 27 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 518692, "name": "Freddie Freeman", "no": 12 }] },
     "decisions": { "winner": "Shohei Ohtani", "loser": "Kevin Kelly", "save": "Alex Vesia" }
   }
 }

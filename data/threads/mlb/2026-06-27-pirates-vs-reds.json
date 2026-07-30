@@ -84,8 +84,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 6, "innings": [0, 4, 0, 0, 0, 0, 0, 2, 0], "hits": 8, "errors": 1, "lob": 4, "record": { "w": 38, "l": 42 }, "rank": 5, "league": "NL", "division": "Central" },
-    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 4, "innings": [1, 0, 0, 0, 1, 2, 0, 0, 0], "hits": 9, "errors": 0, "lob": 8, "record": { "w": 41, "l": 41 }, "rank": 4, "league": "NL", "division": "Central" },
+    "away": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 6, "innings": [0, 4, 0, 0, 0, 0, 0, 2, 0], "hits": 8, "errors": 1, "lob": 4, "record": { "w": 38, "l": 42 }, "rank": 5, "league": "NL", "division": "Central", "homers": [{ "id": 682622, "name": "Noelvi Marte", "no": 4 }] },
+    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 4, "innings": [1, 0, 0, 0, 1, 2, 0, 0, 0], "hits": 9, "errors": 0, "lob": 8, "record": { "w": 41, "l": 41 }, "rank": 4, "league": "NL", "division": "Central", "homers": [{ "id": 699013, "name": "Esmerlyn Valdez", "no": 3 }, { "id": 804606, "name": "Konnor Griffin", "no": 5 }, { "id": 542303, "name": "Marcell Ozuna", "no": 7 }] },
     "decisions": { "winner": "Brock Burke", "loser": "Mason Montgomery", "save": "Caleb Ferguson" }
   }
 }

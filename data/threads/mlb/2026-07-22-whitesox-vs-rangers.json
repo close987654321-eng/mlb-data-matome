@@ -21,7 +21,7 @@
   "totalComments": 22,
   "game": {
     "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 7, "record": { "w": 53, "l": 47 }, "rank": 1, "league": "AL", "division": "Central" },
-    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 10, "innings": [2, 0, 1, 2, 4, 1, 0, 0, null], "hits": 18, "errors": 0, "lob": 9, "record": { "w": 51, "l": 50 }, "rank": 1, "league": "AL", "division": "West" },
+    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 10, "innings": [2, 0, 1, 2, 4, 1, 0, 0, null], "hits": 18, "errors": 0, "lob": 9, "record": { "w": 51, "l": 50 }, "rank": 1, "league": "AL", "division": "West", "homers": [{ "id": 694671, "name": "Wyatt Langford", "no": 11 }, { "id": 607043, "name": "Brandon Nimmo", "no": 10 }] },
     "decisions": { "winner": "Kumar Rocker", "loser": "Noah Schultz", "save": "Marco Gonzales" }
   },
   "stats": [

@@ -183,8 +183,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 3, "innings": [2, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 41, "l": 28 }, "rank": 2, "league": "AL", "division": "East" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 3, 0, 0, 0, 0, 1, 0, null], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 46, "l": 27 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 3, "innings": [2, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 41, "l": 28 }, "rank": 2, "league": "AL", "division": "East", "homers": [{ "id": 668723, "name": "Ryan Vilade", "no": 4 }] },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 3, 0, 0, 0, 0, 1, 0, null], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 46, "l": 27 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 663656, "name": "Kyle Tucker", "no": 6 }, { "id": 500743, "name": "Miguel Rojas", "no": 2 }] },
     "decisions": { "winner": "Kyle Hurt", "loser": "Steven Matz", "save": "Tanner Scott" }
   }
 }

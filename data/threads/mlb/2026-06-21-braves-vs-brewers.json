@@ -94,7 +94,7 @@
   ],
   "game": {
     "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 3, "innings": [0, 0, 0, 0, 0, 2, 1, 0, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 45, "l": 29 }, "rank": 1, "league": "NL", "division": "Central" },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 4, "innings": [0, 0, 0, 0, 1, 0, 1, 0, 2], "hits": 6, "errors": 1, "lob": 2, "record": { "w": 48, "l": 27 }, "rank": 1, "league": "NL", "division": "East" },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 4, "innings": [0, 0, 0, 0, 1, 0, 1, 0, 2], "hits": 6, "errors": 1, "lob": 2, "record": { "w": 48, "l": 27 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 645277, "name": "Ozzie Albies", "hr": 2, "no": 12 }] },
     "decisions": { "winner": "Dylan Lee", "loser": "Aaron Ashby" }
   }
 }

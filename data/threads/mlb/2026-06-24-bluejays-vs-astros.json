@@ -215,8 +215,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 9, "innings": [1, 0, 0, 3, 0, 0, 0, 0, 2, 0, 3], "hits": 15, "errors": 1, "lob": 11, "record": { "w": 38, "l": 43 }, "rank": 4, "league": "AL", "division": "West" },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 7, "innings": [0, 0, 0, 2, 0, 0, 2, 2, 0, 0, 1], "hits": 13, "errors": 0, "lob": 13, "record": { "w": 39, "l": 40 }, "rank": 3, "league": "AL", "division": "East" },
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 9, "innings": [1, 0, 0, 3, 0, 0, 0, 0, 2, 0, 3], "hits": 15, "errors": 1, "lob": 11, "record": { "w": 38, "l": 43 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 701358, "name": "Cam Smith", "no": 8 }, { "id": 666211, "name": "Taylor Trammell", "no": 1 }, { "id": 694388, "name": "Joey Loperfido", "no": 1 }, { "id": 673237, "name": "Yainer Diaz", "no": 3 }] },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 7, "innings": [0, 0, 0, 2, 0, 0, 2, 2, 0, 0, 1], "hits": 13, "errors": 0, "lob": 13, "record": { "w": 39, "l": 40 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 649966, "name": "Luis Urías", "no": 1 }, { "id": 662139, "name": "Daulton Varsho", "no": 7 }] },
     "decisions": { "winner": "Logan VanWey", "loser": "Braydon Fisher" }
   }
 }

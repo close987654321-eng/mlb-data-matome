@@ -161,8 +161,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 23, "innings": [0, 0, 3, 1, 4, 6, 4, 0, 5], "hits": 21, "errors": 1, "lob": 4, "record": { "w": 49, "l": 49 }, "rank": 4, "league": "NL", "division": "East" },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 4, "innings": [0, 0, 0, 2, 0, 0, 0, 0, 2], "hits": 9, "errors": 1, "lob": 5, "record": { "w": 41, "l": 56 }, "rank": 4, "league": "AL", "division": "West" },
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 23, "innings": [0, 0, 3, 1, 4, 6, 4, 0, 5], "hits": 21, "errors": 1, "lob": 4, "record": { "w": 49, "l": 49 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 695670, "name": "Harry Ford", "no": 1 }, { "id": 665953, "name": "Andrés Chaparro", "hr": 2, "no": 3 }, { "id": 695734, "name": "Daylen Lile", "no": 11 }] },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 4, "innings": [0, 0, 0, 2, 0, 0, 0, 0, 2], "hits": 9, "errors": 1, "lob": 5, "record": { "w": 41, "l": 56 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 691016, "name": "Tyler Soderstrom", "no": 15 }, { "id": 669127, "name": "Shea Langeliers", "no": 22 }] },
     "decisions": { "winner": "Cade Cavalli", "loser": "Gage Jump" }
   }
 }

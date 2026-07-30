@@ -173,7 +173,7 @@
   ],
   "game": {
     "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 4, "innings": [0, 0, 0, 0, 0, 3, 0, 0, 0, 1], "hits": 6, "errors": 1, "lob": 6, "record": { "w": 44, "l": 37 }, "rank": 2, "league": "NL", "division": "Central" },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 0, 0, 0, 2, 1, 0, 0, 0], "hits": 9, "errors": 2, "lob": 14, "record": { "w": 34, "l": 47 }, "rank": 5, "league": "NL", "division": "East" },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 0, 0, 0, 2, 1, 0, 0, 0], "hits": 9, "errors": 2, "lob": 14, "record": { "w": 34, "l": 47 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 676572, "name": "Eric Wagaman", "no": 2 }, { "id": 676724, "name": "Jared Young", "no": 6 }] },
     "decisions": { "winner": "Jacob Webb", "loser": "Brooks Raley", "save": "Trent Thornton" }
   }
 }

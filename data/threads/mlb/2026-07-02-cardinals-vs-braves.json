@@ -129,7 +129,7 @@
   ],
   "game": {
     "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 2, "errors": 2, "lob": 2, "record": { "w": 44, "l": 39 }, "rank": 3, "league": "NL", "division": "Central" },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 5, "innings": [1, 0, 1, 0, 0, 0, 0, 3, null], "hits": 7, "errors": 0, "lob": 6, "record": { "w": 50, "l": 34 }, "rank": 1, "league": "NL", "division": "East" },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 5, "innings": [1, 0, 1, 0, 0, 0, 0, 3, null], "hits": 7, "errors": 0, "lob": 6, "record": { "w": 50, "l": 34 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 645277, "name": "Ozzie Albies", "no": 13 }] },
     "decisions": { "winner": "Reynaldo López", "loser": "Michael McGreevy" }
   }
 }

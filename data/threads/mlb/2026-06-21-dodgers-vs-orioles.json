@@ -202,7 +202,7 @@
   ],
   "game": {
     "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 1, 0, 2, 0, 0, 0, 0, 0], "hits": 7, "errors": 1, "lob": 8, "record": { "w": 36, "l": 42 }, "rank": 4, "league": "AL", "division": "East" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 2], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 49, "l": 28 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 2], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 49, "l": 28 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 660271, "name": "Shohei Ohtani", "no": 16 }] },
     "decisions": { "winner": "Trevor Rogers", "loser": "Yoshinobu Yamamoto", "save": "Yennier Cano" }
   }
 }

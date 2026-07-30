@@ -21,8 +21,8 @@
   },
   "tags": ["菅野智之", "ロッキーズ", "レッズ", "海外の反応"],
   "game": {
-    "away": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 3, "innings": [0, 0, 1, 0, 1, 0, 1, 0, 0], "hits": 9, "errors": 0, "lob": 6, "record": { "w": 44, "l": 53 }, "rank": 5, "league": "NL", "division": "Central" },
-    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 10, "innings": [2, 4, 2, 0, 0, 2, 0, 0, null], "hits": 14, "errors": 0, "lob": 6, "record": { "w": 40, "l": 60 }, "rank": 5, "league": "NL", "division": "West" },
+    "away": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 3, "innings": [0, 0, 1, 0, 1, 0, 1, 0, 0], "hits": 9, "errors": 0, "lob": 6, "record": { "w": 44, "l": 53 }, "rank": 5, "league": "NL", "division": "Central", "homers": [{ "id": 624431, "name": "Jose Trevino", "hr": 2, "no": 3 }] },
+    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 10, "innings": [2, 4, 2, 0, 0, 2, 0, 0, null], "hits": 14, "errors": 0, "lob": 6, "record": { "w": 40, "l": 60 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 681198, "name": "TJ Rumfield", "no": 13 }] },
     "decisions": { "winner": "Tomoyuki Sugano", "loser": "Rhett Lowder" }
   },
   "stats": [

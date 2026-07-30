@@ -146,8 +146,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 3, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 1], "hits": 7, "errors": 2, "lob": 9, "record": { "w": 42, "l": 42 }, "rank": 1, "league": "AL", "division": "West" },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 2, 0], "hits": 6, "errors": 2, "lob": 5, "record": { "w": 39, "l": 45 }, "rank": 3, "league": "AL", "division": "East" },
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 3, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 1], "hits": 7, "errors": 2, "lob": 9, "record": { "w": 42, "l": 42 }, "rank": 1, "league": "AL", "division": "West", "homers": [{ "id": 592626, "name": "Joc Pederson", "no": 13 }] },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 2, 0], "hits": 6, "errors": 2, "lob": 5, "record": { "w": 39, "l": 45 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 664770, "name": "Nathan Lukes", "no": 4 }] },
     "decisions": { "winner": "Cole Winn", "loser": "Louis Varland", "save": "Tyler Alexander" }
   }
 }

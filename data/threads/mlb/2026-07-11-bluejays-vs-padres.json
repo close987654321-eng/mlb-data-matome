@@ -140,8 +140,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 5, "innings": [0, 0, 0, 1, 4, 0, 0, 0, 0], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 45, "l": 49 }, "rank": 3, "league": "AL", "division": "East" },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 3, "innings": [2, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 10, "errors": 0, "lob": 9, "record": { "w": 46, "l": 48 }, "rank": 3, "league": "NL", "division": "West" },
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 5, "innings": [0, 0, 0, 1, 4, 0, 0, 0, 0], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 45, "l": 49 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 672960, "name": "Kazuma Okamoto", "no": 22 }] },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 3, "innings": [2, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 10, "errors": 0, "lob": 9, "record": { "w": 46, "l": 48 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 593428, "name": "Xander Bogaerts", "no": 9 }] },
     "decisions": { "winner": "Mason Fluharty", "loser": "JP Sears", "save": "Louis Varland" }
   }
 }

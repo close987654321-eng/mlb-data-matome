@@ -184,8 +184,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 6, "innings": [0, 0, 1, 0, 1, 0, 0, 3, 1], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 28, "l": 47 }, "rank": 5, "league": "NL", "division": "West" },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 8, "innings": [0, 7, 0, 1, 0, 0, 0, 0, null], "hits": 12, "errors": 1, "lob": 6, "record": { "w": 39, "l": 36 }, "rank": 3, "league": "NL", "division": "Central" },
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 6, "innings": [0, 0, 1, 0, 1, 0, 0, 3, 1], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 28, "l": 47 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 696100, "name": "Hunter Goodman", "no": 21 }, { "id": 694514, "name": "Sterlin Thompson", "hr": 2, "no": 2 }, { "id": 691720, "name": "Kyle Karros", "no": 4 }] },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 8, "innings": [0, 7, 0, 1, 0, 0, 0, 0, null], "hits": 12, "errors": 1, "lob": 6, "record": { "w": 39, "l": 36 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 691718, "name": "Pete Crow-Armstrong", "no": 15 }, { "id": 621020, "name": "Dansby Swanson", "no": 8 }] },
     "decisions": { "winner": "Javier Assad", "loser": "Sean Sullivan", "save": "Jacob Webb" }
   }
 }

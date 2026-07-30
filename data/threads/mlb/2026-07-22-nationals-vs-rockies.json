@@ -12,8 +12,8 @@
   "summaryJa": "CJエイブラムスが今季24号を含む2本塁打4打点の大活躍でナショナルズが7点を積み上げたが、最終回にロッキーズがハンター・グッドマンの決勝弾などで逆転し8-7のサヨナラ勝利。ジェームズ・ウッドも2安打2二塁打2打点と好結果を残したが試合は逆転負けに終わった。コメント数が9件と極めて少ない試合だったが、「ナショナルズはひどかったのに惜しくも負けただけ」というシンプルな評価が残った。",
   "totalComments": 9,
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 7, "innings": [2, 0, 2, 2, 0, 0, 1, 0, 0], "hits": 10, "errors": 1, "lob": 4, "record": { "w": 51, "l": 51 }, "rank": 4, "league": "NL", "division": "East" },
-    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 8, "innings": [0, 4, 1, 0, 1, 1, 0, 1, null], "hits": 12, "errors": 0, "lob": 8, "record": { "w": 41, "l": 62 }, "rank": 5, "league": "NL", "division": "West" },
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 7, "innings": [2, 0, 2, 2, 0, 0, 1, 0, 0], "hits": 10, "errors": 1, "lob": 4, "record": { "w": 51, "l": 51 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 682928, "name": "CJ Abrams", "hr": 2, "no": 24 }] },
+    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 8, "innings": [0, 4, 1, 0, 1, 1, 0, 1, null], "hits": 12, "errors": 0, "lob": 8, "record": { "w": 41, "l": 62 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 666160, "name": "Mickey Moniak", "no": 16 }, { "id": 696100, "name": "Hunter Goodman", "no": 31 }] },
     "decisions": { "winner": "Juan Mejia", "loser": "Clayton Beeter", "save": "Jordan Romano" }
   },
   "stats": [

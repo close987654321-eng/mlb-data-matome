@@ -166,7 +166,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 8, "innings": [0, 0, 0, 0, 1, 0, 3, 4, 0], "hits": 12, "errors": 1, "lob": 6, "record": { "w": 44, "l": 43 }, "rank": 4, "league": "NL", "division": "East" },
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 8, "innings": [0, 0, 0, 0, 1, 0, 3, 4, 0], "hits": 12, "errors": 1, "lob": 6, "record": { "w": 44, "l": 43 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 682928, "name": "CJ Abrams", "no": 18 }] },
     "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 3, "record": { "w": 37, "l": 47 }, "rank": 5, "league": "AL", "division": "East" },
     "decisions": { "winner": "Cade Cavalli", "loser": "Greg Weissert" }
   }

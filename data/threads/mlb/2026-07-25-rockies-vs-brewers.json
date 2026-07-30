@@ -21,7 +21,7 @@
   },
   "game": {
     "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 5, "innings": [2, 0, 1, 1, 0, 0, 1, 0, 0], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 42, "l": 63 }, "rank": 5, "league": "NL", "division": "West" },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 2, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 0], "hits": 9, "errors": 0, "lob": 8, "record": { "w": 64, "l": 39 }, "rank": 1, "league": "NL", "division": "Central" },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 2, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 0], "hits": 9, "errors": 0, "lob": 8, "record": { "w": 64, "l": 39 }, "rank": 1, "league": "NL", "division": "Central", "homers": [{ "id": 592885, "name": "Christian Yelich", "no": 7 }, { "id": 668930, "name": "Brice Turang", "no": 15 }] },
     "decisions": { "winner": "Tomoyuki Sugano", "loser": "Shane Drohan", "save": "Jordan Romano" }
   },
   "stats": [

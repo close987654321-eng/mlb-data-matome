@@ -21,8 +21,8 @@
   },
   "tags": ["マット・オルソン", "ブレーブス", "レンジャーズ", "海外の反応"],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 7, "innings": [1, 0, 2, 0, 0, 4, 0, 0, 0], "hits": 12, "errors": 0, "lob": 10, "record": { "w": 50, "l": 48 }, "rank": 1, "league": "AL", "division": "West" },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6, "innings": [0, 4, 1, 0, 0, 0, 1, 0, 0], "hits": 9, "errors": 2, "lob": 7, "record": { "w": 56, "l": 41 }, "rank": 1, "league": "NL", "division": "East" },
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 7, "innings": [1, 0, 2, 0, 0, 4, 0, 0, 0], "hits": 12, "errors": 0, "lob": 10, "record": { "w": 50, "l": 48 }, "rank": 1, "league": "AL", "division": "West", "homers": [{ "id": 694497, "name": "Evan Carter", "no": 8 }, { "id": 592626, "name": "Joc Pederson", "no": 16 }] },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6, "innings": [0, 4, 1, 0, 0, 0, 1, 0, 0], "hits": 9, "errors": 2, "lob": 7, "record": { "w": 56, "l": 41 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 671739, "name": "Michael Harris II", "no": 17 }, { "id": 642201, "name": "Eli White", "no": 5 }] },
     "decisions": { "winner": "MacKenzie Gore", "loser": "Tyler Kinley", "save": "Jacob Latz" }
   },
   "stats": [

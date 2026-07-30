@@ -21,8 +21,8 @@
   },
   "tags": ["ロイヤルズ", "メッツ", "千賀滉大", "フアン・ソト", "ボビー・ウィットJr.", "海外の反応"],
   "game": {
-    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 16, "innings": [0, 2, 0, 2, 5, 0, 7, 0, 0], "hits": 19, "errors": 3, "lob": 13, "record": { "w": 38, "l": 54 }, "rank": 5, "league": "AL", "division": "Central" },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 12, "innings": [3, 2, 0, 4, 0, 0, 2, 1, 0], "hits": 13, "errors": 0, "lob": 6, "record": { "w": 38, "l": 54 }, "rank": 5, "league": "NL", "division": "East" },
+    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 16, "innings": [0, 2, 0, 2, 5, 0, 7, 0, 0], "hits": 19, "errors": 3, "lob": 13, "record": { "w": 38, "l": 54 }, "rank": 5, "league": "AL", "division": "Central", "homers": [{ "id": 686475, "name": "Tyler Tolbert", "no": 2 }, { "id": 679845, "name": "Nick Loftin", "no": 4 }] },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 12, "innings": [3, 2, 0, 4, 0, 0, 2, 1, 0], "hits": 13, "errors": 0, "lob": 6, "record": { "w": 38, "l": 54 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 665742, "name": "Juan Soto", "no": 20 }, { "id": 805999, "name": "A.J. Ewing", "no": 6 }] },
     "decisions": { "winner": "Beck Way", "loser": "Matt Seelinger" }
   },
   "stats": [

@@ -164,8 +164,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 6, "innings": [1, 0, 5, 0, 0, 0, 0, 0, 0], "hits": 10, "errors": 0, "lob": 6, "record": { "w": 39, "l": 42 }, "rank": 4, "league": "AL", "division": "West" },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 5, "innings": [0, 0, 0, 0, 3, 0, 0, 0, 2], "hits": 6, "errors": 0, "lob": 1, "record": { "w": 39, "l": 42 }, "rank": 3, "league": "AL", "division": "East" },
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 6, "innings": [1, 0, 5, 0, 0, 0, 0, 0, 0], "hits": 10, "errors": 0, "lob": 6, "record": { "w": 39, "l": 42 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 694671, "name": "Wyatt Langford", "no": 8 }, { "id": 669394, "name": "Jake Burger", "no": 14 }, { "id": 592626, "name": "Joc Pederson", "no": 12 }] },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 5, "innings": [0, 0, 0, 0, 3, 0, 0, 0, 2], "hits": 6, "errors": 0, "lob": 1, "record": { "w": 39, "l": 42 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 672960, "name": "Kazuma Okamoto", "no": 18 }] },
     "decisions": { "winner": "MacKenzie Gore", "loser": "Kevin Gausman", "save": "Jacob Latz" }
   }
 }

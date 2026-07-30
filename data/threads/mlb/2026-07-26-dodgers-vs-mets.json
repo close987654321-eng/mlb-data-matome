@@ -46,7 +46,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 0, 3, 0, 1, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 67, "l": 38 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 0, 3, 0, 1, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 67, "l": 38 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 663656, "name": "Kyle Tucker", "no": 9 }] },
     "home": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 0, 0, 1, 0, 0, 2, 0], "hits": 6, "errors": 1, "lob": 10, "record": { "w": 43, "l": 62 }, "rank": 5, "league": "NL", "division": "East" },
     "decisions": { "winner": "Yoshinobu Yamamoto", "loser": "Nolan McLean", "save": "Brock Stewart" }
   },

@@ -88,10 +88,23 @@ export type PlayerStat = {
  * data/standings.json（＝常に最新）を記事に出すと、7月の試合の記事が9月には違う順位を表示してしまう。
  * 過去記事でも数字が狂わないことを優先して、記事ごとに固定する。
  */
+/**
+ * その試合の本塁打1本ぶん（boxscore の打者成績由来）。「誰が打ったか」は日本人ファンが最も
+ * 検索する情報なので試合結果ボックスに1行そえる。日本語表記はカタログ（players.ts の mlbId）で引く
+ * ＝JSON には公式英語表記だけ持ち、表記の正は1か所に寄せる。
+ */
+export type ThreadHomer = {
+  id: number; // MLB 選手ID
+  name: string; // 公式英語表記（例: "Alex Bregman"）
+  hr?: number; // その試合で2本以上打ったときだけ入る
+  no?: number; // その試合終了時点の今季本数（「今季11号」の号数）
+};
+
 export type ThreadGameSide = {
   ja: string; // 日本語短縮チーム名（例: "ドジャース"）。teams.ts の getTeam キー＝ロゴ/色を引ける
   en: string; // 公式英語名（例: "Los Angeles Dodgers"）
   score: number; // 最終得点
+  homers?: ThreadHomer[]; // このチームの本塁打（無い試合は省略）
   /** 回ごとの得点。ホームが最終回を打たなかった回は null（表示は「−」）。延長は 10 要素以上になる */
   innings?: (number | null)[];
   hits?: number; // 安打（H）

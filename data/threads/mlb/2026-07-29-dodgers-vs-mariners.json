@@ -26,8 +26,8 @@
   },
   "tags": ["ドジャース", "マリナーズ", "大谷翔平", "海外の反応"],
   "game": {
-    "away": { "ja": "マリナーズ", "en": "Seattle Mariners", "score": 7, "innings": [0, 1, 0, 3, 0, 1, 0, 2, 0], "hits": 10, "errors": 2, "lob": 3, "record": { "w": 53, "l": 55 }, "rank": 3, "league": "AL", "division": "West" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 6, "innings": [1, 0, 1, 2, 1, 0, 0, 0, 1], "hits": 13, "errors": 0, "lob": 8, "record": { "w": 67, "l": 40 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "マリナーズ", "en": "Seattle Mariners", "score": 7, "innings": [0, 1, 0, 3, 0, 1, 0, 2, 0], "hits": 10, "errors": 2, "lob": 3, "record": { "w": 53, "l": 55 }, "rank": 3, "league": "AL", "division": "West", "homers": [{ "id": 686527, "name": "Dominic Canzone", "hr": 2, "no": 18 }, { "id": 663728, "name": "Cal Raleigh", "no": 11 }, { "id": 608701, "name": "Rob Refsnyder", "no": 4 }, { "id": 677594, "name": "Julio Rodríguez", "no": 16 }] },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 6, "innings": [1, 0, 1, 2, 1, 0, 0, 0, 1], "hits": 13, "errors": 0, "lob": 8, "record": { "w": 67, "l": 40 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 571970, "name": "Max Muncy", "no": 21 }, { "id": 660271, "name": "Shohei Ohtani", "no": 23 }] },
     "decisions": { "winner": "José A. Ferrer", "loser": "Brock Stewart", "save": "Andrés Muñoz" }
   },
   "stats": [

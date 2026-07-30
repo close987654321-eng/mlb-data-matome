@@ -98,8 +98,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 4, "innings": [1, 0, 0, 0, 0, 0, 2, 1, 0], "hits": 10, "errors": 1, "lob": 6, "record": { "w": 45, "l": 47 }, "rank": 3, "league": "NL", "division": "West" },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 10, "innings": [0, 0, 1, 1, 2, 4, 2, 0, null], "hits": 13, "errors": 1, "lob": 7, "record": { "w": 46, "l": 46 }, "rank": 2, "league": "NL", "division": "West" },
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 4, "innings": [1, 0, 0, 0, 0, 0, 2, 1, 0], "hits": 10, "errors": 1, "lob": 6, "record": { "w": 45, "l": 47 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 694371, "name": "Tommy Troy", "no": 4 }] },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 10, "innings": [0, 0, 1, 1, 2, 4, 2, 0, null], "hits": 13, "errors": 1, "lob": 7, "record": { "w": 46, "l": 46 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 669134, "name": "Luis Campusano", "no": 4 }] },
     "decisions": { "winner": "Michael King", "loser": "Jose Cabrera" }
   }
 }

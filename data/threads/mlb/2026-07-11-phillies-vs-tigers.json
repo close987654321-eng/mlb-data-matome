@@ -206,8 +206,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 2, "innings": [0, 0, 1, 1, 0, 0, 0, 0, 0], "hits": 4, "errors": 1, "lob": 7, "record": { "w": 52, "l": 43 }, "rank": 2, "league": "NL", "division": "East" },
-    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 10, "innings": [0, 0, 2, 0, 0, 5, 3, 0, null], "hits": 8, "errors": 1, "lob": 4, "record": { "w": 44, "l": 50 }, "rank": 4, "league": "AL", "division": "Central" },
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 2, "innings": [0, 0, 1, 1, 0, 0, 0, 0, 0], "hits": 4, "errors": 1, "lob": 7, "record": { "w": 52, "l": 43 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 656537, "name": "Derek Hill", "no": 7 }] },
+    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 10, "innings": [0, 0, 2, 0, 0, 5, 3, 0, null], "hits": 8, "errors": 1, "lob": 4, "record": { "w": 44, "l": 50 }, "rank": 4, "league": "AL", "division": "Central", "homers": [{ "id": 805808, "name": "Kevin McGonigle", "no": 8 }, { "id": 679529, "name": "Spencer Torkelson", "no": 16 }, { "id": 690993, "name": "Colt Keith", "no": 8 }] },
     "decisions": { "winner": "Jack Flaherty", "loser": "Tim Mayza" }
   }
 }

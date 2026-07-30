@@ -218,8 +218,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 1, 0, 0, 2, 0, 0, 0], "hits": 7, "errors": 0, "lob": 11, "record": { "w": 32, "l": 41 }, "rank": 5, "league": "NL", "division": "East" },
-    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 5, "innings": [4, 0, 0, 0, 1, 0, 0, 0, null], "hits": 6, "errors": 1, "lob": 4, "record": { "w": 35, "l": 37 }, "rank": 5, "league": "NL", "division": "Central" },
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 1, 0, 0, 2, 0, 0, 0], "hits": 7, "errors": 0, "lob": 11, "record": { "w": 32, "l": 41 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 668901, "name": "Mark Vientos", "no": 8 }] },
+    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 5, "innings": [4, 0, 0, 0, 1, 0, 0, 0, null], "hits": 6, "errors": 1, "lob": 4, "record": { "w": 35, "l": 37 }, "rank": 5, "league": "NL", "division": "Central", "homers": [{ "id": 701398, "name": "Sal Stewart", "no": 14 }, { "id": 668715, "name": "Spencer Steer", "no": 11 }] },
     "decisions": { "winner": "Brady Singer", "loser": "Kodai Senga", "save": "Tony Santillan" }
   }
 }

@@ -31,8 +31,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 7, "innings": [0, 2, 3, 0, 0, 0, 2, 0, 0], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 40, "l": 48 }, "rank": 5, "league": "AL", "division": "East" },
-    "home": { "ja": "エンゼルス", "en": "Los Angeles Angels", "score": 5, "innings": [2, 1, 0, 0, 0, 0, 0, 1, 1], "hits": 9, "errors": 1, "lob": 6, "record": { "w": 36, "l": 55 }, "rank": 5, "league": "AL", "division": "West" },
+    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 7, "innings": [0, 2, 3, 0, 0, 0, 2, 0, 0], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 40, "l": 48 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 575929, "name": "Willson Contreras", "no": 20 }, { "id": 680776, "name": "Jarren Duran", "no": 13 }] },
+    "home": { "ja": "エンゼルス", "en": "Los Angeles Angels", "score": 5, "innings": [2, 1, 0, 0, 0, 0, 0, 1, 1], "hits": 9, "errors": 1, "lob": 6, "record": { "w": 36, "l": 55 }, "rank": 5, "league": "AL", "division": "West", "homers": [{ "id": 687263, "name": "Zach Neto", "no": 19 }] },
     "decisions": { "winner": "Greg Weissert", "loser": "Ryan Johnson", "save": "Aroldis Chapman" }
   },
   "tags": [

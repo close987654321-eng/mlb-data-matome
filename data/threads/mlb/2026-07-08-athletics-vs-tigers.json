@@ -21,8 +21,8 @@
   },
   "tags": ["アスレチックス", "タイガース", "ニック・カーツ", "海外の反応"],
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 2, "innings": [0, 0, 1, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 41, "l": 50 }, "rank": 4, "league": "AL", "division": "West" },
-    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 6, "innings": [2, 0, 0, 0, 0, 4, 0, 0, null], "hits": 8, "errors": 1, "lob": 7, "record": { "w": 41, "l": 50 }, "rank": 4, "league": "AL", "division": "Central" },
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 2, "innings": [0, 0, 1, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 41, "l": 50 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 703607, "name": "Henry Bolte", "no": 3 }] },
+    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 6, "innings": [2, 0, 0, 0, 0, 4, 0, 0, null], "hits": 8, "errors": 1, "lob": 7, "record": { "w": 41, "l": 50 }, "rank": 4, "league": "AL", "division": "Central", "homers": [{ "id": 690993, "name": "Colt Keith", "no": 7 }] },
     "decisions": { "winner": "Tarik Skubal", "loser": "J.T. Ginn" }
   },
   "stats": [

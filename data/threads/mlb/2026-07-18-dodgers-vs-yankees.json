@@ -216,7 +216,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 2, 0, 0], "hits": 5, "errors": 1, "lob": 4, "record": { "w": 62, "l": 36 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 2, 0, 0], "hits": 5, "errors": 1, "lob": 4, "record": { "w": 62, "l": 36 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 571970, "name": "Max Muncy", "no": 18 }] },
     "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 54, "l": 43 }, "rank": 2, "league": "AL", "division": "East" },
     "decisions": { "winner": "Jack Dreyer", "loser": "Gerrit Cole", "save": "Tanner Scott" }
   }

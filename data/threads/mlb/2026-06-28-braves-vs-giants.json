@@ -106,7 +106,7 @@
   ],
   "game": {
     "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 1, "errors": 0, "lob": 4, "record": { "w": 49, "l": 32 }, "rank": 1, "league": "NL", "division": "East" },
-    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 5, "innings": [0, 2, 3, 0, 0, 0, 0, 0, null], "hits": 6, "errors": 1, "lob": 1, "record": { "w": 34, "l": 48 }, "rank": 4, "league": "NL", "division": "West" },
+    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 5, "innings": [0, 2, 3, 0, 0, 0, 0, 0, null], "hits": 6, "errors": 1, "lob": 1, "record": { "w": 34, "l": 48 }, "rank": 4, "league": "NL", "division": "West", "homers": [{ "id": 646240, "name": "Rafael Devers", "hr": 2, "no": 14 }] },
     "decisions": { "winner": "Logan Webb", "loser": "Bryce Elder" }
   }
 }

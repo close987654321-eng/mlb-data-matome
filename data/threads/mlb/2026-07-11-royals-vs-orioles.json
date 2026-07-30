@@ -83,8 +83,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 3, "innings": [0, 0, 0, 2, 0, 0, 0, 1, 0], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 38, "l": 57 }, "rank": 5, "league": "AL", "division": "Central" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 5, "innings": [0, 2, 0, 1, 0, 0, 0, 2, null], "hits": 9, "errors": 0, "lob": 6, "record": { "w": 44, "l": 51 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 3, "innings": [0, 0, 0, 2, 0, 0, 0, 1, 0], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 38, "l": 57 }, "rank": 5, "league": "AL", "division": "Central", "homers": [{ "id": 686555, "name": "Isaac Collins", "no": 5 }, { "id": 695506, "name": "Jac Caglianone", "no": 15 }] },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 5, "innings": [0, 2, 0, 1, 0, 0, 0, 2, null], "hits": 9, "errors": 0, "lob": 6, "record": { "w": 44, "l": 51 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 694212, "name": "Samuel Basallo", "no": 15 }, { "id": 677942, "name": "Blaze Alexander", "no": 4 }] },
     "decisions": { "winner": "Rico Garcia", "loser": "Matt Strahm", "save": "Andrew Kittredge" }
   }
 }

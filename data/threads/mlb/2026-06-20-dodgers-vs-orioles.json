@@ -204,8 +204,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 5, "innings": [0, 0, 0, 0, 0, 3, 2, 0, 0], "hits": 7, "errors": 1, "lob": 2, "record": { "w": 35, "l": 42 }, "rank": 4, "league": "AL", "division": "East" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 6, "innings": [2, 1, 0, 0, 0, 0, 0, 0, 3], "hits": 12, "errors": 0, "lob": 12, "record": { "w": 49, "l": 27 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 5, "innings": [0, 0, 0, 0, 0, 3, 2, 0, 0], "hits": 7, "errors": 1, "lob": 2, "record": { "w": 35, "l": 42 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 624413, "name": "Pete Alonso", "no": 17 }, { "id": 683002, "name": "Gunnar Henderson", "no": 16 }] },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 6, "innings": [2, 1, 0, 0, 0, 0, 0, 0, 3], "hits": 12, "errors": 0, "lob": 12, "record": { "w": 49, "l": 27 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 605141, "name": "Mookie Betts", "no": 8 }] },
     "decisions": { "winner": "Blake Treinen", "loser": "Ryan Helsley" }
   }
 }

@@ -235,7 +235,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3, "innings": [0, 2, 1, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 5, "record": { "w": 38, "l": 56 }, "rank": 5, "league": "NL", "division": "West" },
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3, "innings": [0, 2, 1, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 5, "record": { "w": 38, "l": 56 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 666397, "name": "Edouard Julien", "no": 3 }, { "id": 691720, "name": "Kyle Karros", "no": 8 }] },
     "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [3, 0, 0, 0, 0, 0, 0, 1, null], "hits": 7, "errors": 1, "lob": 5, "record": { "w": 61, "l": 33 }, "rank": 1, "league": "NL", "division": "West" },
     "decisions": { "winner": "Edgardo Henriquez", "loser": "Antonio Senzatela", "save": "Tanner Scott" }
   }

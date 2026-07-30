@@ -195,8 +195,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 0, 1, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 9, "record": { "w": 56, "l": 31 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 7, "innings": [0, 1, 0, 2, 3, 0, 0, 1, null], "hits": 12, "errors": 0, "lob": 6, "record": { "w": 41, "l": 46 }, "rank": 4, "league": "AL", "division": "West" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 0, 1, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 9, "record": { "w": 56, "l": 31 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 518692, "name": "Freddie Freeman", "no": 14 }] },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 7, "innings": [0, 1, 0, 2, 3, 0, 0, 1, null], "hits": 12, "errors": 0, "lob": 6, "record": { "w": 41, "l": 46 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 641680, "name": "Jonah Heim", "no": 8 }, { "id": 675961, "name": "Alika Williams", "no": 2 }, { "id": 669127, "name": "Shea Langeliers", "no": 20 }] },
     "decisions": { "winner": "J.T. Ginn", "loser": "Charlie Barnes" }
   }
 }

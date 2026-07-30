@@ -172,8 +172,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 8, "innings": [0, 0, 3, 2, 0, 0, 2, 1, 0], "hits": 10, "errors": 0, "lob": 14, "record": { "w": 44, "l": 25 }, "rank": 1, "league": "NL", "division": "West" },
-    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 6, "innings": [0, 0, 0, 0, 4, 0, 0, 2, 0], "hits": 12, "errors": 0, "lob": 8, "record": { "w": 35, "l": 34 }, "rank": 3, "league": "NL", "division": "Central" },
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 8, "innings": [0, 0, 3, 2, 0, 0, 2, 1, 0], "hits": 10, "errors": 0, "lob": 14, "record": { "w": 44, "l": 25 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 660271, "name": "Shohei Ohtani", "no": 13 }] },
+    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 6, "innings": [0, 0, 0, 0, 4, 0, 0, 2, 0], "hits": 12, "errors": 0, "lob": 8, "record": { "w": 35, "l": 34 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 664040, "name": "Brandon Lowe", "no": 16 }, { "id": 804668, "name": "Rafael Flores Jr.", "no": 1 }] },
     "decisions": { "winner": "Jack Dreyer", "loser": "Mitch Keller", "save": "Tanner Scott" }
   }
 }

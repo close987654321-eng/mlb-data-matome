@@ -27,8 +27,8 @@
     "海外の反応"
   ],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 6, "innings": [2, 3, 0, 0, 0, 1, 0, 0, 0], "hits": 14, "errors": 0, "lob": 15, "record": { "w": 42, "l": 58 }, "rank": 5, "league": "NL", "division": "East" },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 55, "l": 45 }, "rank": 2, "league": "NL", "division": "East" },
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 6, "innings": [2, 3, 0, 0, 0, 1, 0, 0, 0], "hits": 14, "errors": 0, "lob": 15, "record": { "w": 42, "l": 58 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 596019, "name": "Francisco Lindor", "no": 6 }] },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 55, "l": 45 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 664761, "name": "Alec Bohm", "no": 12 }] },
     "decisions": { "winner": "Nolan McLean", "loser": "Alan Rangel" }
   },
   "stats": [

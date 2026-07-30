@@ -21,8 +21,8 @@
     }
   },
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 7, "innings": [2, 4, 0, 0, 0, 0, 0, 0, 1], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 43, "l": 43 }, "rank": 3, "league": "NL", "division": "West" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 12, "innings": [0, 2, 2, 4, 2, 1, 0, 1, null], "hits": 17, "errors": 0, "lob": 9, "record": { "w": 57, "l": 31 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 7, "innings": [2, 4, 0, 0, 0, 0, 0, 0, 1], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 43, "l": 43 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 701538, "name": "Jackson Merrill", "no": 9 }, { "id": 592518, "name": "Manny Machado", "no": 17 }, { "id": 630105, "name": "Jake Cronenworth", "no": 2 }] },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 12, "innings": [0, 2, 2, 4, 2, 1, 0, 1, null], "hits": 17, "errors": 0, "lob": 9, "record": { "w": 57, "l": 31 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 687221, "name": "Dalton Rushing", "no": 10 }] },
     "decisions": { "winner": "Will Klein", "loser": "Wandy Peralta" }
   },
   "media": {

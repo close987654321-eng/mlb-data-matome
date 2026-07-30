@@ -177,7 +177,7 @@
   ],
   "game": {
     "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 3, "record": { "w": 41, "l": 29 }, "rank": 2, "league": "AL", "division": "East" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 0, 0, 0, 0, 1, 0, 0, null], "hits": 6, "errors": 1, "lob": 4, "record": { "w": 47, "l": 27 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 0, 0, 0, 0, 1, 0, 0, null], "hits": 6, "errors": 1, "lob": 4, "record": { "w": 47, "l": 27 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 660271, "name": "Shohei Ohtani", "no": 15 }] },
     "decisions": { "winner": "Justin Wrobleski", "loser": "Drew Rasmussen", "save": "Tanner Scott" }
   }
 }

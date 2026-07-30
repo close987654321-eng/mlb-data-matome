@@ -233,7 +233,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [1, 0, 2, 1, 2, 0, 0, 0, 0], "hits": 11, "errors": 0, "lob": 12, "record": { "w": 37, "l": 34 }, "rank": 3, "league": "NL", "division": "Central" },
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [1, 0, 2, 1, 2, 0, 0, 0, 0], "hits": 11, "errors": 0, "lob": 12, "record": { "w": 37, "l": 34 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 664023, "name": "Ian Happ", "no": 16 }, { "id": 699393, "name": "Pedro Ramírez", "no": 1 }, { "id": 691718, "name": "Pete Crow-Armstrong", "no": 12 }] },
     "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 1, "innings": [0, 0, 1, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 28, "l": 43 }, "rank": 4, "league": "NL", "division": "West" },
     "decisions": { "winner": "Ben Brown", "loser": "Trevor McDonald" }
   }

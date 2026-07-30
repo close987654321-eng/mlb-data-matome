@@ -152,7 +152,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 10, "innings": [2, 0, 0, 5, 0, 0, 3, 0, 0], "hits": 13, "errors": 0, "lob": 11, "record": { "w": 45, "l": 43 }, "rank": 4, "league": "NL", "division": "East" },
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 10, "innings": [2, 0, 0, 5, 0, 0, 3, 0, 0], "hits": 13, "errors": 0, "lob": 11, "record": { "w": 45, "l": 43 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 683083, "name": "Nasim Nuñez", "no": 1 }, { "id": 665953, "name": "Andrés Chaparro", "no": 1 }, { "id": 695578, "name": "James Wood", "no": 22 }] },
     "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 2, 0], "hits": 9, "errors": 0, "lob": 11, "record": { "w": 37, "l": 48 }, "rank": 5, "league": "AL", "division": "East" },
     "decisions": { "winner": "Andrew Alvarez", "loser": "Payton Tolle" }
   }

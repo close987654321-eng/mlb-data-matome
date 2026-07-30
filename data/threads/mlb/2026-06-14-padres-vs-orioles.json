@@ -219,8 +219,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 9, "innings": [4, 0, 0, 0, 2, 0, 1, 1, 1], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 36, "l": 33 }, "rank": 2, "league": "NL", "division": "West" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [2, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 10, "errors": 0, "lob": 9, "record": { "w": 34, "l": 38 }, "rank": 4, "league": "AL", "division": "East" },
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 9, "innings": [4, 0, 0, 0, 2, 0, 1, 1, 1], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 36, "l": 33 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 701538, "name": "Jackson Merrill", "no": 7 }, { "id": 660710, "name": "Rodolfo Durán", "no": 2 }, { "id": 669392, "name": "Samad Taylor", "no": 1 }, { "id": 657757, "name": "Gavin Sheets", "no": 11 }, { "id": 592518, "name": "Manny Machado", "no": 12 }] },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [2, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 10, "errors": 0, "lob": 9, "record": { "w": 34, "l": 38 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 624413, "name": "Pete Alonso", "no": 16 }] },
     "decisions": { "winner": "Randy Vásquez", "loser": "Trey Gibson" }
   }
 }

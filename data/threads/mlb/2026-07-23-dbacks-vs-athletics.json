@@ -12,8 +12,8 @@
   "summaryJa": "ダイヤモンドバックスがアスレチックスを15-5と圧倒。コービン・キャロルが3塁打と今季15号HRを放ち「キャロルが戻ってきた！」と喜びの声。今季初HRのウォルドシュミットも飛び出すなど打線が爆発。アスレチックスは先発を早々に降板させられ位置捕手が投球する事態に。「ホワイトソックスが再建の手本を見せた、Aのビルドアップに期待できない」という辛辣な声が並んだ。「ロッキーズの試合のサムネが結果を写さない」など、動画フォーマットへの好評コメントも目立った。",
   "totalComments": 45,
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 5, "innings": [0, 0, 1, 0, 1, 0, 1, 0, 2], "hits": 10, "errors": 0, "lob": 6, "record": { "w": 43, "l": 59 }, "rank": 4, "league": "AL", "division": "West" },
-    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 15, "innings": [0, 0, 0, 2, 7, 5, 0, 1, null], "hits": 17, "errors": 0, "lob": 8, "record": { "w": 53, "l": 49 }, "rank": 2, "league": "NL", "division": "West" },
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 5, "innings": [0, 0, 1, 0, 1, 0, 1, 0, 2], "hits": 10, "errors": 0, "lob": 6, "record": { "w": 43, "l": 59 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 643446, "name": "Jeff McNeil", "no": 4 }] },
+    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 15, "innings": [0, 0, 0, 2, 7, 5, 0, 1, null], "hits": 17, "errors": 0, "lob": 8, "record": { "w": 53, "l": 49 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 571448, "name": "Nolan Arenado", "no": 14 }, { "id": 814439, "name": "Ryan Waldschmidt", "no": 1 }, { "id": 672515, "name": "Gabriel Moreno", "no": 7 }, { "id": 682998, "name": "Corbin Carroll", "no": 15 }, { "id": 543510, "name": "James McCann", "no": 3 }] },
     "decisions": { "winner": "Merrill Kelly", "loser": "Gage Jump" }
   },
   "stats": [

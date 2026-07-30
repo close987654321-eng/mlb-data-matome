@@ -213,7 +213,7 @@
   ],
   "game": {
     "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 0, 1], "hits": 8, "errors": 0, "lob": 9, "record": { "w": 38, "l": 55 }, "rank": 5, "league": "AL", "division": "Central" },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 6, "innings": [1, 0, 0, 0, 0, 0, 0, 5, null], "hits": 9, "errors": 0, "lob": 9, "record": { "w": 39, "l": 54 }, "rank": 5, "league": "NL", "division": "East" },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 6, "innings": [1, 0, 0, 0, 0, 0, 0, 5, null], "hits": 9, "errors": 0, "lob": 9, "record": { "w": 39, "l": 54 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 805999, "name": "A.J. Ewing", "no": 7 }] },
     "decisions": { "winner": "Brooks Raley", "loser": "Alex Lange" }
   }
 }

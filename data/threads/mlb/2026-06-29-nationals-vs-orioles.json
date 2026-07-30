@@ -136,8 +136,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 6, "innings": [0, 0, 3, 0, 2, 0, 1, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 43, "l": 42 }, "rank": 4, "league": "NL", "division": "East" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 4, "innings": [2, 0, 0, 0, 0, 0, 2, 0, 0], "hits": 5, "errors": 1, "lob": 4, "record": { "w": 39, "l": 46 }, "rank": 4, "league": "AL", "division": "East" },
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 6, "innings": [0, 0, 3, 0, 2, 0, 1, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 43, "l": 42 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 671277, "name": "Luis García Jr.", "hr": 2, "no": 16 }] },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 4, "innings": [2, 0, 0, 0, 0, 0, 2, 0, 0], "hits": 5, "errors": 1, "lob": 4, "record": { "w": 39, "l": 46 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 624413, "name": "Pete Alonso", "no": 19 }, { "id": 702616, "name": "Jackson Holliday", "no": 5 }] },
     "decisions": { "winner": "Zack Littell", "loser": "Kyle Bradish", "save": "PJ Poulin" }
   }
 }

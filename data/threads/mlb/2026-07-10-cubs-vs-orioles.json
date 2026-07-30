@@ -55,8 +55,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 52, "l": 41 }, "rank": 2, "league": "NL", "division": "Central" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 1, 0, 0, 0, 0, 0, 2, null], "hits": 3, "errors": 2, "lob": 8, "record": { "w": 43, "l": 51 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 52, "l": 41 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 673548, "name": "Seiya Suzuki", "no": 15 }] },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 1, 0, 0, 0, 0, 0, 2, null], "hits": 3, "errors": 2, "lob": 8, "record": { "w": 43, "l": 51 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 641933, "name": "Tyler O'Neill", "no": 6 }] },
     "decisions": { "winner": "Tyler Wells", "loser": "Tyler Ferguson", "save": "Andrew Kittredge" }
   },
   "comments": [

@@ -129,8 +129,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 9, "innings": [1, 2, 3, 0, 0, 2, 0, 0, 1], "hits": 16, "errors": 0, "lob": 14, "record": { "w": 49, "l": 42 }, "rank": 3, "league": "NL", "division": "East" },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 8, "innings": [0, 0, 0, 0, 0, 0, 0, 5, 3], "hits": 7, "errors": 1, "lob": 1, "record": { "w": 41, "l": 49 }, "rank": 4, "league": "AL", "division": "West" },
+    "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 9, "innings": [1, 2, 3, 0, 0, 2, 0, 0, 1], "hits": 16, "errors": 0, "lob": 14, "record": { "w": 49, "l": 42 }, "rank": 3, "league": "NL", "division": "East", "homers": [{ "id": 681715, "name": "Heriberto Hernández", "hr": 2, "no": 11 }, { "id": 677870, "name": "Leo Jiménez", "no": 1 }, { "id": 672640, "name": "Otto Lopez", "no": 9 }] },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 8, "innings": [0, 0, 0, 0, 0, 0, 0, 5, 3], "hits": 7, "errors": 1, "lob": 1, "record": { "w": 41, "l": 49 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 641680, "name": "Jonah Heim", "no": 9 }] },
     "decisions": { "winner": "Eury Pérez", "loser": "Gage Jump" }
   }
 }

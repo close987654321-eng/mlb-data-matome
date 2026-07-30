@@ -21,8 +21,8 @@
   },
   "tags": ["フィリーズ", "レッズ", "カイル・シュワーバー", "海外の反応"],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 4, "innings": [0, 0, 3, 0, 0, 0, 0, 1, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 51, "l": 41 }, "rank": 2, "league": "NL", "division": "East" },
-    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 41, "l": 49 }, "rank": 5, "league": "NL", "division": "Central" },
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 4, "innings": [0, 0, 3, 0, 0, 0, 0, 1, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 51, "l": 41 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 656941, "name": "Kyle Schwarber", "no": 31 }] },
+    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 41, "l": 49 }, "rank": 5, "league": "NL", "division": "Central", "homers": [{ "id": 553993, "name": "Eugenio Suárez", "no": 9 }] },
     "decisions": { "winner": "Zack Wheeler", "loser": "Andrew Abbott", "save": "Jhoan Duran" }
   },
   "stats": [

@@ -192,8 +192,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 0, 4, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 53, "l": 42 }, "rank": 2, "league": "AL", "division": "East" },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 2, "innings": [2, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 48, "l": 48 }, "rank": 4, "league": "NL", "division": "East" },
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 0, 4, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 53, "l": 42 }, "rank": 2, "league": "AL", "division": "East", "homers": [{ "id": 641857, "name": "Ryan McMahon", "no": 9 }, { "id": 502671, "name": "Paul Goldschmidt", "no": 15 }, { "id": 663757, "name": "Trent Grisham", "no": 10 }] },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 2, "innings": [2, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 48, "l": 48 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 678554, "name": "Curtis Mead", "no": 16 }, { "id": 695578, "name": "James Wood", "no": 27 }] },
     "decisions": { "winner": "Brent Headrick", "loser": "Clayton Beeter", "save": "David Bednar" }
   }
 }

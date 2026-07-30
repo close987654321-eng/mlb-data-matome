@@ -225,8 +225,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 5, "innings": [0, 0, 0, 0, 2, 2, 0, 0, 1], "hits": 5, "errors": 0, "lob": 4, "record": { "w": 49, "l": 47 }, "rank": 2, "league": "NL", "division": "West" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 3, "innings": [1, 0, 2, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 2, "lob": 4, "record": { "w": 61, "l": 36 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 5, "innings": [0, 0, 0, 0, 2, 2, 0, 0, 1], "hits": 5, "errors": 0, "lob": 4, "record": { "w": 49, "l": 47 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 694374, "name": "Tim Tawa", "no": 3 }] },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 3, "innings": [1, 0, 2, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 2, "lob": 4, "record": { "w": 61, "l": 36 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 660271, "name": "Shohei Ohtani", "no": 22 }] },
     "decisions": { "winner": "Ryan Thompson", "loser": "Edgardo Henriquez", "save": "Paul Sewald" }
   }
 }

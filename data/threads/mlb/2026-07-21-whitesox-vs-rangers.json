@@ -169,7 +169,7 @@
   ],
   "game": {
     "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 10, "innings": [0, 0, 1, 0, 4, 0, 0, 0, 5], "hits": 13, "errors": 0, "lob": 7, "record": { "w": 53, "l": 46 }, "rank": 1, "league": "AL", "division": "Central" },
-    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 3, "innings": [1, 1, 0, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 50, "l": 50 }, "rank": 2, "league": "AL", "division": "West" },
+    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 3, "innings": [1, 1, 0, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 50, "l": 50 }, "rank": 2, "league": "AL", "division": "West", "homers": [{ "id": 669394, "name": "Jake Burger", "no": 17 }, { "id": 592626, "name": "Joc Pederson", "no": 17 }] },
     "decisions": { "winner": "Chris Murphy", "loser": "Jacob deGrom" }
   }
 }

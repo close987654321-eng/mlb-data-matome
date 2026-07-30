@@ -68,8 +68,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 3, "errors": 0, "lob": 4, "record": { "w": 38, "l": 42 }, "rank": 3, "league": "AL", "division": "West" },
-    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 2], "hits": 6, "errors": 1, "lob": 6, "record": { "w": 33, "l": 46 }, "rank": 4, "league": "NL", "division": "West" },
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 3, "errors": 0, "lob": 4, "record": { "w": 38, "l": 42 }, "rank": 3, "league": "AL", "division": "West", "homers": [{ "id": 691777, "name": "Max Muncy", "no": 5 }] },
+    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 2], "hits": 6, "errors": 1, "lob": 6, "record": { "w": 33, "l": 46 }, "rank": 4, "league": "NL", "division": "West", "homers": [{ "id": 682674, "name": "Victor Bericoto", "no": 2 }, { "id": 646240, "name": "Rafael Devers", "no": 12 }] },
     "decisions": { "winner": "Erik Miller", "loser": "Elvis Alvarado" }
   }
 }

@@ -272,8 +272,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 6, "innings": [1, 3, 0, 2, 0, 0, 0, 0, 0], "hits": 13, "errors": 0, "lob": 11, "record": { "w": 35, "l": 36 }, "rank": 3, "league": "AL", "division": "West" },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4, "innings": [0, 2, 0, 0, 0, 1, 0, 1, 0], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 29, "l": 40 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 6, "innings": [1, 3, 0, 2, 0, 0, 0, 0, 0], "hits": 13, "errors": 0, "lob": 11, "record": { "w": 35, "l": 36 }, "rank": 3, "league": "AL", "division": "West", "homers": [{ "id": 694671, "name": "Wyatt Langford", "no": 3 }, { "id": 543309, "name": "Kyle Higashioka", "no": 5 }] },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4, "innings": [0, 2, 0, 0, 0, 1, 0, 1, 0], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 29, "l": 40 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 575929, "name": "Willson Contreras", "hr": 2, "no": 16 }] },
     "decisions": { "winner": "Nathan Eovaldi", "loser": "Connelly Early", "save": "Jacob Latz" }
   }
 }

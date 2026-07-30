@@ -215,8 +215,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 10, "innings": [0, 0, 0, 0, 3, 3, 0, 4, 0], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 42, "l": 37 }, "rank": 3, "league": "NL", "division": "Central" },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 0, 3, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 34, "l": 45 }, "rank": 5, "league": "NL", "division": "East" },
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 10, "innings": [0, 0, 0, 0, 3, 3, 0, 4, 0], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 42, "l": 37 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 683737, "name": "Michael Busch", "no": 9 }, { "id": 621020, "name": "Dansby Swanson", "hr": 2, "no": 11 }] },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 0, 3, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 34, "l": 45 }, "rank": 5, "league": "NL", "division": "East", "homers": [{ "id": 682626, "name": "Francisco Alvarez", "no": 7 }, { "id": 676724, "name": "Jared Young", "no": 5 }] },
     "decisions": { "winner": "Javier Assad", "loser": "Nolan McLean" }
   }
 }

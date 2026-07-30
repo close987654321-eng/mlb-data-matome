@@ -12,8 +12,8 @@
   "summaryJa": "レッドソックスがダブルヘッダー第1試合でオリオールズを6-3で下し、球団タイ記録となる**15連勝**を達成（1946年以来80年ぶり）。チェン宗哲の守備が勝利に貢献し「チェンがまた大きな役割を果たした！」と絶賛。吉田正尚はDH通算7打数2安打1打点と地道に貢献。「80サマーズアゴー（80年前）、すごく詩的だ」という感慨のコメントが好評を集めた。第2試合はオリオールズが逆転して5-1で雪辱したが、それでも今季最高の勝率を誇るボストンに「期待以上」の評価が続く。",
   "totalComments": 48,
   "game": {
-    "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 0, 1, 1, 0, 1, 0, 0, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 49, "l": 53 }, "rank": 4, "league": "AL", "division": "East" },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6, "innings": [4, 0, 1, 1, 0, 0, 0, 0, null], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 52, "l": 48 }, "rank": 3, "league": "AL", "division": "East" },
+    "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 0, 1, 1, 0, 1, 0, 0, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 49, "l": 53 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 687952, "name": "Christian Encarnacion-Strand", "no": 2 }] },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6, "innings": [4, 0, 1, 1, 0, 0, 0, 0, null], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 52, "l": 48 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 678882, "name": "Ceddanne Rafaela", "no": 9 }] },
     "decisions": { "winner": "Jake Bennett", "loser": "Dean Kremer", "save": "Aroldis Chapman" }
   },
   "stats": [

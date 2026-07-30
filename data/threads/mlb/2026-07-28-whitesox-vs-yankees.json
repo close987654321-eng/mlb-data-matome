@@ -213,7 +213,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 9, "innings": [0, 0, 0, 4, 0, 0, 1, 4, 0], "hits": 10, "errors": 2, "lob": 4, "record": { "w": 60, "l": 46 }, "rank": 2, "league": "AL", "division": "East" },
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 9, "innings": [0, 0, 0, 4, 0, 0, 1, 4, 0], "hits": 10, "errors": 2, "lob": 4, "record": { "w": 60, "l": 46 }, "rank": 2, "league": "AL", "division": "East", "homers": [{ "id": 645305, "name": "Ali Sánchez", "no": 1 }] },
     "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 5, "innings": [3, 0, 0, 0, 1, 0, 0, 0, 1], "hits": 10, "errors": 3, "lob": 9, "record": { "w": 55, "l": 50 }, "rank": 1, "league": "AL", "division": "Central" },
     "decisions": { "winner": "Brent Headrick", "loser": "Bryan Hudson", "save": "David Bednar" }
   }

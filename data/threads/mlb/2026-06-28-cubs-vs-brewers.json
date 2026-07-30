@@ -153,8 +153,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 8, "innings": [0, 0, 0, 2, 0, 4, 1, 0, 1], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 45, "l": 38 }, "rank": 2, "league": "NL", "division": "Central" },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 2, "innings": [1, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 2, "record": { "w": 50, "l": 30 }, "rank": 1, "league": "NL", "division": "Central" },
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 8, "innings": [0, 0, 0, 2, 0, 4, 1, 0, 1], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 45, "l": 38 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 624424, "name": "Michael Conforto", "no": 5 }, { "id": 664023, "name": "Ian Happ", "no": 17 }, { "id": 673548, "name": "Seiya Suzuki", "no": 12 }] },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 2, "innings": [1, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 2, "record": { "w": 50, "l": 30 }, "rank": 1, "league": "NL", "division": "Central", "homers": [{ "id": 694192, "name": "Jackson Chourio", "no": 11 }] },
     "decisions": { "winner": "David Peterson", "loser": "Chad Patrick" }
   }
 }

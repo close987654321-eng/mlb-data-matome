@@ -230,8 +230,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 5, "innings": [0, 0, 0, 3, 2, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 5, "record": { "w": 28, "l": 46 }, "rank": 5, "league": "NL", "division": "West" },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 2, "innings": [1, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 9, "record": { "w": 38, "l": 36 }, "rank": 3, "league": "NL", "division": "Central" },
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 5, "innings": [0, 0, 0, 3, 2, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 5, "record": { "w": 28, "l": 46 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 681198, "name": "TJ Rumfield", "no": 10 }] },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 2, "innings": [1, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 9, "record": { "w": 38, "l": 36 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 691718, "name": "Pete Crow-Armstrong", "no": 14 }] },
     "decisions": { "winner": "Blas Castaño", "loser": "Edward Cabrera", "save": "Jaden Hill" }
   }
 }

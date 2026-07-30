@@ -142,8 +142,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 14, "innings": [0, 0, 0, 0, 2, 0, 1, 3, 8], "hits": 17, "errors": 1, "lob": 6, "record": { "w": 43, "l": 36 }, "rank": 2, "league": "NL", "division": "East" },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 9, "innings": [0, 1, 0, 4, 0, 0, 0, 3, 1], "hits": 8, "errors": 1, "lob": 4, "record": { "w": 41, "l": 39 }, "rank": 4, "league": "NL", "division": "East" },
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 14, "innings": [0, 0, 0, 0, 2, 0, 1, 3, 8], "hits": 17, "errors": 1, "lob": 6, "record": { "w": 43, "l": 36 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 669016, "name": "Brandon Marsh", "no": 11 }, { "id": 624641, "name": "Edmundo Sosa", "no": 5 }, { "id": 681082, "name": "Bryson Stott", "no": 7 }] },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 9, "innings": [0, 1, 0, 4, 0, 0, 0, 3, 1], "hits": 8, "errors": 1, "lob": 4, "record": { "w": 41, "l": 39 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 678391, "name": "Jorbit Vivas", "no": 2 }, { "id": 671277, "name": "Luis García Jr.", "no": 12 }] },
     "decisions": { "winner": "Orion Kerkering", "loser": "Brad Lord" }
   }
 }

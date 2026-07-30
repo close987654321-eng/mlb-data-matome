@@ -22,7 +22,7 @@
   "tags": ["ダイヤモンドバックス", "パイレーツ", "コービン・キャロル", "海外の反応"],
   "game": {
     "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8, "innings": [1, 2, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1], "hits": 16, "errors": 1, "lob": 15, "record": { "w": 56, "l": 52 }, "rank": 2, "league": "NL", "division": "West" },
-    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 7, "innings": [0, 0, 0, 0, 0, 0, 0, 3, 3, 1, 0, 0], "hits": 14, "errors": 3, "lob": 13, "record": { "w": 55, "l": 53 }, "rank": 3, "league": "NL", "division": "Central" },
+    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 7, "innings": [0, 0, 0, 0, 0, 0, 0, 3, 3, 1, 0, 0], "hits": 14, "errors": 3, "lob": 13, "record": { "w": 55, "l": 53 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 664040, "name": "Brandon Lowe", "no": 22 }, { "id": 668804, "name": "Bryan Reynolds", "no": 15 }] },
     "decisions": { "winner": "Gerardo Carrillo", "loser": "Wilber Dotel" }
   },
   "stats": [

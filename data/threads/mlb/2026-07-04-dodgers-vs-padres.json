@@ -36,8 +36,8 @@
     "海外の反応"
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 3, "innings": [1, 0, 0, 1, 0, 1, 0, 0, 0], "hits": 8, "errors": 1, "lob": 7, "record": { "w": 43, "l": 44 }, "rank": 3, "league": "NL", "division": "West" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 4, 0, null], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 58, "l": 31 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 3, "innings": [1, 0, 0, 1, 0, 1, 0, 0, 0], "hits": 8, "errors": 1, "lob": 7, "record": { "w": 43, "l": 44 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 701538, "name": "Jackson Merrill", "no": 10 }] },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 4, 0, null], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 58, "l": 31 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 606192, "name": "Teoscar Hernández", "no": 8 }] },
     "decisions": { "winner": "Kyle Hurt", "loser": "Adrian Morejon", "save": "Tanner Scott" }
   },
   "stats": [

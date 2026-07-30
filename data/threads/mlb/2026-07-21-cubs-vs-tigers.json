@@ -139,8 +139,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "タイガース", "en": "Detroit Tigers", "score": 8, "innings": [4, 0, 0, 0, 0, 0, 0, 1, 0, 3], "hits": 12, "errors": 1, "lob": 10, "record": { "w": 47, "l": 53 }, "rank": 4, "league": "AL", "division": "Central" },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [0, 0, 3, 0, 0, 0, 0, 2, 0, 1], "hits": 11, "errors": 1, "lob": 10, "record": { "w": 56, "l": 44 }, "rank": 2, "league": "NL", "division": "Central" },
+    "away": { "ja": "タイガース", "en": "Detroit Tigers", "score": 8, "innings": [4, 0, 0, 0, 0, 0, 0, 1, 0, 3], "hits": 12, "errors": 1, "lob": 10, "record": { "w": 47, "l": 53 }, "rank": 4, "league": "AL", "division": "Central", "homers": [{ "id": 682985, "name": "Riley Greene", "no": 15 }, { "id": 693307, "name": "Dillon Dingler", "hr": 2, "no": 21 }] },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [0, 0, 3, 0, 0, 0, 0, 2, 0, 1], "hits": 11, "errors": 1, "lob": 10, "record": { "w": 56, "l": 44 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 664023, "name": "Ian Happ", "no": 18 }, { "id": 683737, "name": "Michael Busch", "no": 13 }, { "id": 673548, "name": "Seiya Suzuki", "no": 16 }] },
     "decisions": { "winner": "Kenley Jansen", "loser": "Trent Thornton", "save": "Tyler Holton" }
   }
 }

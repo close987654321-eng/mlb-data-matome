@@ -21,7 +21,7 @@
   },
   "game": {
     "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 3, "innings": [0, 2, 0, 0, 0, 0, 1, 0, 0], "hits": 8, "errors": 0, "lob": 10, "record": { "w": 55, "l": 49 }, "rank": 2, "league": "NL", "division": "West" },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 2, "innings": [0, 0, 0, 2, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 52, "l": 52 }, "rank": 4, "league": "NL", "division": "East" },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 2, "innings": [0, 0, 0, 2, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 52, "l": 52 }, "rank": 4, "league": "NL", "division": "East", "homers": [{ "id": 686611, "name": "Dylan Crews", "no": 8 }] },
     "decisions": { "winner": "Eduardo Rodriguez", "loser": "Zack Littell", "save": "Paul Sewald" }
   },
   "stats": [

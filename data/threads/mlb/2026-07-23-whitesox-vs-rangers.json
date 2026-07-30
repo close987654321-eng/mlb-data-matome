@@ -21,7 +21,7 @@
   "totalComments": 44,
   "game": {
     "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 4, "innings": [0, 1, 0, 2, 0, 1, 0, 0, 0], "hits": 7, "errors": 2, "lob": 6, "record": { "w": 54, "l": 47 }, "rank": 1, "league": "AL", "division": "Central" },
-    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 2, "innings": [0, 1, 0, 1, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 51, "l": 51 }, "rank": 1, "league": "AL", "division": "West" },
+    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 2, "innings": [0, 1, 0, 1, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 51, "l": 51 }, "rank": 1, "league": "AL", "division": "West", "homers": [{ "id": 695508, "name": "Cam Cauley", "no": 1 }] },
     "decisions": { "winner": "Anthony Kay", "loser": "Cal Quantrill", "save": "Bryan Hudson" }
   },
   "stats": [

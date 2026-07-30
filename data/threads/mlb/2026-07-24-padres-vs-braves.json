@@ -29,8 +29,8 @@
     "海外の反応"
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 5, "innings": [0, 3, 0, 0, 0, 0, 0, 2, 0], "hits": 9, "errors": 0, "lob": 6, "record": { "w": 50, "l": 53 }, "rank": 3, "league": "NL", "division": "West" },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6, "innings": [0, 1, 0, 4, 0, 0, 1, 0, null], "hits": 9, "errors": 0, "lob": 3, "record": { "w": 60, "l": 42 }, "rank": 1, "league": "NL", "division": "East" },
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 5, "innings": [0, 3, 0, 0, 0, 0, 0, 2, 0], "hits": 9, "errors": 0, "lob": 6, "record": { "w": 50, "l": 53 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 664034, "name": "Ty France", "no": 16 }] },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6, "innings": [0, 1, 0, 4, 0, 0, 1, 0, null], "hits": 9, "errors": 0, "lob": 3, "record": { "w": 60, "l": 42 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 671739, "name": "Michael Harris II", "no": 19 }, { "id": 686948, "name": "Drake Baldwin", "no": 19 }, { "id": 642086, "name": "Dominic Smith", "no": 7 }, { "id": 645277, "name": "Ozzie Albies", "no": 16 }] },
     "decisions": { "winner": "Chris Sale", "loser": "Griffin Canning", "save": "Raisel Iglesias" }
   },
   "stats": [

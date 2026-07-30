@@ -170,8 +170,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 5, "innings": [0, 2, 0, 0, 1, 1, 0, 0, 1], "hits": 8, "errors": 0, "lob": 10, "record": { "w": 51, "l": 42 }, "rank": 2, "league": "NL", "division": "East" },
-    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 11, "innings": [0, 0, 2, 5, 0, 4, 0, 0, null], "hits": 11, "errors": 0, "lob": 7, "record": { "w": 42, "l": 49 }, "rank": 5, "league": "NL", "division": "Central" },
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 5, "innings": [0, 2, 0, 0, 1, 1, 0, 0, 1], "hits": 8, "errors": 0, "lob": 10, "record": { "w": 51, "l": 42 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 592663, "name": "J.T. Realmuto", "no": 7 }, { "id": 656941, "name": "Kyle Schwarber", "no": 32 }] },
+    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 11, "innings": [0, 0, 2, 5, 0, 4, 0, 0, null], "hits": 11, "errors": 0, "lob": 7, "record": { "w": 42, "l": 49 }, "rank": 5, "league": "NL", "division": "Central", "homers": [{ "id": 682829, "name": "Elly De La Cruz", "no": 14 }, { "id": 701398, "name": "Sal Stewart", "hr": 2, "no": 19 }, { "id": 682622, "name": "Noelvi Marte", "no": 6 }, { "id": 668709, "name": "JJ Bleday", "no": 14 }] },
     "decisions": { "winner": "Chase Burns", "loser": "Alan Rangel" }
   }
 }

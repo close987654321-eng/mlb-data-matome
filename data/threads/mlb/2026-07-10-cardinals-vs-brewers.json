@@ -35,8 +35,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 8, "innings": [0, 2, 4, 0, 0, 0, 1, 0, 1], "hits": 11, "errors": 0, "lob": 6, "record": { "w": 59, "l": 34 }, "rank": 1, "league": "NL", "division": "Central" },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 4, "innings": [0, 0, 0, 1, 0, 3, 0, 0, 0], "hits": 5, "errors": 0, "lob": 5, "record": { "w": 48, "l": 44 }, "rank": 3, "league": "NL", "division": "Central" },
+    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 8, "innings": [0, 2, 4, 0, 0, 0, 1, 0, 1], "hits": 11, "errors": 0, "lob": 6, "record": { "w": 59, "l": 34 }, "rank": 1, "league": "NL", "division": "Central", "homers": [{ "id": 641343, "name": "Jake Bauers", "no": 17 }, { "id": 668930, "name": "Brice Turang", "no": 13 }] },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 4, "innings": [0, 0, 0, 1, 0, 3, 0, 0, 0], "hits": 5, "errors": 0, "lob": 5, "record": { "w": 48, "l": 44 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 691023, "name": "Jordan Walker", "no": 22 }] },
     "decisions": { "winner": "Logan Henderson", "loser": "Andre Pallante" }
   },
   "comments": [

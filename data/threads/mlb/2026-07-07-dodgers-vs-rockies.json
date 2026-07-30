@@ -38,8 +38,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 7, "innings": [0, 1, 0, 0, 1, 1, 0, 0, 3, 1, 0], "hits": 9, "errors": 1, "lob": 10, "record": { "w": 37, "l": 55 }, "rank": 5, "league": "NL", "division": "West" },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 8, "innings": [0, 0, 2, 4, 0, 0, 0, 0, 0, 1, 1], "hits": 13, "errors": 0, "lob": 8, "record": { "w": 60, "l": 32 }, "rank": 1, "league": "NL", "division": "West" },
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 7, "innings": [0, 1, 0, 0, 1, 1, 0, 0, 3, 1, 0], "hits": 9, "errors": 1, "lob": 10, "record": { "w": 37, "l": 55 }, "rank": 5, "league": "NL", "division": "West", "homers": [{ "id": 678662, "name": "Ezequiel Tovar", "no": 8 }] },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 8, "innings": [0, 0, 2, 4, 0, 0, 0, 0, 0, 1, 1], "hits": 13, "errors": 0, "lob": 8, "record": { "w": 60, "l": 32 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 660271, "name": "Shohei Ohtani", "no": 19 }] },
     "decisions": { "winner": "Edgardo Henriquez", "loser": "Jimmy Herget" }
   },
   "comments": [

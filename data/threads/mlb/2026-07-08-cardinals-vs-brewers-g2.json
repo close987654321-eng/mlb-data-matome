@@ -27,8 +27,8 @@
   },
   "tags": ["カージナルス", "ブルワーズ", "ヌートバー", "海外の反応"],
   "game": {
-    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 10, "innings": [0, 0, 1, 0, 2, 0, 7, 0, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 58, "l": 33 }, "rank": 1, "league": "NL", "division": "Central" },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 2, "innings": [0, 0, 0, 0, 0, 2, 0, 0, 0], "hits": 4, "errors": 0, "lob": 4, "record": { "w": 47, "l": 43 }, "rank": 3, "league": "NL", "division": "Central" },
+    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 10, "innings": [0, 0, 1, 0, 2, 0, 7, 0, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 58, "l": 33 }, "rank": 1, "league": "NL", "division": "Central", "homers": [{ "id": 687401, "name": "Joey Ortiz", "no": 3 }] },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 2, "innings": [0, 0, 0, 0, 0, 2, 0, 0, 0], "hits": 4, "errors": 0, "lob": 4, "record": { "w": 47, "l": 43 }, "rank": 3, "league": "NL", "division": "Central", "homers": [{ "id": 676369, "name": "Nelson Velázquez", "no": 4 }] },
     "decisions": { "winner": "Robert Gasser", "loser": "Hunter Dobbins" }
   },
   "stats": [

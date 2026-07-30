@@ -161,8 +161,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 6, "innings": [0, 0, 2, 0, 2, 0, 2, 0, 0], "hits": 12, "errors": 1, "lob": 11, "record": { "w": 43, "l": 44 }, "rank": 4, "league": "NL", "division": "Central" },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10, "innings": [0, 5, 1, 2, 0, 0, 0, 2, null], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 49, "l": 38 }, "rank": 2, "league": "NL", "division": "East" },
+    "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 6, "innings": [0, 0, 2, 0, 2, 0, 2, 0, 0], "hits": 12, "errors": 1, "lob": 11, "record": { "w": 43, "l": 44 }, "rank": 4, "league": "NL", "division": "Central", "homers": [{ "id": 680779, "name": "Henry Davis", "no": 7 }] },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10, "innings": [0, 5, 1, 2, 0, 0, 0, 2, null], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 49, "l": 38 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 669016, "name": "Brandon Marsh", "no": 15 }, { "id": 664761, "name": "Alec Bohm", "no": 10 }, { "id": 607208, "name": "Trea Turner", "no": 10 }] },
     "decisions": { "winner": "Orion Kerkering", "loser": "Paul Skenes" }
   }
 }

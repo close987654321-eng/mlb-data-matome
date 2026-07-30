@@ -50,7 +50,7 @@
   ],
   "game": {
     "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 3, "innings": [0, 0, 2, 0, 0, 0, 1, 0, 0], "hits": 6, "errors": 1, "lob": 3, "record": { "w": 55, "l": 50 }, "rank": 2, "league": "NL", "division": "West" },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 5, "innings": [0, 0, 4, 0, 1, 0, 0, 0, null], "hits": 9, "errors": 0, "lob": 10, "record": { "w": 53, "l": 52 }, "rank": 3, "league": "NL", "division": "East" },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 5, "innings": [0, 0, 4, 0, 1, 0, 0, 0, null], "hits": 9, "errors": 0, "lob": 10, "record": { "w": 53, "l": 52 }, "rank": 3, "league": "NL", "division": "East", "homers": [{ "id": 682928, "name": "CJ Abrams", "no": 25 }] },
     "decisions": { "winner": "Foster Griffin", "loser": "Mitch Bratt", "save": "Clayton Beeter" }
   },
   "comments": [

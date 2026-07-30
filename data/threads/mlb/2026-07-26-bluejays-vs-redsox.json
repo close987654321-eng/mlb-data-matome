@@ -44,7 +44,7 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 6, "innings": [0, 0, 5, 0, 0, 0, 0, 0, 1], "hits": 15, "errors": 0, "lob": 7, "record": { "w": 48, "l": 57 }, "rank": 5, "league": "AL", "division": "East" },
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 6, "innings": [0, 0, 5, 0, 0, 0, 0, 0, 1], "hits": 15, "errors": 0, "lob": 7, "record": { "w": 48, "l": 57 }, "rank": 5, "league": "AL", "division": "East", "homers": [{ "id": 543807, "name": "George Springer", "no": 11 }] },
     "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 1, "errors": 0, "lob": 3, "record": { "w": 53, "l": 50 }, "rank": 3, "league": "AL", "division": "East" },
     "decisions": { "winner": "Dylan Cease", "loser": "Sonny Gray" }
   },

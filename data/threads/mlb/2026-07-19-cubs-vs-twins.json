@@ -26,8 +26,8 @@
   },
   "tags": ["カブス", "ツインズ", "鈴木誠也", "ピート・クロウアームストロング", "海外の反応"],
   "game": {
-    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 2, "innings": [0, 1, 0, 0, 0, 0, 1, 0, 0], "hits": 8, "errors": 0, "lob": 4, "record": { "w": 49, "l": 50 }, "rank": 3, "league": "AL", "division": "Central" },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [1, 2, 2, 0, 0, 0, 1, 0, null], "hits": 11, "errors": 0, "lob": 9, "record": { "w": 55, "l": 43 }, "rank": 2, "league": "NL", "division": "Central" },
+    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 2, "innings": [0, 1, 0, 0, 0, 0, 1, 0, 0], "hits": 8, "errors": 0, "lob": 4, "record": { "w": 49, "l": 50 }, "rank": 3, "league": "AL", "division": "Central", "homers": [{ "id": 665019, "name": "Kody Clemens", "hr": 2, "no": 18 }] },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [1, 2, 2, 0, 0, 0, 1, 0, null], "hits": 11, "errors": 0, "lob": 9, "record": { "w": 55, "l": 43 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 683737, "name": "Michael Busch", "no": 12 }] },
     "decisions": { "winner": "Matthew Boyd", "loser": "Taj Bradley" }
   },
   "stats": [

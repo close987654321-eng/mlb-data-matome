@@ -188,7 +188,7 @@
   ],
   "game": {
     "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 2, "innings": [0, 1, 1, 0, 0, 0, 0, 0, 0], "hits": 10, "errors": 1, "lob": 9, "record": { "w": 38, "l": 59 }, "rank": 5, "league": "AL", "division": "Central" },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 8, "innings": [0, 2, 0, 0, 0, 5, 1, 0, null], "hits": 12, "errors": 1, "lob": 9, "record": { "w": 46, "l": 51 }, "rank": 4, "league": "AL", "division": "East" },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 8, "innings": [0, 2, 0, 0, 0, 5, 1, 0, null], "hits": 12, "errors": 1, "lob": 9, "record": { "w": 46, "l": 51 }, "rank": 4, "league": "AL", "division": "East", "homers": [{ "id": 694212, "name": "Samuel Basallo", "no": 16 }, { "id": 665750, "name": "Leody Taveras", "no": 4 }] },
     "decisions": { "winner": "Grant Wolfram", "loser": "Matt Strahm" }
   }
 }

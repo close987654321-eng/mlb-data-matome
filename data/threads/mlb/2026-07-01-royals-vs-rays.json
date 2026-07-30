@@ -120,8 +120,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 10, "innings": [0, 0, 6, 0, 2, 2, 0, 0, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 49, "l": 33 }, "rank": 1, "league": "AL", "division": "East" },
-    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 4, "innings": [1, 0, 2, 0, 0, 0, 0, 1, 0], "hits": 6, "errors": 1, "lob": 2, "record": { "w": 35, "l": 51 }, "rank": 5, "league": "AL", "division": "Central" },
+    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 10, "innings": [0, 0, 6, 0, 2, 2, 0, 0, 0], "hits": 11, "errors": 0, "lob": 8, "record": { "w": 49, "l": 33 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 668723, "name": "Ryan Vilade", "no": 6 }, { "id": 691406, "name": "Junior Caminero", "no": 23 }] },
+    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 4, "innings": [1, 0, 2, 0, 0, 0, 0, 1, 0], "hits": 6, "errors": 1, "lob": 2, "record": { "w": 35, "l": 51 }, "rank": 5, "league": "AL", "division": "Central", "homers": [{ "id": 695600, "name": "Carter Jensen", "no": 12 }, { "id": 677951, "name": "Bobby Witt Jr.", "hr": 2, "no": 12 }] },
     "decisions": { "winner": "Griffin Jax", "loser": "Noah Cameron" }
   }
 }

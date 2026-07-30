@@ -36,7 +36,7 @@
   ],
   "game": {
     "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 7, "innings": [0, 0, 5, 0, 2, 0, 0, 0, 0, 0], "hits": 13, "errors": 0, "lob": 13, "record": { "w": 51, "l": 47 }, "rank": 3, "league": "NL", "division": "Central" },
-    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8, "innings": [0, 0, 0, 0, 0, 3, 2, 2, 0, 1], "hits": 10, "errors": 0, "lob": 6, "record": { "w": 51, "l": 48 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8, "innings": [0, 0, 0, 0, 0, 3, 2, 2, 0, 1], "hits": 10, "errors": 0, "lob": 6, "record": { "w": 51, "l": 48 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 571448, "name": "Nolan Arenado", "no": 13 }, { "id": 672695, "name": "Geraldo Perdomo", "no": 7 }] },
     "decisions": { "winner": "Juan Morillo", "loser": "Luis Gastelum" }
   },
   "stats": [
