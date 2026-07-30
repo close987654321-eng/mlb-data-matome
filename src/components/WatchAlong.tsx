@@ -8,11 +8,14 @@ type Props = {
   pickedLabel: string; // 「○○件から抜粋」の見出し
   hintLabel: string; // 動画下のスクロール案内
   transcriptLabel: string; // 番組トークの見出し（あるときだけ使う）
+  unpinLabel: string; // 動画のピン留めをやめる
+  pinLabel: string; // 動画のピン留めに戻す
 };
 
 /**
- * 動画つき記事のデフォルト表示：動画を上部にピン留めし、その裏をコメントが流れていく。
+ * 動画つき記事のデフォルト表示：動画を上部に置き、（再生した人には）その裏をコメントが流れていく。
  * 動画とコメントを同じ親（この section）の直下に縦並びで置くことで sticky を成立させる。
+ * ピン留めを再生後だけに絞る判断は StickyVideo 側のコメント参照。
  */
 export default function WatchAlong({
   thread,
@@ -20,6 +23,8 @@ export default function WatchAlong({
   pickedLabel,
   hintLabel,
   transcriptLabel,
+  unpinLabel,
+  pinLabel,
 }: Props) {
   // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+👍
   const isInterview = thread.format === 'interview';
@@ -29,7 +34,13 @@ export default function WatchAlong({
   return (
     <section className="mt-8">
       {thread.media && (
-        <StickyVideo media={thread.media} sourceUrl={thread.sourceUrl} hintLabel={hintLabel} />
+        <StickyVideo
+          media={thread.media}
+          sourceUrl={thread.sourceUrl}
+          hintLabel={hintLabel}
+          unpinLabel={unpinLabel}
+          pinLabel={pinLabel}
+        />
       )}
 
       {/* 番組トーク（あれば）を動画とコメントの間に挟む。海外ファンのコメントに入る前の文脈。 */}

@@ -203,6 +203,8 @@ export default async function ColumnDetailPage({
             media={pinnedVideo.media}
             sourceUrl={column.sourceUrl ?? ''}
             hintLabel={t('threads.watchAlongHint')}
+            unpinLabel={t('threads.unpinVideo')}
+            pinLabel={t('threads.pinVideo')}
           />
         )}
         {column.blocks.map((block, i) => {

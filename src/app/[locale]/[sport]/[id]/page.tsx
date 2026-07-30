@@ -498,13 +498,15 @@ export default async function ThreadDetailPage({
       )}
 
       {isWatchAlong ? (
-        // この記事だけ：動画をピン留めし、その裏をコメントが試合の時系列順に流れる。
+        // 動画つき記事：再生した人にだけ動画をピン留めし、その裏をコメントが流れる。
         <WatchAlong
           thread={thread}
           comments={comments}
           pickedLabel={t('threads.pickedComments', { total: thread.totalComments })}
           hintLabel={t('threads.watchAlongHint')}
           transcriptLabel={t('threads.transcript')}
+          unpinLabel={t('threads.unpinVideo')}
+          pinLabel={t('threads.pinVideo')}
         />
       ) : (
         <>

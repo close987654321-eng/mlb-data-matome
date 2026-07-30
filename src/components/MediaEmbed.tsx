@@ -6,6 +6,8 @@ import type { ThreadMedia } from '@/types/thread';
 type Props = {
   media: ThreadMedia;
   sourceUrl: string; // 埋め込めない動画のときの送客先（元スレ）
+  // 動画の再生開始を親に伝える（StickyVideo 用）。サーバー描画側は渡さない＝undefined。
+  onVideoActivate?: () => void;
 };
 
 // キャプション＋出典の脚注。引用配慮として必ず出す。
@@ -25,7 +27,7 @@ function Caption({ media }: { media: ThreadMedia }) {
  * - image: 直リンク画像を表示（ファイルはコミットしない）
  * - video: 既知プロバイダは公式 iframe で埋め込み、未対応なら元スレへ送客
  */
-export default function MediaEmbed({ media, sourceUrl }: Props) {
+export default function MediaEmbed({ media, sourceUrl, onVideoActivate }: Props) {
   if (media.kind === 'image') {
     return (
       <figure className="mt-8">
@@ -52,6 +54,7 @@ export default function MediaEmbed({ media, sourceUrl }: Props) {
           controls
           playsInline
           preload="metadata"
+          onPlay={onVideoActivate}
           className="aspect-video w-full rounded-xl bg-black"
         />
         <Caption media={media} />
@@ -70,6 +73,7 @@ export default function MediaEmbed({ media, sourceUrl }: Props) {
             embedUrl={embed}
             thumbUrl={videoPoster(media) ?? ''}
             title={media.caption ?? 'video'}
+            onActivate={onVideoActivate}
           />
         </div>
         <Caption media={media} />

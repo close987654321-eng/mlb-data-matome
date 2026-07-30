@@ -7,6 +7,8 @@ type Props = {
   embedUrl: string; // toEmbedUrl の結果（クエリ無しの埋め込み URL）
   thumbUrl: string; // ファサードのポスター画像（無ければ空文字）
   title: string;
+  // 再生開始の通知。StickyVideo が「見る人だけピン留めする」判定に使う。
+  onActivate?: () => void;
 };
 
 /**
@@ -15,7 +17,7 @@ type Props = {
  * これで記事ページの初期ロードからプレイヤー一式（JS+CSS で ~0.9MB）を外し、
  * TBT・メインスレッド処理・転送量を大幅に削減する。動画は実際に見る人だけが読み込む。
  */
-export default function LiteVideo({ embedUrl, thumbUrl, title }: Props) {
+export default function LiteVideo({ embedUrl, thumbUrl, title, onActivate }: Props) {
   const [active, setActive] = useState(false);
 
   if (active) {
@@ -34,7 +36,10 @@ export default function LiteVideo({ embedUrl, thumbUrl, title }: Props) {
   return (
     <button
       type="button"
-      onClick={() => setActive(true)}
+      onClick={() => {
+        setActive(true);
+        onActivate?.();
+      }}
       aria-label={title}
       className="group absolute inset-0 h-full w-full"
     >
