@@ -115,8 +115,11 @@ node scripts/fetch-youtube.mjs comments "<動画URL>" 200
 ### タイトル
 
 ```
-{M/D} {主役の出来事}・{2人目}〔・{3人目}〕｜きょうの日本人選手
+{M/D} {主役の出来事}・{2人目}〔・{3人目}〕｜きょうのMLB日本人選手
 ```
+
+末尾の `｜きょうのMLB日本人選手` は**固定**（シリーズ識別）。「MLB」を入れているのは、
+タイトル単体で見たとき何の競技の日本人選手か分からないため（2026-07-31 変更）。
 
 - **②③に出す順と同じ順**で選手を並べる（タイトル＝目次）。
 - 選手名を先頭10字以内／全角32〜35字／「成績まとめ」「海外の反応」の語は使わない
@@ -166,7 +169,7 @@ curl -s "https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=<ETの翌日>&h
   "id": "2026-07-30-jp-daily",
   "sport": "mlb", "format": "youtube", "subreddit": "YouTube",
   "sourceUrl": "<主役の公式ハイライトURL>",
-  "title": { "ja": "7/30 村上23号・岡本3安打・大谷2安打｜きょうの日本人選手", "en": "..." },
+  "title": { "ja": "7/30 村上23号・岡本3安打・大谷2安打｜きょうのMLB日本人選手", "en": "..." },
   "summaryJa": "…メタ説明用のリード（画面には出ない＝①が代わり）…",
   "totalComments": 647,            // 使った動画の総コメント数の合計（実測）
   "media": { "kind": "image", "url": "/media/jp-daily-2026-07-30-og.jpg", "width": 1200, "height": 578 },  // ← 16:9版・寸法必須（JSON-LD/Discoverの1200px宣言）
