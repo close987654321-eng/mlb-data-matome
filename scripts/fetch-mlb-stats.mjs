@@ -693,6 +693,108 @@ async function runJp(season, { date, asJson, team } = {}) {
   recs.forEach(printRecord);
 }
 
+/**
+ * jpday … 指定日(ET)に出場した「日本人選手だけ」を、カード描画に必要な形で返す
+ * （scripts/jp-daily-card.mjs = X 用「きょうの日本人」カードの唯一のデータ源）。
+ *
+ * jp コマンドと分けている理由は 2 つ。
+ *  (a) 対象がちがう … jp はライバル外国人も含む（記事の成績ボックス用）。カードは日本人だけ
+ *      ＝「これ1枚で日本人の全部がわかる」が売りなので、混ぜると薄まる。
+ *  (b) 形がちがう … jp の出力は記事JSON(Thread.stats)へそのまま転記される契約なので、顔写真用の
+ *      id や主役選出用の生スタッツを足せない。足すと記事JSONに余計なキーが混入する。
+ *
+ * 出力は数値だけ（公知の事実）＝法務 posture は他コマンドと同じ。
+ */
+async function runJpDay(season, { date } = {}) {
+  const ids = [...new Set([...Object.keys(JP_NAMES).map(Number), ...EXTRA_IDS])];
+  // 開幕日＝カードの通し番号（DAY 127）に使う。毎日同じ体裁＋通し番号が「集める」動機になる。
+  const opener = await getJson(`${BASE}/seasons?sportId=1&season=${season}`)
+    .then((d) => d.seasons?.[0]?.regularSeasonStartDate ?? null)
+    .catch(() => null);
+  const [ranks, saberMap] = await Promise.all([fetchRanks(season), fetchWar(ids, season)]);
+  const [todayPeople, cumPeople, prevPeople] = await Promise.all([
+    fetchStats(ids, season, { date }),
+    fetchStats(ids, season, { start: seasonStart(season), end: date }),
+    fetchStats(ids, season, { start: seasonStart(season), end: prevDay(date) }),
+  ]);
+  const cumById = new Map(cumPeople.map((p) => [p.id, p]));
+  const prevById = new Map(prevPeople.map((p) => [p.id, p]));
+
+  // その日の全試合＝所属チームの勝敗をカードの各行に出すため（「6-3 W」）。取得に失敗しても
+  // 成績カード自体は成立するので、空配列にして続行する。
+  const schedule = await fetchSchedule(date).catch(() => []);
+  const gamesOf = (teamId) =>
+    schedule
+      .filter((g) => (g.awaySide?.teamId === teamId || g.homeSide?.teamId === teamId) && /final|completed|game over/i.test(g.status))
+      .map((g) => {
+        const home = g.homeSide?.teamId === teamId;
+        const rf = home ? g.homeScore : g.awayScore;
+        const ra = home ? g.awayScore : g.homeScore;
+        if (rf == null || ra == null) return null;
+        return {
+          for: rf,
+          against: ra,
+          win: rf > ra,
+          home,
+          gamePk: g.gamePk,
+          opponent: TEAM_JA[home ? g.away : g.home] ?? (home ? g.away : g.home),
+          extra: (g.awaySide?.innings?.length ?? 0) > 9, // 延長（記事の一言に使う）
+          // ダイジェスト記事（jp-daily）の試合セクションにそのまま貼れる形（Thread.game と同じ型）。
+          // 文字列から組み直すと表記ゆれるので、ここで確定した公式名・スコアだけを渡す。
+          game: {
+            away: { ja: TEAM_JA[g.away] ?? g.away, en: g.away, score: g.awayScore },
+            home: { ja: TEAM_JA[g.home] ?? g.home, en: g.home, score: g.homeScore },
+            ...(g.decisions?.winner ? { decisions: g.decisions } : {}),
+          },
+        };
+      })
+      .filter(Boolean);
+
+  const num = (v) => (v == null ? 0 : Number(v)) || 0;
+  const players = todayPeople
+    .filter((p) => pickSplit(p, 'hitting') || pickSplit(p, 'pitching'))
+    .map((dp) => {
+      const cum = cumById.get(dp.id) ?? dp;
+      const rec = toStatRecord(cum, { datePerson: dp, prevPerson: prevById.get(dp.id), ranks, saber: saberMap.get(dp.id) });
+      const h = pickSplit(dp, 'hitting');
+      const p = pickSplit(dp, 'pitching');
+      const ch = pickSplit(cum, 'hitting');
+      const cp = pickSplit(cum, 'pitching');
+      const sb = saberMap.get(dp.id);
+      return {
+        id: dp.id,
+        name: jpName(cum),
+        team: teamJa(cum),
+        teamId: cum.currentTeam?.id ?? dp.currentTeam?.id ?? null,
+        games: gamesOf(cum.currentTeam?.id ?? dp.currentTeam?.id ?? null),
+        today: rec.today ?? '',
+        note: rec.note ?? null,
+        season: rec.season ?? '',
+        war: rec.war ?? null,
+        rank: rec.rank ?? null,
+        seasonHr: ch ? num(ch.homeRuns) : null, // 節目バッジ（今季◯号）の裏取り用
+        // 今季の到達点。カードは文字列でなくこの生値から指標チップ（OPS / WAR / ERA / WHIP）を組む。
+        seasonHit: ch && num(ch.gamesPlayed) ? { avg: ch.avg, hr: num(ch.homeRuns), rbi: num(ch.rbi), ops: ch.ops, obp: ch.obp, slg: ch.slg, g: num(ch.gamesPlayed) } : null,
+        seasonPit: cp && num(cp.gamesPlayed) ? { w: num(cp.wins), l: num(cp.losses), era: cp.era, whip: cp.whip, so: num(cp.strikeOuts), ip: cp.inningsPitched } : null,
+        warHit: sb?.hit ?? null,
+        warPit: sb?.pit ?? null,
+        // 主役の自動選出に使う生値。整形済み文字列を正規表現で読み解くのは壊れやすいので数値で渡す。
+        hit: h
+          ? { ab: num(h.atBats), h: num(h.hits), hr: num(h.homeRuns), rbi: num(h.rbi), bb: num(h.baseOnBalls),
+              so: num(h.strikeOuts), r: num(h.runs), sb: num(h.stolenBases), d: num(h.doubles), t: num(h.triples),
+              pa: num(h.plateAppearances) }
+          : null,
+        pit: p
+          ? { ip: p.inningsPitched ?? '0.0', h: num(p.hits), er: num(p.earnedRuns), so: num(p.strikeOuts),
+              bb: num(p.baseOnBalls), w: num(p.wins), l: num(p.losses), sv: num(p.saves), hld: num(p.holds),
+              hr: num(p.homeRuns) }
+          : null,
+      };
+    });
+  const day = opener ? Math.floor((Date.parse(`${date}T12:00:00Z`) - Date.parse(`${opener}T12:00:00Z`)) / 86400000) + 1 : null;
+  console.log(JSON.stringify({ date, season, opener, day, players }, null, 2));
+}
+
 async function runPlayer(query, season, { asJson } = {}) {
   let ids;
   if (/^\d+$/.test(query)) {
@@ -2310,6 +2412,10 @@ async function main() {
     } else {
       await runJp(arg ? Number(arg) : defaultSeason(), { asJson, team });
     }
+  } else if (cmd === 'jpday') {
+    // jpday [YYYY-MM-DD(ET)]：その日出場した日本人選手だけをカード用の構造で吐く（既定=ET昨日）。
+    const date = arg && DATE_RE.test(arg) ? arg : addDays(etToday(), -1);
+    await runJpDay(Number(date.slice(0, 4)), { date });
   } else if (cmd === 'player' && arg) {
     await runPlayer(arg, arg2 ? Number(arg2) : defaultSeason(), { asJson });
   } else if (cmd === 'games') {

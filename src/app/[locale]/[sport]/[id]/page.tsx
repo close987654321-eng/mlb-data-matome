@@ -11,12 +11,14 @@ import { gameSeoTitle, gameSeoDescription, gameDateOf, gameDateLongJa } from '@/
 import { coverImage, ogCover, youTubeId } from '@/lib/media';
 import { rankNextReads } from '@/lib/nextRead';
 import { isThreadIndexable } from '@/lib/threadIndex';
+import { allComments } from '@/lib/daily';
 import { tagCountMap } from '@/lib/tags';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
 import Transcript from '@/components/Transcript';
 import StatBox from '@/components/StatBox';
+import DailyArticle from '@/components/DailyArticle';
 import GameBox from '@/components/GameBox';
 import GameResultCard from '@/components/GameResultCard';
 import WatchAlong from '@/components/WatchAlong';
@@ -135,13 +137,16 @@ export default async function ThreadDetailPage({
   const subtitle = thread.series
     ? seriesTitle(thread.series, otherLocale)
     : thread.title[otherLocale];
+  // 日次記事（きょうの日本人選手）はコーナー構成の読み物として描く＝1本のコメント列にしない。
+  const daily = thread.daily ?? null;
   // フック引用は冒頭に大きく掲げ、本文リストからは外す（重複を避ける）。
-  const hook = thread.comments.find((c) => c.isHook);
+  // 日次記事はコメントを本文の流れの中に持つので、冒頭のフックは出さない。
+  const hook = daily ? undefined : thread.comments.find((c) => c.isHook);
   // JSON の配列順 = 編集した「会話の流れ」順をそのまま表示する（スコア順に並べ替えない）。
   // 最後がオチになるよう matome スキルの R1/R2 に従って並べてある前提。
   const comments = thread.comments.filter((c) => !c.isHook);
   // 動画つきの記事は「動画ピン留め＋コメントが裏を流れる」watch-along をデフォルトにする。
-  const isWatchAlong = thread.media?.kind === 'video';
+  const isWatchAlong = !daily && thread.media?.kind === 'video';
   // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+👍
   const isInterview = thread.format === 'interview';
   const isYoutube = thread.format === 'youtube';
@@ -191,9 +196,10 @@ export default async function ThreadDetailPage({
   // 判断したコメント（フック・ハイライト）を優先し、残りをスコア順で足して上限10件に抑える。
   // 訳文(bodyJa)を text にし、原文(bodyEn)は無理に混ぜない＝ページの主言語(ja)と揃える。
   const AEO_COMMENT_LIMIT = 10;
+  const flatComments = allComments(thread); // 日次記事はコメントを本文ブロックに持つので横断で拾う
   const pickedComments = [
-    ...thread.comments.filter((c) => c.isHook || c.isHighlight),
-    ...thread.comments
+    ...flatComments.filter((c) => c.isHook || c.isHighlight),
+    ...flatComments
       .filter((c) => !c.isHook && !c.isHighlight)
       .sort((a, b) => b.score - a.score),
   ].slice(0, AEO_COMMENT_LIMIT);
@@ -218,6 +224,24 @@ export default async function ThreadDetailPage({
     const lastStop = cut.lastIndexOf('。');
     return lastStop > max * 0.5 ? cut.slice(0, lastStop + 1) : cut.trimEnd() + '…';
   };
+  // 日次記事は1本の記事に複数の公式ハイライト（主役＋ざわつき）が乗るので、それぞれ VideoObject を出す。
+  const dailyVideoLd = [daily?.hero.media, daily?.buzz?.media]
+    .filter((m) => m?.kind === 'video' && m.publishedAt)
+    .map((m) => {
+      const id = youTubeId(m!.url);
+      return {
+        '@type': 'VideoObject',
+        name: m!.videoTitle || title,
+        description: ldDescription(thread.summaryJa),
+        thumbnailUrl: m!.thumbUrl ?? cover.url,
+        uploadDate: m!.publishedAt,
+        embedUrl: id ? `https://www.youtube.com/embed/${id}` : undefined,
+        contentUrl: m!.url,
+        inLanguage: 'en',
+        ...(m!.credit ? { creditText: m!.credit } : {}),
+        publisher: { '@id': `${SITE_URL}/#organization` },
+      };
+    });
   const videoLd =
     thread.media?.kind === 'video' && thread.media.publishedAt
       ? [
@@ -327,6 +351,7 @@ export default async function ThreadDetailPage({
       },
       // 動画記事の VideoObject（uploadDate が取れている記事だけ）。
       ...videoLd,
+      ...dailyVideoLd,
       ...eventLd,
       {
         '@type': 'BreadcrumbList',
@@ -429,7 +454,10 @@ export default async function ThreadDetailPage({
         </figure>
       )}
 
-      <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
+      {/* 日次記事はリードを「きょうの3行」（DailyArticle ①）が担うので要約段落は出さない（メタ説明には使う）。 */}
+      {!daily && (
+        <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
+      )}
 
       {/* 試合結果ボックス。「◯◯ 対 ◯◯」で来た読者が先に知りたいのは勝敗＝結論を成績より上に置く。
           線スコア・順位・勝敗はすべて thread.game に焼き込んだ公知の数値（サイト本体は API を叩かない）。 */}
@@ -476,8 +504,9 @@ export default async function ThreadDetailPage({
         </p>
       )}
 
-      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。日本人選手のみ（jpTagged）。 */}
-      {sport === 'mlb' && jpTagged.length > 0 && (
+      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。日本人選手のみ（jpTagged）。
+          日次記事は出さない＝②③の選手名が個別ハブへリンク済みで、冒頭にチップを6個並べると開幕が渋滞する。 */}
+      {sport === 'mlb' && !daily && jpTagged.length > 0 && (
         <p className="mt-4 flex flex-wrap gap-2">
           {jpTagged.map((p) => (
             <Link
@@ -497,7 +526,9 @@ export default async function ThreadDetailPage({
         </p>
       )}
 
-      {isWatchAlong ? (
+      {daily ? (
+        <DailyArticle daily={daily} sourceUrl={thread.sourceUrl} locale={locale} />
+      ) : isWatchAlong ? (
         // 動画つき記事：再生した人にだけ動画をピン留めし、その裏をコメントが流れる。
         <WatchAlong
           thread={thread}

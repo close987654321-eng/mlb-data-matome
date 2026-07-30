@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/navigation';
 import { threadTitle } from '@/lib/series';
+import { allComments } from '@/lib/daily';
 import { reasonLabel, type Ranked } from '@/lib/nextRead';
 import type { Locale } from '@/lib/i18n';
 
@@ -21,9 +22,11 @@ export default async function NextReadCard({ pick, locale }: { pick: Ranked; loc
   const thread = item.thread;
   const title = threadTitle(thread, locale);
   const teaserComment =
-    thread.comments.find((c) => c.isHook) ??
-    thread.comments.find((c) => c.isHighlight) ??
-    thread.comments[0];
+    (() => {
+      // 日次記事はコメントを本文ブロックに持つので allComments を通す（直接見ると引用が空になる）。
+      const cs = allComments(thread);
+      return cs.find((c) => c.isHook) ?? cs.find((c) => c.isHighlight) ?? cs[0];
+    })();
   const teaser = teaserComment
     ? locale === 'ja'
       ? teaserComment.bodyJa

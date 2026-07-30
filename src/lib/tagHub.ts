@@ -4,6 +4,7 @@ import type { PlayerSeason } from './playerStats';
 import type { FeedItem } from './feed';
 import type { TagCount } from './tags';
 import type { Thread, ThreadComment } from '@/types/thread';
+import { allComments } from './daily';
 
 /**
  * タグLP（リッチ化するタグページ）の判定と導入文の唯一の正。
@@ -142,7 +143,7 @@ function mentionOf(comment: ThreadComment, patterns: string[]): 'none' | 'body' 
 
 /** 使えるコメント（本文があり、一言レスでない）を票数の多い順に。 */
 function usableComments(thread: Thread): ThreadComment[] {
-  return (thread.comments ?? [])
+  return allComments(thread)
     .filter((c) => textLength(voiceBody(c)) >= MIN_BODY)
     .sort((a, b) => b.score - a.score);
 }

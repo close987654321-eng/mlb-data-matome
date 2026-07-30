@@ -35,7 +35,7 @@ SSG します。
 ├── CLAUDE.md
 ├── AGENTS.md                    # 他エージェント向けの薄いポインタ（内容はここに複製しない）
 ├── README.md
-├── .claude/skills/              # matome / jp-games / neta-radar / x-post / x-share / kpi-weekly（各 SKILL.md + references/）
+├── .claude/skills/              # matome / jp-games / jp-daily / neta-radar / x-post / x-share / kpi-weekly / column（各 SKILL.md + references/）
 ├── data/
 │   └── threads/
 │       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
@@ -97,6 +97,12 @@ SSG します。
 日本人選手の**出場試合を漏れなく**記事化する段取り（出場試合の洗い出し→公式ハイライト同定→重複検知→
 matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md`）。「今日の日本人選手の試合
 まとめて」等で発動し、選手ハブ /player を出場試合の動画記事で充実させる。
+その日出場した日本人を**1枚のカード画像＋1本のダイジェスト記事**にする日次シリーズ「きょうの日本人選手」は
+**`jp-daily` スキル**（`.claude/skills/jp-daily/SKILL.md`）。カード（X にリンク無しで単体投稿する拡散の本体）と
+記事（`Thread.daily`）をセットで作る。記事は帯番組のコーナー構成＝①きょうの3行→②きょうの主役（地の文に
+現地コメントを証言として差し込む読み物）→③残り全員ひと言ずつ→④きょうの現地ざわつき→⑤きょうの1枚
+（カード配布・保存/転載OK）→⑥あすの日本人。**日本人が絡む試合はこの日次記事に集約**し、jp-games の
+個別記事はライバル（非日本人）だけの試合に限る＝同じ日の記事どうしが食い合うのを避けるため（2026-07-30 合意）。
 ネタの**発見**（YouTube 定点監視・MLB ライバル枠・興行カレンダー・Reddit 巡回注文）は **`neta-radar`
 スキル**（`.claude/skills/neta-radar/SKILL.md`）。「今日のネタある？」「ネタ探して」等で発動し、候補
 チケットを出して matome / jp-games に委譲する（記事化はしない）。
@@ -111,6 +117,12 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
   生の取得 JSON は `_local/queue/` に置き、**コミットしない**（YouTube API 規約のデータ保存
   制限。記事に残すのは抜粋のみ）。MLB 公式ハイライト・RIZIN 公式が主用途。`search "<クエリ>" [本数]
   --channel <ID>` で動画検索もできる（試合ハイライトの同定＝`jp-games` スキルが使う）。
+- **きょうの日本人選手（jp-daily）**: `node scripts/fetch-mlb-stats.mjs jpday [ETの試合日]` で、その日出場した
+  **日本人選手だけ**をカード・記事用の構造（生スタッツ／今季到達点／WAR／所属チームの勝敗）で取得。
+  `node scripts/jp-daily-card.mjs [ETの試合日]` が X 配布用のカード（1080×1350）と、記事ヒーロー／OGP 用の
+  16:9 版（`-og.jpg`・1200×578）を書き出す（背景 `public/media/card-ballpark.jpg`・アイコン
+  `public/media/card-brand.jpg`・無ければ Unsplash に退避）。縦カードをそのまま OG にすると X・Discover が
+  中央だけを切り抜いて題字が消えるので、記事の `media` には必ず 16:9 版を使う。
 - **日本人選手の出場試合レーダー（jp-games）**: `node scripts/fetch-mlb-stats.mjs games [ETの試合日]
   [--json]` で「日本人選手が出場した全試合」と**記事化済みか**を列挙（既定=ET昨日／期間指定でバックフィル）。
   `existingArticle:null` が未記事化＝作成対象。詳細は `jp-games` スキル（公式ハイライトの日付一致同定・

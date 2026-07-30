@@ -123,6 +123,68 @@ export type ThreadGame = {
   decisions?: { winner?: string; loser?: string; save?: string };
 };
 
+/**
+ * 日次記事「きょうの日本人選手」（jp-daily）の本文ブロック。
+ *
+ * このシリーズは通常記事の「コメントを並べるリスト」ではなく、**編集部が試合を語る地の文に
+ * 現地コメントを証言として差し込む読み物**（2026-07-30 の骨子v2）。ブロックの並び＝原稿の流れ。
+ * - p     … 地の文1段落
+ * - quote … 現地コメント1件を大きく引用（原文併記）
+ * - chips … 短い一言リアクションをまとめて畳み掛ける（5chまとめ的なテンポ。訳文＋👍のみ表示）
+ */
+export type DailyBlock =
+  | { type: 'p'; text: string }
+  | { type: 'quote'; comment: ThreadComment }
+  | { type: 'chips'; comments: ThreadComment[] };
+
+/** ② きょうの主役 — 1人だけ深く。試合の物語＋現地の声。 */
+export type DailyHero = {
+  player: string; // 日本語名（選手ハブへリンク）
+  team: string;
+  note?: string; // 節目バッジ（例: "今季23号"）
+  line: string; // その試合の成績（jpday の today）
+  result: string; // 試合結果1行（例: "ホワイトソックス 6-5 ヤンキース ○（延長10回）"）
+  season?: string; // 今季成績1行
+  media?: ThreadMedia; // その試合の公式ハイライト
+  blocks: DailyBlock[]; // 本文（地の文と引用の交互）
+};
+
+/** ③ 残り全員、ひと言ずつ — 主役以外を1人3〜4行の短評で。反応が無い選手はそう正直に書く。 */
+export type DailyShort = {
+  player: string;
+  team: string;
+  result: string; // "カブス ● 2-3 カージナルス" のような1行
+  line: string; // その試合の成績
+  season?: string; // 今季成績1行
+  text: string; // 編集部の短評（2〜3行）。数字の読み上げでなく一言の視点を入れる
+  quotes?: ThreadComment[]; // あれば現地の一言（0〜2件）
+};
+
+/** ④ きょうの現地ざわつき — その日コメント欄がいちばん騒いだ話題1つ（日本人と無関係でも可）。 */
+export type DailyBuzz = {
+  title: string; // 話題の見出し（例: "「大谷は歩かせてもいいのか」現地で再燃した敬遠論争"）
+  media?: ThreadMedia; // 話題の出どころの動画（主役の試合と別ならここに）
+  blocks: DailyBlock[];
+};
+
+/**
+ * 日次記事「きょうの日本人選手」の本体。帯番組のコーナー構成:
+ * ① きょうの3行 → ② きょうの主役 → ③ 残り全員ひと言ずつ → ④ きょうの現地ざわつき →
+ * ⑤ きょうの1枚（カード配布）→ ⑥ あすの日本人。描画は src/components/DailyArticle.tsx。
+ *
+ * ⚠️ これが付いた記事は Thread.comments を空にし、コメントは blocks / quotes が持つ。
+ * 記事横断でコメントを数える・拾う処理は src/lib/daily.ts の allComments() を通す。
+ */
+export type ThreadDaily = {
+  threeLines: string[]; // ① 忙しい人はここで帰ってOKの要約（3行）
+  hero: DailyHero; // ②
+  shorts: DailyShort[]; // ③
+  buzz?: DailyBuzz; // ④（その日騒ぎが無ければ省く）
+  cardUrl?: string; // ⑤ 配布用の縦カード（1080×1350）。保存・転載OKの配布物として見せる
+  cardNo?: number; // カードの通し番号（開幕からの日数 = カードの NO.127）
+  tomorrow?: string[]; // ⑥ あすの日本人（先発予定など。statsapi probables 由来・無ければ省く）
+};
+
 /** 海外掲示板スレッドの日本語まとめ 1 件 */
 export type Thread = {
   id: string; // "2026-06-09-judge-walkoff" のような日付プレフィックス付き kebab-case
@@ -140,7 +202,8 @@ export type Thread = {
   flair?: string; // "Game Thread" などの Reddit フレア
   totalComments: number; // 元スレの総コメント数（抜粋元の規模を示す）
   transcript?: ThreadTranscript[]; // 動画内の番組トーク（あれば動画とコメントの間に表示）
-  comments: ThreadComment[]; // 抜粋・翻訳済みコメント
+  comments: ThreadComment[]; // 抜粋・翻訳済みコメント（daily 記事では空＝コメントは daily 側が持つ）
+  daily?: ThreadDaily; // 日次記事「きょうの日本人選手」。コーナー構成の読み物として描く
   media?: ThreadMedia; // 代表メディア（カードサムネ＆記事 hero に使う）
   gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）
   stats?: PlayerStat[]; // 日本人選手の成績ボックス（R10・MLB記事のみ）。summaryJa の直下に表示

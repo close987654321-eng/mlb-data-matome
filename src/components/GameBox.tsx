@@ -27,6 +27,8 @@ export default async function GameBox({
   dateLabel,
   locale,
   children,
+  heading,
+  className,
 }: {
   game: ThreadGame;
   /** 試合日の表示（例: 2026.7.30）。記事の series.date / id 由来＝JST */
@@ -34,6 +36,10 @@ export default async function GameBox({
   locale: Locale;
   /** ボックス下端に置くアクション（試合結果カードの生成ボタン）。関心が一番高い位置で押せる。 */
   children?: React.ReactNode;
+  /** 見出しの差し替え。null＝見出しを出さない（日次ダイジェストは選手名が見出しで、その下に置くため）。 */
+  heading?: React.ReactNode | null;
+  /** 外側の余白の差し替え（既定 mt-8）。 */
+  className?: string;
 }) {
   const t = await getTranslations();
   const { away, home } = game;
@@ -73,10 +79,10 @@ export default async function GameBox({
     : undefined;
 
   return (
-    <section className="mt-8" aria-label={t('game.heading')}>
-      <SectionHeading label={t('game.heading')} />
+    <section className={className ?? 'mt-8'} aria-label={t('game.heading')}>
+      {heading !== null && <SectionHeading label={heading ?? t('game.heading')} />}
 
-      <div className="mt-4 rounded-xl border border-line bg-surface">
+      <div className={`${heading === null ? '' : 'mt-4 '}rounded-xl border border-line bg-surface`}>
         {/* ① スコア＝主役。ロゴ・チーム名・（あれば）試合時点の順位と勝敗・得点 */}
         <div className="divide-y divide-line/70">
           {sides.map(({ side, isWinner }) => {
