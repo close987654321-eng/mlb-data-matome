@@ -1,0 +1,104 @@
+{
+  "id": "2026-07-30-redsox-vs-athletics",
+  "sport": "mlb",
+  "subreddit": "YouTube",
+  "sourceUrl": "https://www.youtube.com/watch?v=FniGFlChYUo",
+  "fetchedAt": "2026-07-30T16:30:00+09:00",
+  "title": {
+    "en": "Red Sox defeat Athletics; Yoshida goes 0-for-1 in limited action",
+    "ja": "吉田正尚1打席0安打、レッドソックスがアスレチックスを下す【海外の反応】"
+  },
+  "summaryJa": "レッドソックスがアスレチックスを下した。吉田正尚は限られた出場機会（1打数0安打）でこの試合での活躍はなく、ニック・カーツは出場記録なし。コメント欄は今日の全試合中最少の9件で、実況の「MONA MONA MONA！」という絶叫コールや「レッドソックスが意地を見せた」といった短いポストが中心。ローレンス・バトラーについて「打率2割前後で守備も及第点以下」という指摘もあり、アスレチックスの打線への懸念が浮き彫りになった試合だった。",
+  "flair": "Highlights",
+  "totalComments": 9,
+  "format": "youtube",
+  "media": {
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=FniGFlChYUo",
+    "credit": "MLB（YouTube公式ハイライト）",
+    "publishedAt": "2026-07-30T05:55:43Z",
+    "videoTitle": "RED SOX vs. ATHLETICS: Official Full Game Highlights (July 29) | 2026 MLB Season"
+  },
+  "tags": ["レッドソックス", "アスレチックス", "吉田正尚", "海外の反応"],
+  "stats": [
+    {
+      "player": "吉田正尚",
+      "team": "レッドソックス",
+      "today": "1打数0安打",
+      "season": "打率.261 4本 19打点 OPS.719（73試合）",
+      "war": "0.1",
+      "delta": "OPS -.004"
+    },
+    {
+      "player": "ニック・カーツ",
+      "team": "アスレチックス",
+      "today": "0打数0安打",
+      "season": "打率.260 21本 69打点 OPS.890（97試合）",
+      "war": "2.9",
+      "delta": "OPS +.001",
+      "rank": "本塁打 MLB27位"
+    }
+  ],
+  "comments": [
+    {
+      "author": "@tonyandpals",
+      "score": 8,
+      "bodyEn": "\"MONA MONA MONA!\" what a call",
+      "bodyJa": "「MONA MONA MONA！」という絶叫実況、最高だよ",
+      "isHook": true
+    },
+    {
+      "author": "@thetopofthebeantv",
+      "score": 3,
+      "bodyEn": "Red Sox showing heart ❤",
+      "bodyJa": "レッドソックス、意地を見せた❤"
+    },
+    {
+      "author": "@Ben_Ashman",
+      "score": 1,
+      "bodyEn": "GG",
+      "bodyJa": "GG"
+    },
+    {
+      "author": "@marcomaruca8051",
+      "score": 1,
+      "bodyEn": "First watch",
+      "bodyJa": "初見"
+    },
+    {
+      "author": "@paulhager1281",
+      "score": 1,
+      "bodyEn": "And butler had a decent game..but the guy is hitting .200 or 198..i mean come on and he cant play right field unless its hit right to him",
+      "bodyJa": "バトラーはそれなりの試合だったけど、打率2割前後のままで守備もほぼ正面にきた球しか捕れない。さすがにどうかと思う"
+    },
+    {
+      "author": "@patriotsfanforlite",
+      "score": 0,
+      "bodyEn": "Lets go",
+      "bodyJa": "レッツゴー"
+    },
+    {
+      "author": "@MT-or7lv",
+      "score": 0,
+      "bodyEn": "Nice, way to keep playing.",
+      "bodyJa": "ナイス、諦めずプレーし続けた"
+    },
+    {
+      "author": "@crazylegs1823",
+      "score": 0,
+      "bodyEn": "12:06 DUDE! Run to first! Make them throw to first, they might make an error... Don't just pout cause you struck out!",
+      "bodyJa": "12:06 おいちゃんと一塁に走れ！送球させたらエラーするかもしれないのに……三振したからってふてくされるな！"
+    },
+    {
+      "author": "@JordynPi",
+      "score": 0,
+      "bodyEn": "11:03 it sounds like Slaten has been a bad, bad man",
+      "bodyJa": "11:03 スレイトンはとんでもない悪さをしたみたいな言われ方だ"
+    }
+  ],
+  "game": {
+    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4, "innings": [0, 0, 0, 0, 1, 1, 0, 0, 0, 2], "hits": 12, "errors": 2, "lob": 13, "record": { "w": 56, "l": 51 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 663330, "name": "Jahmai Jones", "no": 4 }, { "id": 655316, "name": "Andruw Monasterio", "no": 6 }] },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 2, "innings": [0, 1, 0, 0, 1, 0, 0, 0, 0, 0], "hits": 8, "errors": 1, "lob": 10, "record": { "w": 45, "l": 63 }, "rank": 4, "league": "AL", "division": "West", "homers": [{ "id": 671732, "name": "Lawrence Butler", "no": 6 }, { "id": 641680, "name": "Jonah Heim", "no": 11 }] },
+    "decisions": { "winner": "Aroldis Chapman", "loser": "José Suarez", "save": "Greg Weissert" }
+  }
+}
