@@ -5,7 +5,8 @@ import { playerSlugByJaName } from '@/lib/players';
 import SectionHeading from '@/components/SectionHeading';
 import MediaEmbed from '@/components/MediaEmbed';
 import DailyCardShare from '@/components/DailyCardShare';
-import type { ThreadDaily, DailyBlock, ThreadComment } from '@/types/thread';
+import StoryBlocks from '@/components/StoryBlocks';
+import type { ThreadDaily } from '@/types/thread';
 import type { Locale } from '@/lib/i18n';
 
 /**
@@ -77,7 +78,7 @@ export default async function DailyArticle({
           <MediaEmbed media={daily.hero.media} sourceUrl={daily.hero.media.url || sourceUrl} />
         )}
 
-        <Blocks blocks={daily.hero.blocks} />
+        <StoryBlocks blocks={daily.hero.blocks} />
       </section>
 
       {/* ③ 残り全員、ひと言ずつ — 網羅性はここで担保。反応が無い日は正直にそう書く。 */}
@@ -132,7 +133,7 @@ export default async function DailyArticle({
           {daily.buzz.media && (
             <MediaEmbed media={daily.buzz.media} sourceUrl={daily.buzz.media.url || sourceUrl} />
           )}
-          <Blocks blocks={daily.buzz.blocks} />
+          <StoryBlocks blocks={daily.buzz.blocks} />
         </section>
       )}
 
@@ -201,59 +202,5 @@ export default async function DailyArticle({
         </section>
       )}
     </div>
-  );
-}
-
-/** 地の文＋引用＋一言チップの本文。ブロックの並び＝原稿の流れをそのまま描く。 */
-function Blocks({ blocks }: { blocks: DailyBlock[] }) {
-  return (
-    <div className="mt-6 space-y-5">
-      {blocks.map((b, i) => {
-        if (b.type === 'p') {
-          return (
-            <p key={i} className="text-[15px] leading-[1.9] text-ink">
-              {b.text}
-            </p>
-          );
-        }
-        if (b.type === 'quote') {
-          return <Quote key={i} comment={b.comment} />;
-        }
-        // chips: 短い一言を畳み掛ける（5chまとめのテンポ）。原文は JSON に保持・表示は訳＋👍のみ。
-        return (
-          <ul key={i} className="flex flex-wrap gap-2">
-            {b.comments.map((c, j) => (
-              <li
-                key={j}
-                className="rounded-[3px] bg-surface px-3 py-1.5 text-sm text-ink ring-1 ring-line"
-              >
-                “{c.bodyJa}”
-                <span className="ml-1.5 text-xs tabular-nums text-ink-mute">
-                  👍{c.score.toLocaleString()}
-                </span>
-              </li>
-            ))}
-          </ul>
-        );
-      })}
-    </div>
-  );
-}
-
-/** 現地コメントの大きめ引用。地の文の「証言」として立たせる（原文併記＝翻訳の透明性）。 */
-function Quote({ comment }: { comment: ThreadComment }) {
-  return (
-    <figure className="border-l-4 border-ink py-1 pl-5">
-      <blockquote className="text-lg font-bold leading-relaxed text-ink">
-        “{comment.bodyJa}”
-      </blockquote>
-      <figcaption className="mt-1.5 text-xs text-ink-soft">
-        — {comment.author}{' '}
-        <span className="tabular-nums">👍{comment.score.toLocaleString()}</span>
-        {comment.bodyEn && (
-          <span className="mt-1 block italic leading-relaxed text-ink-mute">{comment.bodyEn}</span>
-        )}
-      </figcaption>
-    </figure>
   );
 }

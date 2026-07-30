@@ -128,15 +128,16 @@ export type ThreadGame = {
 };
 
 /**
- * 日次記事「きょうの日本人選手」（jp-daily）の本文ブロック。
+ * 語り形式（story）の本文ブロック（matome R13 が編集ルールの正）。
  *
- * このシリーズは通常記事の「コメントを並べるリスト」ではなく、**編集部が試合を語る地の文に
- * 現地コメントを証言として差し込む読み物**（2026-07-30 の骨子v2）。ブロックの並び＝原稿の流れ。
- * - p     … 地の文1段落
- * - quote … 現地コメント1件を大きく引用（原文併記）
- * - chips … 短い一言リアクションをまとめて畳み掛ける（5chまとめ的なテンポ。訳文＋👍のみ表示）
+ * 「コメントを並べるリスト」ではなく、**編集部が出来事を語る地の文に、実在コメントを証言として
+ * 差し込む読み物**の1ブロック。jp-daily（きょうの日本人選手）で確立し、事件性のある大一番・
+ * 興行直後など通常記事にも使える（Thread.story）。ブロックの並び＝原稿の流れ。
+ * - p     … 地の文1段落（書いていいのは裏が取れる事実だけ＝APIの数値・コメントの証言）
+ * - quote … コメント1件を大きく引用（原文併記）
+ * - chips … 短い一言リアクションをまとめて畳み掛ける（5chまとめ的なテンポ。訳文＋スコアのみ表示）
  */
-export type DailyBlock =
+export type StoryBlock =
   | { type: 'p'; text: string }
   | { type: 'quote'; comment: ThreadComment }
   | { type: 'chips'; comments: ThreadComment[] };
@@ -150,7 +151,7 @@ export type DailyHero = {
   result: string; // 試合結果1行（例: "ホワイトソックス 6-5 ヤンキース ○（延長10回）"）
   season?: string; // 今季成績1行
   media?: ThreadMedia; // その試合の公式ハイライト
-  blocks: DailyBlock[]; // 本文（地の文と引用の交互）
+  blocks: StoryBlock[]; // 本文（地の文と引用の交互）
 };
 
 /** ③ 残り全員、ひと言ずつ — 主役以外を1人3〜4行の短評で。反応が無い選手はそう正直に書く。 */
@@ -168,7 +169,7 @@ export type DailyShort = {
 export type DailyBuzz = {
   title: string; // 話題の見出し（例: "「大谷は歩かせてもいいのか」現地で再燃した敬遠論争"）
   media?: ThreadMedia; // 話題の出どころの動画（主役の試合と別ならここに）
-  blocks: DailyBlock[];
+  blocks: StoryBlock[];
 };
 
 /**
@@ -206,8 +207,11 @@ export type Thread = {
   flair?: string; // "Game Thread" などの Reddit フレア
   totalComments: number; // 元スレの総コメント数（抜粋元の規模を示す）
   transcript?: ThreadTranscript[]; // 動画内の番組トーク（あれば動画とコメントの間に表示）
-  comments: ThreadComment[]; // 抜粋・翻訳済みコメント（daily 記事では空＝コメントは daily 側が持つ）
+  comments: ThreadComment[]; // 抜粋・翻訳済みコメント（daily / story 記事では空＝コメントはそちらが持つ）
   daily?: ThreadDaily; // 日次記事「きょうの日本人選手」。コーナー構成の読み物として描く
+  // 語り形式の本文（matome R13）。あればコメント列の代わりに「地の文×証言引用」で描く。
+  // 事件性のある大一番・興行直後など、通常のまとめ記事でも使える（daily とは排他＝daily が優先）。
+  story?: StoryBlock[];
   media?: ThreadMedia; // 代表メディア（カードサムネ＆記事 hero に使う）
   gallery?: ThreadMedia[]; // 追加メディア（記事本文に順に差し込む。連続フレーム等）
   stats?: PlayerStat[]; // 日本人選手の成績ボックス（R10・MLB記事のみ）。summaryJa の直下に表示

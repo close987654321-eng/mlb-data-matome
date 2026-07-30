@@ -1,7 +1,7 @@
-import type { Thread, ThreadComment, DailyBlock } from '@/types/thread';
+import type { Thread, ThreadComment, StoryBlock } from '@/types/thread';
 
 /** ブロック列（地の文＋引用＋一言チップ）から実在コメントだけを取り出す。 */
-function blockComments(blocks: DailyBlock[]): ThreadComment[] {
+function blockComments(blocks: StoryBlock[]): ThreadComment[] {
   return blocks.flatMap((b) =>
     b.type === 'quote' ? [b.comment] : b.type === 'chips' ? b.comments : [],
   );
@@ -17,10 +17,14 @@ function blockComments(blocks: DailyBlock[]): ThreadComment[] {
  */
 export function allComments(thread: Thread): ThreadComment[] {
   const d = thread.daily;
-  if (!d) return thread.comments;
-  return [
-    ...blockComments(d.hero.blocks),
-    ...d.shorts.flatMap((s) => s.quotes ?? []),
-    ...(d.buzz ? blockComments(d.buzz.blocks) : []),
-  ];
+  if (d) {
+    return [
+      ...blockComments(d.hero.blocks),
+      ...d.shorts.flatMap((s) => s.quotes ?? []),
+      ...(d.buzz ? blockComments(d.buzz.blocks) : []),
+    ];
+  }
+  // 語り形式の通常記事（matome R13）＝コメントは story ブロックが持つ。
+  if (thread.story) return blockComments(thread.story);
+  return thread.comments;
 }

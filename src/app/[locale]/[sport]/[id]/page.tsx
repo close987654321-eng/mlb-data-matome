@@ -19,6 +19,7 @@ import SeriesBadge from '@/components/SeriesBadge';
 import Transcript from '@/components/Transcript';
 import StatBox from '@/components/StatBox';
 import DailyArticle from '@/components/DailyArticle';
+import StoryBlocks from '@/components/StoryBlocks';
 import GameBox from '@/components/GameBox';
 import GameResultCard from '@/components/GameResultCard';
 import WatchAlong from '@/components/WatchAlong';
@@ -139,6 +140,8 @@ export default async function ThreadDetailPage({
     : thread.title[otherLocale];
   // 日次記事（きょうの日本人選手）はコーナー構成の読み物として描く＝1本のコメント列にしない。
   const daily = thread.daily ?? null;
+  // 語り形式（matome R13）＝コメント列の代わりに「地の文×証言引用」で描く通常記事。daily が優先。
+  const story = !daily && thread.story?.length ? thread.story : null;
   // フック引用は冒頭に大きく掲げ、本文リストからは外す（重複を避ける）。
   // 日次記事はコメントを本文の流れの中に持つので、冒頭のフックは出さない。
   const hook = daily ? undefined : thread.comments.find((c) => c.isHook);
@@ -146,7 +149,8 @@ export default async function ThreadDetailPage({
   // 最後がオチになるよう matome スキルの R1/R2 に従って並べてある前提。
   const comments = thread.comments.filter((c) => !c.isHook);
   // 動画つきの記事は「動画ピン留め＋コメントが裏を流れる」watch-along をデフォルトにする。
-  const isWatchAlong = !daily && thread.media?.kind === 'video';
+  // story 記事は動画があっても watch-along にしない（コメントが空＝流すものが無い。動画は本文に埋め込む）。
+  const isWatchAlong = !daily && !story && thread.media?.kind === 'video';
   // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+👍
   const isInterview = thread.format === 'interview';
   const isYoutube = thread.format === 'youtube';
@@ -556,6 +560,10 @@ export default async function ThreadDetailPage({
             <MediaEmbed key={i} media={m} sourceUrl={thread.sourceUrl} />
           ))}
 
+          {/* 語り形式（R13）は地の文×証言引用で描き、コメント列は出さない（story がコメントを内包する）。 */}
+          {story ? (
+            <StoryBlocks blocks={story} scoreMark={isInterview ? null : scoreMark} />
+          ) : (
           <section className="mt-10">
             <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
               <span className="h-3 w-[2px] bg-ink" />
@@ -601,6 +609,7 @@ export default async function ThreadDetailPage({
               ))}
             </ul>
           </section>
+          )}
         </>
       )}
 
