@@ -15,11 +15,17 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=twU4W2zY1p8",
+    "thumbUrl": "/media/2026-07-30-padres-vs-rockies-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-07-29T23:04:14Z",
     "videoTitle": "ROCKIES vs. PADRES: Official Full Game Highlights (July 29) | 2026 MLB Season"
   },
-  "tags": ["パドレス", "ロッキーズ", "メイソン・ミラー", "海外の反応"],
+  "tags": [
+    "パドレス",
+    "ロッキーズ",
+    "メイソン・ミラー",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "メイソン・ミラー",
@@ -113,8 +119,62 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 6, "errors": 0, "lob": 7, "record": { "w": 42, "l": 67 }, "rank": 5, "league": "NL", "division": "West" },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 3, "innings": [0, 0, 0, 3, 0, 0, 0, 0, null], "hits": 6, "errors": 1, "lob": 4, "record": { "w": 55, "l": 53 }, "rank": 3, "league": "NL", "division": "West" },
-    "decisions": { "winner": "Griffin Canning", "loser": "Gabriel Hughes", "save": "Mason Miller" }
+    "away": {
+      "ja": "ロッキーズ",
+      "en": "Colorado Rockies",
+      "score": 1,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "hits": 6,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 42,
+        "l": 67
+      },
+      "rank": 5,
+      "league": "NL",
+      "division": "West"
+    },
+    "home": {
+      "ja": "パドレス",
+      "en": "San Diego Padres",
+      "score": 3,
+      "innings": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        null
+      ],
+      "hits": 6,
+      "errors": 1,
+      "lob": 4,
+      "record": {
+        "w": 55,
+        "l": 53
+      },
+      "rank": 3,
+      "league": "NL",
+      "division": "West"
+    },
+    "decisions": {
+      "winner": "Griffin Canning",
+      "loser": "Gabriel Hughes",
+      "save": "Mason Miller"
+    }
   }
 }

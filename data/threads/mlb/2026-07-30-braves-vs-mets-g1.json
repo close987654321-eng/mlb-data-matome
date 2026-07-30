@@ -15,11 +15,17 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=DnuYeYJOXXU",
+    "thumbUrl": "/media/2026-07-30-braves-vs-mets-g1-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-07-29T20:36:34Z",
     "videoTitle": "BRAVES vs. METS GAME 1: Official Full Game Highlights (July 29) | 2026 MLB Season"
   },
-  "tags": ["ブレーブス", "メッツ", "マット・オルソン", "海外の反応"],
+  "tags": [
+    "ブレーブス",
+    "メッツ",
+    "マット・オルソン",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "マット・オルソン",
@@ -186,8 +192,69 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 2, "innings": [0, 0, 0, 0, 0, 2, 0, 0, 0], "hits": 7, "errors": 1, "lob": 5, "record": { "w": 62, "l": 45 }, "rank": 1, "league": "NL", "division": "East", "homers": [{ "id": 621566, "name": "Matt Olson", "no": 28 }] },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 0, 0, 2, 0, 1, 0, null], "hits": 6, "errors": 1, "lob": 9, "record": { "w": 46, "l": 62 }, "rank": 5, "league": "NL", "division": "East" },
-    "decisions": { "winner": "Huascar Brazobán", "loser": "Dylan Dodd", "save": "Devin Williams" }
+    "away": {
+      "ja": "ブレーブス",
+      "en": "Atlanta Braves",
+      "score": 2,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "hits": 7,
+      "errors": 1,
+      "lob": 5,
+      "record": {
+        "w": 62,
+        "l": 45
+      },
+      "rank": 1,
+      "league": "NL",
+      "division": "East",
+      "homers": [
+        {
+          "id": 621566,
+          "name": "Matt Olson",
+          "no": 28
+        }
+      ]
+    },
+    "home": {
+      "ja": "メッツ",
+      "en": "New York Mets",
+      "score": 3,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        null
+      ],
+      "hits": 6,
+      "errors": 1,
+      "lob": 9,
+      "record": {
+        "w": 46,
+        "l": 62
+      },
+      "rank": 5,
+      "league": "NL",
+      "division": "East"
+    },
+    "decisions": {
+      "winner": "Huascar Brazobán",
+      "loser": "Dylan Dodd",
+      "save": "Devin Williams"
+    }
   }
 }
