@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/navigation';
 import { getTeam, teamLogoUrl, teamAbbr } from '@/lib/teams';
-import { getPlayerByMlbId } from '@/lib/players';
+import { playerLabel, type PlayerLabel } from '@/lib/playerNames';
 import { divisionRankShort } from '@/lib/standings';
 import { teamHubOf, TEAM_HUB_MIN_ARTICLES } from '@/lib/teamHub';
 import { getAllTags } from '@/lib/tags';
@@ -54,6 +54,23 @@ export default async function GameBox({
     { side: away, isWinner: away.score > home.score },
     { side: home, isWinner: home.score > away.score },
   ];
+
+  // 選手名（本塁打・勝敗投手）は日本語表記に当ててから描く。JSX の中では await できないので先に解決する。
+  // 解決の正は playerNames.ts（カタログ＝日本人選手 → カタカナ表 → 英語表記のまま）。
+  const homerLabels = new Map<number, PlayerLabel>();
+  for (const { side } of sides) {
+    for (const h of side.homers ?? []) {
+      homerLabels.set(h.id, await playerLabel(h.name, { locale, mlbId: h.id }));
+    }
+  }
+  const dec = game.decisions;
+  const decisions = dec
+    ? {
+        winner: dec.winner ? await playerLabel(dec.winner, { locale }) : undefined,
+        loser: dec.loser ? await playerLabel(dec.loser, { locale }) : undefined,
+        save: dec.save ? await playerLabel(dec.save, { locale }) : undefined,
+      }
+    : undefined;
 
   return (
     <section className="mt-8" aria-label={t('game.heading')}>
@@ -193,7 +210,7 @@ export default async function GameBox({
           </div>
         )}
 
-        {/* ③ 本塁打＝「誰が打ったか」。日本人選手はカタログの日本語表記＋選手ハブへリンク */}
+        {/* ③ 本塁打＝「誰が打ったか」。名前は日本語表記、カタログにある選手は選手ハブへリンク */}
         {sides.some(({ side }) => side.homers?.length) && (
           <div className="flex flex-wrap gap-x-5 gap-y-1 border-t border-line px-5 py-3 text-xs">
             <span className="text-ink-mute">{t('game.hr')}</span>
@@ -207,14 +224,13 @@ export default async function GameBox({
                       {teamAbbr(info?.id) ?? side.ja}
                     </span>
                     {side.homers!.map((h, i) => {
-                      const pl = getPlayerByMlbId(h.id);
-                      const label = pl ? (locale === 'ja' ? pl.nameJa : pl.nameEn) : h.name;
+                      const { label, slug } = homerLabels.get(h.id) ?? { label: h.name };
                       return (
                         <span key={h.id}>
                           {i > 0 && '、'}
-                          {pl ? (
+                          {slug ? (
                             <Link
-                              href={`/player/${pl.slug}`}
+                              href={`/player/${slug}`}
                               className="font-medium text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
                             >
                               {label}
@@ -235,25 +251,25 @@ export default async function GameBox({
           </div>
         )}
 
-        {/* ④ 勝敗投手・セーブ。選手名は公式表記（英語）のまま */}
-        {game.decisions && (game.decisions.winner || game.decisions.loser) && (
+        {/* ④ 勝敗投手・セーブ。本塁打と同じく日本語表記＋カタログ選手はハブへリンク */}
+        {decisions && (decisions.winner || decisions.loser) && (
           <p className="flex flex-wrap gap-x-4 gap-y-1 border-t border-line px-5 py-3 text-xs text-ink-soft">
-            {game.decisions.winner && (
+            {decisions.winner && (
               <span>
                 <span className="text-ink-mute">{t('game.wp')}</span>{' '}
-                <span className="font-medium text-ink">{game.decisions.winner}</span>
+                <PitcherName player={decisions.winner} strong />
               </span>
             )}
-            {game.decisions.loser && (
+            {decisions.loser && (
               <span>
                 <span className="text-ink-mute">{t('game.lp')}</span>{' '}
-                {game.decisions.loser}
+                <PitcherName player={decisions.loser} />
               </span>
             )}
-            {game.decisions.save && (
+            {decisions.save && (
               <span>
                 <span className="text-ink-mute">{t('game.sv')}</span>{' '}
-                {game.decisions.save}
+                <PitcherName player={decisions.save} />
               </span>
             )}
           </p>
@@ -265,4 +281,19 @@ export default async function GameBox({
       <p className="mt-2 text-xs text-ink-mute">{t('game.asOf', { date: dateLabel })}</p>
     </section>
   );
+}
+
+/** 勝敗投手・セーブの名前1つ。カタログにある選手（日本人＋主要ライバル）は選手ハブへ送る。 */
+function PitcherName({ player, strong }: { player: PlayerLabel; strong?: boolean }) {
+  if (player.slug) {
+    return (
+      <Link
+        href={`/player/${player.slug}`}
+        className="font-medium text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
+      >
+        {player.label}
+      </Link>
+    );
+  }
+  return strong ? <span className="font-medium text-ink">{player.label}</span> : <>{player.label}</>;
 }
