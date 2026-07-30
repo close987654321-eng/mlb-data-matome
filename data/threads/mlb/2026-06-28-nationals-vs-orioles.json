@@ -88,7 +88,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 4 },
-    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3 }
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 4, "innings": [0, 1, 0, 0, 1, 1, 0, 0, 0, 1], "hits": 13, "errors": 1, "lob": 13, "record": { "w": 42, "l": 42 }, "rank": 4, "league": "NL", "division": "East" },
+    "home": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 3, "innings": [0, 1, 0, 0, 0, 0, 0, 2, 0, 0], "hits": 7, "errors": 2, "lob": 8, "record": { "w": 39, "l": 45 }, "rank": 4, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Clayton Beeter", "loser": "Ryan Helsley", "save": "Justin Lawrence" }
   }
 }

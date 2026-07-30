@@ -63,8 +63,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 11 },
-    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 0 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 11, "innings": [0, 0, 0, 0, 3, 5, 2, 1, 0], "hits": 16, "errors": 1, "lob": 11, "record": { "w": 59, "l": 45 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 1, "lob": 7, "record": { "w": 53, "l": 52 }, "rank": 4, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Shota Imanaga", "loser": "Paul Skenes", "save": "Javier Assad" }
   },
   "comments": [
     {

@@ -183,15 +183,8 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "フィリーズ",
-      "en": "Philadelphia Phillies",
-      "score": 4
-    },
-    "home": {
-      "ja": "タイガース",
-      "en": "Detroit Tigers",
-      "score": 2
-    }
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 4, "innings": [0, 0, 1, 3, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 4, "record": { "w": 53, "l": 43 }, "rank": 2, "league": "NL", "division": "East" },
+    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 2, "innings": [0, 0, 0, 0, 1, 0, 0, 1, 0], "hits": 10, "errors": 1, "lob": 7, "record": { "w": 44, "l": 51 }, "rank": 4, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Cristopher Sánchez", "loser": "Casey Mize", "save": "Jhoan Duran" }
   }
 }

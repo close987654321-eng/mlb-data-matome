@@ -153,7 +153,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 8 },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 2 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 8, "innings": [0, 0, 0, 2, 0, 4, 1, 0, 1], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 45, "l": 38 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 2, "innings": [1, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 2, "record": { "w": 50, "l": 30 }, "rank": 1, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "David Peterson", "loser": "Chad Patrick" }
   }
 }

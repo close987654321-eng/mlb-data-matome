@@ -52,8 +52,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 4 },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6 }
+    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 4, "innings": [0, 0, 0, 0, 0, 3, 0, 1, 0], "hits": 7, "errors": 2, "lob": 5, "record": { "w": 47, "l": 40 }, "rank": 3, "league": "NL", "division": "Central" },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [2, 0, 0, 0, 0, 4, 0, 0, null], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 50, "l": 40 }, "rank": 2, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Drew Pomeranz", "loser": "Matthew Liberatore", "save": "Jacob Webb" }
   },
   "tags": ["ヌートバー", "鈴木誠也", "ピート・クロウアームストロング", "カージナルス", "カブス", "海外の反応"],
   "comments": [

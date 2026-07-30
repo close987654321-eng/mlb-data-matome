@@ -26,8 +26,9 @@
   },
   "tags": ["ホワイトソックス", "ヤンキース", "村上宗隆", "ベン・ライス", "ミゲル・バルガス", "海外の反応"],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 3 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 2 }
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 3, "innings": [0, 3, 0, 0, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 7, "record": { "w": 61, "l": 46 }, "rank": 2, "league": "AL", "division": "East" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 2], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 55, "l": 51 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Gerrit Cole", "loser": "Anthony Kay", "save": "David Bednar" }
   },
   "stats": [
     {

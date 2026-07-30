@@ -195,7 +195,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3 },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 14 }
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [1, 0, 0, 2, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 1, "record": { "w": 62, "l": 44 }, "rank": 1, "league": "NL", "division": "East" },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 14, "innings": [1, 0, 2, 0, 0, 2, 4, 5, null], "hits": 19, "errors": 0, "lob": 11, "record": { "w": 45, "l": 62 }, "rank": 5, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Zac Thornton", "loser": "Connor Thomas" }
   }
 }

@@ -183,7 +183,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 9 },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 6 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 9, "innings": [0, 5, 0, 2, 0, 0, 0, 2, 0], "hits": 8, "errors": 0, "lob": 5, "record": { "w": 41, "l": 37 }, "rank": 3, "league": "NL", "division": "Central" },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 6, "innings": [0, 2, 0, 0, 0, 0, 1, 0, 3], "hits": 6, "errors": 1, "lob": 6, "record": { "w": 34, "l": 44 }, "rank": 5, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Edward Cabrera", "loser": "Kodai Senga" }
   }
 }

@@ -12,16 +12,9 @@
   "summaryJa": "パイレーツがダブルヘッダー第1試合でヤンキースを5-3で撃破（第2試合はヤンキース2-0）。ミッチ・ケラーが5回好投し、ブライアン・レイノルズのダイビングキャッチも光った。ヤンキースのベン・ライスはDH通算9打数1安打1本塁打3打点で今季30号を達成。チスホームのリプレー申請は今季4勝17敗のまさかのトータルで「球審が最も苦手なパーソン」と笑われた。第2試合はヤンキースが2-0で雪辱した。",
   "totalComments": 87,
   "game": {
-    "away": {
-      "ja": "パイレーツ",
-      "en": "Pittsburgh Pirates",
-      "score": 5
-    },
-    "home": {
-      "ja": "ヤンキース",
-      "en": "New York Yankees",
-      "score": 3
-    }
+    "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 5, "innings": [0, 0, 0, 0, 2, 0, 1, 0, 0, 2], "hits": 7, "errors": 0, "lob": 6, "record": { "w": 53, "l": 49 }, "rank": 4, "league": "NL", "division": "Central" },
+    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 3, "innings": [0, 0, 0, 0, 0, 0, 3, 0, 0, 0], "hits": 6, "errors": 0, "lob": 10, "record": { "w": 56, "l": 45 }, "rank": 2, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Mason Montgomery", "loser": "Fernando Cruz", "save": "Gregory Soto" }
   },
   "stats": [
     {

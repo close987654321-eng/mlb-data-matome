@@ -161,7 +161,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 2 },
-    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 12 }
+    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 2, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 0], "hits": 4, "errors": 1, "lob": 4, "record": { "w": 38, "l": 33 }, "rank": 1, "league": "AL", "division": "Central" },
+    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 12, "innings": [0, 1, 4, 6, 0, 0, 0, 1, null], "hits": 16, "errors": 0, "lob": 10, "record": { "w": 44, "l": 27 }, "rank": 1, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Gerrit Cole", "loser": "Davis Martin", "save": "Ryan Yarbrough" }
   }
 }

@@ -760,10 +760,32 @@ function titleDateName(etDate) {
   return `${MONTH_NAMES_US[Number(m) - 1]} ${Number(d)}`;
 }
 
-/** 指定日(ET)の全試合（チーム・スコア・状態）。officialDate が ET の試合日。 */
+/**
+ * 指定日(ET)の全試合（チーム・スコア・状態）。officialDate が ET の試合日。
+ * hydrate で線スコア（回ごとの得点・H/E/残塁）と勝敗投手も一緒に取る＝記事の「試合結果ボックス」の素データ。
+ * leagueRecord は**その試合終了時点**の勝敗なので、記事に焼き込めば後から古くならない。
+ */
 async function fetchSchedule(date) {
-  const data = await getJson(`${BASE}/schedule?sportId=1&date=${date}`);
+  const data = await getJson(`${BASE}/schedule?sportId=1&date=${date}&hydrate=linescore,decisions`);
   const games = (data.dates ?? []).flatMap((d) => d.games ?? []);
+  // 回ごとの得点。その回を打たなかった（サヨナラ・9回裏不要）は runs キー自体が無いので null にする。
+  const inningsOf = (ls, side) =>
+    (ls?.innings ?? []).map((i) => (i?.[side]?.runs ?? null));
+  const sideOf = (g, side) => {
+    const t = g.teams?.[side];
+    const tot = g.linescore?.teams?.[side];
+    const rec = t?.leagueRecord;
+    return {
+      teamId: t?.team?.id ?? null,
+      name: t?.team?.name,
+      score: t?.score ?? null,
+      innings: inningsOf(g.linescore, side),
+      hits: tot?.hits ?? null,
+      errors: tot?.errors ?? null,
+      lob: tot?.leftOnBase ?? null,
+      record: rec && rec.wins != null ? { w: rec.wins, l: rec.losses } : null,
+    };
+  };
   return games.map((g) => ({
     etDate: g.officialDate,
     status: g.status?.detailedState ?? g.status?.abstractGameState ?? '',
@@ -773,7 +795,43 @@ async function fetchSchedule(date) {
     home: g.teams?.home?.team?.name,
     awayScore: g.teams?.away?.score ?? null,
     homeScore: g.teams?.home?.score ?? null,
+    awaySide: sideOf(g, 'away'),
+    homeSide: sideOf(g, 'home'),
+    decisions: g.decisions
+      ? {
+          winner: g.decisions.winner?.fullName,
+          loser: g.decisions.loser?.fullName,
+          save: g.decisions.save?.fullName,
+        }
+      : null,
   }));
+}
+
+/**
+ * 指定日(ET)時点の地区順位（teamId → {rank, league, division}）。
+ * standings は date 指定でその日の順位を返す＝過去記事にも「その試合時点の順位」を焼き込める
+ * （data/standings.json＝常に最新 を過去記事に出すと順位が嘘になる）。
+ * 取れなければ空 Map を返し、順位だけ欠けた状態で続行する（記事を壊さない）。
+ */
+async function fetchRanksOn(season, etDate) {
+  const out = new Map();
+  try {
+    const data = await getJson(
+      `${BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason&date=${etDate}`,
+    );
+    for (const rec of data.records ?? []) {
+      const info = DIVISION_INFO[rec.division?.id];
+      if (!info) continue;
+      for (const t of rec.teamRecords ?? []) {
+        const rank = Number(t.divisionRank);
+        if (!t.team?.id || !Number.isFinite(rank)) continue;
+        out.set(t.team.id, { rank, league: info.league, division: info.division });
+      }
+    }
+  } catch (e) {
+    console.log(`  （${etDate} の順位表を取得できず順位は省略: ${e.message}）`);
+  }
+  return out;
 }
 
 const TEAM_JA_SET = new Set(Object.values(TEAM_JA));
@@ -1190,64 +1248,169 @@ async function runWarRace(asOf) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// backfill-games … 既存の MLB 記事に試合の最終スコア（thread.game）を埋める。記事 id の
+// backfill-games … 既存の MLB 記事に試合結果（thread.game）を埋める。記事 id の
 // "{date}-{slugA}-vs-{slugB}" から対戦2チームを取り、id 日付(JST)の前日(ET)の公式スケジュールで
-// 該当試合を同定→away/home＋スコアを書き込む（公知の数値だけ・「試合結果カード」の素データ）。
+// 該当試合を同定→スコア・線スコア（回ごとの得点/H/E/残塁）・その試合時点の勝敗と地区順位・勝敗投手を
+// 書き込む（公知の数値だけ＝記事の「試合結果ボックス」と「試合結果カード」の素データ）。
 // 既定は dry-run、--apply で書き込み。series を跨ぐ同一カードの誤マッチを避けるため日付は ET=JST-1 固定。
 // 曖昧（同日DH等で複数一致）・未確定・不一致はスキップ（捏造しない）。
+// game を既に持つ記事も、線スコアが無ければ追記する（--force で全件書き直し）。
+// ⚠️ 順位・勝敗は「その試合終了時点」を焼き込む＝data/standings.json（常に最新）を記事に出すと、
+//    7月の試合の記事が9月には違う順位を表示してしまうため。
 // ─────────────────────────────────────────────────────────────────────────────
 const TEAM_SLUGS = new Set(Object.values(TEAM_SLUG));
 
-async function runBackfillGames({ apply } = {}) {
+/**
+ * JSON テキストからトップレベルキーのブロック（`  "game": {...}`）の範囲を返す。
+ * JSON.parse→stringify で書き戻すと既存のインライン整形（tags の1行表記など）まで展開されて
+ * 無関係な再整形ノイズが出るため、該当ブロックだけを文字列として差し替える。
+ * 文字列リテラル内の波括弧は数えない（チーム名に波括弧は無いが、安全側に倒す）。
+ */
+function topLevelBlockRange(src, key) {
+  const start = src.indexOf(`\n  "${key}": {`);
+  if (start < 0) return null;
+  let i = src.indexOf('{', start);
+  let depth = 0, inStr = false, esc = false;
+  for (; i < src.length; i++) {
+    const c = src[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') inStr = true;
+    else if (c === '{') depth++;
+    else if (c === '}' && --depth === 0) return { from: start + 1, to: i + 1 };
+  }
+  return null;
+}
+
+async function runBackfillGames({ apply, force } = {}) {
   const dir = path.join(process.cwd(), 'data', 'threads', 'mlb');
   const files = readdirSync(dir).filter((f) => f.endsWith('.json'));
   const cache = new Map(); // etDate -> schedule games[]（同日複数記事で API を1回に）
-  let filled = 0, already = 0, noPattern = 0, unmatched = 0, ambiguous = 0;
+  const rankCache = new Map(); // etDate -> Map<teamId, {rank,league,division}>
+  let filled = 0, enriched = 0, already = 0, noPattern = 0, unmatched = 0, ambiguous = 0;
   for (const f of files) {
     const file = path.join(dir, f);
     let t;
     try { t = JSON.parse(readFileSync(file, 'utf8')); } catch { continue; }
-    if (t.game) { already++; continue; }
+    // 線スコアまで入っている記事は完成扱い（--force のときだけ書き直す）。
+    if (t.game?.away?.innings?.length && !force) { already++; continue; }
     const id = t.id ?? f.replace(/\.json$/, '');
-    const mt = id.match(/^(\d{4}-\d{2}-\d{2})-(.+)-vs-(.+)$/);
-    if (!mt) { noPattern++; continue; } // "X-vs-Y" でない（議論スレ等）は対象外
-    // id のスラッグ表記ゆれを吸収する。旧記事は "white-sox"/"blue-jays"/"red-sox" のようにハイフン入りで
-    // 書かれており、現行の自動生成（TEAM_SLUG）は "whitesox"/"bluejays"/"redsox"。ハイフンを除いて正規
-    // スラッグに突き合わせる（30球団の正規スラッグは全て単一トークン＝ハイフン無しなので誤マッチしない）。
-    const slugA = mt[2].replace(/-/g, ''), slugB = mt[3].replace(/-/g, '');
-    if (!TEAM_SLUGS.has(slugA) || !TEAM_SLUGS.has(slugB)) { noPattern++; continue; } // 未知 slug（WBC/SP 等）
-    const jstDate = t.series?.date ?? mt[1];
+    // 対戦2チームの特定は ①id の "X-vs-Y" ②記事が既に持つ game の英語チーム名 の順に試す。
+    // ②があるので "ohtani-bat-goes-flying" のような単発ハイライト記事や、DH の "-g1"/"-game2" 付き
+    // id でも拾える（②は記事に書かれている事実だけを使う＝推測しない）。
+    // id のスラッグ表記ゆれも吸収する。旧記事は "white-sox"/"blue-jays" のようにハイフン入りで書かれて
+    // おり現行の自動生成（TEAM_SLUG）は "whitesox"/"bluejays"。ハイフンを除いて正規スラッグに突き合わせる
+    // （30球団の正規スラッグは全て単一トークン＝ハイフン無しなので誤マッチしない）。
+    let slugA, slugB;
+    const mt = id.match(/^(\d{4}-\d{2}-\d{2})-(.+)-vs-(.+?)(?:-(?:game|g)(\d))?$/);
+    if (mt) {
+      const a = mt[2].replace(/-/g, ''), b = mt[3].replace(/-/g, '');
+      if (TEAM_SLUGS.has(a) && TEAM_SLUGS.has(b)) { slugA = a; slugB = b; }
+    }
+    if (!slugA && t.game?.away?.en && t.game?.home?.en) {
+      const a = TEAM_SLUG[t.game.away.en], b = TEAM_SLUG[t.game.home.en];
+      if (a && b) { slugA = a; slugB = b; }
+    }
+    if (!slugA) { noPattern++; continue; } // 試合記事でない（議論スレ等）／未知チーム（WBC/SP 等）
+    const jstDate = t.series?.date ?? id.slice(0, 10);
+    // DH の試合番号は series.gameNo か、id 末尾の "-g1"/"-game2" から取る。
+    const gameNo = t.series?.gameNo ?? (mt?.[4] ? Number(mt[4]) : undefined);
     const etDate = addDays(jstDate, -1); // JST = ET+1（夜試合）。id / series.date は JST。
     if (!cache.has(etDate)) cache.set(etDate, await fetchSchedule(etDate));
     // 同定は en 名でなくスラッグで（移転で "Oakland Athletics"→"Athletics" のような名称揺れに強い）。
-    const found = cache.get(etDate).filter((g) => {
+    let found = cache.get(etDate).filter((g) => {
       const gs = new Set([TEAM_SLUG[g.away], TEAM_SLUG[g.home]]);
       return gs.has(slugA) && gs.has(slugB);
     });
     if (found.length === 0) { unmatched++; console.log(`· ${id}  （${etDate}(ET) に一致試合なし）`); continue; }
-    if (found.length > 1) { ambiguous++; console.log(`· ${id}  （同日に複数一致＝DH等・手動）`); continue; }
+    // ダブルヘッダーの特定。①series.gameNo（第1戦/第2戦）②既に記録済みのスコア に一致する試合を選ぶ。
+    // ②は「記事が既に持っている事実」で絞るので推測が入らない（DH の2試合はスコアがまず一致しない）。
+    // どちらでも決まらなければ曖昧として手動に回す＝2試合をまとめた記事は単一の試合表を持てないので正しい挙動。
+    if (found.length > 1 && gameNo) {
+      const byNo = found.filter((x) => x.gameNumber === gameNo);
+      if (byNo.length === 1) found = byNo;
+    }
+    if (found.length > 1 && t.game?.away?.score != null && t.game?.home?.score != null) {
+      const byScore = found.filter(
+        (x) =>
+          TEAM_JA[x.away] === t.game.away.ja &&
+          x.awayScore === t.game.away.score &&
+          x.homeScore === t.game.home.score,
+      );
+      if (byScore.length === 1) found = byScore;
+    }
+    if (found.length > 1) { ambiguous++; console.log(`· ${id}  （同日に複数一致＝DH等・gameNo/既存スコアで特定できず手動）`); continue; }
     const g = found[0];
     if (g.awayScore == null || g.homeScore == null || !/Final|Completed|Game Over/i.test(g.status)) {
       unmatched++; console.log(`· ${id}  （スコア未確定: ${g.status}）`); continue;
     }
-    const away = { ja: TEAM_JA[g.away] ?? g.away, en: g.away, score: g.awayScore };
-    const home = { ja: TEAM_JA[g.home] ?? g.home, en: g.home, score: g.homeScore };
+    // その試合終了時点の地区順位（同日の他記事とキャッシュ共有）。
+    if (!rankCache.has(etDate)) {
+      rankCache.set(etDate, await fetchRanksOn(Number(etDate.slice(0, 4)), etDate));
+    }
+    const ranks = rankCache.get(etDate);
+    /** API の1チーム分を JSON の1行（インライン）に組む。取れなかった項目は書かない＝捏造しない。 */
+    const sideLine = (src, enName) => {
+      const parts = [
+        `"ja": ${JSON.stringify(TEAM_JA[enName] ?? enName)}`,
+        `"en": ${JSON.stringify(enName)}`,
+        `"score": ${src.score}`,
+      ];
+      // 回ごとの得点は「全回そろっている」ときだけ書く（部分欠けは表が嘘になるので捨てる）。
+      if (src.innings.length >= 9) parts.push(`"innings": [${src.innings.map((v) => (v == null ? 'null' : v)).join(', ')}]`);
+      if (src.hits != null) parts.push(`"hits": ${src.hits}`);
+      if (src.errors != null) parts.push(`"errors": ${src.errors}`);
+      if (src.lob != null) parts.push(`"lob": ${src.lob}`);
+      if (src.record) parts.push(`"record": { "w": ${src.record.w}, "l": ${src.record.l} }`);
+      const r = ranks.get(src.teamId);
+      if (r) parts.push(`"rank": ${r.rank}, "league": "${r.league}", "division": "${r.division}"`);
+      return `{ ${parts.join(', ')} }`;
+    };
+    const d = g.decisions;
+    const decisionParts = !d ? [] : [
+      d.winner && `"winner": ${JSON.stringify(d.winner)}`,
+      d.loser && `"loser": ${JSON.stringify(d.loser)}`,
+      d.save && `"save": ${JSON.stringify(d.save)}`,
+    ].filter(Boolean);
+    const block =
+      '  "game": {\n' +
+      `    "away": ${sideLine(g.awaySide, g.away)},\n` +
+      `    "home": ${sideLine(g.homeSide, g.home)}` +
+      (decisionParts.length ? `,\n    "decisions": { ${decisionParts.join(', ')} }\n` : '\n') +
+      '  }';
+    const isNew = !t.game;
     if (apply) {
       // JSON.stringify で全文を書き戻すと既存のインライン整形（opponent/tags の1行表記）まで展開され
-      // 無関係な再整形ノイズが出る。差分を「game 追記のみ」に保つため、末尾 } の直前にテキスト挿入する。
+      // 無関係な再整形ノイズが出る。差分を「game だけ」に保つため、該当ブロックを文字列で差し替える
+      // （初回は末尾 } の直前に挿入）。
       const src = readFileSync(file, 'utf8');
-      const head = src.slice(0, src.lastIndexOf('}')).replace(/\s+$/, '');
-      const block =
-        '  "game": {\n' +
-        `    "away": { "ja": ${JSON.stringify(away.ja)}, "en": ${JSON.stringify(away.en)}, "score": ${away.score} },\n` +
-        `    "home": { "ja": ${JSON.stringify(home.ja)}, "en": ${JSON.stringify(home.en)}, "score": ${home.score} }\n` +
-        '  }';
-      writeFileSync(file, `${head},\n${block}\n}\n`);
+      let next;
+      const range = topLevelBlockRange(src, 'game');
+      if (range) {
+        next = src.slice(0, range.from) + block + src.slice(range.to);
+      } else {
+        next = `${src.slice(0, src.lastIndexOf('}')).replace(/\s+$/, '')},\n${block}\n}\n`;
+      }
+      // 壊れた JSON を書かない安全弁（差し替えは文字列操作なので必ず通す）。
+      try { JSON.parse(next); } catch (e) {
+        console.log(`! ${id}  （書き込み中止・JSON不正: ${e.message}）`); continue;
+      }
+      writeFileSync(file, next);
     }
-    filled++;
-    console.log(`${apply ? '✓' : '○'} ${id}  ${away.ja} ${g.awayScore} - ${g.homeScore} ${home.ja}`);
+    if (isNew) filled++; else enriched++;
+    const inn = g.awaySide.innings.length;
+    console.log(
+      `${apply ? '✓' : '○'} ${id}  ${TEAM_JA[g.away] ?? g.away} ${g.awayScore} - ${g.homeScore} ${TEAM_JA[g.home] ?? g.home}` +
+      `  ${inn}回${inn > 9 ? '(延長)' : ''}${ranks.size ? '' : ' 順位なし'}${d?.winner ? '' : ' 勝敗投手なし'}${isNew ? '' : ' [追記]'}`,
+    );
   }
-  console.log(`\n試合結果 backfill: 書込${apply ? '' : '(予定)'} ${filled} / 既存 ${already} / 対象外 ${noPattern} / 不一致 ${unmatched} / 曖昧 ${ambiguous}`);
+  console.log(
+    `\n試合結果 backfill${apply ? '' : '(予定)'}: 新規 ${filled} / 追記 ${enriched} / 完成済み ${already} / 対象外 ${noPattern} / 不一致 ${unmatched} / 曖昧 ${ambiguous}`,
+  );
   if (!apply) console.log('（dry-run。実際に書き込むには --apply を付ける）');
 }
 
@@ -2156,8 +2319,9 @@ async function main() {
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     await runStandings(seasonArg ? Number(seasonArg) : defaultSeason(), asOf);
   } else if (cmd === 'backfill-games') {
-    // backfill-games [--apply]：既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用）。
-    await runBackfillGames({ apply: raw.includes('--apply') });
+    // backfill-games [--apply] [--force]：既存MLB記事に試合結果(thread.game)＝スコア・線スコア・
+    // その試合時点の勝敗/順位・勝敗投手 を埋める（試合結果ボックス＆カード用）。--force で完成済みも書き直す。
+    await runBackfillGames({ apply: raw.includes('--apply'), force: raw.includes('--force') });
   } else {
     console.error(
       [
@@ -2174,7 +2338,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs mvp [season]       # MVP予測ボード(規定打者をAL/NL別にスコア化・二刀流は投手WAR合算＋打球の質/バットスピード)を data/mvp-board.json へ',
-        '  node scripts/fetch-mlb-stats.mjs backfill-games [--apply] # 既存MLB記事に試合の最終スコア(thread.game)を埋める（試合結果カード用・既定dry-run）',
+        '  node scripts/fetch-mlb-stats.mjs backfill-games [--apply] [--force] # 既存MLB記事に試合結果(thread.game=スコア/線スコア/その試合時点の勝敗・順位/勝敗投手)を埋める（既定dry-run）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',
       ].join('\n'),
     );

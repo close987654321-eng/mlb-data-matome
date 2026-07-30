@@ -186,7 +186,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 1 },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 4 }
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 6, "errors": 0, "lob": 7, "record": { "w": 54, "l": 40 }, "rank": 1, "league": "NL", "division": "East" },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 4, "innings": [3, 0, 0, 1, 0, 0, 0, 0, null], "hits": 5, "errors": 0, "lob": 2, "record": { "w": 50, "l": 44 }, "rank": 3, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Matthew Liberatore", "loser": "Reynaldo López", "save": "Riley O'Brien" }
   }
 }

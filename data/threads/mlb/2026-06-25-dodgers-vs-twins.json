@@ -95,7 +95,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4 },
-    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 3 }
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 1, 3, 0, 0, 0, 0, 0, 0], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 52, "l": 29 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 3, "innings": [0, 3, 0, 0, 0, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 8, "record": { "w": 38, "l": 44 }, "rank": 3, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Shohei Ohtani", "loser": "Joe Ryan", "save": "Tanner Scott" }
   }
 }

@@ -156,7 +156,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 2 },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 6 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 2, "innings": [0, 0, 0, 0, 1, 0, 0, 1, 0], "hits": 3, "errors": 1, "lob": 7, "record": { "w": 44, "l": 38 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 6, "innings": [0, 0, 0, 0, 0, 3, 2, 1, null], "hits": 11, "errors": 0, "lob": 9, "record": { "w": 50, "l": 29 }, "rank": 1, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Jacob Misiorowski", "loser": "Ethan Roberts" }
   }
 }

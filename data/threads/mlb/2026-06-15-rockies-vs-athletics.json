@@ -216,7 +216,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 23 },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 9 }
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 23, "innings": [2, 3, 0, 3, 6, 0, 4, 5, 0], "hits": 24, "errors": 1, "lob": 6, "record": { "w": 27, "l": 45 }, "rank": 5, "league": "NL", "division": "West" },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 9, "innings": [4, 1, 0, 1, 2, 0, 1, 0, 0], "hits": 14, "errors": 1, "lob": 6, "record": { "w": 35, "l": 36 }, "rank": 2, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Tomoyuki Sugano", "loser": "Jeffrey Springs", "save": "Eiberson Castellano" }
   }
 }

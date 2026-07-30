@@ -1,6 +1,7 @@
 import type { PlayerStat } from '@/types/thread';
 import { playerSlugByJaName } from '@/lib/players';
 import { Link } from '@/lib/navigation';
+import SectionHeading from '@/components/SectionHeading';
 
 type Props = {
   stats: PlayerStat[];
@@ -28,11 +29,9 @@ export default function StatBox({
 }: Props) {
   return (
     <section className="mt-8">
-      <h2 className="mb-4 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-        <span className="h-3 w-[2px] bg-ink" />
-        {heading}
-      </h2>
-      <div className="space-y-4 rounded-xl border border-line bg-surface p-5">
+      {/* 見出しはサイト共通プリミティブ（真上の試合結果ボックスと記号を揃える）。 */}
+      <SectionHeading label={heading} />
+      <div className="mt-4 space-y-4 rounded-xl border border-line bg-surface p-5">
         {stats.map((s, i) => (
           <div key={i} className={i > 0 ? 'border-t border-line/70 pt-4' : ''}>
             <div className="flex items-baseline justify-between gap-2">

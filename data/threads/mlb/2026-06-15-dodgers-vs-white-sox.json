@@ -154,7 +154,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 6 }
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [1, 0, 0, 0, 0, 0, 1, 1, 1], "hits": 7, "errors": 0, "lob": 8, "record": { "w": 45, "l": 27 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 6, "innings": [0, 0, 0, 0, 0, 6, 0, 0, null], "hits": 8, "errors": 0, "lob": 4, "record": { "w": 38, "l": 32 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Erick Fedde", "loser": "Emmet Sheehan", "save": "Seranthony Domínguez" }
   }
 }

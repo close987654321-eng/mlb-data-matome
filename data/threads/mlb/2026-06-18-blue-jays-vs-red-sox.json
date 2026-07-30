@@ -170,7 +170,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 3 },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 0 }
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 3, "innings": [0, 0, 2, 0, 0, 0, 0, 1, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 36, "l": 38 }, "rank": 3, "league": "AL", "division": "East" },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 13, "record": { "w": 29, "l": 42 }, "rank": 5, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Simeon Woods Richardson", "loser": "Jake Bennett", "save": "Louis Varland" }
   }
 }

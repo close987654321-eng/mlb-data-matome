@@ -12,16 +12,9 @@
   "summaryJa": "ブレーブスがパドレスを7-6の接戦で退けた。マット・オルソンが3打数2安打1打点2四球と出塁しまくり攻撃をけん引。8回に逆転に成功し、9回も際どい場面を乗り越えての勝利。「9回で23歳分老けた」というコメントが爆笑を誘った。パドレスはマチャドが0-4かつ守備でも落球と精彩を欠いた。IL明けのペレスが好投し「明日のクリス・セール先発に期待」という声も。",
   "totalComments": 35,
   "game": {
-    "away": {
-      "ja": "パドレス",
-      "en": "San Diego Padres",
-      "score": 6
-    },
-    "home": {
-      "ja": "ブレーブス",
-      "en": "Atlanta Braves",
-      "score": 7
-    }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 6, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 5], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 50, "l": 52 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 7, "innings": [1, 0, 0, 0, 0, 0, 0, 6, null], "hits": 14, "errors": 0, "lob": 12, "record": { "w": 59, "l": 42 }, "rank": 1, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Dylan Lee", "loser": "Wandy Peralta", "save": "Raisel Iglesias" }
   },
   "stats": [
     {

@@ -152,15 +152,8 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ナショナルズ",
-      "en": "Washington Nationals",
-      "score": 10
-    },
-    "home": {
-      "ja": "レッドソックス",
-      "en": "Boston Red Sox",
-      "score": 2
-    }
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 10, "innings": [2, 0, 0, 5, 0, 0, 3, 0, 0], "hits": 13, "errors": 0, "lob": 11, "record": { "w": 45, "l": 43 }, "rank": 4, "league": "NL", "division": "East" },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 2, 0], "hits": 9, "errors": 0, "lob": 11, "record": { "w": 37, "l": 48 }, "rank": 5, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Andrew Alvarez", "loser": "Payton Tolle" }
   }
 }

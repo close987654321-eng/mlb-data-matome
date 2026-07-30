@@ -16,6 +16,7 @@ import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
 import Transcript from '@/components/Transcript';
 import StatBox from '@/components/StatBox';
+import GameBox from '@/components/GameBox';
 import GameResultCard from '@/components/GameResultCard';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
@@ -163,6 +164,11 @@ export default async function ThreadDetailPage({
   const boxStats = jpOnlyBox ? jpStats : (thread.stats ?? []);
   const hiddenTeammates = jpOnlyBox ? (thread.stats ?? []).length - jpStats.length : 0;
   const seriesId = thread.series?.id; // 一覧リンクの自軍アンカー（/player#dodgers 等）
+  // 試合日の表示（JST）。試合結果ボックスと試合結果カード（画像）で共用する。
+  const gameDateLabel = (() => {
+    const g = (thread.series?.date ?? thread.id.slice(0, 10)).split('-');
+    return `${g[0]}.${Number(g[1])}.${Number(g[2])}`;
+  })();
   // 試合ページ→選手ハブの個別リンクは日本人選手だけに絞る（打線全員のチップで埋めない。
   // 非日本人は「{自軍}選手の成績を見る」一覧リンクに集約）。JSON-LD の about は全員のまま（SEO）。
   const jpTagged = taggedPlayers.filter((p) => !p.rival);
@@ -366,6 +372,12 @@ export default async function ThreadDetailPage({
 
       <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
 
+      {/* 試合結果ボックス。「◯◯ 対 ◯◯」で来た読者が先に知りたいのは勝敗＝結論を成績より上に置く。
+          線スコア・順位・勝敗はすべて thread.game に焼き込んだ公知の数値（サイト本体は API を叩かない）。 */}
+      {sport === 'mlb' && thread.game && (
+        <GameBox game={thread.game} dateLabel={gameDateLabel} locale={locale} />
+      )}
+
       {/* 注目選手の成績ボックス（R10）。MLB の試合まとめで summaryJa の直下に出す。数値は編集時に
           fetch-mlb-stats.mjs で取得した公知の事実のみ（サイト本体は API を叩かない）。
           単発の試合は注目選手(boxStats=stats全件・非日本人も含む)、シリーズ戦は日本人だけ＝残りは下のリンクへ。 */}
@@ -420,10 +432,7 @@ export default async function ThreadDetailPage({
         <div className="mt-6">
           <GameResultCard
             game={thread.game}
-            dateLabel={(() => {
-              const g = (thread.series?.date ?? thread.id.slice(0, 10)).split('-');
-              return `${g[0]}.${Number(g[1])}.${Number(g[2])}`;
-            })()}
+            dateLabel={gameDateLabel}
             stats={jpStats
               .filter((s) => s.today)
               .map((s) => ({ player: s.player, line: s.today as string }))}

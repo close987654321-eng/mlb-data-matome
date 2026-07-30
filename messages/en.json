@@ -245,6 +245,20 @@
   "teamTags": {
     "heading": "Reactions by team"
   },
+  "game": {
+    "heading": "Final Score",
+    "win": "W",
+    "record": "{w}-{l}",
+    "lineCaption": "Runs by inning with totals for runs, hits, errors and runners left on base",
+    "r": "R",
+    "h": "H",
+    "e": "E",
+    "lob": "LOB",
+    "wp": "W",
+    "lp": "L",
+    "sv": "S",
+    "asOf": "{date} (JST) · Source: MLB"
+  },
   "standings": {
     "heading": "{division} Standings",
     "rank": "Rk",

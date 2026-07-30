@@ -39,16 +39,9 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ヤンキース",
-      "en": "New York Yankees",
-      "score": 5
-    },
-    "home": {
-      "ja": "レイズ",
-      "en": "Tampa Bay Rays",
-      "score": 1
-    }
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 5, "innings": [0, 0, 0, 0, 3, 0, 0, 1, 1], "hits": 3, "errors": 0, "lob": 0, "record": { "w": 50, "l": 40 }, "rank": 2, "league": "AL", "division": "East" },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 1, "innings": [0, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 3, "record": { "w": 52, "l": 36 }, "rank": 1, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Cam Schlittler", "loser": "Griffin Jax" }
   },
   "comments": [
     {

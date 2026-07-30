@@ -160,7 +160,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 12 },
-    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 10 }
+    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 12, "innings": [5, 4, 0, 0, 3, 0, 0, 0, 0], "hits": 16, "errors": 1, "lob": 9, "record": { "w": 41, "l": 34 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 10, "innings": [2, 4, 0, 1, 0, 1, 0, 0, 2], "hits": 12, "errors": 0, "lob": 8, "record": { "w": 32, "l": 46 }, "rank": 5, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Gordon Graceffo", "loser": "Stephen Kolek" }
   }
 }

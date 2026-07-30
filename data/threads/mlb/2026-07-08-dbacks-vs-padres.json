@@ -21,8 +21,9 @@
   },
   "tags": ["ダイヤモンドバックス", "パドレス", "松井裕樹", "コービン・キャロル", "メイソン・ミラー", "海外の反応"],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 1 },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 4 }
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 1, "lob": 5, "record": { "w": 45, "l": 46 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 4, "innings": [4, 0, 0, 0, 0, 0, 0, 0, null], "hits": 6, "errors": 1, "lob": 4, "record": { "w": 45, "l": 46 }, "rank": 3, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Germán Márquez", "loser": "Zac Gallen", "save": "Mason Miller" }
   },
   "stats": [
     {

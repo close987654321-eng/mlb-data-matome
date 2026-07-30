@@ -161,7 +161,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 3 },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6 }
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 3, "innings": [1, 0, 0, 0, 0, 2, 0, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 43, "l": 43 }, "rank": 4, "league": "NL", "division": "East" },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 6, "innings": [4, 1, 1, 0, 0, 0, 0, 0, null], "hits": 9, "errors": 0, "lob": 3, "record": { "w": 37, "l": 46 }, "rank": 5, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Ranger Suarez", "loser": "Miles Mikolas", "save": "Garrett Whitlock" }
   }
 }

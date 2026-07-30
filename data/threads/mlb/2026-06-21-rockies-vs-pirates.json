@@ -239,7 +239,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 1 },
-    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 2 }
+    "away": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 38, "l": 39 }, "rank": 4, "league": "NL", "division": "Central" },
+    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 2, "innings": [1, 0, 1, 0, 0, 0, 0, 0, null], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 30, "l": 47 }, "rank": 5, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Tomoyuki Sugano", "loser": "Paul Skenes", "save": "Jaden Hill" }
   }
 }

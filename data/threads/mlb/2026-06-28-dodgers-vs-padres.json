@@ -180,7 +180,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 15 },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 3 }
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 15, "innings": [0, 1, 0, 0, 0, 9, 0, 4, 1], "hits": 17, "errors": 0, "lob": 7, "record": { "w": 53, "l": 30 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 3, "innings": [0, 0, 0, 0, 1, 1, 1, 0, 0], "hits": 9, "errors": 1, "lob": 9, "record": { "w": 43, "l": 38 }, "rank": 2, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Yoshinobu Yamamoto", "loser": "Randy Vásquez" }
   }
 }

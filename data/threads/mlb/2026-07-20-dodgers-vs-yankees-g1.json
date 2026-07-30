@@ -29,8 +29,9 @@
   },
   "tags": ["ドジャース", "ヤンキース", "山本由伸", "大谷翔平", "トミー・エドマン", "ベン・ライス", "海外の反応"],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 8 },
-    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 2 }
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 8, "innings": [0, 0, 2, 0, 1, 0, 0, 5, 0], "hits": 10, "errors": 0, "lob": 10, "record": { "w": 63, "l": 36 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 2, "innings": [0, 0, 0, 1, 0, 0, 0, 1, 0], "hits": 4, "errors": 0, "lob": 1, "record": { "w": 54, "l": 44 }, "rank": 2, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Yoshinobu Yamamoto", "loser": "Cam Schlittler" }
   },
   "stats": [
     {

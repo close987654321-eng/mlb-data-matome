@@ -21,8 +21,9 @@
     }
   },
   "game": {
-    "away": { "en": "San Diego Padres", "ja": "パドレス", "score": 7 },
-    "home": { "en": "Los Angeles Dodgers", "ja": "ドジャース", "score": 12 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 7, "innings": [2, 4, 0, 0, 0, 0, 0, 0, 1], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 43, "l": 43 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 12, "innings": [0, 2, 2, 4, 2, 1, 0, 1, null], "hits": 17, "errors": 0, "lob": 9, "record": { "w": 57, "l": 31 }, "rank": 1, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Will Klein", "loser": "Wandy Peralta" }
   },
   "media": {
     "kind": "video",

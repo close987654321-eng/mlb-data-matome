@@ -32,8 +32,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1 },
-    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 0 }
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 52, "l": 42 }, "rank": 2, "league": "NL", "division": "East" },
+    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 7, "record": { "w": 42, "l": 50 }, "rank": 5, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Jesús Luzardo", "loser": "Brady Singer", "save": "Jhoan Duran" }
   },
   "comments": [
     {

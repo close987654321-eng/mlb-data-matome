@@ -202,7 +202,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4 },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 2 }
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 4, "innings": [0, 0, 1, 0, 3, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 54, "l": 30 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 2, "innings": [0, 0, 0, 1, 0, 1, 0, 0, 0], "hits": 6, "errors": 0, "lob": 8, "record": { "w": 43, "l": 39 }, "rank": 2, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Emmet Sheehan", "loser": "Michael King", "save": "Edgardo Henriquez" }
   }
 }

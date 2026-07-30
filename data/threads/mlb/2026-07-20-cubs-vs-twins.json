@@ -36,16 +36,9 @@
     "海外の反応"
   ],
   "game": {
-    "away": {
-      "ja": "ツインズ",
-      "en": "Minnesota Twins",
-      "score": 1
-    },
-    "home": {
-      "ja": "カブス",
-      "en": "Chicago Cubs",
-      "score": 10
-    }
+    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 8, "errors": 1, "lob": 8, "record": { "w": 49, "l": 51 }, "rank": 3, "league": "AL", "division": "Central" },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 10, "innings": [2, 1, 4, 3, 0, 0, 0, 0, null], "hits": 12, "errors": 1, "lob": 8, "record": { "w": 56, "l": 43 }, "rank": 2, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Shota Imanaga", "loser": "Zebby Matthews" }
   },
   "stats": [
     {

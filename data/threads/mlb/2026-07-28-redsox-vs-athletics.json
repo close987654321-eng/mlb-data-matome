@@ -141,7 +141,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4 },
-    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 2 }
+    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4, "innings": [0, 0, 0, 0, 0, 4, 0, 0, 0], "hits": 5, "errors": 2, "lob": 5, "record": { "w": 55, "l": 50 }, "rank": 3, "league": "AL", "division": "East" },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 2, "innings": [1, 0, 0, 0, 0, 1, 0, 0, 0], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 44, "l": 62 }, "rank": 4, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Payton Tolle", "loser": "Jack Perkins", "save": "Aroldis Chapman" }
   }
 }

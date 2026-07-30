@@ -47,16 +47,9 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ヤンキース",
-      "en": "New York Yankees",
-      "score": 3
-    },
-    "home": {
-      "ja": "フィリーズ",
-      "en": "Philadelphia Phillies",
-      "score": 1
-    }
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 3, "innings": [0, 0, 1, 0, 0, 1, 1, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 59, "l": 45 }, "rank": 2, "league": "AL", "division": "East" },
+    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 2, "lob": 8, "record": { "w": 56, "l": 49 }, "rank": 2, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Ryan Weathers", "loser": "Kyle Backhus", "save": "David Bednar" }
   },
   "comments": [
     {

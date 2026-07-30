@@ -193,15 +193,8 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "カージナルス",
-      "en": "St. Louis Cardinals",
-      "score": 5
-    },
-    "home": {
-      "ja": "ダイヤモンドバックス",
-      "en": "Arizona Diamondbacks",
-      "score": 4
-    }
+    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 5, "innings": [2, 0, 0, 0, 1, 0, 0, 1, 1], "hits": 8, "errors": 0, "lob": 8, "record": { "w": 51, "l": 45 }, "rank": 3, "league": "NL", "division": "Central" },
+    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 4, "innings": [0, 1, 1, 0, 0, 0, 0, 2, 0], "hits": 8, "errors": 2, "lob": 6, "record": { "w": 49, "l": 48 }, "rank": 2, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Luis Gastelum", "loser": "Paul Sewald", "save": "Riley O'Brien" }
   }
 }

@@ -21,8 +21,9 @@
   },
   "tags": ["ボビー・ウィットJr.", "ロイヤルズ", "パドレス", "海外の反応"],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 1 },
-    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 6 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 1, "innings": [0, 0, 1, 0, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 7, "record": { "w": 48, "l": 50 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 6, "innings": [2, 0, 1, 1, 0, 2, 0, 0, null], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 40, "l": 59 }, "rank": 5, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Daniel Lynch IV", "loser": "Griffin Canning" }
   },
   "stats": [
     {

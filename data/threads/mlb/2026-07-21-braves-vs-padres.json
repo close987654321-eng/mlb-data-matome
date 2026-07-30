@@ -193,7 +193,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 2 },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 2, "innings": [0, 0, 0, 1, 0, 0, 1, 0, 0], "hits": 7, "errors": 1, "lob": 5, "record": { "w": 49, "l": 51 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [0, 0, 0, 0, 2, 1, 0, 0, null], "hits": 4, "errors": 0, "lob": 2, "record": { "w": 58, "l": 41 }, "rank": 1, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Bryce Elder", "loser": "JP Sears", "save": "Victor Mederos" }
   }
 }

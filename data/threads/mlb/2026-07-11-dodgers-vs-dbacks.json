@@ -234,15 +234,8 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ダイヤモンドバックス",
-      "en": "Arizona Diamondbacks",
-      "score": 9
-    },
-    "home": {
-      "ja": "ドジャース",
-      "en": "Los Angeles Dodgers",
-      "score": 3
-    }
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 9, "innings": [2, 0, 0, 2, 2, 2, 0, 1, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 47, "l": 47 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 3, "innings": [2, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 9, "errors": 3, "lob": 6, "record": { "w": 61, "l": 34 }, "rank": 1, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Eduardo Rodriguez", "loser": "Will Klein" }
   }
 }

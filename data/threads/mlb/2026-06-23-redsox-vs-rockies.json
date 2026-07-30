@@ -92,7 +92,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 2 },
-    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3 }
+    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 2, "innings": [0, 0, 0, 0, 0, 2, 0, 0, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 31, "l": 45 }, "rank": 5, "league": "AL", "division": "East" },
+    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 3], "hits": 12, "errors": 0, "lob": 6, "record": { "w": 31, "l": 48 }, "rank": 5, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Victor Vodnik", "loser": "Aroldis Chapman" }
   }
 }

@@ -32,8 +32,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Oakland Athletics", "score": 8 },
-    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 11 }
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 8, "innings": [0, 0, 0, 0, 0, 3, 3, 0, 2], "hits": 8, "errors": 4, "lob": 2, "record": { "w": 44, "l": 61 }, "rank": 4, "league": "AL", "division": "West" },
+    "home": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 11, "innings": [3, 3, 0, 1, 0, 1, 1, 2, null], "hits": 13, "errors": 0, "lob": 6, "record": { "w": 53, "l": 54 }, "rank": 3, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Connor Prielipp", "loser": "Jeffrey Springs" }
   },
   "comments": [
     {

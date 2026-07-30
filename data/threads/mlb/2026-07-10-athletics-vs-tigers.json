@@ -32,8 +32,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Oakland Athletics", "score": 1 },
-    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 4 }
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 1, "innings": [0, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 41, "l": 52 }, "rank": 4, "league": "AL", "division": "West" },
+    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 4, "innings": [0, 0, 1, 0, 2, 0, 1, 0, null], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 43, "l": 50 }, "rank": 4, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Framber Valdez", "loser": "Jack Perkins", "save": "Kenley Jansen" }
   },
   "comments": [
     {

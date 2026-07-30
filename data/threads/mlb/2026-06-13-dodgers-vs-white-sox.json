@@ -209,7 +209,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 8 }
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [0, 2, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 44, "l": 26 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 8, "innings": [1, 0, 0, 0, 7, 0, 0, 0, null], "hits": 10, "errors": 0, "lob": 8, "record": { "w": 37, "l": 31 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Anthony Kay", "loser": "Roki Sasaki" }
   }
 }

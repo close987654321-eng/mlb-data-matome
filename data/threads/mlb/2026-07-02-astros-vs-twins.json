@@ -133,15 +133,8 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ツインズ",
-      "en": "Minnesota Twins",
-      "score": 8
-    },
-    "home": {
-      "ja": "アストロズ",
-      "en": "Houston Astros",
-      "score": 3
-    }
+    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 8, "innings": [2, 3, 0, 0, 2, 0, 0, 1, 0], "hits": 8, "errors": 2, "lob": 6, "record": { "w": 42, "l": 46 }, "rank": 3, "league": "AL", "division": "Central" },
+    "home": { "ja": "アストロズ", "en": "Houston Astros", "score": 3, "innings": [1, 0, 0, 0, 0, 2, 0, 0, 0], "hits": 8, "errors": 0, "lob": 10, "record": { "w": 43, "l": 46 }, "rank": 3, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Taj Bradley", "loser": "Tatsuya Imai" }
   }
 }

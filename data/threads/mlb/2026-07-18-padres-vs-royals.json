@@ -202,7 +202,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 6 },
-    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 7 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 6, "innings": [0, 0, 0, 0, 2, 0, 0, 0, 1, 3], "hits": 8, "errors": 2, "lob": 5, "record": { "w": 48, "l": 49 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 7, "innings": [0, 1, 0, 0, 0, 1, 0, 1, 0, 4], "hits": 13, "errors": 2, "lob": 12, "record": { "w": 39, "l": 59 }, "rank": 5, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Lucas Erceg", "loser": "Kyle Hart" }
   }
 }

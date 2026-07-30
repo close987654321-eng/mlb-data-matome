@@ -142,7 +142,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 7 },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4 }
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 7, "innings": [1, 0, 0, 0, 5, 1, 0, 0, 0], "hits": 11, "errors": 1, "lob": 10, "record": { "w": 41, "l": 42 }, "rank": 2, "league": "AL", "division": "West" },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 0, 0, 2, 2, 0, 0, 0], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 39, "l": 44 }, "rank": 3, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Peyton Gray", "loser": "Dylan Cease", "save": "Tyler Alexander" }
   }
 }

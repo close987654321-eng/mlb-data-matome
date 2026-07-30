@@ -26,8 +26,9 @@
   },
   "tags": ["ホワイトソックス", "ブルージェイズ", "村上宗隆", "ミゲル・バルガス", "岡本和真", "海外の反応"],
   "game": {
-    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 0 },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 1 }
+    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 51, "l": 46 }, "rank": 1, "league": "AL", "division": "Central" },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, null], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 46, "l": 52 }, "rank": 5, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Shane Bieber", "loser": "Davis Martin", "save": "Louis Varland" }
   },
   "stats": [
     {

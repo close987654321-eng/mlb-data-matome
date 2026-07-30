@@ -198,7 +198,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 2 },
-    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8 }
+    "away": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 1, 0, 0], "hits": 4, "errors": 0, "lob": 3, "record": { "w": 35, "l": 50 }, "rank": 4, "league": "NL", "division": "West" },
+    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8, "innings": [3, 0, 3, 0, 0, 1, 0, 1, null], "hits": 10, "errors": 0, "lob": 9, "record": { "w": 43, "l": 42 }, "rank": 3, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Brandon Pfaadt", "loser": "Landen Roupp" }
   }
 }

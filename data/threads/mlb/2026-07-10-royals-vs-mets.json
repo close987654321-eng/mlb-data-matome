@@ -49,16 +49,9 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ロイヤルズ",
-      "en": "Kansas City Royals",
-      "score": 3
-    },
-    "home": {
-      "ja": "メッツ",
-      "en": "New York Mets",
-      "score": 7
-    }
+    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 3, "innings": [1, 0, 0, 1, 0, 0, 1, 0, 0], "hits": 7, "errors": 1, "lob": 3, "record": { "w": 38, "l": 56 }, "rank": 5, "league": "AL", "division": "Central" },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 7, "innings": [0, 1, 0, 0, 5, 0, 1, 0, null], "hits": 10, "errors": 1, "lob": 6, "record": { "w": 40, "l": 54 }, "rank": 5, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Sean Manaea", "loser": "Michael Wacha" }
   },
   "comments": [
     {

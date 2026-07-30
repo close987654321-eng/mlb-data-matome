@@ -36,8 +36,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 2 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1 }
+    "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 2, "innings": [0, 0, 0, 2, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 43, "l": 48 }, "rank": 4, "league": "AL", "division": "East" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1, "innings": [0, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 47, "l": 45 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Tyron Guerrero", "loser": "Anthony Kay", "save": "Aroldis Chapman" }
   },
   "comments": [
     {

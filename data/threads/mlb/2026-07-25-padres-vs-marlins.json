@@ -20,8 +20,9 @@
     "videoTitle": "PADRES vs. MARLINS: Official Full Game Highlights (July 24) | 2026 MLB Season"
   },
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 4 },
-    "home": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 2 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 4, "innings": [0, 0, 0, 1, 1, 0, 0, 2, 0], "hits": 5, "errors": 1, "lob": 9, "record": { "w": 51, "l": 53 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 2, "innings": [0, 1, 0, 0, 1, 0, 0, 0, 0], "hits": 9, "errors": 2, "lob": 9, "record": { "w": 52, "l": 52 }, "rank": 3, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Adrian Morejon", "loser": "Tyler Zuber", "save": "Mason Miller" }
   },
   "stats": [
     {

@@ -199,7 +199,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 1 },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 15 }
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 1, 0], "hits": 5, "errors": 0, "lob": 4, "record": { "w": 49, "l": 48 }, "rank": 1, "league": "AL", "division": "West" },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 15, "innings": [0, 2, 0, 4, 2, 0, 4, 3, null], "hits": 19, "errors": 0, "lob": 10, "record": { "w": 56, "l": 40 }, "rank": 1, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Chris Sale", "loser": "Cal Quantrill" }
   }
 }

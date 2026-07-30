@@ -208,7 +208,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10 },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 5 }
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10, "innings": [0, 0, 0, 0, 0, 2, 3, 0, 5], "hits": 13, "errors": 2, "lob": 8, "record": { "w": 45, "l": 36 }, "rank": 2, "league": "NL", "division": "East" },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 5, "innings": [4, 0, 1, 0, 0, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 41, "l": 41 }, "rank": 4, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Orion Kerkering", "loser": "Gus Varland" }
   }
 }

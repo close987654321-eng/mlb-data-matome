@@ -195,7 +195,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 3 },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 8 }
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 1, 0, 0, 0, 0, 2, 0], "hits": 6, "errors": 0, "lob": 7, "record": { "w": 42, "l": 59 }, "rank": 5, "league": "NL", "division": "East" },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 8, "innings": [2, 1, 2, 0, 0, 3, 0, 0, null], "hits": 10, "errors": 1, "lob": 5, "record": { "w": 63, "l": 37 }, "rank": 1, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Craig Yoho", "loser": "Freddy Peralta" }
   }
 }

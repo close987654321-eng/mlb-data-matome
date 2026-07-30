@@ -219,7 +219,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 7 },
-    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 9 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 7, "innings": [5, 0, 0, 1, 0, 0, 0, 1, 0], "hits": 10, "errors": 1, "lob": 6, "record": { "w": 38, "l": 36 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 9, "innings": [6, 0, 0, 1, 0, 1, 0, 1, null], "hits": 13, "errors": 0, "lob": 9, "record": { "w": 36, "l": 39 }, "rank": 3, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Jacob deGrom", "loser": "Randy Vásquez", "save": "Jacob Latz" }
   }
 }

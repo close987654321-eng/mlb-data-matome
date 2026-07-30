@@ -209,7 +209,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 12 },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1 }
+    "away": { "ja": "オリオールズ", "en": "Baltimore Orioles", "score": 12, "innings": [2, 1, 1, 2, 0, 0, 4, 2, 0], "hits": 15, "errors": 0, "lob": 9, "record": { "w": 37, "l": 42 }, "rank": 4, "league": "AL", "division": "East" },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 49, "l": 29 }, "rank": 1, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Brandon Young", "loser": "Emmet Sheehan" }
   }
 }

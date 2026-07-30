@@ -33,8 +33,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 12 },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4 }
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 12, "innings": [0, 0, 6, 1, 0, 3, 1, 1, 0], "hits": 14, "errors": 0, "lob": 6, "record": { "w": 51, "l": 42 }, "rank": 2, "league": "AL", "division": "East" },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 4, "innings": [1, 0, 2, 0, 0, 1, 0, 0, 0], "hits": 10, "errors": 1, "lob": 8, "record": { "w": 54, "l": 37 }, "rank": 1, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Ryan Yarbrough", "loser": "Drew Rasmussen" }
   },
   "comments": [
     {

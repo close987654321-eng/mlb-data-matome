@@ -35,8 +35,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 0 },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 7 }
+    "away": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 1, "lob": 6, "record": { "w": 48, "l": 55 }, "rank": 5, "league": "NL", "division": "Central" },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 7, "innings": [1, 0, 0, 0, 0, 6, 0, 0, null], "hits": 10, "errors": 0, "lob": 5, "record": { "w": 53, "l": 51 }, "rank": 3, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Andre Pallante", "loser": "Hunter Greene" }
   },
   "comments": [
     {

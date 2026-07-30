@@ -12,16 +12,9 @@
   "summaryJa": "メッツが4-0でブルワーズを完封。ブルワーズは守備のミスと走塁ミスが重なる自滅で「これがプレーオフを目指すチームのプレーなのか」とファン自身から批判が飛んだ。フアン・ソトは4打数0安打1四球と数字は出なかったが、チームは完勝。新人のソーントンが先発で好投し「メッツはソーントンとイウィングで将来が楽しみ」という期待の声も上がった。",
   "totalComments": 48,
   "game": {
-    "away": {
-      "ja": "メッツ",
-      "en": "New York Mets",
-      "score": 4
-    },
-    "home": {
-      "ja": "ブルワーズ",
-      "en": "Milwaukee Brewers",
-      "score": 0
-    }
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 4, "innings": [0, 1, 0, 0, 2, 0, 0, 1, 0], "hits": 13, "errors": 0, "lob": 11, "record": { "w": 43, "l": 59 }, "rank": 5, "league": "NL", "division": "East" },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 3, "record": { "w": 63, "l": 38 }, "rank": 1, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Zac Thornton", "loser": "Brandon Sproat" }
   },
   "stats": [
     {

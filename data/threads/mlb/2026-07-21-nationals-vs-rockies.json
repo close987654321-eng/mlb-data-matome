@@ -93,7 +93,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 7 },
-    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3 }
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 7, "innings": [3, 0, 0, 0, 0, 1, 2, 0, 1], "hits": 12, "errors": 2, "lob": 6, "record": { "w": 51, "l": 50 }, "rank": 4, "league": "NL", "division": "East" },
+    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3, "innings": [0, 0, 3, 0, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 40, "l": 62 }, "rank": 5, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Riley Cornelio", "loser": "Kyle Freeland", "save": "Tom Cosgrove" }
   }
 }

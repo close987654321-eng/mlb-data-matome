@@ -212,7 +212,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 8 },
-    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 4 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 8, "innings": [2, 0, 0, 2, 0, 0, 4, 0, 0], "hits": 9, "errors": 0, "lob": 5, "record": { "w": 54, "l": 42 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 4, "innings": [0, 0, 4, 0, 0, 0, 0, 0, 0], "hits": 9, "errors": 0, "lob": 8, "record": { "w": 43, "l": 52 }, "rank": 5, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Matthew Boyd", "loser": "Chase Petty", "save": "Jacob Webb" }
   }
 }

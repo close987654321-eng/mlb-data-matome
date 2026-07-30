@@ -20,16 +20,9 @@
   "summaryJa": "ホワイトソックスがレンジャーズを4-2で下しシリーズ勝ち越し。直近2ヶ月のAL最多勝ペースを維持し、遠征でも6勝4敗。「有望な若手が控えているから他チームが怖い」という声も上がった。村上宗隆は3打数0安打1四球3三振、バルガスも4打数0安打と沈黙したが、ブルペンが踏ん張って接戦を制した。日本語コメントでは「今日の勝ちは本当に大きい😊チーム総力戦でテキサスに勝てました😊」と喜びの声も届いた。",
   "totalComments": 44,
   "game": {
-    "away": {
-      "ja": "ホワイトソックス",
-      "en": "Chicago White Sox",
-      "score": 4
-    },
-    "home": {
-      "ja": "レンジャーズ",
-      "en": "Texas Rangers",
-      "score": 2
-    }
+    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 4, "innings": [0, 1, 0, 2, 0, 1, 0, 0, 0], "hits": 7, "errors": 2, "lob": 6, "record": { "w": 54, "l": 47 }, "rank": 1, "league": "AL", "division": "Central" },
+    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 2, "innings": [0, 1, 0, 1, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 51, "l": 51 }, "rank": 1, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Anthony Kay", "loser": "Cal Quantrill", "save": "Bryan Hudson" }
   },
   "stats": [
     {

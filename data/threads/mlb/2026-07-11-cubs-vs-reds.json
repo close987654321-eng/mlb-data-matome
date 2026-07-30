@@ -154,15 +154,8 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "カブス",
-      "en": "Chicago Cubs",
-      "score": 0
-    },
-    "home": {
-      "ja": "レッズ",
-      "en": "Cincinnati Reds",
-      "score": 4
-    }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 5, "record": { "w": 52, "l": 42 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "レッズ", "en": "Cincinnati Reds", "score": 4, "innings": [0, 0, 0, 0, 1, 0, 3, 0, null], "hits": 13, "errors": 0, "lob": 9, "record": { "w": 43, "l": 50 }, "rank": 5, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Hunter Greene", "loser": "Shota Imanaga" }
   }
 }

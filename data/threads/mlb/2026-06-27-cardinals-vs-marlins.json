@@ -123,7 +123,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 4 },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 0 }
+    "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 0, 2, 2], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 43, "l": 39 }, "rank": 3, "league": "NL", "division": "East" },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 5, "record": { "w": 42, "l": 37 }, "rank": 3, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Max Meyer", "loser": "George Soriano" }
   }
 }

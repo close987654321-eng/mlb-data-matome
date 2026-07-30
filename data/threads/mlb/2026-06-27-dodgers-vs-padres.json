@@ -189,7 +189,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1 },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 7 }
+    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 6, "record": { "w": 52, "l": 30 }, "rank": 1, "league": "NL", "division": "West" },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 7, "innings": [0, 3, 0, 0, 0, 0, 0, 4, null], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 43, "l": 37 }, "rank": 2, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Walker Buehler", "loser": "Roki Sasaki" }
   }
 }

@@ -225,7 +225,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 4 },
-    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 3 }
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 4, "innings": [0, 0, 0, 0, 0, 1, 0, 3, 0], "hits": 8, "errors": 2, "lob": 7, "record": { "w": 38, "l": 55 }, "rank": 5, "league": "NL", "division": "West" },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 3, "innings": [1, 0, 0, 0, 1, 1, 0, 0, 0], "hits": 8, "errors": 2, "lob": 9, "record": { "w": 60, "l": 33 }, "rank": 1, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Juan Mejia", "loser": "Will Klein", "save": "Jordan Romano" }
   }
 }

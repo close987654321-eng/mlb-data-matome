@@ -64,6 +64,24 @@ export function teamLogoUrl(id: number): string {
   return `https://www.mlbstatic.com/team-logos/${id}.svg`;
 }
 
+/**
+ * teamId → 公式3文字略号（statsapi /teams の abbreviation 実測値）。
+ * 線スコア表の行見出しに使う＝スコアボードの慣習表記で、日本語名より桁が揃い狭い画面に収まる。
+ * 移転で変わりうる（例: 133 は Oakland 時代 OAK → 現 ATH）ので、変わったらここだけ直す。
+ */
+const TEAM_ABBR: Record<number, string> = {
+  108: 'LAA', 109: 'AZ', 110: 'BAL', 111: 'BOS', 112: 'CHC', 113: 'CIN',
+  114: 'CLE', 115: 'COL', 116: 'DET', 117: 'HOU', 118: 'KC', 119: 'LAD',
+  120: 'WSH', 121: 'NYM', 133: 'ATH', 134: 'PIT', 135: 'SD', 136: 'SEA',
+  137: 'SF', 138: 'STL', 139: 'TB', 140: 'TEX', 141: 'TOR', 142: 'MIN',
+  143: 'PHI', 144: 'ATL', 145: 'CWS', 146: 'MIA', 147: 'NYY', 158: 'MIL',
+};
+
+/** 公式3文字略号。未知チームは undefined（呼び出し側で日本語名にフォールバックする）。 */
+export function teamAbbr(id?: number): string | undefined {
+  return id == null ? undefined : TEAM_ABBR[id];
+}
+
 /** MLB 公式チームサイトの URL（構造化データの sameAs＝エンティティ照合用）。 */
 export function teamOfficialUrl(slug: string): string {
   return `https://www.mlb.com/${slug}`;

@@ -196,7 +196,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 3 },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 1 }
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 3, "innings": [1, 0, 0, 0, 0, 0, 0, 1, 1], "hits": 4, "errors": 0, "lob": 10, "record": { "w": 39, "l": 43 }, "rank": 2, "league": "AL", "division": "West" },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 2, "lob": 4, "record": { "w": 39, "l": 41 }, "rank": 3, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Steven Okert", "loser": "Jeff Hoffman", "save": "Josh Hader" }
   }
 }

@@ -20,16 +20,9 @@
   "summaryJa": "パドレスがブレーブスの先発陣を打ち崩し8-3で快勝。マチャドとタティスの長打が目立った。松井裕樹は0.2回1失点と不安定な登板となったが、メイソン・ミラーが最終回を3奪三振で締めて貫禄を見せた。「アトランタはトレードデッドラインで先発を補強しないとプレーオフ争いは厳しい」という声が目立つ。「負け越し中のパドレスに負けるとは」とブレーブスファンが嘆いた。",
   "totalComments": 34,
   "game": {
-    "away": {
-      "ja": "パドレス",
-      "en": "San Diego Padres",
-      "score": 8
-    },
-    "home": {
-      "ja": "ブレーブス",
-      "en": "Atlanta Braves",
-      "score": 3
-    }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 8, "innings": [1, 0, 0, 3, 1, 1, 0, 2, 0], "hits": 13, "errors": 0, "lob": 7, "record": { "w": 50, "l": 51 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [0, 2, 0, 0, 0, 0, 1, 0, 0], "hits": 4, "errors": 0, "lob": 9, "record": { "w": 58, "l": 42 }, "rank": 1, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Walker Buehler", "loser": "Reynaldo López" }
   },
   "stats": [
     {

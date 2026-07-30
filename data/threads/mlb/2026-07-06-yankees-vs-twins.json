@@ -171,7 +171,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 6 },
-    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 1 }
+    "away": { "ja": "ツインズ", "en": "Minnesota Twins", "score": 6, "innings": [1, 0, 0, 1, 2, 2, 0, 0, 0], "hits": 13, "errors": 0, "lob": 10, "record": { "w": 44, "l": 47 }, "rank": 3, "league": "AL", "division": "Central" },
+    "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 5, "errors": 0, "lob": 3, "record": { "w": 49, "l": 40 }, "rank": 2, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Joe Ryan", "loser": "Ryan Weathers" }
   }
 }

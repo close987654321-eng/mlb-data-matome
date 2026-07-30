@@ -104,7 +104,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 1 },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 6 }
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 41, "l": 40 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 6, "innings": [3, 0, 0, 0, 0, 0, 3, 0, null], "hits": 6, "errors": 0, "lob": 3, "record": { "w": 46, "l": 33 }, "rank": 2, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Nick Martinez", "loser": "Zac Gallen" }
   }
 }

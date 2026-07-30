@@ -193,7 +193,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 4 },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 6 }
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 4, "innings": [0, 0, 3, 0, 0, 0, 1, 0, 0], "hits": 11, "errors": 0, "lob": 6, "record": { "w": 50, "l": 41 }, "rank": 2, "league": "AL", "division": "East" },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 6, "innings": [0, 2, 0, 4, 0, 0, 0, 0, null], "hits": 8, "errors": 1, "lob": 5, "record": { "w": 53, "l": 36 }, "rank": 1, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Ian Seymour", "loser": "Will Warren", "save": "Bryan Baker" }
   }
 }

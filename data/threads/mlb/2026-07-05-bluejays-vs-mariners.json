@@ -36,8 +36,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 0 },
-    "home": { "ja": "マリナーズ", "en": "Seattle Mariners", "score": 11 }
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 1, "errors": 1, "lob": 1, "record": { "w": 42, "l": 47 }, "rank": 3, "league": "AL", "division": "East" },
+    "home": { "ja": "マリナーズ", "en": "Seattle Mariners", "score": 11, "innings": [0, 5, 0, 0, 2, 4, 0, 0, null], "hits": 11, "errors": 0, "lob": 4, "record": { "w": 46, "l": 44 }, "rank": 1, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Logan Gilbert", "loser": "Shane Bieber" }
   },
   "tags": ["岡本和真", "ブルージェイズ", "マリナーズ", "海外の反応"],
   "comments": [

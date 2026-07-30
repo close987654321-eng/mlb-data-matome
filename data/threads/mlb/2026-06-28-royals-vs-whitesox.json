@@ -122,7 +122,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 1 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 2 }
+    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 6, "errors": 2, "lob": 6, "record": { "w": 34, "l": 50 }, "rank": 5, "league": "AL", "division": "Central" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 1, 0, 1], "hits": 10, "errors": 0, "lob": 8, "record": { "w": 43, "l": 38 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Grant Taylor", "loser": "Daniel Lynch IV" }
   }
 }

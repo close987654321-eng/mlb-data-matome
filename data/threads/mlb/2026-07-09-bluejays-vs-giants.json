@@ -204,7 +204,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 10 },
-    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 0 }
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 10, "innings": [5, 0, 0, 0, 0, 0, 0, 2, 3], "hits": 11, "errors": 0, "lob": 7, "record": { "w": 44, "l": 49 }, "rank": 3, "league": "AL", "division": "East" },
+    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 1, "errors": 3, "lob": 4, "record": { "w": 38, "l": 54 }, "rank": 4, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Dylan Cease", "loser": "Logan Webb" }
   }
 }

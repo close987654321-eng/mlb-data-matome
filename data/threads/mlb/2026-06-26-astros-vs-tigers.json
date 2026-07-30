@@ -156,7 +156,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 2 },
-    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 1 }
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 0, 1], "hits": 5, "errors": 0, "lob": 3, "record": { "w": 40, "l": 43 }, "rank": 2, "league": "AL", "division": "West" },
+    "home": { "ja": "タイガース", "en": "Detroit Tigers", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 5, "errors": 0, "lob": 4, "record": { "w": 34, "l": 47 }, "rank": 4, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Tatsuya Imai", "loser": "Troy Melton", "save": "Enyel De Los Santos" }
   }
 }

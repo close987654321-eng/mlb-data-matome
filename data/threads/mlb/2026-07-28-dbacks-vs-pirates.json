@@ -182,7 +182,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2 },
-    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 3 }
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2, "innings": [0, 0, 0, 0, 0, 2, 0, 0, 0, 0], "hits": 8, "errors": 1, "lob": 10, "record": { "w": 55, "l": 52 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 3, "innings": [0, 0, 0, 0, 0, 1, 0, 1, 0, 1], "hits": 9, "errors": 1, "lob": 8, "record": { "w": 55, "l": 52 }, "rank": 3, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Mason Montgomery", "loser": "Taylor Clarke" }
   }
 }

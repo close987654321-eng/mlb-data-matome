@@ -119,7 +119,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 2 },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 6 }
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 2, "innings": [0, 0, 2, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 5, "record": { "w": 46, "l": 37 }, "rank": 2, "league": "NL", "division": "East" },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 6, "innings": [0, 0, 0, 0, 0, 4, 2, 0, null], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 35, "l": 48 }, "rank": 5, "league": "NL", "division": "East" },
+    "decisions": { "winner": "A.J. Minter", "loser": "Alan Rangel" }
   }
 }

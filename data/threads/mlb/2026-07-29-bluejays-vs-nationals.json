@@ -26,8 +26,9 @@
   },
   "tags": ["ブルージェイズ", "ナショナルズ", "岡本和真", "CJ・エイブラムス", "ジェームズ・ウッド", "海外の反応"],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 6 },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 8 }
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 6, "innings": [0, 0, 1, 1, 1, 0, 0, 3, 0], "hits": 8, "errors": 2, "lob": 4, "record": { "w": 49, "l": 59 }, "rank": 5, "league": "AL", "division": "East" },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 8, "innings": [4, 0, 0, 3, 1, 0, 0, 0, null], "hits": 8, "errors": 2, "lob": 9, "record": { "w": 55, "l": 53 }, "rank": 3, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Cade Cavalli", "loser": "Shane Bieber", "save": "Clayton Beeter" }
   },
   "stats": [
     {

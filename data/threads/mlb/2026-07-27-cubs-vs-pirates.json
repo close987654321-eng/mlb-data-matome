@@ -45,8 +45,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 7 },
-    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 8 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 7, "innings": [0, 1, 0, 3, 0, 0, 0, 1, 2], "hits": 12, "errors": 0, "lob": 6, "record": { "w": 59, "l": 46 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "パイレーツ", "en": "Pittsburgh Pirates", "score": 8, "innings": [0, 3, 4, 0, 1, 0, 0, 0, null], "hits": 11, "errors": 0, "lob": 4, "record": { "w": 54, "l": 52 }, "rank": 3, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Braxton Ashcraft", "loser": "Jameson Taillon", "save": "Mason Montgomery" }
   },
   "comments": [
     {

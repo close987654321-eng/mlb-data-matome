@@ -21,8 +21,9 @@
   },
   "tags": ["アストロズ", "ナショナルズ", "今井達也", "ジェームズ・ウッド", "海外の反応"],
   "game": {
-    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 6 },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 3 }
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 6, "innings": [0, 1, 0, 3, 0, 1, 0, 1, 0], "hits": 6, "errors": 1, "lob": 8, "record": { "w": 46, "l": 48 }, "rank": 3, "league": "AL", "division": "West" },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 3, "innings": [1, 0, 1, 0, 0, 0, 0, 0, 1], "hits": 11, "errors": 0, "lob": 11, "record": { "w": 47, "l": 46 }, "rank": 4, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Steven Okert", "loser": "Andrew Alvarez", "save": "Josh Hader" }
   },
   "stats": [
     {

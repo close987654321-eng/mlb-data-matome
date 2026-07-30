@@ -245,6 +245,20 @@
   "teamTags": {
     "heading": "球団別の海外の反応"
   },
+  "game": {
+    "heading": "試合結果",
+    "win": "勝",
+    "record": "{w}勝{l}敗",
+    "lineCaption": "回ごとの得点と、得点・安打・失策・残塁の合計",
+    "r": "計",
+    "h": "安",
+    "e": "失",
+    "lob": "残",
+    "wp": "勝",
+    "lp": "敗",
+    "sv": "S",
+    "asOf": "{date}（日本時間）・出典: MLB公式"
+  },
   "standings": {
     "heading": "{division} 順位表",
     "rank": "順位",

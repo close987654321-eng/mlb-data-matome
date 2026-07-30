@@ -31,8 +31,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8 },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 0 }
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 8, "innings": [2, 0, 4, 1, 0, 1, 0, 0, 0], "hits": 11, "errors": 0, "lob": 5, "record": { "w": 45, "l": 45 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 8, "errors": 2, "lob": 8, "record": { "w": 44, "l": 46 }, "rank": 3, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Brandon Pfaadt", "loser": "Walker Buehler" }
   },
   "comments": [
     {

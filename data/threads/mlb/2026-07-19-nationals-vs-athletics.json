@@ -21,8 +21,9 @@
   },
   "tags": ["CJ・エイブラムス", "ジェームズ・ウッド", "ナショナルズ", "アスレチックス", "海外の反応"],
   "game": {
-    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 1 },
-    "home": { "ja": "アスレチックス", "en": "Oakland Athletics", "score": 15 }
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 4, "errors": 1, "lob": 8, "record": { "w": 49, "l": 50 }, "rank": 4, "league": "NL", "division": "East" },
+    "home": { "ja": "アスレチックス", "en": "Athletics", "score": 15, "innings": [5, 1, 0, 0, 0, 2, 6, 1, null], "hits": 13, "errors": 0, "lob": 7, "record": { "w": 42, "l": 56 }, "rank": 4, "league": "AL", "division": "West" },
+    "decisions": { "winner": "J.T. Ginn", "loser": "Zack Littell" }
   },
   "stats": [
     {

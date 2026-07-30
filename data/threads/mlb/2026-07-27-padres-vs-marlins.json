@@ -39,8 +39,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 5 },
-    "home": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 3 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 5, "innings": [0, 0, 0, 0, 1, 0, 0, 4, 0], "hits": 13, "errors": 1, "lob": 7, "record": { "w": 53, "l": 53 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 3, "innings": [0, 2, 1, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 6, "record": { "w": 52, "l": 54 }, "rank": 4, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Wandy Peralta", "loser": "Lake Bachar", "save": "Mason Miller" }
   },
   "comments": [
     {

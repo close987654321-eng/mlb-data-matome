@@ -80,17 +80,34 @@ export type PlayerStat = {
 /**
  * 試合の最終結果（スコア）。MLB公式スケジュールAPI由来の数値だけ＝公知の事実（著作権の対象外）。
  * scripts/fetch-mlb-stats.mjs backfill-games で編集時に取得して書き込む（サイト本体は API を叩かない）。
- * これがある MLB 記事は「試合結果カード」を画像出力できる（src/components/GameResultCard.tsx）。
+ * これがある MLB 記事は記事上に「試合結果ボックス」（src/components/GameBox.tsx）を出し、
+ * 「試合結果カード」を画像出力できる（src/components/GameResultCard.tsx）。
  * away/home は API の実際の表/裏（ビジター/ホーム）。ロゴ/色は ja 名から teams.ts で解決する。
+ *
+ * ⚠️ record / rank は **その試合終了時点の値を焼き込む**（API の leagueRecord と日付指定 standings 由来）。
+ * data/standings.json（＝常に最新）を記事に出すと、7月の試合の記事が9月には違う順位を表示してしまう。
+ * 過去記事でも数字が狂わないことを優先して、記事ごとに固定する。
  */
 export type ThreadGameSide = {
   ja: string; // 日本語短縮チーム名（例: "ドジャース"）。teams.ts の getTeam キー＝ロゴ/色を引ける
   en: string; // 公式英語名（例: "Los Angeles Dodgers"）
   score: number; // 最終得点
+  /** 回ごとの得点。ホームが最終回を打たなかった回は null（表示は「−」）。延長は 10 要素以上になる */
+  innings?: (number | null)[];
+  hits?: number; // 安打（H）
+  errors?: number; // 失策（E）
+  lob?: number; // 残塁（LOB）
+  /** この試合終了時点の勝敗（API の leagueRecord）。後から古くならない */
+  record?: { w: number; l: number };
+  rank?: number; // この試合終了時点の地区順位（1〜5）
+  league?: 'AL' | 'NL'; // 地区ラベルの組み立て用（standings.ts の League と同じ）
+  division?: 'East' | 'Central' | 'West'; // 同上（DivisionName と同じ）
 };
 export type ThreadGame = {
   away: ThreadGameSide; // ビジター（表）
   home: ThreadGameSide; // ホーム（裏）
+  /** 勝敗投手・セーブ（API の decisions）。選手名は英語表記のまま＝公式表記 */
+  decisions?: { winner?: string; loser?: string; save?: string };
 };
 
 /** 海外掲示板スレッドの日本語まとめ 1 件 */

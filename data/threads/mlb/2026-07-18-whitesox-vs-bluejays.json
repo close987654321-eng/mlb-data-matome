@@ -225,15 +225,8 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ホワイトソックス",
-      "en": "Chicago White Sox",
-      "score": 12
-    },
-    "home": {
-      "ja": "ブルージェイズ",
-      "en": "Toronto Blue Jays",
-      "score": 4
-    }
+    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 12, "innings": [0, 5, 0, 0, 3, 0, 4, 0, 0], "hits": 12, "errors": 0, "lob": 5, "record": { "w": 51, "l": 45 }, "rank": 1, "league": "AL", "division": "Central" },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 1, 1, 1, 1, 0, 0, 0], "hits": 7, "errors": 1, "lob": 9, "record": { "w": 45, "l": 52 }, "rank": 5, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Tyler Schweitzer", "loser": "Spencer Miles" }
   }
 }

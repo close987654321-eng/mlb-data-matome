@@ -251,7 +251,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 0 },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 3 }
+    "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 6, "errors": 0, "lob": 5, "record": { "w": 50, "l": 42 }, "rank": 2, "league": "AL", "division": "East" },
+    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 3, "innings": [0, 0, 1, 0, 1, 0, 1, 0, null], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 54, "l": 36 }, "rank": 1, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Shane McClanahan", "loser": "Gerrit Cole", "save": "Bryan Baker" }
   }
 }

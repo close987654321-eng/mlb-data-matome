@@ -69,8 +69,30 @@ export function standingPhraseJa(row: StandingRow, division: StandingsDivision):
 
 /** 地区の表示ラベル（ja: ナ・リーグ西地区 / en: NL West）。 */
 export function divisionLabel(d: StandingsDivision, locale: string): string {
-  if (locale === 'en') return `${d.league} ${d.division}`;
-  const league = d.league === 'AL' ? 'ア・リーグ' : 'ナ・リーグ';
-  const div = { East: '東', Central: '中', West: '西' }[d.division];
-  return `${league}${div}地区`;
+  return divisionLabelOf(d.league, d.division, locale);
+}
+
+/**
+ * league / division から地区ラベルを作る。順位表を経由しない呼び出し用
+ * （記事に焼き込んだ試合時点の順位＝ThreadGameSide.league/division を出すのに使う）。
+ */
+export function divisionLabelOf(league: League, division: DivisionName, locale: string): string {
+  if (locale === 'en') return `${league} ${division}`;
+  const lg = league === 'AL' ? 'ア・リーグ' : 'ナ・リーグ';
+  return `${lg}${{ East: '東', Central: '中', West: '西' }[division]}地区`;
+}
+
+/** 「ナ中2位」のような短い肩書き（試合結果ボックスの1行に収める用）。 */
+export function divisionRankShort(
+  league: League,
+  division: DivisionName,
+  rank: number,
+  locale: string,
+): string {
+  if (locale === 'en') {
+    const suffix = rank === 1 ? 'st' : rank === 2 ? 'nd' : rank === 3 ? 'rd' : 'th';
+    return `${league} ${division} ${rank}${suffix}`;
+  }
+  const lg = league === 'AL' ? 'ア' : 'ナ';
+  return `${lg}${{ East: '東', Central: '中', West: '西' }[division]}${rank === 1 ? '首位' : `${rank}位`}`;
 }

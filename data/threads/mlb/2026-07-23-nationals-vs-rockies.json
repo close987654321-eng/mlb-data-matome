@@ -12,16 +12,9 @@
   "summaryJa": "ナショナルズがロッキーズを8-0で完封。CJ・エイブラムスが5打数4安打と絶好調で打線を牽引。ジェームズ・ウッドは4打数0安打ながら1打点と貢献した。カバリ投手が試合を深く進む好投を見せ「ロッキーズの失策連発が相手を助けた」という指摘も。ロッキーズについては「あと2人の好投手が来れば来年はワイルドカード圏内」という声の一方で「クアーズフィールドでは投手が集まらない」という嘆きも。ナショナルズは52勝51敗と今季初の貯金1に並んだ。",
   "totalComments": 16,
   "game": {
-    "away": {
-      "ja": "ナショナルズ",
-      "en": "Washington Nationals",
-      "score": 8
-    },
-    "home": {
-      "ja": "ロッキーズ",
-      "en": "Colorado Rockies",
-      "score": 0
-    }
+    "away": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 8, "innings": [0, 0, 0, 0, 1, 0, 6, 1, 0], "hits": 14, "errors": 1, "lob": 8, "record": { "w": 52, "l": 51 }, "rank": 4, "league": "NL", "division": "East" },
+    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 6, "errors": 3, "lob": 10, "record": { "w": 41, "l": 63 }, "rank": 5, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Cade Cavalli", "loser": "Gabriel Hughes" }
   },
   "stats": [
     {

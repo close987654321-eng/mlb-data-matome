@@ -91,7 +91,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3 },
-    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 1 }
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [0, 1, 1, 0, 1, 0, 0, 0, 0], "hits": 8, "errors": 0, "lob": 8, "record": { "w": 49, "l": 31 }, "rank": 1, "league": "NL", "division": "East" },
+    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 2, "lob": 9, "record": { "w": 33, "l": 48 }, "rank": 4, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Dylan Lee", "loser": "Trevor McDonald", "save": "Raisel Iglesias" }
   }
 }

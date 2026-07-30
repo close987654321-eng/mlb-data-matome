@@ -187,7 +187,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 3 },
-    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 4 }
+    "away": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 3, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 2], "hits": 6, "errors": 0, "lob": 5, "record": { "w": 42, "l": 58 }, "rank": 4, "league": "NL", "division": "West" },
+    "home": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 4, "innings": [0, 0, 0, 3, 0, 0, 0, 0, 1], "hits": 8, "errors": 0, "lob": 9, "record": { "w": 41, "l": 60 }, "rank": 5, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Alex Lange", "loser": "Caleb Kilian" }
   }
 }

@@ -31,8 +31,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 2 },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 11 }
+    "away": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 2, "innings": [0, 0, 0, 0, 1, 0, 1, 0, 0], "hits": 5, "errors": 1, "lob": 4, "record": { "w": 42, "l": 65 }, "rank": 5, "league": "NL", "division": "West" },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 11, "innings": [3, 0, 0, 0, 0, 5, 2, 1, null], "hits": 14, "errors": 0, "lob": 5, "record": { "w": 66, "l": 39 }, "rank": 1, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Jacob Misiorowski", "loser": "Kyle Freeland" }
   },
   "comments": [
     {

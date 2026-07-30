@@ -20,16 +20,9 @@
   "summaryJa": "エンゼルスがカージナルスを5-1で下し2連勝。アデルのホームランなど打線が機能し、投手陣もカージナルスを最小失点に抑えた。ヌートバーは4打数0安打2三振と存在感を出せなかった。カージナルスファンからは「最下位チームに2連敗」「監督を変えろ」と批判が噴出。エンゼルスファンは「プレーオフを目指せる」と久々の上昇気流を喜んだ。",
   "totalComments": 25,
   "game": {
-    "away": {
-      "ja": "カージナルス",
-      "en": "St. Louis Cardinals",
-      "score": 1
-    },
-    "home": {
-      "ja": "エンゼルス",
-      "en": "Los Angeles Angels",
-      "score": 5
-    }
+    "away": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 1, "innings": [0, 0, 0, 0, 1, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 51, "l": 49 }, "rank": 4, "league": "NL", "division": "Central" },
+    "home": { "ja": "エンゼルス", "en": "Los Angeles Angels", "score": 5, "innings": [5, 0, 0, 0, 0, 0, 0, 0, null], "hits": 10, "errors": 0, "lob": 7, "record": { "w": 41, "l": 61 }, "rank": 5, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Walbert Ureña", "loser": "Matthew Liberatore" }
   },
   "stats": [
     {

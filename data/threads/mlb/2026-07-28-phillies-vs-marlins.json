@@ -194,7 +194,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 7 },
-    "home": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 8 }
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 7, "innings": [2, 0, 0, 0, 0, 4, 0, 1, 0], "hits": 10, "errors": 2, "lob": 6, "record": { "w": 57, "l": 50 }, "rank": 2, "league": "NL", "division": "East" },
+    "home": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 8, "innings": [2, 3, 0, 0, 0, 0, 0, 0, 3], "hits": 14, "errors": 1, "lob": 9, "record": { "w": 53, "l": 54 }, "rank": 4, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Calvin Faucher", "loser": "Jhoan Duran" }
   }
 }

@@ -272,7 +272,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 6 },
-    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4 }
+    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 6, "innings": [1, 3, 0, 2, 0, 0, 0, 0, 0], "hits": 13, "errors": 0, "lob": 11, "record": { "w": 35, "l": 36 }, "rank": 3, "league": "AL", "division": "West" },
+    "home": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 4, "innings": [0, 2, 0, 0, 0, 1, 0, 1, 0], "hits": 9, "errors": 0, "lob": 4, "record": { "w": 29, "l": 40 }, "rank": 5, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Nathan Eovaldi", "loser": "Connelly Early", "save": "Jacob Latz" }
   }
 }

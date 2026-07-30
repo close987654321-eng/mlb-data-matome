@@ -133,7 +133,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 3 },
-    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2 }
+    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 3, "innings": [0, 0, 0, 0, 0, 0, 3, 0, 0], "hits": 7, "errors": 1, "lob": 3, "record": { "w": 55, "l": 33 }, "rank": 1, "league": "NL", "division": "Central" },
+    "home": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2, "innings": [1, 0, 0, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 0, "lob": 10, "record": { "w": 44, "l": 45 }, "rank": 2, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Drew Rom", "loser": "Eduardo Rodriguez", "save": "Trevor Megill" }
   }
 }

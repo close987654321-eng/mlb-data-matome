@@ -160,7 +160,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 8 },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6 }
+    "away": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 8, "innings": [0, 0, 0, 0, 0, 0, 3, 5, 0], "hits": 9, "errors": 2, "lob": 2, "record": { "w": 38, "l": 39 }, "rank": 3, "league": "AL", "division": "East" },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 6, "innings": [0, 3, 0, 0, 0, 2, 0, 1, 0], "hits": 9, "errors": 0, "lob": 11, "record": { "w": 40, "l": 37 }, "rank": 3, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Jeff Hoffman", "loser": "Jacob Webb", "save": "Louis Varland" }
   }
 }

@@ -45,8 +45,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 4 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1 }
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 4, "innings": [0, 0, 0, 0, 0, 3, 0, 1, 0], "hits": 6, "errors": 1, "lob": 5, "record": { "w": 52, "l": 54 }, "rank": 2, "league": "AL", "division": "West" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 5, "errors": 1, "lob": 5, "record": { "w": 54, "l": 49 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Hunter Brown", "loser": "Sean Burke", "save": "Josh Hader" }
   },
   "comments": [
     {

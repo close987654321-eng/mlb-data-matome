@@ -42,8 +42,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 7 },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 10 }
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 7, "innings": [1, 0, 1, 1, 1, 0, 0, 1, 2], "hits": 9, "errors": 1, "lob": 10, "record": { "w": 55, "l": 51 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 10, "innings": [0, 1, 1, 0, 4, 0, 3, 1, null], "hits": 15, "errors": 0, "lob": 7, "record": { "w": 54, "l": 52 }, "rank": 3, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Riley Cornelio", "loser": "Jonathan Loáisiga", "save": "Clayton Beeter" }
   },
   "comments": [
     {

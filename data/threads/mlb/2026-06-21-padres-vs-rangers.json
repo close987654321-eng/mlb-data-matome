@@ -86,7 +86,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 6 },
-    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 4 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 6, "innings": [0, 0, 1, 0, 0, 0, 0, 2, 0, 3], "hits": 9, "errors": 1, "lob": 8, "record": { "w": 39, "l": 36 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 4, "innings": [0, 0, 0, 0, 0, 1, 2, 0, 0, 1], "hits": 9, "errors": 1, "lob": 7, "record": { "w": 36, "l": 40 }, "rank": 3, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Adrian Morejon", "loser": "Joe Ross", "save": "Mason Miller" }
   }
 }

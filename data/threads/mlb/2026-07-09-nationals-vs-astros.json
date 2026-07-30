@@ -141,7 +141,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 2 },
-    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 8 }
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 2, "innings": [0, 0, 0, 0, 1, 0, 0, 1, 0], "hits": 8, "errors": 0, "lob": 5, "record": { "w": 46, "l": 49 }, "rank": 3, "league": "AL", "division": "West" },
+    "home": { "ja": "ナショナルズ", "en": "Washington Nationals", "score": 8, "innings": [0, 0, 2, 3, 3, 0, 0, 0, null], "hits": 9, "errors": 1, "lob": 11, "record": { "w": 48, "l": 46 }, "rank": 4, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Foster Griffin", "loser": "Spencer Arrighetti" }
   }
 }

@@ -174,7 +174,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 3 },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 9 }
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 3, "innings": [0, 0, 0, 0, 0, 0, 0, 2, 1], "hits": 5, "errors": 0, "lob": 3, "record": { "w": 36, "l": 51 }, "rank": 5, "league": "NL", "division": "East" },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 9, "innings": [1, 0, 4, 0, 0, 0, 4, 0, null], "hits": 12, "errors": 0, "lob": 5, "record": { "w": 41, "l": 46 }, "rank": 3, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Spencer Miles", "loser": "Freddy Peralta", "save": "Patrick Corbin" }
   }
 }

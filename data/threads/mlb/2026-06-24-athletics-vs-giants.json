@@ -134,7 +134,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 1 },
-    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 3 }
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 1, "innings": [0, 0, 1, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 6, "record": { "w": 38, "l": 41 }, "rank": 2, "league": "AL", "division": "West" },
+    "home": { "ja": "ジャイアンツ", "en": "San Francisco Giants", "score": 3, "innings": [0, 2, 0, 0, 0, 0, 1, 0, null], "hits": 9, "errors": 1, "lob": 9, "record": { "w": 32, "l": 46 }, "rank": 4, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Robbie Ray", "loser": "Aaron Civale", "save": "Caleb Kilian" }
   }
 }

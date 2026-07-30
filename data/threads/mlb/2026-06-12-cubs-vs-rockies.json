@@ -180,7 +180,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 9 },
-    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 9, "innings": [0, 0, 0, 4, 2, 0, 2, 1, 0], "hits": 10, "errors": 0, "lob": 4, "record": { "w": 35, "l": 34 }, "rank": 4, "league": "NL", "division": "Central" },
+    "home": { "ja": "ロッキーズ", "en": "Colorado Rockies", "score": 3, "innings": [0, 0, 1, 1, 0, 0, 0, 0, 1], "hits": 12, "errors": 0, "lob": 10, "record": { "w": 26, "l": 43 }, "rank": 5, "league": "NL", "division": "West" },
+    "decisions": { "winner": "Edward Cabrera", "loser": "Ryan Feltner" }
   }
 }

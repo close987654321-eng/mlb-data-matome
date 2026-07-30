@@ -143,7 +143,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 7 },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 9 }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 7, "innings": [1, 0, 2, 0, 0, 0, 0, 4, 0], "hits": 13, "errors": 1, "lob": 8, "record": { "w": 43, "l": 41 }, "rank": 2, "league": "NL", "division": "West" },
+    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 9, "innings": [1, 4, 0, 0, 3, 1, 0, 0, null], "hits": 13, "errors": 0, "lob": 9, "record": { "w": 48, "l": 38 }, "rank": 2, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Matthew Boyd", "loser": "JP Sears", "save": "Ryan Rolison" }
   }
 }

@@ -26,8 +26,9 @@
   },
   "tags": ["ブルージェイズ", "レイズ", "岡本和真", "海外の反応"],
   "game": {
-    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 1 },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 3 }
+    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 1, "innings": [0, 0, 1, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 2, "record": { "w": 59, "l": 43 }, "rank": 1, "league": "AL", "division": "East" },
+    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 3, "innings": [1, 0, 1, 0, 0, 0, 1, 0, null], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 47, "l": 56 }, "rank": 5, "league": "AL", "division": "East" },
+    "decisions": { "winner": "Shane Bieber", "loser": "Ian Seymour", "save": "Louis Varland" }
   },
   "stats": [
     {

@@ -26,8 +26,9 @@
   },
   "tags": ["カブス", "カージナルス", "鈴木誠也", "ヌートバー", "ピート・クロウアームストロング", "海外の反応"],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 10 },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 2 }
+    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 10, "innings": [2, 5, 0, 0, 1, 0, 0, 1, 1], "hits": 17, "errors": 0, "lob": 9, "record": { "w": 61, "l": 46 }, "rank": 2, "league": "NL", "division": "Central" },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 2, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 1], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 53, "l": 54 }, "rank": 4, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Colin Rea", "loser": "Michael McGreevy" }
   },
   "stats": [
     {

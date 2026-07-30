@@ -208,7 +208,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 0 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1 }
+    "away": { "ja": "アスレチックス", "en": "Athletics", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 4, "errors": 0, "lob": 8, "record": { "w": 41, "l": 54 }, "rank": 4, "league": "AL", "division": "West" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 1, "innings": [0, 0, 0, 0, 0, 1, 0, 0, null], "hits": 5, "errors": 1, "lob": 6, "record": { "w": 49, "l": 45 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Erick Fedde", "loser": "Gage Jump", "save": "Grant Taylor" }
   }
 }

@@ -43,8 +43,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "メッツ", "en": "New York Mets", "score": 7 },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6 }
+    "away": { "ja": "メッツ", "en": "New York Mets", "score": 7, "innings": [0, 1, 0, 0, 0, 1, 0, 0, 3, 2], "hits": 11, "errors": 1, "lob": 8, "record": { "w": 38, "l": 53 }, "rank": 5, "league": "NL", "division": "East" },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6, "innings": [0, 2, 1, 0, 0, 0, 0, 0, 2, 1], "hits": 13, "errors": 0, "lob": 15, "record": { "w": 52, "l": 37 }, "rank": 1, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Brooks Raley", "loser": "Owen Murphy", "save": "Luke Weaver" }
   },
   "comments": [
     {

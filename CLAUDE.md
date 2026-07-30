@@ -133,6 +133,13 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     のリーダーボード CSV から **OAA（守備範囲）・守備run（FRV相当）・送球 最速mph・走力 ft/s** を取得（MLB公式・
     キー不要）。OAA等は守備位置に就く野手のみ＝投手/DH には付かない（大谷は走力のみ）。Savant 取得が失敗しても
     コア（statsapi）スナップショットは壊さずその指標だけ欠落させて続行。法務 posture は statsapi と同じ（公知の数値だけ）。
+  - **試合結果（`Thread.game`・記事の主役データ）**: `node scripts/fetch-mlb-stats.mjs backfill-games --apply` で
+    公式スケジュール（`hydrate=linescore,decisions`）から **最終スコア・回ごとの得点と H/E/残塁・その試合時点の
+    勝敗と地区順位・勝敗投手/セーブ** を記事 JSON に埋める。記事は要約直下の**試合結果ボックス**（`GameBox`＝
+    線スコア表＋公式ロゴ直リンク）で表示し、同じデータで「試合結果カード」画像も作れる（正は matome R10+）。
+    ⚠️ **順位・勝敗はその試合終了時点の値を焼き込む**（`leagueRecord` と日付指定 standings）。`data/standings.json`
+    ＝常に最新 を記事に出すと、7月の試合の記事が9月には違う順位を表示してしまうため。**サイト本体は
+    静的JSONを読むだけ**（API を叩かない）という posture は他と同じ。
 
 ### 4.2 出力フォーマット
 

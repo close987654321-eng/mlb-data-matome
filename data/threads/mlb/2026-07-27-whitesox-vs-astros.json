@@ -47,8 +47,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 3 },
-    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 12 }
+    "away": { "ja": "アストロズ", "en": "Houston Astros", "score": 3, "innings": [1, 0, 1, 0, 1, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 8, "record": { "w": 52, "l": 55 }, "rank": 3, "league": "AL", "division": "West" },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 12, "innings": [2, 0, 1, 0, 0, 2, 4, 3, null], "hits": 12, "errors": 0, "lob": 3, "record": { "w": 55, "l": 49 }, "rank": 1, "league": "AL", "division": "Central" },
+    "decisions": { "winner": "Sean Newcomb", "loser": "Ronel Blanco" }
   },
   "comments": [
     {

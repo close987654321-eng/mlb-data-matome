@@ -21,8 +21,9 @@
   },
   "tags": ["ロイヤルズ", "メッツ", "千賀滉大", "フアン・ソト", "ボビー・ウィットJr.", "海外の反応"],
   "game": {
-    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 16 },
-    "home": { "ja": "メッツ", "en": "New York Mets", "score": 12 }
+    "away": { "ja": "ロイヤルズ", "en": "Kansas City Royals", "score": 16, "innings": [0, 2, 0, 2, 5, 0, 7, 0, 0], "hits": 19, "errors": 3, "lob": 13, "record": { "w": 38, "l": 54 }, "rank": 5, "league": "AL", "division": "Central" },
+    "home": { "ja": "メッツ", "en": "New York Mets", "score": 12, "innings": [3, 2, 0, 4, 0, 0, 2, 1, 0], "hits": 13, "errors": 0, "lob": 6, "record": { "w": 38, "l": 54 }, "rank": 5, "league": "NL", "division": "East" },
+    "decisions": { "winner": "Beck Way", "loser": "Matt Seelinger" }
   },
   "stats": [
     {

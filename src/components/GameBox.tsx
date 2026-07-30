@@ -1,0 +1,220 @@
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/lib/navigation';
+import { getTeam, teamLogoUrl, teamAbbr } from '@/lib/teams';
+import { divisionRankShort } from '@/lib/standings';
+import { teamHubOf, TEAM_HUB_MIN_ARTICLES } from '@/lib/teamHub';
+import { getAllTags } from '@/lib/tags';
+import SectionHeading from '@/components/SectionHeading';
+import type { ThreadGame, ThreadGameSide } from '@/types/thread';
+import type { Locale } from '@/lib/i18n';
+
+/**
+ * 試合結果ボックス。記事の要約直下・注目選手の成績（StatBox）の上に置く。
+ *
+ * なぜここに置くか: 「◯◯ 対 ◯◯」で来た読者が最初に知りたいのは勝敗とスコアで、
+ * 海外の反応（コメント）はその次。結論を先に出して、そのまま反応へ流す。
+ *
+ * データは thread.game（scripts/fetch-mlb-stats.mjs が編集時に取得した公知の数値だけ）。
+ * サイト本体は API を叩かない。順位・勝敗は**その試合終了時点の値**を記事に焼き込んであるので、
+ * 何ヶ月後に読んでも表示が狂わない（data/standings.json＝常に最新 は使わない）。
+ *
+ * 段階的に描く（欠けている要素は黙って省く）＝ backfill が届いていない記事でも壊れない:
+ *   スコアだけ → ＋線スコア（innings）→ ＋順位/勝敗（rank・record）→ ＋勝敗投手（decisions）
+ */
+export default async function GameBox({
+  game,
+  dateLabel,
+  locale,
+}: {
+  game: ThreadGame;
+  /** 試合日の表示（例: 2026.7.30）。記事の series.date / id 由来＝JST */
+  dateLabel: string;
+  locale: Locale;
+}) {
+  const t = await getTranslations();
+  const { away, home } = game;
+  // 延長戦は 10 回以上。両チームで長い方に合わせる（ホームが最終回を打たない試合があるため）。
+  const innCount = Math.max(away.innings?.length ?? 0, home.innings?.length ?? 0);
+  const hasLine = innCount > 0;
+
+  // チーム名は LP 昇格済み（記事3件以上）のときだけリンク化する＝薄いタグページへ送らない
+  // （isTagIndexable / TeamStandings と同じ規律）。
+  const tags = await getAllTags();
+  const linkable = new Set(
+    tags
+      .filter(({ tag, count }) => count >= TEAM_HUB_MIN_ARTICLES && teamHubOf(tag))
+      .map(({ tag }) => tag),
+  );
+
+  const sides: { side: ThreadGameSide; isWinner: boolean }[] = [
+    { side: away, isWinner: away.score > home.score },
+    { side: home, isWinner: home.score > away.score },
+  ];
+
+  return (
+    <section className="mt-8" aria-label={t('game.heading')}>
+      <SectionHeading label={t('game.heading')} />
+
+      <div className="mt-4 rounded-xl border border-line bg-surface">
+        {/* ① スコア＝主役。ロゴ・チーム名・（あれば）試合時点の順位と勝敗・得点 */}
+        <div className="divide-y divide-line/70">
+          {sides.map(({ side, isWinner }) => {
+            const info = getTeam(side.ja);
+            const name =
+              locale === 'ja' ? side.ja : (info?.nameEn ?? side.en);
+            return (
+              <div key={side.en} className="flex items-center gap-3 px-5 py-4">
+                {info && (
+                  // eslint-disable-next-line @next/next/no-img-element -- MLB公式ロゴSVGを直リンク（再ホストしない）
+                  <img
+                    src={teamLogoUrl(info.id)}
+                    alt=""
+                    width={32}
+                    height={32}
+                    loading="lazy"
+                    className="h-8 w-8 shrink-0 object-contain"
+                  />
+                )}
+                <div className="min-w-0 flex-1">
+                  <p
+                    className={`flex items-center gap-2 truncate text-[15px] ${isWinner ? 'font-bold text-ink' : 'text-ink-soft'}`}
+                  >
+                    {linkable.has(side.ja) ? (
+                      <Link
+                        href={`/tag/${encodeURIComponent(side.ja)}`}
+                        className="truncate underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
+                      >
+                        {name}
+                      </Link>
+                    ) : (
+                      <span className="truncate">{name}</span>
+                    )}
+                    {isWinner && (
+                      <span className="shrink-0 rounded-[2px] border border-line px-1.5 py-0.5 text-[10px] font-semibold text-ink-soft">
+                        {t('game.win')}
+                      </span>
+                    )}
+                  </p>
+                  {/* 試合時点の地区順位と勝敗（焼き込み値。無ければ行ごと省く） */}
+                  {(side.rank && side.league && side.division) || side.record ? (
+                    <p className="mt-0.5 truncate text-xs tabular-nums text-ink-mute">
+                      {side.rank && side.league && side.division && (
+                        <span>
+                          {divisionRankShort(side.league, side.division, side.rank, locale)}
+                        </span>
+                      )}
+                      {side.rank && side.record && <span className="mx-1.5">·</span>}
+                      {side.record && (
+                        <span>
+                          {t('game.record', { w: side.record.w, l: side.record.l })}
+                        </span>
+                      )}
+                    </p>
+                  ) : null}
+                </div>
+                <p
+                  className={`shrink-0 text-3xl tabular-nums ${isWinner ? 'font-bold text-ink' : 'font-medium text-ink-soft'}`}
+                >
+                  {side.score}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* ② 線スコア。9回＋R/H/E/残＝最大14列なので、本文を横スクロールさせず表だけを流す */}
+        {hasLine && (
+          <div className="overflow-x-auto border-t border-line">
+            <table className="w-full min-w-[27rem] border-collapse text-center text-xs">
+              <caption className="sr-only">{t('game.lineCaption')}</caption>
+              <thead>
+                <tr className="text-ink-mute">
+                  <th scope="col" className="px-3 py-2 text-left font-medium">
+                    <span className="sr-only">{t('standings.team')}</span>
+                  </th>
+                  {Array.from({ length: innCount }, (_, i) => (
+                    <th key={i} scope="col" className="w-7 px-1 py-2 font-medium tabular-nums">
+                      {i + 1}
+                    </th>
+                  ))}
+                  <th scope="col" className="w-8 border-l border-line px-1 py-2 font-semibold">
+                    {t('game.r')}
+                  </th>
+                  <th scope="col" className="w-8 px-1 py-2 font-medium">
+                    {t('game.h')}
+                  </th>
+                  <th scope="col" className="w-8 px-1 py-2 font-medium">
+                    {t('game.e')}
+                  </th>
+                  <th scope="col" className="w-8 px-1 py-2 font-medium">
+                    {t('game.lob')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sides.map(({ side, isWinner }) => {
+                  const info = getTeam(side.ja);
+                  const label = teamAbbr(info?.id) ?? side.ja;
+                  return (
+                    <tr
+                      key={side.en}
+                      className={`border-t border-line ${isWinner ? 'font-semibold text-ink' : 'text-ink-soft'}`}
+                    >
+                      <th
+                        scope="row"
+                        className="whitespace-nowrap px-3 py-2 text-left text-xs font-semibold"
+                      >
+                        {label}
+                      </th>
+                      {Array.from({ length: innCount }, (_, i) => {
+                        const v = side.innings?.[i];
+                        return (
+                          <td key={i} className="px-1 py-2 tabular-nums">
+                            {/* その回を打たなかった（サヨナラ・9回裏不要）は「−」 */}
+                            {v == null ? <span className="text-ink-mute">−</span> : v}
+                          </td>
+                        );
+                      })}
+                      <td className="border-l border-line px-1 py-2 font-bold tabular-nums text-ink">
+                        {side.score}
+                      </td>
+                      <td className="px-1 py-2 tabular-nums">{side.hits ?? '−'}</td>
+                      <td className="px-1 py-2 tabular-nums">{side.errors ?? '−'}</td>
+                      <td className="px-1 py-2 tabular-nums">{side.lob ?? '−'}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* ③ 勝敗投手・セーブ。選手名は公式表記（英語）のまま */}
+        {game.decisions && (game.decisions.winner || game.decisions.loser) && (
+          <p className="flex flex-wrap gap-x-4 gap-y-1 border-t border-line px-5 py-3 text-xs text-ink-soft">
+            {game.decisions.winner && (
+              <span>
+                <span className="text-ink-mute">{t('game.wp')}</span>{' '}
+                <span className="font-medium text-ink">{game.decisions.winner}</span>
+              </span>
+            )}
+            {game.decisions.loser && (
+              <span>
+                <span className="text-ink-mute">{t('game.lp')}</span>{' '}
+                {game.decisions.loser}
+              </span>
+            )}
+            {game.decisions.save && (
+              <span>
+                <span className="text-ink-mute">{t('game.sv')}</span>{' '}
+                {game.decisions.save}
+              </span>
+            )}
+          </p>
+        )}
+      </div>
+
+      <p className="mt-2 text-xs text-ink-mute">{t('game.asOf', { date: dateLabel })}</p>
+    </section>
+  );
+}

@@ -69,7 +69,8 @@
     }
   ],
   "game": {
-    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2 },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 3 }
+    "away": { "ja": "ダイヤモンドバックス", "en": "Arizona Diamondbacks", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 1, 0, 0], "hits": 8, "errors": 0, "lob": 6, "record": { "w": 39, "l": 39 }, "rank": 3, "league": "NL", "division": "West" },
+    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 3, "innings": [0, 0, 1, 2, 0, 0, 0, 0, null], "hits": 7, "errors": 0, "lob": 6, "record": { "w": 42, "l": 34 }, "rank": 2, "league": "NL", "division": "Central" },
+    "decisions": { "winner": "Andre Pallante", "loser": "Merrill Kelly", "save": "Riley O'Brien" }
   }
 }

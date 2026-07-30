@@ -43,8 +43,9 @@
     }
   ],
   "game": {
-    "away": { "ja": "タイガース", "en": "Detroit Tigers", "score": 2 },
-    "home": { "ja": "エンゼルス", "en": "Los Angeles Angels", "score": 1 }
+    "away": { "ja": "タイガース", "en": "Detroit Tigers", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 2], "hits": 6, "errors": 0, "lob": 6, "record": { "w": 45, "l": 52 }, "rank": 4, "league": "AL", "division": "Central" },
+    "home": { "ja": "エンゼルス", "en": "Los Angeles Angels", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 38, "l": 60 }, "rank": 5, "league": "AL", "division": "West" },
+    "decisions": { "winner": "Keider Montero", "loser": "Kirby Yates" }
   },
   "tags": [
     "李灝宇",
