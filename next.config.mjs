@@ -34,10 +34,11 @@ const nextConfig = {
   // 由来のワンショット流入が主で回遊が少ないため、ページ毎インラインの欠点が出にくく FCP/LCP に効く。
   experimental: {
     inlineCss: true,
-    // ↓ 無人クラウドの build ゲートでだけ有効化（上の leanBuild コメント参照）。cpus=2 でワーカー数を
-    //   コア数から固定し、maxConcurrency=4 で 1 ワーカーの同時レンダーも絞る＝同時に開く fd を ~8 並列に
-    //   抑えて EMFILE を根絶する。Vercel/ローカルの通常ビルドには一切効かない（既定＝全開）。
-    ...(leanBuild ? { cpus: 2, staticGenerationMaxConcurrency: 4 } : {}),
+    // ↓ 無人クラウドの build ゲートでだけ有効化（上の leanBuild コメント参照）。記事数が増えるにつれ
+    //   cpus=2/maxConcurrency=4（旧設定）でも同時 fd が上限を超えるようになった（2026-07-31 実測・
+    //   digest 3948951212 で /tag/[tag] がランダムに失敗）。ワーカー1・同時レンダー1まで絞って
+    //   fd 圧を実質シリアライズし直す（遅いが確実）。Vercel/ローカルの通常ビルドには一切効かない（既定＝全開）。
+    ...(leanBuild ? { cpus: 1, staticGenerationMaxConcurrency: 1 } : {}),
   },
   images: {
     // Vercel の画像最適化(/_next/image)は無料枠=5,000変換/月で、更新頻度の高い本サイトでは
