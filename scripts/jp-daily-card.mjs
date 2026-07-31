@@ -78,10 +78,32 @@ function teamTone(hex) {
  */
 const headshotUrl = (id) => `https://img.mlbstatic.com/mlb-photos/image/upload/w_500,q_auto:best/v1/people/${id}/headshot/silo/current`;
 
-async function fetchAvatar(id) {
+/**
+ * 顔写真・ロゴの取得は「落ちたら null で続行」だが、黙って落ちると顔もロゴも無い抜け殻のカードが
+ * そのまま公開される（2026-07-31 No.128 で実際に発生＝クラウド無人実行から MLB の CDN に届かず
+ * 全滅、誰も気づかないまま記事に載った）。そこで ①数回リトライ ②取れなかったものを記録して
+ * 最後にまとめて警告、の2段で「静かに劣化する」のを防ぐ。記録先が MISSING_ART。
+ */
+const MISSING_ART = [];
+
+async function fetchArt(url, label) {
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
+      if (res.ok) return Buffer.from(await res.arrayBuffer());
+      // 404 は「その素材が無い」＝リトライしても変わらないので即あきらめる。
+      if (res.status === 404) break;
+    } catch { /* ネットワーク断・タイムアウト＝間をおいて再挑戦する */ }
+    if (attempt < 3) await new Promise((r) => setTimeout(r, attempt * 700));
+  }
+  MISSING_ART.push(label);
+  return null;
+}
+
+async function fetchAvatar(id, label = `顔写真 ${id}`) {
   try {
-    const res = await fetch(headshotUrl(id));
-    if (!res.ok) return null;
+    const raw = await fetchArt(headshotUrl(id), label);
+    if (!raw) return null;
     const S = 500;
     // silo は胸のあたりで水平にカットされている。枠が無いぶんその直線がそのまま見えてしまうので、
     // 下端のアルファをグラデーションで抜いて地に溶かす（切り抜きを枠なしで置くための下ごしらえ）。
@@ -90,14 +112,14 @@ async function fetchAvatar(id) {
       `<stop offset="0.84" stop-color="#fff" stop-opacity="1"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>` +
       `</linearGradient></defs><rect width="${S}" height="${S}" fill="url(#g)"/></svg>`,
     );
-    const out = await sharp(Buffer.from(await res.arrayBuffer()))
+    const out = await sharp(raw)
       .resize(S, S, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .ensureAlpha()
       .composite([{ input: fade, blend: 'dest-in' }])
       .png()
       .toBuffer();
     return `data:image/png;base64,${out.toString('base64')}`;
-  } catch { return null; }
+  } catch { MISSING_ART.push(label); return null; }
 }
 
 /**
@@ -144,17 +166,17 @@ async function fetchBallpark(custom) {
  * ⚠️ 白のシルエットに置き換える手は使えない … カブスのような「塗りの円＋抜き文字」のロゴは
  * アルファを取ると中の文字が消えてただの円盤になる（実際に描いて発覚）。色は保ったまま起こす。
  */
-async function fetchLogoWatermark(teamId) {
+async function fetchLogoWatermark(teamId, label = `主役の透かしロゴ ${teamId}`) {
   if (!teamId) return null;
   try {
-    const res = await fetch(`https://www.mlbstatic.com/team-logos/${teamId}.svg`);
-    if (!res.ok) return null;
-    const png = await sharp(Buffer.from(await res.arrayBuffer()), { density: 384 })
+    const raw = await fetchArt(`https://www.mlbstatic.com/team-logos/${teamId}.svg`, label);
+    if (!raw) return null;
+    const png = await sharp(raw, { density: 384 })
       .resize(420, 420, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .modulate({ brightness: 1.55, saturation: 1.1 })
       .png().toBuffer();
     return `data:image/png;base64,${png.toString('base64')}`;
-  } catch { return null; }
+  } catch { MISSING_ART.push(label); return null; }
 }
 
 /**
@@ -178,16 +200,16 @@ async function loadBrandLogo() {
 }
 
 // チームロゴ（公式SVG）を sharp で PNG 化（satori は SVG 画像を確実に描けない）。
-async function fetchLogo(teamId) {
+async function fetchLogo(teamId, label = `ロゴ ${teamId}`) {
   if (!teamId) return null;
   try {
-    const res = await fetch(`https://www.mlbstatic.com/team-logos/${teamId}.svg`);
-    if (!res.ok) return null;
-    const png = await sharp(Buffer.from(await res.arrayBuffer()), { density: 384 })
+    const raw = await fetchArt(`https://www.mlbstatic.com/team-logos/${teamId}.svg`, label);
+    if (!raw) return null;
+    const png = await sharp(raw, { density: 384 })
       .resize(120, 120, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
       .png().toBuffer();
     return `data:image/png;base64,${png.toString('base64')}`;
-  } catch { return null; }
+  } catch { MISSING_ART.push(label); return null; }
 }
 
 /**
@@ -471,11 +493,11 @@ async function main() {
 
   const bgFlag = argv.indexOf('--bg');
   const [avatars, logos, colors, ballpark, heroMark, brand] = await Promise.all([
-    Promise.all(ranked.map((p) => fetchAvatar(p.id))),
-    Promise.all(ranked.map((p) => fetchLogo(p.teamId))),
+    Promise.all(ranked.map((p) => fetchAvatar(p.id, `${p.name} の顔写真`))),
+    Promise.all(ranked.map((p) => fetchLogo(p.teamId, `${p.team} のロゴ`))),
     loadTeamColors(),
     fetchBallpark(bgFlag >= 0 ? argv[bgFlag + 1] : null),
-    fetchLogoWatermark(hero.teamId),
+    fetchLogoWatermark(hero.teamId, `${hero.team} の透かしロゴ`),
     loadBrandLogo(),
   ]);
   const art = new Map(ranked.map((p, i) => [p.id, { avatar: avatars[i], logo: logos[i] }]));
@@ -584,6 +606,18 @@ async function main() {
   console.log(`  OG(記事ヒーロー/OGP): ${path.relative(process.cwd(), og)}（1200×${ogH}）`);
   console.log(`  主役: ${hero.name} ${hero.today}${hero.note ? ` ★${hero.note}` : ''}`);
   ranked.slice(1).forEach((p) => console.log(`   ・${p.name} ${shortLine(p)}`));
+
+  // 素材が欠けたカードは「作れたつもり」でいちばん危ない。ここで必ず声を上げ、既定では
+  // 非ゼロ終了して公開の手前で止める（顔もロゴも無いカードを配るくらいなら作り直す）。
+  // どうしても素材抜きで出す日だけ --allow-no-art を明示する。
+  if (MISSING_ART.length) {
+    console.error(`\n⚠️ 素材が ${MISSING_ART.length} 点取れなかった（3回リトライ後）:`);
+    MISSING_ART.forEach((m) => console.error(`   × ${m}`));
+    console.error('   → MLB の CDN（img.mlbstatic.com / www.mlbstatic.com）に届いていない。');
+    console.error('     顔写真・ロゴ抜きのカードは公開しない。同じコマンドで作り直すか、');
+    console.error('     素材なしで押し切る場合だけ --allow-no-art を付ける。');
+    if (!argv.includes('--allow-no-art')) process.exit(3);
+  }
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
