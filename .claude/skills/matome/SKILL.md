@@ -459,9 +459,12 @@ jp-daily（きょうの日本人選手）で確立した書き方の一般化＝
 5. `data/threads/{sport}/{id}.json` に保存
 5b. **動画記事は OG 画像を担保**：`media.kind:"video"` なら `node scripts/og-thumb.mjs <id>` を走らせる。
    maxres があれば何もしない（`skip:maxres-ok`）、無ければローカル OG を生成して `thumbUrl` を入れる（R5）。
-5c. **シーズン観測日誌に追記（対象選手のみ）**：記事のタグに `data/player-journal/{slug}.json` が存在する
-   選手（現在: tomoyuki-sugano / seiya-suzuki / roki-sasaki）が入っていたら、その JSON の `entries` に
-   1エントリ追記する（型は `src/lib/playerJournal.ts`）。ルール:
+5c. **シーズン観測日誌に追記（対象選手のみ）**：日誌がある選手が記事のタグに入っていたら、その JSON の
+   `entries` に1エントリ追記する（型は `src/lib/playerJournal.ts`）。
+   対象の判定は**その場で `ls data/player-journal/` を実行して JSON がある選手すべて**（選手名は
+   `src/lib/players.ts` の slug ↔ nameJa で引く）。⚠️ ここに選手名を列挙しない＝日誌は選手が増える資産で、
+   固定リストを書くと増えた選手が無人ルーティンから漏れる（2026-08-01 に 3人固定のまま11人へ増えていて
+   吉田正尚11件・鈴木誠也5件が未収録になっていた事故の再発防止）。ルール:
    - `quotes` は**いま保存した記事からの逐語コピーのみ**（author/score/bodyEn/bodyJa をそのまま。1〜2件、
      その選手に言及している声を優先）。`threadId`/`sport`/`format`/`date`（fetchedAt の日付）を必ず入れる
    - `headingJa` は「対◯◯、6回1失点」のような記事にある事実だけの短い見出し
