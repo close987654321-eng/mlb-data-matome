@@ -15,7 +15,13 @@ import {
 import type { Fighter } from '@/lib/fighters';
 import { SPORT_INFO } from '@/lib/sports';
 import { getEditorNote, type EditorNote } from '@/lib/editorNotes';
-import { getPlayerJournal, type PlayerJournal as PlayerJournalData } from '@/lib/playerJournal';
+import {
+  getPlayerJournal,
+  journalLatestHighlight,
+  type PlayerJournal as PlayerJournalData,
+} from '@/lib/playerJournal';
+import { getGamelog, type Gamelog } from '@/lib/gamelog';
+import { jpWarRank, type JpRank } from '@/lib/jpRank';
 import {
   teamHubOf,
   teamHubIntroJa,
@@ -32,6 +38,7 @@ import type { Player } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import FeedCard from '@/components/FeedCard';
 import TagVoices from '@/components/TagVoices';
+import PlayerNow from '@/components/PlayerNow';
 import SeasonJournal from '@/components/SeasonJournal';
 import TeamStandings from '@/components/TeamStandings';
 import SectionHeading from '@/components/SectionHeading';
@@ -59,6 +66,27 @@ function teamLpOf(tag: string, feedCount: number): TeamHub | null {
 /** フィード1件のタグ（チームLPの話題集計用）。 */
 function tagsOfItem(item: FeedItem): string[] {
   return (item.kind === 'thread' ? item.thread.tags : item.column.tags) ?? [];
+}
+
+/** 選手LPのアーカイブ（カード枠から溢れた分）を月ごとにまとめる。フィードは日付降順＝月も新しい順。 */
+function archiveMonthsOf(items: FeedItem[]): { month: string; items: FeedItem[] }[] {
+  const groups: { month: string; items: FeedItem[] }[] = [];
+  for (const item of items) {
+    const month = item.date.slice(0, 7);
+    const last = groups.at(-1);
+    if (last && last.month === month) last.items.push(item);
+    else groups.push({ month, items: [item] });
+  }
+  return groups;
+}
+
+const MONTHS_EN = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+function monthLabel(month: string, locale: Locale): string {
+  const [y, m] = month.split('-');
+  return locale === 'en' ? `${MONTHS_EN[Number(m) - 1]} ${y}` : `${y}年${Number(m)}月`;
 }
 
 /** ファイターの競技ラベル（パンくず・競技一覧リンク用）。 */
@@ -199,7 +227,8 @@ export default async function TagPage({
   let otherHubs: { player: Player; count: number }[] = [];
   let otherFighters: { fighter: Fighter; count: number }[] = [];
   if (hub) {
-    if (!journal) voices = tagHubVoices(feed, hub);
+    // 日誌はja専用なので、enでは日誌選手でも声ピックアップを出す（enから声も日誌も消える穴を塞ぐ）。
+    if (!journal || locale === 'en') voices = tagHubVoices(feed, hub);
     otherHubs = playerTagHubs(await getAllTags()).filter(({ player }) => player.slug !== hub.slug);
   } else if (fighter) {
     voices = tagHubVoices(feed, fighter);
@@ -213,10 +242,23 @@ export default async function TagPage({
   let teamPlayers: Player[] = [];
   let hubTeam: TeamInfo | undefined; // 顔写真に添える所属チーム（ロゴ・カラー）。snapshot 由来＝移籍に自動追従。
   const statLines = new Map<string, string>(); // slug → 成績1行（所属日本人選手リンクに添える）
+  // 「いま」ブロック（PlayerNow）用: 今季成績・試合別ログ・日本人WAR順位（すべて静的JSONの再表示）。
+  let hubSeason: PlayerSeason | null = null;
+  let hubGamelog: Gamelog | null = null;
+  let hubJpRank: JpRank | null = null;
+  let hubAsOf: string | undefined;
   if (hub) {
     // 所属は ja/en どちらのLPでも顔写真の横に出すので、導入文（ja のみ）と切り離して取る。
-    const [snap, season] = await Promise.all([getPlayersSnapshot(), getPlayerSeason(hub.mlbId)]);
+    const [snap, season, gamelog] = await Promise.all([
+      getPlayersSnapshot(),
+      getPlayerSeason(hub.mlbId),
+      getGamelog(hub.mlbId),
+    ]);
     hubTeam = getTeam(season?.team);
+    hubSeason = season;
+    hubGamelog = gamelog;
+    hubJpRank = jpWarRank(snap, hub);
+    hubAsOf = snap.asOf || undefined;
     if (locale !== 'en') {
       intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
       editorNote = await getEditorNote(hub.slug);
@@ -391,18 +433,7 @@ export default async function TagPage({
           {updatedIso && <span> ・ {t('tag.updated', { date: updatedIso.slice(0, 10) })}</span>}
         </p>
 
-        {/* 役割分担の相互リンク: 反応まとめ（ここ）⇔ 成績・徹底分析（選手ハブ）。 */}
-        {hub && (
-          <Link
-            href={`/player/${hub.slug}`}
-            className="group mt-5 flex items-center justify-between border-y border-line py-3.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
-          >
-            <span>{t('tag.statsHub', { name: locale === 'en' ? hub.nameEn : hub.nameJa })}</span>
-            <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
-        )}
+        {/* 成績ハブへの導線は「いま」ブロック（PlayerNow）のフッターに統合＝ヘッダーの1行リンクは廃止。 */}
 
         {/* ファイターLP: 競技一覧への導線（MLB選手の成績ハブに相当する「次の一手」）。 */}
         {fighter && (
@@ -445,6 +476,23 @@ export default async function TagPage({
       {/* チームLP: 地区順位表（CI が毎時更新する静的JSON。ライバルのLPへの回遊網も兼ねる）。 */}
       {teamLp && <TeamStandings teamId={teamLp.info.id} locale={locale} />}
 
+      {/* 選手タグLP: 「いま」ブロック＝最新の山場の声＋総評＋スタットパネル。検索着地の
+          第一意図「直近どう見られてる？」にファーストビューで答え、数字は成績ハブへの太い橋になる。
+          日誌がない選手・en面ではスタットパネルだけに退化する（全選手LP共通）。 */}
+      {hub && (
+        <PlayerNow
+          locale={locale}
+          player={hub}
+          season={hubSeason}
+          gamelog={hubGamelog}
+          jpRank={hubJpRank}
+          asOf={hubAsOf}
+          highlight={journal && locale !== 'en' ? journalLatestHighlight(journal) : null}
+          editorNote={journal && locale !== 'en' ? editorNote : null}
+          showJournalJump={Boolean(journal) && locale !== 'en'}
+        />
+      )}
+
       {/* 選手・ファイタータグLP: 反応そのものを LP に直接引用する（クエリ意図との一致＋記事追加ごとに入れ替わる鮮度）。 */}
       {(hub || fighter) && (
         <TagVoices
@@ -456,8 +504,9 @@ export default async function TagPage({
         />
       )}
 
-      {/* 選手・ファイタータグLP: 編集部ノート＝声ピックアップを横断した「海外でどう見られているか」の要約（ja のみ・手書き）。 */}
-      {(hub || fighter) && editorNote && (
+      {/* 編集部ノート＝「海外でどう見られているか」の要約（ja のみ・手書き）。
+          日誌がある選手は「いま」ブロックに吸収済みなので、ここに出すのはファイターと日誌なし選手だけ。 */}
+      {(fighter || (hub && !journal)) && editorNote && (
         <section className="space-y-5">
           <SectionHeading label={t('tag.editorNote', { name: (hub ?? fighter)!.nameJa })} />
           <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
@@ -530,14 +579,60 @@ export default async function TagPage({
         </section>
       )}
 
-      <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-        {feed.map((item, i) => (
-          <li key={feedKey(item)}>
-            {/* 先頭カードだけ画像を LCP として先取り。 */}
-            <FeedCard item={item} locale={locale} priority={i === 0} />
-          </li>
-        ))}
-      </ul>
+      {/* 記事一覧: 選手LPは日誌・いまブロックが主役になったので、カードは最新6件だけ。
+          残りは軽い月別テキストのアーカイブに降格（大谷LPの78枚カード壁＝ページ重量問題も同時に解消）。 */}
+      <section className="space-y-5">
+        {hub && <SectionHeading label={t('tag.latestArticles')} count={feed.length} />}
+        <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {(hub ? feed.slice(0, 6) : feed).map((item, i) => (
+            <li key={feedKey(item)}>
+              {/* 先頭カードだけ画像を LCP として先取り。 */}
+              <FeedCard item={item} locale={locale} priority={i === 0} />
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {hub && feed.length > 6 && (
+        <section className="space-y-6">
+          <SectionHeading label={t('tag.archive')} count={feed.length - 6} />
+          {archiveMonthsOf(feed.slice(6)).map(({ month, items }) => (
+            <div key={month}>
+              <p className="border-b border-line pb-2 text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
+                {monthLabel(month, locale)}
+              </p>
+              <ul className="divide-y divide-line">
+                {items.map((item) => {
+                  const { name } = itemOf(item, locale);
+                  const href =
+                    item.kind === 'thread'
+                      ? `/${item.thread.sport}/${item.thread.id}`
+                      : `/columns/${item.column.id}`;
+                  return (
+                    <li key={feedKey(item)}>
+                      <Link
+                        href={href}
+                        className="group flex items-baseline gap-3 py-2.5 text-sm text-ink-soft transition-colors hover:text-ink"
+                      >
+                        <span className="shrink-0 text-xs tabular-nums text-ink-mute">
+                          {Number(item.date.slice(5, 7))}/{Number(item.date.slice(8, 10))}
+                        </span>
+                        <span className="line-clamp-1">{name}</span>
+                        <span
+                          aria-hidden
+                          className="ml-auto shrink-0 text-ink-mute transition-transform group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </section>
+      )}
 
       {/* ファイターLP同士の相互リンク網（選手LPクラスタと同じ思想。まずは井上⇔中谷から）。 */}
       {fighter && otherFighters.length > 0 && (

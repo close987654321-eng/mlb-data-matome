@@ -58,6 +58,10 @@ export type JournalEntry = {
 export type PlayerJournal = {
   /** 日誌の序文＝編集者がこの選手の物語を数行で立てる（ja）。 */
   introJa?: string;
+  /** 日誌末尾の「次の見どころ」＝次戦・次の節目の予告（編集セッションで人が書く。クラウド禁止）。 */
+  nextJa?: string;
+  /** nextJa の賞味期限（JSTの試合日）。過ぎたらビルド時に非表示＝終わった試合の予告を出さない。 */
+  nextUntil?: string;
   entries: JournalEntry[];
 };
 
@@ -83,6 +87,34 @@ export type JournalChapter = {
   leadJa?: string;
   entries: JournalEntry[];
 };
+
+/**
+ * 「いま」ブロックに掲げる最新のハイライト＝直近の山場（peak）の最多いいね引用。
+ * 山場がなければ引用のある最新エントリで代用（LPの顔になる声を常に1本立てる）。
+ */
+export function journalLatestHighlight(
+  journal: PlayerJournal,
+): { entry: JournalEntry; quote: JournalQuote } | null {
+  const pool = journal.entries.filter((e) => e.quotes.length > 0);
+  const entry = [...pool].reverse().find((e) => e.peak) ?? pool.at(-1);
+  if (!entry) return null;
+  const quote = entry.quotes.reduce((a, b) => (b.score > a.score ? b : a));
+  return { entry, quote };
+}
+
+/**
+ * 期限内の「次の見どころ」。SSG は stats CI で毎日ビルドされるので、nextUntil を過ぎた予告は
+ * 次のビルドで自然に消える（古い予告を出し続けてページが死んで見えるのを防ぐ）。
+ */
+export function journalNext(journal: PlayerJournal): string | null {
+  if (!journal.nextJa) return null;
+  if (journal.nextUntil) {
+    // sv-SE ロケール＝YYYY-MM-DD 固定表記。JSTの暦日で比較する。
+    const todayJst = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(new Date());
+    if (todayJst > journal.nextUntil) return null;
+  }
+  return journal.nextJa;
+}
 
 /** 章ごとにまとめる。先頭に章タイトルが無いデータでも落ちない（無題の第1章になる）。 */
 export function journalChapters(journal: PlayerJournal): JournalChapter[] {

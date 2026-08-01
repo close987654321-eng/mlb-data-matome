@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/navigation';
 import SectionHeading from '@/components/SectionHeading';
-import { journalChapters, type PlayerJournal, type JournalEntry } from '@/lib/playerJournal';
+import { journalChapters, journalNext, type PlayerJournal, type JournalEntry } from '@/lib/playerJournal';
 
 /**
  * 選手タグLPの「シーズン観測日誌」v2。
@@ -151,6 +151,7 @@ export default function SeasonJournal({ journal, label }: { journal: PlayerJourn
   const t = useTranslations();
   if (journal.entries.length === 0) return null;
   const chapters = journalChapters(journal);
+  const next = journalNext(journal);
 
   return (
     <section className="space-y-4">
@@ -160,7 +161,8 @@ export default function SeasonJournal({ journal, label }: { journal: PlayerJourn
       </p>
       <div className="space-y-9">
         {chapters.map((chapter, ci) => (
-          <div key={ci}>
+          // 最終章＝最新の観測。「いま」ブロックのアンカーの着地点（sticky ヘッダー分の余白つき）。
+          <div key={ci} id={ci === chapters.length - 1 ? 'journal-latest' : undefined} className="scroll-mt-24">
             {/* 章見出し＝編集者が幕を割る。番号＋期間で「上から時系列」であることも同時に言う。 */}
             <div className="border-b border-ink pb-2.5">
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
@@ -191,6 +193,15 @@ export default function SeasonJournal({ journal, label }: { journal: PlayerJourn
           </div>
         ))}
       </div>
+      {/* 次の見どころ＝物語のクリフハンガー。期限（nextUntil）を過ぎるとビルド時に自然に消える。 */}
+      {next && (
+        <div className="rounded-[3px] border border-ink p-5 sm:p-6">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
+            {t('tag.journalNext')}
+          </p>
+          <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink">{next}</p>
+        </div>
+      )}
       <p className="text-xs leading-relaxed text-ink-mute">{t('tag.journalNote')}</p>
     </section>
   );
