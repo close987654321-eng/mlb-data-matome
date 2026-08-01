@@ -15,6 +15,7 @@ import {
 import type { Fighter } from '@/lib/fighters';
 import { SPORT_INFO } from '@/lib/sports';
 import { getEditorNote, type EditorNote } from '@/lib/editorNotes';
+import { getPlayerJournal, type PlayerJournal as PlayerJournalData } from '@/lib/playerJournal';
 import {
   teamHubOf,
   teamHubIntroJa,
@@ -31,6 +32,7 @@ import type { Player } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import FeedCard from '@/components/FeedCard';
 import TagVoices from '@/components/TagVoices';
+import SeasonJournal from '@/components/SeasonJournal';
 import TeamStandings from '@/components/TeamStandings';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -205,6 +207,7 @@ export default async function TagPage({
   // 選手・チームタグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
   let intro: string | undefined;
   let editorNote: EditorNote | null = null; // 編集部ノート（ja のみ。手書きの和文要約）
+  let journal: PlayerJournalData | null = null; // シーズン観測日誌（ja のみ。追記型の時系列引用）
   let teamPlayers: Player[] = [];
   let hubTeam: TeamInfo | undefined; // 顔写真に添える所属チーム（ロゴ・カラー）。snapshot 由来＝移籍に自動追従。
   const statLines = new Map<string, string>(); // slug → 成績1行（所属日本人選手リンクに添える）
@@ -214,7 +217,7 @@ export default async function TagPage({
     hubTeam = getTeam(season?.team);
     if (locale !== 'en') {
       intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
-      editorNote = await getEditorNote(hub.slug);
+      [editorNote, journal] = await Promise.all([getEditorNote(hub.slug), getPlayerJournal(hub.slug)]);
     }
   } else if (fighter && locale !== 'en') {
     intro = fighterHubIntroJa(fighter, feed.length);
@@ -462,6 +465,12 @@ export default async function TagPage({
             </p>
           </div>
         </section>
+      )}
+
+      {/* 選手タグLP: シーズン観測日誌＝海外の評価の推移を時系列で追う追記型セクション。
+          記事が増えるたびに伸びる＝再着地した検索読者に「物語が進んでいる」継続性を見せる。 */}
+      {hub && journal && (
+        <SeasonJournal journal={journal} label={t('tag.journal', { name: hub.nameJa })} />
       )}
 
       {/* ファイターLP: 主要試合タイムライン＝「この試合の反応が読みたい」ナビ。公式スコアの

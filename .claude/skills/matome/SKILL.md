@@ -459,6 +459,14 @@ jp-daily（きょうの日本人選手）で確立した書き方の一般化＝
 5. `data/threads/{sport}/{id}.json` に保存
 5b. **動画記事は OG 画像を担保**：`media.kind:"video"` なら `node scripts/og-thumb.mjs <id>` を走らせる。
    maxres があれば何もしない（`skip:maxres-ok`）、無ければローカル OG を生成して `thumbUrl` を入れる（R5）。
+5c. **シーズン観測日誌に追記（対象選手のみ）**：記事のタグに `data/player-journal/{slug}.json` が存在する
+   選手（現在: tomoyuki-sugano / seiya-suzuki / roki-sasaki）が入っていたら、その JSON の `entries` に
+   1エントリ追記する（型は `src/lib/playerJournal.ts`）。ルール:
+   - `quotes` は**いま保存した記事からの逐語コピーのみ**（author/score/bodyEn/bodyJa をそのまま。1〜2件、
+     その選手に言及している声を優先）。`threadId`/`sport`/`format`/`date`（fetchedAt の日付）を必ず入れる
+   - `headingJa` は「対◯◯、6回1失点」のような記事にある事実だけの短い見出し
+   - `editorJa`（俺ボイスの観測メモ）は**書かない**＝山場かどうかの判断と地の文は編集セッションで
+     人が足す（クラウド無人実行で地の文を生成しない。捏造・声ブレ防止）
 6. `npm run build` で確認（任意）
 7. **フィードバックを蓄積する（育つ構造）**：村山が「この抜粋要らない」「並べ方」「訳が堅い」等の
    指摘を出したら `references/feedback-log.md` の該当セクションに「ダメ→直し方」で1行追記する。
