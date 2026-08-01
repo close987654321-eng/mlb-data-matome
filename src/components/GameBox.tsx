@@ -29,11 +29,14 @@ export default async function GameBox({
   children,
   heading,
   className,
+  lpTags,
 }: {
   game: ThreadGame;
   /** 試合日の表示（例: 2026.7.30）。記事の series.date / id 由来＝JST */
   dateLabel: string;
   locale: Locale;
+  /** 記事のタグ。名前がここにある選手は選手LP（/tag）へ、無い選手だけ成績ハブへリンク。 */
+  lpTags?: string[];
   /** ボックス下端に置くアクション（試合結果カードの生成ボタン）。関心が一番高い位置で押せる。 */
   children?: React.ReactNode;
   /** 見出しの差し替え。null＝見出しを出さない（日次ダイジェストは選手名が見出しで、その下に置くため）。 */
@@ -236,7 +239,7 @@ export default async function GameBox({
                           {i > 0 && '、'}
                           {slug ? (
                             <Link
-                              href={`/player/${slug}`}
+                              href={playerHref(homerLabels.get(h.id)!, lpTags)}
                               className="font-medium text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
                             >
                               {label}
@@ -263,19 +266,19 @@ export default async function GameBox({
             {decisions.winner && (
               <span>
                 <span className="text-ink-mute">{t('game.wp')}</span>{' '}
-                <PitcherName player={decisions.winner} strong />
+                <PitcherName player={decisions.winner} strong lpTags={lpTags} />
               </span>
             )}
             {decisions.loser && (
               <span>
                 <span className="text-ink-mute">{t('game.lp')}</span>{' '}
-                <PitcherName player={decisions.loser} />
+                <PitcherName player={decisions.loser} lpTags={lpTags} />
               </span>
             )}
             {decisions.save && (
               <span>
                 <span className="text-ink-mute">{t('game.sv')}</span>{' '}
-                <PitcherName player={decisions.save} />
+                <PitcherName player={decisions.save} lpTags={lpTags} />
               </span>
             )}
           </p>
@@ -289,12 +292,19 @@ export default async function GameBox({
   );
 }
 
-/** 勝敗投手・セーブの名前1つ。カタログにある選手（日本人＋主要ライバル）は選手ハブへ送る。 */
-function PitcherName({ player, strong }: { player: PlayerLabel; strong?: boolean }) {
+/** 選手名リンクの行き先。タグにある選手は選手LP（/tag＝存在保証あり）、無い選手は成績ハブへ。 */
+function playerHref(p: PlayerLabel, lpTags?: string[]): string {
+  return p.nameJa && lpTags?.includes(p.nameJa)
+    ? `/tag/${encodeURIComponent(p.nameJa)}`
+    : `/player/${p.slug}`;
+}
+
+/** 勝敗投手・セーブの名前1つ。カタログにある選手（日本人＋主要ライバル）は選手LP/ハブへ送る。 */
+function PitcherName({ player, strong, lpTags }: { player: PlayerLabel; strong?: boolean; lpTags?: string[] }) {
   if (player.slug) {
     return (
       <Link
-        href={`/player/${player.slug}`}
+        href={playerHref(player, lpTags)}
         className="font-medium text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
       >
         {player.label}

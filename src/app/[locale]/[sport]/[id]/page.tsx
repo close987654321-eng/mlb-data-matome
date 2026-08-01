@@ -367,14 +367,16 @@ export default async function ThreadDetailPage({
             name: categoryLabel,
             item: absoluteUrl(locale, `/${sport}`),
           },
-          // 主役選手ハブを挟む4階層（可視パンくずと一致）。選手が居ない記事は3階層のまま。
+          // 主役選手のLPを挟む4階層（可視パンくずと一致）。選手が居ない記事は3階層のまま。
+          // 行き先は選手LP（/tag）＝内部リンクをLPに集める（2026-08-01・村山指示）。primaryPlayer は
+          // この記事のタグ由来なのでタグページの存在が保証される（404しない）。
           ...(primaryPlayer && primaryPlayerName
             ? [
                 {
                   '@type': 'ListItem',
                   position: 3,
                   name: primaryPlayerName,
-                  item: absoluteUrl(locale, `/player/${primaryPlayer.slug}`),
+                  item: absoluteUrl(locale, `/tag/${encodeURIComponent(primaryPlayer.nameJa)}`),
                 },
               ]
             : []),
@@ -399,9 +401,14 @@ export default async function ThreadDetailPage({
           items={[
             { name: t('nav.home'), href: '/' },
             { name: categoryLabel, href: `/${sport}` },
-            // 主役選手の常緑ハブを挟んで、検索着地→選手ハブ→他記事の回遊を作る。
+            // 主役選手の常緑LPを挟んで、検索着地→選手LP→他記事の回遊を作る（JSON-LD側と一致）。
             ...(primaryPlayer && primaryPlayerName
-              ? [{ name: primaryPlayerName, href: `/player/${primaryPlayer.slug}` }]
+              ? [
+                  {
+                    name: primaryPlayerName,
+                    href: `/tag/${encodeURIComponent(primaryPlayer.nameJa)}`,
+                  },
+                ]
               : []),
             { name: title },
           ]}
@@ -466,7 +473,7 @@ export default async function ThreadDetailPage({
       {/* 試合結果ボックス。「◯◯ 対 ◯◯」で来た読者が先に知りたいのは勝敗＝結論を成績より上に置く。
           線スコア・順位・勝敗はすべて thread.game に焼き込んだ公知の数値（サイト本体は API を叩かない）。 */}
       {sport === 'mlb' && thread.game && (
-        <GameBox game={thread.game} dateLabel={gameDateLabel} locale={locale}>
+        <GameBox game={thread.game} dateLabel={gameDateLabel} locale={locale} lpTags={thread.tags}>
           {/* 「試合結果カードを作る」はボックス下端に同居させる＝結果を読んだ直後（関心のピーク）に
               画像生成→X共有→UTM来訪の導線を出す。以前は記事のかなり下にあって繋がりが悪かった。 */}
           <GameResultCard
@@ -487,6 +494,7 @@ export default async function ThreadDetailPage({
       {boxStats.length > 0 && (
         <StatBox
           stats={boxStats}
+          lpTags={thread.tags}
           heading={t('threads.statsHeading')}
           todayLabel={t('threads.statToday')}
           seasonLabel={t('threads.statSeason')}
@@ -508,14 +516,17 @@ export default async function ThreadDetailPage({
         </p>
       )}
 
-      {/* 試合ページ → 選手の今季成績ハブ（相互送客＝回遊／エンティティ強化）。日本人選手のみ（jpTagged）。
-          日次記事は出さない＝②③の選手名が個別ハブへリンク済みで、冒頭にチップを6個並べると開幕が渋滞する。 */}
+      {/* 試合ページ → 選手LP（相互送客＝回遊／エンティティ強化）。日本人選手のみ（jpTagged）。
+          行き先は成績ハブから選手LP（/tag）へ変更（2026-08-01・村山指示＝内部リンクをLPに集める。
+          jpTagged はこの記事のタグ由来なのでタグページの存在が保証される）。成績ハブへは LP 内の
+          PlayerNow CTA から1クリックで届く。
+          日次記事は出さない＝②③の選手名が個別LPへリンク済みで、冒頭にチップを6個並べると開幕が渋滞する。 */}
       {sport === 'mlb' && !daily && jpTagged.length > 0 && (
         <p className="mt-4 flex flex-wrap gap-2">
           {jpTagged.map((p) => (
             <Link
               key={p.slug}
-              href={`/player/${p.slug}`}
+              href={`/tag/${encodeURIComponent(p.nameJa)}`}
               className="inline-flex min-h-[44px] items-center gap-1.5 rounded-[3px] bg-surface px-4 text-sm font-medium text-ink ring-1 ring-line transition-colors hover:bg-paper"
             >
               <svg viewBox="0 0 24 24" className="h-3.5 w-3.5 fill-current text-ink-mute" aria-hidden>

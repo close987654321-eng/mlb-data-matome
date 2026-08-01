@@ -11,6 +11,9 @@ type Props = {
   warLabel: string; // WAR の行ラベル（例: 「WAR」）
   deltaLabel: string; // 前回比の行ラベル（例: 「前回比」）
   rankLabel: string; // 順位の行ラベル（例: 「ランク」）
+  /** 記事のタグ。名前がここにある選手は選手LP（/tag）へ、無い選手だけ成績ハブへリンク
+      （タグ由来ならタグページの存在が保証される＝404しない。内部リンクをLPに集める方針）。 */
+  lpTags?: string[];
 };
 
 /**
@@ -26,6 +29,7 @@ export default function StatBox({
   warLabel,
   deltaLabel,
   rankLabel,
+  lpTags,
 }: Props) {
   return (
     <section className="mt-8">
@@ -36,11 +40,16 @@ export default function StatBox({
           <div key={i} className={i > 0 ? 'border-t border-line/70 pt-4' : ''}>
             <div className="flex items-baseline justify-between gap-2">
               <p className="font-bold text-ink">
-                {/* 選手ハブがある選手は名前から個別ページへ内部リンク（クラスタ強化） */}
+                {/* 名前は選手LP（/tag）へ内部リンク（クラスタ強化）。タグに無い選手のみ成績ハブへ */}
                 {(() => {
                   const slug = playerSlugByJaName(s.player);
-                  return slug ? (
-                    <Link href={`/player/${slug}`} className="hover:text-ink hover:underline">
+                  const href = lpTags?.includes(s.player)
+                    ? `/tag/${encodeURIComponent(s.player)}`
+                    : slug
+                      ? `/player/${slug}`
+                      : null;
+                  return href ? (
+                    <Link href={href} className="hover:text-ink hover:underline">
                       {s.player}
                     </Link>
                   ) : (

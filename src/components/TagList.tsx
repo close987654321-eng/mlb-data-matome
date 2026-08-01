@@ -10,7 +10,8 @@ type Props = {
 
 /**
  * 記事のタグ。回遊価値で3段に振り分ける（回遊の入口を良質なものだけにする）:
- *  1) 選手名タグ … 滞在の長い選手ハブ /player/{slug} へ送る最良の回遊先（バーチャート印＋濃いめの枠）
+ *  1) 選手名タグ … 選手LP /tag/{名前} へ送る最良の回遊先（バーチャート印＋濃いめの枠）。
+ *     旧 /player/{slug} 行きは 2026-08-01 に変更＝内部リンクをLPに集める（成績ハブへはLP内CTAで届く）
  *  2) 通常タグ（複数記事あり） … /tag/{タグ} のタグ別一覧へ
  *  3) singleton・汎用（STOPLIST） … リンクにしない（行き止まり／識別力ゼロの leak を作らない）
  * 日本語タグは URL エンコードして渡す（タグページ側で decode する）。
@@ -47,7 +48,7 @@ export default function TagList({ tags, counts }: Props) {
       {playerChips.map((p) => (
         <Link
           key={`player-${p.slug}`}
-          href={`/player/${p.slug}`}
+          href={`/tag/${encodeURIComponent(p.name)}`}
           className="inline-flex items-center gap-1.5 rounded-[2px] border border-ink/25 bg-ink/[0.03] px-2.5 py-0.5 text-xs font-medium text-ink transition-colors hover:bg-ink/[0.06]"
         >
           <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current" aria-hidden>

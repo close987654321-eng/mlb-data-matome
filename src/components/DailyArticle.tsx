@@ -49,8 +49,9 @@ export default async function DailyArticle({
       <section className="mt-12">
         <SectionHeading label={t('daily.hero')} />
         <h2 className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 text-2xl font-bold text-ink sm:text-3xl">
+          {/* 選手名は選手LP（/tag）へ。日次記事は出場者全員をタグに持つ規約＝LPの存在が保証される */}
           {heroSlug ? (
-            <Link href={`/player/${heroSlug}`} className="hover:underline">
+            <Link href={`/tag/${encodeURIComponent(daily.hero.player)}`} className="hover:underline">
               {daily.hero.player}
             </Link>
           ) : (
@@ -92,7 +93,7 @@ export default async function DailyArticle({
                 <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                   <span className="text-base font-bold text-ink">
                     {slug ? (
-                      <Link href={`/player/${slug}`} className="hover:underline">
+                      <Link href={`/tag/${encodeURIComponent(s.player)}`} className="hover:underline">
                         {s.player}
                       </Link>
                     ) : (

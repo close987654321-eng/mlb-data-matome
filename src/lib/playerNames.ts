@@ -29,7 +29,8 @@ async function load(): Promise<Record<string, string>> {
 }
 
 /** 表示する選手名＋（カタログにある選手だけ）ハブ slug。 */
-export type PlayerLabel = { label: string; slug?: string };
+/** nameJa はカタログ一致時のみ。選手LP（/tag/{nameJa}）へのリンク判定に使う（label は locale で変わるため別持ち）。 */
+export type PlayerLabel = { label: string; slug?: string; nameJa?: string };
 
 /**
  * 選手の表示名を解決する。優先順は カタログ（ID 一致→英語名一致）→ カタカナ表 → 公式英語表記。
@@ -41,8 +42,9 @@ export async function playerLabel(
 ): Promise<PlayerLabel> {
   const catalog: Player | undefined =
     (opts.mlbId != null ? getPlayerByMlbId(opts.mlbId) : undefined) ?? getPlayerByEnName(nameEn);
-  if (opts.locale !== 'ja') return { label: catalog?.nameEn ?? nameEn, slug: catalog?.slug };
-  if (catalog) return { label: catalog.nameJa, slug: catalog.slug };
+  if (opts.locale !== 'ja')
+    return { label: catalog?.nameEn ?? nameEn, slug: catalog?.slug, nameJa: catalog?.nameJa };
+  if (catalog) return { label: catalog.nameJa, slug: catalog.slug, nameJa: catalog.nameJa };
   const names = await load();
   return { label: names[nameEn] ?? nameEn };
 }
