@@ -5,6 +5,8 @@ import { buildFeed, paginate, type FeedItem } from '@/lib/feed';
 import { getFrontPagePicks, issueDate } from '@/lib/frontpage';
 import { getAllTags } from '@/lib/tags';
 import { PLAYERS } from '@/lib/players';
+import { FIGHTERS } from '@/lib/fighters';
+import { TEAM_HUB_MIN_ARTICLES } from '@/lib/teamHub';
 import { getPlayersSnapshot, type PlayerSeason } from '@/lib/playerStats';
 import { pickHero } from '@/lib/playerHero';
 import { SPORTS, SPORT_INFO, type Sport } from '@/lib/sports';
@@ -65,10 +67,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     (it) => !(it.kind === 'thread' && `${it.thread.sport}/${it.thread.id}` === heroKey),
   );
 
-  // 二枚看板の watch 本数（動画つき・hideFromWatch でない）。
-  const watchCount = threads.filter((th) => th.media?.kind === 'video' && !th.hideFromWatch).length;
+  // 二枚看板 左セル＝/browse（選手・チーム別LPディレクトリ）の件数。/browse 本体と同じ基準
+  // （選手=タグ記事1件以上の非rival・チーム=LP昇格済み3件以上・格闘家=記事あり）で数える。
+  const tagCounts = new Map(allTags.map(({ tag, count }) => [tag, count]));
+  const browseCount =
+    PLAYERS.filter((p) => !p.rival && (tagCounts.get(p.nameJa) ?? 0) > 0).length +
+    allTags.filter(({ tag, count }) => getTeam(tag) != null && count >= TEAM_HUB_MIN_ARTICLES)
+      .length +
+    FIGHTERS.filter((f) => (tagCounts.get(f.nameJa) ?? 0) > 0).length;
 
   // 注目選手レーン＝MLB 今季成績がある日本人（必ずヒーロー数字が出る＝honest）。SoT=players.ts 順。
+  // 行き先は選手LP（/tag/{名前}＝海外の反応の定点）に集める（2026-08-01・村山指示）。
+  // 記事が1本も無い選手はタグページ自体が生成されないので、その選手だけ成績ハブへ倒す。
   const railItems: PlayerRailItem[] = PLAYERS.filter((p) => !p.rival)
     .map((p) => ({ p, s: snap.players[String(p.mlbId)] as PlayerSeason | undefined }))
     .filter((x) => x.s != null && x.s.league != null)
@@ -78,6 +88,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
       const statLabel = hero.statLabel ?? (hero.kind === 'warTotal' ? t('threads.statWar') : null);
       return {
         slug: p.slug,
+        href:
+          (tagCounts.get(p.nameJa) ?? 0) > 0
+            ? `/tag/${encodeURIComponent(p.nameJa)}`
+            : `/player/${p.slug}`,
         name: locale === 'en' ? p.nameEn : p.nameJa,
         statValue: hero.value,
         statLabel,
@@ -227,7 +241,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </section>
       )}
 
-      <TwoPillars watchCount={watchCount} asOf={snap.asOf || undefined} />
+      <TwoPillars browseCount={browseCount} asOf={snap.asOf || undefined} />
 
       <PlayerRail items={railItems} />
 

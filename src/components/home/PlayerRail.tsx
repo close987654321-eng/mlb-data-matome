@@ -6,6 +6,8 @@ import Rail from './Rail';
 /** 1 選手ぶんの表示データ（page.tsx 側で pickHero から整形して渡す＝この層は数値を作らない）。 */
 export type PlayerRailItem = {
   slug: string;
+  /** 行き先。原則は選手LP（/tag/{名前}）＝内部リンクをLPに集める。記事ゼロの選手のみ成績ハブ。 */
+  href: string;
   name: string;
   statValue: string;
   statLabel: string | null;
@@ -17,7 +19,8 @@ export type PlayerRailItem = {
 /**
  * 注目選手レーン。今季の大きな生数字を主役にしたスタッツ・タイル。
  * 休止時は罫も枠もない（編集的に軽い）。ホバー/タップで二枚看板と同じく bg-surface へ微かに持ち上げ＋名前が赤。
- * 数値は公知の事実（スナップショット）のみ＝honest-authority。TOP から選手ハブへの動線。
+ * 数値は公知の事実（スナップショット）のみ＝honest-authority。TOP から選手LP（/tag）への動線
+ * （2026-08-01 に成績ハブ行きから変更＝内部リンクをLPに集める）。
  */
 export default function PlayerRail({ items }: { items: PlayerRailItem[] }) {
   const t = useTranslations();
@@ -27,7 +30,7 @@ export default function PlayerRail({ items }: { items: PlayerRailItem[] }) {
       {items.map((p) => (
         <li key={p.slug} className="shrink-0 snap-start">
           <Link
-            href={`/player/${p.slug}`}
+            href={p.href}
             className="group block w-32 rounded-[3px] p-3 transition-colors hover:bg-surface"
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式CDNの顔写真を直リンク（再ホストしない） */}
