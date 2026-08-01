@@ -28,8 +28,8 @@ const ACCENT_SOFT = 'rgba(205,184,132,0.55)';
 const rgba = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${a})`; };
 
 // 編集者確認の最新値で WAR を当日補正（自前WARの snapshot が試合確定前でラグる時のみ）。
-// 691718 PCA=5.8 … 7/9 の2発HRを反映した最新値（Reddit スレ / fWAR で確認・村山指示）。snapshot は 5.5 で未反映。
-const WAR_OVERRIDE = { 691718: 5.8 };
+// 現在は snapshot が最新（7/15 refresh）で補正不要＝空。ラグる時だけ mlbId: 値 を足す。
+const WAR_OVERRIDE = {};
 
 // war-race.json のキー(mlbId)→ 表示チーム。ロゴ/所属の引きに使う（追跡セット内の NL 選手＋大谷）。
 const TEAM = {
