@@ -192,11 +192,14 @@ export default async function TagPage({
   const heading = await headingOf(locale, decoded, teamLp);
   // 選手・ファイタータグLP: 反応そのものを LP に直接載せるピックアップ＋LP同士の相互リンク網。
   // ピックアップは「その人に言及している声」だけを質の高い順に（tagHubVoices）。
+  // 観測日誌（時系列の逐語引用）がある選手は声ピックアップを出さない＝同じ声が2度並ぶ重複を避け、
+  // 日誌を LP の主役にする（2026-08-01 村山判断）。
+  const journal: PlayerJournalData | null = hub ? await getPlayerJournal(hub.slug) : null;
   let voices: TagVoice[] = [];
   let otherHubs: { player: Player; count: number }[] = [];
   let otherFighters: { fighter: Fighter; count: number }[] = [];
   if (hub) {
-    voices = tagHubVoices(feed, hub);
+    if (!journal) voices = tagHubVoices(feed, hub);
     otherHubs = playerTagHubs(await getAllTags()).filter(({ player }) => player.slug !== hub.slug);
   } else if (fighter) {
     voices = tagHubVoices(feed, fighter);
@@ -207,7 +210,6 @@ export default async function TagPage({
   // 選手・チームタグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
   let intro: string | undefined;
   let editorNote: EditorNote | null = null; // 編集部ノート（ja のみ。手書きの和文要約）
-  let journal: PlayerJournalData | null = null; // シーズン観測日誌（ja のみ。追記型の時系列引用）
   let teamPlayers: Player[] = [];
   let hubTeam: TeamInfo | undefined; // 顔写真に添える所属チーム（ロゴ・カラー）。snapshot 由来＝移籍に自動追従。
   const statLines = new Map<string, string>(); // slug → 成績1行（所属日本人選手リンクに添える）
@@ -217,7 +219,7 @@ export default async function TagPage({
     hubTeam = getTeam(season?.team);
     if (locale !== 'en') {
       intro = tagHubIntroJa(hub, season, seasonYear(snap), feed.length);
-      [editorNote, journal] = await Promise.all([getEditorNote(hub.slug), getPlayerJournal(hub.slug)]);
+      editorNote = await getEditorNote(hub.slug);
     }
   } else if (fighter && locale !== 'en') {
     intro = fighterHubIntroJa(fighter, feed.length);
@@ -467,9 +469,10 @@ export default async function TagPage({
         </section>
       )}
 
-      {/* 選手タグLP: シーズン観測日誌＝海外の評価の推移を時系列で追う追記型セクション。
-          記事が増えるたびに伸びる＝再着地した検索読者に「物語が進んでいる」継続性を見せる。 */}
-      {hub && journal && (
+      {/* 選手タグLP: シーズン観測日誌＝海外の評価の推移を章立てで追う追記型セクション。
+          記事が増えるたびに伸びる＝再着地した検索読者に「物語が進んでいる」継続性を見せる。
+          日誌がある選手は声ピックアップの代わりにこれが LP の主役（ja のみ）。 */}
+      {hub && journal && locale !== 'en' && (
         <SeasonJournal journal={journal} label={t('tag.journal', { name: hub.nameJa })} />
       )}
 

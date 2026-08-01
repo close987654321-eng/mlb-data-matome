@@ -1,12 +1,15 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/navigation';
 import SectionHeading from '@/components/SectionHeading';
-import type { PlayerJournal, JournalEntry } from '@/lib/playerJournal';
+import { journalChapters, type PlayerJournal, type JournalEntry } from '@/lib/playerJournal';
 
 /**
- * 選手タグLPの「シーズン観測日誌」。月ごとの区切りで時系列（開幕→現在）に読ませ、
- * 山場の試合にだけ編集部の地の文（editorJa）が挟まる＝評価の推移を物語として追える。
- * 引用は逐語転載のみで、各エントリから必ず出典記事へリンクする（playerJournal.ts が正）。
+ * 選手タグLPの「シーズン観測日誌」v2。
+ * 引用の羅列に見えない編集構造（村山指摘「並べただけ感」への回答）:
+ *  - 章立て: 評価の転換点で編集者が幕を割る（第◯章＋タイトル＋リード）＝物語として読む
+ *  - 背骨タイムライン: 左の縦罫＋ノードで「上から時系列」を視覚で言う
+ *  - 強弱: 通常試合は1行ビート、山場（peak）は横幅を使った見せ場（引用を横に並べる）
+ * 引用は逐語転載のみで、各エントリから出典（記事 or MLB公式動画）へ必ずリンクする。
  * ja 専用（編集部の和文を英語ページに混ぜない＝編集部ノートと同じ扱い）。
  */
 
@@ -15,81 +18,175 @@ function dateJa(date: string): string {
   return `${Number(m)}月${Number(d)}日`;
 }
 
+/** 章の期間表示（例「3月30日 — 5月17日」。1試合だけの章は単日）。 */
+function rangeJa(entries: JournalEntry[]): string {
+  const first = dateJa(entries[0].date);
+  const last = dateJa(entries[entries.length - 1].date);
+  return first === last ? first : `${first} — ${last}`;
+}
+
 /** 票数の出し方は TagVoices と同じ規約（YouTube=👍 / Reddit=▲ / interview=票なし）。 */
-function QuoteMeta({ entry, author, score }: { entry: JournalEntry; author: string; score: number }) {
-  const isYoutube = entry.format === 'youtube';
+function quoteMeta(entry: JournalEntry, author: string, score: number) {
+  const isYoutube = entry.format === 'youtube' || Boolean(entry.video);
   const isInterview = entry.format === 'interview';
   return (
-    <p className="mt-1.5 flex items-center gap-3 text-xs text-ink-mute">
+    <span className="flex items-center gap-2.5 text-xs text-ink-mute">
       <span className="font-medium text-ink-soft">{isYoutube || isInterview ? author : `u/${author}`}</span>
       {!isInterview && (
         <span className="tabular-nums">
           {isYoutube ? '👍' : '▲'} {score.toLocaleString()}
         </span>
       )}
-    </p>
+    </span>
+  );
+}
+
+/** 出典リンク（記事＝内部 / 開幕期のMLB公式ハイライト＝外部）。 */
+function SourceLink({ entry }: { entry: JournalEntry }) {
+  const t = useTranslations();
+  if (entry.threadId && entry.sport) {
+    return (
+      <Link
+        href={`/${entry.sport}/${entry.threadId}`}
+        className="group inline-flex items-center gap-1 text-xs text-ink-mute transition-colors hover:text-ink"
+      >
+        {t('tag.journalSource')}
+        <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
+          →
+        </span>
+      </Link>
+    );
+  }
+  if (entry.video) {
+    return (
+      <a
+        href={entry.video.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group inline-flex items-center gap-1 text-xs text-ink-mute transition-colors hover:text-ink"
+      >
+        {t('tag.journalVideoSource', { channel: entry.video.channel })}
+        <span aria-hidden>↗</span>
+      </a>
+    );
+  }
+  return null;
+}
+
+/** 通常ビート＝1試合を小さく刻む（日付・見出し・引用1〜2件を締めて置く）。 */
+function Beat({ entry }: { entry: JournalEntry }) {
+  return (
+    <li className="relative py-4 pl-8">
+      <span
+        aria-hidden
+        className="absolute left-[1.5px] top-[1.35rem] h-2 w-2 rounded-full border border-ink-mute bg-paper"
+      />
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+        <span className="shrink-0 text-xs tabular-nums text-ink-mute">{dateJa(entry.date)}</span>
+        <p className="text-sm font-semibold text-ink">{entry.headingJa}</p>
+      </div>
+      {entry.editorJa && (
+        <p className="mt-2.5 max-w-prose border-l-2 border-ink pl-3.5 text-sm leading-relaxed text-ink">
+          {entry.editorJa}
+        </p>
+      )}
+      {entry.quotes.length > 0 && (
+        <ul className="mt-2.5 space-y-2.5">
+          {entry.quotes.map((q, i) => (
+            <li key={i} className="max-w-prose">
+              <p className="text-sm leading-relaxed text-ink-soft">
+                “{(q.bodyJa ?? '').trim() || q.bodyEn}”
+              </p>
+              <div className="mt-1">{quoteMeta(entry, q.author, q.score)}</div>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="mt-2.5">
+        <SourceLink entry={entry} />
+      </div>
+    </li>
+  );
+}
+
+/** 山場＝横幅を使った見せ場。ノードは塗り、枠で持ち上げ、引用を横に並べて熱量を見せる。 */
+function PeakBeat({ entry }: { entry: JournalEntry }) {
+  return (
+    <li className="relative py-5 pl-8">
+      <span
+        aria-hidden
+        className="absolute left-[0.5px] top-[2.05rem] h-2.5 w-2.5 rounded-full bg-ink"
+      />
+      <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+          <span className="shrink-0 text-xs tabular-nums text-ink-mute">{dateJa(entry.date)}</span>
+          <p className="text-base font-bold text-ink">{entry.headingJa}</p>
+        </div>
+        {entry.editorJa && (
+          <p className="mt-3.5 max-w-prose border-l-2 border-ink pl-3.5 text-sm leading-relaxed text-ink">
+            {entry.editorJa}
+          </p>
+        )}
+        {entry.quotes.length > 0 && (
+          <ul className="mt-4 grid gap-x-6 gap-y-3.5 sm:grid-cols-2">
+            {entry.quotes.map((q, i) => (
+              <li key={i}>
+                <p className="text-sm leading-relaxed text-ink-soft">
+                  “{(q.bodyJa ?? '').trim() || q.bodyEn}”
+                </p>
+                <div className="mt-1.5">{quoteMeta(entry, q.author, q.score)}</div>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="mt-4 border-t border-line pt-3">
+          <SourceLink entry={entry} />
+        </div>
+      </div>
+    </li>
   );
 }
 
 export default function SeasonJournal({ journal, label }: { journal: PlayerJournal; label: string }) {
   const t = useTranslations();
   if (journal.entries.length === 0) return null;
-
-  // 月ごとにまとめて「4月 → 5月 → …」の章立てにする（entries は昇順で渡ってくる）。
-  const months: { label: string; entries: JournalEntry[] }[] = [];
-  for (const entry of journal.entries) {
-    const m = `${Number(entry.date.slice(5, 7))}月`;
-    const last = months[months.length - 1];
-    if (last && last.label === m) last.entries.push(entry);
-    else months.push({ label: m, entries: [entry] });
-  }
+  const chapters = journalChapters(journal);
 
   return (
-    <section className="space-y-3">
+    <section className="space-y-4">
       <SectionHeading label={label} count={journal.entries.length} />
-      <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{t('tag.journalLead')}</p>
-      <div className="divide-y divide-line border-y border-line">
-        {months.map((month) => (
-          <div key={month.label} className="py-4">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
-              {month.label}
-            </p>
-            <ol className="divide-y divide-line">
-              {month.entries.map((entry) => (
-                <li key={`${entry.threadId}/${entry.date}`} className="py-5">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <p className="text-sm font-semibold text-ink">{entry.headingJa}</p>
-                    <span className="shrink-0 text-xs tabular-nums text-ink-mute">
-                      {dateJa(entry.date)}
-                    </span>
-                  </div>
-                  {/* 山場だけの編集部メモ＝左罫1本で引用と声色を分ける（無彩色の規律）。 */}
-                  {entry.editorJa && (
-                    <p className="mt-3 max-w-prose border-l-2 border-ink pl-3.5 text-sm leading-relaxed text-ink">
-                      {entry.editorJa}
-                    </p>
-                  )}
-                  <ul className="mt-3 space-y-3">
-                    {entry.quotes.map((q, i) => (
-                      <li key={i}>
-                        <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
-                          “{(q.bodyJa ?? '').trim() || q.bodyEn}”
-                        </p>
-                        <QuoteMeta entry={entry} author={q.author} score={q.score} />
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href={`/${entry.sport}/${entry.threadId}`}
-                    className="group mt-3 inline-flex items-center gap-1 text-xs text-ink-mute transition-colors hover:text-ink"
-                  >
-                    {t('tag.journalSource')}
-                    <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
-                      →
-                    </span>
-                  </Link>
-                </li>
-              ))}
+      <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
+        {journal.introJa ?? t('tag.journalLead')}
+      </p>
+      <div className="space-y-9">
+        {chapters.map((chapter, ci) => (
+          <div key={ci}>
+            {/* 章見出し＝編集者が幕を割る。番号＋期間で「上から時系列」であることも同時に言う。 */}
+            <div className="border-b border-ink pb-2.5">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
+                {t('tag.journalChapter', { n: ci + 1 })} ・ {rangeJa(chapter.entries)}
+              </p>
+              {chapter.titleJa && (
+                <h3 className="mt-1.5 text-base font-bold tracking-wide text-ink sm:text-lg">
+                  {chapter.titleJa}
+                </h3>
+              )}
+              {chapter.leadJa && (
+                <p className="mt-1.5 max-w-prose text-sm leading-relaxed text-ink-soft">
+                  {chapter.leadJa}
+                </p>
+              )}
+            </div>
+            {/* 背骨タイムライン: 左の縦罫にノードを打つ＝上から下へ時間が流れる構造を視覚で示す。 */}
+            <ol className="relative">
+              <span aria-hidden className="absolute bottom-2 left-[5px] top-2 w-px bg-line" />
+              {chapter.entries.map((entry) =>
+                entry.peak ? (
+                  <PeakBeat key={`${entry.date}/${entry.headingJa}`} entry={entry} />
+                ) : (
+                  <Beat key={`${entry.date}/${entry.headingJa}`} entry={entry} />
+                ),
+              )}
             </ol>
           </div>
         ))}

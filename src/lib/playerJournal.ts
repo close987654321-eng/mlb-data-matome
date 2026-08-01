@@ -3,16 +3,18 @@ import path from 'node:path';
 
 /**
  * 選手タグLP（/tag/{選手名}）の「シーズン観測日誌」＝海外ファンの評価がシーズンを通じて
- * どう動いたかを、試合（記事）ごとの実在コメント引用で時系列に積んでいく成長型セクション。
+ * どう動いたかを、試合ごとの実在コメント引用で時系列に積んでいく成長型セクション。
  * data/player-journal/{slug}.json が唯一の正。
  *
- * 役割分担: tagHubVoices が「今なにを言われているか」（質順・日替わり）、日誌が「評価の推移」
- * （時系列・追記型）。狙いは「{選手名} 海外の反応」で再着地した読者に“前に来たときから物語が
- * 進んでいる”継続性を見せてリピーター化すること。
+ * v2（2026-08-01）: 引用の羅列に見える問題（村山指摘「並べただけ感」）を、編集の構造で解く:
+ *  - chapter（章）: 編集者が評価の転換点で幕を割る。日誌は「章タイトル＋リード」で物語として読む
+ *  - peak（山場）: 盛り上がった試合は横幅を使った見せ場レイアウトで強弱をつける
+ *  - video 出典: サイト記事がない開幕〜5月は MLB 公式ハイライトのコメント欄を直接出典にする
  *
  * 規律（捏造防止＝CLAUDE.md §4.4）:
- *  - quotes は data/threads の記事JSONからの逐語コピーのみ。threadId で出典記事に必ずリンクする
- *  - editorJa（編集部の地の文）は山場の試合だけ。記事にある事実と実在コメントの範囲で書く
+ *  - quotes は出典（記事JSON または取得済みコメントJSON）からの逐語コピーのみ。出典リンク必須
+ *  - editorJa / chapterLeadJa（編集部の地の文）は記事・gamelog にある事実と実在コメントの範囲で書く
+ *  - 地の文はクラウド無人実行では生成しない（編集セッションで人が書く）
  */
 
 export type JournalQuote = {
@@ -22,27 +24,46 @@ export type JournalQuote = {
   bodyJa?: string;
 };
 
+/** サイト記事がない期間の出典＝MLB公式ハイライト動画（コメント欄から逐語引用）。 */
+export type JournalVideoSource = {
+  url: string;
+  title: string;
+  channel: string;
+};
+
 export type JournalEntry = {
-  /** 試合/話題の日付（YYYY-MM-DD・出典記事の fetchedAt 基準＝JST）。 */
+  /** 試合の日付（YYYY-MM-DD）。 */
   date: string;
-  /** 「対レッズ、2打席連発」のような事実見出し（記事にある事実だけ）。 */
+  /** 「対レッズ、2打席連発」のような事実見出し（記事・gamelog にある事実だけ）。 */
   headingJa: string;
-  /** 出典記事＝引用の逐語元。リンク先 /{sport}/{threadId}。 */
-  threadId: string;
-  sport: string;
-  /** 出典記事の format（youtube/reddit/interview）。票数アイコンの出し分けに使う。 */
+  /** 出典記事（ある場合）。リンク先 /{sport}/{threadId}。 */
+  threadId?: string;
+  sport?: string;
+  /** 記事がない試合の出典動画（threadId と排他）。 */
+  video?: JournalVideoSource;
+  /** 出典の format（youtube/reddit/interview）。票数アイコンの出し分けに使う。 */
   format?: string;
-  /** 山場の試合だけに書く編集部の地の文（2〜3行）。 */
+  /** 山場の試合だけに書く編集部の観測メモ（2〜3行）。 */
   editorJa?: string;
-  /** 出典記事からの逐語引用（1〜2件）。 */
+  /** 山場＝横幅を使った見せ場レイアウトで出す。 */
+  peak?: boolean;
+  /** このエントリから新しい章が始まる（章タイトル）。時系列上の評価の転換点で割る。 */
+  chapterJa?: string;
+  /** 章見出しの直下に置く編集リード1行。 */
+  chapterLeadJa?: string;
+  /** 出典からの逐語引用。 */
   quotes: JournalQuote[];
 };
 
-export type PlayerJournal = { entries: JournalEntry[] };
+export type PlayerJournal = {
+  /** 日誌の序文＝編集者がこの選手の物語を数行で立てる（ja）。 */
+  introJa?: string;
+  entries: JournalEntry[];
+};
 
 const DIR = path.join(process.cwd(), 'data', 'player-journal');
 
-/** slug の選手に日誌があれば開幕→現在の昇順で返す（無ければ null＝セクション自体を出さない）。 */
+/** slug の選手に日誌があれば時系列昇順で返す（無ければ null＝セクション自体を出さない）。 */
 export async function getPlayerJournal(slug: string): Promise<PlayerJournal | null> {
   try {
     const raw = await fs.readFile(path.join(DIR, `${slug}.json`), 'utf8');
@@ -54,4 +75,23 @@ export async function getPlayerJournal(slug: string): Promise<PlayerJournal | nu
   } catch {
     return null;
   }
+}
+
+/** 章のまとまり（chapterJa を持つエントリが新章の頭）。 */
+export type JournalChapter = {
+  titleJa?: string;
+  leadJa?: string;
+  entries: JournalEntry[];
+};
+
+/** 章ごとにまとめる。先頭に章タイトルが無いデータでも落ちない（無題の第1章になる）。 */
+export function journalChapters(journal: PlayerJournal): JournalChapter[] {
+  const chapters: JournalChapter[] = [];
+  for (const entry of journal.entries) {
+    if (entry.chapterJa || chapters.length === 0) {
+      chapters.push({ titleJa: entry.chapterJa, leadJa: entry.chapterLeadJa, entries: [] });
+    }
+    chapters[chapters.length - 1].entries.push(entry);
+  }
+  return chapters;
 }
