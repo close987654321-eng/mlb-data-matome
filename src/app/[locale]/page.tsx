@@ -18,6 +18,7 @@ import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
 import SectionHeading from '@/components/SectionHeading';
+import TeamHubLinks from '@/components/TeamHubLinks';
 import MlbToday from '@/components/home/MlbToday';
 import SearchConsole from '@/components/home/SearchConsole';
 import TwoPillars from '@/components/home/TwoPillars';
@@ -231,6 +232,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         label={mlbLabel}
         locale={locale}
       />
+
+      {/* 球団別チームLPへのフレーズ一致アンカー（GSC実測 2026-08-01: 「ドジャース 海外の反応」系
+          約230表示/28日がトップに着地して0クリック＝受け皿LPへ検索フレーズで直送する）。 */}
+      <TeamHubLinks sport="mlb" />
 
       <SearchConsole tags={consoleTags} />
 
