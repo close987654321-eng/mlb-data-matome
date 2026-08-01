@@ -141,14 +141,17 @@ function SiteHeader() {
             className="h-7 w-auto sm:h-8"
           />
         </Link>
-        {/* グローバルは2本柱（海外ファンと見る/選手成績）＋競技のみ。日本人選手クラスタの
+        {/* グローバルは2本柱（選手・チーム別LP/選手成績）＋競技のみ。日本人選手クラスタの
             子ハブ（ランキング/オールスター/NEXT MLB）は PlayerHubNav（クラスタ内タブ）に委譲
-            ＝ヘッダーの MLB 項目肥大を避け、1項目1階層を守る。 */}
+            ＝ヘッダーの MLB 項目肥大を避け、1項目1階層を守る。
+            旧「海外ファンと見る」(/watch) は 2026-08 に /browse へスワップ: 流入の主戦場が
+            検索×タグLPに移ったため、全ページに載る最強の内部リンク枠をLP群へ注ぐ。watch への
+            導線はトップ新着・記事内 SeriesNav・フッターで温存（ページ自体は現役）。 */}
         <nav aria-label={t('nav.main')} className="hidden items-center gap-5 text-sm sm:flex">
           <NavLink href="/" exact>
             {t('nav.home')}
           </NavLink>
-          <NavLink href="/watch">{t('nav.watch')}</NavLink>
+          <NavLink href="/browse">{t('nav.browse')}</NavLink>
           <NavLink href="/player">{t('nav.players')}</NavLink>
           {SPORTS.filter((s) => s !== 'npb').map((s) => (
             <NavLink key={s} href={`/${s}`}>
@@ -170,8 +173,8 @@ function SiteHeader() {
         <NavLink href="/" exact className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.home')}
         </NavLink>
-        <NavLink href="/watch" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
-          {t('nav.watch')}
+        <NavLink href="/browse" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
+          {t('nav.browse')}
         </NavLink>
         <NavLink href="/player" className="inline-flex min-h-[44px] items-center whitespace-nowrap">
           {t('nav.players')}
@@ -206,6 +209,9 @@ function SiteFooter() {
             </Link>
             <Link href="/watch" className="transition-colors hover:text-ink">
               {t('nav.watch')}
+            </Link>
+            <Link href="/browse" className="transition-colors hover:text-ink">
+              {t('nav.browse')}
             </Link>
             <Link href="/player" className="transition-colors hover:text-ink">
               {t('nav.players')}

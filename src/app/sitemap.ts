@@ -82,6 +82,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
     entry('/watch', latestWatch), // 「海外ファンと見る」ハブ
+    // 選手・チーム別LPディレクトリ（ヘッダー常設）。記事が増えるたび件数・並びが動く＝最新記事日時。
+    entry('/browse', latest),
     entry('/daily', latestDaily), // 「きょうの日本人選手」恒久ハブ（毎日16時更新）
     // 運営者情報・規約系（AdSense 審査要件・更新頻度は低いので lastModified なし）
     entry('/about'),
