@@ -70,6 +70,7 @@ SSG します。
     ├── fetch-reddit.mjs        # Reddit OAuth 取得スクリプト（承認待ち）
     ├── backfill-video-meta.mjs # 動画記事に publishedAt/videoTitle を後追い投入（JSON-LD VideoObject 用）
     ├── ping-indexnow.mjs       # 公開直後の即時インデックス通知（無人公開CIから自動実行）
+    ├── warm-card-art.mjs       # カード素材（顔写真・ロゴ）を public/media/card-art/ に事前取得（§4.1）
     └── threads-update.md       # 更新手順
 ```
 
@@ -123,6 +124,10 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
   16:9 版（`-og.jpg`・1200×578）を書き出す（背景 `public/media/card-ballpark.jpg`・アイコン
   `public/media/card-brand.jpg`・無ければ Unsplash に退避）。縦カードをそのまま OG にすると X・Discover が
   中央だけを切り抜いて題字が消えるので、記事の `media` には必ず 16:9 版を使う。
+  顔写真・チームロゴは **`public/media/card-art/` のローカルキャッシュを MLB の CDN より先に読む**＝
+  クラウド無人実行が egress ポリシーで `img.mlbstatic.com` を 403 拒否されても絵が出る（2026-08-01・02 に
+  2日連続でシリーズが止まった対策）。カタログに選手を足したら通常ネットワークの端末で
+  `node scripts/warm-card-art.mjs`（全選手＋30球団を取得してコミット）。
 - **日本人選手の出場試合レーダー（jp-games）**: `node scripts/fetch-mlb-stats.mjs games [ETの試合日]
   [--json]` で「日本人選手が出場した全試合」と**記事化済みか**を列挙（既定=ET昨日／期間指定でバックフィル）。
   `existingArticle:null` が未記事化＝作成対象。詳細は `jp-games` スキル（公式ハイライトの日付一致同定・

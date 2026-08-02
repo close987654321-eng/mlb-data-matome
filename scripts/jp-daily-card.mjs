@@ -86,11 +86,43 @@ const headshotUrl = (id) => `https://img.mlbstatic.com/mlb-photos/image/upload/w
  */
 const MISSING_ART = [];
 
-async function fetchArt(url, label) {
+/**
+ * 素材のローカルキャッシュ。クラウド無人実行の環境は egress ポリシーで MLB の CDN
+ * （img.mlbstatic.com / www.mlbstatic.com）を 403 で弾くことがあり、2026-08-01 と 08-02 は
+ * それで2日連続カードが作れず日次シリーズが止まった。CDN に届かなくても同じ絵が出るように、
+ * 一度取れた素材は repo に置いて次回からそれを使う（＝キャッシュ優先・取れたら書き足す）。
+ * 事前の一括取得は `node scripts/warm-card-art.mjs`。
+ */
+const ART_CACHE_DIR = path.join('public', 'media', 'card-art');
+const artCachePath = (name) => path.join(process.cwd(), ART_CACHE_DIR, name);
+
+async function readArtCache(name) {
+  if (!name) return null;
+  try {
+    const buf = await fs.readFile(artCachePath(name));
+    return buf.length ? buf : null;
+  } catch { return null; }
+}
+
+async function writeArtCache(name, buf) {
+  if (!name || !buf?.length) return;
+  try {
+    await fs.mkdir(path.dirname(artCachePath(name)), { recursive: true });
+    await fs.writeFile(artCachePath(name), buf);
+  } catch { /* 書けなくても描画には影響しないので黙って続行 */ }
+}
+
+async function fetchArt(url, label, cacheName) {
+  const cached = await readArtCache(cacheName);
+  if (cached) return cached;
   for (let attempt = 1; attempt <= 3; attempt++) {
     try {
       const res = await fetch(url, { signal: AbortSignal.timeout(15000) });
-      if (res.ok) return Buffer.from(await res.arrayBuffer());
+      if (res.ok) {
+        const buf = Buffer.from(await res.arrayBuffer());
+        await writeArtCache(cacheName, buf);
+        return buf;
+      }
       // 404 は「その素材が無い」＝リトライしても変わらないので即あきらめる。
       if (res.status === 404) break;
     } catch { /* ネットワーク断・タイムアウト＝間をおいて再挑戦する */ }
@@ -102,7 +134,7 @@ async function fetchArt(url, label) {
 
 async function fetchAvatar(id, label = `顔写真 ${id}`) {
   try {
-    const raw = await fetchArt(headshotUrl(id), label);
+    const raw = await fetchArt(headshotUrl(id), label, `headshot-${id}.png`);
     if (!raw) return null;
     const S = 500;
     // silo は胸のあたりで水平にカットされている。枠が無いぶんその直線がそのまま見えてしまうので、
@@ -169,7 +201,7 @@ async function fetchBallpark(custom) {
 async function fetchLogoWatermark(teamId, label = `主役の透かしロゴ ${teamId}`) {
   if (!teamId) return null;
   try {
-    const raw = await fetchArt(`https://www.mlbstatic.com/team-logos/${teamId}.svg`, label);
+    const raw = await fetchArt(`https://www.mlbstatic.com/team-logos/${teamId}.svg`, label, `team-${teamId}.svg`);
     if (!raw) return null;
     const png = await sharp(raw, { density: 384 })
       .resize(420, 420, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
@@ -203,7 +235,7 @@ async function loadBrandLogo() {
 async function fetchLogo(teamId, label = `ロゴ ${teamId}`) {
   if (!teamId) return null;
   try {
-    const raw = await fetchArt(`https://www.mlbstatic.com/team-logos/${teamId}.svg`, label);
+    const raw = await fetchArt(`https://www.mlbstatic.com/team-logos/${teamId}.svg`, label, `team-${teamId}.svg`);
     if (!raw) return null;
     const png = await sharp(raw, { density: 384 })
       .resize(120, 120, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
@@ -613,8 +645,10 @@ async function main() {
   if (MISSING_ART.length) {
     console.error(`\n⚠️ 素材が ${MISSING_ART.length} 点取れなかった（3回リトライ後）:`);
     MISSING_ART.forEach((m) => console.error(`   × ${m}`));
-    console.error('   → MLB の CDN（img.mlbstatic.com / www.mlbstatic.com）に届いていない。');
-    console.error('     顔写真・ロゴ抜きのカードは公開しない。同じコマンドで作り直すか、');
+    console.error('   → MLB の CDN（img.mlbstatic.com / www.mlbstatic.com）に届かず、');
+    console.error(`     ${ART_CACHE_DIR}/ のキャッシュにも無い素材（新加入・初登場の選手など）。`);
+    console.error('     顔写真・ロゴ抜きのカードは公開しない。通常ネットワークの端末で');
+    console.error('     `node scripts/warm-card-art.mjs` を走らせてキャッシュを足しコミットするか、');
     console.error('     素材なしで押し切る場合だけ --allow-no-art を付ける。');
     if (!argv.includes('--allow-no-art')) process.exit(3);
   }
