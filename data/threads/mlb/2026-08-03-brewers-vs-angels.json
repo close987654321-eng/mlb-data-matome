@@ -15,11 +15,17 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=GMPfw-84esg",
+    "thumbUrl": "/media/2026-08-03-brewers-vs-angels-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-08-02T22:24:29Z",
     "videoTitle": "BREWERS vs. ANGELS: Official Full Game Highlights (August 2) | 2026 MLB Season"
   },
-  "tags": ["ジェイコブ・ミシオロウスキー", "ブルワーズ", "エンゼルス", "海外の反応"],
+  "tags": [
+    "ジェイコブ・ミシオロウスキー",
+    "ブルワーズ",
+    "エンゼルス",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "ジェイコブ・ミシオロウスキー",
@@ -29,9 +35,70 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 7, "record": { "w": 69, "l": 42 }, "rank": 1, "league": "NL", "division": "Central" },
-    "home": { "ja": "エンゼルス", "en": "Los Angeles Angels", "score": 3, "innings": [0, 2, 0, 0, 0, 0, 0, 1, null], "hits": 4, "errors": 0, "lob": 3, "record": { "w": 43, "l": 69 }, "rank": 5, "league": "AL", "division": "West", "homers": [{ "id": 685133, "name": "Wade Meckler", "no": 1 }] },
-    "decisions": { "winner": "Walbert Ureña", "loser": "Jacob Misiorowski", "save": "Ryan Zeferjahn" }
+    "away": {
+      "ja": "ブルワーズ",
+      "en": "Milwaukee Brewers",
+      "score": 0,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 5,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 69,
+        "l": 42
+      },
+      "rank": 1,
+      "league": "NL",
+      "division": "Central"
+    },
+    "home": {
+      "ja": "エンゼルス",
+      "en": "Los Angeles Angels",
+      "score": 3,
+      "innings": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        null
+      ],
+      "hits": 4,
+      "errors": 0,
+      "lob": 3,
+      "record": {
+        "w": 43,
+        "l": 69
+      },
+      "rank": 5,
+      "league": "AL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 685133,
+          "name": "Wade Meckler",
+          "no": 1
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Walbert Ureña",
+      "loser": "Jacob Misiorowski",
+      "save": "Ryan Zeferjahn"
+    }
   },
   "comments": [
     {
