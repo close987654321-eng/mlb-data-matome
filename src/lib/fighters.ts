@@ -126,6 +126,10 @@ export const FIGHTERS: Fighter[] = [
     voiceScope: 'global',
     accoladeJa: 'プロボクシング・3階級制覇王者（前WBC世界バンタム級王者）',
     record: { wins: 32, losses: 1, draws: 0, kos: 24, asOf: '2026-05-02' },
+    headlineStats: [
+      // リング誌P4P＝井上戦後に6位から7位へ後退も歴代トップ10キープ（2026-05-05付各紙報道で裏取り）
+      { value: '7位', labelJa: 'リング誌P4P（2026年5月・井上戦後もトップ10キープ）' },
+    ],
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E4%B8%AD%E8%B0%B7%E6%BD%A4%E4%BA%BA',
       'https://en.wikipedia.org/wiki/Junto_Nakatani',
