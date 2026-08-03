@@ -303,6 +303,69 @@ export const FIGHTERS: Fighter[] = [
       },
     ],
   },
+  {
+    slug: 'tenshin-nasukawa',
+    nameJa: '那須川天心',
+    nameEn: 'Tenshin Nasukawa',
+    shortJa: ['那須川', '天心'],
+    sport: 'boxing',
+    voiceScope: 'domestic',
+    nextFightJa: { labelJa: '9/27井上拓真戦', until: '2026-09-27' },
+    accoladeJa: 'プロボクシング・WBC世界バンタム級ランキング1位（元WBOアジアパシフィックバンタム級王者）',
+    record: { wins: 8, losses: 1, draws: 0, kos: 3, asOf: '2026-04-11' },
+    headlineStats: [
+      // キックボクシング時代の通算戦績（2022-06-19 THE MATCH 2022引退時点）
+      { value: '42-0', labelJa: 'キックボクシング時代の無敗記録（28KO・2022年引退）' },
+      // 2026年8月時点のWBC世界バンタム級ランキング（9/27再戦の前提となる序列）
+      { value: 'WBC1位', labelJa: '世界バンタム級ランキング（2026年8月時点）' },
+    ],
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E9%82%A3%E9%A0%88%E5%B7%9D%E5%A4%A9%E5%BF%83',
+      'https://en.wikipedia.org/wiki/Tenshin_Nasukawa',
+    ],
+    fights: [
+      {
+        date: '2026-04-11',
+        opponentJa: 'ファン・フランシスコ・エストラーダ',
+        opponentEn: 'Juan Francisco Estrada',
+        venueJa: '両国国技館（WBC世界バンタム級挑戦者決定戦）',
+        resultJa: '9回終了時TKO勝ち（相手棄権）',
+        noteJa: '元2階級制覇王者をボディで攻略。井上拓真への再挑戦権を獲得',
+      },
+      {
+        date: '2025-11-24',
+        opponentJa: '井上拓真',
+        opponentEn: 'Takuma Inoue',
+        venueJa: 'TOYOTA ARENA TOKYO（WBC世界バンタム級王座決定戦）',
+        resultJa: '0-3判定負け（112-116、112-116、111-117）',
+        noteJa: 'プロボクシング初黒星。10ヶ月後の9/27に再戦が決定',
+      },
+      {
+        date: '2024-10-14',
+        opponentJa: 'ジェルウィン・アシロ',
+        opponentEn: 'Gerwin Asilo',
+        venueJa: '有明アリーナ（WBOアジアパシフィックバンタム級王座決定戦）',
+        resultJa: '3-0判定勝ち',
+        noteJa: '空位だった王座を獲得。2025年4月に世界挑戦へ専念するため返上',
+      },
+      {
+        date: '2023-04-08',
+        opponentJa: '与那覇勇気',
+        opponentEn: 'Yuki Yonaha',
+        venueJa: '有明アリーナ',
+        resultJa: '3-0判定勝ち',
+        noteJa: 'プロボクシングデビュー戦',
+      },
+      {
+        date: '2018-12-31',
+        opponentJa: 'フロイド・メイウェザー',
+        opponentEn: 'Floyd Mayweather',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN.14）',
+        resultJa: '1R2分19秒TKO負け（3度のダウン）',
+        noteJa: 'エキシビションマッチ。プロボクシングの通算戦績には含まれない',
+      },
+    ],
+  },
 ];
 
 /** タグ文字列（=正式名）に一致するファイターを返す。LP化の判定に使う。 */
