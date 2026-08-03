@@ -366,6 +366,83 @@ export const FIGHTERS: Fighter[] = [
       },
     ],
   },
+  {
+    slug: 'kai-asakura',
+    nameJa: '朝倉海',
+    nameEn: 'Kai Asakura',
+    shortJa: ['朝倉海'],
+    sport: 'mma',
+    voiceScope: 'domestic',
+    nextFightJa: { labelJa: '8/29チロン戦', until: '2026-08-29' },
+    accoladeJa: '総合格闘家・JAPAN TOP TEAM所属（元RIZINバンタム級王者・第3代/第6代）',
+    record: { wins: 22, losses: 6, draws: 0, kos: 14, asOf: '2026-05-30' },
+    headlineStats: [
+      // 通算22勝のうちKO/TKO決着数（sherdog記録・2026-05-30時点で裏取り）
+      { value: '14KO', labelJa: '通算22勝のうちKO/TKO決着数' },
+    ],
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E6%9C%9D%E5%80%89%E6%B5%B7',
+      'https://en.wikipedia.org/wiki/Kai_Asakura',
+    ],
+    fights: [
+      {
+        date: '2026-05-30',
+        opponentJa: 'キャメロン・スマザーマン',
+        opponentEn: 'Cameron Smotherman',
+        venueJa: '中国・マカオ（UFCファイトナイト）',
+        resultJa: '1RTKO勝ち',
+        noteJa: 'バンタム級に戻しての一戦でUFC初勝利。開始2連敗からの反撃',
+      },
+      {
+        date: '2025-08-16',
+        opponentJa: 'ティム・エリオット',
+        opponentEn: 'Tim Elliott',
+        venueJa: '米シカゴ（UFC 319）',
+        resultJa: '2R4分39秒ギロチンチョークで負け',
+        noteJa: 'フライ級でのUFC2連敗目',
+      },
+      {
+        date: '2024-12-07',
+        opponentJa: 'アレックス・パントージャ',
+        opponentEn: 'Alexandre Pantoja',
+        venueJa: '米ラスベガス（UFC 310）',
+        resultJa: '2R2分5秒リアネイキッドチョークで負け',
+        noteJa: 'UFC参戦初戦でいきなりフライ級王座に挑戦。デビュー戦での世界王座挑戦は史上初',
+      },
+      {
+        date: '2023-12-31',
+        opponentJa: 'フアン・アーチュレッタ',
+        opponentEn: 'Juan Archuleta',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN.45）',
+        resultJa: '2RTKO勝ち（膝蹴りからのパウンド）',
+        noteJa: 'レッドカードスタートの特殊ルール。バンタム級王座に返り咲き第6代王者に',
+      },
+      {
+        date: '2020-08-10',
+        opponentJa: '扇久保博正',
+        opponentEn: 'Hiromasa Ougikubo',
+        venueJa: 'ぴあアリーナMM（RIZIN.23）',
+        resultJa: '1R4分31秒TKO勝ち',
+        noteJa: '空位のバンタム級王座決定戦。第3代RIZINバンタム級王者に',
+      },
+      {
+        date: '2019-12-31',
+        opponentJa: '堀口恭司',
+        opponentEn: 'Kyoji Horiguchi',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN.26）',
+        resultJa: 'KO負け',
+        noteJa: '前年8月の借りを返された「リベンジKO」',
+      },
+      {
+        date: '2019-08-18',
+        opponentJa: '堀口恭司',
+        opponentEn: 'Kyoji Horiguchi',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN.18）',
+        resultJa: 'KO勝ち',
+        noteJa: '当時無敗だった堀口を沈めた、RIZIN史上最大の番狂わせと呼ばれる一戦',
+      },
+    ],
+  },
 ];
 
 /** タグ文字列（=正式名）に一致するファイターを返す。LP化の判定に使う。 */
