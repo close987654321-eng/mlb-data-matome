@@ -17,6 +17,7 @@ import { SPORT_INFO } from '@/lib/sports';
 import { getEditorNote, type EditorNote } from '@/lib/editorNotes';
 import {
   getPlayerJournal,
+  getFighterJournal,
   journalLatestHighlight,
   type PlayerJournal as PlayerJournalData,
 } from '@/lib/playerJournal';
@@ -222,7 +223,12 @@ export default async function TagPage({
   // ピックアップは「その人に言及している声」だけを質の高い順に（tagHubVoices）。
   // 観測日誌（時系列の逐語引用）がある選手は声ピックアップを出さない＝同じ声が2度並ぶ重複を避け、
   // 日誌を LP の主役にする（2026-08-01 村山判断）。
-  const journal: PlayerJournalData | null = hub ? await getPlayerJournal(hub.slug) : null;
+  // 格闘技はキャリア観測日誌（fighter-journal）＝シーズン版と同じ型・同じ表示で1冊をキャリア通算で積む。
+  const journal: PlayerJournalData | null = hub
+    ? await getPlayerJournal(hub.slug)
+    : fighter
+      ? await getFighterJournal(fighter.slug)
+      : null;
   let voices: TagVoice[] = [];
   let otherHubs: { player: Player; count: number }[] = [];
   let otherFighters: { fighter: Fighter; count: number }[] = [];
@@ -231,7 +237,8 @@ export default async function TagPage({
     if (!journal || locale === 'en') voices = tagHubVoices(feed, hub);
     otherHubs = playerTagHubs(await getAllTags()).filter(({ player }) => player.slug !== hub.slug);
   } else if (fighter) {
-    voices = tagHubVoices(feed, fighter);
+    // 日誌があるファイターも選手LPと同じ扱い＝声ピックアップは出さない（同じ声が2度並ぶのを避ける）。
+    if (!journal || locale === 'en') voices = tagHubVoices(feed, fighter);
     otherFighters = fighterTagHubs(await getAllTags()).filter(
       ({ fighter: f }) => f.slug !== fighter.slug,
     );
@@ -520,9 +527,16 @@ export default async function TagPage({
 
       {/* 選手タグLP: シーズン観測日誌＝海外の評価の推移を章立てで追う追記型セクション。
           記事が増えるたびに伸びる＝再着地した検索読者に「物語が進んでいる」継続性を見せる。
-          日誌がある選手は声ピックアップの代わりにこれが LP の主役（ja のみ）。 */}
-      {hub && journal && locale !== 'en' && (
-        <SeasonJournal journal={journal} label={t('tag.journal', { name: hub.nameJa })} />
+          日誌がある選手は声ピックアップの代わりにこれが LP の主役（ja のみ）。
+          ファイターはキャリア観測日誌＝試合が年数回なのでシーズンでなくキャリア1冊で積む。 */}
+      {(hub || fighter) && journal && locale !== 'en' && (
+        <SeasonJournal
+          journal={journal}
+          variant={fighter ? 'career' : 'season'}
+          label={t(fighter ? 'tag.careerJournal' : 'tag.journal', {
+            name: (hub ?? fighter)!.nameJa,
+          })}
+        />
       )}
 
       {/* ファイターLP: 主要試合タイムライン＝「この試合の反応が読みたい」ナビ。公式スコアの

@@ -41,8 +41,11 @@ function quoteMeta(entry: JournalEntry, author: string, score: number) {
   );
 }
 
+/** シーズン観測日誌（MLB選手）と、キャリア観測日誌（格闘技）の文言出し分け。 */
+export type JournalVariant = 'season' | 'career';
+
 /** 出典リンク（記事＝内部 / 開幕期のMLB公式ハイライト＝外部）。 */
-function SourceLink({ entry }: { entry: JournalEntry }) {
+function SourceLink({ entry, variant }: { entry: JournalEntry; variant: JournalVariant }) {
   const t = useTranslations();
   if (entry.threadId && entry.sport) {
     return (
@@ -50,7 +53,8 @@ function SourceLink({ entry }: { entry: JournalEntry }) {
         href={`/${entry.sport}/${entry.threadId}`}
         className="group inline-flex items-center gap-1 text-xs text-ink-mute transition-colors hover:text-ink"
       >
-        {t('tag.journalSource')}
+        {/* キャリア版のエントリは試合以外（場外の話題）もあるので「この試合の」と言わない。 */}
+        {t(variant === 'career' ? 'tag.careerJournalSource' : 'tag.journalSource')}
         <span aria-hidden className="transition-transform group-hover:translate-x-0.5">
           →
         </span>
@@ -74,7 +78,7 @@ function SourceLink({ entry }: { entry: JournalEntry }) {
 }
 
 /** 通常ビート＝1試合を小さく刻む（日付・見出し・引用1〜2件を締めて置く）。 */
-function Beat({ entry }: { entry: JournalEntry }) {
+function Beat({ entry, variant }: { entry: JournalEntry; variant: JournalVariant }) {
   return (
     <li className="relative py-4 pl-8">
       <span
@@ -103,14 +107,14 @@ function Beat({ entry }: { entry: JournalEntry }) {
         </ul>
       )}
       <div className="mt-2.5">
-        <SourceLink entry={entry} />
+        <SourceLink entry={entry} variant={variant} />
       </div>
     </li>
   );
 }
 
 /** 山場＝横幅を使った見せ場。ノードは塗り、枠で持ち上げ、引用を横に並べて熱量を見せる。 */
-function PeakBeat({ entry }: { entry: JournalEntry }) {
+function PeakBeat({ entry, variant }: { entry: JournalEntry; variant: JournalVariant }) {
   return (
     <li className="relative py-5 pl-8">
       <span
@@ -140,14 +144,22 @@ function PeakBeat({ entry }: { entry: JournalEntry }) {
           </ul>
         )}
         <div className="mt-4 border-t border-line pt-3">
-          <SourceLink entry={entry} />
+          <SourceLink entry={entry} variant={variant} />
         </div>
       </div>
     </li>
   );
 }
 
-export default function SeasonJournal({ journal, label }: { journal: PlayerJournal; label: string }) {
+export default function SeasonJournal({
+  journal,
+  label,
+  variant = 'season',
+}: {
+  journal: PlayerJournal;
+  label: string;
+  variant?: JournalVariant;
+}) {
   const t = useTranslations();
   if (journal.entries.length === 0) return null;
   const chapters = journalChapters(journal);
@@ -184,9 +196,9 @@ export default function SeasonJournal({ journal, label }: { journal: PlayerJourn
               <span aria-hidden className="absolute bottom-2 left-[5px] top-2 w-px bg-line" />
               {chapter.entries.map((entry) =>
                 entry.peak ? (
-                  <PeakBeat key={`${entry.date}/${entry.headingJa}`} entry={entry} />
+                  <PeakBeat key={`${entry.date}/${entry.headingJa}`} entry={entry} variant={variant} />
                 ) : (
-                  <Beat key={`${entry.date}/${entry.headingJa}`} entry={entry} />
+                  <Beat key={`${entry.date}/${entry.headingJa}`} entry={entry} variant={variant} />
                 ),
               )}
             </ol>
@@ -202,7 +214,9 @@ export default function SeasonJournal({ journal, label }: { journal: PlayerJourn
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink">{next}</p>
         </div>
       )}
-      <p className="text-xs leading-relaxed text-ink-mute">{t('tag.journalNote')}</p>
+      <p className="text-xs leading-relaxed text-ink-mute">
+        {t(variant === 'career' ? 'tag.careerJournalNote' : 'tag.journalNote')}
+      </p>
     </section>
   );
 }

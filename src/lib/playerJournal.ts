@@ -66,11 +66,11 @@ export type PlayerJournal = {
 };
 
 const DIR = path.join(process.cwd(), 'data', 'player-journal');
+const FIGHTER_DIR = path.join(process.cwd(), 'data', 'fighter-journal');
 
-/** slug の選手に日誌があれば時系列昇順で返す（無ければ null＝セクション自体を出さない）。 */
-export async function getPlayerJournal(slug: string): Promise<PlayerJournal | null> {
+async function readJournal(dir: string, slug: string): Promise<PlayerJournal | null> {
   try {
-    const raw = await fs.readFile(path.join(DIR, `${slug}.json`), 'utf8');
+    const raw = await fs.readFile(path.join(dir, `${slug}.json`), 'utf8');
     const journal = JSON.parse(raw) as PlayerJournal;
     if (!journal.entries?.length) return null;
     // 表示は常に時系列昇順＝物語として読ませる。データ側の並び順に依存しない。
@@ -79,6 +79,21 @@ export async function getPlayerJournal(slug: string): Promise<PlayerJournal | nu
   } catch {
     return null;
   }
+}
+
+/** slug の選手に日誌があれば時系列昇順で返す（無ければ null＝セクション自体を出さない）。 */
+export async function getPlayerJournal(slug: string): Promise<PlayerJournal | null> {
+  return readJournal(DIR, slug);
+}
+
+/**
+ * 格闘技版＝キャリア観測日誌（data/fighter-journal/{slug}.json・slug は fighters.ts）。
+ * 試合が年数回しかないので「シーズン」でなくキャリア全体を1冊で積む。型・引用の規律
+ * （逐語コピーのみ・地の文は編集セッションで人が書く）は選手日誌と完全に同一。
+ * date は fights タイムラインと同じ試合日（現地）、試合間の話題はスレの立った日。
+ */
+export async function getFighterJournal(slug: string): Promise<PlayerJournal | null> {
+  return readJournal(FIGHTER_DIR, slug);
 }
 
 /** 章のまとまり（chapterJa を持つエントリが新章の頭）。 */
