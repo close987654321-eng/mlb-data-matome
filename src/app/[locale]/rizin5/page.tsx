@@ -7,6 +7,7 @@ import { buildFeed } from '@/lib/feed';
 import { getAllTags } from '@/lib/tags';
 import { linkableFighterOf } from '@/lib/fighterHub';
 import { RIZIN5, type Rizin5Fighter } from '@/lib/rizin5';
+import { SPORT_INFO } from '@/lib/sports';
 import { VOD_OFFERS } from '@/lib/vod';
 import EventCountdown from '@/components/EventCountdown';
 import FeedGrid from '@/components/FeedGrid';
@@ -127,6 +128,8 @@ export default async function Rizin5Page({
   // カード内の選手名をファイターLPへ張るための集合。LPは記事1件以上のタグにしか生成されない。
   const lpTags = new Set((await getAllTags()).map(({ tag }) => tag));
 
+  const mmaLabel = locale === 'en' ? SPORT_INFO.mma.labelEn : SPORT_INFO.mma.labelJa;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
@@ -159,9 +162,11 @@ export default async function Rizin5Page({
       },
       {
         '@type': 'BreadcrumbList',
+        // 競技（MMA）を1階層挟む＝表示のパンくずと同じ形。/mma LP への内部リンクをこのハブからも張る。
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: t('nav.home'), item: absoluteUrl(locale, '') },
-          { '@type': 'ListItem', position: 2, name: RIZIN5.nameJa, item: absoluteUrl(locale, '/rizin5') },
+          { '@type': 'ListItem', position: 2, name: mmaLabel, item: absoluteUrl(locale, '/mma') },
+          { '@type': 'ListItem', position: 3, name: RIZIN5.nameJa, item: absoluteUrl(locale, '/rizin5') },
         ],
       },
     ],
@@ -171,7 +176,13 @@ export default async function Rizin5Page({
     <div className="space-y-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      <Breadcrumbs items={[{ name: t('nav.home'), href: '/' }, { name: RIZIN5.nameJa }]} />
+      <Breadcrumbs
+        items={[
+          { name: t('nav.home'), href: '/' },
+          { name: mmaLabel, href: '/mma' },
+          { name: RIZIN5.nameJa },
+        ]}
+      />
 
       <section className="border-b border-line pb-6">
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">{t('rizin5.eyebrow')}</span>

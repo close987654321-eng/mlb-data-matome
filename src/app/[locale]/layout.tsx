@@ -12,6 +12,7 @@ import { Link } from '@/lib/navigation';
 import { locales, defaultLocale } from '@/lib/i18n';
 import { SPORTS, SPORT_INFO } from '@/lib/sports';
 import { ALLSTAR } from '@/lib/allstar';
+import { RIZIN5 } from '@/lib/rizin5';
 import { SITE_URL } from '@/lib/site';
 import '../globals.css';
 
@@ -223,6 +224,11 @@ function SiteFooter() {
             {ALLSTAR.enabled && (
               <Link href="/allstar" className="transition-colors hover:text-ink">
                 {t('nav.allstar')}
+              </Link>
+            )}
+            {RIZIN5.enabled && (
+              <Link href="/rizin5" className="transition-colors hover:text-ink">
+                {t('nav.rizin5')}
               </Link>
             )}
             <Link href="/prospects" className="transition-colors hover:text-ink">
