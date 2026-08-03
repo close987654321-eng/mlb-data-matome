@@ -8,6 +8,8 @@ import { tagHubOf, tagHubIntroJa, tagHubVoices, playerTagHubs, type TagVoice } f
 import {
   fighterHubOf,
   fighterHubIntroJa,
+  fighterHubTitleJa,
+  fighterHubHeadingJa,
   fighterTagHubs,
   fightFeedItems,
   fightDateJa,
@@ -127,9 +129,16 @@ async function headingOf(locale: Locale, tag: string, teamLp: TeamHub | null): P
   const t = await getTranslations({ locale });
   if (locale === 'en') {
     if (hub) return `${hub.nameEn} — Overseas Fan Reactions`;
-    if (fighter) return `${fighter.nameEn} — Overseas Fan Reactions`;
+    // domestic ファイターは英語面でも「海外の反応」を名乗らせない（実態は国内の声）。
+    if (fighter) {
+      return fighter.voiceScope === 'global'
+        ? `${fighter.nameEn} — Overseas Fan Reactions`
+        : `${fighter.nameEn} — Career Record & Fan Voices`;
+    }
     if (teamLp) return `${teamLp.info.nameEn} — Overseas Fan Reactions`;
   }
+  // domestic ファイターの H1 は「戦績×次戦」框（title と同じ関係＝【】接尾辞なし）。
+  if (fighter && fighter.voiceScope === 'domestic') return fighterHubHeadingJa(fighter);
   return t('tag.heading', { tag: teamLp ? teamDisplayJa(teamLp) : tag });
 }
 
@@ -152,9 +161,13 @@ export async function generateMetadata({
   // チームLPは alias 併記（例「ダイヤモンドバックス（Dバックス）」）＝実際に打たれるクエリに一致させる。
   const nameJa = teamLp ? teamDisplayJa(teamLp) : decoded;
   // 格闘技は「MLB現地ファン」だと誤りになるので接尾辞を競技非依存にする。
-  const fullTitle = isJaHub
-    ? `${nameJa}の海外の反応まとめ【${fighter ? '' : 'MLB'}現地ファンの声を日本語訳】`
-    : heading;
+  // domestic ファイターは框ごと差し替え＝「戦績×次戦×ファンの声」（fighterHubTitleJa）。
+  const fullTitle =
+    fighter && locale !== 'en'
+      ? fighterHubTitleJa(fighter)
+      : isJaHub
+        ? `${nameJa}の海外の反応まとめ【MLB現地ファンの声を日本語訳】`
+        : heading;
   const title = isJaHub ? { absolute: fullTitle } : fullTitle;
   let description = t('tag.lead', { tag: decoded });
   const updated = feed[0]?.date.slice(0, 10);
@@ -536,9 +549,14 @@ export default async function TagPage({
         <SeasonJournal
           journal={journal}
           variant={fighter ? 'career' : 'season'}
-          label={t(fighter ? 'tag.careerJournal' : 'tag.journal', {
-            name: (hub ?? fighter)!.nameJa,
-          })}
+          label={t(
+            fighter
+              ? fighter.voiceScope === 'domestic'
+                ? 'tag.careerJournalDomestic'
+                : 'tag.careerJournal'
+              : 'tag.journal',
+            { name: (hub ?? fighter)!.nameJa },
+          )}
         />
       )}
 
@@ -546,7 +564,11 @@ export default async function TagPage({
           事実行＋その試合の記事への直リンクで、「{選手名} {対戦相手} 海外の反応」の複合クエリも受ける。 */}
       {fighter && locale !== 'en' && fighter.fights.length > 0 && (
         <section className="space-y-5">
-          <SectionHeading label={t('tag.fights', { name: fighter.nameJa })} />
+          <SectionHeading
+            label={t(fighter.voiceScope === 'domestic' ? 'tag.fightsDomestic' : 'tag.fights', {
+              name: fighter.nameJa,
+            })}
+          />
           <div className="divide-y divide-line border-y border-line">
             {fighter.fights.map((fight) => {
               const related = fightFeedItems(fight, feed);

@@ -63,7 +63,13 @@ export default function FighterNow({
 
   return (
     <section className="space-y-5">
-      <SectionHeading label={t("tag.now", { name: fighter.nameJa })} />
+      {/* domestic＝国内中心に語られるファイターは「海外は〜」を名乗らせない（voiceScope の框） */}
+      <SectionHeading
+        label={t(
+          fighter.voiceScope === "domestic" ? "tag.nowDomestic" : "tag.now",
+          { name: fighter.nameJa },
+        )}
+      />
       <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
         {/* 最新の山場の声＝このLPの顔。 */}
         {highlight && quoteBody && (

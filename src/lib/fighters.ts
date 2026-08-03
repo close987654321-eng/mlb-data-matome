@@ -32,6 +32,19 @@ export type Fighter = {
   /** 姓・名の単独表記。コメント本文の「井上」「尚弥」を拾うため（players.ts の shortJa と同じ役割）。 */
   shortJa?: string[];
   sport: Sport;
+  /**
+   * LPの框の出し分け（2026-08-03 村山判断）。海外の反応框が実態に合うのは井上・中谷のみ＝
+   * global。国内中心に語られるファイター（RIZIN勢など）は domestic＝「ファンの声で読む
+   * キャリア観測」框にし、title・見出しから「海外」を外す。看板と中身のズレは CTR と
+   * 滞在の両方で検索に殺されるため、素材の実態（引用が日本語コメント中心か）で決める。
+   */
+  voiceScope: 'global' | 'domestic';
+  /**
+   * 次戦（確定情報のみ・裏取り必須）。domestic の title/description の前方に
+   * 「次戦・{labelJa}」として出す。until（JSTの試合日）を過ぎるとビルド時に自動で消える
+   * ＝journalNext と同じ賞味期限方式。試合が終わったら fights[] に結果を足してこれを更新。
+   */
+  nextFightJa?: { labelJa: string; until: string };
   /** 肩書き（例「S・バンタム級4団体統一王者」）。タイトル変動時に手動更新 */
   accoladeJa: string;
   /** 通算戦績。asOf は最終試合日＝「いつ時点の数字か」を必ず出す */
@@ -55,6 +68,7 @@ export const FIGHTERS: Fighter[] = [
     nameEn: 'Naoya Inoue',
     shortJa: ['井上', '尚弥'],
     sport: 'boxing',
+    voiceScope: 'global',
     accoladeJa: 'プロボクシング・S・バンタム級4団体統一王者（WBA・WBC・IBF・WBO）',
     record: { wins: 33, losses: 0, draws: 0, kos: 27, asOf: '2026-05-02' },
     headlineStats: [
@@ -109,6 +123,7 @@ export const FIGHTERS: Fighter[] = [
     nameEn: 'Junto Nakatani',
     shortJa: ['中谷', '潤人'],
     sport: 'boxing',
+    voiceScope: 'global',
     accoladeJa: 'プロボクシング・3階級制覇王者（前WBC世界バンタム級王者）',
     record: { wins: 32, losses: 1, draws: 0, kos: 24, asOf: '2026-05-02' },
     sameAs: [
@@ -140,6 +155,8 @@ export const FIGHTERS: Fighter[] = [
     nameEn: 'Ren Hiramoto',
     shortJa: ['平本', '蓮'],
     sport: 'mma',
+    voiceScope: 'domestic',
+    nextFightJa: { labelJa: '9/10ダウトベック戦', until: '2026-09-10' },
     accoladeJa: '総合格闘家・剛毅會（元キックボクサー、K-1甲子園2014優勝）',
     record: { wins: 4, losses: 3, draws: 0, kos: 1, asOf: '2024-07-28' },
     sameAs: [
