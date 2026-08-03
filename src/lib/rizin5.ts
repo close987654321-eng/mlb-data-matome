@@ -42,11 +42,16 @@ export type Rizin5Fighter = {
   noteJa?: string;
   /** 通算戦績の表示文字列（例「MMA19勝6敗1無効試合」）。未検証なら持たない */
   record?: string;
-  /** 戦績の基準日＝最終試合日（record を持つなら必須） */
+  /** 戦績の基準日＝最終試合日。デビュー戦の選手だけ持たない（「◯◯時点」が意味を持たないため） */
   recordAsOf?: string;
   /** 直近の試合（新しい順・Wikipedia 戦績表で裏取り済みのみ） */
   recentFights?: Rizin5Fight[];
-  /** 選手写真（Wikimedia Commons の CC ライセンス画像のみ・クレジット必須） */
+  /**
+   * 選手写真（Wikimedia Commons の CC ライセンス画像のみ・クレジット必須）。
+   * 実体は scripts/rizin5-portraits.mjs が顔基準クロップ＋モノクロで書き出した 512×512。
+   * 素材を差し替えるときは同スクリプトの SOURCES とこのクレジットを必ずセットで直す。
+   * Commons に CC 画像が無い選手は持たない＝ページ側が頭文字タイルにフォールバックする。
+   */
   photo?: { src: string; creditJa: string; href: string };
 };
 
@@ -83,7 +88,7 @@ export const RIZIN5 = {
   venueJa: '京セラドーム大阪',
   nameJa: '超RIZIN.5 浪速の超復活祭り',
   /** ページ内容の最終更新日（dateModified・sitemap lastmod に使う） */
-  updatedAt: '2026-08-03',
+  updatedAt: '2026-08-04',
   /** この大会の反応記事を束ねるタグ（記事の tags に付けるとハブの関連枠に自動で並ぶ） */
   matchTags: ['RIZIN', '超RIZIN.5'],
 
@@ -158,8 +163,8 @@ export const RIZIN5 = {
         ],
         photo: {
           src: '/media/rizin5/mikuru-asakura.jpg',
-          creditJa: 'Gyutan329pii（2019年RIZIN.15・CC BY-SA 4.0・Wikimedia Commons）',
-          href: 'https://commons.wikimedia.org/wiki/File:%E6%9C%9D%E5%80%89%E6%9C%AA%E6%9D%A5.jpg',
+          creditJa: 'ホタテマン0010（2025年RIZIN男祭り・CC BY 4.0・Wikimedia Commons）',
+          href: 'https://commons.wikimedia.org/wiki/File:%E6%9C%9D%E5%80%89%E6%9C%AA%E6%9D%A5_%E5%85%A5%E5%A0%B4.png',
         },
       },
       right: {
@@ -174,8 +179,8 @@ export const RIZIN5 = {
         ],
         photo: {
           src: '/media/rizin5/shinya-aoki.jpg',
-          creditJa: 'Evolve MMA（2011年撮影・CC BY 3.0・Wikimedia Commons）',
-          href: 'https://commons.wikimedia.org/wiki/File:Shinya_Aoki_at_Evolve_MMA_in_Singapore_(cropped).jpg',
+          creditJa: 'SUPERADRIANME（2013年ONE FC シンガポール大会・CC BY 2.0・Wikimedia Commons）',
+          href: 'https://commons.wikimedia.org/wiki/File:ONE_Fighting_Championship_2013_Singapore_03.IMG_6775_(8623910640).jpg',
         },
       },
       feudJa: '本人。この大会に出る6人と拳を交えてきた男が、7人目の因縁を作りに戻ってくる',
@@ -282,7 +287,7 @@ export const RIZIN5 = {
         photo: {
           src: '/media/rizin5/ren-hiramoto.jpg',
           creditJa: 'ホタテマン0010（2024年超RIZIN.3・CC BY 4.0・Wikimedia Commons）',
-          href: 'https://commons.wikimedia.org/wiki/File:%E5%B9%B3%E6%9C%AC%E8%93%AE_%E8%B6%85RIZIN3_(cropped).png',
+          href: 'https://commons.wikimedia.org/wiki/File:%E5%B9%B3%E6%9C%AC%E8%93%AE_%E8%B6%85RIZIN3.png',
         },
       },
       feudJa:
@@ -318,6 +323,11 @@ export const RIZIN5 = {
           { date: '2023.12.31', vsJa: 'クレベル・コイケ', resultJa: '× 3R 1:22 ダースチョーク' },
           { date: '2023.4.29', vsJa: '平本蓮', resultJa: '○ 判定2-1' },
         ],
+        photo: {
+          src: '/media/rizin5/yutaka-saito.jpg',
+          creditJa: 'ホタテマン0010（2023年RIZIN LANDMARK 5・CC BY 4.0・Wikimedia Commons）',
+          href: 'https://commons.wikimedia.org/wiki/File:%E6%96%8E%E8%97%A4%E8%A3%95.jpg',
+        },
       },
       right: {
         name: 'YA-MAN',
@@ -358,11 +368,22 @@ export const RIZIN5 = {
       },
       right: {
         name: '高木凌',
+        noteJa: '26歳・フリー（元パラエストラ八王子）。11勝のうち8つがKO決着。現在3連勝中',
+        record: 'MMA11勝3敗',
+        recordAsOf: '2026-05-10',
+        recentFights: [
+          { date: '2026.5.10', vsJa: 'リー・カイウェン', resultJa: '○ 1R 1:38 TKO' },
+          { date: '2026.3.7', vsJa: '木村柊也', resultJa: '○ 1R 5:00 TKO（ドクターストップ）' },
+          { date: '2025.9.28', vsJa: '三宅輝砂', resultJa: '○ 判定3-0' },
+          { date: '2025.5.4', vsJa: '秋元強真', resultJa: '× 判定0-3' },
+        ],
       },
-      feudJa: 'ケラモフは2023年7月の王座決定戦で朝倉未来をリアネイキドチョークで下した元王者',
+      feudJa:
+        'ケラモフは2023年7月の王座決定戦で朝倉未来をリアネイキドチョークで下した元王者。高木は2024年に萩原京平を一本、いま3連勝中',
       story: [
         'ケラモフは2023年の王座決定戦で未来を絞め落とした元王者。そのあと鈴木千裕にベルトを奪われて、おととしの大晦日にはサトシのライト級王座にも挑んで三角絞めに散った。この大会の因縁の網は、ケラモフを経由してもつながってる。',
-        '相手の高木凌についてはうちの取材がまだ薄い。ここは正直に、下のロードで追いかけながら書き足していく。',
+        '高木凌は野球少年から19歳で格闘技を始めて、パンクラスのフェザー級ランキング1位まで駆け上がった26歳。11勝のうち8つがKOで、決め手はだいたい右ストレート。2024年9月には萩原京平をリアネイキドチョークで一本にしていて、去年5月に秋元強真へ判定で落としてからは3連勝で戻してきた。',
+        'この試合、地味に大会の縮図でもある。ケラモフを倒せば未来を絞め落とした男を倒したことになるし、ここでも萩原京平の名前が出てくる。ダウトベックの前哨戦と同じ壁を、高木はすでに一本で越えてる。',
       ],
     },
     {
@@ -370,19 +391,69 @@ export const RIZIN5 = {
       weightJa: '49.0kg',
       left: {
         name: 'RENA',
-        noteJa: 'シュートボクシング出身。RIZIN女子の看板を最初から背負ってきた',
+        noteJa: '35歳・シーザージム。シュートボクシング出身で、RIZIN旗揚げから女子の看板を張ってきた',
+        record: 'MMA15勝6敗（立ち技36勝5敗1分）',
+        recordAsOf: '2025-12-31',
+        recentFights: [
+          { date: '2025.12.31', vsJa: '伊澤星花', resultJa: '× 2R 1:58 ギロチンチョーク' },
+          { date: '2024.7.28', vsJa: 'ケイト・ロータス', resultJa: '○ 2R 4:18 TKO' },
+          { date: '2024.3.26', vsJa: 'シン・ユリ', resultJa: '○ 判定3-0' },
+        ],
       },
       right: {
         name: 'ナターシャ・クジュティナ',
+        noteJa: '37歳・ロシア／アメリカン・トップチーム。リオ五輪柔道52kg級の銅メダリスト',
+        record: 'MMA10勝1敗',
+        recordAsOf: '2026-04-12',
+        recentFights: [
+          { date: '2026.4.12', vsJa: '浜崎朱加', resultJa: '○ 1R 4:54 腕ひしぎ十字固め' },
+          { date: '2025.8.16', vsJa: 'ローズ・コンセイサン', resultJa: '○ 判定3-0' },
+          { date: '2025.5.22', vsJa: 'アシュリー・ヨーダー', resultJa: '○ 判定2-1' },
+        ],
       },
-      story: [],
+      feudJa:
+        'クジュティナはRIZIN初戦（2026年4月）で元王者・浜崎朱加を1R腕ひしぎ十字固め。柔道の五輪メダリストが、日本女子の看板を続けて狩りに来る',
+      story: [
+        'RENAが最後に勝ったのは2024年7月の超RIZIN.3。去年の大晦日は伊澤星花のベルトに挑んで、2R1分58秒、ギロチンで落とされた。旗揚げから10年、RIZIN女子の看板をひとりで張ってきた35歳が、いまいちばん崖に近いところに立ってる。',
+        'で、相手が相性という意味でいちばん嫌なタイプ。クジュティナは2016年リオ五輪の柔道52kg級で銅、2019年の東京世界選手権では決勝まで行って阿部詩に敗れた銀メダリスト。33歳でMMAに転向して10勝1敗、この4月のRIZIN初戦では元王者の浜崎朱加を1R4分54秒の腕十字で畳んでいる。日本の女子MMAの象徴を、下から順に剥がしにきてる感がある。',
+        'シュートボクシングで育ったRENAの武器は立ち技、クジュティナの土俵は組みと極め。噛み合わせがはっきりしてるぶん、どっちの間合いで試合が進むかで全部決まる。看板を守る側の試合としては、これ以上ないくらい分かりやすい。',
+      ],
     },
     {
       order: 8,
       weightJa: '59.0kg',
-      left: { name: '冨澤大智' },
-      right: { name: 'ドンマイ川端' },
-      story: [],
+      left: {
+        name: '冨澤大智',
+        noteJa: '28歳・FIGHTER\'S FLOW。BreakingDown出身の元消防士。三浦孝太を左膝一発で沈めた',
+        record: 'MMA3勝2敗（キック2勝1敗）',
+        recordAsOf: '2026-06-06',
+        recentFights: [
+          { date: '2026.6.6', vsJa: '加藤瑠偉', resultJa: '○ 1R 4:37 TKO（グラウンドの肘打ち）' },
+          { date: '2025.12.31', vsJa: '篠塚辰樹', resultJa: '× 2R 3:22 TKO' },
+          { date: '2025.9.28', vsJa: '平本丈', resultJa: '○ 判定2-1' },
+          { date: '2024.12.31', vsJa: '三浦孝太', resultJa: '○ 1R 1:53 KO（左膝蹴り）' },
+        ],
+      },
+      right: {
+        name: 'ドンマイ川端',
+        noteJa:
+          '36歳・柔道家（本名・川端龍／三段）。2011年講道館杯60kg級優勝。柔道YouTuberとしても活動し、これがプロMMAデビュー戦',
+        record: 'プロMMAデビュー戦（アマチュアMMAは0勝1敗）',
+        recentFights: [
+          { date: '2023.5.21', vsJa: 'ヒロヤ（BreakingDown・アマチュア）', resultJa: '× 延長 判定0-5' },
+        ],
+        photo: {
+          src: '/media/rizin5/donmai-kawabata.jpg',
+          creditJa: 'RuinDig/Yuki Uchida（2024年 第10回野村道場・CC BY 4.0・Wikimedia Commons）',
+          href: 'https://commons.wikimedia.org/wiki/File:Nomura-Dojo-10th--Judo--2024-09-07_002.jpg',
+        },
+      },
+      feudJa: '2人とも同じ相手に同じ負け方をしている。冨澤は2022年11月、川端は2023年5月、BreakingDownでヒロヤに0-5の判定負け',
+      story: [
+        '最後の1試合だけ毛色が違う。冨澤大智は元消防士でBreakingDown出身、いまRIZINで3勝2敗。おととしの大晦日に三浦孝太を左膝一発で沈めて、この6月は加藤瑠偉をグラウンドの肘で切り裂いて1R TKO。当たったら終わる側の人間になってきた。',
+        '対する川端龍、リングネーム・ドンマイ川端は36歳の柔道家。2011年の講道館杯60kg級を獲って、同じ年のグランドスラム東京で2位。2013年の全日本選抜体重別では、準決勝で当時世界ランク1位だった髙藤直寿を巴投げで一本にして優勝している。のちの東京五輪金メダリストを投げた男、と言えば伝わると思う。いまは篠原信一や野村忠宏を動画に引っ張り出す柔道YouTuberで、プロの格闘技戦績はゼロ。会見によれば朝倉海に誘われて一度は断って、それでも練習を積んで榊原信行のオファーを受けたらしい。36歳のプロデビュー戦が京セラドームって、字面がもう物語。',
+        '調べてて笑ったのが、この2人、どっちもBreakingDownでヒロヤに0-5の判定負けを食らってること。冨澤が2022年11月、川端が2023年5月。同じ壁に同じ点差で弾かれた2人が、3年経って大阪で当たる。第8試合を消化試合だと思ってる人は、たぶん損する。',
+      ],
     },
   ] satisfies Rizin5Card[],
 

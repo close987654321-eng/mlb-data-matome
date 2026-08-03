@@ -54,14 +54,27 @@ function FighterColumn({
   const lp = linkableFighterOf(fighter.name, lpTags);
   return (
     <div className="flex-1 space-y-2">
-      {fighter.photo && (
+      {/*
+        写真のある選手と無い選手が同じ行に並ぶので、枠は必ず同じ正方形を出す。
+        CC ライセンスの写真が存在しない選手（RIZIN勢は Commons に無いことが多い）は
+        頭文字だけのタイルにする＝片方だけ絵が無くて左右が崩れるのを防ぐため。
+      */}
+      {fighter.photo ? (
         <Image
           src={fighter.photo.src}
           alt={fighter.name}
-          width={480}
-          height={480}
+          width={512}
+          height={512}
+          sizes="220px"
           className="aspect-square w-full max-w-[220px] rounded-[3px] object-cover"
         />
+      ) : (
+        <div
+          aria-hidden
+          className="flex aspect-square w-full max-w-[220px] items-center justify-center rounded-[3px] border border-line bg-ink/[0.04]"
+        >
+          <span className="text-5xl font-bold leading-none text-ink/20">{[...fighter.name][0]}</span>
+        </div>
       )}
       {lp ? (
         <p className="text-base font-bold text-ink">
@@ -82,7 +95,8 @@ function FighterColumn({
       {fighter.record && (
         <p className="text-xs text-ink">
           {fighter.record}
-          <span className="text-ink-mute">（{fighter.recordAsOf}時点）</span>
+          {/* デビュー戦の選手は「◯◯時点」が意味を持たないので基準日を持たない（川端龍など）。 */}
+          {fighter.recordAsOf && <span className="text-ink-mute">（{fighter.recordAsOf}時点）</span>}
         </p>
       )}
       {fighter.recentFights && fighter.recentFights.length > 0 && (
