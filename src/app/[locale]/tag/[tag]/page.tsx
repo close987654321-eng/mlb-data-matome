@@ -443,18 +443,8 @@ export default async function TagPage({
 
         {/* 成績ハブへの導線は「いま」ブロック（PlayerNow）のフッターに統合＝ヘッダーの1行リンクは廃止。 */}
 
-        {/* ファイターLP: 競技一覧への導線（MLB選手の成績ハブに相当する「次の一手」）。 */}
-        {fighter && (
-          <Link
-            href={`/${fighter.sport}`}
-            className="group mt-5 flex items-center justify-between border-y border-line py-3.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
-          >
-            <span>{t('tag.sportFeed', { sport: sportLabel(fighter, locale) })}</span>
-            <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-              →
-            </span>
-          </Link>
-        )}
+        {/* ファイターLP: 競技一覧への1行リンクは廃止＝ファーストビューの逃げ導線になっていた
+            （2026-08-03 村山判断）。競技への回遊はパンくず・記事カード経由で足りる。 */}
 
         {/* チームLP: 所属日本人選手の成績ハブへ（snapshot 由来＝ハブが必ず生成済みの選手のみ）。 */}
         {teamPlayers.length > 0 && (
