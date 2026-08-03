@@ -230,6 +230,75 @@ export const FIGHTERS: Fighter[] = [
       },
     ],
   },
+  {
+    slug: 'mikuru-asakura',
+    nameJa: '朝倉未来',
+    nameEn: 'Mikuru Asakura',
+    sport: 'mma',
+    voiceScope: 'domestic',
+    nextFightJa: { labelJa: '9/10青木真也戦', until: '2026-09-10' },
+    accoladeJa: '総合格闘家・JAPAN TOP TEAM（RIZINフェザー級王座決定戦に3度挑戦も未勝利）',
+    record: { wins: 19, losses: 6, draws: 0, kos: 9, asOf: '2025-12-31' },
+    headlineStats: [
+      // 2020(斎藤裕)・2023(ケラモフ)・2025(シェイドゥラエフ)の3度とも王座決定戦で敗退（fights参照）
+      { value: '0勝3敗', labelJa: 'RIZINフェザー級王座決定戦（2020・2023・2025年大晦日）' },
+      // 2025-12-31シェイドゥラエフ戦から2026-09-10青木戦まで＝253日（rizin5.tsのfeudJaと同一の裏取り値）
+      { value: '253日ぶり', labelJa: '前回の敗戦からの復帰戦（9/10青木真也戦時点）' },
+    ],
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E6%9C%9D%E5%80%89%E6%9C%AA%E6%9D%A5',
+      'https://en.wikipedia.org/wiki/Mikuru_Asakura',
+    ],
+    fights: [
+      {
+        date: '2025-12-31',
+        opponentJa: 'ラジャブアリ・シェイドゥラエフ',
+        opponentEn: 'Razhabali Shaidulloev',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN師走の超強者祭り）',
+        resultJa: '1R2分54秒TKO負け',
+        noteJa: 'RIZINフェザー級王座決定戦。3度目の王座挑戦も届かず、担架で運ばれた',
+      },
+      {
+        date: '2025-07-27',
+        opponentJa: 'クレベル・コイケ',
+        opponentEn: 'Kleber Koike Erbst',
+        venueJa: 'さいたまスーパーアリーナ（超RIZIN.4 真夏の喧嘩祭り）',
+        resultJa: '2-1判定勝ち',
+        noteJa: '2021年に一本負けを喫した相手への4年越しの雪辱',
+      },
+      {
+        date: '2025-05-04',
+        opponentJa: '鈴木千裕',
+        opponentEn: 'Chihiro Suzuki',
+        venueJa: '東京ドーム（RIZIN男祭り）',
+        resultJa: '3R1分57秒TKO勝ち（ドクターストップ）',
+      },
+      {
+        date: '2024-07-28',
+        opponentJa: '平本蓮',
+        opponentEn: 'Ren Hiramoto',
+        venueJa: 'さいたまスーパーアリーナ（超RIZIN.3）',
+        resultJa: '1R2分18秒KO負け',
+        noteJa: '何年も挑発を重ねた相手にわずか1ラウンドで敗れる。海外にも波及した一戦',
+      },
+      {
+        date: '2023-07-30',
+        opponentJa: 'ヴガール・ケラモフ',
+        opponentEn: 'Vugar Karamov',
+        venueJa: 'さいたまスーパーアリーナ（超RIZIN.2）',
+        resultJa: '1R2分41秒一本負け（リアネイキドチョーク）',
+        noteJa: 'RIZINフェザー級王座決定戦。2度目の王座挑戦も一本負け',
+      },
+      {
+        date: '2020-11-21',
+        opponentJa: '斎藤裕',
+        opponentEn: 'Yutaka Saito',
+        venueJa: '大阪城ホール（RIZIN.25）',
+        resultJa: '0-3判定負け',
+        noteJa: 'RIZIN初代フェザー級王座決定戦。初めての王座挑戦',
+      },
+    ],
+  },
 ];
 
 /** タグ文字列（=正式名）に一致するファイターを返す。LP化の判定に使う。 */
