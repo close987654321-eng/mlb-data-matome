@@ -8,6 +8,7 @@ import { PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
 import { ALLSTAR } from '@/lib/allstar';
+import { RIZIN5 } from '@/lib/rizin5';
 import { SPORTS } from '@/lib/sports';
 import { SERIES } from '@/lib/series';
 import { getCyDetailRows } from '@/lib/cyYoungBoard';
@@ -109,6 +110,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/mvp', statDate),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
+    // 超RIZIN.5 特設ハブ（開催前から育てるイベント観測所。lastmod はコンテンツの最終更新日）。
+    ...(RIZIN5.enabled ? [entry('/rizin5', RIZIN5.updatedAt)] : []),
     ...playerEntries,
     // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。
     // ピラーの lastmod は配下で最も新しい成績時点（手キュレーションなので他に動く日付が無い）。

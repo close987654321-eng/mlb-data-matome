@@ -13,6 +13,8 @@ import { rankNextReads } from '@/lib/nextRead';
 import { isThreadIndexable } from '@/lib/threadIndex';
 import { allComments } from '@/lib/daily';
 import { tagCountMap } from '@/lib/tags';
+import { RIZIN5 } from '@/lib/rizin5';
+import Rizin5Promo from '@/components/Rizin5Promo';
 import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import SeriesBadge from '@/components/SeriesBadge';
@@ -643,6 +645,9 @@ export default async function ThreadDetailPage({
         </a>
         <ShareButtons url={absoluteUrl(locale, `/${sport}/${thread.id}`)} title={title} />
       </footer>
+
+      {/* 超RIZIN.5 特設ハブへの導線（RIZIN タグの記事のみ＝spoke→hub の内部リンク）。 */}
+      {(thread.tags ?? []).some((tag) => RIZIN5.matchTags.includes(tag)) && <Rizin5Promo />}
 
       {/* 記事下 VOD CTA（収益化の器②）。競技ごとの視聴サービスを案内。提携前は公式URL、確定後にアフィリンクへ差し替え。 */}
       <VodCta
