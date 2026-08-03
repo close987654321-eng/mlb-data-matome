@@ -1,5 +1,7 @@
 import { useTranslations } from "next-intl";
 import SectionHeading from "@/components/SectionHeading";
+import { Link } from "@/lib/navigation";
+import { fightDayJa, fighterNextFight } from "@/lib/fighterHub";
 import type { Fighter } from "@/lib/fighters";
 import type { EditorNote } from "@/lib/editorNotes";
 import type { JournalEntry, JournalQuote } from "@/lib/playerJournal";
@@ -60,6 +62,9 @@ export default function FighterNow({
   const quoteBody = highlight
     ? (highlight.quote.bodyJa ?? "").trim() || highlight.quote.bodyEn
     : null;
+  // 次戦＝このLPで一番時間価値が高い情報。大会ハブがある試合はここが唯一のハブ入口になる
+  // （試合日 until を過ぎればカタログ側の判定でバッジごと自動で消える）。
+  const next = fighterNextFight(fighter);
 
   return (
     <section className="space-y-5">
@@ -71,6 +76,38 @@ export default function FighterNow({
         )}
       />
       <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
+        {/* 次戦バー＝日付・相手・大会（ハブがあれば大会名がそのままリンク＝LP⇄イベントハブの相互配線）。 */}
+        {next && (
+          <div className="mb-5 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-line pb-4">
+            <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
+              {t("upcoming.nextLabel")}
+            </span>
+            <span className="text-sm font-bold text-ink">
+              {fightDayJa(next.until)}
+              {next.opponentJa && ` ・ vs ${next.opponentJa}`}
+            </span>
+            {next.eventJa && (
+              <span className="w-full text-xs text-ink-soft sm:w-auto">
+                {next.href ? (
+                  <Link
+                    href={next.href}
+                    className="group inline-flex items-center gap-1 underline underline-offset-2 transition-colors hover:text-ink"
+                  >
+                    {next.eventJa}
+                    <span
+                      aria-hidden
+                      className="inline-block transition-transform group-hover:translate-x-0.5"
+                    >
+                      →
+                    </span>
+                  </Link>
+                ) : (
+                  next.eventJa
+                )}
+              </span>
+            )}
+          </div>
+        )}
         {/* 最新の山場の声＝このLPの顔。 */}
         {highlight && quoteBody && (
           <figure className="border-b border-line pb-5">

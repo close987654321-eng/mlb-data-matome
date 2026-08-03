@@ -12,6 +12,7 @@ import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
 import TeamHubLinks from '@/components/TeamHubLinks';
 import Rizin5Promo from '@/components/Rizin5Promo';
+import UpcomingFights from '@/components/UpcomingFights';
 import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
@@ -174,6 +175,9 @@ export default async function SportPage({
 
       {/* 超RIZIN.5 特設ハブへの導線（mma のみ・会期後は rizin5.ts の enabled で自動消灯）。 */}
       {sport === 'mma' && <Rizin5Promo />}
+
+      {/* 次の試合＝ファイターLP・イベントハブへの回遊網（格闘技のみ・ja のみ・終わった試合は自動で消える）。 */}
+      {locale !== 'en' && <UpcomingFights sport={sport} />}
 
       {feed.length === 0 ? (
         <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">

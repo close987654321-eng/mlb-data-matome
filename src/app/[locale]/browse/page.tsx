@@ -8,6 +8,7 @@ import { getTeam, teamLogoUrl, headshotUrl } from '@/lib/teams';
 import { TEAM_HUB_MIN_ARTICLES, teamHubOf, teamDisplayJa, type TeamHub } from '@/lib/teamHub';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import UpcomingFights from '@/components/UpcomingFights';
 import { Link } from '@/lib/navigation';
 import { localeAlternates } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
@@ -131,6 +132,9 @@ export default async function BrowsePage({ params }: { params: Promise<{ locale:
           </ul>
         </section>
       )}
+
+      {/* 次の試合＝ディレクトリに「いま押す理由」を足す枠（格闘家LPとイベントハブへの近道）。 */}
+      {locale !== 'en' && <UpcomingFights />}
 
       {fighters.length > 0 && (
         <section className="space-y-4">

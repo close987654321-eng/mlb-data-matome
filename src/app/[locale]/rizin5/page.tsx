@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { buildFeed } from '@/lib/feed';
+import { getAllTags } from '@/lib/tags';
+import { linkableFighterOf } from '@/lib/fighterHub';
 import { RIZIN5, type Rizin5Fighter } from '@/lib/rizin5';
 import { VOD_OFFERS } from '@/lib/vod';
 import EventCountdown from '@/components/EventCountdown';
@@ -36,7 +38,19 @@ export async function generateMetadata({
 }
 
 /** カード内の選手1人ぶんの欄（写真・肩書き・戦績・直近の試合）。 */
-function FighterColumn({ fighter, recentLabel }: { fighter: Rizin5Fighter; recentLabel: string }) {
+function FighterColumn({
+  fighter,
+  recentLabel,
+  lpTags,
+}: {
+  fighter: Rizin5Fighter;
+  recentLabel: string;
+  /** ファイターLPが生成済みのタグ集合（記事1件以上）。名前をLPへリンクする判定に使う */
+  lpTags: Set<string>;
+}) {
+  // LP を持つ出場選手（平本蓮・朝倉未来など）は名前をLPへ。hub→LP の相互リンクで、
+  // 大会ページで因縁を読んだ読者をその選手のキャリア観測日誌へ送る。
+  const lp = linkableFighterOf(fighter.name, lpTags);
   return (
     <div className="flex-1 space-y-2">
       {fighter.photo && (
@@ -48,7 +62,21 @@ function FighterColumn({ fighter, recentLabel }: { fighter: Rizin5Fighter; recen
           className="aspect-square w-full max-w-[220px] rounded-[3px] object-cover"
         />
       )}
-      <p className="text-base font-bold text-ink">{fighter.name}</p>
+      {lp ? (
+        <p className="text-base font-bold text-ink">
+          <Link
+            href={`/tag/${encodeURIComponent(lp.nameJa)}`}
+            className="group inline-flex items-center gap-1 underline decoration-line underline-offset-4 transition-colors hover:text-ink-soft hover:decoration-ink"
+          >
+            {fighter.name}
+            <span aria-hidden className="text-sm transition-transform group-hover:translate-x-0.5">
+              →
+            </span>
+          </Link>
+        </p>
+      ) : (
+        <p className="text-base font-bold text-ink">{fighter.name}</p>
+      )}
       {fighter.noteJa && <p className="text-xs leading-relaxed text-ink-soft">{fighter.noteJa}</p>}
       {fighter.record && (
         <p className="text-xs text-ink">
@@ -95,6 +123,9 @@ export default async function Rizin5Page({
 
   // 視聴CTA: vod.ts の ABEMA 案件を参照＝アフィリエイト提携後の href 差し替えがここにも自動反映される。
   const abema = VOD_OFFERS.mma.find((o) => o.service === 'ABEMA' && o.href);
+
+  // カード内の選手名をファイターLPへ張るための集合。LPは記事1件以上のタグにしか生成されない。
+  const lpTags = new Set((await getAllTags()).map(({ tag }) => tag));
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -185,8 +216,8 @@ export default async function Rizin5Page({
 
               {/* 選手2欄（写真・戦績・直近の試合）。データの無い欄は自動で薄くなる。 */}
               <div className="mt-4 flex flex-col gap-5 sm:flex-row sm:gap-8">
-                <FighterColumn fighter={card.left} recentLabel={t('rizin5.recentLabel')} />
-                <FighterColumn fighter={card.right} recentLabel={t('rizin5.recentLabel')} />
+                <FighterColumn fighter={card.left} recentLabel={t('rizin5.recentLabel')} lpTags={lpTags} />
+                <FighterColumn fighter={card.right} recentLabel={t('rizin5.recentLabel')} lpTags={lpTags} />
               </div>
 
               {card.feudJa && (

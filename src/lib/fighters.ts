@@ -43,8 +43,21 @@ export type Fighter = {
    * 次戦（確定情報のみ・裏取り必須）。domestic の title/description の前方に
    * 「次戦・{labelJa}」として出す。until（JSTの試合日）を過ぎるとビルド時に自動で消える
    * ＝journalNext と同じ賞味期限方式。試合が終わったら fights[] に結果を足してこれを更新。
+   *
+   * opponentJa / eventJa / href は「次の試合」一覧（UpcomingFights）とLPヒーローの
+   * 次戦バッジが使う。href はサイト内のイベントハブ（/rizin5 等）＝ファイターLPと
+   * イベントハブを相互に結ぶ配線で、until を過ぎれば両方まとめて自動で消える。
    */
-  nextFightJa?: { labelJa: string; until: string };
+  nextFightJa?: {
+    labelJa: string;
+    until: string;
+    /** 対戦相手（一覧の「vs ◯◯」に出す。無ければ labelJa で代替） */
+    opponentJa?: string;
+    /** 大会名｜会場（公式発表の表記） */
+    eventJa?: string;
+    /** サイト内のイベントハブへのパス（無い大会は持たない） */
+    href?: string;
+  };
   /** 肩書き（例「S・バンタム級4団体統一王者」）。タイトル変動時に手動更新 */
   accoladeJa: string;
   /** 通算戦績。asOf は最終試合日＝「いつ時点の数字か」を必ず出す */
@@ -160,7 +173,13 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['平本', '蓮'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: { labelJa: '9/10ダウトベック戦', until: '2026-09-10' },
+    nextFightJa: {
+      labelJa: '9/10ダウトベック戦',
+      until: '2026-09-10',
+      opponentJa: 'カルシャガ・ダウトベック',
+      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
+      href: '/rizin5',
+    },
     accoladeJa: '総合格闘家・剛毅會（元キックボクサー、K-1甲子園2014優勝）',
     record: { wins: 4, losses: 3, draws: 0, kos: 1, asOf: '2024-07-28' },
     sameAs: [
@@ -240,7 +259,13 @@ export const FIGHTERS: Fighter[] = [
     nameEn: 'Mikuru Asakura',
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: { labelJa: '9/10青木真也戦', until: '2026-09-10' },
+    nextFightJa: {
+      labelJa: '9/10青木真也戦',
+      until: '2026-09-10',
+      opponentJa: '青木真也',
+      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
+      href: '/rizin5',
+    },
     accoladeJa: '総合格闘家・JAPAN TOP TEAM（RIZINフェザー級王座決定戦に3度挑戦も未勝利）',
     record: { wins: 19, losses: 6, draws: 0, kos: 9, asOf: '2025-12-31' },
     headlineStats: [
@@ -310,7 +335,12 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['那須川', '天心'],
     sport: 'boxing',
     voiceScope: 'domestic',
-    nextFightJa: { labelJa: '9/27井上拓真戦', until: '2026-09-27' },
+    nextFightJa: {
+      labelJa: '9/27井上拓真戦',
+      until: '2026-09-27',
+      opponentJa: '井上拓真',
+      eventJa: 'Prime Video Boxing 16｜TOYOTA ARENA TOKYO',
+    },
     accoladeJa: 'プロボクシング・WBC世界バンタム級ランキング1位（元WBOアジアパシフィックバンタム級王者）',
     record: { wins: 8, losses: 1, draws: 0, kos: 3, asOf: '2026-04-11' },
     headlineStats: [
@@ -373,7 +403,12 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['朝倉海'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: { labelJa: '8/29チロン戦', until: '2026-08-29' },
+    nextFightJa: {
+      labelJa: '8/29チロン戦',
+      until: '2026-08-29',
+      opponentJa: 'アオリ・チロン',
+      eventJa: 'UFCファイトナイト上海｜上海インドアスタジアム',
+    },
     accoladeJa: '総合格闘家・JAPAN TOP TEAM所属（元RIZINバンタム級王者・第3代/第6代）',
     record: { wins: 22, losses: 6, draws: 0, kos: 14, asOf: '2026-05-30' },
     headlineStats: [

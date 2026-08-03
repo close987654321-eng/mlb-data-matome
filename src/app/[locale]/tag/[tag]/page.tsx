@@ -43,6 +43,7 @@ import FeedCard from '@/components/FeedCard';
 import TagVoices from '@/components/TagVoices';
 import PlayerNow from '@/components/PlayerNow';
 import FighterNow from '@/components/FighterNow';
+import UpcomingFights from '@/components/UpcomingFights';
 import SeasonJournal from '@/components/SeasonJournal';
 import TeamStandings from '@/components/TeamStandings';
 import SectionHeading from '@/components/SectionHeading';
@@ -672,6 +673,9 @@ export default async function TagPage({
           ))}
         </section>
       )}
+
+      {/* 他ファイターの次戦＝LPを読み終えた読者の次の行き先（自分の次戦はヒーローに出ているので除く）。 */}
+      {fighter && locale !== 'en' && <UpcomingFights excludeSlug={fighter.slug} />}
 
       {/* ファイターLP同士の相互リンク網（選手LPクラスタと同じ思想。まずは井上⇔中谷から）。 */}
       {fighter && otherFighters.length > 0 && (

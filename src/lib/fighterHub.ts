@@ -1,5 +1,6 @@
-import { getFighterByJaName, type Fighter, type FighterFight } from './fighters';
+import { FIGHTERS, getFighterByJaName, type Fighter, type FighterFight } from './fighters';
 import type { FeedItem } from './feed';
+import type { Sport } from './sports';
 import type { TagCount } from './tags';
 
 /**
@@ -24,10 +25,56 @@ export function fightDateJa(date: string): string {
  * until（JSTの試合日）を過ぎたらビルド時に消える＝journalNext と同じ賞味期限方式。
  */
 export function fighterNextFightJa(fighter: Fighter): string | null {
+  return fighterNextFight(fighter)?.labelJa ?? null;
+}
+
+/** 期限内の次戦（相手・大会名・イベントハブのパスつき）。期限切れは null。 */
+export function fighterNextFight(fighter: Fighter): NonNullable<Fighter['nextFightJa']> | null {
   if (!fighter.nextFightJa) return null;
+  return isUpcoming(fighter.nextFightJa.until) ? fighter.nextFightJa : null;
+}
+
+/** until（JSTの試合日）が今日以降か＝まだ「次戦」と呼んでいいか。 */
+function isUpcoming(until: string): boolean {
   const todayJst = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(new Date());
-  if (todayJst > fighter.nextFightJa.until) return null;
-  return fighter.nextFightJa.labelJa;
+  return todayJst <= until;
+}
+
+/** 「2026-09-10」→「9/10（水）」。試合日は JST 基準（カタログの until と同じ）。 */
+export function fightDayJa(until: string): string {
+  return new Intl.DateTimeFormat('ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    month: 'numeric',
+    day: 'numeric',
+    weekday: 'short',
+  }).format(new Date(`${until}T12:00:00+09:00`));
+}
+
+export type UpcomingFight = {
+  fighter: Fighter;
+  next: NonNullable<Fighter['nextFightJa']>;
+};
+
+/**
+ * 期限内の「次の試合」一覧（試合日の近い順）。カタログ1か所から出すので、
+ * ファイターLP・競技LP・/browse・イベントハブのどこに置いても中身がズレない
+ * ＝6枚のLPと大会ハブを1枠で結ぶ内部リンクの網（試合が終われば自動で消える）。
+ */
+export function upcomingFights(opts: { sport?: Sport; excludeSlug?: string } = {}): UpcomingFight[] {
+  return FIGHTERS.filter((f) => f.nextFightJa && isUpcoming(f.nextFightJa.until))
+    .filter((f) => (opts.sport ? f.sport === opts.sport : true))
+    .filter((f) => f.slug !== opts.excludeSlug)
+    .map((f) => ({ fighter: f, next: f.nextFightJa! }))
+    .sort((a, b) => a.next.until.localeCompare(b.next.until));
+}
+
+/**
+ * イベントハブのカード欄から選手名→ファイターLPへ張れるか。LPは記事が1件以上ある
+ * タグにしか生成されない（tag の generateStaticParams）ので、記事0件のファイターには張らない。
+ */
+export function linkableFighterOf(nameJa: string, articleTags: Set<string>): Fighter | null {
+  const fighter = fighterHubOf(nameJa);
+  return fighter && articleTags.has(fighter.nameJa) ? fighter : null;
 }
 
 /**
