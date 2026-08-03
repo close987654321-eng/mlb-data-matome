@@ -36,6 +36,12 @@ export type Fighter = {
   accoladeJa: string;
   /** 通算戦績。asOf は最終試合日＝「いつ時点の数字か」を必ず出す */
   record: { wins: number; losses: number; draws: number; kos: number; asOf: string };
+  /**
+   * LP上部のヒーロー（FighterNow）に大きく出す実測ハイライト数値。record から自動で出る
+   * 通算戦績・KO率以外で見出しにしたい数字（世界戦連勝・P4P順位など）を、裏取りした値だけ
+   * 手動で足す（時点や出典はラベルに含めて曖昧さを残さない）。
+   */
+  headlineStats?: { value: string; labelJa: string }[];
   /** Knowledge Graph 束ね用（Wikipedia 等） */
   sameAs: string[];
   /** 新しい順。LPの「主要試合と海外の反応」タイムラインに出す */
@@ -51,6 +57,12 @@ export const FIGHTERS: Fighter[] = [
     sport: 'boxing',
     accoladeJa: 'プロボクシング・S・バンタム級4団体統一王者（WBA・WBC・IBF・WBO）',
     record: { wins: 33, losses: 0, draws: 0, kos: 27, asOf: '2026-05-02' },
+    headlineStats: [
+      // 世界タイトル戦通算＝28勝無敗23KO（中谷戦終了時点・当サイト2026-06-10記事で裏取り）
+      { value: '28-0', labelJa: '世界タイトル戦（23KO）' },
+      // リング誌P4P1位＝中谷戦2日後の返り咲き（当サイト2026-05-04記事で裏取り）
+      { value: '1位', labelJa: 'リング誌P4P（2026年5月返り咲き）' },
+    ],
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E4%BA%95%E4%B8%8A%E5%B0%9A%E5%BC%A5',
       'https://en.wikipedia.org/wiki/Naoya_Inoue',

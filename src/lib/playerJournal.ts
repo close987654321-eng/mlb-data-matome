@@ -51,6 +51,8 @@ export type JournalEntry = {
   chapterJa?: string;
   /** 章見出しの直下に置く編集リード1行。 */
   chapterLeadJa?: string;
+  /** 山場（peak）に添えるサムネ（出典動画のYouTube公式サムネ等・恒久URLのみ）。 */
+  thumbUrl?: string;
   /** 出典からの逐語引用。 */
   quotes: JournalQuote[];
 };

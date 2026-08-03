@@ -40,6 +40,7 @@ import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } fr
 import FeedCard from '@/components/FeedCard';
 import TagVoices from '@/components/TagVoices';
 import PlayerNow from '@/components/PlayerNow';
+import FighterNow from '@/components/FighterNow';
 import SeasonJournal from '@/components/SeasonJournal';
 import TeamStandings from '@/components/TeamStandings';
 import SectionHeading from '@/components/SectionHeading';
@@ -500,6 +501,17 @@ export default async function TagPage({
         />
       )}
 
+      {/* ファイタータグLP: 「いま」ブロック＝最新の山場の声＋総評＋ビッグ数字（戦績・KO率・世界戦・P4P）。
+          数値は fighters.ts の裏取り済みカタログの再表示（PlayerNow のファイター版・ja のみ）。 */}
+      {fighter && locale !== 'en' && (
+        <FighterNow
+          fighter={fighter}
+          highlight={journal ? journalLatestHighlight(journal) : null}
+          editorNote={editorNote}
+          showJournalJump={Boolean(journal)}
+        />
+      )}
+
       {/* 選手・ファイタータグLP: 反応そのものを LP に直接引用する（クエリ意図との一致＋記事追加ごとに入れ替わる鮮度）。 */}
       {(hub || fighter) && (
         <TagVoices
@@ -512,8 +524,9 @@ export default async function TagPage({
       )}
 
       {/* 編集部ノート＝「海外でどう見られているか」の要約（ja のみ・手書き）。
-          日誌がある選手は「いま」ブロックに吸収済みなので、ここに出すのはファイターと日誌なし選手だけ。 */}
-      {(fighter || (hub && !journal)) && editorNote && (
+          選手は「いま」（PlayerNow）、ファイターは FighterNow に吸収済みなので、
+          ここに出すのは日誌なしの選手だけ。 */}
+      {hub && !journal && editorNote && (
         <section className="space-y-5">
           <SectionHeading label={t('tag.editorNote', { name: (hub ?? fighter)!.nameJa })} />
           <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
