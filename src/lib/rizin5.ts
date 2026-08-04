@@ -79,12 +79,34 @@ export type Rizin5RoadEntry = {
   link?: { href: string; labelJa: string; internal?: boolean };
 };
 
+/** 直近大会のPPV販売実績1行（価格は各大会当時の税込・報道/比較記事で裏取り済みのみ） */
+export type Rizin5PastPpv = {
+  /** 大会名＋開催日（表示用） */
+  eventJa: string;
+  /** 販売プラットフォーム（「／」区切り・表示用） */
+  platformsJa: string;
+  /** 当時の販売価格（表示用） */
+  priceJa: string;
+};
+
+/** チケット席種1行（公式発表の税込価格。JSON-LD の offers にも使うので数値で持つ） */
+export type Rizin5Seat = {
+  nameJa: string;
+  /** 税込価格（円） */
+  price: number;
+  /** 公式ページの完売表記に追従（asOfJa 時点） */
+  soldOut?: boolean;
+};
+
+/** チケット購入導線（公式・プレイガイドの直リンク。アフィリエイトではない通常リンク） */
+export type Rizin5TicketLink = { labelJa: string; href: string };
+
 export const RIZIN5 = {
   enabled: true,
   /** 開催日（JST） */
   eventDate: '2026-09-10',
   dateLabelJa: '2026年9月10日（木）',
-  doorLabelJa: '15:00開場／17:00開演予定',
+  doorLabelJa: '14:00開場／16:00開始予定',
   venueJa: '京セラドーム大阪',
   nameJa: '超RIZIN.5 浪速の超復活祭り',
   /** ページ内容の最終更新日（dateModified・sitemap lastmod に使う） */
@@ -106,7 +128,51 @@ export const RIZIN5 = {
     /** 公式発表があったら true にして platforms を確定情報に書き換える */
     announced: false,
     noteJa:
-      '超RIZIN.5の配信・PPVの公式発表はまだ出ていない（2026年8月3日時点）。これまでのRIZINの大型大会はABEMA・U-NEXT・スカパー!・RIZIN LIVEなどでPPV販売されてきたので、発表され次第この欄を更新する。',
+      '超RIZIN.5の配信・PPVの公式発表はまだ出ていない（2026年8月4日時点。公式サイトも「決定次第案内」の表記）。これまでのRIZINの大型大会はABEMA・U-NEXT・スカパー!・RIZIN LIVEなどでPPV販売されてきたので、当たりを付けるための直近実績を下に置いておく。発表が出たら、この欄を価格・購入手順つきで即日更新する。',
+    /**
+     * 直近大会のPPV販売実績（各大会当時の税込価格）。販売ページ・比較記事で裏取りした値のみ＝推測で埋めない。
+     * 超RIZIN.5 の販路発表が出たら、この表の上に確定情報＋購入導線を置く。
+     */
+    pastPpv: [
+      {
+        eventJa: '超RIZIN.4（2025年7月27日）',
+        platformsJa: 'ABEMA／U-NEXT',
+        priceJa: '前売 6,500円・当日 6,900円（両サービス同一価格・地上波中継なし）',
+      },
+      {
+        eventJa: 'RIZIN.53（2026年5月10日）',
+        platformsJa: 'ABEMA／U-NEXT／スカパー!／RIZIN LIVE／RIZIN 100 CLUB',
+        priceJa: '前売 5,500円・当日 6,000円・見逃し 4,400円（スカパー!は一律6,000円＋基本料、100 CLUBは会員割引あり）',
+      },
+    ] satisfies Rizin5PastPpv[],
+    pastPpvNoteJa:
+      '価格はいずれも各大会当時の販売価格（税込）。超RIZIN.5の販路・価格は公式発表が正で、こことは異なる可能性がある。',
+  },
+
+  /**
+   * チケット（現地観戦）。席種・価格・完売状況は RIZIN 公式の大会ページ
+   * （https://jp.rizinff.com/_ct/17834937）の表記が正＝転記のみ・推測で埋めない。
+   * 残席は動くので、席種の状況を更新したら asOfJa を必ずその日の日付にする。
+   */
+  tickets: {
+    statusJa: '一般発売中（2026年7月12日 10:00〜）。スマートフォン対応の電子チケット。',
+    asOfJa: '2026年8月4日',
+    seats: [
+      { nameJa: 'VVIP1列席', price: 1_100_000, soldOut: true },
+      { nameJa: 'VVIP2・3列席', price: 550_000 },
+      { nameJa: 'VIP席', price: 220_000 },
+      { nameJa: 'SRS席', price: 55_000 },
+      { nameJa: 'RS席', price: 44_000 },
+      { nameJa: 'S席', price: 33_000, soldOut: true },
+      { nameJa: 'A席', price: 16_500, soldOut: true },
+    ] satisfies Rizin5Seat[],
+    noteJa:
+      'このほか選手応援シート等の企画席あり（一部完売）。残席状況は日々変わるので、購入前に公式ページで最新の販売状況を確認してほしい。',
+    links: [
+      { labelJa: 'RIZIN公式（大会情報・チケット）', href: 'https://jp.rizinff.com/_ct/17834937' },
+      { labelJa: 'チケットぴあ', href: 'https://lp.p.pia.jp/event/sports/476958/index.html' },
+      { labelJa: 'イープラス', href: 'https://eplus.jp/sf/detail/1784450087-P0030114' },
+    ] satisfies Rizin5TicketLink[],
   },
 
   cards: [

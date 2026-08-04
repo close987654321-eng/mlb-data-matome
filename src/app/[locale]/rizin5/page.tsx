@@ -8,7 +8,7 @@ import { getAllTags } from '@/lib/tags';
 import { linkableFighterOf } from '@/lib/fighterHub';
 import { RIZIN5, type Rizin5Fighter } from '@/lib/rizin5';
 import { SPORT_INFO } from '@/lib/sports';
-import { VOD_OFFERS } from '@/lib/vod';
+import { vodOffers } from '@/lib/vod';
 import EventCountdown from '@/components/EventCountdown';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
@@ -136,8 +136,11 @@ export default async function Rizin5Page({
     [],
   );
 
-  // 視聴CTA: vod.ts の ABEMA 案件を参照＝アフィリエイト提携後の href 差し替えがここにも自動反映される。
-  const abema = VOD_OFFERS.mma.find((o) => o.service === 'ABEMA' && o.href);
+  // 視聴CTA: vod.ts の mma 案件のうち RIZIN の PPV 販売実績がある2社（ABEMA・U-NEXT）だけ出す。
+  // アフィリエイト提携後は vod.ts の href 差し替えがここにも自動反映される。
+  const ppvServices = vodOffers('mma').filter((o) => o.service === 'ABEMA' || o.service === 'U-NEXT');
+  // JSON-LD の offers は販売中の席種だけで組む（完売席を含めると価格レンジが実態とズレる）。
+  const seatsOnSale = RIZIN5.tickets.seats.filter((s) => !s.soldOut);
 
   // カード内の選手名をファイターLPへ張るための集合。LPは記事1件以上のタグにしか生成されない。
   const lpTags = new Set((await getAllTags()).map(({ tag }) => tag));
@@ -150,7 +153,8 @@ export default async function Rizin5Page({
       {
         '@type': 'SportsEvent',
         name: RIZIN5.nameJa,
-        startDate: `${RIZIN5.eventDate}T17:00:00+09:00`,
+        // 開始時刻は公式の「開場14:00／開始16:00予定」に追従（doorLabelJa とセットで直す）。
+        startDate: `${RIZIN5.eventDate}T16:00:00+09:00`,
         eventStatus: 'https://schema.org/EventScheduled',
         eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
         location: {
@@ -166,6 +170,19 @@ export default async function Rizin5Page({
         description: t('rizin5.metaDesc'),
         url: absoluteUrl(locale, '/rizin5'),
         image: OG.url,
+        // チケット実売（公式の席種・価格の転記）。イベントリッチリザルトの offers 推奨項目を実測値で満たす。
+        ...(seatsOnSale.length > 0 && {
+          offers: {
+            '@type': 'AggregateOffer',
+            url: RIZIN5.tickets.links[0].href,
+            priceCurrency: 'JPY',
+            lowPrice: Math.min(...seatsOnSale.map((s) => s.price)),
+            highPrice: Math.max(...seatsOnSale.map((s) => s.price)),
+            offerCount: seatsOnSale.length,
+            availability: 'https://schema.org/LimitedAvailability',
+            validFrom: '2026-07-12T10:00:00+09:00',
+          },
+        }),
       },
       {
         '@type': 'CollectionPage',
@@ -303,20 +320,105 @@ export default async function Rizin5Page({
         </div>
       </section>
 
-      {/* 視聴方法（未発表の間は正直にそう書く。提携確定後は vod.ts の href 差し替えが自動反映）。 */}
+      {/* 視聴方法（未発表の間は正直にそう書き、直近大会のPPV実績で当たりを付けてもらう。提携確定後は vod.ts の href 差し替えが自動反映）。 */}
       <section id="watch">
         <SectionHeading label={t('rizin5.viewingTitle')} lead />
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">{RIZIN5.viewing.noteJa}</p>
-        {abema?.href && (
-          <a
-            href={abema.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft"
-          >
-            {t('rizin5.viewingCta', { service: abema.service })} <span aria-hidden>↗</span>
-          </a>
+
+        <div className="mt-5">
+          <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-ink-mute">
+            {t('rizin5.viewingPastTitle')}
+          </p>
+          <div className="mt-2 overflow-x-auto">
+            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-ink/40 text-[11px] uppercase tracking-[0.1em] text-ink-mute">
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.viewingPastEvent')}</th>
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.viewingPastPlatforms')}</th>
+                  <th className="py-2 font-medium">{t('rizin5.viewingPastPrice')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {RIZIN5.viewing.pastPpv.map((row) => (
+                  <tr key={row.eventJa} className="border-b border-line align-top">
+                    <td className="whitespace-nowrap py-2.5 pr-4 font-bold text-ink">{row.eventJa}</td>
+                    <td className="py-2.5 pr-4 text-ink">{row.platformsJa}</td>
+                    <td className="py-2.5 text-ink-soft">{row.priceJa}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 max-w-prose text-xs leading-relaxed text-ink-mute">{RIZIN5.viewing.pastPpvNoteJa}</p>
+        </div>
+
+        {/* 配信サービスへの導線。景表法ステマ規制対応＝PR明示＋rel=sponsored（VodCta と同じ規律・アフィ差し替え後もこのまま法令準拠）。 */}
+        {ppvServices.length > 0 && (
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <span className="rounded bg-ink/[0.06] px-1.5 py-0.5 text-[10px] font-semibold text-ink-soft">
+              {t('vod.pr')}
+            </span>
+            {ppvServices.map((o) => (
+              <a
+                key={o.service}
+                href={o.href}
+                target="_blank"
+                rel="noopener nofollow sponsored"
+                className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft"
+              >
+                {t('rizin5.viewingCta', { service: o.service })} <span aria-hidden>↗</span>
+              </a>
+            ))}
+          </div>
         )}
+      </section>
+
+      {/* チケット（現地観戦）。席種・価格は公式ページの転記＝残席が動くので「◯◯時点」を必ず出す。購入導線は公式＋プレイガイドの通常リンク（非アフィリエイト）。 */}
+      <section id="tickets">
+        <SectionHeading label={t('rizin5.ticketsTitle')} lead />
+        <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink">{RIZIN5.tickets.statusJa}</p>
+        <div className="mt-4 max-w-xl overflow-x-auto">
+          <table className="w-full border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-ink/40 text-[11px] uppercase tracking-[0.1em] text-ink-mute">
+                <th className="py-2 pr-4 font-medium">{t('rizin5.ticketsSeat')}</th>
+                <th className="py-2 pr-4 font-medium">{t('rizin5.ticketsPrice')}</th>
+                <th className="py-2 font-medium">{t('rizin5.ticketsStatus')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {RIZIN5.tickets.seats.map((seat) => (
+                <tr key={seat.nameJa} className="border-b border-line">
+                  <td className="py-2 pr-4 font-bold text-ink">{seat.nameJa}</td>
+                  <td className="py-2 pr-4 tabular-nums text-ink">{seat.price.toLocaleString('ja-JP')}円</td>
+                  <td className="py-2 text-xs">
+                    {seat.soldOut ? (
+                      <span className="text-ink-mute">{t('rizin5.ticketsSoldOut')}</span>
+                    ) : (
+                      <span className="font-medium text-ink">{t('rizin5.ticketsOnSale')}</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-2 max-w-prose text-xs leading-relaxed text-ink-mute">
+          {t('rizin5.ticketsAsOf', { date: RIZIN5.tickets.asOfJa })}｜{RIZIN5.tickets.noteJa}
+        </p>
+        <div className="mt-4 flex flex-wrap gap-3">
+          {RIZIN5.tickets.links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink px-4 py-2 text-sm font-bold text-ink transition-colors hover:bg-ink hover:text-paper"
+            >
+              {l.labelJa} <span aria-hidden>↗</span>
+            </a>
+          ))}
+        </div>
       </section>
 
       {/* ロード・トゥ・9.10（新しい順・出来事の日付基準）。 */}
