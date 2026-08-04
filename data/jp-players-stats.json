@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-08-04 12:41",
+  "asOf": "2026-08-04 15:42",
   "players": {
     "500743": {
       "fielding": {
@@ -1415,7 +1415,7 @@
       "league": "NL",
       "pitching": {
         "avg": ".181",
-        "baseOnBalls": 24,
+        "baseOnBalls": 25,
         "earnedRuns": 11,
         "era": "2.30",
         "gamesPlayed": 32,
@@ -1429,10 +1429,10 @@
         "runs": 12,
         "saves": 0,
         "strikeOuts": 47,
-        "strikeoutWalkRatio": "1.96",
+        "strikeoutWalkRatio": "1.88",
         "strikeoutsPer9Inn": "9.84",
-        "walksPer9Inn": "5.02",
-        "whip": "1.16",
+        "walksPer9Inn": "5.23",
+        "whip": "1.19",
         "winPercentage": ".667",
         "wins": 2
       },
@@ -1649,7 +1649,7 @@
           },
           "runs": {
             "lg": 37,
-            "mlb": 90
+            "mlb": 91
           },
           "slg": {
             "lg": 21,
@@ -1991,8 +1991,8 @@
             "mlb": 8
           },
           "obp": {
-            "lg": 19,
-            "mlb": 33
+            "lg": 20,
+            "mlb": 34
           },
           "ops": {
             "lg": 5,
@@ -2037,27 +2037,27 @@
         "fielding": ".988",
         "gamesPlayed": 106,
         "gamesStarted": 106,
-        "innings": "912.1",
+        "innings": "914.1",
         "oaa": 9,
         "position": "右翼",
-        "putOuts": 244,
+        "putOuts": 246,
         "runsPrevented": 8
       },
       "hitting": {
-        "atBats": 409,
+        "atBats": 410,
         "avg": ".244",
-        "babip": ".293",
+        "babip": ".292",
         "baseOnBalls": 55,
         "doubles": 22,
         "gamesPlayed": 109,
         "hits": 100,
         "homeRuns": 16,
         "obp": ".340",
-        "ops": ".814",
-        "plateAppearances": 473,
+        "ops": ".813",
+        "plateAppearances": 474,
         "rbi": 52,
         "runs": 67,
-        "slg": ".474",
+        "slg": ".473",
         "stolenBases": 15,
         "strikeOuts": 109,
         "triples": 12
@@ -2068,7 +2068,7 @@
         "hitting": {
           "avg": {
             "lg": 56,
-            "mlb": 95
+            "mlb": 96
           },
           "baseOnBalls": {
             "lg": 13,
@@ -2180,8 +2180,8 @@
             "mlb": 11
           },
           "winPercentage": {
-            "lg": 22,
-            "mlb": 42
+            "lg": 21,
+            "mlb": 41
           },
           "wins": {
             "lg": 27,
@@ -2701,7 +2701,7 @@
           },
           "obp": {
             "lg": 16,
-            "mlb": 43
+            "mlb": 42
           },
           "ops": {
             "lg": 4,
@@ -3046,8 +3046,8 @@
             "mlb": 56
           },
           "wins": {
-            "lg": 51,
-            "mlb": 99
+            "lg": 52,
+            "mlb": 100
           }
         }
       },
@@ -3178,7 +3178,6 @@
         }
       },
       "saber": {
-        "hit": 0,
         "pit": 0.283453
       },
       "team": "アストロズ"
