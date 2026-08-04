@@ -6,7 +6,7 @@ export const OPERATOR_NAME = '「海外の反応まとめ」運営';
 // 問い合わせ用 Google フォーム（about / contact ページの CTA リンク先）。
 export const CONTACT_FORM_URL = 'https://forms.gle/Gh6pjqdCR3ijLJqW8';
 // 最終更新日（ポリシー改定時に手で更新する）。
-export const LEGAL_UPDATED = '2026-06-13';
+export const LEGAL_UPDATED = '2026-08-04';
 
 /** 法務系ページ1本の構造化コンテンツ（見出し＋段落＋箇条書き）。 */
 export type LegalSection = {
@@ -38,6 +38,13 @@ const PRIVACY: Record<Locale, LegalDoc> = {
         paragraphs: [
           '当サイトは、第三者配信の広告サービス（Google アドセンス等）を利用する場合があります。このような広告配信事業者は、利用者の興味に応じた商品やサービスの広告を表示するため、当サイトや他サイトへのアクセスに関する情報（氏名・住所・メールアドレス・電話番号は含みません）を使用することがあります。',
           'Cookie を無効にする方法や Google アドセンスに関する詳細は、「広告 – ポリシーと規約 – Google」をご確認ください。第三者配信による広告のパーソナライズは、Google の「広告設定」から無効にできます。',
+        ],
+      },
+      {
+        heading: 'アフィリエイトプログラムについて',
+        paragraphs: [
+          '当サイトは、ASP（アフィリエイト・サービス・プロバイダ。A8.net、afb、バリューコマース、アクセストレード等）が提供するアフィリエイトプログラムを利用する場合があります。この場合、記事内・記事下のリンクには広告（PR）が含まれ、該当箇所には「PR」の表記を行います。',
+          'これらのリンクを経由して商品・サービスのお申込みが行われた場合、当サイトは提携先から報酬を受け取ることがあります。サービスの料金・提供条件は変更されることがあるため、お申込みの際は必ずリンク先の公式サイトで最新の情報をご確認ください。',
         ],
       },
       {
@@ -79,6 +86,13 @@ const PRIVACY: Record<Locale, LegalDoc> = {
         paragraphs: [
           'This site may use third-party ad services such as Google AdSense. These providers may use information about your visits to this and other sites (excluding your name, address, email, or phone number) to show ads relevant to your interests.',
           'For details on cookies and AdSense, see “Advertising – Policies & Terms – Google.” You can disable personalized advertising via Google’s Ads Settings.',
+        ],
+      },
+      {
+        heading: 'Affiliate programs',
+        paragraphs: [
+          'This site may use affiliate programs provided through ASPs (affiliate service providers) such as A8.net, afb, ValueCommerce, and AccessTrade. In that case, links in or below articles may include advertising, and such placements are labeled “PR.”',
+          'When you sign up for a product or service via these links, this site may receive a commission from the partner. Prices and terms are subject to change, so please always check the latest details on the linked official site.',
         ],
       },
       {
