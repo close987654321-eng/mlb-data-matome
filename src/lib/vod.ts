@@ -11,6 +11,11 @@ export type VodOffer = {
   pitch: Record<Locale, string>;
   /** 遷移先。当面は各社の公式 URL。提携確定後にアフィリエイトリンクへ差し替える。null で非表示。 */
   href: string | null;
+  /**
+   * RIZIN の大型大会で PPV 販売実績がある販路。/rizin5 の #watch に視聴CTAとして出す判定に使う
+   * （ページ側にサービス名をハードコードせず、販路の増減をこのファイルだけで完結させる）。
+   */
+  rizinPpv?: boolean;
 };
 
 export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
@@ -48,15 +53,6 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
   ],
   mma: [
     {
-      service: 'U-NEXT',
-      pitch: {
-        ja: 'UFC の日本向け配信はこちら。',
-        en: "UFC's home for Japan.",
-      },
-      // TODO(提携確定後): U-NEXT リンクに差し替え
-      href: 'https://video.unext.jp/',
-    },
-    {
       service: 'ABEMA',
       pitch: {
         ja: 'RIZIN を PPV で。',
@@ -65,6 +61,28 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
       // A8 の ABEMA プレミアム案件（2026-08-05 承認・1号店メディアIDで発行した a8mat）。
       // 2号店（anime）のリンクとは別物＝流用すると成果否認。提携解除時は公式 https://abema.tv/ に戻す。
       href: 'https://px.a8.net/svt/ejp?a8mat=4B9YLB+8KZZQQ+4EKC+60OXE',
+      rizinPpv: true,
+    },
+    {
+      service: 'U-NEXT',
+      pitch: {
+        ja: 'UFC の日本向け配信はこちら。',
+        en: "UFC's home for Japan.",
+      },
+      // TODO(提携確定後): U-NEXT リンクに差し替え
+      href: 'https://video.unext.jp/',
+      rizinPpv: true,
+    },
+    {
+      service: 'スカパー!',
+      pitch: {
+        ja: 'RIZIN を PPV で。格闘技専門チャンネル「ファイティングTV サムライ」も。',
+        en: 'RIZIN via PPV, plus a dedicated combat-sports channel.',
+      },
+      // もしもアフィリエイトのスカパー!案件（2026-08-05 承認）。実体はバリューコマース経由の二段リダイレクト。
+      // 元タグは protocol-relative（//af.moshimo.com/…）なので https: を明示して埋める。
+      href: 'https://af.moshimo.com/af/c/click?a_id=5731049&p_id=1080&pc_id=1564&pl_id=16147',
+      rizinPpv: true,
     },
   ],
   // NPB（next メジャーリーガー）の視聴サービスは提携が固まるまで非表示（空配列＝vodOffers は [] を返し CTA 非表示）。

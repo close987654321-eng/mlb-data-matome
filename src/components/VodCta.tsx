@@ -43,6 +43,8 @@ export default function VodCta({
               href={o.href}
               target="_blank"
               rel="noopener nofollow sponsored"
+              // もしも（スカパー!）のタグ仕様。既定の strict-origin だと参照元URLが落ちて成果計測を取りこぼす。
+              referrerPolicy="no-referrer-when-downgrade"
               className="inline-flex shrink-0 items-center gap-1.5 rounded-[3px] bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink-soft"
             >
               {watchLabel}
