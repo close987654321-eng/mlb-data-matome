@@ -61,15 +61,25 @@ jobs:
           SEASON=$(TZ=Asia/Tokyo date +%Y)
           node scripts/fetch-mlb-stats.mjs standings "$ASOF" "$SEASON" | tail -2 || echo "standings スキップ（既存JSONを保持）"
 
-      - name: 投手データ（球種＋サイヤング予測）を1日1回だけ更新
+      - name: 投手データ（球種＋サイヤング予測）＋MVP予測ボードを1日1回だけ更新
         run: |
           set -euo pipefail
           # このリポの GitHub ネイティブ cron は不発（毎時ジョブは cron-job.org の workflow_dispatch で駆動）。
-          # なので日次の投手データ更新は独立 schedule でなく、確実に回るこの毎時ジョブに相乗りさせる。
-          # UTC 08時台の実行のときだけ走らせる＝実質1日1回（球種/被弾は登板ごとにしか動かない・§4.1 低頻度）。
-          # 前日のMLB全試合が確定した後（08 UTC = JST 17時 = ET 4時）。他の時間帯は即スキップ。
-          if [ "$(date -u +%H)" != "08" ]; then
-            echo "投手データ更新は 08 UTC の実行時のみ（現在 $(date -u +%H) UTC）→ スキップ"
+          # なので日次の投手/MVPデータ更新は独立 schedule でなく、確実に回るこの毎時ジョブに相乗りさせる。
+          # ⚠️ 以前は「UTC 08時台の実行のときだけ」という時刻の完全一致で判定していたが、外部トリガーの
+          # 発火時刻がドリフトしてUTC 08時台に一度も当たらなくなり、cy-young/mvp/pitch-arsenals の3ボードが
+          # 2026-07-27を最後に10日以上静止する事故が発生（2026-08-06発覚）。時刻一致でなく「今日まだ
+          # 更新していないか」で判定する自己修復ゲートに変更＝毎時ジョブがどの分・時に実行されても、
+          # 前日の試合が確定した後の最初の1回で必ず拾える。
+          CURRENT_HOUR_UTC=$((10#$(date -u +%H)))
+          if [ "$CURRENT_HOUR_UTC" -lt 8 ]; then
+            echo "投手/MVPデータ更新は UTC 8時以降のみ（前日のMLB全試合が確定=ET4時後・現在 ${CURRENT_HOUR_UTC} UTC）→ スキップ"
+            exit 0
+          fi
+          TODAY_JST=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+          LAST_ASOF_DATE=$(grep -o '"asOf": *"[0-9-]*' data/cy-young-board.json | head -1 | grep -o '[0-9-]*$' || echo "")
+          if [ "$LAST_ASOF_DATE" = "$TODAY_JST" ]; then
+            echo "本日分は更新済み（asOf日付=${LAST_ASOF_DATE}）→ スキップ"
             exit 0
           fi
           SEASON=$(TZ=Asia/Tokyo date +%Y)
