@@ -62,8 +62,9 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
         ja: 'RIZIN を PPV で。',
         en: 'RIZIN via PPV.',
       },
-      // TODO(提携確定後): ABEMA（プレミアム/PPV・A8 等で要確認）リンクに差し替え
-      href: 'https://abema.tv/',
+      // A8 の ABEMA プレミアム案件（2026-08-05 承認・1号店メディアIDで発行した a8mat）。
+      // 2号店（anime）のリンクとは別物＝流用すると成果否認。提携解除時は公式 https://abema.tv/ に戻す。
+      href: 'https://px.a8.net/svt/ejp?a8mat=4B9YLB+8KZZQQ+4EKC+60OXE',
     },
   ],
   // NPB（next メジャーリーガー）の視聴サービスは提携が固まるまで非表示（空配列＝vodOffers は [] を返し CTA 非表示）。
