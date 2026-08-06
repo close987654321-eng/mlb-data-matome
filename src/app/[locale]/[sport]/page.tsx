@@ -10,6 +10,7 @@ import { getTagsBySport } from '@/lib/tags';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
+import FighterHubLinks from '@/components/FighterHubLinks';
 import TeamHubLinks from '@/components/TeamHubLinks';
 import Rizin5Promo from '@/components/Rizin5Promo';
 import UpcomingFights from '@/components/UpcomingFights';
@@ -167,6 +168,9 @@ export default async function SportPage({
           </p>
         </section>
       )}
+
+      {/* 選手（格闘家）LPへの導線。人気タグより上＝LPが増えてきた導線不足への対応（ファイタータグの無い競技では自動的に非表示）。 */}
+      <FighterHubLinks sport={sport} />
 
       <PopularTags sport={sport} />
 

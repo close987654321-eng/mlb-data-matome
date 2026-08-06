@@ -78,19 +78,12 @@ export function linkableFighterOf(nameJa: string, articleTags: Set<string>): Fig
 }
 
 /**
- * LP の meta title（absolute・ja）。voiceScope で框を出し分ける:
- * - global: 「海外の反応まとめ」框（井上・中谷＝英語圏の声が実在する看板に嘘のないケース）
- * - domestic: 「戦績×次戦×ファンの声」框＝「{選手名} ダウトベック」等の対戦・戦績クエリに
- *   正面から当てる。次戦ラベルは期限つき（試合後は自動で「戦績とファンの声」に戻る）。
+ * LP の meta title（absolute・ja）。「{選手名} 評判・戦績まとめ」で統一（2026-08-06 村山指示）。
+ * 「評判」は海外・国内を問わない中立語＝voiceScope（global/domestic）で框を割る必要がない
+ * （domestic ファイターに「海外の反応」を名乗らせない制約とも自然に両立する）。
  */
 export function fighterHubTitleJa(fighter: Fighter): string {
-  if (fighter.voiceScope === 'global') {
-    return `${fighter.nameJa}の海外の反応まとめ【現地ファンの声を日本語訳】`;
-  }
-  const next = fighterNextFightJa(fighter);
-  return next
-    ? `${fighter.nameJa}の戦績と次戦・${next}【ファンの声で読むキャリア観測】`
-    : `${fighter.nameJa}の戦績とファンの声【キャリア観測日誌】`;
+  return `${fighter.nameJa} 評判・戦績まとめ`;
 }
 
 /** LP の H1（ja）＝ title から【】接尾辞を外したもの（tagHub と同じ関係）。 */
