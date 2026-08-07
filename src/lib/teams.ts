@@ -59,6 +59,13 @@ export function getTeam(teamJa?: string | null): TeamInfo | undefined {
   return TEAMS[teamJa];
 }
 
+/** teamId → 日本語短縮名とチーム情報。statsapi 由来のデータ（試合日程）に日本語名を当てるのに使う。 */
+const BY_ID = new Map(Object.entries(TEAMS).map(([nameJa, info]) => [info.id, { nameJa, info }]));
+
+export function getTeamById(id?: number | null): { nameJa: string; info: TeamInfo } | undefined {
+  return id == null ? undefined : BY_ID.get(id);
+}
+
 /** 公式チームロゴ（SVG）の直リンクURL。 */
 export function teamLogoUrl(id: number): string {
   return `https://www.mlbstatic.com/team-logos/${id}.svg`;

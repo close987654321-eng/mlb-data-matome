@@ -404,10 +404,12 @@
     "statLast10": "L10 {record}",
     "teamGames": "{name} — results & overseas reactions",
     "teamGamesJump": "See recent results",
-    "teamGamesNote": "Scores are official MLB results. Each row links to the fan reactions for that game.",
+    "teamGamesNote": "Scores are official MLB results (updated hourly). Rows with a digest link to the fan reactions for that game.",
+    "gamesMore": "Show {count} earlier games",
     "gameWin": "Win",
     "gameLoss": "Loss",
-    "gameHomers": "HR: {names}"
+    "gameHomers": "HR: {names}",
+    "gameNoteBy": "Editor's note"
   },
   "daily": {
     "threeLines": "Today in 3 lines",

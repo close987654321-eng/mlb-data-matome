@@ -3,9 +3,6 @@ import { isStopTag, type TagCount } from './tags';
 import { getPlayerByJaName, hasMlbStats, PLAYERS, type Player } from './players';
 import type { PlayersSnapshot } from './playerStats';
 import type { VoiceSubject } from './tagHub';
-import { gameDateOf } from './gameSeo';
-import type { FeedItem } from './feed';
-import type { Thread, ThreadGameSide } from '@/types/thread';
 
 /**
  * チームタグLP（リッチ化するタグページ）の判定と導入文の唯一の正。
@@ -163,57 +160,6 @@ export function teamVoiceSubject(hub: TeamHub): VoiceSubject {
     aliases: [...shortEn, ...(hub.info.aliasJa ? [hub.info.aliasJa] : [])],
     exact: true,
   };
-}
-
-/**
- * チームLPの試合タイムライン1行。記事に焼き込んだ試合結果（Thread.game＝MLB公式スケジュールAPI
- * 由来の公知の数値）を、そのチーム視点（自軍/相手・勝敗）に組み替えたもの。
- */
-export type TeamGameRow = {
-  thread: Thread;
-  /** 試合日（JST）。記事の公開日ではなく試合そのものの日付で並べる。 */
-  date: string;
-  self: ThreadGameSide;
-  opp: ThreadGameSide;
-  /** 自チームがホームか。表示の「◯◯戦（ホーム/ビジター）」に使う。 */
-  home: boolean;
-  /** 勝ち=true / 負け=false / 同点（サスペンデッド等）=null */
-  win: boolean | null;
-};
-
-/**
- * そのチームが**当事者だった**試合を新しい順に。タグが付いているだけの試合
- * （ライバル戦の記事にチーム名タグが付くことがある）は当事者判定で除く。
- *
- * 同じ試合を2本の記事が扱うことがある（試合レポート＋珍プレー記事）ので、試合の同一性
- * （日付＋対戦カード＋スコア）で1行にまとめる＝タイムラインに同じ試合が二度出ない。
- * フィードは新着順なので、残るのは先に公開された方＝通常は試合レポート。
- */
-export function teamGames(feed: FeedItem[], teamJa: string, limit = 8): TeamGameRow[] {
-  const seen = new Set<string>();
-  const rows: TeamGameRow[] = [];
-  for (const item of feed) {
-    if (item.kind !== 'thread') continue;
-    const game = item.thread.game;
-    if (!game) continue;
-    const home = game.home.ja === teamJa;
-    if (!home && game.away.ja !== teamJa) continue;
-    const date = gameDateOf(item.thread);
-    const key = `${date}|${game.away.ja}|${game.home.ja}|${game.away.score}-${game.home.score}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    const self = home ? game.home : game.away;
-    const opp = home ? game.away : game.home;
-    rows.push({
-      thread: item.thread,
-      date,
-      self,
-      opp,
-      home,
-      win: self.score === opp.score ? null : self.score > opp.score,
-    });
-  }
-  return rows.sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
 }
 
 /**

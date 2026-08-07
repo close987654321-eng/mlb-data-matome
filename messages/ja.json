@@ -404,10 +404,12 @@
     "statLast10": "直近10試合 {record}",
     "teamGames": "{name}の試合結果と海外の反応",
     "teamGamesJump": "直近の試合結果を見る",
-    "teamGamesNote": "スコアは MLB 公式の試合結果。各行から、その試合に対する現地ファンの反応まとめへ。",
+    "teamGamesNote": "スコアは MLB 公式の試合結果（毎時更新）。まとめ記事がある試合は、行をタップすると現地ファンの反応まとめへ。",
+    "gamesMore": "過去の試合をもっと見る（あと{count}試合）",
     "gameWin": "勝ち",
     "gameLoss": "負け",
-    "gameHomers": "本塁打 {names}"
+    "gameHomers": "本塁打 {names}",
+    "gameNoteBy": "中の人メモ"
   },
   "daily": {
     "threeLines": "きょうの3行",

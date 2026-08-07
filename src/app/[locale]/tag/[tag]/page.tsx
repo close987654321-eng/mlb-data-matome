@@ -33,12 +33,12 @@ import {
   teamJpPlayers,
   teamDisplayJa,
   teamVoiceSubject,
-  teamGames,
   teamTagHubs,
   TEAM_HUB_MIN_ARTICLES,
   type TeamHub,
-  type TeamGameRow,
 } from '@/lib/teamHub';
+import { getTeamSchedule, teamGameRows, type TeamGameRow } from '@/lib/teamGames';
+import { getTeamNotes } from '@/lib/teamNotes';
 import { getTeam, headshotUrl, teamLogoUrl, teamOfficialUrl, type TeamInfo } from '@/lib/teams';
 import {
   getStandings,
@@ -291,7 +291,8 @@ export default async function TagPage({
   let hubAsOf: string | undefined;
   // チームLPの「いま」ブロック用: 地区順位の現在地と、記事に焼き込んだ試合結果のタイムライン。
   let teamStanding: { row: StandingRow; division: StandingsDivision } | null = null;
-  let teamGameRows: TeamGameRow[] = [];
+  let teamGames: TeamGameRow[] = [];
+  let teamNotes = new Map<string, string>();
   let teamAsOf: string | undefined;
   if (hub) {
     // 所属は ja/en どちらのLPでも顔写真の横に出すので、導入文（ja のみ）と切り離して取る。
@@ -313,15 +314,19 @@ export default async function TagPage({
     intro = fighterHubIntroJa(fighter, feed.length);
     editorNote = await getEditorNote(fighter.slug);
   } else if (teamLp) {
-    const [snap, standing, standings] = await Promise.all([
+    const [snap, standing, standings, schedule, notes] = await Promise.all([
       getPlayersSnapshot(),
       standingOfTeam(teamLp.info.id),
       getStandings(),
+      getTeamSchedule(),
+      getTeamNotes(teamLp.info.slug),
     ]);
     teamPlayers = teamJpPlayers(snap, decoded);
     teamStanding = standing;
     teamAsOf = standings.asOf || undefined;
-    teamGameRows = teamGames(feed, decoded);
+    // 日程（全試合）を背骨に、記事がある試合だけリンク・本塁打・現地の声が乗る。
+    teamGames = teamGameRows(schedule, feed, decoded);
+    teamNotes = notes;
     for (const p of teamPlayers) {
       const line = statLineOf(snap.players[String(p.mlbId)], locale);
       if (line) statLines.set(p.slug, line);
@@ -525,7 +530,7 @@ export default async function TagPage({
           standing={teamStanding}
           asOf={teamAsOf}
           voice={voices[0] ?? null}
-          gamesAnchor={teamGameRows.length > 0}
+          gamesAnchor={teamGames.length > 0}
         />
       )}
 
@@ -533,8 +538,9 @@ export default async function TagPage({
           一覧の段階で見せて、その試合のまとめ記事へ送る（「{チーム} 対 {チーム} 海外の反応」の受け皿）。 */}
       {teamLp && (
         <TeamGames
-          rows={teamGameRows}
+          rows={teamGames}
           locale={locale}
+          notes={teamNotes}
           label={t('tag.teamGames', {
             name: locale === 'en' ? teamLp.info.nameEn : teamLp.nameJa,
           })}

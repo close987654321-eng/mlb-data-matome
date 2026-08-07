@@ -2392,6 +2392,77 @@ async function runStandings(season, asOf) {
   console.log(`standings 書き出し: 6地区${total}球団 / asOf ${stampedAsOf} → ${file}`);
 }
 
+/** ISO日時（UTC）→ その試合の日本時間の日付。記事の日付（series.date）と同じ基準に揃える。 */
+function jstDateOf(iso) {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date(iso));
+}
+
+/**
+ * チームLPの試合タイムライン用に、直近 days 日ぶんの**全試合の結果**を data/team-games.json へ。
+ *
+ * なぜ要るか: それまでタイムラインは記事に焼き込んだ試合結果（Thread.game）だけで組んでいたので、
+ * **まとめ記事を書いていない試合が丸ごと抜け**、「ホワイトソックスの試合結果」が7/30で止まって見えた
+ * （2026-08-07 村山指摘）。日程 API を毎時取り直して全試合を並べ、記事がある試合だけリンクを足す形にする。
+ *
+ * 保存は「1試合1行の平たい配列」＝チームごとに2重持ちしない（ファイルを小さく保ち毎時コミットを軽くする）。
+ * チーム別の並べ替えはビルド時に src/lib/teamGames.ts がやる。サイト本体は API を叩かない posture のまま。
+ *
+ * ⚠️ 日付は **JST**（gameDate を Asia/Tokyo に直した日）。記事の series.date が JST なので、
+ * ET の officialDate をそのまま入れると1日ズレて記事と突き合わせできない（ET夜の試合＝JST翌日）。
+ */
+async function runTeamGames(season, asOf, days = 30) {
+  const to = etToday();
+  const from = addDays(to, -days);
+  const data = await getJson(
+    `${BASE}/schedule?sportId=1&startDate=${from}&endDate=${to}&gameType=R`,
+  );
+  const all = (data.dates ?? []).flatMap((d) => d.games ?? []);
+  const games = [];
+  const teamsSeen = new Set();
+  for (const g of all) {
+    // 確定した試合だけ。未消化・中止・サスペンデッド継続中は載せない（結果が無い行を作らない）。
+    if ((g.status?.abstractGameState ?? '') !== 'Final') continue;
+    const a = g.teams?.away;
+    const h = g.teams?.home;
+    const aId = a?.team?.id;
+    const hId = h?.team?.id;
+    if (!TEAM_ID_JA[aId] || !TEAM_ID_JA[hId]) continue;
+    if (a?.score == null || h?.score == null) continue;
+    teamsSeen.add(aId).add(hId);
+    games.push({
+      d: jstDateOf(g.gameDate),
+      a: aId,
+      h: hId,
+      as: a.score,
+      hs: h.score,
+      // ダブルヘッダーだけ試合番号を持つ＝同じ日・同じ相手の2試合を区別する
+      ...(g.doubleHeader === 'Y' && g.gameNumber ? { no: g.gameNumber } : {}),
+    });
+  }
+  if (games.length === 0) throw new Error('team-games: 確定した試合が0件＝異常とみなし書き込み中止');
+  if (teamsSeen.size < 30) {
+    throw new Error(`team-games: 出現球団が ${teamsSeen.size}（30想定）＝異常とみなし書き込み中止`);
+  }
+  games.sort((x, y) => y.d.localeCompare(x.d) || (y.no ?? 0) - (x.no ?? 0) || x.a - y.a);
+
+  const file = path.join(process.cwd(), 'data', 'team-games.json');
+  const content = { season, from, to, games };
+  // 中身が前回と一致なら asOf を据え置き＝バイト一致で no-op（毎時 cron の無駄コミット防止）。
+  let stampedAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    const { asOf: _a, ...rest } = prev;
+    if (stableStringify(rest) === stableStringify(content)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 初回作成 */
+  }
+  // 1行1試合の圧縮出力（毎時コミットされるので indent を付けない＝リポジトリを太らせない）。
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }, 0) + '\n');
+  console.log(
+    `team-games 書き出し: ${games.length}試合 / ${from}〜${to}(ET) / asOf ${stampedAsOf} → ${file}`,
+  );
+}
+
 async function main() {
   const raw = process.argv.slice(2);
   const asJson = raw.includes('--json');
@@ -2463,6 +2534,14 @@ async function main() {
     const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     await runStandings(seasonArg ? Number(seasonArg) : defaultSeason(), asOf);
+  } else if (cmd === 'team-games') {
+    // team-games ["YYYY-MM-DD HH:MM"(=asOf)] [season] [--days N]：直近N日の全試合結果を
+    // data/team-games.json へ（チームLPの試合タイムライン用・記事の有無に関わらず全試合）。
+    const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    const daysIdx = raw.indexOf('--days');
+    const days = daysIdx >= 0 && raw[daysIdx + 1] ? Number(raw[daysIdx + 1]) : 30;
+    await runTeamGames(seasonArg ? Number(seasonArg) : defaultSeason(), asOf, days);
   } else if (cmd === 'backfill-games') {
     // backfill-games [--apply] [--force]：既存MLB記事に試合結果(thread.game)＝スコア・線スコア・
     // その試合時点の勝敗/順位・勝敗投手 を埋める（試合結果ボックス＆カード用）。--force で完成済みも書き直す。
@@ -2480,6 +2559,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs gamelogs [season]  # MLBロースター級 全選手の試合別ログを一括更新（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs standings          # AL/NL全6地区の順位表を data/standings.json へ（チームLP用）',
+        '  node scripts/fetch-mlb-stats.mjs team-games [--days N] # 直近N日(既定30)の全試合結果を data/team-games.json へ（チームLPの試合タイムライン用）',
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs mvp [season]       # MVP予測ボード(規定打者をAL/NL別にスコア化・二刀流は投手WAR合算＋打球の質/バットスピード)を data/mvp-board.json へ',

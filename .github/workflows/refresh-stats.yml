@@ -61,6 +61,15 @@ jobs:
           SEASON=$(TZ=Asia/Tokyo date +%Y)
           node scripts/fetch-mlb-stats.mjs standings "$ASOF" "$SEASON" | tail -2 || echo "standings スキップ（既存JSONを保持）"
 
+      - name: 全試合の結果を更新（チームLPの試合タイムライン用・statsapi 1コール）
+        run: |
+          set -euo pipefail
+          # チームLPのタイムラインは「まとめ記事のある試合」でなく**全試合**を並べる（2026-08-07）。
+          # 直近30日の確定試合を取り直す。試合が増えていない時間帯は内容一致＝バイト一致 no-op。
+          ASOF=$(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          node scripts/fetch-mlb-stats.mjs team-games "$ASOF" "$SEASON" | tail -2 || echo "team-games スキップ（既存JSONを保持）"
+
       - name: 投手データ（球種＋サイヤング予測）＋MVP予測ボードを1日1回だけ更新
         run: |
           set -euo pipefail
@@ -92,13 +101,13 @@ jobs:
       - name: 変化があればコミット＆push
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json; then
+          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json data/team-games.json; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json
+          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json data/team-games.json
           git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
           # 記事の自動マージ等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
           for i in 1 2 3 4 5; do
