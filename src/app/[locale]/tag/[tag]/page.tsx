@@ -39,6 +39,7 @@ import {
   type TeamHub,
 } from '@/lib/teamHub';
 import { getTeamSchedule, teamGameRows, type TeamGameRow } from '@/lib/teamGames';
+import { getGameVoices } from '@/lib/gameVoices';
 import { getTeamNotes } from '@/lib/teamNotes';
 import { getTeam, headshotUrl, teamLogoUrl, teamOfficialUrl, type TeamInfo } from '@/lib/teams';
 import {
@@ -317,19 +318,21 @@ export default async function TagPage({
   } else if (teamLp) {
     // タイムラインの声は**全記事**から拾う（タグ絞りのフィードではない）＝日次記事がその試合に
     // 触れていれば、専用記事がまだ無い直近の試合にも現地の声を出せる。
-    const [snap, standing, standings, schedule, notes, allThreads] = await Promise.all([
+    const [snap, standing, standings, schedule, notes, allThreads, voices] = await Promise.all([
       getPlayersSnapshot(),
       standingOfTeam(teamLp.info.id),
       getStandings(),
       getTeamSchedule(),
       getTeamNotes(teamLp.info.slug),
       getAllThreads(),
+      getGameVoices(),
     ]);
     teamPlayers = teamJpPlayers(snap, decoded);
     teamStanding = standing;
     teamAsOf = standings.asOf || undefined;
-    // 日程（全試合）を背骨に、記事がある試合だけリンク・本塁打・現地の声が乗る。
-    teamGames = teamGameRows(schedule, allThreads, decoded);
+    // 日程（全試合）を背骨に、記事がある試合はリンク・本塁打・現地の声が乗る。記事が届いて
+    // いない試合は声レイヤー（公式ハイライトのコメント1件）が声だけ埋める。
+    teamGames = teamGameRows(schedule, allThreads, decoded, undefined, voices);
     teamNotes = notes;
     for (const p of teamPlayers) {
       const line = statLineOf(snap.players[String(p.mlbId)], locale);
