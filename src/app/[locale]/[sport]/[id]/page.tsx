@@ -231,7 +231,7 @@ export default async function ThreadDetailPage({
     return lastStop > max * 0.5 ? cut.slice(0, lastStop + 1) : cut.trimEnd() + '…';
   };
   // 日次記事は1本の記事に複数の公式ハイライト（主役＋ざわつき）が乗るので、それぞれ VideoObject を出す。
-  const dailyVideoLd = [daily?.hero.media, daily?.buzz?.media]
+  const dailyVideoLd = [daily?.hero.media, ...(daily?.buzz ?? []).map((b) => b.media)]
     .filter((m) => m?.kind === 'video' && m.publishedAt)
     .map((m) => {
       const id = youTubeId(m!.url);

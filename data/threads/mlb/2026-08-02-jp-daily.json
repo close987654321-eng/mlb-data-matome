@@ -302,94 +302,96 @@
         ]
       }
     ],
-    "buzz": {
-      "title": "「今日は負けたがスクーバルを獲った」——敗戦10分後に始まった祝勝会",
-      "media": {
-        "kind": "video",
-        "url": "https://www.youtube.com/watch?v=K71iT7Jmbxk",
-        "thumbUrl": "https://i.ytimg.com/vi/K71iT7Jmbxk/maxresdefault.jpg",
-        "credit": "MLB（YouTube公式ハイライト）",
-        "publishedAt": "2026-08-02T03:57:54Z",
-        "videoTitle": "RED SOX vs. DODGERS: Official Full Game Highlights (August 1) | 2026 MLB Season"
-      },
-      "blocks": [
-        {
-          "type": "p",
-          "text": "試合そのものより騒がしかったのは、同じ夜に飛び込んできた移籍の報だった。タイガースのタリク・スクーバル——2年連続でア・リーグのサイ・ヤング賞を獲った左腕が、ドジャースへ。現地報道によれば8月1日の夜遅くに合意が伝わり、デトロイトはリバー・ライアン、ザイア・ホープ、ブレイディ・スミスを受け取る。（MLB公式のロースター・トランザクションにはこの記事を書いた8月2日時点でまだ反映されていないため、ここでは報道とコメント欄の反応として扱う。）"
+    "buzz": [
+      {
+        "title": "「今日は負けたがスクーバルを獲った」——敗戦10分後に始まった祝勝会",
+        "media": {
+          "kind": "video",
+          "url": "https://www.youtube.com/watch?v=K71iT7Jmbxk",
+          "thumbUrl": "https://i.ytimg.com/vi/K71iT7Jmbxk/maxresdefault.jpg",
+          "credit": "MLB（YouTube公式ハイライト）",
+          "publishedAt": "2026-08-02T03:57:54Z",
+          "videoTitle": "RED SOX vs. DODGERS: Official Full Game Highlights (August 1) | 2026 MLB Season"
         },
-        {
-          "type": "quote",
-          "comment": {
-            "author": "@Notaek14",
-            "score": 12,
-            "bodyEn": "WE GOT SKUBAL",
-            "bodyJa": "スクーバルを獲ったぞ"
-          }
-        },
-        {
-          "type": "quote",
-          "comment": {
-            "author": "@John_Fadez",
-            "score": 20,
-            "bodyEn": "This is the reason why Tarik skubal is a dodger now 😭",
-            "bodyJa": "タリク・スクーバルがドジャースになった理由がこれだよ😭"
-          }
-        },
-        {
-          "type": "p",
-          "text": "負けた直後の敗戦処理みたいなコメント欄が、10分で祝勝会に変わる。ドジャースファンの言い分は要するに「今日は負けたが人生には勝った」だ。"
-        },
-        {
-          "type": "chips",
-          "comments": [
-            {
-              "author": "@JesusmMontesss",
-              "score": 6,
-              "bodyEn": "No excuses tbh 😂😂 we just got skubal I couldn’t be any more happier rn",
-              "bodyJa": "言い訳はしない😂😂 スクーバルを獲ったばかりで今は最高の気分"
-            },
-            {
-              "author": "@Wesimp4Dutt",
-              "score": 6,
-              "bodyEn": "Nobody has it worse than us, at least we got skubal",
-              "bodyJa": "俺たちほど不幸な奴らはいないよ、少なくともスクーバルは獲ったけど"
-            },
-            {
-              "author": "@amarchitects0814",
-              "score": 5,
-              "bodyEn": "Dodgers got Skubal",
-              "bodyJa": "ドジャースがスクーバルを獲得"
+        "blocks": [
+          {
+            "type": "p",
+            "text": "試合そのものより騒がしかったのは、同じ夜に飛び込んできた移籍の報だった。タイガースのタリク・スクーバル——2年連続でア・リーグのサイ・ヤング賞を獲った左腕が、ドジャースへ。現地報道によれば8月1日の夜遅くに合意が伝わり、デトロイトはリバー・ライアン、ザイア・ホープ、ブレイディ・スミスを受け取る。（MLB公式のロースター・トランザクションにはこの記事を書いた8月2日時点でまだ反映されていないため、ここでは報道とコメント欄の反応として扱う。）"
+          },
+          {
+            "type": "quote",
+            "comment": {
+              "author": "@Notaek14",
+              "score": 12,
+              "bodyEn": "WE GOT SKUBAL",
+              "bodyJa": "スクーバルを獲ったぞ"
             }
-          ]
-        },
-        {
-          "type": "p",
-          "text": "一方で、これを歓迎しない声のほうが数としては多い。ドジャースがまた買った、という話だからだ。年俸総額への呆れと、来オフの制度論争を持ち出すコメントがいちばん伸びた。"
-        },
-        {
-          "type": "quote",
-          "comment": {
-            "author": "@Bra12dy",
-            "score": 23,
-            "bodyEn": "So with Skubal LA's payroll is over $420 million now. This is why MLB will seriously discuss a cap/floor this offseason.",
-            "bodyJa": "スクーバルが入ってドジャースの年俸総額は4億2000万ドル超え。だからこのオフ、MLBは本気でサラリーキャップと下限の話をすることになる"
+          },
+          {
+            "type": "quote",
+            "comment": {
+              "author": "@John_Fadez",
+              "score": 20,
+              "bodyEn": "This is the reason why Tarik skubal is a dodger now 😭",
+              "bodyJa": "タリク・スクーバルがドジャースになった理由がこれだよ😭"
+            }
+          },
+          {
+            "type": "p",
+            "text": "負けた直後の敗戦処理みたいなコメント欄が、10分で祝勝会に変わる。ドジャースファンの言い分は要するに「今日は負けたが人生には勝った」だ。"
+          },
+          {
+            "type": "chips",
+            "comments": [
+              {
+                "author": "@JesusmMontesss",
+                "score": 6,
+                "bodyEn": "No excuses tbh 😂😂 we just got skubal I couldn’t be any more happier rn",
+                "bodyJa": "言い訳はしない😂😂 スクーバルを獲ったばかりで今は最高の気分"
+              },
+              {
+                "author": "@Wesimp4Dutt",
+                "score": 6,
+                "bodyEn": "Nobody has it worse than us, at least we got skubal",
+                "bodyJa": "俺たちほど不幸な奴らはいないよ、少なくともスクーバルは獲ったけど"
+              },
+              {
+                "author": "@amarchitects0814",
+                "score": 5,
+                "bodyEn": "Dodgers got Skubal",
+                "bodyJa": "ドジャースがスクーバルを獲得"
+              }
+            ]
+          },
+          {
+            "type": "p",
+            "text": "一方で、これを歓迎しない声のほうが数としては多い。ドジャースがまた買った、という話だからだ。年俸総額への呆れと、来オフの制度論争を持ち出すコメントがいちばん伸びた。"
+          },
+          {
+            "type": "quote",
+            "comment": {
+              "author": "@Bra12dy",
+              "score": 23,
+              "bodyEn": "So with Skubal LA's payroll is over $420 million now. This is why MLB will seriously discuss a cap/floor this offseason.",
+              "bodyJa": "スクーバルが入ってドジャースの年俸総額は4億2000万ドル超え。だからこのオフ、MLBは本気でサラリーキャップと下限の話をすることになる"
+            }
+          },
+          {
+            "type": "quote",
+            "comment": {
+              "author": "@usernotfound0497",
+              "score": 3,
+              "bodyEn": "Did the red sox just ruin baseball by forcing the Dodgers to get skubal? 💔",
+              "bodyJa": "レッドソックスはドジャースにスクーバルを獲らせることで野球を壊してしまったのでは？💔"
+            }
+          },
+          {
+            "type": "p",
+            "text": "補強された先発陣の並びは、山本由伸、ブレイク・スネル、タイラー・グラスノー、そこにスクーバル。この日8回を投げて負けた投手は、その筆頭に名前が挙がる側にいる。自分の投球が援護ゼロで流された夜に、援護そのものがトレードで届いた——ドジャースというチームは、だいたいいつもこういう順番で話が進む。"
           }
-        },
-        {
-          "type": "quote",
-          "comment": {
-            "author": "@usernotfound0497",
-            "score": 3,
-            "bodyEn": "Did the red sox just ruin baseball by forcing the Dodgers to get skubal? 💔",
-            "bodyJa": "レッドソックスはドジャースにスクーバルを獲らせることで野球を壊してしまったのでは？💔"
-          }
-        },
-        {
-          "type": "p",
-          "text": "補強された先発陣の並びは、山本由伸、ブレイク・スネル、タイラー・グラスノー、そこにスクーバル。この日8回を投げて負けた投手は、その筆頭に名前が挙がる側にいる。自分の投球が援護ゼロで流された夜に、援護そのものがトレードで届いた——ドジャースというチームは、だいたいいつもこういう順番で話が進む。"
-        }
-      ]
-    },
+        ]
+      }
+    ],
     "cardUrl": "/media/jp-daily-2026-08-02.jpg",
     "cardNo": 130,
     "tomorrow": [

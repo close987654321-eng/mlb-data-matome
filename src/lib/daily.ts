@@ -21,7 +21,7 @@ export function allComments(thread: Thread): ThreadComment[] {
     return [
       ...blockComments(d.hero.blocks),
       ...d.shorts.flatMap((s) => s.quotes ?? []),
-      ...(d.buzz ? blockComments(d.buzz.blocks) : []),
+      ...(d.buzz ?? []).flatMap((b) => blockComments(b.blocks)),
     ];
   }
   // 語り形式の通常記事（matome R13）＝コメントは story ブロックが持つ。

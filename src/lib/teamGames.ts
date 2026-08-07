@@ -3,7 +3,7 @@ import path from 'node:path';
 import { gameDateOf } from './gameSeo';
 import { getTeam, getTeamById } from './teams';
 import { allComments } from './daily';
-import type { Thread, ThreadComment, ThreadHomer } from '@/types/thread';
+import type { StoryBlock, Thread, ThreadComment, ThreadHomer } from '@/types/thread';
 
 /**
  * チームLPの試合タイムラインが読むデータ。
@@ -135,11 +135,12 @@ export function buildGameSources(threads: Thread[]): Map<string, GameSource> {
       if (prev?.comment && prev.comment.score >= comment.score) return;
       map.set(key, { thread, dedicated: false, comment });
     };
-    add(
-      d.hero.result,
-      d.hero.blocks.flatMap((b) => (b.type === 'quote' ? [b.comment] : b.type === 'chips' ? b.comments : [])),
-    );
+    const quotesOf = (blocks: StoryBlock[]) =>
+      blocks.flatMap((b) => (b.type === 'quote' ? [b.comment] : b.type === 'chips' ? b.comments : []));
+    add(d.hero.result, quotesOf(d.hero.blocks));
     for (const s of d.shorts) add(s.result, s.quotes ?? []);
+    // ④ ざわつき枠は「日本人が絡まない試合」を拾える唯一の供給源＝result を書いた回だけ紐づく。
+    for (const b of d.buzz ?? []) add(b.result, quotesOf(b.blocks));
   }
   for (const thread of threads) {
     const game = thread.game;

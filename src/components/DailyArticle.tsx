@@ -124,19 +124,16 @@ export default async function DailyArticle({
         </div>
       </section>
 
-      {/* ④ きょうの現地ざわつき — 日本の報道に絶対出ない話題の定位置。日本人と無関係でも拾う。 */}
-      {daily.buzz && (
-        <section className="mt-12">
-          <SectionHeading label={t('daily.buzz')} />
-          <h3 className="mt-4 text-xl font-bold leading-snug text-ink sm:text-2xl">
-            {daily.buzz.title}
-          </h3>
-          {daily.buzz.media && (
-            <MediaEmbed media={daily.buzz.media} sourceUrl={daily.buzz.media.url || sourceUrl} />
-          )}
-          <StoryBlocks blocks={daily.buzz.blocks} />
+      {/* ④ きょうの現地ざわつき — 日本の報道に絶対出ない話題の定位置。日本人と無関係でも拾う。
+          1〜2件。見出し（SectionHeading）は先頭の1回だけ出し、2件目は同じコーナーの続きとして並べる。 */}
+      {(daily.buzz ?? []).map((buzz, i) => (
+        <section key={buzz.title} className={i === 0 ? 'mt-12' : 'mt-10'}>
+          {i === 0 && <SectionHeading label={t('daily.buzz')} />}
+          <h3 className="mt-4 text-xl font-bold leading-snug text-ink sm:text-2xl">{buzz.title}</h3>
+          {buzz.media && <MediaEmbed media={buzz.media} sourceUrl={buzz.media.url || sourceUrl} />}
+          <StoryBlocks blocks={buzz.blocks} />
         </section>
-      )}
+      ))}
 
       {/* ⑤ きょうの1枚 — カードは「保存・転載していい配布物」として渡す。詳細は DailyCardShare。 */}
       {daily.cardUrl && (
