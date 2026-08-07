@@ -254,6 +254,28 @@ function SiteFooter() {
             <a href="/feed.xml" className="transition-colors hover:text-ink">
               RSS
             </a>
+            {/* 海外の反応アンテナ各社の登録条件＝トップ・記事ページからのリンク設置。フッター掲載で
+                全ページ充足。日本語読者向けの送客網なので ja 面にだけ出す（2号店 layout と同じ扱い）。 */}
+            {locale === 'ja' && (
+              <>
+                <a
+                  href="https://kaigai-antenna.com/"
+                  target="_blank"
+                  rel="noopener"
+                  className="transition-colors hover:text-ink"
+                >
+                  海外の反応アンテナ
+                </a>
+                <a
+                  href="https://kaihan-antenna.com/"
+                  target="_blank"
+                  rel="noopener"
+                  className="transition-colors hover:text-ink"
+                >
+                  海外の反応アンテナ.com
+                </a>
+              </>
+            )}
           </nav>
         </div>
       </div>
