@@ -32,11 +32,21 @@ import {
   teamHubTopics,
   teamJpPlayers,
   teamDisplayJa,
+  teamVoiceSubject,
+  teamGames,
+  teamTagHubs,
   TEAM_HUB_MIN_ARTICLES,
   type TeamHub,
+  type TeamGameRow,
 } from '@/lib/teamHub';
 import { getTeam, headshotUrl, teamLogoUrl, teamOfficialUrl, type TeamInfo } from '@/lib/teams';
-import { standingOfTeam, standingPhraseJa } from '@/lib/standings';
+import {
+  getStandings,
+  standingOfTeam,
+  standingPhraseJa,
+  type StandingRow,
+  type StandingsDivision,
+} from '@/lib/standings';
 import type { Player } from '@/lib/players';
 import { getPlayerSeason, getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import FeedCard from '@/components/FeedCard';
@@ -46,6 +56,8 @@ import FighterNow from '@/components/FighterNow';
 import UpcomingFights from '@/components/UpcomingFights';
 import SeasonJournal from '@/components/SeasonJournal';
 import TeamStandings from '@/components/TeamStandings';
+import TeamNow from '@/components/TeamNow';
+import TeamGames from '@/components/TeamGames';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
@@ -247,6 +259,7 @@ export default async function TagPage({
   let voices: TagVoice[] = [];
   let otherHubs: { player: Player; count: number }[] = [];
   let otherFighters: { fighter: Fighter; count: number }[] = [];
+  let otherTeams: { hub: TeamHub; count: number }[] = [];
   if (hub) {
     // 日誌はja専用なので、enでは日誌選手でも声ピックアップを出す（enから声も日誌も消える穴を塞ぐ）。
     if (!journal || locale === 'en') voices = tagHubVoices(feed, hub);
@@ -256,6 +269,13 @@ export default async function TagPage({
     if (!journal || locale === 'en') voices = tagHubVoices(feed, fighter);
     otherFighters = fighterTagHubs(await getAllTags()).filter(
       ({ fighter: f }) => f.slug !== fighter.slug,
+    );
+  } else if (teamLp) {
+    // チームLPも選手LPと同じ2点（声ピックアップ＋LP相互リンク網）を持たせる。
+    // チームは観測日誌を持たない＝声ピックアップが常に主役（先頭1件は「いま」ブロックが使う）。
+    voices = tagHubVoices(feed, teamVoiceSubject(teamLp));
+    otherTeams = teamTagHubs(await getAllTags()).filter(
+      ({ hub: h }) => h.info.id !== teamLp.info.id,
     );
   }
   // 選手・チームタグLPの導入文（ja のみ。英語ページに和文の生成文を混ぜない）。
@@ -269,6 +289,10 @@ export default async function TagPage({
   let hubGamelog: Gamelog | null = null;
   let hubJpRank: JpRank | null = null;
   let hubAsOf: string | undefined;
+  // チームLPの「いま」ブロック用: 地区順位の現在地と、記事に焼き込んだ試合結果のタイムライン。
+  let teamStanding: { row: StandingRow; division: StandingsDivision } | null = null;
+  let teamGameRows: TeamGameRow[] = [];
+  let teamAsOf: string | undefined;
   if (hub) {
     // 所属は ja/en どちらのLPでも顔写真の横に出すので、導入文（ja のみ）と切り離して取る。
     const [snap, season, gamelog] = await Promise.all([
@@ -289,8 +313,15 @@ export default async function TagPage({
     intro = fighterHubIntroJa(fighter, feed.length);
     editorNote = await getEditorNote(fighter.slug);
   } else if (teamLp) {
-    const [snap, standing] = await Promise.all([getPlayersSnapshot(), standingOfTeam(teamLp.info.id)]);
+    const [snap, standing, standings] = await Promise.all([
+      getPlayersSnapshot(),
+      standingOfTeam(teamLp.info.id),
+      getStandings(),
+    ]);
     teamPlayers = teamJpPlayers(snap, decoded);
+    teamStanding = standing;
+    teamAsOf = standings.asOf || undefined;
+    teamGameRows = teamGames(feed, decoded);
     for (const p of teamPlayers) {
       const line = statLineOf(snap.players[String(p.mlbId)], locale);
       if (line) statLines.set(p.slug, line);
@@ -300,7 +331,7 @@ export default async function TagPage({
         teamLp,
         seasonYear(snap),
         teamPlayers,
-        teamHubTopics(feed.map(tagsOfItem), decoded, teamPlayers),
+        teamHubTopics(feed.map(tagsOfItem), decoded, teamPlayers, snap),
         feed.length,
         standing ? standingPhraseJa(standing.row, standing.division) : undefined,
       );
@@ -485,8 +516,44 @@ export default async function TagPage({
         )}
       </section>
 
+      {/* チームLP: 「いま」ブロック＝最新の現地の声＋順位・勝敗・ゲーム差の現在地（PlayerNow のチーム版）。
+          着地の第一意図「いま現地はどう言ってる？／どういう状況？」にファーストビューで答える。 */}
+      {teamLp && (
+        <TeamNow
+          locale={locale}
+          hub={teamLp}
+          standing={teamStanding}
+          asOf={teamAsOf}
+          voice={voices[0] ?? null}
+          gamesAnchor={teamGameRows.length > 0}
+        />
+      )}
+
+      {/* チームLP: 試合結果と海外の反応のタイムライン。スコア・勝敗・本塁打という「探している答え」を
+          一覧の段階で見せて、その試合のまとめ記事へ送る（「{チーム} 対 {チーム} 海外の反応」の受け皿）。 */}
+      {teamLp && (
+        <TeamGames
+          rows={teamGameRows}
+          locale={locale}
+          label={t('tag.teamGames', {
+            name: locale === 'en' ? teamLp.info.nameEn : teamLp.nameJa,
+          })}
+        />
+      )}
+
       {/* チームLP: 地区順位表（CI が毎時更新する静的JSON。ライバルのLPへの回遊網も兼ねる）。 */}
       {teamLp && <TeamStandings teamId={teamLp.info.id} locale={locale} />}
+
+      {/* チームLP: 現地ファンの声ピックアップ（選手LPと同じ機構）。先頭1件は「いま」が使うので外す。 */}
+      {teamLp && (
+        <TagVoices
+          voices={voices.slice(1)}
+          locale={locale}
+          label={t('tag.voices', {
+            name: locale === 'en' ? teamLp.info.nameEn : teamLp.nameJa,
+          })}
+        />
+      )}
 
       {/* 選手タグLP: 「いま」ブロック＝最新の山場の声＋総評＋スタットパネル。検索着地の
           第一意図「直近どう見られてる？」にファーストビューで答え、数字は成績ハブへの太い橋になる。
@@ -619,12 +686,12 @@ export default async function TagPage({
         </section>
       )}
 
-      {/* 記事一覧: 選手LPは日誌・いまブロックが主役になったので、カードは最新6件だけ。
+      {/* 記事一覧: 選手LP・チームLPは日誌／いまブロックが主役になったので、カードは最新6件だけ。
           残りは軽い月別テキストのアーカイブに降格（大谷LPの78枚カード壁＝ページ重量問題も同時に解消）。 */}
       <section className="space-y-5">
-        {hub && <SectionHeading label={t('tag.latestArticles')} count={feed.length} />}
+        {(hub || teamLp) && <SectionHeading label={t('tag.latestArticles')} count={feed.length} />}
         <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-          {(hub ? feed.slice(0, 6) : feed).map((item, i) => (
+          {(hub || teamLp ? feed.slice(0, 6) : feed).map((item, i) => (
             <li key={feedKey(item)}>
               {/* 先頭カードだけ画像を LCP として先取り。 */}
               <FeedCard item={item} locale={locale} priority={i === 0} />
@@ -633,7 +700,7 @@ export default async function TagPage({
         </ul>
       </section>
 
-      {hub && feed.length > 6 && (
+      {(hub || teamLp) && feed.length > 6 && (
         <section className="space-y-6">
           <SectionHeading label={t('tag.archive')} count={feed.length - 6} />
           {archiveMonthsOf(feed.slice(6)).map(({ month, items }) => (
@@ -690,6 +757,38 @@ export default async function TagPage({
                 >
                   <span className="line-clamp-1">{locale === 'en' ? f.nameEn : f.nameJa}</span>
                   <span className="shrink-0 text-xs tabular-nums text-ink-mute">{count}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {/* チームLP同士の相互リンク網（選手LPクラスタと同じ思想）。順位表は同地区4球団までしか届かない
+          ＝残り25球団のLPへ、ここで一度に配線する。 */}
+      {teamLp && otherTeams.length > 0 && (
+        <section className="space-y-5">
+          <SectionHeading label={t('tag.otherTeams')} />
+          <ul className="grid grid-cols-2 gap-x-6 sm:grid-cols-3 lg:grid-cols-4">
+            {otherTeams.map(({ hub: h, count }) => (
+              <li key={h.info.id}>
+                <Link
+                  href={`/tag/${encodeURIComponent(h.nameJa)}`}
+                  className="group flex items-center gap-2 border-b border-line py-3 text-sm font-medium text-ink transition-colors hover:text-ink-soft"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式チームロゴSVGを直リンク（再ホストしない） */}
+                  <img
+                    src={teamLogoUrl(h.info.id)}
+                    alt=""
+                    width={20}
+                    height={20}
+                    loading="lazy"
+                    className="h-5 w-5 shrink-0 object-contain"
+                  />
+                  <span className="line-clamp-1">
+                    {locale === 'en' ? h.info.nameEn : h.nameJa}
+                  </span>
+                  <span className="ml-auto shrink-0 text-xs tabular-nums text-ink-mute">{count}</span>
                 </Link>
               </li>
             ))}

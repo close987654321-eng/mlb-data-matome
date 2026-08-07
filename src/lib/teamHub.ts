@@ -1,7 +1,11 @@
 import { getTeam, type TeamInfo } from './teams';
-import { isStopTag } from './tags';
-import { hasMlbStats, PLAYERS, type Player } from './players';
+import { isStopTag, type TagCount } from './tags';
+import { getPlayerByJaName, hasMlbStats, PLAYERS, type Player } from './players';
 import type { PlayersSnapshot } from './playerStats';
+import type { VoiceSubject } from './tagHub';
+import { gameDateOf } from './gameSeo';
+import type { FeedItem } from './feed';
+import type { Thread, ThreadGameSide } from '@/types/thread';
 
 /**
  * チームタグLP（リッチ化するタグページ）の判定と導入文の唯一の正。
@@ -49,17 +53,39 @@ export function teamJpPlayers(snap: PlayersSnapshot, teamJa: string): Player[] {
  * チームのフィードで実際に記事が集まっている話題（上位4件）。汎用タグ・チームタグ
  * （自チームと対戦相手）・1件きりのタグに加え、jpPlayers（導入文の「所属」文で列挙済みの
  * 選手名・エイリアス）も除く＝同じ名前を1つの導入文に2回並べない。
+ *
+ * ⚠️ **他球団の選手タグも除く**（snapshot の所属で判定）。試合まとめには対戦相手の選手タグも
+ * 付くので、素通しすると「ホワイトソックスの話題の中心は岡本和真」のような事実に反する導入文に
+ * なる（2026-08-07 実測）。カタログ外の現地選手は所属が分からないので、そのまま話題として残す。
  */
-export function teamHubTopics(tagLists: string[][], nameJa: string, jpPlayers: Player[]): string[] {
+export function teamHubTopics(
+  tagLists: string[][],
+  nameJa: string,
+  jpPlayers: Player[],
+  snap: PlayersSnapshot,
+): string[] {
   const exclude = new Set<string>([nameJa]);
   for (const p of jpPlayers) {
     exclude.add(p.nameJa);
     for (const a of p.aliases ?? []) exclude.add(a);
   }
+  /** そのタグが「別のチームに所属する選手」か（カタログで引ける選手だけ判定できる）。 */
+  const isOtherTeamPlayer = (tag: string): boolean => {
+    const p = getPlayerByJaName(tag);
+    if (!p) return false;
+    return snap.players[String(p.mlbId)]?.team !== nameJa;
+  };
   const counts = new Map<string, number>();
   for (const tags of tagLists) for (const tag of tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
   return [...counts.entries()]
-    .filter(([tag, count]) => count >= 2 && !isStopTag(tag) && !exclude.has(tag) && !getTeam(tag))
+    .filter(
+      ([tag, count]) =>
+        count >= 2 &&
+        !isStopTag(tag) &&
+        !exclude.has(tag) &&
+        !getTeam(tag) &&
+        !isOtherTeamPlayer(tag),
+    )
     .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], 'ja'))
     .slice(0, 4)
     .map(([tag]) => tag);
@@ -118,4 +144,88 @@ export function teamHubDescriptionJa(
   if (jpPlayers.length) parts.push(`${year}年は${jpPlayers.map((p) => p.nameJa).join('・')}が所属。`);
   parts.push(`全${articleCount}件を新着順で掲載${updated ? `・最終更新 ${updated}` : ''}。`);
   return parts.join('');
+}
+
+/**
+ * チームLPの「現地ファンの声ピックアップ」の主題。選手・ファイター用に書いた照合器
+ * （tagHubVoices）をチームにも同じ選び方で使うための写し。
+ *
+ * 英語は**フルネーム**（Chicago White Sox）を主表記にし、単語1つの短縮名（Mets / Reds / Rays）は
+ * 混ぜない＝一般語の一部に当たって無関係なコメントを拾うのを避ける（exact と同じ理由）。
+ * 日本語の短縮カタカナ（ホワイトソックス）と検索主流表記（Dバックス）は誤爆しないので入れる。
+ * 当サイトのコメントは必ず bodyJa（訳）を持つので、実質はこの日本語表記で拾えている。
+ */
+export function teamVoiceSubject(hub: TeamHub): VoiceSubject {
+  const shortEn = hub.info.nameEn.includes(' ') ? [hub.info.nameEn] : []; // "White Sox"=安全 / "Mets"=危険
+  return {
+    nameJa: hub.nameJa,
+    nameEn: hub.info.nameFull,
+    aliases: [...shortEn, ...(hub.info.aliasJa ? [hub.info.aliasJa] : [])],
+    exact: true,
+  };
+}
+
+/**
+ * チームLPの試合タイムライン1行。記事に焼き込んだ試合結果（Thread.game＝MLB公式スケジュールAPI
+ * 由来の公知の数値）を、そのチーム視点（自軍/相手・勝敗）に組み替えたもの。
+ */
+export type TeamGameRow = {
+  thread: Thread;
+  /** 試合日（JST）。記事の公開日ではなく試合そのものの日付で並べる。 */
+  date: string;
+  self: ThreadGameSide;
+  opp: ThreadGameSide;
+  /** 自チームがホームか。表示の「◯◯戦（ホーム/ビジター）」に使う。 */
+  home: boolean;
+  /** 勝ち=true / 負け=false / 同点（サスペンデッド等）=null */
+  win: boolean | null;
+};
+
+/**
+ * そのチームが**当事者だった**試合を新しい順に。タグが付いているだけの試合
+ * （ライバル戦の記事にチーム名タグが付くことがある）は当事者判定で除く。
+ *
+ * 同じ試合を2本の記事が扱うことがある（試合レポート＋珍プレー記事）ので、試合の同一性
+ * （日付＋対戦カード＋スコア）で1行にまとめる＝タイムラインに同じ試合が二度出ない。
+ * フィードは新着順なので、残るのは先に公開された方＝通常は試合レポート。
+ */
+export function teamGames(feed: FeedItem[], teamJa: string, limit = 8): TeamGameRow[] {
+  const seen = new Set<string>();
+  const rows: TeamGameRow[] = [];
+  for (const item of feed) {
+    if (item.kind !== 'thread') continue;
+    const game = item.thread.game;
+    if (!game) continue;
+    const home = game.home.ja === teamJa;
+    if (!home && game.away.ja !== teamJa) continue;
+    const date = gameDateOf(item.thread);
+    const key = `${date}|${game.away.ja}|${game.home.ja}|${game.away.score}-${game.home.score}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const self = home ? game.home : game.away;
+    const opp = home ? game.away : game.home;
+    rows.push({
+      thread: item.thread,
+      date,
+      self,
+      opp,
+      home,
+      win: self.score === opp.score ? null : self.score > opp.score,
+    });
+  }
+  return rows.sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
+}
+
+/**
+ * 記事が実在するチームLPの一覧（件数つき）。LP 同士を相互リンクする「チーム別の海外の反応」網に使う。
+ * 選手LPクラスタ（playerTagHubs）と同じ思想＝同型クエリ（「{チーム名} 海外の反応」）の LP を
+ * 内部リンクで密に束ね、クロール深度と内部評価を底上げする。tags は getAllTags()（件数降順）を渡す。
+ */
+export function teamTagHubs(tags: TagCount[]): { hub: TeamHub; count: number }[] {
+  const hubs: { hub: TeamHub; count: number }[] = [];
+  for (const { tag, count } of tags) {
+    const hub = count >= TEAM_HUB_MIN_ARTICLES ? teamHubOf(tag) : null;
+    if (hub) hubs.push({ hub, count });
+  }
+  return hubs;
 }

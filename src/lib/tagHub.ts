@@ -83,12 +83,19 @@ const PER_THREAD = 2;
 /** 一言レス（「うおおお」等）を弾く最小文字数。 */
 const MIN_BODY = 16;
 
-/** 声の主題（選手・ファイター）。表記ゆれを集めて「その人を語っているか」を判定するのに使う。 */
+/** 声の主題（選手・ファイター・チーム）。表記ゆれを集めて「それを語っているか」を判定するのに使う。 */
 export type VoiceSubject = {
   nameJa: string;
   nameEn: string;
   aliases?: string[];
   shortJa?: string[];
+  /**
+   * 与えた表記だけで照合する（語に割らない）。チーム主題で使う。
+   * 人名は姓・名の単独表記で呼ばれる（Ohtani / 大谷）ので語に割って部分一致で拾うのが正しいが、
+   * チームの英語名は短い一般語と同形（Mets ⊂ helmets / Reds ⊂ hundreds）で、同じ割り方をすると
+   * そのチームに言及していないコメントを拾ってしまう。
+   */
+  exact?: boolean;
 };
 
 /** 比較用の正規化: 大小文字・アクセント・中黒/空白の差を消す（Sánchez=sanchez, ラーズ・ヌートバー=ラーズヌートバー）。 */
@@ -111,18 +118,24 @@ function voiceBody(c: ThreadComment): string {
 }
 
 /**
- * その人を指す表記のゆれ一覧。日本語は姓・名の単独表記（shortJa）とタグのエイリアス、
+ * その主題を指す表記のゆれ一覧。日本語は姓・名の単独表記（shortJa）とタグのエイリアス、
  * 英語はフルネームと4文字以上のトークン（Ohtani / Shohei）。カタカナ名は「・」で割った要素も足す。
+ * exact な主題（チーム）は語に割らず、与えた表記だけを使う（VoiceSubject.exact のコメント参照）。
  */
 function subjectPatterns(subject: VoiceSubject): string[] {
-  const parts = [
+  const given = [
     subject.nameJa,
     subject.nameEn,
     ...(subject.aliases ?? []),
     ...(subject.shortJa ?? []),
-    ...subject.nameJa.split('・').filter((w) => w.length >= 3),
-    ...subject.nameEn.split(/[\s-]+/).filter((w) => w.length >= 4),
   ];
+  const parts = subject.exact
+    ? given
+    : [
+        ...given,
+        ...subject.nameJa.split('・').filter((w) => w.length >= 3),
+        ...subject.nameEn.split(/[\s-]+/).filter((w) => w.length >= 4),
+      ];
   return [...new Set(parts.map(normalize).filter((w) => w.length >= 2))];
 }
 
