@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags, getFeedByTag } from '@/lib/tags';
+import { getAllThreads } from '@/lib/data';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
 import { tagHubOf, tagHubIntroJa, tagHubVoices, playerTagHubs, type TagVoice } from '@/lib/tagHub';
@@ -314,18 +315,21 @@ export default async function TagPage({
     intro = fighterHubIntroJa(fighter, feed.length);
     editorNote = await getEditorNote(fighter.slug);
   } else if (teamLp) {
-    const [snap, standing, standings, schedule, notes] = await Promise.all([
+    // タイムラインの声は**全記事**から拾う（タグ絞りのフィードではない）＝日次記事がその試合に
+    // 触れていれば、専用記事がまだ無い直近の試合にも現地の声を出せる。
+    const [snap, standing, standings, schedule, notes, allThreads] = await Promise.all([
       getPlayersSnapshot(),
       standingOfTeam(teamLp.info.id),
       getStandings(),
       getTeamSchedule(),
       getTeamNotes(teamLp.info.slug),
+      getAllThreads(),
     ]);
     teamPlayers = teamJpPlayers(snap, decoded);
     teamStanding = standing;
     teamAsOf = standings.asOf || undefined;
     // 日程（全試合）を背骨に、記事がある試合だけリンク・本塁打・現地の声が乗る。
-    teamGames = teamGameRows(schedule, feed, decoded);
+    teamGames = teamGameRows(schedule, allThreads, decoded);
     teamNotes = notes;
     for (const p of teamPlayers) {
       const line = statLineOf(snap.players[String(p.mlbId)], locale);

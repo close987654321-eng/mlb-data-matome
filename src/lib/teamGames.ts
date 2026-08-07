@@ -3,7 +3,6 @@ import path from 'node:path';
 import { gameDateOf } from './gameSeo';
 import { getTeam, getTeamById } from './teams';
 import { allComments } from './daily';
-import type { FeedItem } from './feed';
 import type { Thread, ThreadComment, ThreadHomer } from '@/types/thread';
 
 /**
@@ -57,34 +56,108 @@ export type TeamGameRow = {
   win: boolean | null;
   /** ダブルヘッダーの試合番号（通常の試合は無い）。 */
   gameNo?: number;
-  /** その試合のまとめ記事。無い試合は結果だけの行になる。 */
+  /** その試合を扱った記事。無い試合は結果だけの行になる。 */
   thread: Thread | null;
-  /** 記事に焼き込んだ自軍の本塁打（記事がある試合だけ持てる情報）。 */
+  /** 記事がその試合そのもののまとめか（false = 日次記事の中で触れているだけ）。表示の出し分けに使う。 */
+  dedicated: boolean;
+  /** その試合の現地ファンの声（実在コメント1件）。記事があっても声が取れない試合は null。 */
+  voice: ThreadComment | null;
+  /** 記事に焼き込んだ自軍の本塁打（専用記事だけが持てる情報）。 */
   homers?: ThreadHomer[];
 };
 
-/** 試合の同一性キー。日程側と記事側の両方から同じ文字列を作れることが条件。 */
-function gameKey(date: string, awayJa: string, homeJa: string, away: number, home: number, no?: number): string {
-  return `${date}|${awayJa}|${homeJa}|${away}-${home}${no ? `|${no}` : ''}`;
+/**
+ * 試合の同一性キー。日程・専用記事・日次記事の3系統から同じ文字列を作れることが条件。
+ * ビジター/ホームの順に依存しないよう「チーム名＋その得点」の組を並べ替えて作る＝日次記事の
+ * `result` 文字列（自軍が先頭）からも同じキーを作れる。ダブルヘッダーで得点が入れ替わっただけの
+ * 2試合も、チームと得点が対で紐づいているので別キーになる。
+ */
+function gameKey(date: string, teamA: string, scoreA: number, teamB: string, scoreB: number): string {
+  const [x, y] = [`${teamA}=${scoreA}`, `${teamB}=${scoreB}`].sort();
+  return `${date}|${x}|${y}`;
 }
 
-/** 記事側（Thread.game）から、そのチームが当事者の試合を key → 行の素 に。 */
-function articleRows(feed: FeedItem[], teamJa: string) {
-  const map = new Map<string, { thread: Thread; homers?: ThreadHomer[] }>();
-  for (const item of feed) {
-    if (item.kind !== 'thread') continue;
-    const game = item.thread.game;
+/** 日次記事の結果1行（例「ホワイトソックス 6-5 ヤンキース ○（延長10回）」）＝自軍が先頭。 */
+function parseDailyResult(result: string | undefined): { key: string } | null {
+  const m = (result ?? '').match(/^(\S+)\s+(\d+)-(\d+)\s+(\S+)/);
+  return m ? { key: gameKey('', m[1], Number(m[2]), m[4], Number(m[3])) } : null;
+}
+
+/** その試合を扱った記事と、そこから拾える現地の声1件。 */
+type GameSource = {
+  thread: Thread;
+  dedicated: boolean;
+  comment: ThreadComment | null;
+  homers?: ThreadHomer[];
+};
+
+/** 一言レス（「うおおお」等）を弾く最小文字数。TagVoices と同じ規約。 */
+const MIN_BODY = 16;
+
+function usable(c: ThreadComment): boolean {
+  return ((c.bodyJa ?? '').trim() || (c.bodyEn ?? '').trim()).length >= MIN_BODY;
+}
+
+/** 候補コメントから「代表の声」を1件。フック引用＞ハイライト＞票数最上位。 */
+function pickVoice(comments: ThreadComment[]): ThreadComment | null {
+  const list = comments.filter(usable);
+  if (list.length === 0) return null;
+  return (
+    list.find((c) => c.isHook) ??
+    list.filter((c) => c.isHighlight).sort((a, b) => b.score - a.score)[0] ??
+    list.slice().sort((a, b) => b.score - a.score)[0] ??
+    null
+  );
+}
+
+/**
+ * 試合キー → その試合を扱った記事と声。**全記事**から作る（タグ絞りではない）。
+ *
+ * 供給源は2系統。専用記事が無い試合でも、日次記事（きょうの日本人選手）がその試合に触れていれば
+ * そこから声を拾う＝タイムライン上部（＝まだ個別記事が書かれていない直近の試合）の空白が埋まる。
+ * 実測で初期表示10行のカバー率が 20% → 32% に上がる（2026-08-07・村山「各試合に海外ファンの
+ * コメントを」）。専用記事が優先＝より深い記事へ送る。
+ */
+export function buildGameSources(threads: Thread[]): Map<string, GameSource> {
+  const map = new Map<string, GameSource>();
+  // 先に日次記事（弱い供給源）を入れ、あとから専用記事で上書きする。
+  for (const thread of threads) {
+    const d = thread.daily;
+    if (!d) continue;
+    const date = thread.id.slice(0, 10); // 日次記事の id は JST 日付
+    const add = (result: string | undefined, comments: ThreadComment[]) => {
+      const parsed = parseDailyResult(result);
+      const comment = pickVoice(comments);
+      if (!parsed || !comment) return;
+      const key = `${date}${parsed.key}`;
+      const prev = map.get(key);
+      // 同じ試合に複数の証言がある（主役＋短評）なら票数の多い方を残す
+      if (prev?.comment && prev.comment.score >= comment.score) return;
+      map.set(key, { thread, dedicated: false, comment });
+    };
+    add(
+      d.hero.result,
+      d.hero.blocks.flatMap((b) => (b.type === 'quote' ? [b.comment] : b.type === 'chips' ? b.comments : [])),
+    );
+    for (const s of d.shorts) add(s.result, s.quotes ?? []);
+  }
+  for (const thread of threads) {
+    const game = thread.game;
     if (!game) continue;
-    const home = game.home.ja === teamJa;
-    if (!home && game.away.ja !== teamJa) continue; // タグが付いているだけの他チームの試合は除く
-    const date = gameDateOf(item.thread);
-    const no = item.thread.series?.gameNo;
-    const key = gameKey(date, game.away.ja, game.home.ja, game.away.score, game.home.score, no);
-    // 同じ試合を2本の記事が扱うことがある（試合レポート＋珍プレー記事）。フィードは新着順なので
-    // 先に入った方＝通常は試合レポートを残す。
-    if (map.has(key)) continue;
-    const self = home ? game.home : game.away;
-    map.set(key, { thread: item.thread, ...(self.homers?.length ? { homers: self.homers } : {}) });
+    const key = gameKey(
+      gameDateOf(thread),
+      game.away.ja,
+      game.away.score,
+      game.home.ja,
+      game.home.score,
+    );
+    // 同じ試合を2本の記事が扱うことがある（試合レポート＋珍プレー記事）。線スコアまで持つ方＝
+    // 試合レポートを優先し、同格なら先勝ち。
+    const prev = map.get(key);
+    if (prev?.dedicated && !(game.away.innings?.length && !prev.thread.game?.away.innings?.length)) {
+      continue;
+    }
+    map.set(key, { thread, dedicated: true, comment: pickVoice(allComments(thread)) });
   }
   return map;
 }
@@ -97,13 +170,20 @@ function articleRows(feed: FeedItem[], teamJa: string) {
  */
 export function teamGameRows(
   schedule: TeamSchedule | null,
-  feed: FeedItem[],
+  threads: Thread[],
   teamJa: string,
   limit = 26,
 ): TeamGameRow[] {
-  const articles = articleRows(feed, teamJa);
+  const sources = buildGameSources(threads);
   const rows: TeamGameRow[] = [];
   const seen = new Set<string>();
+
+  /** 専用記事から、自軍の本塁打を取り出す（日次記事は線スコアを持たないので undefined）。 */
+  const homersOf = (src: GameSource | undefined, isHome: boolean): ThreadHomer[] | undefined => {
+    const game = src?.dedicated ? src.thread.game : undefined;
+    const self = game ? (isHome ? game.home : game.away) : undefined;
+    return self?.homers?.length ? self.homers : undefined;
+  };
 
   for (const g of schedule?.games ?? []) {
     const away = getTeamById(g.a);
@@ -111,13 +191,14 @@ export function teamGameRows(
     if (!away || !home) continue;
     const isHome = home.nameJa === teamJa;
     if (!isHome && away.nameJa !== teamJa) continue;
-    const key = gameKey(g.d, away.nameJa, home.nameJa, g.as, g.hs, g.no);
+    const key = gameKey(g.d, away.nameJa, g.as, home.nameJa, g.hs);
     if (seen.has(key)) continue;
     seen.add(key);
     const opp = isHome ? away : home;
     const score = isHome ? g.hs : g.as;
     const oppScore = isHome ? g.as : g.hs;
-    const article = articles.get(key);
+    const src = sources.get(key);
+    const homers = homersOf(src, isHome);
     rows.push({
       date: g.d,
       home: isHome,
@@ -127,17 +208,29 @@ export function teamGameRows(
       oppEn: opp.info.nameEn,
       win: score === oppScore ? null : score > oppScore,
       ...(g.no ? { gameNo: g.no } : {}),
-      thread: article?.thread ?? null,
-      ...(article?.homers ? { homers: article.homers } : {}),
+      thread: src?.thread ?? null,
+      dedicated: src?.dedicated ?? false,
+      voice: src?.comment ?? null,
+      ...(homers ? { homers } : {}),
     });
   }
 
-  // 日程の窓の外（＝30日より前）にある記事つきの試合を足す。日程JSONが無いときは全部ここで拾う。
-  for (const [key, { thread, homers }] of articles) {
+  // 日程の窓の外（＝30日より前）にある専用記事つきの試合を足す。日程JSONが無いときは全部ここで拾う。
+  for (const thread of threads) {
+    const game = thread.game;
+    if (!game) continue;
+    const isHome = game.home.ja === teamJa;
+    if (!isHome && game.away.ja !== teamJa) continue;
+    const key = gameKey(
+      gameDateOf(thread),
+      game.away.ja,
+      game.away.score,
+      game.home.ja,
+      game.home.score,
+    );
     if (seen.has(key)) continue;
     seen.add(key);
-    const game = thread.game!;
-    const isHome = game.home.ja === teamJa;
+    const src = sources.get(key);
     const self = isHome ? game.home : game.away;
     const opp = isHome ? game.away : game.home;
     rows.push({
@@ -150,33 +243,15 @@ export function teamGameRows(
       oppEn: getTeam(opp.ja)?.nameEn ?? opp.en,
       win: self.score === opp.score ? null : self.score > opp.score,
       ...(thread.series?.gameNo ? { gameNo: thread.series.gameNo } : {}),
-      thread,
-      ...(homers ? { homers } : {}),
+      thread: src?.thread ?? thread,
+      dedicated: src?.dedicated ?? true,
+      voice: src?.comment ?? null,
+      // この行は専用記事そのものから組んでいるので、本塁打はその記事の自軍側を使う。
+      ...(self.homers?.length ? { homers: self.homers } : {}),
     });
   }
 
   return rows
     .sort((a, b) => b.date.localeCompare(a.date) || (b.gameNo ?? 0) - (a.gameNo ?? 0))
     .slice(0, limit);
-}
-
-/** 一言レス（「うおおお」等）を弾く最小文字数。TagVoices と同じ規約。 */
-const MIN_BODY = 16;
-
-/**
- * その試合のまとめ記事から「代表の声」を1件。フック引用＞ハイライト＞票数最上位の順。
- * タイムラインに現地の声をちょいちょい挟むために使う（全行に出すと結果が読めなくなるので、
- * 出す行数は呼び出し側＝TeamGames が絞る）。
- */
-export function gameVoice(thread: Thread): ThreadComment | null {
-  const usable = allComments(thread).filter(
-    (c) => ((c.bodyJa ?? '').trim() || (c.bodyEn ?? '').trim()).length >= MIN_BODY,
-  );
-  if (usable.length === 0) return null;
-  return (
-    usable.find((c) => c.isHook) ??
-    usable.filter((c) => c.isHighlight).sort((a, b) => b.score - a.score)[0] ??
-    usable.slice().sort((a, b) => b.score - a.score)[0] ??
-    null
-  );
 }

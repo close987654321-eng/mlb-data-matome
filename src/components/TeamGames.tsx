@@ -3,7 +3,7 @@ import { Link } from '@/lib/navigation';
 import SectionHeading from '@/components/SectionHeading';
 import { threadTitle } from '@/lib/series';
 import { playerLabel } from '@/lib/playerNames';
-import { gameVoice, type TeamGameRow } from '@/lib/teamGames';
+import type { TeamGameRow } from '@/lib/teamGames';
 import type { Locale } from '@/lib/i18n';
 
 /**
@@ -22,8 +22,6 @@ import type { Locale } from '@/lib/i18n';
 
 /** 初期表示する行数。残りは <details> のネイティブ開閉で畳む（クライアントJSなし・HTMLには全件載る）。 */
 const VISIBLE = 10;
-/** 現地の声を添える行数の上限。全行に付けると結果が読めなくなるので、新しい方から数件だけ。 */
-const VOICE_ROWS = 3;
 
 export default async function TeamGames({
   rows,
@@ -66,20 +64,12 @@ export default async function TeamGames({
     }),
   );
 
-  // 現地の声は「記事がある行」の新しい方から VOICE_ROWS 件だけ。
-  const voiced = new Set(
-    rows
-      .map((r, i) => (r.thread ? i : -1))
-      .filter((i) => i >= 0)
-      .slice(0, VOICE_ROWS),
-  );
-
   const items = rows.map((row, i) => {
-    const { date, score, oppScore, oppJa, oppEn, win, home, gameNo, thread } = row;
+    const { date, score, oppScore, oppJa, oppEn, win, home, gameNo, thread, dedicated, voice } = row;
     const mark = win == null ? '－' : en ? (win ? 'W' : 'L') : win ? '○' : '●';
     const [, m, d] = date.split('-');
     const note = en ? undefined : notes.get(date);
-    const voice = thread && voiced.has(i) ? gameVoice(thread) : null;
+    // 声は**声が取れた全試合**に出す（2026-08-07 村山「各試合に海外ファンのコメントを」）。
     const voiceBody = voice ? (en ? voice.bodyEn || voice.bodyJa : voice.bodyJa) : '';
 
     // 結果の1行。記事がある試合だけリンクにする（記事の無い試合は行き止まりに送らない）。
@@ -125,8 +115,12 @@ export default async function TeamGames({
                 {t('tag.gameHomers', { names: homerLines[i]! })}
               </p>
             )}
+            {/* 日次記事はその試合の専用まとめではないので、同じタイトルが何行も並ばないよう
+                「この日のまとめで触れている」と出す（リンク先は日次記事）。 */}
             <p className="mt-1 pl-14 text-xs text-ink-soft transition-colors group-hover:text-ink">
-              <span className="line-clamp-1">{threadTitle(thread, locale)}</span>
+              <span className="line-clamp-1">
+                {dedicated ? threadTitle(thread, locale) : t('tag.gameFromDaily')}
+              </span>
             </p>
           </Link>
         ) : (
