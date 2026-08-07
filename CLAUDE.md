@@ -161,6 +161,13 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     `data/player-names-ja.json`（公式英語表記→カタカナの手当て表）→ 英語のまま、の順で解決する。記事 JSON には
     公式英語表記だけ持つ（表記の正を1か所に寄せる）。未収録の選手は英語で出るだけなので、気づいた時に
     `node scripts/check-player-names.mjs` で洗い出してカタカナを足す（既存記事も次のビルドから直る）。
+  - **チームLPの試合タイムライン**: `node scripts/fetch-mlb-stats.mjs team-games` で直近30日の
+    **全試合の結果**を `data/team-games.json` へ（statsapi 1コール・CI が毎時更新）。チームLPは
+    これを背骨に並べ、まとめ記事のある試合だけリンク・本塁打・現地の声が乗る＝記事を書いていない試合が
+    抜けない（2026-08-07 改修）。日付は **JST**（記事の `series.date` と突き合わせるため）。
+    タイムラインに挟む「中の人メモ」は `data/team-notes.json`（手書き・節目の試合だけ）で、
+    書く候補と事実は `node scripts/team-note-candidates.mjs` が出す。運用は **jp-daily スキルの
+    Step 6b**（1日1〜2件）が正。
     ⚠️ **順位・勝敗はその試合終了時点の値を焼き込む**（`leagueRecord` と日付指定 standings）。`data/standings.json`
     ＝常に最新 を記事に出すと、7月の試合の記事が9月には違う順位を表示してしまうため。**サイト本体は
     静的JSONを読むだけ**（API を叩かない）という posture は他と同じ。
