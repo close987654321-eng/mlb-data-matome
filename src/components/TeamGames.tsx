@@ -65,12 +65,15 @@ export default async function TeamGames({
   );
 
   const items = rows.map((row, i) => {
-    const { date, score, oppScore, oppJa, oppEn, win, home, gameNo, thread, dedicated, voice } = row;
+    const { date, score, oppScore, oppJa, oppEn, win, home, gameNo, thread, dedicated, voice, voiceUrl } =
+      row;
     const mark = win == null ? '－' : en ? (win ? 'W' : 'L') : win ? '○' : '●';
     const [, m, d] = date.split('-');
     const note = en ? undefined : notes.get(date);
     // 声は**声が取れた全試合**に出す（2026-08-07 村山「各試合に海外ファンのコメントを」）。
     const voiceBody = voice ? (en ? voice.bodyEn || voice.bodyJa : voice.bodyJa) : '';
+    // 著者名の書式と票数の記号は媒体で変わる。声レイヤーは常に YouTube 由来。
+    const voiceKind = voiceUrl ? 'youtube' : (thread?.format ?? 'reddit');
 
     // 結果の1行。記事がある試合だけリンクにする（記事の無い試合は行き止まりに送らない）。
     const head = (
@@ -126,21 +129,31 @@ export default async function TeamGames({
         ) : (
           head
         )}
-        {/* その試合の現地の声＝タイムラインを「結果表」で終わらせない（記事がある試合の新しい数件だけ）。 */}
+        {/* その試合の現地の声＝タイムラインを「結果表」で終わらせない。記事が無い試合は
+            声レイヤー（公式ハイライトのコメント1件）が埋め、著者名が引用元動画への送客になる。 */}
         {voice && voiceBody && (
           <figure className="mt-2.5 pl-14">
             <blockquote className="border-l border-line pl-3 text-sm leading-relaxed text-ink">
               “{voiceBody}”
             </blockquote>
             <figcaption className="mt-1 pl-3 text-xs text-ink-mute">
-              <span className="font-medium text-ink-soft">
-                {thread!.format === 'youtube' || thread!.format === 'interview'
-                  ? voice.author
-                  : `u/${voice.author}`}
-              </span>
-              {thread!.format !== 'interview' && (
+              {voiceUrl ? (
+                <a
+                  href={voiceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-ink-soft underline decoration-line underline-offset-2 hover:decoration-ink"
+                >
+                  {voice.author}
+                </a>
+              ) : (
+                <span className="font-medium text-ink-soft">
+                  {voiceKind === 'reddit' ? `u/${voice.author}` : voice.author}
+                </span>
+              )}
+              {voiceKind !== 'interview' && (
                 <span className="ml-2 tabular-nums">
-                  {thread!.format === 'youtube' ? '👍' : '▲'} {voice.score.toLocaleString()}
+                  {voiceKind === 'reddit' ? '▲' : '👍'} {voice.score.toLocaleString()}
                 </span>
               )}
             </figcaption>

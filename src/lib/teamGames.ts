@@ -3,6 +3,7 @@ import path from 'node:path';
 import { gameDateOf } from './gameSeo';
 import { getTeam, getTeamById } from './teams';
 import { allComments } from './daily';
+import type { GameVoice } from './gameVoices';
 import type { StoryBlock, Thread, ThreadComment, ThreadHomer } from '@/types/thread';
 
 /**
@@ -60,8 +61,13 @@ export type TeamGameRow = {
   thread: Thread | null;
   /** 記事がその試合そのもののまとめか（false = 日次記事の中で触れているだけ）。表示の出し分けに使う。 */
   dedicated: boolean;
-  /** その試合の現地ファンの声（実在コメント1件）。記事があっても声が取れない試合は null。 */
+  /** その試合の現地ファンの声（実在コメント1件）。声が取れない試合だけ null。 */
   voice: ThreadComment | null;
+  /**
+   * 声レイヤー（data/game-voices.json）由来のときだけ入る引用元の動画URL。
+   * 記事由来の声は記事そのものが送客先なので undefined＝この有無で送客先を出し分ける。
+   */
+  voiceUrl?: string;
   /** 記事に焼き込んだ自軍の本塁打（専用記事だけが持てる情報）。 */
   homers?: ThreadHomer[];
 };
@@ -163,19 +169,39 @@ export function buildGameSources(threads: Thread[]): Map<string, GameSource> {
   return map;
 }
 
+/** 声レイヤー（1試合1件）を試合キーで引ける形にする。 */
+function voiceLayer(voices: GameVoice[]): Map<string, { comment: ThreadComment; url: string }> {
+  const map = new Map<string, { comment: ThreadComment; url: string }>();
+  for (const v of voices) {
+    const away = getTeamById(v.a);
+    const home = getTeamById(v.h);
+    if (!away || !home) continue;
+    map.set(gameKey(v.d, away.nameJa, v.as, home.nameJa, v.hs), {
+      comment: { author: v.author, score: v.score, bodyEn: v.en, bodyJa: v.ja },
+      url: `https://www.youtube.com/watch?v=${v.v}`,
+    });
+  }
+  return map;
+}
+
 /**
  * そのチームの試合タイムライン（新しい順）。日程（全試合）を背骨に、記事がある試合にリンクを重ねる。
  *
  * 日程の窓（既定30日）より古い試合でも、記事がある試合は行として残す＝窓を伸ばさずに
  * 「記事のある試合は必ず辿れる」を保つ。並べ替えのあと limit 件に切る。
+ *
+ * 声の供給源は3系統で、**専用記事 ＞ 日次記事 ＞ 声レイヤー**の優先順位。記事が声を持つ試合は
+ * より深い記事へ送りたいので、声レイヤーは記事が届いていない試合だけを埋める。
  */
 export function teamGameRows(
   schedule: TeamSchedule | null,
   threads: Thread[],
   teamJa: string,
   limit = 26,
+  voices: GameVoice[] = [],
 ): TeamGameRow[] {
   const sources = buildGameSources(threads);
+  const layer = voiceLayer(voices);
   const rows: TeamGameRow[] = [];
   const seen = new Set<string>();
 
@@ -200,6 +226,8 @@ export function teamGameRows(
     const oppScore = isHome ? g.as : g.hs;
     const src = sources.get(key);
     const homers = homersOf(src, isHome);
+    // 記事が声を持たない試合だけ声レイヤーで埋める（記事の声のほうが編集済みで文脈も濃い）。
+    const lay = src?.comment ? undefined : layer.get(key);
     rows.push({
       date: g.d,
       home: isHome,
@@ -211,7 +239,8 @@ export function teamGameRows(
       ...(g.no ? { gameNo: g.no } : {}),
       thread: src?.thread ?? null,
       dedicated: src?.dedicated ?? false,
-      voice: src?.comment ?? null,
+      voice: src?.comment ?? lay?.comment ?? null,
+      ...(lay ? { voiceUrl: lay.url } : {}),
       ...(homers ? { homers } : {}),
     });
   }
