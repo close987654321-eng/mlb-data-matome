@@ -5,7 +5,16 @@ import { getAllTags, getFeedByTag } from '@/lib/tags';
 import { getAllThreads } from '@/lib/data';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
-import { tagHubOf, tagHubIntroJa, tagHubVoices, playerTagHubs, type TagVoice } from '@/lib/tagHub';
+import {
+  tagHubOf,
+  tagHubIntroJa,
+  tagHubVoices,
+  playerTagHubs,
+  subjectPatterns,
+  mentionsSubject,
+  type TagVoice,
+  type VoiceSubject,
+} from '@/lib/tagHub';
 import {
   fighterHubOf,
   fighterHubIntroJa,
@@ -21,7 +30,7 @@ import { getEditorNote, type EditorNote } from '@/lib/editorNotes';
 import {
   getPlayerJournal,
   getFighterJournal,
-  journalLatestHighlight,
+  journalNowHighlight,
   type PlayerJournal as PlayerJournalData,
 } from '@/lib/playerJournal';
 import { getGamelog, type Gamelog } from '@/lib/gamelog';
@@ -350,6 +359,12 @@ export default async function TagPage({
     }
   }
 
+  // 「いま」ブロックの声は日替わりで回す（journalNowHighlight）。その中で本人が主語の声を優先するための判定。
+  const nowSubject: VoiceSubject | null = hub ?? fighter;
+  const nowAbout = nowSubject
+    ? { isAbout: (text: string) => mentionsSubject(text, subjectPatterns(nowSubject)) }
+    : undefined;
+
   const pageUrl = absoluteUrl(locale, `/tag/${encodeURIComponent(decoded)}`);
   const updatedIso = feed[0]?.date; // フィードは日付降順＝先頭が最新（最終更新のシグナル）
   const jsonLd = {
@@ -568,7 +583,7 @@ export default async function TagPage({
         />
       )}
 
-      {/* 選手タグLP: 「いま」ブロック＝最新の山場の声＋総評＋スタットパネル。検索着地の
+      {/* 選手タグLP: 「いま」ブロック＝現地の声（日替わりで入れ替わる1本）＋総評＋スタットパネル。検索着地の
           第一意図「直近どう見られてる？」にファーストビューで答え、数字は成績ハブへの太い橋になる。
           日誌がない選手・en面ではスタットパネルだけに退化する（全選手LP共通）。 */}
       {hub && (
@@ -579,18 +594,18 @@ export default async function TagPage({
           gamelog={hubGamelog}
           jpRank={hubJpRank}
           asOf={hubAsOf}
-          highlight={journal && locale !== 'en' ? journalLatestHighlight(journal) : null}
+          highlight={journal && locale !== 'en' ? journalNowHighlight(journal, nowAbout) : null}
           editorNote={journal && locale !== 'en' ? editorNote : null}
           showJournalJump={Boolean(journal) && locale !== 'en'}
         />
       )}
 
-      {/* ファイタータグLP: 「いま」ブロック＝最新の山場の声＋総評＋ビッグ数字（戦績・KO率・世界戦・P4P）。
+      {/* ファイタータグLP: 「いま」ブロック＝現地の声（日替わり）＋総評＋ビッグ数字（戦績・KO率・世界戦・P4P）。
           数値は fighters.ts の裏取り済みカタログの再表示（PlayerNow のファイター版・ja のみ）。 */}
       {fighter && locale !== 'en' && (
         <FighterNow
           fighter={fighter}
-          highlight={journal ? journalLatestHighlight(journal) : null}
+          highlight={journal ? journalNowHighlight(journal, nowAbout) : null}
           editorNote={editorNote}
           showJournalJump={Boolean(journal)}
         />

@@ -9,7 +9,7 @@ import type { JournalEntry, JournalQuote } from "@/lib/playerJournal";
 /**
  * 格闘技タグLPの「いま」ブロック＝PlayerNow のファイター版。検索着地の第一意図
  * 「直近、海外はどう見てる？」に最初の1画面で答え、数字で目を引く:
- *  - 最新の山場の声（キャリア観測日誌の journalLatestHighlight）
+ *  - 現地の声1本（キャリア観測日誌から日替わりで回す journalNowHighlight）
  *  - 編集部ノート（総評）を吸収
  *  - ビッグ数字パネル: 通算戦績・KO率（record からの単純演算）＋ headlineStats
  *    （世界戦連勝・P4P順位など fighters.ts の裏取り済みカタログ値）
@@ -17,9 +17,16 @@ import type { JournalEntry, JournalQuote } from "@/lib/playerJournal";
  * ja 専用（編集部の和文を英語ページに混ぜない＝日誌と同じ扱い）。
  */
 
+/**
+ * 「8月6日」。年をまたぐ声（ローテが過去の一戦を引いたとき）は年から書く
+ * ＝ファイターの日誌はキャリア通算＝年をまたぐので、年なしだと今年の話に読める。
+ */
 function dateJa(date: string): string {
-  const [, m, d] = date.split("-");
-  return `${Number(m)}月${Number(d)}日`;
+  const [y, m, d] = date.split("-");
+  const thisYear = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Tokyo" })
+    .format(new Date())
+    .slice(0, 4);
+  return `${y === thisYear ? "" : `${Number(y)}年`}${Number(m)}月${Number(d)}日`;
 }
 
 /** 引用の話者行（規約は SeasonJournal / PlayerNow と同じ: YouTube=👍 / Reddit=▲ + u/ 接頭）。 */
@@ -30,9 +37,12 @@ function quoteAuthor(entry: JournalEntry, quote: JournalQuote) {
       <span className="font-medium text-ink-soft">
         {isYoutube ? quote.author : `u/${quote.author}`}
       </span>
-      <span className="tabular-nums">
-        {isYoutube ? "👍" : "▲"} {quote.score.toLocaleString()}
-      </span>
+      {/* 票が付いていない声は「👍 0」を出さない＝LPの顔に0を並べて弱く見せない（値は捏造しない） */}
+      {quote.score > 0 && (
+        <span className="tabular-nums">
+          {isYoutube ? "👍" : "▲"} {quote.score.toLocaleString()}
+        </span>
+      )}
     </>
   );
 }

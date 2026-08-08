@@ -13,7 +13,8 @@ import type { Locale } from '@/lib/i18n';
 /**
  * 選手タグLPの「いま」ブロック＝検索着地の第一意図「直近、海外なんて言ってる？」に
  * ファーストビューで答えるカード。
- *  - 日誌がある選手（ja）: 最新の山場引用＋編集部ノート（総評）＋スタットパネル＋最新の観測へのアンカー
+ *  - 日誌がある選手（ja）: 現地の声1本（日替わりローテ＝journalNowHighlight）＋編集部ノート（総評）
+ *    ＋スタットパネル＋最新の観測へのアンカー
  *  - それ以外（日誌なし・en）: スタットパネルだけに退化＝全選手LP共通の「成績ハブへの太い橋」
  * 数値はすべて snapshot / gamelog（CIが更新する公知の数値）の再表示で、ここでは何も計算で作らない。
  * WARスパークラインは gamelog.warHistory の実測期間だけを正直に描く（開幕からとは言わない）。
@@ -48,16 +49,26 @@ function quoteAuthor(entry: JournalEntry, quote: JournalQuote) {
   return (
     <>
       <span className="font-medium text-ink-soft">{isYoutube ? quote.author : `u/${quote.author}`}</span>
-      <span className="tabular-nums">
-        {isYoutube ? '👍' : '▲'} {quote.score.toLocaleString()}
-      </span>
+      {/* 票が付いていない声は「👍 0」を出さない＝LPの顔に0を並べて弱く見せない（値は捏造しない） */}
+      {quote.score > 0 && (
+        <span className="tabular-nums">
+          {isYoutube ? '👍' : '▲'} {quote.score.toLocaleString()}
+        </span>
+      )}
     </>
   );
 }
 
+/**
+ * 「8月6日」。年をまたぐ声（ローテが去年の一戦を引いたとき）は年から書く
+ * ＝「12月31日」だけ出して今年の話に読ませない。
+ */
 function dateJa(date: string): string {
-  const [, m, d] = date.split('-');
-  return `${Number(m)}月${Number(d)}日`;
+  const [y, m, d] = date.split('-');
+  const thisYear = new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' })
+    .format(new Date())
+    .slice(0, 4);
+  return `${y === thisYear ? '' : `${Number(y)}年`}${Number(m)}月${Number(d)}日`;
 }
 
 export default function PlayerNow({
@@ -139,7 +150,8 @@ export default function PlayerNow({
     <section className="space-y-5">
       <SectionHeading label={quoteBody ? t('tag.now', { name }) : t('tag.panelTitle', { name })} />
       <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
-        {/* 最新の山場の声＝このLPの顔。検索着地の「直近どう見られてる？」に最初の1画面で答える。 */}
+        {/* 現地の声＝このLPの顔。検索着地の「直近どう見られてる？」に最初の1画面で答える。
+            どの1本を出すかは日替わり（journalNowHighlight）＝再訪しても同じ声が居座らない。 */}
         {highlight && quoteBody && (
           <figure className="border-b border-line pb-5">
             <blockquote className="max-w-prose text-lg font-bold leading-relaxed text-ink sm:text-xl">

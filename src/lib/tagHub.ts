@@ -122,7 +122,7 @@ function voiceBody(c: ThreadComment): string {
  * 英語はフルネームと4文字以上のトークン（Ohtani / Shohei）。カタカナ名は「・」で割った要素も足す。
  * exact な主題（チーム）は語に割らず、与えた表記だけを使う（VoiceSubject.exact のコメント参照）。
  */
-function subjectPatterns(subject: VoiceSubject): string[] {
+export function subjectPatterns(subject: VoiceSubject): string[] {
   const given = [
     subject.nameJa,
     subject.nameEn,
@@ -152,6 +152,15 @@ function mentionOf(comment: ThreadComment, patterns: string[]): 'none' | 'body' 
     }
   }
   return found;
+}
+
+/**
+ * その本文がこの主題に言及しているか。声ピックアップの内部判定（mentionOf）と同じ正規化を、
+ * 日誌ハイライト（journalNowHighlight）の「本人の話か」加点からも使えるように公開したもの。
+ */
+export function mentionsSubject(text: string, patterns: string[]): boolean {
+  const hay = normalize(text);
+  return patterns.some((p) => hay.includes(p));
 }
 
 /** 使えるコメント（本文があり、一言レスでない）を票数の多い順に。 */

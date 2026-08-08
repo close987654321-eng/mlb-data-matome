@@ -105,18 +105,111 @@ export type JournalChapter = {
   entries: JournalEntry[];
 };
 
+/** 「いま」ブロックの顔になる声（LP上部に大きく出す1本）。 */
+export type JournalHighlight = { entry: JournalEntry; quote: JournalQuote };
+
 /**
- * 「いま」ブロックに掲げる最新のハイライト＝直近の山場（peak）の最多いいね引用。
- * 山場がなければ引用のある最新エントリで代用（LPの顔になる声を常に1本立てる）。
+ * ローテーションの設計値。
+ * 旧実装は「直近の山場（peak）の最多いいね」固定で、peak が手打ちのフラグなので
+ * 新しい山場を立てるまで同じ声が何週間も居座った（千賀は6/29、佐々木は7/18で固着・2026-08-08 村山指摘）。
+ * 日誌のエントリ自体は記事を書くたびに積まれている＝そこから候補プールを作って日替わりで回す。
  */
-export function journalLatestHighlight(
+const NOW_SCAN_ENTRIES = 12; // 候補を読むエントリ数の上限（これ以上は遡らない）
+const NOW_WINDOW_DAYS = 45; // 鮮度の窓＝日誌の最新エントリから何日ぶんを「いま」と見なすか
+const NOW_MIN_POOL = 4; // 窓の中が薄い選手（登板間隔が長い投手・年数回のファイター）はここまで窓を広げる
+const NOW_PER_ENTRY = 2; // 1試合から採る上限（1試合の話題でローテを埋めない）
+const NOW_POOL = 8; // ローテーションの周期（この本数を日替わりで回す）
+const NOW_MIN_LEN = 24; // 一言レス（「うおおお」）を大見出しに掲げない
+const NOW_MAX_LEN = 160; // 大きな字でファーストビューに収まる長さ
+const NOW_MAX_EMOJI = 4; // 絵文字だらけの応援コメント（「🇯🇵🎉ナイスピッチング👏🎊」）は顔にしない
+
+/** 表示に使う本文（ja 優先・無ければ en）＝ PlayerNow / FighterNow の描き方と同じ。 */
+function quoteText(quote: JournalQuote): string {
+  return (quote.bodyJa ?? '').trim() || (quote.bodyEn ?? '').trim();
+}
+
+const EMOJI = /[\p{Extended_Pictographic}\p{Regional_Indicator}\p{So}\p{Sk}]/gu;
+
+/** 絵文字・空白を除いた実質の文字数（声ピックアップ＝tagHub と同じものさし）。 */
+function textLength(s: string): number {
+  return s.replace(EMOJI, '').replace(/\s/g, '').length;
+}
+
+/** 大きな字で1本だけ掲げるに足る引用か（短すぎ・絵文字だらけを弾く）。 */
+function heroWorthy(quote: JournalQuote): boolean {
+  const body = quoteText(quote);
+  return textLength(body) >= NOW_MIN_LEN && (body.match(EMOJI)?.length ?? 0) <= NOW_MAX_EMOJI;
+}
+
+/** 日誌の最新エントリから NOW_WINDOW_DAYS 日ぶんが「いま」の窓（絶対日付でなく日誌内の相対で見る）。 */
+function windowStart(latest: string): string {
+  return new Date(Date.parse(`${latest}T00:00:00Z`) - NOW_WINDOW_DAYS * 86_400_000)
+    .toISOString()
+    .slice(0, 10);
+}
+
+/**
+ * JST の暦日を通日（1970-01-01 起点）に。日替わりローテーションの種。
+ * SSG なので値が決まるのはビルド時＝stats CI が毎日ビルドを回している前提
+ * （期限つき予告 journalNext と同じ前提・同じ壊れ方をする）。
+ */
+function jstDayIndex(today?: string): number {
+  const ymd =
+    today ?? new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Tokyo' }).format(new Date());
+  return Math.floor(Date.parse(`${ymd}T00:00:00Z`) / 86_400_000);
+}
+
+/**
+ * 「いま」に掲げる候補プール＝直近エントリの“読ませる”引用を質順に NOW_POOL 本。
+ * 新しいエントリほど強く加点する＝プールの中身は試合が積まれるたびに勝手に入れ替わる。
+ * 山場（peak）は加点するが独占はさせない（固着の原因を断ちつつ、大きな試合の声は上に来る）。
+ * isAbout（その選手に言及しているか）を渡すと、その人が主語の声を優先する
+ * ＝「{選手名} 海外の反応」で着地した読者が求める声をLPの顔にする。
+ */
+function nowPool(journal: PlayerJournal, isAbout?: (text: string) => boolean): JournalHighlight[] {
+  const withQuotes = journal.entries.filter((e) => e.quotes.length > 0);
+  const from = windowStart(withQuotes.at(-1)?.date ?? '');
+  const recent = withQuotes.slice(-NOW_SCAN_ENTRIES).reverse(); // 新しい順
+  const cands: { hl: JournalHighlight; q: number }[] = [];
+  for (const [age, entry] of recent.entries()) {
+    // 窓の外まで来ていて、かつ回すのに足りる本数が溜まっていれば打ち切る（古い声を「いま」に出さない）。
+    if (entry.date < from && cands.length >= NOW_MIN_POOL) break;
+    [...entry.quotes]
+      .filter(heroWorthy)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, NOW_PER_ENTRY)
+      .forEach((quote, rank) => {
+        const body = quoteText(quote);
+        let q = 1 - age / NOW_SCAN_ENTRIES; // 新しいエントリほど上
+        if (entry.peak) q += 0.5;
+        q -= rank * 0.2; // 同じ試合なら票数の上位から
+        if (quote.score <= 0) q -= 0.5; // 票が付いていない声＝ファンの総意とは言えないので顔にしにくくする
+        if (textLength(body) <= NOW_MAX_LEN) q += 0.4;
+        if (isAbout?.(body)) q += 0.6; // 本人の話をしている声
+        cands.push({ hl: { entry, quote }, q });
+      });
+  }
+  return cands
+    .sort((a, b) => b.q - a.q)
+    .slice(0, NOW_POOL)
+    .map((c) => c.hl);
+}
+
+/**
+ * 「いま」ブロックに掲げるハイライト＝候補プールを **JSTの日付で日替わりに回した1本**。
+ * 同じ日は必ず同じ声（ビルドが何度走っても揺れない）、翌日は別の声、新しい試合が積まれれば
+ * プールごと新しくなる。候補が作れない日誌（短い引用しかない等）だけ従来の「直近の山場」に退避する。
+ */
+export function journalNowHighlight(
   journal: PlayerJournal,
-): { entry: JournalEntry; quote: JournalQuote } | null {
-  const pool = journal.entries.filter((e) => e.quotes.length > 0);
-  const entry = [...pool].reverse().find((e) => e.peak) ?? pool.at(-1);
+  opts?: { isAbout?: (text: string) => boolean; today?: string },
+): JournalHighlight | null {
+  const pool = nowPool(journal, opts?.isAbout);
+  if (pool.length > 0) return pool[jstDayIndex(opts?.today) % pool.length];
+  const withQuotes = journal.entries.filter((e) => e.quotes.length > 0);
+  const entry = [...withQuotes].reverse().find((e) => e.peak) ?? withQuotes.at(-1);
   if (!entry) return null;
-  const quote = entry.quotes.reduce((a, b) => (b.score > a.score ? b : a));
-  return { entry, quote };
+  return { entry, quote: entry.quotes.reduce((a, b) => (b.score > a.score ? b : a)) };
 }
 
 /**
