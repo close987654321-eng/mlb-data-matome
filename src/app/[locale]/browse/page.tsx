@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllTags } from '@/lib/tags';
-import { PLAYERS, type Player } from '@/lib/players';
+import { PLAYERS, hasMlbStats, type Player } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { FIGHTERS } from '@/lib/fighters';
 import { getTeam, teamLogoUrl, headshotUrl } from '@/lib/teams';
@@ -55,6 +55,12 @@ export default async function BrowsePage({ params }: { params: Promise<{ locale:
     .filter((e) => e.count > 0)
     .sort((a, b) => b.count - a.count || a.p.nameJa.localeCompare(b.p.nameJa, 'ja'));
 
+  // 海外の注目スター（rival カタログ）。行き先はタグLPでなく /player/{slug}＝「{選手名} 成績」で
+  // 2ページ目に張り付く成績ハブへ、ヘッダー常設ハブから2ホップの内部リンクを通す（GSC実測:
+  // シュワーバー/クロウアームストロング成績系が計2,000表示超で全部11位前後・2026-08-11）。
+  // hasMlbStats で絞る＝/player の生成条件（hubEligible）を満たすリンクだけ並べて404を作らない。
+  const rivals = PLAYERS.filter((p) => p.rival && hasMlbStats(snap.players[String(p.mlbId)]));
+
   // チームLP（LP昇格済み＝記事3件以上のタグのみ）。記事数降順。
   const teams = tags
     .map(({ tag, count }) => ({ hub: teamHubOf(tag), count }))
@@ -90,13 +96,30 @@ export default async function BrowsePage({ params }: { params: Promise<{ locale:
             <PlayerCard
               key={p.slug}
               player={p}
-              count={count}
               teamJa={snap.players[String(p.mlbId)]?.team}
               countLabel={t('browse.articleCount', { count })}
             />
           ))}
         </ul>
       </section>
+
+      {rivals.length > 0 && (
+        <section className="space-y-4">
+          <SectionHeading label={t('browse.rivals')} count={rivals.length} />
+          <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{t('browse.rivalsLead')}</p>
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {rivals.map((p) => (
+              <PlayerCard
+                key={p.slug}
+                player={p}
+                href={`/player/${p.slug}`}
+                teamJa={snap.players[String(p.mlbId)]?.team}
+                countLabel={t('browse.rivalStats')}
+              />
+            ))}
+          </ul>
+        </section>
+      )}
 
       {teams.length > 0 && (
         <section className="space-y-4">
@@ -174,20 +197,21 @@ export default async function BrowsePage({ params }: { params: Promise<{ locale:
 
 function PlayerCard({
   player,
-  count,
   teamJa,
   countLabel,
+  href,
 }: {
   player: Player;
-  count: number;
   teamJa?: string;
   countLabel: string;
+  /** 省略時はタグLP。rival は成績ハブ /player/{slug} を渡す（タグ記事0件でもリンク先が空にならない）。 */
+  href?: string;
 }) {
   const team = getTeam(teamJa);
   return (
     <li>
       <Link
-        href={`/tag/${encodeURIComponent(player.nameJa)}`}
+        href={href ?? `/tag/${encodeURIComponent(player.nameJa)}`}
         className="flex items-center gap-3 rounded-[2px] border border-line p-3 transition-colors hover:border-ink"
       >
         {/* eslint-disable-next-line @next/next/no-img-element -- MLB公式ヘッドショットを直リンク */}

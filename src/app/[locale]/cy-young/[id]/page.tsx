@@ -48,7 +48,7 @@ function copy(en: boolean, r: CyRow, season: number) {
         reactTitle: 'Overseas reactions',
         reactEmpty: 'No reaction articles yet for this pitcher.',
         backBoard: 'Back to the Cy Young board',
-        toHub: 'Player page (game-by-game)',
+        toHub: `${r.nameEn} — game-by-game stats`,
         source: `Data: MLB Stats API + Baseball Savant. ${season} season, as of `,
       }
     : {
@@ -62,7 +62,8 @@ function copy(en: boolean, r: CyRow, season: number) {
         reactTitle: '海外の反応',
         reactEmpty: 'この投手の海外の反応記事はまだありません。',
         backBoard: 'サイヤング予測ボードに戻る',
-        toHub: '選手ページ（試合ごとの成績）',
+        // 選手名＋「成績」のフレーズ一致アンカー（mvp/[id] と同じ意図）。
+        toHub: `${r.nameJa}の試合別成績・現地の評判`,
         source: `出典: MLB公式Stats API＋Baseball Savant。${season}シーズン・`,
       };
 }

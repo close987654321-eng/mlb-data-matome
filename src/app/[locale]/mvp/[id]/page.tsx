@@ -62,7 +62,7 @@ function copy(en: boolean, r: MvpRow, season: number) {
         reactTitle: 'Overseas reactions',
         reactEmpty: 'No reaction articles yet for this hitter.',
         backBoard: 'Back to the MVP board',
-        toHub: 'Player page (game-by-game)',
+        toHub: `${r.nameEn} — game-by-game stats`,
         source: `Data: MLB Stats API + Baseball Savant. ${season} season, as of `,
       }
     : {
@@ -92,7 +92,9 @@ function copy(en: boolean, r: MvpRow, season: number) {
         reactTitle: '海外の反応',
         reactEmpty: 'この打者の海外の反応記事はまだありません。',
         backBoard: 'MVP予測ボードに戻る',
-        toHub: '選手ページ（試合ごとの成績）',
+        // 選手名＋「成績」のフレーズ一致アンカー＝「{選手名} 成績」で2ページ目に張り付く
+        // /player ハブへ内部評価を渡す（チームLPの「{チーム}の海外の反応」アンカーと同じ手法）。
+        toHub: `${r.nameJa}の試合別成績・現地の評判`,
         source: `出典: MLB公式Stats API＋Baseball Savant。${season}シーズン・`,
       };
 }
