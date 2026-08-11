@@ -2,8 +2,9 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 /**
- * 選手タグLP（/tag/{選手名}）の「編集部ノート」＝この選手が海外でどう見られているかの
- * 300字前後の編集部要約。data/editor-notes.json（slug キー）が唯一の正。
+ * 選手・ファイター・チームタグLP（/tag/{名前}）の「編集部ノート」＝その主題が海外で
+ * どう見られているかの300字前後の編集部要約。data/editor-notes.json が唯一の正。
+ * キーは選手・ファイター＝カタログの slug、チーム＝teams.ts の slug（whitesox 等・衝突しない）。
  *
  * 現地ファンの声ピックアップ（tagHubVoices）が「生のコメント（日替わりで最大20件）」を見せるのに対し、
  * ノートはそれを横断した傾向の言語化＝「◯◯ 海外の反応」で来た人が30秒で全体像を掴める

@@ -356,6 +356,10 @@ export default async function TagPage({
         feed.length,
         standing ? standingPhraseJa(standing.row, standing.division) : undefined,
       );
+      // チームも選手・ファイターと同じ編集部ノートを持てる（キーは teams.ts の slug＝whitesox 等。
+      // 選手 slug と衝突しない）。導入文・順位表が全チーム共通の生成物なのに対し、ノートは
+      // そのチーム固有の手書きテキスト＝「{チーム名} 海外の反応」LPの独自性を担う。
+      editorNote = await getEditorNote(teamLp.info.slug);
     }
   }
 
@@ -624,10 +628,12 @@ export default async function TagPage({
 
       {/* 編集部ノート＝「海外でどう見られているか」の要約（ja のみ・手書き）。
           選手は「いま」（PlayerNow）、ファイターは FighterNow に吸収済みなので、
-          ここに出すのは日誌なしの選手だけ。 */}
-      {hub && !journal && editorNote && (
+          ここに出すのは日誌なしの選手とチーム。 */}
+      {((hub && !journal) || teamLp) && editorNote && (
         <section className="space-y-5">
-          <SectionHeading label={t('tag.editorNote', { name: (hub ?? fighter)!.nameJa })} />
+          <SectionHeading
+            label={t('tag.editorNote', { name: hub?.nameJa ?? teamLp!.nameJa })}
+          />
           <div className="rounded-[3px] border border-line bg-surface p-5 sm:p-6">
             <p className="max-w-prose text-sm leading-relaxed text-ink">{editorNote.noteJa}</p>
             <p className="mt-4 border-t border-line pt-3 text-xs text-ink-mute">
