@@ -19,6 +19,11 @@ export type RaceBoardCard = {
   href: string;
   asOfText: string | null;
   leagues: { label: string; rows: RaceRow[] }[];
+  /**
+   * ボード本体へのリンク文言。省略時は共通ラベル。カードごとに「サイ・ヤング賞候補〜」と
+   * 書き分けて、送り先のページが狙う語とアンカーを一致させる（内部リンクの評価を渡す配線）。
+   */
+  moreLabel?: string;
 };
 
 /**
@@ -114,7 +119,7 @@ export default function RaceBoards({
               href={card.href}
               className="block border-t border-line px-4 py-2.5 text-xs text-ink-soft transition-colors hover:text-ink"
             >
-              {boardLabel} <span aria-hidden>→</span>
+              {card.moreLabel ?? boardLabel} <span aria-hidden>→</span>
             </Link>
           </div>
         ))}

@@ -10,36 +10,57 @@ import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
+import {
+  asOfShort,
+  boardItemList,
+  boardLeaders,
+  jpRankPhrase,
+  leadersPhrase,
+  type BoardLeaders,
+} from '@/lib/boardSeo';
 import { type Locale } from '@/lib/i18n';
 
 // MVPレースの海外の反応記事を拾うタグ。
 const MVP_TAGS = ['MVP'];
 
-/** ページ内の文言（インライン bilingual＝CyYoungPage と同じ流儀。messages は nav.mvp のみ）。 */
-function copy(en: boolean, year: number | string) {
+/**
+ * ページ内の文言（インライン bilingual＝CyYoungPage と同じ流儀。messages は nav.mvp のみ）。
+ * 題字・タイトルの主語を「候補」にする理由と、説明文に実データの首位を差し込む狙いは
+ * boardSeo.ts（サイヤング側で実測した検索語のズレ）と同じ。ボード2種は改良をパリティ移植する。
+ */
+function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string) {
+  const day = asOfShort(asOf, en);
   return en
     ? {
         crumb: 'MVP Board',
         eyebrow: `${year} Season`,
-        title: 'MVP Prediction Board & Reactions',
+        title: `${year} MVP Candidates & Prediction Board`,
         lead: 'Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR — two-way pitching WAR included). A data-driven read on the AL & NL MVP races — with Shohei Ohtani and Japan’s bats highlighted, plus overseas fan reactions. Tap any row for the full breakdown.',
-        metaTitle: `MVP ${year} Prediction & Overseas Reactions | AL/NL Hitters`,
-        metaDesc: `Who wins the ${year} MVP? Qualified hitters scored by wRC+, xwOBA, homers, baserunning, defense and WAR across AL & NL — plus overseas fan reactions to Ohtani and Japan’s hitters.`,
+        metaTitle: `${year} MVP Candidates | AL/NL Hitter Rankings`,
+        metaDesc: `${year} MVP candidates, ranked${day ? ` (as of ${day})` : ''}. ${leadersPhrase(leaders, true)} ${jpRankPhrase(leaders, true)} Qualified hitters scored by wRC+, xwOBA, homers, baserunning, defense and WAR across AL & NL.`,
       }
     : {
         crumb: 'MVP予測',
         eyebrow: `${year} シーズン`,
-        title: 'MVP 予測ボード＆海外の反応',
+        title: `MVP候補 ${year} 予測ランキング`,
         lead: '規定打席に到達した打者を、wRC+・xwOBA・本塁打・走塁・守備・WARをもとにリーグ内でスコア化した予測ランキング（二刀流の大谷翔平は投手WARも合算）。ア・リーグとナ・リーグのMVP争いを、日本人打者の順位や海外ファンの反応とあわせて追えます。気になる打者の行をタップすると、打球の質・バットスピードまで分かる詳細ページへ。',
-        metaTitle: `MVP 予測 ${year}｜AL/NL打者スコアランキング`,
-        metaDesc: `${year}MVPは誰が獲る？規定打者をwRC+・xwOBA・本塁打・走塁・守備・WARで総合スコア化したAL/NL予測ランキングと、大谷翔平ら日本人打者への海外の反応をまとめて。`,
+        // cy-young と同じ＝brand 付与後も切られない長さに抑え、リーグ別クエリは h2 に持たせる。
+        metaTitle: `MVP候補 ${year} 予測ランキング`,
+        // 構成は cy-young と同じ＝検索語→いま誰が有力か→指標（切られてよい）の順。
+        metaDesc: `${year}年MVP候補の予測ランキング${day ? `（${day}時点）` : ''}。${leadersPhrase(leaders, false)}${jpRankPhrase(leaders, false)}wRC+・xwOBA・本塁打・走塁・守備・WARでリーグ内スコア化した順位と、海外ファンの反応。`,
       };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const board = await getMvpBoard();
-  const c = copy(locale === 'en', board?.season ?? new Date().getFullYear());
+  const en = locale === 'en';
+  const c = copy(
+    en,
+    board?.season ?? new Date().getFullYear(),
+    board ? boardLeaders(board, en) : { nl: null, al: null, jp: null },
+    board?.asOf,
+  );
   return {
     title: c.metaTitle,
     description: c.metaDesc,
@@ -57,7 +78,8 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
   // データ未生成なら 404（mvp コマンド前）。通常はビルド時に data/mvp-board.json が存在する。
   if (!board) notFound();
   const en = locale === 'en';
-  const c = copy(en, board.season);
+  const leaders = boardLeaders(board, en);
+  const c = copy(en, board.season, leaders, board.asOf);
 
   // MVPレースの海外の反応（MVPタグの記事）＝「MVP 海外の反応」の中身。
   const all = await getAllThreads();
@@ -74,7 +96,10 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
         name: c.title,
         description: c.metaDesc,
         url: absoluteUrl(locale, '/mvp'),
+        ...(board.asOf ? { dateModified: board.asOf.slice(0, 10) } : {}),
       },
+      // 「MVP候補 ランキング」型クエリ向け＝このページが順位表であることを機械可読にする（cy-young と同型）。
+      boardItemList(board, en, (row) => absoluteUrl(locale, `/mvp/${row.id}`), c.title),
       {
         '@type': 'BreadcrumbList',
         itemListElement: [

@@ -63,7 +63,7 @@ function LeagueTable({
 
   return (
     <div>
-      <h3 className="mb-2 text-sm font-bold tracking-wide text-ink">{league}</h3>
+      <h2 className="mb-2 text-sm font-bold tracking-wide text-ink">{league}</h2>
       <div className="overflow-x-auto rounded-[2px] border border-line">
         <table className="w-full min-w-[560px] text-sm tabular-nums">
           <thead>
@@ -158,6 +158,7 @@ export default function CyYoungBoard({ board, locale }: { board: Board; locale: 
         methodTitle: 'How the score works',
         method: `Prediction score = each pitcher’s within-league percentile in ERA + xERA (${pct(w.prevention)}), K-BB% (${pct(w.kbb)}), innings (${pct(w.ip)}), WHIP (${pct(w.whip)}) and HR/9 (${pct(w.hr9)}), blended. It’s our data-driven read, not a verdict — Cy Young is a within-league race, and volume (innings) keeps relievers out. Qualified starters only (~${board.qualifyIp} IP).`,
         cols: { pitcher: 'Pitcher', score: 'Score', era: 'ERA', xera: 'xERA', ip: 'IP', kbb: 'K-BB%', jp: 'JP', more: 'lower in the field' },
+        leagues: { NL: 'NL Cy Young candidates', AL: 'AL Cy Young candidates' },
         watchTitle: 'Japanese starters on the cusp',
         watchSub: 'Dominant by rate, but not yet innings-qualified — where the rest of Japan’s rotation stands.',
         watchGap: (n: number) => `~${n} IP to qualify`,
@@ -168,6 +169,9 @@ export default function CyYoungBoard({ board, locale }: { board: Board; locale: 
         methodTitle: '予測スコアの出し方',
         method: `各指標が同じリーグの規定投手の中でどの位置にいるかを0〜100で数値化し、ERA＋xERA（${pct(w.prevention)}）・K-BB%（${pct(w.kbb)}）・投球回（${pct(w.ip)}）・WHIP（${pct(w.whip)}）・HR/9（${pct(w.hr9)}）の重みをつけて合算したものが予測スコアです。サイ・ヤング賞はリーグ内での争いなのでAL/NL別に集計し、対象は規定投球回（目安 約${board.qualifyIp}回）に到達した先発に絞っています。現時点の成績にもとづく予測です。`,
         cols: { pitcher: '投手', score: '予測スコア', era: 'ERA', xera: 'xERA', ip: '投球回', kbb: 'K-BB%', jp: '日本', more: 'この間の投手は省略' },
+        // 表の見出しは「AL」「NL」の記号でなく、検索で打たれる語（ア・リーグ サイヤング候補）で書く。
+        // このクエリは実測で唯一6位に入っていてCTR10.6%＝上位化の効きが確かめられている枠（boardSeo.ts）。
+        leagues: { NL: 'ナ・リーグ サイ・ヤング賞候補', AL: 'ア・リーグ サイ・ヤング賞候補' },
         watchTitle: '規定投球回に届いていない日本人先発',
         watchSub: '投球内容は上位級でも、投球回がまだ規定に届かずランキングの対象外の投手たち。規定に到達すれば上の表に入ってきます。',
         watchGap: (n: number) => `規定まであと約${n}回`,
@@ -189,10 +193,16 @@ export default function CyYoungBoard({ board, locale }: { board: Board; locale: 
         <p className="mt-1.5 max-w-prose text-xs leading-relaxed text-ink-soft">{t.method}</p>
       </div>
 
-      {/* NL → AL の順（大谷・山本ら日本人はほぼ NL）。 */}
+      {/* NL → AL の順（大谷・山本ら日本人はほぼ NL）。id はリーグ別クエリからの着地点（/cy-young#al）。 */}
       {(['NL', 'AL'] as const).map((lg) => (
-        <section key={lg} className="space-y-2" aria-label={lg}>
-          <LeagueTable league={lg} rows={board.leagues[lg]} maxScore={maxScore} en={en} t={t.cols} />
+        <section key={lg} id={lg.toLowerCase()} className="space-y-2" aria-label={t.leagues[lg]}>
+          <LeagueTable
+            league={t.leagues[lg]}
+            rows={board.leagues[lg]}
+            maxScore={maxScore}
+            en={en}
+            t={t.cols}
+          />
         </section>
       ))}
 

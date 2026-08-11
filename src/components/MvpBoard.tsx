@@ -64,7 +64,7 @@ function LeagueTable({
 
   return (
     <div>
-      <h3 className="mb-2 text-sm font-bold tracking-wide text-ink">{league}</h3>
+      <h2 className="mb-2 text-sm font-bold tracking-wide text-ink">{league}</h2>
       <div className="overflow-x-auto rounded-[2px] border border-line">
         <table className="w-full min-w-[560px] text-sm tabular-nums">
           <thead>
@@ -167,6 +167,7 @@ export default async function MvpBoard({ board, locale }: { board: Board; locale
         methodTitle: 'How the score works',
         method: `Prediction score = each hitter’s within-league percentile in wRC+ + xwOBA (${pct(w.batting)}), home runs (${pct(w.hr)}), WAR (${pct(w.war)}), baserunning (${pct(w.run)}) and defense incl. positional adjustment (${pct(w.def)}), blended. Weights are calibrated to how MVP voting actually behaves — offense first, defense and baserunning as tiebreakers. Two-way players (Ohtani) count pitching WAR too, with the defense weight shifted to WAR (he contributes on the mound instead of in the field). It’s our data-driven read, not a verdict — MVP is a within-league race. Qualified hitters only (~${board.qualifyPa} PA).`,
         cols: { hitter: 'Hitter', score: 'Score', wrc: 'wRC+', ops: 'OPS', hr: 'HR', war: 'WAR', jp: 'JP', more: 'lower in the field' },
+        leagues: { NL: 'NL MVP candidates', AL: 'AL MVP candidates' },
         watchTitle: 'Japanese hitters on the cusp',
         watchSub: 'Not yet PA-qualified — where Japan’s bats stand right now.',
         watchGap: (n: number) => `~${n} PA to qualify`,
@@ -176,6 +177,8 @@ export default async function MvpBoard({ board, locale }: { board: Board; locale
         methodTitle: '予測スコアの出し方',
         method: `各指標が同じリーグの規定打者の中でどの位置にいるかを0〜100で数値化し、打撃 wRC+＋xwOBA（${pct(w.batting)}）・本塁打（${pct(w.hr)}）・WAR（${pct(w.war)}）・走塁（${pct(w.run)}）・守備＋位置補正（${pct(w.def)}）の重みをつけて合算したものが予測スコアです。重みは実際のMVP投票の傾向（打撃成績が最重視で、守備や走塁は僅差のときの決め手）に合わせて較正しています。MVPはリーグ内での争いなのでAL/NL別に集計し、対象は規定打席（目安 約${board.qualifyPa}打席）に到達した打者。二刀流の大谷翔平は投手WARも合算し、守備の重みをWARに振り替えて評価します（守備に就かない代わりにマウンドで貢献するため）。現時点の成績にもとづく予測です。`,
         cols: { hitter: '打者', score: '予測スコア', wrc: 'wRC+', ops: 'OPS', hr: '本塁打', war: 'WAR', jp: '日本', more: 'この間の打者は省略' },
+        // 見出しは記号（AL/NL）でなく検索語で書く＝CyYoungBoard と同型（理由は boardSeo.ts）。
+        leagues: { NL: 'ナ・リーグ MVP候補', AL: 'ア・リーグ MVP候補' },
         watchTitle: '規定打席に届いていない日本人野手',
         watchSub: '打席数がまだ規定に届かずランキングの対象外の野手たち。規定に到達すれば上の表に入ってきます。',
         watchGap: (n: number) => `規定まであと約${n}打席`,
@@ -196,10 +199,16 @@ export default async function MvpBoard({ board, locale }: { board: Board; locale
         <p className="mt-1.5 max-w-prose text-xs leading-relaxed text-ink-soft">{t.method}</p>
       </div>
 
-      {/* NL → AL の順（大谷・鈴木ら日本人野手の多くは NL）。 */}
+      {/* NL → AL の順（大谷・鈴木ら日本人野手の多くは NL）。id はリーグ別クエリの着地点（/mvp#al）。 */}
       {(['NL', 'AL'] as const).map((lg) => (
-        <section key={lg} className="space-y-2" aria-label={lg}>
-          <LeagueTable league={lg} rows={board.leagues[lg]} maxScore={maxScore} en={en} t={t.cols} />
+        <section key={lg} id={lg.toLowerCase()} className="space-y-2" aria-label={t.leagues[lg]}>
+          <LeagueTable
+            league={t.leagues[lg]}
+            rows={board.leagues[lg]}
+            maxScore={maxScore}
+            en={en}
+            t={t.cols}
+          />
         </section>
       ))}
 

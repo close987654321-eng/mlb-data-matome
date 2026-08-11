@@ -119,6 +119,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     raceCards.push({
       title: t('home.raceMvp'),
       href: '/mvp',
+      moreLabel: t('home.raceMoreMvp'),
       asOfText: mvpBoard.asOf ? t('player.asOf', { date: mvpBoard.asOf }) : null,
       leagues: [
         { label: 'NL', rows: toRaceRows(mvpBoard.leagues.NL) },
@@ -130,6 +131,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
     raceCards.push({
       title: t('home.raceCy'),
       href: '/cy-young',
+      moreLabel: t('home.raceMoreCy'),
       asOfText: cyBoard.asOf ? t('player.asOf', { date: cyBoard.asOf }) : null,
       leagues: [
         { label: 'NL', rows: toRaceRows(cyBoard.leagues.NL) },
