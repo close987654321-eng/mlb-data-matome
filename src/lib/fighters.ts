@@ -485,23 +485,28 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['秋元', '強真'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '8/11クレベル・コイケ戦',
-      until: '2026-08-11',
-      opponentJa: 'クレベル・コイケ',
-      eventJa: 'RIZIN.54｜TOYOTA ARENA TOKYO',
-    },
+    // 次戦は未確定。RIZIN.54 後のマイクで「シェイドゥラエフ×AJ・マッキーの勝者と大晦日ナゴヤドームのメインで」と
+    // 要求したが、対戦は正式発表されていない＋左拳の負傷を本人が明かしている（確定情報のみ載せる＝nextFightJa は持たない）。
     accoladeJa:
-      '総合格闘家・JAPAN TOP TEAM所属（通称「The Hunter」、19歳で元Bellatorバンタム級王者パッチー・ミックスをTKO撃破）',
-    record: { wins: 12, losses: 1, draws: 0, kos: 7, asOf: '2026-03-07' },
+      '総合格闘家・JAPAN TOP TEAM所属（通称「The Hunter」、20歳で元RIZINフェザー級王者クレベル・コイケを完封し次期挑戦者に）',
+    record: { wins: 13, losses: 1, draws: 0, kos: 7, asOf: '2026-08-11' },
     headlineStats: [
-      // パッチー・ミックス撃破時点の年齢（生年月日2006-03-08・当サイト2026-08-06記事で裏取り）
-      { value: '19歳', labelJa: 'パッチー・ミックス撃破時点の年齢（2026年3月時点）' },
-      // RIZIN.54メインの勝者にシェイドゥラエフの王座挑戦権が懸かる（ゴング格闘技等の事前報道で裏取り）
-      { value: '王座挑戦権', labelJa: '8/11クレベル・コイケ戦の勝者がシェイドゥラエフの王座に挑戦（RIZIN.54）' },
+      // クレベル撃破時点の年齢（生年月日2006-03-08・当サイト2026-08-06記事で裏取り）
+      { value: '20歳', labelJa: '元王者クレベル・コイケを完封した時点の年齢（2026年8月11日）' },
+      // 2024年大晦日の元谷友貴戦（プロ唯一の黒星）以降、負けなし。
+      { value: '5連勝', labelJa: '2025年5月の高木凌戦からRIZIN.54まで無敗（2026年8月11日時点）' },
     ],
     sameAs: ['https://ja.wikipedia.org/wiki/%E7%A7%8B%E5%85%83%E5%BC%B7%E7%9C%9F'],
     fights: [
+      {
+        date: '2026-08-11',
+        opponentJa: 'クレベル・コイケ',
+        opponentEn: 'Kleber Koike Erbst',
+        venueJa: 'TOYOTA ARENA TOKYO（RIZIN.54）',
+        resultJa: '判定3-0勝ち',
+        noteJa:
+          'フェザー級次期挑戦者決定戦。元王者の寝技を最後まで切り続けて完封し5連勝。試合後に左拳の負傷を明かした',
+      },
       {
         date: '2026-03-07',
         opponentJa: 'パッチー・ミックス',
@@ -598,6 +603,67 @@ export const FIGHTERS: Fighter[] = [
         venueJa: 'Gladiator',
         resultJa: '判定3-0勝ち',
         noteJa: 'プロデビュー戦',
+      },
+    ],
+  },
+  {
+    // 2026-08-11 RIZIN.54 で上田幹雄を2R KO＝ヘビー級GP決勝進出を機に新設（村山判断＝伸びる前に器を置く）。
+    // 記事はまだ2本と薄いので、11/8 決勝までに記事が積まれて LP が厚くなる前提の先行投資。
+    slug: 'edpolo-king',
+    nameJa: 'エドポロキング',
+    nameEn: 'Edpolo King',
+    shortJa: ['エドポロ'],
+    sport: 'mma',
+    // 素材は RIZIN 公式のコメント欄＝日本語主体。海外の反応框は名乗らない（voiceScope の判断基準は型定義参照）。
+    voiceScope: 'domestic',
+    nextFightJa: {
+      labelJa: '11/8スダリオ剛戦（ヘビー級GP決勝）',
+      until: '2026-11-08',
+      opponentJa: 'スダリオ剛',
+      eventJa: 'RIZIN LANDMARK 17 in CHIBA｜LaLa arena TOKYO-BAY',
+    },
+    accoladeJa:
+      '総合格闘家・ROOTS GYM所属（身長204cm、初代Rumbleヘビー級王者。プロMMAは4戦全勝すべてKO/TKO決着）',
+    record: { wins: 4, losses: 0, draws: 0, kos: 4, asOf: '2026-08-11' },
+    headlineStats: [
+      // Wikipedia の公式プロフィール記載値（2001-02-08 生・大阪市生野区出身）。
+      { value: '204cm', labelJa: 'RIZINヘビー級で戦う体格（公式プロフィール）' },
+      // プロ4戦がすべて1R/2Rのフィニッシュ＝判定に行ったことが一度もない。
+      { value: '4戦4勝', labelJa: 'プロMMA全勝・すべてKO/TKO決着（2026年8月11日時点）' },
+    ],
+    sameAs: ['https://ja.wikipedia.org/wiki/%E3%82%A8%E3%83%89%E3%83%9D%E3%83%AD%E3%82%AD%E3%83%B3%E3%82%B0'],
+    fights: [
+      {
+        date: '2026-08-11',
+        opponentJa: '上田幹雄',
+        opponentEn: 'Mikio Ueda',
+        venueJa: 'TOYOTA ARENA TOKYO（RIZIN.54）',
+        resultJa: '2R0分47秒KO勝ち（膝蹴り）',
+        noteJa:
+          'ヘビー級ジャパンGP準決勝。極真の世界王者を1年半ぶりの実戦で沈め決勝へ。リング上でスダリオ剛に「かかってこんかいコラ」',
+      },
+      {
+        date: '2025-03-30',
+        opponentJa: '酒井リョウ',
+        opponentEn: 'Ryo Sakai',
+        venueJa: 'RIZIN.50',
+        resultJa: '2RTKO勝ち',
+        noteJa: 'マウントからのパウンドで決着。酒井はこの1年半後、GP準決勝でスダリオ剛にもTKOで敗れている',
+      },
+      {
+        date: '2024-12-31',
+        opponentJa: '貴賢神',
+        opponentEn: 'Takakento',
+        venueJa: 'RIZIN.49',
+        resultJa: '1RTKO勝ち',
+        noteJa: '相手はスダリオ剛の実弟。スダリオはGP決勝を「弟の雪辱」と位置づけている',
+      },
+      {
+        date: '2024-05-26',
+        opponentJa: 'テリー・ワカンダ',
+        opponentEn: 'Terry Wakanda',
+        venueJa: 'Rumble',
+        resultJa: '1RTKO勝ち',
       },
     ],
   },
