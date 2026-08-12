@@ -36,14 +36,15 @@ const SPORT_HUBS: Partial<Record<Sport, SportHub>> = {
     leadJa:
       '世界タイトルマッチ・注目のKO・PFP論争に対する海外の反応を、現地ファンのコメントの日本語訳でまとめたページ。翻訳元は海外掲示板 Reddit（r/Boxing）と公式ハイライトのコメント欄。',
   },
-  // mlb/boxing に続いて LP 化（2026-07-30）。未 LP 化のあいだ /mma・/npb は description を
-  // 持たず layout のトップ用コピーをそのまま継いでいた＝トップと同文の重複メタだったため。
+  // mlb/boxing に続いて LP 化（2026-07-30）。2026-08-12 に RIZIN 主軸のポータルへ刷新＝
+  // タイトル・導入とも RIZIN 前方（大会日程・結果・視聴方法のクエリ形）に寄せ、UFC=海外の反応の
+  // 燃料という分業を明示する（合意の経緯は _local/strategy/2026-08-12-rizin-search-plan.md）。
   mma: {
-    titleJa: 'MMA・UFCの海外の反応まとめ｜現地ファンの声を日本語訳',
-    headingJa: 'MMA・UFCの海外の反応まとめ',
-    headingEn: 'MMA — Overseas Fan Reactions',
+    titleJa: 'RIZIN・UFCの海外の反応まとめ｜大会日程・結果・視聴方法',
+    headingJa: 'RIZIN・UFCの海外の反応まとめ',
+    headingEn: 'MMA — RIZIN & UFC Fan Reactions',
     leadJa:
-      'UFC・RIZIN の注目カード、衝撃のKO/一本、次の対戦相手をめぐる論争に対する海外の反応を、現地ファンのコメントの日本語訳でまとめたページ。翻訳元は海外掲示板 Reddit（r/MMA・r/ufc）と公式ハイライトのコメント欄。',
+      'RIZIN・ブレイキングダウン・UFCの大会日程と結果、注目カードへの現地ファンの声を日本語でまとめたページ。超RIZIN.5のようなビッグイベントは特設ページで開催前から追いかけ、大会が終わるたび結果と反応をここにアーカイブしていく。翻訳元は海外掲示板 Reddit（r/MMA・r/ufc）と公式ハイライトのコメント欄。',
   },
   npb: {
     titleJa: 'NPB注目株の海外の反応まとめ｜next メジャーリーガーへの現地の評価',

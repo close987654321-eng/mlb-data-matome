@@ -12,8 +12,10 @@ import Pagination from '@/components/Pagination';
 import PopularTags from '@/components/PopularTags';
 import FighterHubLinks from '@/components/FighterHubLinks';
 import TeamHubLinks from '@/components/TeamHubLinks';
-import Rizin5Promo from '@/components/Rizin5Promo';
+import UpcomingEvents from '@/components/UpcomingEvents';
+import EventTimeline from '@/components/EventTimeline';
 import UpcomingFights from '@/components/UpcomingFights';
+import VodCta from '@/components/VodCta';
 import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
@@ -169,6 +171,9 @@ export default async function SportPage({
         </section>
       )}
 
+      {/* /mma ポータルの主役枠: 次の大会（events.ts レジストリから自動繰り上がり。旧 Rizin5Promo の後継）。 */}
+      {sport === 'mma' && <UpcomingEvents />}
+
       {/* 選手（格闘家）LPへの導線。人気タグより上＝LPが増えてきた導線不足への対応（ファイタータグの無い競技では自動的に非表示）。 */}
       <FighterHubLinks sport={sport} />
 
@@ -177,11 +182,23 @@ export default async function SportPage({
       {/* 球団別チームLPへの導線（チームタグの無い競技では自動的に非表示）。 */}
       <TeamHubLinks sport={sport} />
 
-      {/* 超RIZIN.5 特設ハブへの導線（mma のみ・会期後は rizin5.ts の enabled で自動消灯）。 */}
-      {sport === 'mma' && <Rizin5Promo />}
-
       {/* 次の試合＝ファイターLP・イベントハブへの回遊網（格闘技のみ・ja のみ・終わった試合は自動で消える）。 */}
       {locale !== 'en' && <UpcomingFights sport={sport} />}
+
+      {/* 大会スケジュール・アーカイブ（mma のみ）。大会が終わってもエントリが残る＝時間とともに厚くなる年表。 */}
+      {sport === 'mma' && <EventTimeline />}
+
+      {/* 視聴ガイド（mma のみ）。年表で日程を見た直後＝視聴意図が立つ位置に置く。計測枠は hub。 */}
+      {sport === 'mma' && (
+        <VodCta
+          sport={sport}
+          locale={locale}
+          heading={t('vod.heading', { sport: locale === 'en' ? info.labelEn : info.labelJa })}
+          prLabel={t('vod.pr')}
+          watchLabel={t('vod.watch')}
+          placement="hub"
+        />
+      )}
 
       {feed.length === 0 ? (
         <p className="rounded-lg border border-dashed border-line p-8 text-center text-sm text-ink-soft">
