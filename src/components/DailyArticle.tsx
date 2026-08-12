@@ -207,6 +207,7 @@ export default async function DailyArticle({
       <VodCta
         sport="mlb"
         locale={locale}
+        placement="daily"
         heading={t('daily.watchCta')}
         prLabel={t('vod.pr')}
         watchLabel={t('vod.watch')}

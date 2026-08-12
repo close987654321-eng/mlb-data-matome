@@ -1,6 +1,6 @@
 import type { Sport } from '@/lib/sports';
 import type { Locale } from '@/lib/i18n';
-import { vodOffers } from '@/lib/vod';
+import { vodOffers, type VodPlacement } from '@/lib/vod';
 
 // 記事下の VOD CTA。競技ごとの視聴サービスを案内する（収益化の器②）。
 // ステマ規制（景表法）対応で「PR」を明示し、アフィリンクには rel="sponsored" を付ける。
@@ -11,14 +11,17 @@ export default function VodCta({
   heading,
   prLabel,
   watchLabel,
+  placement = 'article',
 }: {
   sport: Sport;
   locale: Locale;
   heading: string;
   prLabel: string;
   watchLabel: string;
+  /** 設置場所。ASP のレポートを場所別に読むための計測枠を切り替える（正は vod.ts の spaces）。 */
+  placement?: VodPlacement;
 }) {
-  const offers = vodOffers(sport);
+  const offers = vodOffers(sport, placement);
   if (offers.length === 0) return null; // 提携前で出す案件が無ければ何も描かない
 
   return (
