@@ -105,8 +105,13 @@ export function fighterHubIntroJa(fighter: Fighter, articleCount: number): strin
       `${fighter.nameJa}（${fighter.nameEn}）に対する海外の反応・現地ファンのコメントを日本語訳でまとめたページ。`,
     );
   } else {
+    // 「次戦情報」は次戦が確定している選手にだけ名乗らせる。試合直後で次が未発表の選手
+    // （2026-08-12 クレベル・コイケ）に書くと、説明文と中身がズレる＝看板詐欺を description でやることになる。
+    const hasNext = Boolean(fighterNextFight(fighter));
     sentences.push(
-      `${fighter.nameJa}（${fighter.nameEn}）の戦績・次戦情報と、試合ごとのファンの声をまとめたページ。`,
+      hasNext
+        ? `${fighter.nameJa}（${fighter.nameEn}）の戦績・次戦情報と、試合ごとのファンの声をまとめたページ。`
+        : `${fighter.nameJa}（${fighter.nameEn}）の戦績と、試合ごとのファンの声をまとめたページ。`,
     );
   }
   const r = fighter.record;

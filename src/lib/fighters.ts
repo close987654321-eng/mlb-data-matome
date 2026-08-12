@@ -949,6 +949,102 @@ export const FIGHTERS: Fighter[] = [
     ],
   },
   {
+    /*
+      RIZIN フェザー級を長く支配した柔術家。voiceScope は 'domestic'
+      （ブラジル出身だが語られる場は日本＝素材の実態で決める・2026-08-12 の学び）。
+      2026-08-11 の秋元強真戦（判定0-3負け）で次戦は未発表なので nextFightJa は持たない。
+    */
+    slug: 'kleber-koike',
+    nameJa: 'クレベル・コイケ',
+    nameEn: 'Kleber Koike Erbst',
+    shortJa: ['クレベル'],
+    sport: 'mma',
+    voiceScope: 'domestic',
+    accoladeJa: '元RIZINフェザー級王者（2度戴冠）・元KSWフェザー級王者。ボンサイ柔術',
+    // 35勝10敗1分＝別に無効試合1（2023-06-24 体重超過）。record に NC の枠が無いので fights の noteJa に書く。
+    record: { wins: 35, losses: 10, draws: 1, kos: 2, asOf: '2026-08-11' },
+    headlineStats: [
+      // 35勝のうち29が一本＝KO2との対比がこの選手の輪郭そのもの（en.wikipedia の決着内訳）
+      { value: '29', labelJa: '一本勝ち（35勝中／KOは2）' },
+      { value: '2度', labelJa: 'RIZINフェザー級戴冠（2022年・2024年）' },
+    ],
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%AC%E3%83%99%E3%83%AB%E3%83%BB%E3%82%B3%E3%82%A4%E3%82%B1',
+      'https://en.wikipedia.org/wiki/Kleber_Koike_Erbst',
+    ],
+    fights: [
+      {
+        date: '2026-08-11',
+        opponentJa: '秋元強真',
+        opponentEn: 'Kyoma Akimoto',
+        venueJa: '東京・トヨタアリーナ東京（RIZIN.54）',
+        resultJa: '判定0-3負け',
+        noteJa: '20歳の次期挑戦者に3ラウンド完封された。KOではなく判定で押し切られた敗け方が議論を呼んだ',
+      },
+      {
+        date: '2025-12-31',
+        opponentJa: 'ヴガール・ケラモフ',
+        opponentEn: 'Vugar Karamov',
+        venueJa: 'さいたま（RIZIN 師走の超強者祭り）',
+        resultJa: '判定3-0勝ち',
+        noteJa: '王座陥落と朝倉未来戦の連敗を止めた大晦日',
+      },
+      {
+        date: '2025-07-27',
+        opponentJa: '朝倉未来',
+        opponentEn: 'Mikuru Asakura',
+        venueJa: 'さいたま（超RIZIN.4）',
+        resultJa: '判定1-2負け',
+        noteJa: '得意の組みを最後まで嫌われ、スプリット判定で落とした',
+      },
+      {
+        date: '2025-05-04',
+        opponentJa: 'ラジャブアリ・シェイドゥラエフ',
+        opponentEn: 'Razhabali Shaydullaev',
+        venueJa: '東京ドーム（RIZIN OTOKOMATSURI）',
+        resultJa: '1R1分2秒KO負け',
+        noteJa: '無敗の挑戦者に1分2秒で王座を明け渡した',
+      },
+      {
+        date: '2024-12-31',
+        opponentJa: '鈴木千裕',
+        opponentEn: 'Chihiro Suzuki',
+        venueJa: 'さいたま（RIZIN.49）',
+        resultJa: '判定3-0勝ち',
+        noteJa: '2度目のRIZINフェザー級戴冠。互いに血まみれの3ラウンドで、敗れた鈴木の評価も上がった一戦',
+      },
+      {
+        date: '2024-06-09',
+        opponentJa: 'フアン・アーチュレッタ',
+        opponentEn: 'Juan Archuleta',
+        venueJa: '東京・国立代々木競技場第一体育館（RIZIN.47）',
+        resultJa: '1R2分25秒インバーテッドヒールフックで一本勝ち',
+      },
+      {
+        date: '2023-12-31',
+        opponentJa: '斎藤裕',
+        opponentEn: 'Yutaka Saito',
+        venueJa: 'さいたま（RIZIN.45）',
+        resultJa: '3R1分22秒ブラボーチョークで一本勝ち',
+      },
+      {
+        date: '2023-06-24',
+        opponentJa: '鈴木千裕',
+        opponentEn: 'Chihiro Suzuki',
+        venueJa: '札幌（RIZIN.43）',
+        resultJa: '無効試合（体重超過）',
+        noteJa: '計量で体重を落とせずRIZINフェザー級王座を失った。MMA戦績には勝敗として計上されない',
+      },
+      {
+        date: '2022-12-31',
+        opponentJa: 'パトリシオ・ピットブル',
+        opponentEn: 'Patrício Pitbull',
+        venueJa: 'さいたま（Bellator MMA vs. RIZIN）',
+        resultJa: '判定0-3負け',
+      },
+    ],
+  },
+  {
     slug: 'tyson-fury',
     nameJa: 'タイソン・フューリー',
     nameEn: 'Tyson Fury',
