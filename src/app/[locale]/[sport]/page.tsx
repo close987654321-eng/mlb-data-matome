@@ -178,7 +178,9 @@ export default async function SportPage({
       {/* 選手（格闘家）LPへの導線。人気タグより上＝LPが増えてきた導線不足への対応（ファイタータグの無い競技では自動的に非表示）。 */}
       <FighterHubLinks sport={sport} />
 
-      <PopularTags sport={sport} />
+      {/* mma は人気タグを出さない: 格闘技のタグはほぼファイター名＝直上の選手戦績（FighterHubLinks）と
+          重複して同じ行き先が2列並ぶため（2026-08-13 村山さん指示）。 */}
+      {sport !== 'mma' && <PopularTags sport={sport} />}
 
       {/* 球団別チームLPへの導線（チームタグの無い競技では自動的に非表示）。 */}
       <TeamHubLinks sport={sport} />
