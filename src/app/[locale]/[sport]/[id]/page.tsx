@@ -649,14 +649,17 @@ export default async function ThreadDetailPage({
       {/* 超RIZIN.5 特設ハブへの導線（RIZIN タグの記事のみ＝spoke→hub の内部リンク）。 */}
       {(thread.tags ?? []).some((tag) => RIZIN5.matchTags.includes(tag)) && <Rizin5Promo />}
 
-      {/* 記事下 VOD CTA（収益化の器②）。競技ごとの視聴サービスを案内。提携前は公式URL、確定後にアフィリンクへ差し替え。 */}
-      <VodCta
-        sport={sport}
-        locale={locale}
-        heading={t('vod.heading', { sport: locale === 'ja' ? info.labelJa : info.labelEn })}
-        prLabel={t('vod.pr')}
-        watchLabel={t('vod.watch')}
-      />
+      {/* 記事下 VOD CTA（収益化の器②）。競技ごとの視聴サービスを案内。
+          日次記事は DailyArticle が「あすの日本人」直後に自前で出すので、ここでは出さない（1ページ1枠）。 */}
+      {!daily && (
+        <VodCta
+          sport={sport}
+          locale={locale}
+          heading={t('vod.heading', { sport: locale === 'ja' ? info.labelJa : info.labelEn })}
+          prLabel={t('vod.pr')}
+          watchLabel={t('vod.watch')}
+        />
+      )}
 
       {/* 記事末の関連枠は「次に読む」カードと同じ順位付けの続き（多様性キャップが両方をまたいで効く）。 */}
       <RelatedArticles ranked={relatedRanked} locale={locale} />

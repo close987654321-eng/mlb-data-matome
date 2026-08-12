@@ -12,6 +12,11 @@ export type VodOffer = {
   /** 遷移先。当面は各社の公式 URL。提携確定後にアフィリエイトリンクへ差し替える。null で非表示。 */
   href: string | null;
   /**
+   * インプレッション計測用の 1x1 画像（バリューコマースのタグはリンクと対で貼る仕様）。
+   * 落とすと表示数が計上されず EPC が読めなくなるので、VC 案件は必ずセットで入れる。
+   */
+  impressionPixel?: string;
+  /**
    * RIZIN の大型大会で PPV 販売実績がある販路。/rizin5 の #watch に視聴CTAとして出す判定に使う
    * （ページ側にサービス名をハードコードせず、販路の増減をこのファイルだけで完結させる）。
    */
@@ -19,16 +24,22 @@ export type VodOffer = {
 };
 
 export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
+  // 2026-08-12: 止めたままだった SPOTV NOW 枠（href:null）を畳み、アマプラ1本に絞る。
+  // MLB は全記事の8割超＝最大の面なので、選択肢を並べず「1クリックで決まる」形にする。
   mlb: [
     {
-      service: 'SPOTV NOW',
+      service: 'Amazon Prime Video',
+      // 訴求は Amazon 公式発表（2026-03-27 配信開始・SPOTVチャンネル）の事実のみ。景表法上、
+      // 「全試合見放題」等の言い過ぎは書かない＝配信は350試合以上（全2430試合ではない）。
       pitch: {
-        ja: '大谷・ドジャース戦をはじめ MLB をライブ＆見逃し配信。',
-        en: 'Watch MLB live and on demand — including Ohtani and the Dodgers.',
+        ja: 'プライム会員なら追加料金なし。SPOTVチャンネルで 2026 レギュラーシーズンを350試合以上ライブ配信（ドジャース戦ほか日本人選手の所属チーム中心）。',
+        en: 'Included with Prime at no extra cost. 350+ live MLB regular-season games in 2026 via the SPOTV channel.',
       },
-      // 2026-07-03 一旦非表示（href:null＝安全弁で自動で出さない）。SPOTV NOW への送客を止める。
-      // 復活は URL を戻すだけ（提携確定後はアクセストレード / A8 の SPOTV NOW＝実質 U-NEXT「SPOTV NOWパック」リンクに差し替え）。
-      href: null,
+      // バリューコマースの Amazon Prime Video 紹介プログラム（2026-08-12 提携・成果地点=申込完了）。
+      // 元タグは protocol-relative（//ck.jp.ap.valuecommerce.com/…）なので https: を明示して埋める。
+      href: 'https://ck.jp.ap.valuecommerce.com/servlet/referral?sid=3777710&pid=892677360',
+      impressionPixel:
+        'https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=3777710&pid=892677360',
     },
   ],
   boxing: [

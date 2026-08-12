@@ -6,6 +6,7 @@ import SectionHeading from '@/components/SectionHeading';
 import MediaEmbed from '@/components/MediaEmbed';
 import DailyCardShare from '@/components/DailyCardShare';
 import StoryBlocks from '@/components/StoryBlocks';
+import VodCta from '@/components/VodCta';
 import type { ThreadDaily } from '@/types/thread';
 import type { Locale } from '@/lib/i18n';
 
@@ -199,6 +200,17 @@ export default async function DailyArticle({
           </ul>
         </section>
       )}
+
+      {/* ⑥の直後＝日次記事で唯一の換金点。「あすの試合」の話をした直後に視聴導線を置くのが最も自然で、
+          記事末（関連記事の下）より文脈が強い。日次は sport=mlb 固定なので競技は決め打ちでよい。
+          記事ページ側の記事下 VOD CTA は daily のとき出さない＝1ページ1枠に保つ。 */}
+      <VodCta
+        sport="mlb"
+        locale={locale}
+        heading={t('daily.watchCta')}
+        prLabel={t('vod.pr')}
+        watchLabel={t('vod.watch')}
+      />
     </div>
   );
 }
