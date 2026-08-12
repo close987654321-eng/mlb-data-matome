@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-08-12 09:01",
+  "asOf": "2026-08-12 11:47",
   "hitting": [],
   "pitching": [
     {
@@ -469,7 +469,7 @@
       "home": false,
       "hr": 1,
       "ibb": 0,
-      "l": 0,
+      "l": 1,
       "opp": "Miami Marlins",
       "oppJa": "マーリンズ",
       "outs": 15,
@@ -485,7 +485,7 @@
   },
   "season": 2026,
   "team": "パイレーツ",
-  "teamGames": 123,
+  "teamGames": 124,
   "warHistory": [
     {
       "d": "2026-06-30",
@@ -661,6 +661,7 @@
     },
     {
       "d": "2026-08-12",
+      "warHit": 0,
       "warPit": 3.7
     }
   ]
