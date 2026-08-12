@@ -8,6 +8,7 @@ import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
 import { gameSeoTitle, gameSeoDescription, gameDateOf, gameDateLongJa } from '@/lib/gameSeo';
+import { fightSeoTitle } from '@/lib/fightSeo';
 import { coverImage, ogCover, youTubeId } from '@/lib/media';
 import { rankNextReads } from '@/lib/nextRead';
 import { isThreadIndexable } from '@/lib/threadIndex';
@@ -61,7 +62,9 @@ export async function generateMetadata({
   const title = threadTitle(thread, locale);
   // 試合記事は検索結果に出すタイトル/説明文だけ組み直す＝スコアと日付を前に出して「対」クエリに答える
   // （記事本文の見出しは title のまま。理由と実測値は src/lib/gameSeo.ts）。
-  const seoTitle = sport === 'mlb' ? gameSeoTitle(thread, locale) : null;
+  // 格闘技は「{A} vs {B} 結果｜{勝者}が{決着}勝ち」に組み直す（結果クエリ対策・src/lib/fightSeo.ts）。
+  // 説明文は summaryJa のまま＝要約が既に「誰が誰にどう勝ったか」から書き出されているため。
+  const seoTitle = sport === 'mlb' ? gameSeoTitle(thread, locale) : fightSeoTitle(thread, locale);
   const description = sport === 'mlb' ? gameSeoDescription(thread, locale) : thread.summaryJa;
   // OGP/Discover は 1200px 幅以上を要求するので、動画は maxresdefault(1280x720) を優先する
   // 大きいカバーを使う（カード表示の coverImage=hqdefault とは別物）。
