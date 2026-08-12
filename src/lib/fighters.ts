@@ -788,6 +788,167 @@ export const FIGHTERS: Fighter[] = [
     ],
   },
   {
+    /*
+      超RIZIN.5（9/10）メインの2人。RIZIN の外国人トップを opt-in した初のケース。
+
+      voiceScope が 'domestic' なのは実測の結論（2026-08-12）。「外国人選手なら海外の反応框が
+      成立する」という見込みで着手したが、素材を数えたら成り立たなかった:
+        - 当サイトのシェイドゥラエフ関連3記事は RIZIN 公式YouTubeの**日本語コメント**中心
+          （英語原文つきは37件中2件）
+        - 決定戦の PFL 公式動画のコメント欄も**キルギス語・ロシア語と日本語**が主で英語は少数
+      つまり彼らを語っているのは英語圏ではなく「母国＋日本」。ここで global を名乗ると
+      看板と中身がズレる（2026-08-03 村山決定と同じ理由）ので、戦績×次戦框で出す。
+      GSC 実測でも需要は「ajマッキー ufc」「シェイドゥラエフ マッキー」＝対戦・戦績クエリ側にある。
+    */
+    slug: 'razhabali-shaydullaev',
+    nameJa: 'ラジャブアリ・シェイドゥラエフ',
+    nameEn: 'Razhabali Shaydullaev',
+    // 表記ゆれ（コメント欄では「シェイドラエフ」も頻出）。姓だけの言及を拾う。
+    shortJa: ['シェイドゥラエフ', 'シェイドラエフ'],
+    sport: 'mma',
+    voiceScope: 'domestic',
+    nextFightJa: {
+      labelJa: '9/10マッキー戦',
+      until: '2026-09-10',
+      opponentJa: 'AJ・マッキー',
+      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
+      href: '/rizin5',
+    },
+    accoladeJa: 'RIZINフェザー級王者・キルギス（2025年5月戴冠／RIZIN初のキルギス人選手）',
+    record: { wins: 19, losses: 0, draws: 0, kos: 7, asOf: '2026-04-12' },
+    headlineStats: [
+      // ヒーローは record から「通算戦績19-0」「KO率」を自動で出す。ここに 19-0 を再掲すると
+      // 同じ数字が2枠に並ぶので、record から読み取れない値だけを置く。
+      // 戴冠2025-05-04 → コレスニック・朝倉未来・久保優太で3度防衛（2026年4月時点）
+      { value: '3', labelJa: 'RIZIN王座防衛（2026年4月時点）' },
+      // 19戦すべてフィニッシュ決着＝判定までいったことが一度もない（en.wikipedia の戦績表で全戦確認）
+      { value: '0', labelJa: '判定決着（19戦すべてフィニッシュ）' },
+    ],
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%B8%E3%83%A3%E3%83%96%E3%82%A2%E3%83%AA%E3%83%BB%E3%82%B7%E3%82%A7%E3%82%A4%E3%83%89%E3%82%A5%E3%83%A9%E3%82%A8%E3%83%95',
+      'https://en.wikipedia.org/wiki/Razhabali_Shaydullaev',
+    ],
+    fights: [
+      {
+        date: '2026-04-12',
+        opponentJa: '久保優太',
+        opponentEn: 'Yuta Kubo',
+        venueJa: '福岡（RIZIN LANDMARK 13）',
+        resultJa: '1R4分13秒TKO勝ち',
+        noteJa: '久保との2度目の対戦で3度目の王座防衛。連勝を19に伸ばした',
+      },
+      {
+        date: '2025-12-31',
+        opponentJa: '朝倉未来',
+        opponentEn: 'Mikuru Asakura',
+        venueJa: 'さいたま（RIZIN 師走の超強者祭り）',
+        resultJa: '1R2分54秒TKO勝ち',
+        noteJa: '2度目の王座防衛。朝倉未来の挑戦を1Rで退けた大晦日',
+      },
+      {
+        date: '2025-09-28',
+        opponentJa: 'ビクター・コレスニック',
+        opponentEn: 'Viktor Kolesnik',
+        venueJa: '名古屋（RIZIN.51）',
+        resultJa: '1R33秒TKO勝ち',
+        noteJa: '初防衛戦を33秒で終わらせた',
+      },
+      {
+        date: '2025-05-04',
+        opponentJa: 'クレベル・コイケ',
+        opponentEn: 'Kleber Koike Erbst',
+        venueJa: '東京ドーム（RIZIN OTOKOMATSURI）',
+        resultJa: '1R1分2秒KO勝ち',
+        noteJa: '王者クレベルを1分2秒で仕留めてRIZINフェザー級王座を戴冠',
+      },
+      {
+        date: '2024-12-31',
+        opponentJa: '久保優太',
+        opponentEn: 'Yuta Kubo',
+        venueJa: 'さいたま（RIZIN.49）',
+        resultJa: '2R2分30秒TKO勝ち',
+      },
+      {
+        date: '2024-09-29',
+        opponentJa: 'フアン・アーチュレッタ',
+        opponentEn: 'Juan Archuleta',
+        venueJa: 'さいたま（RIZIN.48）',
+        resultJa: '1R3分12秒アームバーで一本勝ち',
+      },
+      {
+        date: '2024-06-09',
+        opponentJa: '武田光司',
+        opponentEn: 'Koji Takeda',
+        venueJa: '東京・国立代々木競技場第一体育館（RIZIN.47）',
+        resultJa: '1R4分42秒リアネイキドチョークで一本勝ち',
+        noteJa: 'RIZIN初参戦。当時すでに10戦10フィニッシュの無敗だった',
+      },
+    ],
+  },
+  {
+    slug: 'aj-mckee',
+    nameJa: 'AJ・マッキー',
+    nameEn: 'A.J. McKee',
+    shortJa: ['マッキー'],
+    sport: 'mma',
+    voiceScope: 'domestic',
+    nextFightJa: {
+      labelJa: '9/10シェイドゥラエフ戦',
+      until: '2026-09-10',
+      opponentJa: 'ラジャブアリ・シェイドゥラエフ',
+      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
+      href: '/rizin5',
+    },
+    accoladeJa: '元Bellator世界フェザー級王者・米国（2021年フェザー級グランプリ優勝）',
+    record: { wins: 25, losses: 2, draws: 0, kos: 6, asOf: '2026-06-27' },
+    headlineStats: [
+      // デビューから無敗のまま18連勝→2022-04-15 のピットブル再戦で初黒星（en.wikipedia）
+      { value: '18-0', labelJa: 'デビューからの連勝（2022年4月に初黒星）' },
+      { value: '$1M', labelJa: '2021年ベラトールGP優勝賞金' },
+    ],
+    sameAs: ['https://en.wikipedia.org/wiki/A._J._McKee'],
+    fights: [
+      {
+        date: '2026-06-27',
+        opponentJa: 'サラマト・イスブラエフ',
+        opponentEn: 'Salamat Isbulaev',
+        venueJa: '米サンディエゴ（PFL San Diego）',
+        resultJa: '3-0判定勝ち',
+        noteJa: 'PFLで3連勝。この勝利で超RIZIN.5の王座統一戦へ',
+      },
+      {
+        date: '2026-03-20',
+        opponentJa: 'アダム・ボリッチ',
+        opponentEn: 'Ádám Borics',
+        venueJa: 'スペイン・マドリード（PFL Madrid）',
+        resultJa: '3-0判定勝ち',
+      },
+      {
+        date: '2025-07-19',
+        opponentJa: 'アフメド・マゴメドフ',
+        opponentEn: 'Akhmed Magomedov',
+        venueJa: '南アフリカ・ケープタウン（PFL Champions Series 2）',
+        resultJa: '3-0判定勝ち',
+      },
+      {
+        date: '2024-10-19',
+        opponentJa: 'ポール・ヒューズ',
+        opponentEn: 'Paul Hughes',
+        venueJa: 'サウジアラビア・リヤド（PFL Super Fights: Battle of the Giants）',
+        resultJa: '1-2判定負け',
+        noteJa: '通算2敗目。ここから3連勝で立て直した',
+      },
+      {
+        date: '2021-07-31',
+        opponentJa: 'パトリシオ・ピットブル',
+        opponentEn: 'Patrício Pitbull',
+        venueJa: '米イングルウッド（Bellator 263）',
+        resultJa: '1Rギロチンチョークで一本勝ち',
+        noteJa: 'フェザー級グランプリ決勝。王者ピットブルを1Rで極め、王座と賞金100万ドルを獲得',
+      },
+    ],
+  },
+  {
     slug: 'tyson-fury',
     nameJa: 'タイソン・フューリー',
     nameEn: 'Tyson Fury',
