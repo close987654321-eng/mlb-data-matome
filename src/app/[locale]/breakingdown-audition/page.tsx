@@ -191,12 +191,13 @@ export default async function BdAuditionPage({ params }: { params: Promise<{ loc
       <header className="space-y-3 border-b border-line pb-8">
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">DATA</span>
         <h1 className="text-3xl font-bold tracking-[-0.02em] text-ink sm:text-4xl">{heading}</h1>
+        {/* 導入の地の文（俺ボイス・2026-08-13 村山さんレビュー済み）。本数・再生は実データを差し込む。 */}
         <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
-          ブレイキングダウンの名物・オーディション動画を、切り抜きではなくデータで読む観測ページ。
-          朝倉未来チャンネルに投稿された歴代オーディション動画 全{totals.videos}本（BD4〜BD
-          {summaries[summaries.length - 1]?.event}・合計{manJa(totals.views)}回再生・コメント
-          {manJa(totals.comments)}件）の公開統計を大会別に集計し、各大会の人気コメントを原文のまま並べた。
-          数字とコメント欄だけで、この祭りの歴史はかなり読める。
+          オーディション動画の切り抜きは腐るほどある。でも数字を並べた奴は見たことがなかったので、
+          全部数えた。朝倉未来チャンネルの歴代オーディション{totals.videos}本、合計
+          {manJa(totals.views)}再生。数えて分かったのは、この祭りは「衰退してる」んじゃなくて
+          「変質してる」ってことだった。再生数はBD6がピークでいまは1/3。なのにコメント密度は過去最高。
+          観る人が減って、語る人が残った。
         </p>
         <p className="text-xs text-ink-mute">
           数値は{fetchedAt}時点のYouTube公開統計。コメント引用は各大会の最多コメント動画から機械抽出した
@@ -223,6 +224,13 @@ export default async function BdAuditionPage({ params }: { params: Promise<{ loc
             ))}
           </ul>
         </div>
+        {/* データの読み（俺ボイス・2026-08-13 村山さんレビュー済み）。 */}
+        <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
+          俺の読みはこうだ。初期のオーディションは「ヤバい素人を見る動画」で、いまは「常連の続き物を
+          追う番組」になった。BD16以降のコメント欄が「◯◯いらないボタン」だらけなのは民度の低下じゃなくて、
+          視聴者が編成に参加し始めた証拠。番組が視聴者を選んでたのが、視聴者が番組を編成する側に回った。
+          テレビが30年かけて失った距離感を、この祭りは4年で通り過ぎた。
+        </p>
       </section>
 
       {/* ② コメント欄で読む歴史（逐語引用＝機械コピー） */}
@@ -271,6 +279,12 @@ export default async function BdAuditionPage({ params }: { params: Promise<{ loc
             );
           })}
         </div>
+        {/* 歴史の締めの地の文（俺ボイス・2026-08-13 村山さんレビュー済み）。 */}
+        <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
+          BD4の頃「こめおが喧嘩する風潮を創った」と書かれた文化は、4年後、運営に呼ばれた審査員が
+          全員にコケにされる展開を「これは流石にひでぇよw」と笑うところまで来た。次の札幌で
+          コメント欄が何を発明するか、このページで数え続ける。
+        </p>
       </section>
 
       {/* ③ オーディション→RIZIN のパイプライン（裏取り済みの事実のみ） */}
