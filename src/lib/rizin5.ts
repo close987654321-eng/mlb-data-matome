@@ -101,6 +101,31 @@ export type Rizin5Seat = {
 /** チケット購入導線（公式・プレイガイドの直リンク。アフィリエイトではない通常リンク） */
 export type Rizin5TicketLink = { labelJa: string; href: string };
 
+/**
+ * 公式映像（#official）。
+ *
+ * なぜ「画像」でなく「埋め込み動画」なのか（2026-08-12）:
+ * 大会の公式ビジュアル（対戦カード画像・ポスター）は RIZIN の著作物で、ダウンロードして
+ * public/media に置く＝転載は絶対にしない（CLAUDE.md §4.5・このファイル冒頭の規律）。
+ * 一方 YouTube の埋め込みは**公式が用意した配信手段**で、再生数も権利も公式に帰属したまま
+ * こちらのページに公式ビジュアルを出せる。ファサードのポスターに出るのも YouTube が配信する
+ * 公式サムネイル（＝トレーラーのキービジュアルそのもの）なので、
+ * 「公式の絵をページの主役に据える」という目的を、転載せずに満たせる唯一のルート。
+ *
+ * 載せてよいのは **RIZIN 公式チャンネル（UCZZ0UGjWsRdM8_5bsqtxYaQ）の動画だけ**。
+ * 報道各社が撮った会見動画（オリコン等）は公式チャンネルではないので載せない。
+ */
+export type Rizin5Video = {
+  /** YouTube の視聴URL（RIZIN 公式チャンネルのみ） */
+  url: string;
+  /** 表示タイトル（公式の動画タイトルを短縮してよいが、意味は変えない） */
+  titleJa: string;
+  /** 公開日（YYYY-MM-DD） */
+  date: string;
+  /** 一言メモ（何が見られるか）。無くてよい */
+  noteJa?: string;
+};
+
 export const RIZIN5 = {
   enabled: true,
   /** 開催日（JST） */
@@ -113,6 +138,31 @@ export const RIZIN5 = {
   updatedAt: '2026-08-12',
   /** この大会の反応記事を束ねるタグ（記事の tags に付けるとハブの関連枠に自動で並ぶ） */
   matchTags: ['RIZIN', '超RIZIN.5'],
+
+  /**
+   * 公式映像（#official）。先頭がページ主役の大枠＝トレーラーを置く。
+   * 新しい公式動画（煽りV・追加カード発表）が出たらここに足す＝ページ側の変更は不要。
+   */
+  videos: [
+    {
+      url: 'https://www.youtube.com/watch?v=1rYyBfh0kXg',
+      titleJa: '【Trailer】超RIZIN.5 浪速の超復活祭り',
+      date: '2026-07-10',
+      noteJa: '大阪城から始まる公式トレーラー。大会のキービジュアルはこの映像から。',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=TlZP-KGrOV8',
+      titleJa: '超ド級カード発表記者会見（2026.7.20）',
+      date: '2026-07-20',
+      noteJa: '朝倉未来vs青木真也、シェイドゥラエフvsAJ・マッキーがここで発表された会見の全編。',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=WTSkzU2BgQ4',
+      titleJa: '超緊急記者会見（2026.4.18）',
+      date: '2026-04-18',
+      noteJa: '京セラドーム大阪での開催そのものが発表された最初の会見。',
+    },
+  ] satisfies Rizin5Video[],
 
   /** 導入の地の文（俺ボイス）＝このハブの編集の背骨。 */
   introJa: [

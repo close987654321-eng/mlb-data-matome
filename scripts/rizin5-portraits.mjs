@@ -12,10 +12,16 @@
  * 写真を差し替えるだけでは解決しない（そもそも代わりの CC 画像が存在しない選手が多い）ので、
  * ここで3点を機械的に揃える:
  *   1. 顔の位置と大きさ  … macOS Vision で実測した顔ボックス（下の face）を基準に正方形を切る
- *   2. 明るさとコントラスト … グレースケール化して平均輝度・分散を目標値へ線形変換
+ *   2. 明るさとコントラスト … 平均輝度・分散を目標値へ線形変換（素材ごとの露出差を消す）
  *   3. 出力サイズ        … 512×512 固定
- * グレースケールはサイトの規律（モダンミニマル無彩色）にも合う＝赤い国旗も青いリングも
- * 同じトーンに落ちるので、素材の出自の差がいちばん目立たなくなる。
+ *
+ * カラーで出す（2026-08-12 村山指示・既定）:
+ * 当初はグレースケールで出していた（サイトの無彩色規律に合う＋素材の出自差がいちばん目立たない）。
+ * ただし興行ハブは「対戦カードとして見せる」面＝顔が売り物なので、彩度を捨てる代償のほうが大きい
+ * と判断して既定をカラーへ変更した。出自差は次の2点で抑える:
+ *   - 輝度の正規化はグレースケール時代と同じ式のまま（露出差＝いちばん目立つ差はここで消える）
+ *   - 彩度を目標値へ寄せる（TARGET_SAT）＝色被りした素材と極彩色の素材を同じ濃さに揃える
+ * `--mono` で従来のグレースケール出力に戻せる（記事サムネ等、無彩色で使いたい場面のため）。
  *
  * 顔ボックスの測り方（素材を差し替えたら必ず測り直す）:
  *   swift scripts/face-box.swift <画像パス...>
@@ -39,9 +45,17 @@ const FACE_Y = 0.42;
  * 顔が小さく写っている素材（500px の入場写真など）は寄りを諦めて引きのまま使う。
  */
 const MIN_CROP = 200;
-/** グレースケール後に揃える平均輝度と標準偏差（0-255）。 */
+/** 揃える平均輝度と標準偏差（0-255）。 */
 const TARGET_MEAN = 116;
 const TARGET_SD = 54;
+/**
+ * 揃える平均彩度（0-255・HSV の S）。カラー出力のときだけ使う。
+ * 低めに置くのは、素材の色被り（青いリング照明・赤い国旗）を落ち着かせて
+ * 9枚を「同じ組写真」に見せるため。上げすぎると1枚だけ極彩色になって行が壊れる。
+ */
+const TARGET_SAT = 74;
+/** 彩度補正の効かせすぎ防止（modulate の倍率レンジ）。 */
+const SAT_RANGE = [0.65, 1.5];
 
 /**
  * face = macOS Vision（scripts/face-box.swift）で実測した顔ボックス。
@@ -134,28 +148,70 @@ function cropBox(width, height, face) {
   };
 }
 
-async function render(src, box) {
-  const flat = await sharp(src)
+/**
+ * 平均彩度（HSV の S・0-255）を実測する。sharp の stats() は S を返さないので、
+ * 小さく潰した生ピクセルから直接測る（64×64 で十分＝彩度は面の平均値なので解像度が要らない）。
+ */
+async function meanSaturation(buf) {
+  const { data, info } = await sharp(buf)
+    .resize(64, 64, { fit: 'fill' })
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  let sum = 0;
+  const px = info.width * info.height;
+  for (let i = 0; i < px; i++) {
+    const o = i * info.channels;
+    const r = data[o], g = data[o + 1], b = data[o + 2];
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    // HSV の S。真っ黒（max=0）は色が無いので 0 扱い。
+    sum += max === 0 ? 0 : ((max - min) / max) * 255;
+  }
+  return sum / px;
+}
+
+async function render(src, box, { mono }) {
+  let flat = sharp(src)
     .extract({ left: box.left, top: box.top, width: box.size, height: box.size })
-    .resize(OUT, OUT)
-    .grayscale()
-    .toBuffer();
+    .resize(OUT, OUT);
+  if (mono) flat = flat.grayscale();
+  const cropped = await flat.toBuffer();
 
   // 明るさ・コントラストを目標値へ寄せる（out = a*in + b）。素材ごとの露出差がここで消える。
-  const { channels } = await sharp(flat).stats();
-  const { mean, stdev } = channels[0];
+  // カラーのときは輝度（ITU-R BT.601 の重み）で測って RGB 全チャンネルに同じ係数を掛ける＝
+  // 色相を動かさずに露出だけ揃える。
+  const { channels } = await sharp(cropped).stats();
+  const w = mono ? [1, 0, 0] : [0.299, 0.587, 0.114];
+  const mean = channels.reduce((s, c, i) => s + (w[i] ?? 0) * c.mean, 0);
+  const stdev = channels.reduce((s, c, i) => s + (w[i] ?? 0) * c.stdev, 0);
   const a = Math.min(1.8, Math.max(0.7, TARGET_SD / Math.max(1, stdev)));
   const b = TARGET_MEAN - a * mean;
 
-  return sharp(flat)
-    .linear(a, b)
-    .sharpen({ sigma: 0.6 })
-    .jpeg({ quality: 84, chromaSubsampling: '4:4:4' })
+  let img = sharp(cropped).linear(a, b);
+
+  if (!mono) {
+    // 彩度を揃える。露出補正後に測る（linear で彩度も動くため、補正前の値だと外す）。
+    const sat = await meanSaturation(await img.toBuffer());
+    const ratio = Math.min(SAT_RANGE[1], Math.max(SAT_RANGE[0], TARGET_SAT / Math.max(1, sat)));
+    img = sharp(await img.toBuffer()).modulate({ saturation: ratio });
+  }
+
+  // シャープは「拡大した素材ほど弱く」。500px 原版から 200px を切って 512 へ引き伸ばす選手
+  // （平本・ケラモフ・斎藤）に固定値 0.6 を掛けると、輪郭が段になって色が塗り絵のように割れる
+  // ＝グレースケール時代は目立たなかったがカラーで一気に露呈した（2026-08-12 実測）。
+  const upscale = OUT / box.size;
+  const sigma = upscale > 1 ? Math.max(0.2, 0.6 / upscale) : 0.6;
+
+  return img
+    .sharpen({ sigma })
+    .jpeg({ quality: 86, chromaSubsampling: '4:4:4' })
     .toBuffer();
 }
 
 async function main() {
-  const only = process.argv.slice(2).filter((a) => !a.startsWith('-'));
+  const argv = process.argv.slice(2);
+  const mono = argv.includes('--mono');
+  const only = argv.filter((a) => !a.startsWith('-'));
   const targets = only.length ? SOURCES.filter((s) => only.includes(s.slug)) : SOURCES;
   if (!targets.length) {
     console.error(`slug が見つからない: ${only.join(', ')}`);
@@ -172,11 +228,11 @@ async function main() {
     const src = await download(s.url, cacheDir);
     const meta = await sharp(src).metadata();
     const box = cropBox(meta.width, meta.height, s.face);
-    const out = await render(src, box);
+    const out = await render(src, box, { mono });
     await fs.writeFile(path.join(outDir, `${s.slug}.jpg`), out);
     const ratio = ((s.face.h * meta.height) / box.size).toFixed(2);
     console.log(
-      `${s.slug.padEnd(16)} ${meta.width}x${meta.height} → 切り出し ${box.size}px（顔比 ${ratio}）  ${(out.length / 1024).toFixed(0)}KB`,
+      `${s.slug.padEnd(16)} ${meta.width}x${meta.height} → 切り出し ${box.size}px（顔比 ${ratio}）  ${(out.length / 1024).toFixed(0)}KB${mono ? '  mono' : ''}`,
     );
   }
 }

@@ -9,7 +9,9 @@ import { linkableFighterOf } from '@/lib/fighterHub';
 import { RIZIN5, type Rizin5Fighter } from '@/lib/rizin5';
 import { SPORT_INFO } from '@/lib/sports';
 import { vodOffers } from '@/lib/vod';
+import { toEmbedUrl, youTubeId } from '@/lib/media';
 import EventCountdown from '@/components/EventCountdown';
+import LiteVideo from '@/components/LiteVideo';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -242,12 +244,113 @@ export default async function Rizin5Page({
         ))}
       </section>
 
+      {/*
+        公式映像（#official）。1本目＝トレーラーを大枠で主役に据える。
+        ファサード（LiteVideo）なので、クリックするまでプレイヤー一式は読み込まれない＝
+        大会ページの初期表示を重くせずに公式ビジュアルだけ見せられる。
+        画像を転載しない代わりに公式の絵をここで出す、という設計の意図は rizin5.ts の Rizin5Video 参照。
+      */}
+      {RIZIN5.videos.length > 0 && (
+        <section id="official">
+          <SectionHeading label={t('rizin5.officialTitle')} lead />
+          {(() => {
+            const [hero, ...rest] = RIZIN5.videos;
+            const heroEmbed = toEmbedUrl(hero.url);
+            const heroId = youTubeId(hero.url);
+            return (
+              <>
+                {heroEmbed && (
+                  <figure className="mt-4">
+                    <div className="relative aspect-video overflow-hidden rounded-[3px] bg-black">
+                      <LiteVideo
+                        embedUrl={heroEmbed}
+                        thumbUrl={heroId ? `https://i.ytimg.com/vi/${heroId}/maxresdefault.jpg` : ''}
+                        title={hero.titleJa}
+                      />
+                    </div>
+                    <figcaption className="mt-2 text-xs leading-relaxed text-ink-soft">
+                      {hero.titleJa}
+                      {hero.noteJa && <span className="text-ink-mute">｜{hero.noteJa}</span>}
+                    </figcaption>
+                  </figure>
+                )}
+                {rest.length > 0 && (
+                  <ul className="mt-4 space-y-2">
+                    {rest.map((v) => (
+                      <li key={v.url} className="flex flex-wrap items-baseline gap-x-2 text-sm">
+                        <time className="shrink-0 tabular-nums text-xs text-ink-mute">{v.date}</time>
+                        <a
+                          href={v.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-medium text-ink underline underline-offset-2 transition-colors hover:text-ink-soft"
+                        >
+                          {v.titleJa} <span aria-hidden>↗</span>
+                        </a>
+                        {v.noteJa && <span className="text-xs text-ink-mute">{v.noteJa}</span>}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                <p className="mt-3 text-[11px] leading-relaxed text-ink-mute">{t('rizin5.officialNote')}</p>
+              </>
+            );
+          })()}
+        </section>
+      )}
+
+      {/*
+        対戦カード一覧（#card-list）。下の詳細カードは1試合ずつが長いので、
+        「全8試合を一目で見て、気になる試合へ飛ぶ」入口をここに置く＝
+        「超RIZIN.5 対戦カード」クエリで来た読者が探している形そのもの。
+      */}
+      <section id="card-list">
+        <SectionHeading label={t('rizin5.cardListTitle')} count={RIZIN5.cards.length} lead />
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[520px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-ink/40 text-[11px] uppercase tracking-[0.1em] text-ink-mute">
+                <th className="py-2 pr-3 font-medium">{t('rizin5.cardListNo')}</th>
+                <th className="py-2 pr-4 font-medium">{t('rizin5.cardListMatch')}</th>
+                <th className="py-2 font-medium">{t('rizin5.cardListWeight')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {RIZIN5.cards.map((card) => (
+                <tr key={card.order} className="border-b border-line align-top">
+                  <td className="py-2.5 pr-3 tabular-nums text-ink-mute">
+                    {String(card.order).padStart(2, '0')}
+                  </td>
+                  <td className="py-2.5 pr-4">
+                    <a
+                      href={`#fight-${card.order}`}
+                      className="font-bold text-ink underline decoration-line underline-offset-4 transition-colors hover:decoration-ink"
+                    >
+                      {card.left.name} <span className="text-ink-mute">vs</span> {card.right.name}
+                    </a>
+                    {card.titleJa && (
+                      <span className="mt-0.5 block text-xs text-ink-soft">{card.titleJa}</span>
+                    )}
+                  </td>
+                  <td className="whitespace-nowrap py-2.5 text-xs text-ink-soft">{card.weightJa}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       {/* 対戦カードと因縁（全8試合）。 */}
       <section>
         <SectionHeading label={t('rizin5.cardsTitle')} count={RIZIN5.cards.length} lead />
         <div className="mt-4 space-y-6">
           {RIZIN5.cards.map((card) => (
-            <article key={card.order} className="border border-line p-5 sm:p-6">
+            <article
+              key={card.order}
+              id={`fight-${card.order}`}
+              // 一覧表からのアンカー着地でヘッダーに潜らないよう余白を確保する。
+              className="scroll-mt-20 border border-line p-5 sm:p-6"
+            >
               <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-mute">
                 {String(card.order).padStart(2, '0')} ／ {card.weightJa}
                 {card.titleJa ? ` ／ ${card.titleJa}` : ''}
