@@ -12,6 +12,7 @@ import UpcomingFights from '@/components/UpcomingFights';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { type Locale } from '@/lib/i18n';
 
@@ -246,6 +247,25 @@ export function createEventRoute(slug: string) {
           <section className="space-y-5">
             <SectionHeading label={t('events.articles')} count={feed.length} />
             <FeedGrid items={feed} locale={locale} showSport={false} />
+          </section>
+        )}
+
+        {/* サイト内の関連ページ（観測ページ・特集）。 */}
+        {event.relatedJa && event.relatedJa.length > 0 && (
+          <section className="space-y-2">
+            <SectionHeading label={t('events.related')} />
+            <ul className="space-y-1.5">
+              {event.relatedJa.map((r) => (
+                <li key={r.href}>
+                  <Link
+                    href={r.href}
+                    className="text-sm text-ink underline decoration-line underline-offset-4 transition-colors hover:text-ink-soft hover:decoration-ink"
+                  >
+                    {r.labelJa} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </section>
         )}
 

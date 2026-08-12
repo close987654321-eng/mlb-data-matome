@@ -16,6 +16,7 @@ import UpcomingEvents from '@/components/UpcomingEvents';
 import EventTimeline from '@/components/EventTimeline';
 import UpcomingFights from '@/components/UpcomingFights';
 import VodCta from '@/components/VodCta';
+import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
@@ -187,6 +188,18 @@ export default async function SportPage({
 
       {/* 大会スケジュール・アーカイブ（mma のみ）。大会が終わってもエントリが残る＝時間とともに厚くなる年表。 */}
       {sport === 'mma' && <EventTimeline />}
+
+      {/* データ観測ページへの導線（mma のみ・ja のみ＝ページ本文が日本語の編集物）。 */}
+      {sport === 'mma' && locale !== 'en' && (
+        <p className="text-sm">
+          <Link
+            href="/breakingdown-audition"
+            className="text-ink underline decoration-line underline-offset-4 transition-colors hover:text-ink-soft hover:decoration-ink"
+          >
+            BreakingDownオーディション全史——歴代の再生数・人気コメントをデータで見る →
+          </Link>
+        </p>
+      )}
 
       {/* 視聴ガイド（mma のみ）。年表で日程を見た直後＝視聴意図が立つ位置に置く。計測枠は hub。 */}
       {sport === 'mma' && (

@@ -10,6 +10,7 @@ import { NPB_PROSPECTS } from '@/lib/npbPlayers';
 import { ALLSTAR } from '@/lib/allstar';
 import { RIZIN5 } from '@/lib/rizin5';
 import { standardEventPages } from '@/lib/events';
+import { bdAuditionsFetchedAt } from '@/lib/bdAuditions';
 import { SPORTS } from '@/lib/sports';
 import { SERIES } from '@/lib/series';
 import { getCyDetailRows } from '@/lib/cyYoungBoard';
@@ -115,6 +116,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(RIZIN5.enabled ? [entry('/rizin5', RIZIN5.updatedAt)] : []),
     // 軽量イベントページ（events.ts レジストリ発行の /rizin-landmark16 等。festival の特設ハブは上の行）。
     ...standardEventPages().map((e) => entry(`/${e.slug}`, e.updatedAt)),
+    // BreakingDown オーディション全史（データ観測ページ）。lastmod は統計スナップショットの取得日。
+    entry('/breakingdown-audition', await bdAuditionsFetchedAt()),
     ...playerEntries,
     // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。
     // ピラーの lastmod は配下で最も新しい成績時点（手キュレーションなので他に動く日付が無い）。

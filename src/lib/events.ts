@@ -89,6 +89,8 @@ export type FightEvent = {
   watchJa?: string;
   /** 公式サイト等の一次情報リンク（送客＝引用元への還元） */
   officialUrl?: string;
+  /** サイト内の関連ページ（観測ページ・特集など）。イベントページの下部に出す */
+  relatedJa?: { labelJa: string; href: string }[];
   /** ページ内容の最終更新日（dateModified・sitemap lastmod） */
   updatedAt: string;
 };
@@ -156,6 +158,9 @@ export const EVENTS: FightEvent[] = [
     watchJa:
       '全試合が公式配信プラットフォーム「BreakingDown LIVE」でPPV生中継される（公式サイトの記載）。PPVチケットの価格は未確認＝確認でき次第ここを更新する。公式アプリ「BreakingDown Club」の有料会員はPPVチケットが20%オフになる。',
     officialUrl: 'https://breakingdown.jp/',
+    relatedJa: [
+      { labelJa: 'BreakingDownオーディション全史（歴代の再生数・人気コメントのデータ観測）', href: '/breakingdown-audition' },
+    ],
     updatedAt: '2026-08-12',
   },
   {
