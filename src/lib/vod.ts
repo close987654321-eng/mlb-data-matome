@@ -42,8 +42,13 @@ export type VodOffer = {
    */
   spaces?: Partial<Record<VodPlacement, VodSpace>>;
   /**
-   * RIZIN の大型大会で PPV 販売実績がある販路。/rizin5 の #watch に視聴CTAとして出す判定に使う
+   * **いま開催予定の超RIZIN.5 を実際に売っている販路**。/rizin5 の #watch に視聴CTAとして出す判定に使う
    * （ページ側にサービス名をハードコードせず、販路の増減をこのファイルだけで完結させる）。
+   *
+   * ⚠️ 2026-08-12 に意味を「PPV販売実績がある販路」から上のとおり厳密化した。ABEMA が RIZIN の
+   * 公式メディアパートナーになり、榊原CEOが「9月からABEMAさんだけでPPVを配信」と明言したため、
+   * U-NEXT・スカパー! を残すと「そこでも買える」という誤誘導になる（記事下の VodCta には
+   * 引き続き出る＝UFC等の他興行では現役の販路）。次に併売へ戻ったらフラグを戻す。
    */
   rizinPpv?: boolean;
 };
@@ -110,9 +115,11 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
   mma: [
     {
       service: 'ABEMA',
+      // 成果地点は「ABEMAプレミアム新規登録」で、PPV購入では成果が出ない（A8案件条件・2026-08-05）。
+      // よって PPV 単体を売り文句にせず、プレミアムで得られる価値（見逃し・過去大会）を前に出す。
       pitch: {
-        ja: 'RIZIN を PPV で。',
-        en: 'RIZIN via PPV.',
+        ja: 'RIZIN公式メディアパートナー。PPVも見逃しもここで。',
+        en: "RIZIN's official media partner — PPV and replays.",
       },
       // A8 の ABEMA プレミアム案件（2026-08-05 承認・1号店メディアIDで発行した a8mat）。
       // 2号店（anime）のリンクとは別物＝流用すると成果否認。提携解除時は公式 https://abema.tv/ に戻す。
@@ -127,18 +134,20 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
       },
       // TODO(提携確定後): U-NEXT リンクに差し替え
       href: 'https://video.unext.jp/',
-      rizinPpv: true,
+      // rizinPpv は外した（2026-08-12）＝超RIZIN.5 は ABEMA PPV での販売。UFC の販路としては現役。
     },
     {
       service: 'スカパー!',
+      // 「RIZIN を PPV で」は外した（2026-08-12）＝超RIZIN.5 は ABEMA PPV での販売になったため、
+      // ここで RIZIN を訴求すると買えない販路に送ることになる。格闘技専門チャンネル訴求に一本化。
       pitch: {
-        ja: 'RIZIN を PPV で。格闘技専門チャンネル「ファイティングTV サムライ」も。',
-        en: 'RIZIN via PPV, plus a dedicated combat-sports channel.',
+        ja: '格闘技専門チャンネル「ファイティングTV サムライ」。',
+        en: 'Samurai TV — a dedicated combat-sports channel.',
       },
       // もしもアフィリエイトのスカパー!案件（2026-08-05 承認）。実体はバリューコマース経由の二段リダイレクト。
       // 元タグは protocol-relative（//af.moshimo.com/…）なので https: を明示して埋める。
       href: 'https://af.moshimo.com/af/c/click?a_id=5731049&p_id=1080&pc_id=1564&pl_id=16147',
-      rizinPpv: true,
+      // rizinPpv は外した（2026-08-12・理由は U-NEXT と同じ）。
     },
   ],
   // NPB（next メジャーリーガー）の視聴サービスは提携が固まるまで非表示（空配列＝vodOffers は [] を返し CTA 非表示）。
