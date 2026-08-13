@@ -1437,6 +1437,85 @@ export const FIGHTERS: Fighter[] = [
       },
     ],
   },
+  {
+    // 2026-08-13 追加（村山さん依頼）。裏取り: ja/en Wikipedia の戦績表（2025-11-16 グレゴリアン戦まで・
+    // 27勝14KO/9敗/1分で両者一致）＋ゴング格闘技 24519/24414・オリコン（10/17 ONE SAMURAI 4 復帰＝
+    // シュマロフ戦）。素材は RIZIN 公式・ABEMA格闘・U-NEXT格闘技のコメント欄＝日本語主体（パッキャオ戦
+    // だけ国際色）なので domestic 框。
+    slug: 'rukiya-anpo',
+    nameJa: '安保瑠輝也',
+    nameEn: 'Rukiya Anpo',
+    shortJa: ['安保', '瑠輝也'],
+    sport: 'mma',
+    voiceScope: 'domestic',
+    nextFightJa: {
+      labelJa: '10/17シュマロフ戦',
+      until: '2026-10-17',
+      opponentJa: 'ボグダン・シュマロフ',
+      eventJa: 'ONE SAMURAI 4｜有明アリーナ',
+    },
+    accoladeJa: 'キックボクサー・MFL team CLUB es（第4代K-1 WORLD GP スーパー・ライト級王者）',
+    // キックボクシング通算のみ（Wikipedia 戦績表）。MMA は 0勝1敗（2023 大晦日の久保優太戦だけ）＝
+    // record に混ぜず fights の noteJa と日誌で明示する。
+    record: { wins: 27, losses: 9, draws: 1, kos: 14, asOf: '2025-11-16' },
+    headlineStats: [
+      { value: '第4代', labelJa: 'K-1 WORLD GP スーパー・ライト級王者（2019年獲得・防衛2）' },
+    ],
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E5%AE%89%E4%BF%9D%E7%91%A0%E8%BC%9D%E4%B9%9F',
+      'https://en.wikipedia.org/wiki/Rukiya_Anpo',
+    ],
+    fights: [
+      {
+        date: '2025-11-16',
+        opponentJa: 'マラット・グレゴリアン',
+        opponentEn: 'Marat Grigorian',
+        venueJa: '有明アリーナ（ONE 173）',
+        resultJa: '0-3判定負け',
+        noteJa: '約1年ぶりの実戦で世界トップ級と対戦。3kgの体重超過で臨んだことも議論になった',
+      },
+      {
+        date: '2024-12-31',
+        opponentJa: 'シナ・カリミアン',
+        opponentEn: 'Sina Karimian',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN DECADE）',
+        resultJa: '3-0判定勝ち（ボクシングに準じた特別ルール）',
+        noteJa: '負傷欠場したライアン・ガルシアの代替カード。エキシビション扱いでキック戦績には含まれない',
+      },
+      {
+        date: '2024-07-28',
+        opponentJa: 'マニー・パッキャオ',
+        opponentEn: 'Manny Pacquiao',
+        venueJa: 'さいたまスーパーアリーナ（超RIZIN.3）',
+        resultJa: '引き分け（ボクシング・エキシビション）',
+        noteJa: '約1ヶ月前の代打決定から10kg以上減量して臨んだ一戦。戦績には含まれない',
+      },
+      {
+        date: '2023-12-31',
+        opponentJa: '久保優太',
+        opponentEn: 'Yuta Kubo',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN.45）',
+        resultJa: '1R4分28秒 リアネイキッドチョーク一本負け',
+        noteJa: 'MMAデビュー戦。MMA戦績0勝1敗はこの一戦のみ',
+      },
+      {
+        date: '2023-09-24',
+        opponentJa: '宇佐美正パトリック',
+        opponentEn: 'Sho Patrick Usami',
+        venueJa: 'さいたまスーパーアリーナ（RIZIN.44）',
+        resultJa: '3-0判定勝ち',
+        noteJa: 'RIZINでの初白星（キックルール）',
+      },
+      {
+        date: '2023-05-06',
+        opponentJa: 'ブアカーオ・バンチャメーク',
+        opponentEn: 'Buakaw Banchamek',
+        venueJa: '有明アリーナ（RIZIN.42）',
+        resultJa: '引き分け（判定0-0）',
+        noteJa: 'RIZIN初参戦。70kg契約・3分3Rでレジェンドと打ち合った',
+      },
+    ],
+  },
 ];
 
 /** タグ文字列（=正式名）に一致するファイターを返す。LP化の判定に使う。 */
