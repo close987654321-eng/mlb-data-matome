@@ -72,6 +72,7 @@ SSG します。
     ├── ping-indexnow.mjs       # 公開直後の即時インデックス通知（無人公開CIから自動実行）
     ├── warm-card-art.mjs       # カード素材（顔写真・ロゴ）を public/media/card-art/ に事前取得（§4.1）
     ├── fetch-game-voices.mjs   # チームLPの「1試合1件の現地の声」を公式ハイライトから取得（§4.1）
+    ├── journal-gaps.mjs        # 選手LPの観測日誌の取りこぼし検出（jp-daily Step 6a）
     └── threads-update.md       # 更新手順
 ```
 
