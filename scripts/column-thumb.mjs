@@ -101,6 +101,49 @@ function star(cx, cy, s, seed, rot = -10) {
   return d + ' Z';
 }
 
+// 手描きの直線の点列（両端の間を数点に割り、法線方向に微ジッタ＝定規を使わず引いた線）
+function wobblyPoints(p0, p1, jitter, seed, n = 5) {
+  const rnd = mulberry32(seed);
+  const dx = p1[0] - p0[0], dy = p1[1] - p0[1];
+  const len = Math.hypot(dx, dy) || 1;
+  const nx = -dy / len, ny = dx / len;
+  const pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = i / n;
+    const j = i === 0 || i === n ? 0 : (rnd() - 0.5) * 2 * jitter;
+    pts.push([p0[0] + dx * t + nx * j, p0[1] + dy * t + ny * j]);
+  }
+  return pts;
+}
+
+const polyD = (pts) =>
+  pts.map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
+
+const wobblyLine = (p0, p1, jitter, seed, n = 5) => polyD(wobblyPoints(p0, p1, jitter, seed, n));
+
+/**
+ * リング（格闘技コラム用モチーフ）。ボールと同じ規律で描く＝墨の一筆＋薄い重ね線、
+ * 赤は一点だけ（ボールの縫い目にあたるのがロープ）。
+ * MLB以外の競技のコラムで `--motif ring` を指定する。
+ */
+function ringMotif(cx, cy) {
+  const mat = [[cx - 132, cy - 52], [cx + 132, cy - 52], [cx + 190, cy + 86], [cx - 190, cy + 86]];
+  const postH = [118, 118, 150, 150]; // 手前の2本を高く＝奥行き
+  // マットは角を丸めない（smoothClosed だと四角が団子になる）＝辺ごとに手描きの直線を繋ぐ
+  const canvas =
+    polyD(mat.flatMap((p, i) => wobblyPoints(p, mat[(i + 1) % 4], 2, 90 + i).slice(0, -1))) + ' Z';
+  const posts = mat.map((p, i) => wobblyLine(p, [p[0], p[1] - postH[i]], 2, 40 + i));
+  // ロープ3段。各辺の同じ高さ比の点どうしを結ぶ
+  const at = (i, r) => [mat[i][0], mat[i][1] - postH[i] * r];
+  const ropes = [];
+  for (const [k, r] of [0.3, 0.58, 0.86].entries()) {
+    for (const [a, b] of [[0, 1], [1, 2], [3, 0], [3, 2]]) {
+      ropes.push(wobblyLine(at(a, r), at(b, r), 2.5, 60 + k * 10 + a));
+    }
+  }
+  return { canvas, posts, ropes };
+}
+
 // ── レイアウト（全体をひとかたまりで中央へ）─────────────
 const BX = 512, BY = 396, R = 170;
 const circle1 = wobblyCircle(BX, BY, R, 4.5, 7);
@@ -127,6 +170,10 @@ const KANJI = Array.from(opt('kanji', '今週の総括'));
 // 上部の英字キッカー。週刊総括の既定は THIS WEEK IN MLB、データ定点分析(型④)等は
 // --kicker で差し替える（例: RACE BOARD CHECK）。同程度の文字数だとレイアウトが揃う。
 const KICKER = opt('kicker', 'THIS WEEK IN MLB');
+// 図版のモチーフ。既定は野球ボール。格闘技（ボクシング/MMA）のコラムは ring を指定する
+// ＝MLB以外の記事に野球ボールが載るのを避ける。赤は一点だけの規律はどちらも同じ。
+const MOTIF = /^ring$/i.test(String(opt('motif', 'ball'))) ? 'ring' : 'ball';
+const RING = MOTIF === 'ring' ? ringMotif(BX, BY) : null;
 const GLYPH = 84;
 const TX = 806;
 const colH = KANJI.length * (GLYPH + 9) - 9;
@@ -148,6 +195,18 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 
   ${eyebrow}
 
+  ${
+    RING
+      ? `
+  <!-- リング: マット＋コーナーポスト（墨）、ロープが赤の一点 -->
+  <path d="${RING.canvas}" fill="#FFFFFF" stroke="${C.ink}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <g fill="none" stroke="${C.ink}" stroke-width="7" stroke-linecap="round">
+    ${RING.posts.map((d) => `<path d="${d}"/>`).join('\n    ')}
+  </g>
+  <g fill="none" stroke="${C.accent}" stroke-width="5" stroke-linecap="round">
+    ${RING.ropes.map((d) => `<path d="${d}"/>`).join('\n    ')}
+  </g>`
+      : `
   <!-- ボール本体: ペンの一周＋薄い重ね線（鉛筆の下書きが残る感じ） -->
   <path d="${circle2}" fill="none" stroke="${C.ink}" stroke-width="3.5" stroke-linecap="round" opacity="0.30"/>
   <path d="${circle1}" fill="#FFFFFF" stroke="${C.ink}" stroke-width="7" stroke-linecap="round"/>
@@ -160,7 +219,8 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <g fill="none" stroke="${C.accent}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
     ${sA.ticks}
     ${sB.ticks}
-  </g>
+  </g>`
+  }
 
   <!-- 星（墨・手描き） -->
   <path d="${star(BX + R + 44, BY - R - 2, 25, 5)}" fill="none" stroke="${C.ink}" stroke-width="5" stroke-linejoin="round"/>
