@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
-import { getAllTags, getFeedByTag } from '@/lib/tags';
+import { getAllTags, getFeedByTag, tagCountMap } from '@/lib/tags';
 import { getAllThreads } from '@/lib/data';
 import { isTagIndexable } from '@/lib/tagIndex';
 import { feedKey, type FeedItem } from '@/lib/feed';
@@ -295,6 +295,7 @@ export default async function TagPage({
   let teamPlayers: Player[] = [];
   let hubTeam: TeamInfo | undefined; // 顔写真に添える所属チーム（ロゴ・カラー）。snapshot 由来＝移籍に自動追従。
   const statLines = new Map<string, string>(); // slug → 成績1行（所属日本人選手リンクに添える）
+  const playerReactionTags = new Set<string>(); // 反応記事が1件以上ある所属選手（タグLPへリンク可）
   // 「いま」ブロック（PlayerNow）用: 今季成績・試合別ログ・日本人WAR順位（すべて静的JSONの再表示）。
   let hubSeason: PlayerSeason | null = null;
   let hubGamelog: Gamelog | null = null;
@@ -343,9 +344,13 @@ export default async function TagPage({
     // いない試合は声レイヤー（公式ハイライトのコメント1件）が声だけ埋める。
     teamGames = teamGameRows(schedule, allThreads, decoded, undefined, voices);
     teamNotes = notes;
+    // 反応記事が1件以上ある選手だけタグLP（海外の反応まとめ）へリンクする。0件のタグLPは
+    // notFound()（上の feed ガードと同じ条件）＝リンクを出すと404に送ってしまうため。
+    const tagCounts = tagCountMap(allThreads);
     for (const p of teamPlayers) {
       const line = statLineOf(snap.players[String(p.mlbId)], locale);
       if (line) statLines.set(p.slug, line);
+      if ((tagCounts.get(p.nameJa) ?? 0) > 0) playerReactionTags.add(p.slug);
     }
     if (locale !== 'en') {
       intro = teamHubIntroJa(
@@ -522,27 +527,48 @@ export default async function TagPage({
         {/* ファイターLP: 競技一覧への1行リンクは廃止＝ファーストビューの逃げ導線になっていた
             （2026-08-03 村山判断）。競技への回遊はパンくず・記事カード経由で足りる。 */}
 
-        {/* チームLP: 所属日本人選手の成績ハブへ（snapshot 由来＝ハブが必ず生成済みの選手のみ）。 */}
+        {/* チームLP: 所属日本人選手の導線（snapshot 由来＝ハブが必ず生成済みの選手のみ）。
+            主リンク＝選手の海外の反応LP（アンカーは行き先H1と同文「{選手名}の海外の反応まとめ」＝
+            TeamHubLinks で効いたフレーズ一致アンカー処方の選手版）、副リンク＝成績・徹底分析。
+            反応記事がまだ無い選手はタグLPが404になるため、従来どおり成績ハブを主リンクにする。 */}
         {teamPlayers.length > 0 && (
           <div className="mt-5 divide-y divide-line border-y border-line">
-            {teamPlayers.map((p) => (
-              <Link
-                key={p.slug}
-                href={`/player/${p.slug}`}
-                className="group flex items-center justify-between py-3.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
-              >
-                <span className="flex flex-col gap-0.5">
-                  <span>{t('tag.statsHub', { name: locale === 'en' ? p.nameEn : p.nameJa })}</span>
-                  {/* 今季成績1行（snapshot の公知の数値）＝リンク先（成績ハブ）の中身を予告する */}
-                  {statLines.has(p.slug) && (
-                    <span className="text-xs font-normal text-ink-mute">{statLines.get(p.slug)}</span>
+            {teamPlayers.map((p) => {
+              const name = locale === 'en' ? p.nameEn : p.nameJa;
+              const hasReactions = playerReactionTags.has(p.slug);
+              return (
+                <div key={p.slug} className="flex items-center justify-between gap-4 py-3.5">
+                  <Link
+                    href={hasReactions ? `/tag/${encodeURIComponent(p.nameJa)}` : `/player/${p.slug}`}
+                    className="group flex min-w-0 flex-col gap-0.5 text-sm font-semibold text-ink transition-colors hover:text-ink-soft"
+                  >
+                    <span>
+                      {hasReactions
+                        ? t('tag.playerReactions', { name })
+                        : t('tag.statsHub', { name })}{' '}
+                      <span
+                        aria-hidden="true"
+                        className="inline-block transition-transform duration-300 group-hover:translate-x-1"
+                      >
+                        →
+                      </span>
+                    </span>
+                    {/* 今季成績1行（snapshot の公知の数値）＝選手の現在地をどちらのリンク先にも効く形で予告 */}
+                    {statLines.has(p.slug) && (
+                      <span className="text-xs font-normal text-ink-mute">{statLines.get(p.slug)}</span>
+                    )}
+                  </Link>
+                  {hasReactions && (
+                    <Link
+                      href={`/player/${p.slug}`}
+                      className="shrink-0 text-xs font-semibold text-ink-soft transition-colors hover:text-ink"
+                    >
+                      {t('tag.statsHubShort')} <span aria-hidden="true">→</span>
+                    </Link>
                   )}
-                </span>
-                <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </Link>
-            ))}
+                </div>
+              );
+            })}
           </div>
         )}
       </section>
