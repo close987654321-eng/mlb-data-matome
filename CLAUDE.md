@@ -73,6 +73,7 @@ SSG します。
     ├── warm-card-art.mjs       # カード素材（顔写真・ロゴ）を public/media/card-art/ に事前取得（§4.1）
     ├── fetch-game-voices.mjs   # チームLPの「1試合1件の現地の声」を公式ハイライトから取得（§4.1）
     ├── journal-gaps.mjs        # 選手LPの観測日誌の取りこぼし検出（jp-daily Step 6a）
+    ├── fighter-journal-gaps.mjs # ファイターLPの日誌の取りこぼし検出（kpi-weekly Step 2c・上の格闘技版）
     ├── check-editor-notes.mjs  # 編集部ノートの引用が実在コメントか逐語照合（§4.7）
     └── threads-update.md       # 更新手順
 ```
