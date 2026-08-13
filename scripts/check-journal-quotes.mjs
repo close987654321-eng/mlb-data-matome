@@ -4,6 +4,12 @@
 //   node scripts/check-journal-quotes.mjs
 // threadId を持つエントリだけ照合する（video 出典＝生の取得JSONはコミットしない規約のため照合不能。
 // その場合も url/title/channel の存在だけは確認する）。不一致が1件でもあれば exit 1。
+//
+// 例外は retiredThreadId のみ（2026-08-13 追加）。元動画が YouTube から消えた記事は撤去するが
+// （check-dead-videos.mjs の手当てA）、日誌の記述まで消すのは過剰＝その引用は掲載時にこの照合を
+// 通っており、記事本体は git 履歴に残る。ただし「出典の無い引用」を自由に作れると捏造の穴になるので、
+// **retiredThreadId が data/deleted-ids.json に載っている場合だけ**免除する。台帳に無い id は
+// 通常どおり記事を探しに行って落ちる＝言い訳では免除されない。
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 
@@ -39,8 +45,16 @@ async function loadThread(sport, threadId) {
   return threadCache.get(key);
 }
 
+/** 撤去台帳（data/deleted-ids.json）に載っている記事 id。retiredThreadId の免除条件。 */
+const retiredIds = new Set(
+  await readFile(path.join(ROOT, 'data', 'deleted-ids.json'), 'utf8')
+    .then((raw) => JSON.parse(raw).map((e) => e.id))
+    .catch(() => []), // 台帳が無い＝撤去実績ゼロ。免除も無い
+);
+
 const errors = [];
 let checkedQuotes = 0;
+let exemptedQuotes = 0;
 
 for (const dir of JOURNAL_DIRS) {
   let files;
@@ -56,6 +70,17 @@ for (const dir of JOURNAL_DIRS) {
       if (!entry.threadId) {
         if (entry.video && !(entry.video.url && entry.video.title && entry.video.channel)) {
           errors.push(`${where}: video 出典に url/title/channel が揃っていない`);
+        }
+        // 撤去済み記事を出典にしていたエントリ。台帳に載っている id のときだけ照合を免除する。
+        if (entry.retiredThreadId) {
+          if (retiredIds.has(entry.retiredThreadId)) {
+            exemptedQuotes += (entry.quotes ?? []).length;
+            continue;
+          }
+          errors.push(
+            `${where}: retiredThreadId(${entry.retiredThreadId}) が data/deleted-ids.json に無い`,
+          );
+          continue;
         }
         if (!entry.video && (entry.quotes ?? []).length > 0) {
           errors.push(`${where}: 出典（threadId/video）が無いのに引用がある`);
@@ -96,4 +121,8 @@ if (errors.length > 0) {
   for (const e of errors) console.error('  - ' + e);
   process.exit(1);
 }
-console.log(`✓ 観測日誌の引用照合 OK（${checkedQuotes}件の引用を逐語一致で確認）`);
+console.log(
+  `✓ 観測日誌の引用照合 OK（${checkedQuotes}件の引用を逐語一致で確認）` +
+    // 免除は黙って通さず必ず数を出す＝穴が増えていないか人が気づける
+    (exemptedQuotes > 0 ? `／撤去記事が出典の ${exemptedQuotes}件は照合を免除（台帳で確認）` : ''),
+);

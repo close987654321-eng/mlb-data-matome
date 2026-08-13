@@ -41,6 +41,15 @@ export type JournalEntry = {
   sport?: string;
   /** 記事がない試合の出典動画（threadId と排他）。 */
   video?: JournalVideoSource;
+  /**
+   * 出典記事を撤去したときに threadId から移し替える（＝もう存在しない記事の id）。表示には出さない。
+   * 元動画が消えると記事は撤去するが（check-dead-videos.mjs の手当てA）、日誌の記述まで消すのは
+   * 過剰＝引用は掲載時に check-journal-quotes.mjs で逐語照合を通っており、記事は git 履歴に残る。
+   * ただし「出典の無い引用」を野放しにすると捏造の穴になるので、check-journal-quotes.mjs は
+   * **この id が data/deleted-ids.json に載っていること**を確認して初めて照合を免除する
+   * ＝自由記述の言い訳では免除されない（撤去台帳＋git 履歴で必ず追える引用だけが残る）。
+   */
+  retiredThreadId?: string;
   /** 出典の format（youtube/reddit/interview）。票数アイコンの出し分けに使う。 */
   format?: string;
   /** 山場の試合だけに書く編集部の観測メモ（2〜3行）。 */

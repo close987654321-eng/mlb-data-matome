@@ -234,6 +234,12 @@ export type Thread = {
   subreddit: string; // "r/baseball" など、転載元コミュニティの表示名
   format?: 'reddit' | 'interview' | 'youtube'; // コメントの出所。'interview'=選手/監督インタビュー（u/接頭辞と▲スコアを出さない）。'youtube'=動画コメント（author そのまま・👍スコア）。既定は 'reddit'
   sourceUrl: string; // 元スレ URL。引用要件を満たすため必須・必ず送客する
+  // 出典（sourceUrl）が投稿者削除などで消えたときに立てる。記事末の送客リンクを「削除済み」の
+  // 注記テキストへ差し替える＝死んだリンクへ読者を送らない。出典表記そのものは残す（引用の出所を
+  // 明示する義務は動画が消えても消えないため、sourceUrl は履歴として据え置く）。
+  // media が別の生きた動画を指している記事だけがこの状態で存続できる。埋め込みまで死んだ記事は
+  // 記事ごと撤去して data/deleted-ids.json で選手ページへ 301 する（検出は check-dead-videos.mjs）。
+  sourceRemoved?: boolean;
   fetchedAt: string; // ISO8601（JST）
   // 公開後に本文を直したときだけ立てる ISO8601（JST）。JSON-LD の dateModified に出る。
   // 立てないと dateModified=datePublished のままで、コメント差し替え・誤訳修正・追記が

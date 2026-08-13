@@ -635,17 +635,22 @@ export default async function ThreadDetailPage({
       {/* オチ直後（感情のピーク）＝回遊の一等地。ページ唯一の塗り CTA をここへ移す。 */}
       {nextPick && <NextReadCard pick={nextPick} locale={locale} />}
 
-      {/* 元スレ導線はテキストリンクに降格（送客の引用要件は維持しつつ「去る」導線は主役から外す）。 */}
+      {/* 元スレ導線はテキストリンクに降格（送客の引用要件は維持しつつ「去る」導線は主役から外す）。
+          出典が消えた記事（sourceRemoved）はリンクを外して注記に落とす＝404 へ送らない。 */}
       <footer className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
-        <a
-          href={thread.sourceUrl}
-          target="_blank"
-          rel="noopener noreferrer nofollow"
-          className="inline-flex items-center gap-1.5 text-sm text-ink-soft underline-offset-2 transition-colors hover:text-ink hover:underline"
-        >
-          {t('threads.viewSource')}
-          <span aria-hidden>↗</span>
-        </a>
+        {thread.sourceRemoved ? (
+          <p className="max-w-xl text-xs text-ink-mute">{t('threads.sourceGone')}</p>
+        ) : (
+          <a
+            href={thread.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className="inline-flex items-center gap-1.5 text-sm text-ink-soft underline-offset-2 transition-colors hover:text-ink hover:underline"
+          >
+            {t('threads.viewSource')}
+            <span aria-hidden>↗</span>
+          </a>
+        )}
         <ShareButtons url={absoluteUrl(locale, `/${sport}/${thread.id}`)} title={title} />
       </footer>
 

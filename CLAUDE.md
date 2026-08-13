@@ -271,6 +271,18 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
   - `credit`（出典）を必ず添える。中継フレーム/報道写真は著作権に配慮し、引用の範囲＋送客で運用。
   - 巨大ファイルを置かない（適度に圧縮）。ロゴ等のサイト素材は従来どおり `public/` 直下。
 
+**⚠️ 公開後に元動画が消える（＝ストックの経年劣化）は週次で検査する（2026-08-13 追加・2号店と同時導入）。**
+公開時に正しくても、元動画は後から投稿者削除・BAN・権利者削除で消える。消えると埋め込みか出典（送客先）
+が壊れ、「出典の無いコメント転載」に見える＝AdSense の有用性判定に直結する。
+[`scripts/check-dead-videos.mjs`](./scripts/check-dead-videos.mjs) が全記事の `media.url`／`gallery`／
+`sourceUrl` を YouTube API で一括検査する（kpi-weekly の Step 2b で毎週。初回検査は 526本中 2本が死亡）。
+手当ては2通り＝**A: `media` も死んだ → 記事ごと撤去し [`data/deleted-ids.json`](./data/deleted-ids.json)
+に積む**（`next.config.mjs` が選手ページへ 301。404 で被リンク・索引を捨てない）／**B: `sourceUrl` だけ
+死んだ（`media` は生きた別動画）→ 記事JSONに `"sourceRemoved": true`**（記事末の送客リンクが「削除済み」の
+注記に変わる。`sourceUrl` の値は出所の記録として据え置く）。
+観測日誌が撤去記事を指していたら `threadId` → `retiredThreadId` に移し替える。
+`check-journal-quotes.mjs` は**その id が撤去台帳にある場合だけ**照合を免除する（自由記述では免除されない）。
+
 ### 4.6 シリーズ（看板 watch-along 企画「海外ファンと見る」）
 
 確実に毎試合作る固定企画（例: **海外ドジャースファンと見る**）は記事に `series` を付ける。

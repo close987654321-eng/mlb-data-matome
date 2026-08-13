@@ -1,6 +1,14 @@
+import { readFileSync } from 'node:fs';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts');
+
+// 撤去した記事の id 一覧。元動画が YouTube から消えると引用の出典（＝送客先）が失われ、記事が
+// 「出典の無いコメント転載」になってしまうので記事ごと削除する。ただし削除＝404 だと既存の被リンク・
+// 索引を捨てることになるため、その選手の観測日誌ページへ 301 で引き継ぐ（選手ページが無ければ
+// カテゴリ一覧へ）。検出は scripts/check-dead-videos.mjs（kpi-weekly の週次チェック）。
+/** @type {{sport:string,id:string,player?:string|{ja?:string,en?:string},videoId?:string,reason?:string}[]} */
+const deleted = JSON.parse(readFileSync(new URL('./data/deleted-ids.json', import.meta.url), 'utf8'));
 
 // 無人クラウドの build ゲート（scripts/build-gate.sh 経由・[[daily-jp-games-cloud-routine]]）は
 // fd 上限の低い(≈4096)コンテナで走る。next build の静的生成ワーカー数は既定で os.cpus()-1＝コア数に
@@ -63,7 +71,28 @@ const nextConfig = {
     ],
   },
   async redirects() {
+    // 撤去記事は ja/en 双方の記事 URL を選手の観測日誌ページへ 301（既定ロケール ja は prefix 無しが
+    // 正規・英語は /en）。player は文字列（両ロケール共通）か {ja,en}（ロケール別）。ロケール別が
+    // 要るのは、選手ページがそのロケールに記事のある選手しか生成されないことがあるため＝転送先が
+    // 404 にならないよう、デプロイ後に両ロケールで 200 を実測してから確定する。
+    const deletedRedirects = deleted.flatMap(({ sport, id, player }) => {
+      const slug = typeof player === 'string' ? { ja: player, en: player } : (player ?? {});
+      return [
+        {
+          source: `/${sport}/${id}`,
+          destination: slug.ja ? `/player/${slug.ja}` : `/${sport}`,
+          permanent: true,
+        },
+        {
+          source: `/en/${sport}/${id}`,
+          destination: slug.en ? `/en/player/${slug.en}` : `/en/${sport}`,
+          permanent: true,
+        },
+      ];
+    });
+
     return [
+      ...deletedRedirects,
       // 本番の vercel.app は独自ドメインと重複コンテンツになるため、apex（正規）へ恒久転送して
       // SEO を一本化する。host 条件付きなのでプレビューデプロイの個別 URL には影響しない。
       // ドメイン正規化を先に効かせる（その後 ufc→mma は新ドメイン側で適用される）。
