@@ -104,8 +104,10 @@ export function teamHubIntroJa(
 ): string {
   const sentences: string[] = [];
   const names = [hub.info.aliasJa, hub.info.nameFull].filter(Boolean).join('／');
+  // 「海外の反応まとめ」に加えて「ファンの反応」を連続フレーズで持つ（GSC実測 2026-08-13:
+  // 「{チーム}ファンの反応」系クエリが実在し CTR が高いのに、この文字列がページに無かった）。
   sentences.push(
-    `${hub.nameJa}（${names}）の試合・選手に対する海外の反応・現地ファンのコメントを日本語訳でまとめたページ。`,
+    `${hub.nameJa}（${names}）の試合・選手に対する海外の反応まとめ。現地ファンの反応・コメントを日本語訳で紹介するページ。`,
   );
   if (standingPhrase) sentences.push(`現在${standingPhrase}。`);
   if (jpPlayers.length) {
@@ -135,7 +137,8 @@ export function teamHubDescriptionJa(
   standingPhrase?: string,
 ): string {
   const parts: string[] = [
-    `${hub.nameJa}（${[hub.info.aliasJa, hub.info.nameFull].filter(Boolean).join('／')}）への海外の反応・現地ファンのコメントを日本語訳でまとめて紹介。`,
+    // 先頭90字に「海外の反応まとめ」「ファンの反応」の両フレーズを連続一致で収める（intro と同じ処方）。
+    `${hub.nameJa}（${[hub.info.aliasJa, hub.info.nameFull].filter(Boolean).join('／')}）への海外の反応まとめ。現地ファンの反応・コメントを日本語訳で紹介。`,
   ];
   if (standingPhrase) parts.push(`現在${standingPhrase}。`);
   if (jpPlayers.length) parts.push(`${year}年は${jpPlayers.map((p) => p.nameJa).join('・')}が所属。`);
