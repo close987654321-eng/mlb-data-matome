@@ -5,9 +5,14 @@ const withNextIntl = createNextIntlPlugin('./src/lib/i18n.ts');
 
 // 撤去した記事の id 一覧。元動画が YouTube から消えると引用の出典（＝送客先）が失われ、記事が
 // 「出典の無いコメント転載」になってしまうので記事ごと削除する。ただし削除＝404 だと既存の被リンク・
-// 索引を捨てることになるため、その選手の観測日誌ページへ 301 で引き継ぐ（選手ページが無ければ
-// カテゴリ一覧へ）。検出は scripts/check-dead-videos.mjs（kpi-weekly の週次チェック）。
-/** @type {{sport:string,id:string,player?:string|{ja?:string,en?:string},videoId?:string,reason?:string}[]} */
+// 索引を捨てることになるため、いちばん近い常設面へ 301 で引き継ぐ。
+//
+// 転送先は `to` に**ロケール接頭辞を除いたパスで明示する**（ルートを決め打ちしない）。当店のエンティティ
+// 面は選手＝/player/{slug}、ファイター＝/tag/{日本語タグ} と route が分かれており、「選手ページへ」の
+// ような決め打ちは片方で 404 になるため（2026-08-13 に /player/conor-mcgregor で実際に踏んだ。
+// ファイターの日誌は tag LP に載る）。省略時はカテゴリ一覧へ。ロケール別に分けたいときは {ja,en}。
+// 検出は scripts/check-dead-videos.mjs（kpi-weekly の週次チェック）。
+/** @type {{sport:string,id:string,to?:string|{ja?:string,en?:string},videoId?:string,reason?:string}[]} */
 const deleted = JSON.parse(readFileSync(new URL('./data/deleted-ids.json', import.meta.url), 'utf8'));
 
 // 無人クラウドの build ゲート（scripts/build-gate.sh 経由・[[daily-jp-games-cloud-routine]]）は
@@ -71,21 +76,20 @@ const nextConfig = {
     ],
   },
   async redirects() {
-    // 撤去記事は ja/en 双方の記事 URL を選手の観測日誌ページへ 301（既定ロケール ja は prefix 無しが
-    // 正規・英語は /en）。player は文字列（両ロケール共通）か {ja,en}（ロケール別）。ロケール別が
-    // 要るのは、選手ページがそのロケールに記事のある選手しか生成されないことがあるため＝転送先が
-    // 404 にならないよう、デプロイ後に両ロケールで 200 を実測してから確定する。
-    const deletedRedirects = deleted.flatMap(({ sport, id, player }) => {
-      const slug = typeof player === 'string' ? { ja: player, en: player } : (player ?? {});
+    // 撤去記事は ja/en 双方の記事 URL を `to` のパスへ 301（既定ロケール ja は prefix 無しが正規・
+    // 英語は /en）。エンティティ面はそのロケールに記事がある対象しか生成されないことがあるので、
+    // **デプロイ後に両ロケールで 200 を実測してから確定する**（片面だけ落ちるなら {ja,en} で分ける）。
+    const deletedRedirects = deleted.flatMap(({ sport, id, to }) => {
+      const dest = typeof to === 'string' ? { ja: to, en: to } : (to ?? {});
       return [
         {
           source: `/${sport}/${id}`,
-          destination: slug.ja ? `/player/${slug.ja}` : `/${sport}`,
+          destination: dest.ja ?? `/${sport}`,
           permanent: true,
         },
         {
           source: `/en/${sport}/${id}`,
-          destination: slug.en ? `/en/player/${slug.en}` : `/en/${sport}`,
+          destination: `/en${dest.en ?? `/${sport}`}`,
           permanent: true,
         },
       ];

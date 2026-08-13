@@ -277,7 +277,9 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
 [`scripts/check-dead-videos.mjs`](./scripts/check-dead-videos.mjs) が全記事の `media.url`／`gallery`／
 `sourceUrl` を YouTube API で一括検査する（kpi-weekly の Step 2b で毎週。初回検査は 526本中 2本が死亡）。
 手当ては2通り＝**A: `media` も死んだ → 記事ごと撤去し [`data/deleted-ids.json`](./data/deleted-ids.json)
-に積む**（`next.config.mjs` が選手ページへ 301。404 で被リンク・索引を捨てない）／**B: `sourceUrl` だけ
+に積む**（`next.config.mjs` が `to` のパスへ 301。404 で被リンク・索引を捨てない。**転送先は路線を決め打ちせず
+実在パスを書く**＝選手は `/player/{slug}`・ファイターは `/tag/{日本語タグ}` と route が違う。デプロイ後に
+ja/en 両方で 200 を実測する）／**B: `sourceUrl` だけ
 死んだ（`media` は生きた別動画）→ 記事JSONに `"sourceRemoved": true`**（記事末の送客リンクが「削除済み」の
 注記に変わる。`sourceUrl` の値は出所の記録として据え置く）。
 観測日誌が撤去記事を指していたら `threadId` → `retiredThreadId` に移し替える。
