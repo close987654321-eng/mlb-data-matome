@@ -30,6 +30,22 @@ const SCOPES = [
 ].join(' ');
 const CARD_EVENTS = ['card_open', 'card_share', 'card_copy', 'card_copy_image'];
 
+/**
+ * ボット疑い（データセンターのヘッドレスブラウザ）の判定しきい値。
+ * この手のクローラーは JS を実行するので GA4 既定のボット除外（IAB の既知リスト方式）を
+ * すり抜け、素の数字に混ざる。2026-08-12 からシンガポールの1拠点が流入し、8/13 は
+ * その日のセッションの7割超（SG 272 vs 日本 86）を占めて週次KPIが読めなくなった。
+ *
+ * 国名を決め打ちしない＝発信元が変わっても追随する。判定は挙動の2点だけ：
+ * 人間のコホートは国単位で均すとエンゲージ率0%・滞在1秒未満には決してならない
+ * （同期間の実測: 日本 56% / 191秒、シンガポール 0% / 0.8秒）。
+ * 1号店=日本語圏・2号店=英語圏（Japan Reacts）で読者の国が違うので、
+ * 「日本以外を捨てる」ような国の決め打ちは両店共用のこのスクリプトでは使えない。
+ */
+const BOT_MIN_SESSIONS = 20; // これ未満は誤検知回避のため素通し（週次の粒度で見る）
+const BOT_MAX_ENGAGEMENT = 0.05;
+const BOT_MAX_SESSION_SEC = 5;
+
 /** .env.local から拾う（dotenv 依存を増やさない簡易版。fetch-youtube.mjs と同じ流儀） */
 function loadEnv(name) {
   if (process.env[name]) return process.env[name];
@@ -138,6 +154,36 @@ function splitRanges(report, dimName) {
   return out;
 }
 
+/**
+ * 国別レポートからボット疑いの国を割り出す（しきい値の根拠は BOT_* の定義コメント）。
+ * 今週・先週のどちらかで該当すれば除外対象にする＝先週比の分母と分子で同じ国を扱う
+ * （片方の週だけ除くと差分そのものが嘘になる）。
+ */
+function detectBots(countryRows) {
+  const flagged = new Map();
+  for (const range of ['this', 'prev']) {
+    for (const [country, vals] of Object.entries(countryRows?.[range] ?? {})) {
+      // (not set) は inListFilter で名指しできない＝除外フィルタに載せられないので見送る
+      if (country === '(not set)') continue;
+      const [sessions, , , engaged, avgSec] = vals;
+      if (sessions < BOT_MIN_SESSIONS) continue;
+      if (engaged / sessions >= BOT_MAX_ENGAGEMENT) continue;
+      if (avgSec >= BOT_MAX_SESSION_SEC) continue;
+      const seen = flagged.get(country);
+      // 大きく出ている方の週の実測値を代表として持つ（ダイジェストに1行で書くため）
+      if (seen && seen.sessions >= sessions) continue;
+      flagged.set(country, {
+        country,
+        sessions,
+        engagementRate: sessions ? engaged / sessions : 0,
+        avgSessionSec: Math.round(avgSec * 10) / 10,
+        week: range === 'this' ? '今週' : '先週',
+      });
+    }
+  }
+  return [...flagged.values()].sort((a, b) => b.sessions - a.sessions);
+}
+
 async function fetchGa4(token, propertyId, win, warnings) {
   const dateRanges = [
     { startDate: win.this.start, endDate: win.this.end },
@@ -145,16 +191,58 @@ async function fetchGa4(token, propertyId, win, warnings) {
   ];
   const metricNames = (names) => names.map((name) => ({ name }));
 
-  // レポートは独立に取り、1つの失敗で全体を道連れにしない（取れた分だけで出す）
+  // --- 1段目: 国別を取ってボット疑いを特定する（本編のレポートを絞る材料にする） ---
+  let countryRows = null;
+  let bots = [];
+  try {
+    countryRows = splitRanges(
+      await ga4Report(token, propertyId, {
+        dateRanges,
+        dimensions: [{ name: 'country' }],
+        metrics: metricNames([
+          'sessions',
+          'totalUsers',
+          'screenPageViews',
+          'engagedSessions',
+          'averageSessionDuration',
+        ]),
+        orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+        limit: 250,
+      }),
+      'country',
+    );
+    bots = detectBots(countryRows);
+  } catch (e) {
+    warnings.push(
+      `GA4 国別（ボット判定）取得失敗: ${e.message} — ボット除外なしの素の数字で出す`,
+    );
+  }
+
+  // 疑わしい国を各レポートから外す。既存の絞り込みがあるものは andGroup で重ねる。
+  // totals だけは絞らず素で取り、ボット分を国別レポートから引く（引き算なら内訳も出せる）。
+  const exclude = bots.length
+    ? {
+        notExpression: {
+          filter: { fieldName: 'country', inListFilter: { values: bots.map((b) => b.country) } },
+        },
+      }
+    : null;
+  const scoped = (base) => {
+    const f = exclude ? (base ? { andGroup: { expressions: [base, exclude] } } : exclude) : base;
+    return f ? { dimensionFilter: f } : {};
+  };
+
+  // --- 2段目: レポートは独立に取り、1つの失敗で全体を道連れにしない（取れた分だけで出す） ---
   const reports = {
     totals: {
       dateRanges,
-      metrics: metricNames(['sessions', 'totalUsers', 'screenPageViews', 'engagementRate']),
+      metrics: metricNames(['sessions', 'totalUsers', 'screenPageViews', 'engagedSessions']),
     },
     channels: {
       dateRanges,
       dimensions: [{ name: 'sessionDefaultChannelGroup' }],
       metrics: metricNames(['sessions']),
+      ...scoped(null),
       limit: 20,
     },
     sources: {
@@ -162,6 +250,7 @@ async function fetchGa4(token, propertyId, win, warnings) {
       dimensions: [{ name: 'sessionSource' }],
       metrics: metricNames(['sessions']),
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+      ...scoped(null),
       limit: 30,
     },
     // utm_source=card は上位30位に入らない規模でも正確に取るため専用レポートで拾う
@@ -169,15 +258,16 @@ async function fetchGa4(token, propertyId, win, warnings) {
       dateRanges,
       dimensions: [{ name: 'sessionSource' }],
       metrics: metricNames(['sessions']),
-      dimensionFilter: {
+      ...scoped({
         filter: { fieldName: 'sessionSource', stringFilter: { matchType: 'EXACT', value: 'card' } },
-      },
+      }),
     },
     topPages: {
       dateRanges: [dateRanges[0]],
       dimensions: [{ name: 'pagePath' }],
       metrics: metricNames(['screenPageViews']),
       orderBys: [{ metric: { metricName: 'screenPageViews' }, desc: true }],
+      ...scoped(null),
       limit: 10,
     },
     // フィルタ対象の次元は明示的に要求し、行を合算する（次元なしフィルタの仕様に依存しない）
@@ -185,18 +275,16 @@ async function fetchGa4(token, propertyId, win, warnings) {
       dateRanges,
       dimensions: [{ name: 'pagePath' }],
       metrics: metricNames(['screenPageViews', 'userEngagementDuration']),
-      dimensionFilter: {
+      ...scoped({
         filter: { fieldName: 'pagePath', stringFilter: { matchType: 'CONTAINS', value: '/player' } },
-      },
+      }),
       limit: 10000,
     },
     cardEvents: {
       dateRanges,
       dimensions: [{ name: 'eventName' }],
       metrics: metricNames(['eventCount']),
-      dimensionFilter: {
-        filter: { fieldName: 'eventName', inListFilter: { values: CARD_EVENTS } },
-      },
+      ...scoped({ filter: { fieldName: 'eventName', inListFilter: { values: CARD_EVENTS } } }),
     },
   };
 
@@ -227,23 +315,53 @@ async function fetchGa4(token, propertyId, win, warnings) {
   const cardRows = got.cardSessions ? splitRanges(got.cardSessions, 'sessionSource') : null;
   const playerRows = got.playerPages ? splitRanges(got.playerPages, 'pagePath') : null;
 
+  const botKeys = new Set(bots.map((b) => b.country));
+  const botSum = (range) => {
+    const acc = { sessions: 0, users: 0, pageViews: 0, engagedSessions: 0 };
+    for (const [country, vals] of Object.entries(countryRows?.[range] ?? {})) {
+      if (!botKeys.has(country)) continue;
+      acc.sessions += vals[0];
+      acc.users += vals[1];
+      acc.pageViews += vals[2];
+      acc.engagedSessions += vals[3];
+    }
+    return acc;
+  };
+  const withRate = (o) => ({
+    sessions: o.sessions,
+    users: o.users,
+    pageViews: o.pageViews,
+    engagementRate: o.sessions > 0 ? o.engagedSessions / o.sessions : 0,
+  });
+  const rawTotals = (range) => ({
+    sessions: num(totalRows?.[range], '_total', 0),
+    users: num(totalRows?.[range], '_total', 1),
+    pageViews: num(totalRows?.[range], '_total', 2),
+    engagedSessions: num(totalRows?.[range], '_total', 3),
+  });
+  const cleanTotals = (range) => {
+    const raw = rawTotals(range);
+    const bot = botSum(range);
+    return withRate({
+      sessions: raw.sessions - bot.sessions,
+      users: raw.users - bot.users,
+      pageViews: raw.pageViews - bot.pageViews,
+      engagedSessions: raw.engagedSessions - bot.engagedSessions,
+    });
+  };
+
   return {
-    totals: totalRows
-      ? {
-          this: {
-            sessions: num(totalRows.this, '_total', 0),
-            users: num(totalRows.this, '_total', 1),
-            pageViews: num(totalRows.this, '_total', 2),
-            engagementRate: num(totalRows.this, '_total', 3),
-          },
-          prev: {
-            sessions: num(totalRows.prev, '_total', 0),
-            users: num(totalRows.prev, '_total', 1),
-            pageViews: num(totalRows.prev, '_total', 2),
-            engagementRate: num(totalRows.prev, '_total', 3),
-          },
-        }
+    // totals = ボット除外後＝判断に使う数字。GA4 の画面と突き合わせる素の数字は totalsRaw。
+    // channels / sources / topPages / playerPages / cardEvents も同じ基準で除外済み。
+    totals: totalRows ? { this: cleanTotals('this'), prev: cleanTotals('prev') } : null,
+    totalsRaw: totalRows
+      ? { this: withRate(rawTotals('this')), prev: withRate(rawTotals('prev')) }
       : null,
+    botWatch: {
+      countries: bots, // 空配列＝疑わしい国なし（＝totals と totalsRaw は一致する）
+      this: botSum('this'),
+      prev: botSum('prev'),
+    },
     channels: got.channels ? splitRanges(got.channels, 'sessionDefaultChannelGroup') : null,
     sources: got.sources ? splitRanges(got.sources, 'sessionSource') : null,
     cardSessions: cardRows
@@ -436,6 +554,17 @@ async function main() {
         `PV ${t.this.pageViews} (${pct(t.this.pageViews, t.prev.pageViews)}) / ` +
         `card経由 ${ga4.cardSessions?.this ?? 'n/a'}`,
     );
+  }
+  if (ga4?.botWatch?.countries?.length) {
+    const b = ga4.botWatch;
+    const who = b.countries
+      .map(
+        (c) =>
+          `${c.country} ${c.sessions}（${c.week}・エンゲージ${Math.round(c.engagementRate * 100)}%・滞在${c.avgSessionSec}秒）`,
+      )
+      .join(' / ');
+    console.log(`🤖 ボット疑いを除外: 今週 ${b.this.sessions}・先週 ${b.prev.sessions} セッション`);
+    console.log(`   内訳: ${who}`);
   }
   if (ga4?.sources) {
     const top = Object.entries(ga4.sources.this)
