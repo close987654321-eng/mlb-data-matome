@@ -233,6 +233,8 @@ const SPAM = [
   /\bad breaks?\b/i,
   /\bunlisted\b/i,
   /\bshow(ing)? (multiple |the )?replays?\b/i,
+  /\bsound cuts? off\b/i,
+  /\bredo the video\b/i,
 ];
 
 /** タイムラインに1行で置ける発言か。短すぎ・URL・ステマ・絵文字だけ・長すぎを弾く。 */
