@@ -1,7 +1,7 @@
 /**
  * X 投稿用「きょうの日本人」カード PNG 生成（x-post / x-share スキルの弾）。
  *
- *   node scripts/jp-daily-card.mjs [YYYY-MM-DD(ET)] [--out <path>]
+ *   node scripts/jp-daily-card.mjs [YYYY-MM-DD(ET)] [--out <path>] [--hero <playerId>]
  *
  * その日(ET)に出場した日本人選手だけを 1 枚に載せる定番カード。データは
  * `fetch-mlb-stats.mjs jpday`（MLB公式 Stats API・公知の数値のみ）が唯一の源。
@@ -516,11 +516,22 @@ async function main() {
   }
 
   // 主役1人＋残りは活躍順。同点なら本塁打→安打の多い順（毎日決まった順で並ぶと表が固まって見える）。
-  const ranked = [...players].sort((a, b) => {
+  let ranked = [...players].sort((a, b) => {
     const d = heroScore(b) - heroScore(a);
     if (d) return d;
     return (b.hit?.hr ?? 0) - (a.hit?.hr ?? 0) || (b.hit?.h ?? 0) - (a.hit?.h ?? 0);
   });
+  // --hero <playerId>: 自動選出の主役に同定できる公式ハイライト動画が無い日、動画のある選手に主役を差し替える。
+  const heroFlag = argv.indexOf('--hero');
+  if (heroFlag >= 0) {
+    const heroId = Number(argv[heroFlag + 1]);
+    const idx = ranked.findIndex((p) => p.id === heroId);
+    if (idx < 0) {
+      console.error(`--hero ${heroId} が players に見つからない`);
+      process.exit(1);
+    }
+    ranked = [ranked[idx], ...ranked.slice(0, idx), ...ranked.slice(idx + 1)];
+  }
   const [hero, ...rest] = ranked;
 
   const bgFlag = argv.indexOf('--bg');
