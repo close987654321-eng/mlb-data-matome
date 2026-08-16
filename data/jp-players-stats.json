@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-08-16 12:14",
+  "asOf": "2026-08-16 13:03",
   "players": {
     "500743": {
       "fielding": {
@@ -1038,8 +1038,8 @@
       },
       "saber": {
         "hit": 0.2915,
-        "woba": 0.298051,
-        "wrcplus": 87.8726397260274
+        "woba": 0.298531,
+        "wrcplus": 88.21808433179723
       },
       "sprintSpeed": 27.5,
       "team": "ダイヤモンドバックス"
@@ -1576,10 +1576,10 @@
         "fielding": ".981",
         "gamesPlayed": 102,
         "gamesStarted": 102,
-        "innings": "878.0",
+        "innings": "880.0",
         "oaa": 20,
         "position": "遊撃",
-        "putOuts": 126,
+        "putOuts": 128,
         "runsPrevented": 15
       },
       "hitting": {
@@ -1622,7 +1622,7 @@
             "mlb": 43
           },
           "homeRuns": {
-            "lg": 48
+            "lg": 49
           },
           "obp": {
             "lg": 19,
@@ -1799,7 +1799,7 @@
           },
           "inningsPitched": {
             "lg": 24,
-            "mlb": 51
+            "mlb": 52
           },
           "strikeOuts": {
             "lg": 36,
@@ -2373,7 +2373,7 @@
           },
           "inningsPitched": {
             "lg": 8,
-            "mlb": 17
+            "mlb": 18
           },
           "strikeOuts": {
             "lg": 1,
@@ -2394,6 +2394,7 @@
         }
       },
       "saber": {
+        "hit": 0,
         "pit": 5.08631
       },
       "team": "ブルワーズ"
@@ -2447,7 +2448,7 @@
           },
           "strikeOuts": {
             "lg": 4,
-            "mlb": 7
+            "mlb": 8
           },
           "whip": {
             "lg": 10,
@@ -2697,9 +2698,6 @@
           "slg": {
             "lg": 4,
             "mlb": 12
-          },
-          "stolenBases": {
-            "lg": 100
           },
           "triples": {
             "lg": 7,
