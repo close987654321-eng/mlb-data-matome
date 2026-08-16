@@ -1,30 +1,6 @@
 {
-  "asOf": "2026-08-16 08:36",
-  "hitting": [
-    {
-      "ab": 0,
-      "bb": 0,
-      "cs": 0,
-      "d": "2026-08-15",
-      "dbl": 0,
-      "h": 0,
-      "hbp": 0,
-      "home": false,
-      "hr": 0,
-      "ibb": 0,
-      "opp": "Los Angeles Dodgers",
-      "oppJa": "ドジャース",
-      "pa": 0,
-      "r": 0,
-      "rbi": 0,
-      "sb": 0,
-      "sf": 0,
-      "so": 0,
-      "tb": 0,
-      "tpl": 0,
-      "win": false
-    }
-  ],
+  "asOf": "2026-08-16 10:58",
+  "hitting": [],
   "pitching": [
     {
       "bb": 3,
@@ -445,12 +421,12 @@
       "w": 0
     },
     {
-      "bb": 0,
-      "bf": 3,
+      "bb": 1,
+      "bf": 24,
       "d": "2026-08-15",
-      "er": 0,
+      "er": 1,
       "gs": 1,
-      "h": 0,
+      "h": 5,
       "hbp": 0,
       "home": false,
       "hr": 0,
@@ -458,10 +434,10 @@
       "l": 0,
       "opp": "Los Angeles Dodgers",
       "oppJa": "ドジャース",
-      "outs": 3,
-      "r": 0,
-      "so": 0,
-      "w": 0
+      "outs": 18,
+      "r": 1,
+      "so": 6,
+      "w": 1
     }
   ],
   "player": {
@@ -471,7 +447,7 @@
   },
   "season": 2026,
   "team": "ブルワーズ",
-  "teamGames": 126,
+  "teamGames": 127,
   "warHistory": [
     {
       "d": "2026-06-30",
@@ -663,6 +639,7 @@
     },
     {
       "d": "2026-08-16",
+      "warHit": 0,
       "warPit": 5.1
     }
   ]
