@@ -68,7 +68,7 @@ async function main() {
         'div',
         { key: 'foot', style: { display: 'flex', marginTop: 'auto', alignItems: 'flex-end', justifyContent: 'space-between' } },
         [
-          h('div', { key: 'l', style: { display: 'flex', fontWeight: 700, fontSize: 25, color: INK_MUTE, letterSpacing: 1 } }, '全8カードの因縁と戦績・視聴方法・開催までの日誌'),
+          h('div', { key: 'l', style: { display: 'flex', fontWeight: 700, fontSize: 25, color: INK_MUTE, letterSpacing: 1 } }, '全9カードの因縁と戦績・視聴方法・開催までの日誌'),
           h('div', { key: 'r', style: { display: 'flex', fontWeight: 700, fontSize: 22, color: INK_MUTE } }, 'matome-mlb-kaigai.jp'),
         ],
       ),
