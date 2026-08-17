@@ -164,25 +164,39 @@ export const EVENTS: FightEvent[] = [
     updatedAt: '2026-08-12',
   },
   {
-    // 出典: ゴング格闘技（gonkaku.jp/articles/24362）＝2026-07-18 LANDMARK.15 広島で発表。
-    // 長崎初上陸。対戦カードは 2026-08-12 時点で未発表。
+    // 出典: RIZIN 公式の大会情報ページ（jp.rizinff.com/_ct/17852438・2026-08-17 参照）＝会場正式名称・
+    // 開場開始時刻・対戦カード3試合・チケット販売スケジュール／席種価格はすべて公式表記の転記。
+    // 開催発表は 2026-07-18 LANDMARK.15 広島（ゴング格闘技 gonkaku.jp/articles/24362）。
     slug: 'rizin-landmark16',
     org: 'rizin',
     nameJa: 'RIZIN LANDMARK.16 in NAGASAKI',
     shortJa: 'LANDMARK.16 長崎',
     date: '2026-10-03',
     dateLabelJa: '2026年10月3日（土）',
-    venueJa: 'HAPPINESS ARENA',
+    venueJa: '長崎スタジアムシティ HAPPINESS ARENA',
     cityJa: '長崎',
     hub: true,
     tier: 'standard',
     matchTags: ['RIZIN LANDMARK.16'],
     leadJa:
-      'RIZINの長崎初上陸となるLANDMARKシリーズ第16弾。2026年7月18日のRIZIN LANDMARK.15 in HIROSHIMAで開催が発表された。対戦カードは未発表＝発表され次第このページに追記していく。',
+      'RIZINの長崎初上陸となるLANDMARKシリーズ第16弾。2026年7月18日のRIZIN LANDMARK.15 in HIROSHIMAで開催が発表され、公式サイトの大会情報ページには第1弾の対戦カード3試合とチケット情報が掲載されている（2026年8月17日時点）。開場12:00／開始14:00（いずれも予定）。追加カードは発表され次第このページに追記していく。',
+    cards: [
+      { order: 1, matchJa: '堀江圭功 vs 宇佐美正パトリック', noteJa: 'RIZIN MMAルール 5分3R（71.0kg）' },
+      { order: 2, matchJa: 'ビクター・コレスニック vs 松嶋こよみ', noteJa: 'RIZIN MMAルール 5分3R（66.0kg）' },
+      { order: 3, matchJa: '芦澤竜誠 vs 井上聖矢', noteJa: 'RIZIN MMAルール 5分3R（61.0kg）' },
+    ],
+    ticketsJa:
+      'ファンクラブ先着先行は8月17日（月）12:00〜8月19日（水）18:00（強者ノ巣／RIZIN 100 CLUB）、オフィシャルサイト先行は8月21日（金）12:00〜18:00、イープラス最速抽選先行は8月22日（土）12:00〜8月25日（火）18:00、一般発売は8月30日（日）10:00から（イープラス／チケットぴあ／ローソンチケット・電子チケットのみ）。席種はVVIP席275,000円（特典付・1列目・イープラス限定）／VIP席110,000円（特典付）／SRS席33,000円／S席22,000円／A席11,000円（全席指定・税込）。',
+    ticketOffer: {
+      url: 'https://jp.rizinff.com/_ct/17852438',
+      lowPrice: 11_000,
+      highPrice: 275_000,
+      validFrom: '2026-08-30T10:00:00+09:00',
+    },
     watchJa:
-      '配信の詳細は未発表。RIZINは2026年8月にABEMAが公式メディアパートナーとなり、榊原CEOは「9月からABEMAさんだけでPPVを配信」と話している（超RIZIN.5の販路発表時）。本大会の配信形態・価格が発表され次第ここを更新する。',
-    officialUrl: 'https://jp.rizinff.com/',
-    updatedAt: '2026-08-12',
+      '配信の詳細は未発表（公式は「決定次第、RIZINFFオフィシャルサイトよりご案内」）。RIZINは2026年8月にABEMAが公式メディアパートナーとなり、榊原CEOは「9月からABEMAさんだけでPPVを配信」と話している（超RIZIN.5の販路発表時）。本大会の配信形態・価格が発表され次第ここを更新する。',
+    officialUrl: 'https://jp.rizinff.com/_ct/17852438',
+    updatedAt: '2026-08-17',
   },
   {
     // 出典: ゴング格闘技（gonkaku.jp/articles/24362）。千葉初開催。

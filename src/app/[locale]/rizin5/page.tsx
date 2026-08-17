@@ -6,7 +6,7 @@ import { getAllThreads } from '@/lib/data';
 import { buildFeed } from '@/lib/feed';
 import { getAllTags } from '@/lib/tags';
 import { linkableFighterOf } from '@/lib/fighterHub';
-import { RIZIN5, type Rizin5Fighter } from '@/lib/rizin5';
+import { RIZIN5, currentPpvTier, type Rizin5Fighter } from '@/lib/rizin5';
 import { SPORT_INFO } from '@/lib/sports';
 import { vodOffers } from '@/lib/vod';
 import { toEmbedUrl, youTubeId } from '@/lib/media';
@@ -143,6 +143,9 @@ export default async function Rizin5Page({
   const ppvServices = vodOffers('mma').filter((o) => o.rizinPpv);
   // JSON-LD の offers は販売中の席種だけで組む（完売席を含めると価格レンジが実態とズレる）。
   const seatsOnSale = RIZIN5.tickets.seats.filter((s) => !s.soldOut);
+  // いま買える PPV 券種（ビルド時点の JST）。CI の毎時デプロイで追従する＝販売期間の切り替わりは最大1時間ズレる。
+  const ppvNow = currentPpvTier();
+  const ppv = RIZIN5.viewing.ppv;
 
   // カード内の選手名をファイターLPへ張るための集合。LPは記事1件以上のタグにしか生成されない。
   const lpTags = new Set((await getAllTags()).map(({ tag }) => tag));
@@ -158,7 +161,8 @@ export default async function Rizin5Page({
         // 開始時刻は公式の「開場14:00／開始16:00予定」に追従（doorLabelJa とセットで直す）。
         startDate: `${RIZIN5.eventDate}T16:00:00+09:00`,
         eventStatus: 'https://schema.org/EventScheduled',
-        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        // 現地観戦＋ABEMA PPV 生中継＝Mixed（PPV の offer を並べるため）。
+        eventAttendanceMode: 'https://schema.org/MixedEventAttendanceMode',
         location: {
           '@type': 'Place',
           name: RIZIN5.venueJa,
@@ -172,19 +176,39 @@ export default async function Rizin5Page({
         description: t('rizin5.metaDesc'),
         url: absoluteUrl(locale, '/rizin5'),
         image: OG.url,
-        // チケット実売（公式の席種・価格の転記）。イベントリッチリザルトの offers 推奨項目を実測値で満たす。
-        ...(seatsOnSale.length > 0 && {
-          offers: {
-            '@type': 'AggregateOffer',
-            url: RIZIN5.tickets.links[0].href,
-            priceCurrency: 'JPY',
-            lowPrice: Math.min(...seatsOnSale.map((s) => s.price)),
-            highPrice: Math.max(...seatsOnSale.map((s) => s.price)),
-            offerCount: seatsOnSale.length,
-            availability: 'https://schema.org/LimitedAvailability',
-            validFrom: '2026-07-12T10:00:00+09:00',
-          },
-        }),
+        // offers＝現地チケット（公式の席種・価格の転記）＋ABEMA PPV（いま販売中の券種）。
+        // 完売席を含めると価格レンジが実態とズレるので販売中だけで組む。
+        offers: [
+          ...(seatsOnSale.length > 0
+            ? [
+                {
+                  '@type': 'AggregateOffer',
+                  name: 'チケット（現地観戦）',
+                  url: RIZIN5.tickets.links[0].href,
+                  priceCurrency: 'JPY',
+                  lowPrice: Math.min(...seatsOnSale.map((s) => s.price)),
+                  highPrice: Math.max(...seatsOnSale.map((s) => s.price)),
+                  offerCount: seatsOnSale.length,
+                  availability: 'https://schema.org/LimitedAvailability',
+                  validFrom: '2026-07-12T10:00:00+09:00',
+                },
+              ]
+            : []),
+          ...(ppvNow
+            ? [
+                {
+                  '@type': 'Offer',
+                  name: `ABEMA PPV ${ppvNow.nameJa}（ブラウザ購入）`,
+                  url: ppv.buyUrl,
+                  priceCurrency: 'JPY',
+                  price: ppvNow.browser,
+                  availability: 'https://schema.org/InStock',
+                  validFrom: ppvNow.from,
+                  validThrough: ppvNow.to,
+                },
+              ]
+            : []),
+        ],
       },
       {
         '@type': 'CollectionPage',
@@ -428,6 +452,84 @@ export default async function Rizin5Page({
         <SectionHeading label={t('rizin5.viewingTitle')} lead />
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">{RIZIN5.viewing.noteJa}</p>
 
+        {/* ABEMA PPV の確定情報（2026-08-17 発表）。券種×販売期間×価格の表＋いま買える券種の強調。値は公式リリースの転記のみ。 */}
+        <div className="mt-5 border border-ink/40 p-4 sm:p-5">
+          <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-ink-mute">{t('rizin5.ppvTitle')}</p>
+          <p className="mt-1 text-base font-bold text-ink">{ppv.platformJa}</p>
+          <dl className="mt-3 grid gap-x-6 gap-y-1.5 text-sm sm:grid-cols-[auto_1fr]">
+            <dt className="text-ink-mute">{t('rizin5.ppvOnSale')}</dt>
+            <dd className="text-ink">{ppv.onSaleJa}</dd>
+            <dt className="text-ink-mute">{t('rizin5.ppvStream')}</dt>
+            <dd className="text-ink">{ppv.streamJa}</dd>
+            <dt className="text-ink-mute">{t('rizin5.ppvArchive')}</dt>
+            <dd className="text-ink">{ppv.archiveJa}</dd>
+          </dl>
+          {ppvNow && (
+            <p className="mt-4 text-sm text-ink">
+              <span className="mr-2 rounded bg-ink px-1.5 py-0.5 text-[10px] font-semibold text-paper">{t('rizin5.ppvNow')}</span>
+              <span className="font-bold">{ppvNow.nameJa}</span>
+              <span className="ml-2 tabular-nums">
+                {t('rizin5.ppvBrowser')} {ppvNow.browser.toLocaleString('ja-JP')}円 ／ {t('rizin5.ppvApp')}{' '}
+                {ppvNow.app.toLocaleString('ja-JP')}円
+              </span>
+              <span className="ml-2 text-xs text-ink-mute">（{ppvNow.periodJa}）</span>
+            </p>
+          )}
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-ink/40 text-[11px] uppercase tracking-[0.1em] text-ink-mute">
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.ppvTier')}</th>
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.ppvPeriod')}</th>
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.ppvBrowser')}</th>
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.ppvApp')}</th>
+                  <th className="py-2 font-medium">{t('rizin5.ppvSupport')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ppv.tiers.map((tier) => {
+                  const now = ppvNow?.nameJa === tier.nameJa;
+                  return (
+                    <tr key={tier.nameJa} className={`border-b border-line align-top ${now ? 'bg-ink/[0.04]' : ''}`}>
+                      <td className="whitespace-nowrap py-2.5 pr-4 font-bold text-ink">{tier.nameJa}</td>
+                      <td className="py-2.5 pr-4 text-ink-soft">{tier.periodJa}</td>
+                      <td className="whitespace-nowrap py-2.5 pr-4 tabular-nums text-ink">{tier.browser.toLocaleString('ja-JP')}円</td>
+                      <td className="whitespace-nowrap py-2.5 pr-4 tabular-nums text-ink">{tier.app.toLocaleString('ja-JP')}円</td>
+                      <td className="whitespace-nowrap py-2.5 tabular-nums text-ink-soft">
+                        {tier.supportBrowser.toLocaleString('ja-JP')}円 ／ {tier.supportApp.toLocaleString('ja-JP')}円
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 max-w-prose text-xs leading-relaxed text-ink-mute">
+            {t('rizin5.ppvSupportNote', { fighters: ppv.supportFightersJa })}｜{ppv.supportNoteJa}
+          </p>
+          <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink">
+            <span className="font-bold">{t('rizin5.ppvCashback')}</span>｜{ppv.cashbackJa}
+          </p>
+          <ul className="mt-3 max-w-prose list-disc space-y-1 pl-5 text-xs leading-relaxed text-ink-soft">
+            {ppv.extrasJa.map((line) => (
+              <li key={line}>{line}</li>
+            ))}
+          </ul>
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <a
+              href={ppv.buyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft"
+            >
+              {t('rizin5.ppvBuy')} <span aria-hidden>↗</span>
+            </a>
+            <a href={ppv.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-ink-mute underline-offset-2 hover:underline">
+              {ppv.sourceLabelJa} ↗
+            </a>
+          </div>
+        </div>
+
         <div className="mt-5">
           <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-ink-mute">
             {t('rizin5.viewingPastTitle')}
@@ -458,6 +560,7 @@ export default async function Rizin5Page({
         {/* 配信サービスへの導線。景表法ステマ規制対応＝PR明示＋rel=sponsored（VodCta と同じ規律・アフィ差し替え後もこのまま法令準拠）。 */}
         {ppvServices.length > 0 && (
           <div className="mt-5 flex flex-wrap items-center gap-3">
+            <p className="w-full max-w-prose text-xs leading-relaxed text-ink-mute">{t('rizin5.viewingPremiumLead')}</p>
             <span className="rounded bg-ink/[0.06] px-1.5 py-0.5 text-[10px] font-semibold text-ink-soft">
               {t('vod.pr')}
             </span>
@@ -471,7 +574,7 @@ export default async function Rizin5Page({
                 referrerPolicy="no-referrer-when-downgrade"
                 className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft"
               >
-                {t('rizin5.viewingCta', { service: o.service })} <span aria-hidden>↗</span>
+                {t('rizin5.viewingPremiumCta', { service: o.service })} <span aria-hidden>↗</span>
               </a>
             ))}
           </div>
