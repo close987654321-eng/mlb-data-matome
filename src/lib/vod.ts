@@ -45,12 +45,19 @@ export type VodOffer = {
    * **いま開催予定の超RIZIN.5 を実際に売っている販路**。/rizin5 の #watch に視聴CTAとして出す判定に使う
    * （ページ側にサービス名をハードコードせず、販路の増減をこのファイルだけで完結させる）。
    *
-   * ⚠️ 2026-08-12 に意味を「PPV販売実績がある販路」から上のとおり厳密化した。ABEMA が RIZIN の
-   * 公式メディアパートナーになり、榊原CEOが「9月からABEMAさんだけでPPVを配信」と明言したため、
-   * U-NEXT・スカパー! を残すと「そこでも買える」という誤誘導になる（記事下の VodCta には
-   * 引き続き出る＝UFC等の他興行では現役の販路）。次に併売へ戻ったらフラグを戻す。
+   * ⚠️ 2026-08-12 に意味を「PPV販売実績がある販路」から上のとおり厳密化し、榊原CEOの「9月から
+   * ABEMAさんだけでPPVを配信」（報道）を根拠に U-NEXT・スカパー! を落とした。**2026-08-17 に
+   * スカパー! を戻した**＝RIZIN 公式の PPV 情報ページが 100 CLUB／RIZIN LIVE／ABEMA／スカパー! の
+   * 4販路を案内していて、単独販売という前提が誤りだったため。判定の根拠は報道の言い回しではなく
+   * 大会公式の販路表にする（U-NEXT はその表に無いので落としたまま＝UFC等では現役）。
    */
   rizinPpv?: boolean;
+  /**
+   * その販路が「PPV購入と抱き合わせの新規会員登録キャッシュバック」を実施しているか。
+   * CTA の文言をここで切り替える＝ABEMA だけがプレミアム新規登録の還元（＝うちのアフィの成果地点）を
+   * 持つので、他の販路に「プレミアムの登録はこちら」と出してしまわないための分岐。
+   */
+  premiumCashback?: boolean;
 };
 
 /** 設置場所を解決したあとの案件（href は必ず存在する＝非表示のものは vodOffers が落とす）。 */
@@ -125,6 +132,7 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
       // 2号店（anime）のリンクとは別物＝流用すると成果否認。提携解除時は公式 https://abema.tv/ に戻す。
       href: 'https://px.a8.net/svt/ejp?a8mat=4B9YLB+8KZZQQ+4EKC+60OXE',
       rizinPpv: true,
+      premiumCashback: true,
     },
     {
       service: 'U-NEXT',
@@ -134,20 +142,21 @@ export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
       },
       // TODO(提携確定後): U-NEXT リンクに差し替え
       href: 'https://video.unext.jp/',
-      // rizinPpv は外した（2026-08-12）＝超RIZIN.5 は ABEMA PPV での販売。UFC の販路としては現役。
+      // rizinPpv なし＝U-NEXT は超RIZIN.5 の販路に入っていない（2026-08-17 公式PPV情報ページで確認）。UFC の販路としては現役。
     },
     {
       service: 'スカパー!',
-      // 「RIZIN を PPV で」は外した（2026-08-12）＝超RIZIN.5 は ABEMA PPV での販売になったため、
-      // ここで RIZIN を訴求すると買えない販路に送ることになる。格闘技専門チャンネル訴求に一本化。
+      // 2026-08-17: rizinPpv を戻した。8/12 に「超RIZIN.5 は ABEMA 単独販売」と判断して外したが、
+      // RIZIN 公式の PPV 情報ページ（_ct/17858666）が 100 CLUB／RIZIN LIVE／ABEMA／スカパー! の
+      // 4販路を案内していた＝前提が誤り。スカパー! は 8/27 販売開始・6,900円（価格体系が別）。
       pitch: {
-        ja: '格闘技専門チャンネル「ファイティングTV サムライ」。',
-        en: 'Samurai TV — a dedicated combat-sports channel.',
+        ja: '超RIZIN.5のPPVは8/27から。完全生中継を大画面で。',
+        en: 'Super RIZIN.5 PPV from Aug 27 — full live coverage.',
       },
       // もしもアフィリエイトのスカパー!案件（2026-08-05 承認）。実体はバリューコマース経由の二段リダイレクト。
       // 元タグは protocol-relative（//af.moshimo.com/…）なので https: を明示して埋める。
       href: 'https://af.moshimo.com/af/c/click?a_id=5731049&p_id=1080&pc_id=1564&pl_id=16147',
-      // rizinPpv は外した（2026-08-12・理由は U-NEXT と同じ）。
+      rizinPpv: true,
     },
   ],
   // NPB（next メジャーリーガー）の視聴サービスは提携が固まるまで非表示（空配列＝vodOffers は [] を返し CTA 非表示）。

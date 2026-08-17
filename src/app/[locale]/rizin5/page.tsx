@@ -530,6 +530,36 @@ export default async function Rizin5Page({
           </div>
         </div>
 
+        {/* ABEMA 以外の販路（RIZIN公式のPPV情報ページの転記）。ABEMA単独販売ではないので、買える場所を全部出す。 */}
+        <div className="mt-5">
+          <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-ink-mute">
+            {t('rizin5.ppvOtherTitle')}
+          </p>
+          <div className="mt-2 overflow-x-auto">
+            <table className="w-full min-w-[640px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-ink/40 text-[11px] uppercase tracking-[0.1em] text-ink-mute">
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.ppvPlatform')}</th>
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.ppvOnSale')}</th>
+                  <th className="py-2 pr-4 font-medium">{t('rizin5.ppvPrice')}</th>
+                  <th className="py-2 font-medium">{t('rizin5.ppvPlatformNote')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {RIZIN5.viewing.otherPlatforms.map((row) => (
+                  <tr key={row.nameJa} className="border-b border-line align-top">
+                    <td className="whitespace-nowrap py-2.5 pr-4 font-bold text-ink">{row.nameJa}</td>
+                    <td className="whitespace-nowrap py-2.5 pr-4 text-ink">{row.onSaleJa}</td>
+                    <td className="py-2.5 pr-4 text-ink">{row.priceJa}</td>
+                    <td className="py-2.5 text-xs text-ink-soft">{row.noteJa}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 max-w-prose text-xs leading-relaxed text-ink-mute">{RIZIN5.viewing.otherPlatformsNoteJa}</p>
+        </div>
+
         <div className="mt-5">
           <p className="text-[11px] font-medium uppercase tracking-[0.15em] text-ink-mute">
             {t('rizin5.viewingPastTitle')}
@@ -560,7 +590,9 @@ export default async function Rizin5Page({
         {/* 配信サービスへの導線。景表法ステマ規制対応＝PR明示＋rel=sponsored（VodCta と同じ規律・アフィ差し替え後もこのまま法令準拠）。 */}
         {ppvServices.length > 0 && (
           <div className="mt-5 flex flex-wrap items-center gap-3">
-            <p className="w-full max-w-prose text-xs leading-relaxed text-ink-mute">{t('rizin5.viewingPremiumLead')}</p>
+            {ppvServices.some((o) => o.premiumCashback) && (
+              <p className="w-full max-w-prose text-xs leading-relaxed text-ink-mute">{t('rizin5.viewingPremiumLead')}</p>
+            )}
             <span className="rounded bg-ink/[0.06] px-1.5 py-0.5 text-[10px] font-semibold text-ink-soft">
               {t('vod.pr')}
             </span>
@@ -574,7 +606,10 @@ export default async function Rizin5Page({
                 referrerPolicy="no-referrer-when-downgrade"
                 className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft"
               >
-                {t('rizin5.viewingPremiumCta', { service: o.service })} <span aria-hidden>↗</span>
+                {o.premiumCashback
+                  ? t('rizin5.viewingPremiumCta', { service: o.service })
+                  : t('rizin5.viewingCta', { service: o.service })}{' '}
+                <span aria-hidden>↗</span>
               </a>
             ))}
           </div>

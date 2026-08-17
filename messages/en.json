@@ -215,8 +215,8 @@
   "rizin5": {
     "eyebrow": "SPECIAL",
     "title": "Super RIZIN.5 Fight Guide",
-    "metaTitle": "Super RIZIN.5: Full Card, How to Watch (ABEMA PPV Prices) & Tickets | Asakura vs Aoki and all 8 bouts",
-    "metaDesc": "Everything on Super RIZIN.5 (Sep 10, 2026, Kyocera Dome Osaka) in one page: feuds and records for all 8 bouts, how to watch (ABEMA PPV tier prices, sale windows, cashback terms, replay), ticket prices and sell-outs, and the road to 9.10.",
+    "metaTitle": "Super RIZIN.5: All 9 Bouts, How to Watch (PPV Prices) & Tickets | Asakura vs Aoki",
+    "metaDesc": "Everything on Super RIZIN.5 (Sep 10, 2026, Kyocera Dome Osaka) in one page: feuds and records for all 9 bouts including the newly added Usami vs Beinor, how to watch (PPV prices and sale windows on ABEMA, RIZIN 100 CLUB, RIZIN LIVE and SKY PerfecTV!), ticket prices and sell-outs, and the road to 9.10 including Takeru’s retirement ceremony.",
     "daysLeft": "{days} days to fight night",
     "today": "Fight night is today",
     "done": "Event finished",
@@ -244,7 +244,7 @@
     "reactionsTitle": "Reaction roundups for this event",
     "reactionsEmpty": "Reaction roundups (press conference, face-offs, post-fight) will appear here automatically.",
     "factNote": "Dates, cards, records and quotes are limited to facts verified via official announcements, press reports and Wikipedia fight tables. Fighter photos are CC-licensed images from Wikimedia Commons, credited in each card.",
-    "promoLead": "Heading into Super RIZIN.5 on Sep 10: feuds and records for all 8 bouts, ABEMA PPV prices and how to watch, ticket status, and the road to 9.10 — all on one page.",
+    "promoLead": "Heading into Super RIZIN.5 on Sep 10: feuds and records for all 9 bouts, PPV prices and how to watch, ticket status, and the road to 9.10 — all on one page.",
     "promoCta": "Open the fight guide",
     "feudLabel": "The feud",
     "roadTitle": "Road to 9.10",
@@ -264,7 +264,11 @@
     "ppvCashback": "Cashback",
     "ppvBuy": "Buy the ABEMA PPV ticket (official)",
     "viewingPremiumLead": "The cashback requires a new ABEMA Premium sign-up plus an eligible ticket purchase. At the previous event (Super RIZIN.4) the ad-supported Premium plan was excluded, and subscribers had to stay signed up through the next renewal date. Sign up here if you also want replays and past events — and check the current terms on ABEMA before you pick a plan.",
-    "viewingPremiumCta": "Sign up for {service} Premium"
+    "viewingPremiumCta": "Sign up for {service} Premium",
+    "ppvOtherTitle": "Other PPV platforms",
+    "ppvPlatform": "Platform",
+    "ppvPrice": "Price (incl. tax)",
+    "ppvPlatformNote": "Notes"
   },
   "upcoming": {
     "heading": "Upcoming fights",
