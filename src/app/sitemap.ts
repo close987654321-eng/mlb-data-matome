@@ -141,13 +141,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。
     // 実質のあるタグ（選手LP／記事3本以上の通常タグ）だけ載せる＝薄い長尾タグLPを sitemap から外す
     // （index 可否の唯一の正は isTagIndexable。タグページ側の robots noindex と一致させる）。
-    // lastmod はそのタグに付く最新記事（LP の description は成績・件数で毎日動くので鮮度を渡す）。
+    // lastmod はそのタグに付く最新コンテンツ（LP の description は成績・件数で毎日動くので鮮度を渡す）。
+    // タグLP はコラムも列挙するので、コラムにしか付かないタグ（例: インタビュー）で lastmod が
+    // 欠けないよう、記事(fetchedAt)とコラム(publishedAt)の新しい方を採る（両配列とも新着順）。
     ...tags
       .filter(({ tag, count }) => isTagIndexable(tag, count))
       .map(({ tag }) =>
         entry(
           `/tag/${encodeURIComponent(tag)}`,
-          threads.find((t) => (t.tags ?? []).includes(tag))?.fetchedAt,
+          maxDate(
+            [
+              threads.find((t) => (t.tags ?? []).includes(tag))?.fetchedAt,
+              columns.find((c) => (c.tags ?? []).includes(tag))?.publishedAt,
+            ].filter(Boolean) as string[],
+          ),
         ),
       ),
   ];
