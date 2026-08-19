@@ -35,7 +35,7 @@ SSG します。
 ├── CLAUDE.md
 ├── AGENTS.md                    # 他エージェント向けの薄いポインタ（内容はここに複製しない）
 ├── README.md
-├── .claude/skills/              # matome / jp-games / jp-daily / neta-radar / x-post / x-share / kpi-weekly / column（各 SKILL.md + references/）
+├── .claude/skills/              # matome / jp-games / jp-daily / neta-radar / x-post / x-share / kpi-weekly / column / editor-notes（各 SKILL.md + references/）
 ├── data/
 │   └── threads/
 │       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
@@ -75,6 +75,7 @@ SSG します。
     ├── journal-gaps.mjs        # 選手LPの観測日誌の取りこぼし検出（jp-daily Step 6a）
     ├── fighter-journal-gaps.mjs # ファイターLPの日誌の取りこぼし検出（kpi-weekly Step 2c・上の格闘技版）
     ├── check-editor-notes.mjs  # 編集部ノートの引用が実在コメントか逐語照合（§4.7）
+    ├── editor-note-candidates.mjs # 編集部ノートの鮮度検出＋素材抽出（§4.7・editor-notes スキル）
     └── threads-update.md       # 更新手順
 ```
 
@@ -308,6 +309,13 @@ ja/en 両方で 200 を実測する）／**B: `sourceUrl` だけ
 - 保存したら `node scripts/check-editor-notes.mjs`＝`「」` の中身が実在コメントに**逐語で**あるかを
   全記事から機械照合する（観測日誌の `check-journal-quotes.mjs` と同じ役割）。
   照合先はタグを絞らず全記事＝根拠になる声はその主題のタグが付いていない記事にも載るため
+- **書き直しの段取りと日課の正は `editor-notes` スキル**（`.claude/skills/editor-notes/SKILL.md`）。
+  鮮度と素材は `node scripts/editor-note-candidates.mjs`（無印＝30球団の鮮度ギャップ表・
+  `--team <slug>` ＝その主題の実在コメント）。ノートは現在形で書くのに書き直しが
+  「思い出したときだけ」だったため、2026-08-19 の点検で16球団が不在・14球団が6〜8日静止していた
+  （＝観測日誌の `journal-gaps.mjs` と同じ構図）。同日に**全30球団を実コメント由来で更新**し、
+  以後は**週2回（月・木 18:00 JST）のクラウド無人ルーティン**が上位6〜8球団を書き直す
+  （`check-editor-notes.mjs` と `build:gate` を両方通った回だけ自動公開）
 
 ---
 
