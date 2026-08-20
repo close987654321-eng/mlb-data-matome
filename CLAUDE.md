@@ -75,6 +75,7 @@ SSG します。
     ├── journal-gaps.mjs        # 選手LPの観測日誌の取りこぼし検出（jp-daily Step 6a）
     ├── fighter-journal-gaps.mjs # ファイターLPの日誌の取りこぼし検出（kpi-weekly Step 2c・上の格闘技版）
     ├── check-editor-notes.mjs  # 編集部ノートの引用が実在コメントか逐語照合（§4.7）
+    ├── check-affiliate-links.mjs # 貼ってあるアフィリンクの死活検査（kpi-weekly Step 2b・§8）
     ├── editor-note-candidates.mjs # 編集部ノートの鮮度検出＋素材抽出（§4.7・editor-notes スキル）
     └── threads-update.md       # 更新手順
 ```
@@ -358,6 +359,10 @@ ja/en 両方で 200 を実測する）／**B: `sourceUrl` だけ
 > ⚠️ **2026-06-24 上位方針転換**: PV 換金（AdSense/VOD）は天井が低いと判断し、
 > 「無人メディア工場＋AI駆動PM本人」の商品化（MVP=note「らく」）を主戦線に変更。
 > 正はメモリ `monetization-pivot-productize-machine`。以下はサイト側の器の整備＝二次戦線として継続。
+
+⚠️ **貼ったアフィリンクは黙って死ぬ**（ASP は提携終了・広告停止を通知しない）。2026-08-20 に
+もしも経由のスカパー!リンクが 404 になったまま mma 記事66本＋/rizin5 に出ていたのを発見した。
+`node scripts/check-affiliate-links.mjs` が全リンクを叩いて生死と着地URLを見る（kpi-weekly Step 2b で毎週）。
 
 方針: **AdSense（土台）＋ VOD アフィリエイト（ブースター）**。流入の主戦場は検索より
 **Google Discover**（高頻度更新・1200px 以上の画像・独自ドメインが条件）。
