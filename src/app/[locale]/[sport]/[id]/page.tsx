@@ -663,7 +663,10 @@ export default async function ThreadDetailPage({
         <VodCta
           sport={sport}
           locale={locale}
-          heading={t('vod.heading', { sport: locale === 'ja' ? info.labelJa : info.labelEn })}
+          // npb のカテゴリ名（NEXT MLB）はうちの企画名であって視聴対象ではないので、CTA の見出しだけ NPB と呼ぶ。
+          heading={t('vod.heading', {
+            sport: sport === 'npb' ? 'NPB' : locale === 'ja' ? info.labelJa : info.labelEn,
+          })}
           prLabel={t('vod.pr')}
           watchLabel={t('vod.watch')}
         />

@@ -4,6 +4,7 @@ import { NPB_PROSPECTS } from '@/lib/npbPlayers';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import SectionHeading from '@/components/SectionHeading';
+import VodCta from '@/components/VodCta';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
@@ -117,6 +118,16 @@ export default async function ProspectsPage({
           ))}
         </ul>
       </section>
+
+      {/* 視聴ガイド。名鑑で「この選手を見たい」が立った直後に置く＝NPBの試合を実際に観る手段への唯一の導線。 */}
+      <VodCta
+        sport="npb"
+        locale={locale}
+        heading={t('vod.heading', { sport: 'NPB' })}
+        prLabel={t('vod.pr')}
+        watchLabel={t('vod.watch')}
+        placement="hub"
+      />
 
       {/* 回遊導線: 海外の反応・評価の記事一覧（/npb カテゴリ）＋ 現役MLB日本人ハブ（往復ファネル）。 */}
       <div className="flex flex-col gap-2 text-sm">
