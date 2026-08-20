@@ -3,7 +3,7 @@ import SectionHeading from '@/components/SectionHeading';
 import { threadTitle } from '@/lib/series';
 import { divisionLabel, type StandingRow, type StandingsDivision } from '@/lib/standings';
 import type { TeamHub } from '@/lib/teamHub';
-import type { TagVoice } from '@/lib/tagHub';
+import { voiceDate, voiceFormat, type TagVoice } from '@/lib/tagHub';
 import type { Locale } from '@/lib/i18n';
 
 /**
@@ -78,18 +78,20 @@ export default function TeamNow({
             </blockquote>
             <figcaption className="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-ink-mute">
               <span className="font-medium text-ink-soft">
-                {voice.thread.format === 'youtube' || voice.thread.format === 'interview'
-                  ? voice.comment.author
-                  : `u/${voice.comment.author}`}
+                {voiceFormat(voice) === 'reddit'
+                  ? `u/${voice.comment.author}`
+                  : voice.comment.author}
               </span>
-              {voice.thread.format !== 'interview' && (
+              {voiceFormat(voice) !== 'interview' && (
                 <span className="tabular-nums">
-                  {voice.thread.format === 'youtube' ? '👍' : '▲'}{' '}
+                  {voiceFormat(voice) === 'youtube' ? '👍' : '▲'}{' '}
                   {voice.comment.score.toLocaleString()}
                 </span>
               )}
+              {/* 出どころ＝記事（内部リンク先はこの下の一覧が持つ）か、声レイヤーなら試合のカード。 */}
               <span className="min-w-0 truncate">
-                {voice.thread.fetchedAt.slice(0, 10)} ・ {threadTitle(voice.thread, locale)}
+                {voiceDate(voice)} ・{' '}
+                {voice.thread ? threadTitle(voice.thread, locale) : voice.game?.label}
               </span>
             </figcaption>
           </figure>

@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/lib/navigation';
 import SectionHeading from '@/components/SectionHeading';
 import { threadTitle } from '@/lib/series';
-import { VOICES_VISIBLE, type TagVoice } from '@/lib/tagHub';
+import { VOICES_VISIBLE, voiceDate, voiceFormat, type TagVoice } from '@/lib/tagHub';
 import type { Locale } from '@/lib/i18n';
 
 /**
@@ -23,13 +23,15 @@ export default function TagVoices({
   const t = useTranslations();
   if (voices.length === 0) return null;
 
-  const rows = voices.map(({ thread, comment }, i) => {
+  const rows = voices.map((voice, i) => {
+    const { thread, comment, game } = voice;
     const body = locale === 'ja' ? comment.bodyJa : comment.bodyEn || comment.bodyJa;
-    const isYoutube = thread.format === 'youtube';
-    const isInterview = thread.format === 'interview';
+    const format = voiceFormat(voice);
+    const isYoutube = format === 'youtube';
+    const isInterview = format === 'interview';
     return (
       // 同じ記事から複数の声を拾うことがあるので、キーは記事IDだけでは一意にならない
-      <li key={`${thread.sport}/${thread.id}/${i}`} className="py-4">
+      <li key={`${thread ? `${thread.sport}/${thread.id}` : game?.url}/${i}`} className="py-4">
         <p className="text-sm leading-relaxed text-ink">“{body}”</p>
         <div className="mt-2 flex items-center gap-3 text-xs text-ink-mute">
           <span className="shrink-0 font-medium text-ink-soft">
@@ -40,20 +42,42 @@ export default function TagVoices({
               {isYoutube ? '👍' : '▲'} {comment.score.toLocaleString()}
             </span>
           )}
-          <Link
-            href={`/${thread.sport}/${thread.id}`}
-            className="group/row ml-auto flex min-w-0 items-center gap-1 transition-colors hover:text-ink"
-          >
-            <span className="truncate">
-              {thread.fetchedAt.slice(0, 10)} ・ {threadTitle(thread, locale)}
-            </span>
-            <span
-              aria-hidden
-              className="shrink-0 transition-transform group-hover/row:translate-x-0.5"
+          {thread ? (
+            <Link
+              href={`/${thread.sport}/${thread.id}`}
+              className="group/row ml-auto flex min-w-0 items-center gap-1 transition-colors hover:text-ink"
             >
-              →
-            </span>
-          </Link>
+              <span className="truncate">
+                {thread.fetchedAt.slice(0, 10)} ・ {threadTitle(thread, locale)}
+              </span>
+              <span
+                aria-hidden
+                className="shrink-0 transition-transform group-hover/row:translate-x-0.5"
+              >
+                →
+              </span>
+            </Link>
+          ) : (
+            // 声レイヤー由来（まとめ記事が無い試合の声）＝送客先は引用元の公式ハイライト。
+            game && (
+              <a
+                href={game.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group/row ml-auto flex min-w-0 items-center gap-1 transition-colors hover:text-ink"
+              >
+                <span className="truncate">
+                  {voiceDate(voice)} ・ {game.label}
+                </span>
+                <span
+                  aria-hidden
+                  className="shrink-0 transition-transform group-hover/row:translate-x-0.5"
+                >
+                  ↗
+                </span>
+              </a>
+            )
+          )}
         </div>
       </li>
     );

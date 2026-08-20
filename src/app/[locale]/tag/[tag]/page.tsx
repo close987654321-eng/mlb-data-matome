@@ -9,6 +9,7 @@ import {
   tagHubOf,
   tagHubIntroJa,
   tagHubVoices,
+  voicesRecentFirst,
   playerTagHubs,
   subjectPatterns,
   mentionsSubject,
@@ -44,6 +45,7 @@ import {
   teamDisplayJa,
   teamVoiceSubject,
   teamTagHubs,
+  gameVoicesFor,
   TEAM_HUB_MIN_ARTICLES,
   type TeamHub,
 } from '@/lib/teamHub';
@@ -308,12 +310,28 @@ export default async function TagPage({
   let teamAsOf: string | undefined;
   if (hub) {
     // 所属は ja/en どちらのLPでも顔写真の横に出すので、導入文（ja のみ）と切り離して取る。
-    const [snap, season, gamelog] = await Promise.all([
+    const [snap, season, gamelog, layer] = await Promise.all([
       getPlayersSnapshot(),
       getPlayerSeason(hub.mlbId),
       getGamelog(hub.mlbId),
+      getGameVoices(),
     ]);
     hubTeam = getTeam(season?.team);
+    // 声ピックアップを新しい順に並べ直す＝質順のままだと、日次記事で新しい声が増えても LP の
+    // 見出しに出る5件が何週間も入れ替わらない（チームLPと同じ症状）。
+    // 声レイヤー（1試合1件）は**その選手に言及している声**だけ混ぜる（tagHubVoices と同じ規律）＝
+    // チームメイトの話が選手LPに並ぶのを防ぐ。実測では選手名を含む声は少ないので、ここは薄い補強。
+    if (voices.length > 0) {
+      const patterns = subjectPatterns(hub);
+      const layerVoices = hubTeam
+        ? gameVoicesFor(layer, {
+            teamId: hubTeam.id,
+            locale,
+            matches: (text) => mentionsSubject(text, patterns),
+          })
+        : [];
+      voices = voicesRecentFirst(voices, layerVoices);
+    }
     hubSeason = season;
     hubGamelog = gamelog;
     hubJpRank = jpWarRank(snap, hub);
@@ -328,7 +346,7 @@ export default async function TagPage({
   } else if (teamLp) {
     // タイムラインの声は**全記事**から拾う（タグ絞りのフィードではない）＝日次記事がその試合に
     // 触れていれば、専用記事がまだ無い直近の試合にも現地の声を出せる。
-    const [snap, standing, standings, schedule, notes, allThreads, voices] = await Promise.all([
+    const [snap, standing, standings, schedule, notes, allThreads, layer] = await Promise.all([
       getPlayersSnapshot(),
       standingOfTeam(teamLp.info.id),
       getStandings(),
@@ -342,8 +360,11 @@ export default async function TagPage({
     teamAsOf = standings.asOf || undefined;
     // 日程（全試合）を背骨に、記事がある試合はリンク・本塁打・現地の声が乗る。記事が届いて
     // いない試合は声レイヤー（公式ハイライトのコメント1件）が声だけ埋める。
-    teamGames = teamGameRows(schedule, allThreads, decoded, undefined, voices);
+    teamGames = teamGameRows(schedule, allThreads, decoded, undefined, layer);
     teamNotes = notes;
+    // チームLPの声ピックアップ＝記事由来＋声レイヤー（自軍の試合の声）を新しい順に。
+    // 先頭1件は「いま」ブロックの顔なので、ここが止まると LP 全体が古く見える。
+    voices = voicesRecentFirst(voices, gameVoicesFor(layer, { teamId: teamLp.info.id, locale }));
     // 反応記事が1件以上ある選手だけタグLP（海外の反応まとめ）へリンクする。0件のタグLPは
     // notFound()（上の feed ガードと同じ条件）＝リンクを出すと404に送ってしまうため。
     const tagCounts = tagCountMap(allThreads);

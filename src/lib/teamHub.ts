@@ -1,8 +1,10 @@
-import { getTeam, type TeamInfo } from './teams';
+import { getTeam, getTeamById, type TeamInfo } from './teams';
 import { isStopTag, type TagCount } from './tags';
 import { getPlayerByJaName, hasMlbStats, PLAYERS, type Player } from './players';
 import type { PlayersSnapshot } from './playerStats';
-import type { VoiceSubject } from './tagHub';
+import type { TagVoice, VoiceSubject } from './tagHub';
+import type { GameVoice } from './gameVoices';
+import type { Locale } from './i18n';
 
 /**
  * チームタグLP（リッチ化するタグページ）の判定と導入文の唯一の正。
@@ -177,4 +179,51 @@ export function teamTagHubs(tags: TagCount[]): { hub: TeamHub; count: number }[]
     if (hub) hubs.push({ hub, count });
   }
   return hubs;
+}
+
+
+/** LPの声ピックアップに流し込む声レイヤーの上限（1試合1件なので実質「直近◯試合」）。 */
+const GAME_VOICES_LIMIT = 10;
+
+/**
+ * 声レイヤー（`data/game-voices.json`＝1試合1件・jp-daily の日課で毎日追加される）を、LPの声
+ * ピックアップに使える形（TagVoice）にする。新しい試合から順に limit 件まで。
+ *
+ * なぜ要るか: ピックアップが記事由来だけだと、そのチーム／選手の記事が途切れた期間は何週間も同じ声が
+ * 居座る（2026-08-20 実測: ブレーブスLPの先頭が7/27の声のまま＝直近の記事は8/11、声レイヤーには
+ * 8/19の声があった）。試合は毎日あるので、ここを混ぜると「いま」が試合の翌日に入れ替わる。
+ * 原文・著者・票数はスクリプトが取得結果からそのまま書いた値で、訳が付いたものだけが公開される
+ * （`getGameVoices` の安全弁）＝捏造が構造的に起きない。
+ *
+ * `matches` を渡すと本文がその条件を満たす声だけを拾う。チームLPは自軍の試合の声をそのまま使えるが、
+ * **選手LPは「その選手に言及している声」だけ**にする＝チームメイトの話が選手LPに並ぶのを防ぐ
+ * （tagHubVoices が名前で絞っているのと同じ規律）。
+ */
+export function gameVoicesFor(
+  voices: GameVoice[],
+  opts: { teamId: number; locale: Locale; matches?: (text: string) => boolean; limit?: number },
+): TagVoice[] {
+  const { teamId, locale, matches, limit = GAME_VOICES_LIMIT } = opts;
+  return voices
+    .filter((v) => v.a === teamId || v.h === teamId)
+    .filter((v) => !matches || matches(`${v.ja} ${v.en}`))
+    .sort((a, b) => (a.d < b.d ? 1 : -1))
+    .slice(0, limit)
+    .flatMap((v) => {
+      const away = getTeamById(v.a);
+      const home = getTeamById(v.h);
+      if (!away || !home) return [];
+      const [aName, hName] =
+        locale === 'en' ? [away.info.nameEn, home.info.nameEn] : [away.nameJa, home.nameJa];
+      return [
+        {
+          comment: { author: v.author, score: v.score, bodyEn: v.en, bodyJa: v.ja },
+          game: {
+            date: v.d,
+            label: `${aName} ${v.as}-${v.hs} ${hName}`,
+            url: `https://www.youtube.com/watch?v=${v.v}`,
+          },
+        },
+      ];
+    });
 }

@@ -69,8 +69,38 @@ export function tagHubIntroJa(
   return sentences.join('');
 }
 
-/** タグLPに直接引用する「現地ファンの声」1件（記事＋その代表コメント）。 */
-export type TagVoice = { thread: Thread; comment: ThreadComment };
+/**
+ * タグLPに直接引用する「現地ファンの声」1件。
+ *
+ * 供給源は2系統で、どちらか一方だけを持つ:
+ * - `thread`＝まとめ記事のコメント（内部リンクで記事へ送る。従来からの本流）
+ * - `game`＝声レイヤー（`data/game-voices.json`＝1試合1件・毎日更新）。**記事が書かれていない
+ *   試合の声**で、送客先は引用元の公式ハイライト（YouTube）。チームLP専用。
+ *
+ * 声レイヤーを混ぜる理由: 記事由来だけだと、そのチームの専用記事が途切れた期間はピックアップが
+ * 何週間も動かない（2026-08-20 実測: ブレーブスLPの先頭が7/27の声のまま）。試合は毎日あるので、
+ * 声レイヤーを混ぜると「いま」に答えるブロックが試合の翌日には入れ替わる。
+ */
+export type TagVoice = {
+  comment: ThreadComment;
+  thread?: Thread;
+  game?: { date: string; label: string; url: string };
+};
+
+/** 声の日付（YYYY-MM-DD）。記事＝取得日 / 声レイヤー＝試合日（JST）。並べ替えと表示に使う。 */
+export function voiceDate(voice: TagVoice): string {
+  return voice.game?.date ?? voice.thread?.fetchedAt.slice(0, 10) ?? '';
+}
+
+/** 票数の出し方（YouTube=👍 / Reddit=▲ / interview=票なし）の判定。声レイヤーは常に YouTube。 */
+export function voiceFormat(voice: TagVoice): 'youtube' | 'interview' | 'reddit' {
+  if (voice.game) return 'youtube';
+  return voice.thread?.format === 'youtube'
+    ? 'youtube'
+    : voice.thread?.format === 'interview'
+      ? 'interview'
+      : 'reddit';
+}
 
 /** LP に載せる声の総数と、畳んだ状態で見せる件数（残りは「もっと見る」で開く）。 */
 export const VOICES_LIMIT = 20;
@@ -235,7 +265,7 @@ export function tagHubVoices(
   const overflow: typeof hits = [];
   const perThread = new Map<string, number>();
   for (const hit of hits) {
-    const key = hit.voice.thread.id;
+    const key = hit.voice.thread!.id; // tagHubVoices が作る声は必ず記事由来（声レイヤーは呼び出し側で合流）
     const n = perThread.get(key) ?? 0;
     if (n < PER_THREAD && picked.length < limit) {
       picked.push(hit);
@@ -254,6 +284,36 @@ export function tagHubVoices(
     voices.push(s);
   }
   return voices;
+}
+
+/** 同じ発言か（声レイヤーの声が、その試合のまとめ記事にも引用されていることがある）。 */
+function voiceKey(voice: TagVoice): string {
+  return `${voice.comment.author}|${voiceBody(voice.comment).slice(0, 30)}`;
+}
+
+/**
+ * 声ピックアップを**新しい順**に並べ直し、声レイヤー（試合ごとの声）で足りない鮮度を補う。
+ *
+ * tagHubVoices は「読ませる度」の質順で選ぶが、それだけだと**記事が途切れた期間にLPが止まる**
+ * （2026-08-20 実測: ブレーブスLPの先頭が7/27の声のまま）。このLPの第一意図は
+ * 「直近、現地はどう言ってる？」で、先頭1件は「いま」ブロックの顔になるので、
+ * 選ぶ段階は質順のまま・**並べる段階を日付順**にする（質の低い声が繰り上がるわけではない）。
+ * 同じ発言が両系統にあるときは記事由来を残す＝記事へ送客できるほうが読者にとって深い。
+ */
+export function voicesRecentFirst(
+  articleVoices: TagVoice[],
+  layerVoices: TagVoice[],
+  limit = VOICES_LIMIT,
+): TagVoice[] {
+  const seen = new Set(articleVoices.map(voiceKey));
+  const merged = [...articleVoices];
+  for (const voice of layerVoices) {
+    const key = voiceKey(voice);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    merged.push(voice);
+  }
+  return merged.sort((a, b) => (voiceDate(a) < voiceDate(b) ? 1 : -1)).slice(0, limit);
 }
 
 /**
