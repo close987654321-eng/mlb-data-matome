@@ -140,7 +140,7 @@ export default async function Rizin5Page({
 
   // 視聴CTA: vod.ts の mma 案件のうち RIZIN の PPV 販売実績がある販路だけ出す（判定は vod.ts の rizinPpv）。
   // 販路の増減も href のアフィリエイト差し替えも vod.ts 側だけで完結する。
-  const ppvServices = vodOffers('mma').filter((o) => o.rizinPpv);
+  const ppvServices = vodOffers('mma', 'event').filter((o) => o.rizinPpv);
   // JSON-LD の offers は販売中の席種だけで組む（完売席を含めると価格レンジが実態とズレる）。
   const seatsOnSale = RIZIN5.tickets.seats.filter((s) => !s.soldOut);
   // いま買える PPV 券種（ビルド時点の JST）。CI の毎時デプロイで追従する＝販売期間の切り替わりは最大1時間ズレる。
@@ -602,10 +602,15 @@ export default async function Rizin5Page({
                 href={o.href}
                 target="_blank"
                 rel="noopener nofollow sponsored"
-                // もしも（スカパー!）のタグ仕様。既定の strict-origin だと参照元URLが落ちて成果計測を取りこぼす。
+                // バリューコマース（スカパー!）のタグ仕様。既定の strict-origin だと参照元URLが落ちて成果計測を取りこぼす。
                 referrerPolicy="no-referrer-when-downgrade"
                 className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft"
               >
+                {o.impressionPixel && (
+                  // eslint-disable-next-line @next/next/no-img-element -- 計測ピクセルは最適化しない（VodCta と同じ規律）
+                  // loading="lazy" は必須＝React 19 が SSR した <img> を <head> で preload するため、外すと二重計上になる。
+                  <img src={o.impressionPixel} alt="" width={1} height={1} loading="lazy" aria-hidden />
+                )}
                 {o.premiumCashback
                   ? t('rizin5.viewingPremiumCta', { service: o.service })
                   : t('rizin5.viewingCta', { service: o.service })}{' '}

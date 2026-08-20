@@ -75,7 +75,7 @@ export function createEventRoute(slug: string) {
 
     // RIZIN の視聴CTAは vod.ts の現行販路フラグ（rizinPpv）を再利用＝販路の増減は vod.ts だけで完結。
     // BreakingDown は自社プラットフォーム（アフィ提携なし）なので公式サイトへの一次情報リンクのみ。
-    const ppvServices = event.org === 'rizin' ? vodOffers('mma').filter((o) => o.rizinPpv) : [];
+    const ppvServices = event.org === 'rizin' ? vodOffers('mma', 'event').filter((o) => o.rizinPpv) : [];
 
     const pageUrl = absoluteUrl(locale, `/${event.slug}`);
     const jsonLd = {
