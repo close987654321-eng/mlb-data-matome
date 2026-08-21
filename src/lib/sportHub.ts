@@ -22,12 +22,15 @@ export type SportHub = {
 };
 
 const SPORT_HUBS: Partial<Record<Sport, SportHub>> = {
+  // 2026-08-21 役割替え: 「MLB 海外の反応」はトップと /mlb が同じ看板「MLBの海外の反応まとめ」を
+  // 名乗って票を割っていた（GSC 28日実測: /=4.7位・表示2,242 / /mlb=6.8位・表示507）。
+  // 主戦クエリはトップに一本化し、/mlb はチーム別・日本人選手別に探すディレクトリ意図へずらす。
   mlb: {
-    titleJa: 'MLBの海外の反応まとめ｜大谷翔平ら日本人選手への現地の声を日本語訳',
-    headingJa: 'MLBの海外の反応まとめ',
-    headingEn: 'MLB — Overseas Fan Reactions',
+    titleJa: 'MLBまとめ記事一覧｜チーム別・日本人選手別に現地の反応を探す',
+    headingJa: 'MLBまとめ記事一覧',
+    headingEn: 'MLB — All Articles by Team & Player',
     leadJa:
-      '大谷翔平・山本由伸ら日本人選手の活躍や、名勝負・珍プレーに対する海外の反応を、現地ファンのコメントの日本語訳でまとめたページ。翻訳元は海外掲示板 Reddit（r/baseball・r/mlb）と MLB 公式ハイライトのコメント欄。',
+      'MLBの海外の反応まとめをチーム別・日本人選手別にたどれる一覧ページ。30球団のチーム別ページと大谷翔平ら日本人選手のページへの入口を兼ね、名勝負・珍プレーの記事もここから新着順で読める。翻訳元は海外掲示板 Reddit（r/baseball・r/mlb）と MLB 公式ハイライトのコメント欄。',
   },
   boxing: {
     titleJa: 'ボクシングの海外の反応まとめ｜現地ファンの声を日本語訳',
