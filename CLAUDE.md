@@ -71,7 +71,9 @@ SSG します。
     ├── backfill-video-meta.mjs # 動画記事に publishedAt/videoTitle を後追い投入（JSON-LD VideoObject 用）
     ├── ping-indexnow.mjs       # 公開直後の即時インデックス通知（無人公開CIから自動実行）
     ├── warm-card-art.mjs       # カード素材（顔写真・ロゴ）を public/media/card-art/ に事前取得（§4.1）
+    ├── fetch-transactions.mjs  # MLBの移籍・契約レーダー（オフシーズンの記事ネタ・§4.1）
     ├── fetch-game-voices.mjs   # チームLPの「1試合1件の現地の声」を公式ハイライトから取得（§4.1）
+    │                           #   refresh-season = 昇格した「今季の声」の生存を取り直す（毎週）
     ├── journal-gaps.mjs        # 選手LPの観測日誌の取りこぼし検出（jp-daily Step 6a）
     ├── fighter-journal-gaps.mjs # ファイターLPの日誌の取りこぼし検出（kpi-weekly Step 2c・上の格闘技版）
     ├── check-editor-notes.mjs  # 編集部ノートの引用が実在コメントか逐語照合（§4.7）
@@ -182,6 +184,14 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     タイムラインに挟む「中の人メモ」は `data/team-notes.json`（手書き・節目の試合だけ）で、
     書く候補と事実は `node scripts/team-note-candidates.mjs` が出す。運用は **jp-daily スキルの
     Step 6b**（1日1〜2件）が正。
+  - **移籍・契約（オフシーズンの背骨）**: `node scripts/fetch-transactions.mjs [日付|from..to] [--json]` が
+    MLB公式 Stats API の `/transactions`（キー不要・**日付範囲で後から遡れる**＝事前の積み立て不要）から
+    トレード・FA宣言・FA契約・ウェーバー・引退を取り、**日本人選手（players.ts）を最優先**に、今季成績で
+    大物度を付けて並べる。11月〜2月中旬はMLBの試合が無く jp-games / jp-daily の燃料が止まるが、
+    オフは「FA宣言→ウィンターミーティング→契約」の季節で検索需要はむしろ跳ねる（2026-08-24 追加）。
+    `※記事あり` は重複記事の防止、末尾の「カタカナ未収録」は `data/player-names-ja.json` の手当て待ち
+    ＝**オフの主役は外国人選手**なので、ここを放置すると記事に英語名がそのまま出る。
+    運用は **neta-radar スキルの Step 1-E**（記事化はしない＝matome へ委譲）。
   - **試合ごとの現地の声（`data/game-voices.json`）**: `node scripts/fetch-game-voices.mjs [試合日|from..to]` が
     MLB公式ハイライトのコメントから**1試合1件**を取り、`bodyEn`・著者・票数・動画IDを**そのまま書き出す**
     （人も AI も触らない＝捏造が構造的に起きない）。`ja`（訳）だけを後から埋め、**空のあいだはサイトに出ない**
@@ -195,6 +205,13 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     ピックアップは質順で選ぶが**並べるのは日付降順**＝記事が途切れた期間もLPの先頭が動く
     （ブレーブスLPの先頭が7/27の声のまま8/20まで固定されていた対策）。
     ⚠️ 1試合1件を超えて集めない（コメントDBにしない）。窓（直近30日）の外はスクリプトが自動で落とす。
+    ただし**落とす直前に球団あたり6件までを `data/season-voices.json`（今季の声）へ昇格**させる
+    （2026-08-23）。オフシーズン（11月〜2月中旬）は試合が無い＝窓が転がるだけで声レイヤーが空になり、
+    LPの声ピックアップが冬に全滅するため。昇格は**訳が付いたものだけ**・球団あたり上限つき＝増え続けない
+    ＝「保存期間＝窓」の posture は保つ。サイト側は `getGameVoices()` が両方を混ぜて日付降順で返すので、
+    シーズン中の表示は変わらず**オフに入ったときだけ自動で燃料になる**。保存したぶんは
+    `node scripts/fetch-game-voices.mjs refresh-season`（kpi-weekly Step 2b・毎週）で生存を取り直し、
+    消えたコメント・動画は落とす＝規約の「保存するなら定期的に更新か削除」に応える。
     ⚠️ **順位・勝敗はその試合終了時点の値を焼き込む**（`leagueRecord` と日付指定 standings）。`data/standings.json`
     ＝常に最新 を記事に出すと、7月の試合の記事が9月には違う順位を表示してしまうため。**サイト本体は
     静的JSONを読むだけ**（API を叩かない）という posture は他と同じ。
