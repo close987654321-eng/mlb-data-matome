@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-08-23 02:39",
+  "asOf": "2026-08-24 01:45",
   "leagues": {
     "AL": [
       {
@@ -16,22 +16,53 @@
         "pct": {
           "era": 100,
           "hr9": 93,
-          "ip": 100,
+          "ip": 97,
           "kbb": 97,
           "whip": 97,
           "xera": 97
         },
         "rank": 1,
-        "score": 98,
+        "score": 97.4,
         "so": 193,
         "teamEn": "New York Yankees",
         "teamId": 147,
         "teamJa": "ヤンキース",
         "w": 11,
         "whip": "0.96",
-        "why": "ERA2.16・158.0回はリーグ上位 / 0.76得してる（xERA2.92）",
-        "whyEn": "League-best 2.16 ERA, 158.0 IP · lucky by 0.76 (xERA 2.92)",
-        "xera": 2.92
+        "why": "ERA2.16・K-BB%24.9はリーグ上位 / 0.75得してる（xERA2.91）",
+        "whyEn": "League-best 2.16 ERA, 24.9% K-BB · lucky by 0.75 (xERA 2.91)",
+        "xera": 2.91
+      },
+      {
+        "era": "2.37",
+        "hr9": 0.56,
+        "id": 656302,
+        "ipDisp": "144.1",
+        "isJp": false,
+        "kbbPct": 25,
+        "l": 5,
+        "league": "AL",
+        "nameEn": "Dylan Cease",
+        "nameJa": "ディラン・シース",
+        "pct": {
+          "era": 97,
+          "hr9": 100,
+          "ip": 60,
+          "kbb": 100,
+          "whip": 80,
+          "xera": 100
+        },
+        "rank": 2,
+        "score": 89.4,
+        "so": 209,
+        "teamEn": "Toronto Blue Jays",
+        "teamId": 141,
+        "teamJa": "ブルージェイズ",
+        "w": 8,
+        "whip": "1.06",
+        "why": "K-BB%25.0・被弾の少なさはリーグ上位",
+        "whyEn": "League-best 25.0% K-BB, HR suppression",
+        "xera": 2.68
       },
       {
         "era": "2.54",
@@ -52,7 +83,7 @@
           "whip": 87,
           "xera": 93
         },
-        "rank": 2,
+        "rank": 3,
         "score": 84.3,
         "so": 152,
         "teamEn": "Cleveland Guardians",
@@ -63,37 +94,6 @@
         "why": "ERA2.54・WHIP1.03はリーグ上位",
         "whyEn": "League-best 2.54 ERA, 1.03 WHIP",
         "xera": 2.94
-      },
-      {
-        "era": "2.42",
-        "hr9": 0.59,
-        "id": 656302,
-        "ipDisp": "137.2",
-        "isJp": false,
-        "kbbPct": 25.7,
-        "l": 5,
-        "league": "AL",
-        "nameEn": "Dylan Cease",
-        "nameJa": "ディラン・シース",
-        "pct": {
-          "era": 97,
-          "hr9": 100,
-          "ip": 30,
-          "kbb": 100,
-          "whip": 80,
-          "xera": 100
-        },
-        "rank": 3,
-        "score": 83.4,
-        "so": 201,
-        "teamEn": "Toronto Blue Jays",
-        "teamId": 141,
-        "teamJa": "ブルージェイズ",
-        "w": 7,
-        "whip": "1.06",
-        "why": "K-BB%25.7・被弾の少なさはリーグ上位",
-        "whyEn": "League-best 25.7% K-BB, HR suppression",
-        "xera": 2.66
       },
       {
         "era": "3.01",
@@ -109,13 +109,13 @@
         "pct": {
           "era": 87,
           "hr9": 80,
-          "ip": 23,
+          "ip": 20,
           "kbb": 90,
           "whip": 100,
           "xera": 90
         },
         "rank": 4,
-        "score": 76.5,
+        "score": 75.9,
         "so": 138,
         "teamEn": "Tampa Bay Rays",
         "teamId": 139,
@@ -139,14 +139,14 @@
         "nameJa": "ローガン・ギルバート",
         "pct": {
           "era": 67,
-          "hr9": 30,
+          "hr9": 27,
           "ip": 87,
           "kbb": 83,
           "whip": 90,
           "xera": 70
         },
         "rank": 5,
-        "score": 76.1,
+        "score": 75.9,
         "so": 157,
         "teamEn": "Seattle Mariners",
         "teamId": 136,
@@ -217,7 +217,7 @@
         "whip": "1.11",
         "why": "K-BB%19.5・146.0回はリーグ上位",
         "whyEn": "League-best 19.5% K-BB, 146.0 IP",
-        "xera": 3.57
+        "xera": 3.56
       },
       {
         "era": "3.72",
@@ -233,13 +233,13 @@
         "pct": {
           "era": 43,
           "hr9": 10,
-          "ip": 93,
+          "ip": 90,
           "kbb": 93,
           "whip": 73,
           "xera": 53
         },
         "rank": 8,
-        "score": 68.9,
+        "score": 68.3,
         "so": 201,
         "teamEn": "Cleveland Guardians",
         "teamId": 114,
@@ -248,7 +248,7 @@
         "whip": "1.09",
         "why": "K-BB%24.6・154.2回はリーグ上位",
         "whyEn": "League-best 24.6% K-BB, 154.2 IP",
-        "xera": 3.89
+        "xera": 3.88
       },
       {
         "era": "2.79",
@@ -264,13 +264,13 @@
         "pct": {
           "era": 90,
           "hr9": 60,
-          "ip": 37,
+          "ip": 33,
           "kbb": 50,
           "whip": 50,
           "xera": 73
         },
         "rank": 9,
-        "score": 60.5,
+        "score": 59.7,
         "so": 123,
         "teamEn": "Boston Red Sox",
         "teamId": 111,
@@ -295,22 +295,22 @@
         "pct": {
           "era": 23,
           "hr9": 57,
-          "ip": 33,
+          "ip": 30,
           "kbb": 77,
           "whip": 77,
           "xera": 77
         },
         "rank": 10,
-        "score": 56.4,
+        "score": 55.8,
         "so": 137,
         "teamEn": "Seattle Mariners",
         "teamId": 136,
         "teamJa": "マリナーズ",
         "w": 9,
         "whip": "1.08",
-        "why": "K-BB%19.2・WHIP1.08はリーグ上位 / 0.53損してる（xERA3.57）",
-        "whyEn": "League-best 19.2% K-BB, 1.08 WHIP · unlucky by 0.53 (xERA 3.57)",
-        "xera": 3.57
+        "why": "K-BB%19.2・WHIP1.08はリーグ上位 / 0.54損してる（xERA3.56）",
+        "whyEn": "League-best 19.2% K-BB, 1.08 WHIP · unlucky by 0.54 (xERA 3.56)",
+        "xera": 3.56
       },
       {
         "era": "3.18",
@@ -326,13 +326,13 @@
         "pct": {
           "era": 80,
           "hr9": 13,
-          "ip": 63,
+          "ip": 60,
           "kbb": 57,
           "whip": 67,
           "xera": 27
         },
         "rank": 11,
-        "score": 55.6,
+        "score": 55,
         "so": 131,
         "teamEn": "Cleveland Guardians",
         "teamId": 114,
@@ -342,6 +342,37 @@
         "why": "ERA3.18はリーグ上位 / 0.99得してる（xERA4.17）",
         "whyEn": "League-best 3.18 ERA · lucky by 0.99 (xERA 4.17)",
         "xera": 4.17
+      },
+      {
+        "era": "3.49",
+        "hr9": 1.22,
+        "id": 608379,
+        "ipDisp": "162.2",
+        "isJp": false,
+        "kbbPct": 12.8,
+        "l": 8,
+        "league": "AL",
+        "nameEn": "Michael Wacha",
+        "nameJa": "マイケル・ワカ",
+        "pct": {
+          "era": 60,
+          "hr9": 17,
+          "ip": 100,
+          "kbb": 27,
+          "whip": 60,
+          "xera": 30
+        },
+        "rank": 12,
+        "score": 51.6,
+        "so": 126,
+        "teamEn": "Kansas City Royals",
+        "teamId": 118,
+        "teamJa": "ロイヤルズ",
+        "w": 7,
+        "whip": "1.13",
+        "why": "162.2回はリーグ上位 / 0.62得してる（xERA4.11）",
+        "whyEn": "League-best 162.2 IP · lucky by 0.62 (xERA 4.11)",
+        "xera": 4.11
       },
       {
         "era": "4.26",
@@ -362,7 +393,7 @@
           "whip": 33,
           "xera": 67
         },
-        "rank": 12,
+        "rank": 13,
         "score": 50.1,
         "so": 161,
         "teamEn": "Texas Rangers",
@@ -372,38 +403,7 @@
         "whip": "1.23",
         "why": "総合力で上位",
         "whyEn": "Solid all-around",
-        "xera": 3.81
-      },
-      {
-        "era": "3.58",
-        "hr9": 1.21,
-        "id": 608379,
-        "ipDisp": "155.2",
-        "isJp": false,
-        "kbbPct": 12.5,
-        "l": 8,
-        "league": "AL",
-        "nameEn": "Michael Wacha",
-        "nameJa": "マイケル・ワカ",
-        "pct": {
-          "era": 57,
-          "hr9": 20,
-          "ip": 97,
-          "kbb": 27,
-          "whip": 53,
-          "xera": 30
-        },
-        "rank": 13,
-        "score": 49.9,
-        "so": 120,
-        "teamEn": "Kansas City Royals",
-        "teamId": 118,
-        "teamJa": "ロイヤルズ",
-        "w": 6,
-        "whip": "1.15",
-        "why": "155.2回はリーグ上位 / 0.56得してる（xERA4.14）",
-        "whyEn": "League-best 155.2 IP · lucky by 0.56 (xERA 4.14)",
-        "xera": 4.14
+        "xera": 3.8
       },
       {
         "era": "3.37",
@@ -418,14 +418,14 @@
         "nameJa": "エマーソン・ハンコック",
         "pct": {
           "era": 63,
-          "hr9": 20,
+          "hr9": 23,
           "ip": 13,
           "kbb": 60,
           "whip": 63,
           "xera": 60
         },
         "rank": 14,
-        "score": 49.5,
+        "score": 49.7,
         "so": 125,
         "teamEn": "Seattle Mariners",
         "teamId": 136,
@@ -481,13 +481,13 @@
         "pct": {
           "era": 37,
           "hr9": 17,
-          "ip": 53,
+          "ip": 50,
           "kbb": 53,
           "whip": 23,
           "xera": 47
         },
         "rank": 16,
-        "score": 43.8,
+        "score": 43.2,
         "so": 158,
         "teamEn": "Minnesota Twins",
         "teamId": 142,
@@ -497,37 +497,6 @@
         "why": "総合力で上位",
         "whyEn": "Solid all-around",
         "xera": 3.94
-      },
-      {
-        "era": "3.56",
-        "hr9": 1.21,
-        "id": 677960,
-        "ipDisp": "134.0",
-        "isJp": false,
-        "kbbPct": 18.5,
-        "l": 7,
-        "league": "AL",
-        "nameEn": "Ryan Weathers",
-        "nameJa": "ライアン・ウェザーズ",
-        "pct": {
-          "era": 60,
-          "hr9": 20,
-          "ip": 20,
-          "kbb": 67,
-          "whip": 47,
-          "xera": 20
-        },
-        "rank": 17,
-        "score": 42.5,
-        "so": 140,
-        "teamEn": "New York Yankees",
-        "teamId": 147,
-        "teamJa": "ヤンキース",
-        "w": 5,
-        "whip": "1.19",
-        "why": "総合力で上位 / 0.64得してる（xERA4.2）",
-        "whyEn": "Solid all-around · lucky by 0.64 (xERA 4.2)",
-        "xera": 4.2
       },
       {
         "era": "4.02",
@@ -548,7 +517,7 @@
           "whip": 20,
           "xera": 40
         },
-        "rank": 18,
+        "rank": 17,
         "score": 42.5,
         "so": 132,
         "teamEn": "Baltimore Orioles",
@@ -559,6 +528,37 @@
         "why": "被弾の少なさはリーグ上位",
         "whyEn": "League-best HR suppression",
         "xera": 4.08
+      },
+      {
+        "era": "3.60",
+        "hr9": 1.18,
+        "id": 677960,
+        "ipDisp": "137.1",
+        "isJp": false,
+        "kbbPct": 18.5,
+        "l": 8,
+        "league": "AL",
+        "nameEn": "Ryan Weathers",
+        "nameJa": "ライアン・ウェザーズ",
+        "pct": {
+          "era": 53,
+          "hr9": 30,
+          "ip": 27,
+          "kbb": 67,
+          "whip": 40,
+          "xera": 17
+        },
+        "rank": 18,
+        "score": 41.7,
+        "so": 143,
+        "teamEn": "New York Yankees",
+        "teamId": 147,
+        "teamJa": "ヤンキース",
+        "w": 5,
+        "whip": "1.22",
+        "why": "総合力で上位 / 0.68得してる（xERA4.28）",
+        "whyEn": "Solid all-around · lucky by 0.68 (xERA 4.28)",
+        "xera": 4.28
       },
       {
         "era": "4.02",
@@ -574,13 +574,13 @@
         "pct": {
           "era": 27,
           "hr9": 77,
-          "ip": 60,
+          "ip": 57,
           "kbb": 37,
-          "whip": 40,
-          "xera": 33
+          "whip": 43,
+          "xera": 30
         },
         "rank": 19,
-        "score": 41.1,
+        "score": 40.2,
         "so": 128,
         "teamEn": "Kansas City Royals",
         "teamId": 118,
@@ -605,22 +605,53 @@
         "pct": {
           "era": 77,
           "hr9": 87,
-          "ip": 47,
+          "ip": 43,
           "kbb": 30,
           "whip": 27,
           "xera": 3
         },
         "rank": 20,
-        "score": 40,
+        "score": 39.2,
         "so": 136,
         "teamEn": "Toronto Blue Jays",
         "teamId": 141,
         "teamJa": "ブルージェイズ",
         "w": 10,
         "whip": "1.26",
-        "why": "被弾の少なさ・ERA3.23はリーグ上位 / 1.27得してる（xERA4.5）",
-        "whyEn": "League-best HR suppression, 3.23 ERA · lucky by 1.27 (xERA 4.5)",
-        "xera": 4.5
+        "why": "被弾の少なさ・ERA3.23はリーグ上位 / 1.26得してる（xERA4.49）",
+        "whyEn": "League-best HR suppression, 3.23 ERA · lucky by 1.26 (xERA 4.49)",
+        "xera": 4.49
+      },
+      {
+        "era": "3.97",
+        "hr9": 1.5,
+        "id": 676440,
+        "ipDisp": "156.1",
+        "isJp": false,
+        "kbbPct": 12.4,
+        "l": 13,
+        "league": "AL",
+        "nameEn": "Tanner Bibee",
+        "nameJa": "タナー・ビービー",
+        "pct": {
+          "era": 33,
+          "hr9": 3,
+          "ip": 93,
+          "kbb": 20,
+          "whip": 53,
+          "xera": 13
+        },
+        "rank": 21,
+        "score": 38.3,
+        "so": 123,
+        "teamEn": "Cleveland Guardians",
+        "teamId": 114,
+        "teamJa": "ガーディアンズ",
+        "w": 5,
+        "whip": "1.14",
+        "why": "156.1回はリーグ上位",
+        "whyEn": "League-best 156.1 IP",
+        "xera": 4.31
       },
       {
         "era": "3.05",
@@ -636,53 +667,22 @@
         "pct": {
           "era": 83,
           "hr9": 40,
-          "ip": 57,
+          "ip": 53,
           "kbb": 7,
-          "whip": 60,
+          "whip": 53,
           "xera": 3
         },
-        "rank": 21,
-        "score": 38.4,
+        "rank": 22,
+        "score": 36.9,
         "so": 83,
         "teamEn": "Tampa Bay Rays",
         "teamId": 139,
         "teamJa": "レイズ",
         "w": 12,
         "whip": "1.14",
-        "why": "ERA3.05はリーグ上位 / 1.45得してる（xERA4.5）",
-        "whyEn": "League-best 3.05 ERA · lucky by 1.45 (xERA 4.5)",
-        "xera": 4.5
-      },
-      {
-        "era": "4.01",
-        "hr9": 1.5,
-        "id": 676440,
-        "ipDisp": "150.1",
-        "isJp": false,
-        "kbbPct": 12.1,
-        "l": 13,
-        "league": "AL",
-        "nameEn": "Tanner Bibee",
-        "nameJa": "タナー・ビービー",
-        "pct": {
-          "era": 33,
-          "hr9": 3,
-          "ip": 87,
-          "kbb": 20,
-          "whip": 53,
-          "xera": 13
-        },
-        "rank": 22,
-        "score": 37.1,
-        "so": 117,
-        "teamEn": "Cleveland Guardians",
-        "teamId": 114,
-        "teamJa": "ガーディアンズ",
-        "w": 4,
-        "whip": "1.15",
-        "why": "150.1回はリーグ上位",
-        "whyEn": "League-best 150.1 IP",
-        "xera": 4.32
+        "why": "ERA3.05はリーグ上位 / 1.44得してる（xERA4.49）",
+        "whyEn": "League-best 3.05 ERA · lucky by 1.44 (xERA 4.49)",
+        "xera": 4.49
       },
       {
         "era": "4.18",
@@ -698,13 +698,13 @@
         "pct": {
           "era": 17,
           "hr9": 37,
-          "ip": 50,
+          "ip": 47,
           "kbb": 43,
           "whip": 17,
           "xera": 43
         },
         "rank": 23,
-        "score": 36.3,
+        "score": 35.7,
         "so": 117,
         "teamEn": "Seattle Mariners",
         "teamId": 136,
@@ -775,7 +775,7 @@
         "whip": "1.45",
         "why": "総合力で上位",
         "whyEn": "Solid all-around",
-        "xera": 3.89
+        "xera": 3.88
       },
       {
         "era": "3.60",
@@ -824,11 +824,11 @@
           "hr9": 0,
           "ip": 7,
           "kbb": 70,
-          "whip": 40,
-          "xera": 20
+          "whip": 43,
+          "xera": 23
         },
         "rank": 27,
-        "score": 29.5,
+        "score": 30.4,
         "so": 137,
         "teamEn": "Texas Rangers",
         "teamId": 140,
@@ -853,22 +853,22 @@
         "pct": {
           "era": 47,
           "hr9": 60,
-          "ip": 37,
+          "ip": 33,
           "kbb": 17,
           "whip": 10,
-          "xera": 17
+          "xera": 20
         },
         "rank": 28,
-        "score": 28.5,
+        "score": 28.3,
         "so": 129,
         "teamEn": "Baltimore Orioles",
         "teamId": 110,
         "teamJa": "オリオールズ",
         "w": 7,
         "whip": "1.38",
-        "why": "総合力で上位 / 0.56得してる（xERA4.26）",
-        "whyEn": "Solid all-around · lucky by 0.56 (xERA 4.26)",
-        "xera": 4.26
+        "why": "総合力で上位 / 0.55得してる（xERA4.25）",
+        "whyEn": "Solid all-around · lucky by 0.55 (xERA 4.25)",
+        "xera": 4.25
       },
       {
         "era": "4.71",
@@ -915,13 +915,13 @@
         "pct": {
           "era": 0,
           "hr9": 7,
-          "ip": 27,
+          "ip": 23,
           "kbb": 23,
           "whip": 0,
-          "xera": 33
+          "xera": 30
         },
         "rank": 30,
-        "score": 18.1,
+        "score": 16.7,
         "so": 129,
         "teamEn": "Tampa Bay Rays",
         "teamId": 139,
@@ -946,13 +946,13 @@
         "pct": {
           "era": 7,
           "hr9": 87,
-          "ip": 37,
+          "ip": 33,
           "kbb": 0,
           "whip": 7,
           "xera": 10
         },
         "rank": 31,
-        "score": 15.9,
+        "score": 15.1,
         "so": 111,
         "teamEn": "Detroit Tigers",
         "teamId": 116,
@@ -961,7 +961,7 @@
         "whip": "1.40",
         "why": "被弾の少なさはリーグ上位",
         "whyEn": "League-best HR suppression",
-        "xera": 4.44
+        "xera": 4.43
       }
     ],
     "NL": [
@@ -978,14 +978,14 @@
         "nameJa": "ミシオロウスキー",
         "pct": {
           "era": 100,
-          "hr9": 71,
-          "ip": 71,
+          "hr9": 70,
+          "ip": 70,
           "kbb": 100,
           "whip": 100,
           "xera": 100
         },
         "rank": 1,
-        "score": 92.8,
+        "score": 92.5,
         "so": 216,
         "teamEn": "Milwaukee Brewers",
         "teamId": 158,
@@ -994,7 +994,7 @@
         "whip": "0.76",
         "why": "ERA1.68・K-BB%33.3はリーグ上位",
         "whyEn": "League-best 1.68 ERA, 33.3% K-BB",
-        "xera": 1.99
+        "xera": 1.98
       },
       {
         "era": "3.35",
@@ -1008,15 +1008,15 @@
         "nameEn": "Jesús Luzardo",
         "nameJa": "ヘスス・ルザード",
         "pct": {
-          "era": 63,
-          "hr9": 71,
-          "ip": 92,
-          "kbb": 92,
-          "whip": 67,
+          "era": 61,
+          "hr9": 70,
+          "ip": 91,
+          "kbb": 91,
+          "whip": 65,
           "xera": 96
         },
         "rank": 2,
-        "score": 83.5,
+        "score": 82.4,
         "so": 194,
         "teamEn": "Philadelphia Phillies",
         "teamId": 143,
@@ -1039,15 +1039,15 @@
         "nameEn": "Cristopher Sánchez",
         "nameJa": "クリストファー・サンチェス",
         "pct": {
-          "era": 88,
+          "era": 87,
           "hr9": 83,
           "ip": 96,
           "kbb": 83,
-          "whip": 38,
-          "xera": 75
+          "whip": 35,
+          "xera": 74
         },
         "rank": 3,
-        "score": 80.5,
+        "score": 79.8,
         "so": 187,
         "teamEn": "Philadelphia Phillies",
         "teamId": 143,
@@ -1070,15 +1070,15 @@
         "nameEn": "Yoshinobu Yamamoto",
         "nameJa": "山本由伸",
         "pct": {
-          "era": 79,
-          "hr9": 63,
+          "era": 78,
+          "hr9": 61,
           "ip": 83,
-          "kbb": 67,
+          "kbb": 65,
           "whip": 96,
-          "xera": 88
+          "xera": 87
         },
         "rank": 4,
-        "score": 79.5,
+        "score": 78.5,
         "so": 145,
         "teamEn": "Los Angeles Dodgers",
         "teamId": 119,
@@ -1103,13 +1103,13 @@
         "pct": {
           "era": 96,
           "hr9": 100,
-          "ip": 13,
+          "ip": 9,
           "kbb": 96,
-          "whip": 92,
+          "whip": 91,
           "xera": 83
         },
         "rank": 5,
-        "score": 76.6,
+        "score": 75.7,
         "so": 166,
         "teamEn": "Atlanta Braves",
         "teamId": 144,
@@ -1132,23 +1132,23 @@
         "nameEn": "Chase Burns",
         "nameJa": "チェイス・バーンズ",
         "pct": {
-          "era": 88,
-          "hr9": 67,
-          "ip": 17,
-          "kbb": 75,
-          "whip": 75,
-          "xera": 88
+          "era": 87,
+          "hr9": 65,
+          "ip": 13,
+          "kbb": 74,
+          "whip": 74,
+          "xera": 87
         },
         "rank": 6,
-        "score": 68.2,
+        "score": 66.6,
         "so": 159,
         "teamEn": "Cincinnati Reds",
         "teamId": 113,
         "teamJa": "レッズ",
         "w": 14,
         "whip": "1.11",
-        "why": "ERA2.51・K-BB%20.3はリーグ上位",
-        "whyEn": "League-best 2.51 ERA, 20.3% K-BB",
+        "why": "ERA2.51はリーグ上位",
+        "whyEn": "League-best 2.51 ERA",
         "xera": 3.01
       },
       {
@@ -1163,15 +1163,15 @@
         "nameEn": "Braxton Ashcraft",
         "nameJa": "ブラクストン・アッシュクラフト",
         "pct": {
-          "era": 42,
-          "hr9": 21,
-          "ip": 79,
-          "kbb": 79,
-          "whip": 88,
-          "xera": 71
+          "era": 39,
+          "hr9": 17,
+          "ip": 78,
+          "kbb": 78,
+          "whip": 87,
+          "xera": 70
         },
         "rank": 7,
-        "score": 68,
+        "score": 66.4,
         "so": 159,
         "teamEn": "Pittsburgh Pirates",
         "teamId": 134,
@@ -1194,15 +1194,15 @@
         "nameEn": "Sandy Alcantara",
         "nameJa": "サンディ・アルカンタラ",
         "pct": {
-          "era": 54,
-          "hr9": 54,
+          "era": 52,
+          "hr9": 52,
           "ip": 100,
-          "kbb": 38,
-          "whip": 54,
-          "xera": 67
+          "kbb": 35,
+          "whip": 52,
+          "xera": 65
         },
         "rank": 8,
-        "score": 61.8,
+        "score": 60,
         "so": 131,
         "teamEn": "Miami Marlins",
         "teamId": 146,
@@ -1225,15 +1225,15 @@
         "nameEn": "Paul Skenes",
         "nameJa": "ポール・スキーンズ",
         "pct": {
-          "era": 25,
-          "hr9": 58,
-          "ip": 42,
-          "kbb": 88,
-          "whip": 71,
-          "xera": 79
+          "era": 22,
+          "hr9": 57,
+          "ip": 39,
+          "kbb": 87,
+          "whip": 70,
+          "xera": 78
         },
         "rank": 9,
-        "score": 61.2,
+        "score": 59.4,
         "so": 171,
         "teamEn": "Pittsburgh Pirates",
         "teamId": 134,
@@ -1256,15 +1256,15 @@
         "nameEn": "Nolan McLean",
         "nameJa": "ノーラン・マクリーン",
         "pct": {
-          "era": 67,
-          "hr9": 46,
-          "ip": 54,
-          "kbb": 58,
-          "whip": 63,
-          "xera": 63
+          "era": 65,
+          "hr9": 43,
+          "ip": 52,
+          "kbb": 57,
+          "whip": 61,
+          "xera": 61
         },
         "rank": 10,
-        "score": 59.9,
+        "score": 58.1,
         "so": 162,
         "teamEn": "New York Mets",
         "teamId": 121,
@@ -1287,15 +1287,15 @@
         "nameEn": "Cade Cavalli",
         "nameJa": "Cade Cavalli",
         "pct": {
-          "era": 71,
-          "hr9": 46,
-          "ip": 54,
-          "kbb": 71,
-          "whip": 38,
-          "xera": 46
+          "era": 70,
+          "hr9": 43,
+          "ip": 52,
+          "kbb": 70,
+          "whip": 35,
+          "xera": 43
         },
         "rank": 11,
-        "score": 58.1,
+        "score": 56.2,
         "so": 162,
         "teamEn": "Washington Nationals",
         "teamId": 120,
@@ -1318,15 +1318,15 @@
         "nameEn": "Shota Imanaga",
         "nameJa": "今永昇太",
         "pct": {
-          "era": 33,
+          "era": 30,
           "hr9": 4,
-          "ip": 63,
-          "kbb": 63,
+          "ip": 61,
+          "kbb": 61,
           "whip": 83,
-          "xera": 54
+          "xera": 52
         },
         "rank": 12,
-        "score": 54.3,
+        "score": 52.4,
         "so": 140,
         "teamEn": "Chicago Cubs",
         "teamId": 112,
@@ -1335,7 +1335,7 @@
         "whip": "1.09",
         "why": "WHIP1.09はリーグ上位",
         "whyEn": "League-best 1.09 WHIP",
-        "xera": 3.81
+        "xera": 3.8
       },
       {
         "era": "3.75",
@@ -1349,23 +1349,23 @@
         "nameEn": "Logan Webb",
         "nameJa": "ローガン・ウェブ",
         "pct": {
-          "era": 38,
+          "era": 35,
           "hr9": 96,
-          "ip": 50,
-          "kbb": 46,
-          "whip": 75,
-          "xera": 46
+          "ip": 48,
+          "kbb": 43,
+          "whip": 74,
+          "xera": 43
         },
         "rank": 13,
-        "score": 50.6,
+        "score": 48.2,
         "so": 112,
         "teamEn": "San Francisco Giants",
         "teamId": 137,
         "teamJa": "ジャイアンツ",
         "w": 8,
         "whip": "1.11",
-        "why": "被弾の少なさ・WHIP1.11はリーグ上位",
-        "whyEn": "League-best HR suppression, 1.11 WHIP",
+        "why": "被弾の少なさはリーグ上位",
+        "whyEn": "League-best HR suppression",
         "xera": 3.83
       },
       {
@@ -1380,15 +1380,15 @@
         "nameEn": "Eduardo Rodriguez",
         "nameJa": "エドゥアルド・ロドリゲス",
         "pct": {
-          "era": 79,
-          "hr9": 71,
-          "ip": 88,
-          "kbb": 13,
-          "whip": 46,
-          "xera": 17
+          "era": 78,
+          "hr9": 70,
+          "ip": 87,
+          "kbb": 9,
+          "whip": 43,
+          "xera": 13
         },
         "rank": 14,
-        "score": 48.2,
+        "score": 45.7,
         "so": 110,
         "teamEn": "Arizona Diamondbacks",
         "teamId": 109,
@@ -1411,24 +1411,24 @@
         "nameEn": "Michael King",
         "nameJa": "マイケル・キング",
         "pct": {
-          "era": 58,
-          "hr9": 42,
-          "ip": 75,
-          "kbb": 29,
-          "whip": 58,
-          "xera": 25
+          "era": 57,
+          "hr9": 39,
+          "ip": 74,
+          "kbb": 26,
+          "whip": 57,
+          "xera": 22
         },
         "rank": 15,
-        "score": 46.8,
+        "score": 44.8,
         "so": 128,
         "teamEn": "San Diego Padres",
         "teamId": 135,
         "teamJa": "パドレス",
         "w": 8,
         "whip": "1.17",
-        "why": "149.0回はリーグ上位 / 0.97得してる（xERA4.35）",
-        "whyEn": "League-best 149.0 IP · lucky by 0.97 (xERA 4.35)",
-        "xera": 4.35
+        "why": "総合力で上位 / 0.96得してる（xERA4.34）",
+        "whyEn": "Solid all-around · lucky by 0.96 (xERA 4.34)",
+        "xera": 4.34
       },
       {
         "era": "4.58",
@@ -1442,24 +1442,24 @@
         "nameEn": "Kevin Gausman",
         "nameJa": "ケビン・ガウスマン",
         "pct": {
-          "era": 13,
-          "hr9": 38,
-          "ip": 63,
-          "kbb": 54,
-          "whip": 25,
-          "xera": 33
+          "era": 9,
+          "hr9": 35,
+          "ip": 61,
+          "kbb": 52,
+          "whip": 22,
+          "xera": 30
         },
         "rank": 16,
-        "score": 39.7,
+        "score": 37,
         "so": 143,
         "teamEn": "Chicago Cubs",
         "teamId": 112,
         "teamJa": "カブス",
         "w": 6,
         "whip": "1.30",
-        "why": "総合力で上位 / 0.55損してる（xERA4.03）",
-        "whyEn": "Solid all-around · unlucky by 0.55 (xERA 4.03)",
-        "xera": 4.03
+        "why": "総合力で上位 / 0.56損してる（xERA4.02）",
+        "whyEn": "Solid all-around · unlucky by 0.56 (xERA 4.02)",
+        "xera": 4.02
       },
       {
         "era": "3.92",
@@ -1473,15 +1473,15 @@
         "nameEn": "Bryce Elder",
         "nameJa": "ブライス・エルダー",
         "pct": {
-          "era": 29,
-          "hr9": 17,
-          "ip": 33,
-          "kbb": 42,
-          "whip": 33,
-          "xera": 33
+          "era": 26,
+          "hr9": 13,
+          "ip": 30,
+          "kbb": 39,
+          "whip": 30,
+          "xera": 30
         },
         "rank": 17,
-        "score": 33.7,
+        "score": 30.6,
         "so": 113,
         "teamEn": "Atlanta Braves",
         "teamId": 144,
@@ -1490,7 +1490,7 @@
         "whip": "1.23",
         "why": "総合力で上位",
         "whyEn": "Solid all-around",
-        "xera": 4.03
+        "xera": 4.02
       },
       {
         "era": "3.57",
@@ -1504,15 +1504,15 @@
         "nameEn": "Andre Pallante",
         "nameJa": "アンドレ・パランテ",
         "pct": {
-          "era": 46,
-          "hr9": 92,
-          "ip": 17,
-          "kbb": 17,
-          "whip": 29,
-          "xera": 42
+          "era": 43,
+          "hr9": 91,
+          "ip": 13,
+          "kbb": 13,
+          "whip": 26,
+          "xera": 39
         },
         "rank": 18,
-        "score": 32.8,
+        "score": 29.4,
         "so": 97,
         "teamEn": "St. Louis Cardinals",
         "teamId": 138,
@@ -1521,7 +1521,7 @@
         "whip": "1.24",
         "why": "被弾の少なさはリーグ上位",
         "whyEn": "League-best HR suppression",
-        "xera": 3.89
+        "xera": 3.88
       },
       {
         "era": "4.34",
@@ -1535,15 +1535,15 @@
         "nameEn": "Landen Roupp",
         "nameJa": "ランデン・ラウプ",
         "pct": {
-          "era": 17,
-          "hr9": 88,
-          "ip": 8,
-          "kbb": 33,
-          "whip": 17,
-          "xera": 58
+          "era": 13,
+          "hr9": 87,
+          "ip": 4,
+          "kbb": 30,
+          "whip": 13,
+          "xera": 57
         },
         "rank": 19,
-        "score": 31,
+        "score": 28,
         "so": 130,
         "teamEn": "San Francisco Giants",
         "teamId": 137,
@@ -1566,23 +1566,23 @@
         "nameEn": "Robbie Ray",
         "nameJa": "ロビー・レイ",
         "pct": {
-          "era": 75,
-          "hr9": 25,
-          "ip": 33,
-          "kbb": 8,
-          "whip": 17,
-          "xera": 17
+          "era": 74,
+          "hr9": 22,
+          "ip": 30,
+          "kbb": 4,
+          "whip": 13,
+          "xera": 13
         },
         "rank": 20,
-        "score": 30,
+        "score": 26.8,
         "so": 117,
         "teamEn": "San Diego Padres",
         "teamId": 135,
         "teamJa": "パドレス",
         "w": 11,
         "whip": "1.31",
-        "why": "ERA3.20はリーグ上位 / 1.39得してる（xERA4.59）",
-        "whyEn": "League-best 3.20 ERA · lucky by 1.39 (xERA 4.59)",
+        "why": "総合力で上位 / 1.39得してる（xERA4.59）",
+        "whyEn": "Solid all-around · lucky by 1.39 (xERA 4.59)",
         "xera": 4.59
       },
       {
@@ -1597,24 +1597,24 @@
         "nameEn": "Michael McGreevy",
         "nameJa": "マイケル・マグリービー",
         "pct": {
-          "era": 50,
-          "hr9": 25,
-          "ip": 29,
-          "kbb": 21,
-          "whip": 46,
-          "xera": 4
+          "era": 48,
+          "hr9": 22,
+          "ip": 26,
+          "kbb": 17,
+          "whip": 43,
+          "xera": 0
         },
         "rank": 21,
-        "score": 27.7,
+        "score": 24.5,
         "so": 95,
         "teamEn": "St. Louis Cardinals",
         "teamId": 138,
         "teamJa": "カージナルス",
         "w": 5,
         "whip": "1.21",
-        "why": "総合力で上位 / 1.78得してる（xERA5.32）",
-        "whyEn": "Solid all-around · lucky by 1.78 (xERA 5.32)",
-        "xera": 5.32
+        "why": "総合力で上位 / 1.77得してる（xERA5.31）",
+        "whyEn": "Solid all-around · lucky by 1.77 (xERA 5.31)",
+        "xera": 5.31
       },
       {
         "era": "5.12",
@@ -1628,15 +1628,15 @@
         "nameEn": "Aaron Nola",
         "nameJa": "Aaron Nola",
         "pct": {
-          "era": 4,
+          "era": 0,
           "hr9": 0,
-          "ip": 25,
-          "kbb": 50,
-          "whip": 4,
-          "xera": 29
+          "ip": 22,
+          "kbb": 48,
+          "whip": 0,
+          "xera": 26
         },
         "rank": 22,
-        "score": 24.5,
+        "score": 21.6,
         "so": 146,
         "teamEn": "Philadelphia Phillies",
         "teamId": 143,
@@ -1659,15 +1659,15 @@
         "nameEn": "Andrew Abbott",
         "nameJa": "アンドリュー・アボット",
         "pct": {
-          "era": 21,
-          "hr9": 33,
-          "ip": 46,
-          "kbb": 4,
-          "whip": 13,
-          "xera": 13
+          "era": 17,
+          "hr9": 30,
+          "ip": 43,
+          "kbb": 0,
+          "whip": 9,
+          "xera": 9
         },
         "rank": 23,
-        "score": 20,
+        "score": 16.2,
         "so": 108,
         "teamEn": "Cincinnati Reds",
         "teamId": 113,
@@ -1690,15 +1690,15 @@
         "nameEn": "Brady Singer",
         "nameJa": "Brady Singer",
         "pct": {
-          "era": 8,
-          "hr9": 13,
-          "ip": 4,
-          "kbb": 25,
-          "whip": 4,
-          "xera": 8
+          "era": 4,
+          "hr9": 9,
+          "ip": 0,
+          "kbb": 22,
+          "whip": 0,
+          "xera": 4
         },
         "rank": 24,
-        "score": 11.3,
+        "score": 7.6,
         "so": 107,
         "teamEn": "Cincinnati Reds",
         "teamId": 113,
@@ -1708,41 +1708,10 @@
         "why": "総合力で上位",
         "whyEn": "Solid all-around",
         "xera": 5.04
-      },
-      {
-        "era": "5.37",
-        "hr9": 1.81,
-        "id": 518876,
-        "ipDisp": "129.0",
-        "isJp": false,
-        "kbbPct": 4.8,
-        "l": 11,
-        "league": "NL",
-        "nameEn": "Merrill Kelly",
-        "nameJa": "Merrill Kelly",
-        "pct": {
-          "era": 0,
-          "hr9": 8,
-          "ip": 0,
-          "kbb": 0,
-          "whip": 0,
-          "xera": 0
-        },
-        "rank": 25,
-        "score": 0.4,
-        "so": 84,
-        "teamEn": "Arizona Diamondbacks",
-        "teamId": 109,
-        "teamJa": "ダイヤモンドバックス",
-        "w": 8,
-        "whip": "1.52",
-        "why": "総合力で上位 / 1.86得してる（xERA7.23）",
-        "whyEn": "Solid all-around · lucky by 1.86 (xERA 7.23)",
-        "xera": 7.23
       }
     ]
   },
-  "qualifyIp": 129,
+  "qualifyIp": 130.3,
   "season": 2026,
   "watch": [
     {
@@ -1751,7 +1720,7 @@
       "hr9": 1.63,
       "id": 808963,
       "ipDisp": "116.0",
-      "ipGap": 13,
+      "ipGap": 15,
       "kbbPct": 13.8,
       "league": "NL",
       "nameJa": "佐々木朗希",
@@ -1760,7 +1729,7 @@
       "teamId": 119,
       "teamJa": "ドジャース",
       "whip": "1.30",
-      "xera": 4.23
+      "xera": 4.22
     },
     {
       "era": "4.70",
@@ -1768,7 +1737,7 @@
       "hr9": 1.97,
       "id": 608372,
       "ipDisp": "118.2",
-      "ipGap": 11,
+      "ipGap": 12,
       "kbbPct": 8.4,
       "league": "NL",
       "nameJa": "菅野智之",
