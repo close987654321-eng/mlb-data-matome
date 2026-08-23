@@ -58,6 +58,7 @@ GA4_PROPERTY_ID=541564295 GSC_SITE=sc-domain:matome-anime-kaigai.jp node scripts
 ```bash
 node scripts/check-dead-videos.mjs
 node scripts/check-affiliate-links.mjs
+node scripts/fetch-game-voices.mjs refresh-season   # 今季の声を取り直す（生存確認＋票数更新）
 ```
 
 公開後に元動画が YouTube から消えると、記事の埋め込みか出典（送客先）が壊れる。放置すると
@@ -72,6 +73,11 @@ node scripts/check-affiliate-links.mjs
   その場合は**このステップだけ飛ばして先へ進む**＝KPI ダイジェスト自体は落とさない
 - 2号店は revenue-weekly（土曜・ローカル）の Step 4 が同じ検査を担当する。ここで二重に回さない
   （このルーティンのチェックアウトに 2号店のリポジトリは無い）
+
+**今季の声の取り直し**（`fetch-game-voices.mjs refresh-season`）も毎週ここで回す。窓の中の声は毎日の
+入れ替えで自然に取り直されるが、`data/season-voices.json` に昇格したぶんは動かない＝**保存したデータは
+定期的に更新するか削除する**という YouTube API 規約の要求に応える手当て（消えたコメント・動画は落ち、
+票数は最新に更新される）。消費は保存件数ぶんのユニット（100件強＝無料枠の1%）。差分が出たらコミットする。
 
 **アフィリンクの死活**（`check-affiliate-links.mjs`）も同じ理由で毎週見る。ASP は提携終了・広告停止を
 通知してこないので、貼ったリンクは黙って死ぬ。2026-08-20 に**もしも経由のスカパー!リンクが 404

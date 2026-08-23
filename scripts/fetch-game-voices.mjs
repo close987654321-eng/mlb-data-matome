@@ -16,11 +16,14 @@
  * YouTube API 規約への配慮:
  *   1試合につき**1件だけ**（コメントDBにしない）。書き出し時に data/team-games.json の窓
  *   （直近30日）の外へ出たエントリを落とす＝保存期間もタイムラインの窓と一致する。
+ *   落とす直前に球団あたり SEASON_KEEP_PER_TEAM 件だけを data/season-voices.json へ昇格させる
+ *   （オフシーズンのLPの燃料。上限つき＝増え続けない・refresh-season で毎月取り直す）。
  *
  * 使い方:
  *   node scripts/fetch-game-voices.mjs                 # team-games.json の最新日
  *   node scripts/fetch-game-voices.mjs 2026-08-05      # 日付指定
  *   node scripts/fetch-game-voices.mjs 2026-07-20..2026-08-06   # 期間（バックフィル）
+ *   node scripts/fetch-game-voices.mjs refresh-season  # 今季の声を取り直す（月1・規約の「更新か削除」）
  *   オプション: --dry-run（書かない） --limit N（1回に取る試合数の上限・既定40）
  *
  * 消費ユニット: playlistItems（50本/1ユニット）＋ commentThreads（1試合1ユニット）。
@@ -34,6 +37,16 @@ const API_BASE = 'https://www.googleapis.com/youtube/v3';
 const MLB_CHANNEL = 'UCoLrcjPV5PbUrUyXq5mjc_A';
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, 'data', 'game-voices.json');
+const SEASON_OUT = path.join(ROOT, 'data', 'season-voices.json');
+
+/**
+ * 窓（直近30日）から落ちる声のうち、球団ごとにここまでを「今季の声」として残す。
+ *
+ * なぜ上限つきか: 全部貯めると機械的なコメントDBになり、規約に配慮して置いた
+ * 「保存期間＝タイムラインの窓」の posture が崩れる。残すのは記事の抜粋と同じ扱い
+ * ＝訳と出典（動画への送客）が付いた編集物だけ・球団あたりの点数を固定して増え続けない形にする。
+ */
+const SEASON_KEEP_PER_TEAM = 6;
 
 /* ---------------------------------------------------------------- 共通ヘルパ */
 
@@ -270,11 +283,111 @@ async function pickComment(key, videoId, usedBodies) {
   return cands[0] ?? null;
 }
 
+/* ------------------------------------------------- 今季の声（窓から落ちるぶんの退避） */
+
+const seasonKey = (v) => `${v.d}|${v.a}|${v.h}`;
+
+/**
+ * 窓から落ちる声を「今季の声」（data/season-voices.json）へ昇格させる。
+ *
+ * なぜ要るか: 11月〜2月中旬は試合が無い＝窓が転がるだけで声レイヤーは空になり、チーム・選手LPの
+ * 「現地ファンの声ピックアップ」がオフシーズンに全滅する（記事由来の声だけが残る＝2026-08-20 に
+ * 直したはずの「LPの先頭が何週間も動かない」状態への逆戻り）。訳は人が付けた資産でもある。
+ *
+ * 選び方: 訳の付いたものだけを対象に、球団ごとに票数の多い順で SEASON_KEEP_PER_TEAM 件まで。
+ * 1件の声は2球団の試合なのでどちらの枠でも拾われうる＝和集合を取ってから試合キーで重複を落とす。
+ * 既に昇格済みのぶんも毎回この選抜に混ぜる＝上限を超えて増えず、票数の高い声に入れ替わっていく。
+ */
+function promoteSeasonVoices(prevSeason, fellOut) {
+  const byKey = new Map();
+  for (const v of [...prevSeason, ...fellOut.filter((v) => v.ja?.trim())]) byKey.set(seasonKey(v), v);
+  const uniq = [...byKey.values()];
+  const keep = new Set();
+  for (const teamId of new Set(uniq.flatMap((v) => [v.a, v.h]))) {
+    const mine = uniq
+      .filter((v) => v.a === teamId || v.h === teamId)
+      .sort((x, y) => y.score - x.score || y.d.localeCompare(x.d));
+    for (const v of mine.slice(0, SEASON_KEEP_PER_TEAM)) keep.add(seasonKey(v));
+  }
+  return uniq
+    .filter((v) => keep.has(seasonKey(v)))
+    .sort((x, y) => y.d.localeCompare(x.d) || x.a - y.a || x.h - y.h);
+}
+
+/** 「今季の声」を書く（中身が同じなら asOf を据え置く＝毎日の無駄な差分を出さない）。 */
+function writeSeasonFile(voices, prevFile, extra = {}) {
+  const content = { voices };
+  let asOf = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+  const { asOf: prevAsOf, refreshedAt: prevRefreshed, ...prevRest } = prevFile;
+  if (stableStringify(prevRest) === stableStringify(content)) asOf = prevAsOf || asOf;
+  const refreshedAt = extra.refreshedAt ?? prevRefreshed;
+  writeFileSync(
+    SEASON_OUT,
+    `${stableStringify({ asOf, ...(refreshedAt ? { refreshedAt } : {}), ...content })}\n`,
+  );
+}
+
+/**
+ * 保存した「今季の声」を YouTube に取り直して、更新するか落とす（月1回）。
+ *
+ * 窓の中の声は毎日の入れ替えで自然に取り直されるが、昇格させたぶんは動かない。ここで動画と
+ * コメントの生存を確かめ、消えていれば落とす（票数は最新に更新）＝保存するなら定期的に
+ * 更新か削除、という規約の要求に正面から応える。出典が消えた引用をLPに出し続けないための
+ * 手当てでもある（記事側の check-dead-videos.mjs と同じ役割）。
+ *
+ * 上位100件に見つからなければ落とす＝生きている声を巻き込むことはあるが、保存を続けるより安全側に倒す。
+ */
+async function refreshSeason(dryRun) {
+  const key = loadApiKey();
+  const prevFile = readJson(SEASON_OUT, null);
+  if (!prevFile) throw new Error(`${path.relative(ROOT, SEASON_OUT)} が無い（先に通常実行で昇格させる）`);
+  const alive = [];
+  let gone = 0;
+  let rescored = 0;
+  for (const v of prevFile.voices) {
+    let items;
+    try {
+      const data = await api(key, 'commentThreads', {
+        part: 'snippet',
+        videoId: v.v,
+        order: 'relevance',
+        maxResults: 100,
+        textFormat: 'plainText',
+      });
+      items = data.items ?? [];
+    } catch (e) {
+      console.error(`  × ${v.d} ${v.author}: 動画が引けない（${e.message.slice(0, 60)}）`);
+      gone++;
+      continue;
+    }
+    const hit = items
+      .map((it) => it.snippet?.topLevelComment?.snippet)
+      .find((sn) => sn && sn.authorDisplayName === v.author && usableComment(sn.textDisplay) === v.en);
+    if (!hit) {
+      console.error(`  × ${v.d} ${v.author}: コメントが見つからない`);
+      gone++;
+      continue;
+    }
+    const score = hit.likeCount ?? v.score;
+    if (score !== v.score) rescored++;
+    alive.push({ ...v, score });
+  }
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
+  console.error(
+    `今季の声 ${prevFile.voices.length}件を再取得: 生存 ${alive.length}／消滅 ${gone}／票数更新 ${rescored}` +
+      `・消費 約${prevFile.voices.length}ユニット`,
+  );
+  if (dryRun) return console.error('--dry-run なので書き込みなし');
+  writeSeasonFile(alive, prevFile, { refreshedAt: today });
+  console.error(`書き込み: ${path.relative(ROOT, SEASON_OUT)}`);
+}
+
 /* ---------------------------------------------------------------------- 本体 */
 
 async function main() {
   const args = process.argv.slice(2);
   const dryRun = args.includes('--dry-run');
+  if (args[0] === 'refresh-season') return refreshSeason(dryRun);
   const limitArg = args.indexOf('--limit');
   const limit = limitArg >= 0 ? Number(args[limitArg + 1]) : 40;
   const range = args.find((a) => /^\d{4}-\d{2}-\d{2}/.test(a));
@@ -378,11 +491,15 @@ async function main() {
   }
 
   // 窓（team-games.json の期間）の外に出たエントリは落とす＝保存期間をタイムラインと一致させる。
+  // ただし落とす直前に、球団あたり上限つきで「今季の声」へ昇格させる（オフシーズンのLPの燃料）。
   const kept = prev.voices.filter((v) => v.d >= schedule.from);
-  const dropped = prev.voices.length - kept.length;
+  const fellOut = prev.voices.filter((v) => v.d < schedule.from);
   const voices = [...kept, ...added].sort(
     (x, y) => y.d.localeCompare(x.d) || x.a - y.a || x.h - y.h,
   );
+  const prevSeasonFile = readJson(SEASON_OUT, { voices: [] });
+  const seasonVoices = promoteSeasonVoices(prevSeasonFile.voices ?? [], fellOut);
+  const promoted = seasonVoices.length - (prevSeasonFile.voices ?? []).length;
 
   const content = { from: schedule.from, to: schedule.to, voices };
   let asOf = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date());
@@ -391,7 +508,8 @@ async function main() {
 
   console.error(
     `\n新規 ${added.length}／動画なし ${noVideo}／コメントなし ${noComment}` +
-      `／窓外で削除 ${dropped}／合計 ${voices.length}件・消費 約${units}ユニット`,
+      `／窓外へ ${fellOut.length}（うち今季の声へ昇格 ${promoted > 0 ? `+${promoted}` : 0}）` +
+      `／合計 ${voices.length}件・今季の声 ${seasonVoices.length}件・消費 約${units}ユニット`,
   );
   const untranslated = voices.filter((v) => !v.ja.trim()).length;
   if (untranslated) console.error(`⚠️ 未訳 ${untranslated}件（ja が空のあいだサイトには出ない）`);
@@ -401,7 +519,10 @@ async function main() {
     return;
   }
   writeFileSync(OUT, `${stableStringify({ asOf, ...content })}\n`);
-  console.error(`書き込み: ${path.relative(ROOT, OUT)}`);
+  writeSeasonFile(seasonVoices, prevSeasonFile);
+  console.error(
+    `書き込み: ${path.relative(ROOT, OUT)} / ${path.relative(ROOT, SEASON_OUT)}`,
+  );
 }
 
 main().catch((e) => {

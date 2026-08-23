@@ -27,25 +27,47 @@ export type GameVoice = {
   ja: string; // 日本語訳（ここだけ後から埋める）
 };
 
-type GameVoiceFile = { asOf: string; from: string; to: string; voices: GameVoice[] };
+type GameVoiceFile = { asOf: string; from?: string; to?: string; voices: GameVoice[] };
 
 const FILE = path.join(process.cwd(), 'data', 'game-voices.json');
 
+/**
+ * 窓（直近30日）から落ちるときに、球団あたり上限つきで昇格させた「今季の声」。
+ *
+ * なぜ2本立てか: 声レイヤーは直近30日の窓で回っているので、**試合が無い期間は空になる**
+ * （11月〜2月中旬＝オフシーズンはLPの声ピックアップが記事由来だけに痩せる）。窓から落ちる前に
+ * 選抜したぶんをここに退避し、同じ形で混ぜて返す。日付降順で使われるので、シーズン中は窓の声が
+ * 常に上に来て表示は変わらない＝オフに入ったときだけ自動的に燃料になる。
+ * 中身の作られ方・上限・月1の取り直しは scripts/fetch-game-voices.mjs（SEASON_KEEP_PER_TEAM）。
+ */
+const SEASON_FILE = path.join(process.cwd(), 'data', 'season-voices.json');
+
 let cache: GameVoice[] | null = null;
 
+async function readVoices(file: string): Promise<GameVoice[]> {
+  try {
+    const parsed = JSON.parse(await fs.readFile(file, 'utf8')) as GameVoiceFile;
+    return parsed.voices ?? [];
+  } catch {
+    return []; // 未生成でもビルドは通す（声が無いタイムラインになるだけ）
+  }
+}
+
 /**
- * 訳が付いたものだけを返す。
+ * 訳が付いたものだけを返す（窓の声＋今季の声）。
  *
  * `ja` が空のエントリはスクリプトが取ってきたばかりの未訳＝**サイトに出さない**。
  * 「取得は自動・翻訳は後追い」の運用で、訳の付いていない英文がそのまま公開されるのを防ぐ安全弁。
  */
 export async function getGameVoices(): Promise<GameVoice[]> {
   if (cache) return cache;
-  try {
-    const file = JSON.parse(await fs.readFile(FILE, 'utf8')) as GameVoiceFile;
-    cache = (file.voices ?? []).filter((v) => v.ja?.trim());
-  } catch {
-    cache = []; // 未生成でもビルドは通す（声が無いタイムラインになるだけ）
+  const [window, season] = await Promise.all([readVoices(FILE), readVoices(SEASON_FILE)]);
+  const byGame = new Map<string, GameVoice>();
+  // 窓の声を先に入れる＝同じ試合が両方にあれば新しい取得結果（票数が最新）を残す
+  for (const v of [...window, ...season]) {
+    const key = `${v.d}|${v.a}|${v.h}`;
+    if (!byGame.has(key)) byGame.set(key, v);
   }
+  cache = [...byGame.values()].filter((v) => v.ja?.trim());
   return cache;
 }
