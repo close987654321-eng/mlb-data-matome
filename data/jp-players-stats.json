@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-08-23 12:17",
+  "asOf": "2026-08-23 13:54",
   "players": {
     "500743": {
       "fielding": {
@@ -11,8 +11,10 @@
         "gamesPlayed": 36,
         "gamesStarted": 25,
         "innings": "223.1",
+        "oaa": 3,
         "position": "二塁",
-        "putOuts": 39
+        "putOuts": 39,
+        "runsPrevented": 2
       },
       "hitting": {
         "atBats": 174,
@@ -76,8 +78,10 @@
         "gamesPlayed": 126,
         "gamesStarted": 126,
         "innings": "1072.2",
+        "oaa": 2,
         "position": "一塁",
-        "putOuts": 854
+        "putOuts": 854,
+        "runsPrevented": 2
       },
       "hitting": {
         "atBats": 476,
@@ -238,8 +242,10 @@
         "gamesPlayed": 118,
         "gamesStarted": 108,
         "innings": "945.0",
+        "oaa": 3,
         "position": "三塁",
-        "putOuts": 83
+        "putOuts": 83,
+        "runsPrevented": 2
       },
       "hitting": {
         "atBats": 392,
@@ -368,8 +374,10 @@
         "gamesPlayed": 53,
         "gamesStarted": 53,
         "innings": "458.1",
+        "oaa": -2,
         "position": "右翼",
-        "putOuts": 103
+        "putOuts": 103,
+        "runsPrevented": -2
       },
       "hitting": {
         "atBats": 214,
@@ -431,8 +439,10 @@
         "gamesPlayed": 92,
         "gamesStarted": 90,
         "innings": "791.2",
+        "oaa": 8,
         "position": "遊撃",
-        "putOuts": 97
+        "putOuts": 97,
+        "runsPrevented": 6
       },
       "hitting": {
         "atBats": 360,
@@ -493,8 +503,10 @@
         "gamesPlayed": 90,
         "gamesStarted": 88,
         "innings": "749.1",
+        "oaa": -4,
         "position": "左翼",
-        "putOuts": 136
+        "putOuts": 136,
+        "runsPrevented": -4
       },
       "hitting": {
         "atBats": 332,
@@ -617,8 +629,10 @@
         "gamesPlayed": 130,
         "gamesStarted": 130,
         "innings": "1146.0",
+        "oaa": 7,
         "position": "一塁",
-        "putOuts": 934
+        "putOuts": 934,
+        "runsPrevented": 5
       },
       "hitting": {
         "atBats": 503,
@@ -772,8 +786,10 @@
         "gamesPlayed": 5,
         "gamesStarted": 3,
         "innings": "25.0",
+        "oaa": -1,
         "position": "一塁",
-        "putOuts": 12
+        "putOuts": 12,
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 461,
@@ -988,8 +1004,10 @@
         "gamesPlayed": 44,
         "gamesStarted": 36,
         "innings": "329.1",
+        "oaa": 1,
         "position": "左翼",
-        "putOuts": 88
+        "putOuts": 88,
+        "runsPrevented": 1
       },
       "hitting": {
         "atBats": 200,
@@ -1040,8 +1058,10 @@
         "gamesPlayed": 121,
         "gamesStarted": 118,
         "innings": "1038.2",
+        "oaa": -9,
         "position": "右翼",
-        "putOuts": 215
+        "putOuts": 215,
+        "runsPrevented": -8
       },
       "hitting": {
         "atBats": 435,
@@ -1127,8 +1147,10 @@
         "gamesPlayed": 51,
         "gamesStarted": 51,
         "innings": "439.0",
+        "oaa": -2,
         "position": "左翼",
-        "putOuts": 104
+        "putOuts": 104,
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 293,
@@ -1197,8 +1219,10 @@
         "gamesPlayed": 35,
         "gamesStarted": 30,
         "innings": "270.1",
+        "oaa": 3,
         "position": "二塁",
-        "putOuts": 42
+        "putOuts": 42,
+        "runsPrevented": 2
       },
       "hitting": {
         "atBats": 178,
@@ -1288,8 +1312,10 @@
         "gamesPlayed": 114,
         "gamesStarted": 110,
         "innings": "983.0",
+        "oaa": -3,
         "position": "三塁",
-        "putOuts": 64
+        "putOuts": 64,
+        "runsPrevented": -2
       },
       "hitting": {
         "atBats": 466,
@@ -1466,8 +1492,10 @@
         "gamesPlayed": 85,
         "gamesStarted": 84,
         "innings": "741.2",
+        "oaa": 4,
         "position": "右翼",
-        "putOuts": 182
+        "putOuts": 182,
+        "runsPrevented": 4
       },
       "hitting": {
         "atBats": 427,
@@ -1552,8 +1580,10 @@
         "gamesPlayed": 109,
         "gamesStarted": 109,
         "innings": "943.0",
+        "oaa": 23,
         "position": "遊撃",
-        "putOuts": 138
+        "putOuts": 138,
+        "runsPrevented": 17
       },
       "hitting": {
         "atBats": 438,
@@ -1644,8 +1674,10 @@
         "gamesPlayed": 109,
         "gamesStarted": 100,
         "innings": "885.1",
+        "oaa": -5,
         "position": "三塁",
-        "putOuts": 82
+        "putOuts": 82,
+        "runsPrevented": -3
       },
       "hitting": {
         "atBats": 470,
@@ -1692,7 +1724,7 @@
           },
           "obp": {
             "lg": 19,
-            "mlb": 36
+            "mlb": 37
           },
           "ops": {
             "lg": 8,
@@ -1795,8 +1827,10 @@
         "gamesPlayed": 126,
         "gamesStarted": 125,
         "innings": "1096.2",
+        "oaa": 9,
         "position": "中堅",
-        "putOuts": 338
+        "putOuts": 338,
+        "runsPrevented": 8
       },
       "hitting": {
         "atBats": 493,
@@ -1889,8 +1923,10 @@
         "gamesPlayed": 117,
         "gamesStarted": 116,
         "innings": "1022.0",
+        "oaa": -17,
         "position": "遊撃",
-        "putOuts": 168
+        "putOuts": 168,
+        "runsPrevented": -13
       },
       "hitting": {
         "atBats": 470,
@@ -1983,8 +2019,10 @@
         "gamesPlayed": 123,
         "gamesStarted": 123,
         "innings": "1061.1",
+        "oaa": 10,
         "position": "右翼",
-        "putOuts": 285
+        "putOuts": 285,
+        "runsPrevented": 9
       },
       "hitting": {
         "atBats": 472,
@@ -2146,8 +2184,10 @@
         "gamesPlayed": 59,
         "gamesStarted": 54,
         "innings": "472.1",
+        "oaa": -1,
         "position": "捕手",
-        "putOuts": 482
+        "putOuts": 482,
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 217,
@@ -2195,8 +2235,10 @@
         "gamesPlayed": 126,
         "gamesStarted": 125,
         "innings": "1102.0",
+        "oaa": 23,
         "position": "中堅",
-        "putOuts": 336
+        "putOuts": 336,
+        "runsPrevented": 20
       },
       "hitting": {
         "atBats": 495,
@@ -2425,34 +2467,34 @@
         "doublePlays": 0,
         "errors": 1,
         "fielding": ".857",
-        "gamesPlayed": 51,
+        "gamesPlayed": 52,
         "gamesStarted": 0,
-        "innings": "53.1",
+        "innings": "54.1",
         "position": "投手",
         "putOuts": 4
       },
       "hitting": null,
       "league": "NL",
       "pitching": {
-        "avg": ".133",
+        "avg": ".131",
         "baseOnBalls": 19,
         "earnedRuns": 5,
-        "era": "0.84",
-        "gamesPlayed": 51,
+        "era": "0.83",
+        "gamesPlayed": 52,
         "gamesStarted": 0,
         "hits": 24,
         "holds": 0,
         "homeRuns": 0,
         "homeRunsPer9": "0.00",
-        "inningsPitched": "53.1",
+        "inningsPitched": "54.1",
         "losses": 1,
         "runs": 7,
-        "saves": 31,
-        "strikeOuts": 98,
-        "strikeoutWalkRatio": "5.16",
-        "strikeoutsPer9Inn": "16.54",
-        "walksPer9Inn": "3.21",
-        "whip": "0.81",
+        "saves": 32,
+        "strikeOuts": 99,
+        "strikeoutWalkRatio": "5.21",
+        "strikeoutsPer9Inn": "16.40",
+        "walksPer9Inn": "3.15",
+        "whip": "0.79",
         "winPercentage": ".800",
         "wins": 4
       },
@@ -2463,8 +2505,8 @@
             "mlb": 4
           },
           "strikeOuts": {
-            "lg": 45,
-            "mlb": 92
+            "lg": 44,
+            "mlb": 89
           },
           "wins": {
             "lg": 86
@@ -2486,8 +2528,10 @@
         "gamesPlayed": 81,
         "gamesStarted": 75,
         "innings": "656.0",
+        "oaa": -6,
         "position": "右翼",
-        "putOuts": 150
+        "putOuts": 150,
+        "runsPrevented": -6
       },
       "hitting": {
         "atBats": 437,
@@ -2579,8 +2623,10 @@
         "gamesPlayed": 55,
         "gamesStarted": 52,
         "innings": "465.2",
+        "oaa": -6,
         "position": "一塁",
-        "putOuts": 416
+        "putOuts": 416,
+        "runsPrevented": -5
       },
       "hitting": {
         "atBats": 460,
@@ -2669,8 +2715,10 @@
         "gamesPlayed": 94,
         "gamesStarted": 94,
         "innings": "822.0",
+        "oaa": -3,
         "position": "一塁",
-        "putOuts": 647
+        "putOuts": 647,
+        "runsPrevented": -2
       },
       "hitting": {
         "atBats": 352,
@@ -2758,8 +2806,10 @@
         "gamesPlayed": 11,
         "gamesStarted": 9,
         "innings": "69.0",
+        "oaa": -1,
         "position": "右翼",
-        "putOuts": 22
+        "putOuts": 22,
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 29,
@@ -2799,8 +2849,10 @@
         "gamesPlayed": 7,
         "gamesStarted": 5,
         "innings": "46.0",
+        "oaa": -3,
         "position": "左翼",
-        "putOuts": 10
+        "putOuts": 10,
+        "runsPrevented": -2
       },
       "hitting": {
         "atBats": 263,
@@ -2857,8 +2909,10 @@
         "gamesPlayed": 86,
         "gamesStarted": 85,
         "innings": "753.0",
+        "oaa": 0,
         "position": "一塁",
-        "putOuts": 637
+        "putOuts": 637,
+        "runsPrevented": 0
       },
       "hitting": {
         "atBats": 338,
