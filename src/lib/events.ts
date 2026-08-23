@@ -223,18 +223,185 @@ export const EVENTS: FightEvent[] = [
     updatedAt: '2026-08-12',
   },
   {
-    // 出典: ゴング格闘技（gonkaku.jp/articles/24362）＝既発表分として記載。大会名は主催発表の（仮）のまま。
+    // 出典: RIZIN 公式「今年の大晦日は名古屋で開催！2026年 年間スケジュール」
+    // （jp.rizinff.com/_ct/17813466・2026-08-24 参照）＝開催日・会場・公式の仮称「大晦日 名古屋大会（仮）」。
+    // 会場が動いた理由（さいたまスーパーアリーナが年明けから改修に入る）と「RIZINのバンテリン開催は
+    // 団体11年目で初」「大みそか興行は15年から毎年さいたまスーパーアリーナが会場だった」は中日スポーツ
+    // （chunichi.co.jp/article/1187100）。2025年大晦日が「11回目」だったことは下の年表の出典と同じ。
+    // ⚠️ 正式名称・対戦カードは未発表。発表が出るまで（仮）表記のまま・カードは書かない。
     slug: 'rizin-newyear2026',
     org: 'rizin',
-    nameJa: 'RIZIN大晦日（仮）',
-    shortJa: 'RIZIN 大晦日',
+    nameJa: 'RIZIN 大晦日 2026 名古屋大会（仮）',
+    shortJa: 'RIZIN 大晦日 2026',
     date: '2026-12-31',
     dateLabelJa: '2026年12月31日（木）',
-    venueJa: 'バンテリンドームナゴヤ',
+    venueJa: 'バンテリンドーム ナゴヤ',
     cityJa: '名古屋',
+    hub: true,
+    tier: 'festival',
+    matchTags: ['RIZIN 大晦日 2026'],
+    leadJa:
+      '2015年から11回続いた大晦日RIZINが、初めてさいたまスーパーアリーナを離れる。2026年の大晦日はバンテリンドーム ナゴヤ＝12回目にして初の名古屋開催で、RIZINがバンテリンドームを使うのは団体11年目で初めて。会場が動いたのは、さいたまスーパーアリーナが年明けから大規模改修に入るため（中日スポーツ）。大会の正式名称・対戦カードはいずれも未発表で、公式サイトの年間スケジュールでの表記は「大晦日 名古屋大会（仮）」（2026年8月24日時点）。発表が出るたびにこのページへ追記していく。',
+    watchJa:
+      '配信・PPVの詳細は未発表。RIZINは2026年8月にABEMAが公式メディアパートナーとなり、榊原CEOは超RIZIN.5の販路発表時に「9月からABEMAさんだけでPPVを配信」と話している。本大会の配信形態・価格が発表され次第ここを更新する。',
+    officialUrl: 'https://jp.rizinff.com/_ct/17813466',
+    updatedAt: '2026-08-24',
+  },
+
+  /* -------------------------------------------------------------- 歴代の大晦日（年表アーカイブ）
+   * ページは持たない（hub: false）＝/mma ポータルの年表に並ぶだけ。サイト開設（2026-06）より前の
+   * 大会なので反応記事は無いが、「RIZIN 大晦日 歴代」で来た読者に12年ぶんの背骨を見せ、2026年大会の
+   * ページに「12回目」という文脈を与えるために置く。結果まとめ記事を後から書いたら archiveHref を張る。
+   *
+   * 出典: 日本語版 Wikipedia「RIZIN FIGHTING FEDERATION」の大会一覧（2026-08-24 参照）で年・正式名称・
+   * 会場を取り、2020〜2024年ぶんは ユーウォッチ（u-watch.jp/column/sports/rizin-taikai-jyouhou/）の
+   * 一覧と、2025年ぶんは Wikipedia「RIZIN 師走の超強者祭り」（「11回目を迎えた大晦日大会」・入場者
+   * 45,043人）と突き合わせて一致を確認した。会場が11回すべてさいたまスーパーアリーナだったことは
+   * 中日スポーツの記述とも一致する。冠スポンサー表記（Yogibo presents 等）は年表では省く。
+   * 12月29日開催の年末大会（2015年・2017年）は大晦日大会ではないので入れない。
+   * ------------------------------------------------------------------------------------------- */
+  {
+    slug: 'rizin-newyear2015',
+    org: 'rizin',
+    nameJa: 'RIZIN FIGHTING WORLD GRAND-PRIX 2015 IZAの舞',
+    shortJa: '大晦日2015',
+    date: '2015-12-31',
+    dateLabelJa: '2015年12月31日（木）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
     hub: false,
     tier: 'festival',
-    updatedAt: '2026-08-12',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2016',
+    org: 'rizin',
+    nameJa: 'RIZIN FIGHTING WORLD GRAND-PRIX 2016 無差別級トーナメント FINAL ROUND',
+    shortJa: '大晦日2016',
+    date: '2016-12-31',
+    dateLabelJa: '2016年12月31日（土）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2017',
+    org: 'rizin',
+    nameJa: 'RIZIN FIGHTING WORLD GRAND-PRIX 2017 Final ROUND',
+    shortJa: '大晦日2017',
+    date: '2017-12-31',
+    dateLabelJa: '2017年12月31日（日）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2018',
+    org: 'rizin',
+    nameJa: 'RIZIN.14',
+    shortJa: '大晦日2018',
+    date: '2018-12-31',
+    dateLabelJa: '2018年12月31日（月）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2019',
+    org: 'rizin',
+    nameJa: 'RIZIN.20',
+    shortJa: '大晦日2019',
+    date: '2019-12-31',
+    dateLabelJa: '2019年12月31日（火）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2020',
+    org: 'rizin',
+    nameJa: 'RIZIN.26',
+    shortJa: '大晦日2020',
+    date: '2020-12-31',
+    dateLabelJa: '2020年12月31日（木）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2021',
+    org: 'rizin',
+    nameJa: 'RIZIN.33',
+    shortJa: '大晦日2021',
+    date: '2021-12-31',
+    dateLabelJa: '2021年12月31日（金）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2022',
+    org: 'rizin',
+    nameJa: 'RIZIN.40',
+    shortJa: '大晦日2022',
+    date: '2022-12-31',
+    dateLabelJa: '2022年12月31日（土）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2023',
+    org: 'rizin',
+    nameJa: 'RIZIN.45',
+    shortJa: '大晦日2023',
+    date: '2023-12-31',
+    dateLabelJa: '2023年12月31日（日）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2024',
+    org: 'rizin',
+    nameJa: 'RIZIN DECADE（RIZIN.49）',
+    shortJa: '大晦日2024',
+    date: '2024-12-31',
+    dateLabelJa: '2024年12月31日（火）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
+  },
+  {
+    slug: 'rizin-newyear2025',
+    org: 'rizin',
+    nameJa: 'RIZIN 師走の超強者祭り',
+    shortJa: '大晦日2025',
+    date: '2025-12-31',
+    dateLabelJa: '2025年12月31日（水）',
+    venueJa: 'さいたまスーパーアリーナ',
+    cityJa: 'さいたま',
+    hub: false,
+    tier: 'festival',
+    updatedAt: '2026-08-24',
   },
 ];
 
@@ -278,8 +445,12 @@ export function eventHref(event: FightEvent): string | null {
 }
 
 /**
- * sitemap 用: 自前ページを持つ standard イベント（festival の特設ハブは各自で sitemap 登録済み）。
+ * sitemap 用: このレジストリが `/{slug}` に発行するイベントページ。
+ *
+ * 判定は tier ではなく **hubPath の有無**で行う＝`hubPath` を持つのは /rizin5 のような手組みの特設ハブで、
+ * それらは自前で sitemap に登録済み。tier で切っていると、カード発表前を量産型でしのぐ festival
+ * （2026 大晦日）がページはあるのに sitemap に載らない、という取りこぼしが出る（2026-08-24 に発生）。
  */
 export function standardEventPages(): FightEvent[] {
-  return EVENTS.filter((e) => e.hub && e.tier === 'standard');
+  return EVENTS.filter((e) => e.hub && !e.hubPath);
 }
