@@ -1,6 +1,30 @@
 {
-  "asOf": "2026-08-24 01:45",
-  "hitting": [],
+  "asOf": "2026-08-24 04:38",
+  "hitting": [
+    {
+      "ab": 0,
+      "bb": 0,
+      "cs": 0,
+      "d": "2026-08-23",
+      "dbl": 0,
+      "h": 0,
+      "hbp": 0,
+      "home": true,
+      "hr": 0,
+      "ibb": 0,
+      "opp": "Cleveland Guardians",
+      "oppJa": "ガーディアンズ",
+      "pa": 0,
+      "r": 0,
+      "rbi": 0,
+      "sb": 0,
+      "sf": 0,
+      "so": 0,
+      "tb": 0,
+      "tpl": 0,
+      "win": false
+    }
+  ],
   "pitching": [
     {
       "bb": 2,
@@ -418,6 +442,25 @@
       "outs": 15,
       "r": 7,
       "so": 3,
+      "w": 0
+    },
+    {
+      "bb": 1,
+      "bf": 7,
+      "d": "2026-08-23",
+      "er": 3,
+      "gs": 1,
+      "h": 4,
+      "hbp": 0,
+      "home": true,
+      "hr": 0,
+      "ibb": 0,
+      "l": 0,
+      "opp": "Cleveland Guardians",
+      "oppJa": "ガーディアンズ",
+      "outs": 3,
+      "r": 3,
+      "so": 1,
       "w": 0
     }
   ],
