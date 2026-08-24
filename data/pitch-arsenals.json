@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-08-24 01:45",
+  "asOf": "2026-08-25 01:57",
   "pitchers": {
     "519242": {
       "era": 2.2,
@@ -399,13 +399,13 @@
           "hr": 0,
           "nameJa": "チェンジアップ",
           "putAway": 0,
-          "rv100": 0.1,
+          "rv100": 0.2,
           "type": "CH",
           "usage": 5.2,
           "velo": 86.1,
           "whiff": 11.1,
           "woba": 0.253,
-          "xwoba": 0.287
+          "xwoba": 0.286
         }
       ],
       "team": "",
@@ -413,12 +413,33 @@
       "xera": 3.62
     },
     "579328": {
+      "era": 6.25,
       "hrAllowed": {
         "byPitch": {
-          "スプリット": 2,
-          "スライダー": 1
+          "スプリット": 3,
+          "スライダー": 2
         },
         "list": [
+          {
+            "angle": 29,
+            "d": "2026-08-23",
+            "dist": 421,
+            "ev": 103.7,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 86.7
+          },
+          {
+            "angle": 32,
+            "d": "2026-08-23",
+            "dist": 403,
+            "ev": 100.1,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 87
+          },
           {
             "angle": 25,
             "d": "2026-04-13",
@@ -450,52 +471,66 @@
             "velo": 85.1
           }
         ],
-        "total": 3
+        "total": 5
       },
       "league": "AL",
       "nameJa": "菊池雄星",
       "pitches": [
         {
-          "ba": 0.341,
-          "hardHit": 48.6,
+          "ba": 0.294,
+          "hardHit": 53.7,
           "hr": 0,
           "nameJa": "フォーシーム",
-          "putAway": 14.7,
-          "rv100": -1.9,
+          "putAway": 14.6,
+          "rv100": -0.9,
           "type": "FF",
-          "usage": 33.9,
-          "velo": 95.4,
-          "whiff": 20.6,
-          "woba": 0.354,
-          "xwoba": 0.297
+          "usage": 35.5,
+          "velo": 95.5,
+          "whiff": 20.7,
+          "woba": 0.309,
+          "xwoba": 0.302
         },
         {
-          "ba": 0.294,
-          "hardHit": 34.8,
-          "hr": 1,
-          "nameJa": "スライダー",
-          "putAway": 26.2,
-          "rv100": 0.4,
-          "type": "SL",
-          "usage": 23.6,
-          "velo": 86.9,
-          "whiff": 30.1,
-          "woba": 0.399,
-          "xwoba": 0.313
-        },
-        {
-          "ba": 0.143,
-          "hardHit": 36.8,
+          "ba": 0.35,
+          "hardHit": 44.8,
           "hr": 2,
+          "nameJa": "スライダー",
+          "putAway": 26.1,
+          "rv100": -1.5,
+          "type": "SL",
+          "usage": 22.7,
+          "velo": 86.8,
+          "whiff": 28.7,
+          "woba": 0.461,
+          "xwoba": 0.35
+        },
+        {
+          "ba": 0.194,
+          "hardHit": 36.4,
+          "hr": 3,
           "nameJa": "スプリット",
-          "putAway": 22,
-          "rv100": 1.4,
+          "putAway": 19.1,
+          "rv100": -0.1,
           "type": "FS",
-          "usage": 22.2,
+          "usage": 21.5,
           "velo": 86.7,
-          "whiff": 27.8,
-          "woba": 0.207,
-          "xwoba": 0.304
+          "whiff": 29,
+          "woba": 0.292,
+          "xwoba": 0.352
+        },
+        {
+          "ba": 0.182,
+          "hardHit": 27.3,
+          "hr": 0,
+          "nameJa": "カーブ",
+          "putAway": 22.2,
+          "rv100": 3.7,
+          "type": "CU",
+          "usage": 10.4,
+          "velo": 78.6,
+          "whiff": 29,
+          "woba": 0.179,
+          "xwoba": 0.295
         },
         {
           "ba": 0.5,
@@ -505,32 +540,19 @@
           "putAway": 11.8,
           "rv100": -4.5,
           "type": "FC",
-          "usage": 11.5,
+          "usage": 9.9,
           "velo": 90.2,
           "whiff": 31,
           "woba": 0.6,
           "xwoba": 0.581
-        },
-        {
-          "ba": 0.125,
-          "hardHit": 33.3,
-          "hr": 0,
-          "nameJa": "カーブ",
-          "putAway": 14.3,
-          "rv100": 3.8,
-          "type": "CU",
-          "usage": 8.8,
-          "velo": 78.7,
-          "whiff": 23.8,
-          "woba": 0.145,
-          "xwoba": 0.31
         }
       ],
       "team": "エンゼルス",
-      "totalPitches": 567
+      "totalPitches": 656,
+      "xera": 5.46
     },
     "608372": {
-      "era": 4.7,
+      "era": 4.96,
       "hrAllowed": {
         "byPitch": {
           "カッター": 7,
@@ -809,106 +831,106 @@
       "nameJa": "菅野智之",
       "pitches": [
         {
-          "ba": 0.181,
-          "hardHit": 25.9,
+          "ba": 0.187,
+          "hardHit": 25.3,
           "hr": 5,
           "nameJa": "スプリット",
-          "putAway": 18.2,
-          "rv100": 0.3,
+          "putAway": 17.2,
+          "rv100": 0.1,
           "type": "FS",
-          "usage": 21.6,
+          "usage": 21.5,
           "velo": 86.8,
-          "whiff": 32.2,
-          "woba": 0.261,
-          "xwoba": 0.319
+          "whiff": 31.3,
+          "woba": 0.268,
+          "xwoba": 0.323
         },
         {
-          "ba": 0.294,
-          "hardHit": 60.2,
+          "ba": 0.305,
+          "hardHit": 59.3,
           "hr": 7,
           "nameJa": "フォーシーム",
-          "putAway": 12.9,
-          "rv100": -1.1,
+          "putAway": 12.7,
+          "rv100": -1.2,
           "type": "FF",
-          "usage": 20.1,
+          "usage": 19.9,
           "velo": 92.4,
-          "whiff": 14.7,
-          "woba": 0.41,
-          "xwoba": 0.423
+          "whiff": 14.6,
+          "woba": 0.415,
+          "xwoba": 0.417
         },
         {
-          "ba": 0.347,
-          "hardHit": 53.2,
+          "ba": 0.351,
+          "hardHit": 53.1,
           "hr": 1,
           "nameJa": "シンカー",
-          "putAway": 7,
+          "putAway": 6.4,
           "rv100": 0,
           "type": "SI",
-          "usage": 19.6,
+          "usage": 19.8,
           "velo": 92.4,
-          "whiff": 3,
-          "woba": 0.397,
+          "whiff": 2.8,
+          "woba": 0.398,
           "xwoba": 0.462
         },
         {
-          "ba": 0.304,
-          "hardHit": 47.2,
+          "ba": 0.31,
+          "hardHit": 49.1,
           "hr": 7,
           "nameJa": "カッター",
-          "putAway": 10.3,
-          "rv100": -2.7,
+          "putAway": 10,
+          "rv100": -2.5,
           "type": "FC",
-          "usage": 11.4,
+          "usage": 11.3,
           "velo": 88.9,
-          "whiff": 17.1,
+          "whiff": 17.3,
           "woba": 0.46,
-          "xwoba": 0.484
+          "xwoba": 0.487
         },
         {
-          "ba": 0.286,
-          "hardHit": 30.3,
+          "ba": 0.306,
+          "hardHit": 32.4,
           "hr": 2,
           "nameJa": "スイーパー",
-          "putAway": 10,
-          "rv100": -1.8,
+          "putAway": 9.7,
+          "rv100": -2.2,
           "type": "ST",
-          "usage": 10.6,
+          "usage": 10.3,
           "velo": 83.6,
-          "whiff": 20,
-          "woba": 0.35,
-          "xwoba": 0.337
+          "whiff": 19.8,
+          "woba": 0.374,
+          "xwoba": 0.353
         },
         {
-          "ba": 0.209,
-          "hardHit": 36.4,
+          "ba": 0.234,
+          "hardHit": 33.3,
           "hr": 3,
           "nameJa": "スライダー",
-          "putAway": 14.7,
-          "rv100": -1.2,
+          "putAway": 14.5,
+          "rv100": -1.3,
           "type": "SL",
-          "usage": 9.7,
+          "usage": 9.9,
           "velo": 85.3,
-          "whiff": 22.1,
-          "woba": 0.293,
-          "xwoba": 0.308
+          "whiff": 23,
+          "woba": 0.306,
+          "xwoba": 0.304
         },
         {
-          "ba": 0.192,
-          "hardHit": 30.4,
+          "ba": 0.207,
+          "hardHit": 32,
           "hr": 1,
           "nameJa": "カーブ",
-          "putAway": 10.7,
-          "rv100": 0.2,
+          "putAway": 12.1,
+          "rv100": 0,
           "type": "CU",
-          "usage": 7,
-          "velo": 79.8,
-          "whiff": 19.2,
-          "woba": 0.233,
-          "xwoba": 0.349
+          "usage": 7.2,
+          "velo": 79.9,
+          "whiff": 20.7,
+          "woba": 0.263,
+          "xwoba": 0.341
         }
       ],
       "team": "ロッキーズ",
-      "totalPitches": 1900,
+      "totalPitches": 1992,
       "xera": 7.05
     },
     "608379": {
@@ -1533,7 +1555,7 @@
           "velo": 83.2,
           "whiff": 15.8,
           "woba": 0.253,
-          "xwoba": 0.255
+          "xwoba": 0.254
         }
       ],
       "team": "",
@@ -1541,14 +1563,24 @@
       "xera": 3.67
     },
     "650911": {
-      "era": 2.5,
+      "era": 2.62,
       "hrAllowed": {
         "byPitch": {
-          "シンカー": 7,
+          "シンカー": 8,
           "スライダー": 2,
           "チェンジアップ": 4
         },
         "list": [
+          {
+            "angle": 27,
+            "d": "2026-08-23",
+            "dist": 397,
+            "ev": 100.4,
+            "name": "Sinker",
+            "nameJa": "シンカー",
+            "type": "SI",
+            "velo": 94.6
+          },
           {
             "angle": 20,
             "d": "2026-08-06",
@@ -1680,56 +1712,56 @@
             "velo": 95.5
           }
         ],
-        "total": 13
+        "total": 14
       },
       "league": "NL",
       "nameJa": "クリストファー・サンチェス",
       "pitches": [
         {
-          "ba": 0.336,
-          "hardHit": 52.7,
-          "hr": 7,
+          "ba": 0.346,
+          "hardHit": 53,
+          "hr": 8,
           "nameJa": "シンカー",
-          "putAway": 20.2,
-          "rv100": 0,
+          "putAway": 19.5,
+          "rv100": -0.1,
           "type": "SI",
-          "usage": 43.6,
+          "usage": 43.4,
           "velo": 95.1,
-          "whiff": 12.2,
-          "woba": 0.386,
-          "xwoba": 0.369
+          "whiff": 12.3,
+          "woba": 0.395,
+          "xwoba": 0.366
         },
         {
-          "ba": 0.177,
-          "hardHit": 27.6,
+          "ba": 0.173,
+          "hardHit": 27.8,
           "hr": 4,
           "nameJa": "チェンジアップ",
           "putAway": 29.3,
-          "rv100": 1.3,
+          "rv100": 1.4,
           "type": "CH",
-          "usage": 37.4,
+          "usage": 37.6,
           "velo": 87,
-          "whiff": 46.9,
-          "woba": 0.218,
-          "xwoba": 0.195
+          "whiff": 47.2,
+          "woba": 0.212,
+          "xwoba": 0.197
         },
         {
-          "ba": 0.206,
+          "ba": 0.208,
           "hardHit": 32.8,
           "hr": 2,
           "nameJa": "スライダー",
-          "putAway": 30.4,
-          "rv100": 1,
+          "putAway": 29.8,
+          "rv100": 0.9,
           "type": "SL",
-          "usage": 19.1,
+          "usage": 19,
           "velo": 86.3,
-          "whiff": 46.3,
-          "woba": 0.271,
-          "xwoba": 0.263
+          "whiff": 45.6,
+          "woba": 0.27,
+          "xwoba": 0.267
         }
       ],
       "team": "フィリーズ",
-      "totalPitches": 2479,
+      "totalPitches": 2582,
       "xera": 3.34
     },
     "656302": {
@@ -1929,7 +1961,7 @@
       "xera": 2.68
     },
     "656492": {
-      "era": 3.18,
+      "era": 3.19,
       "hrAllowed": {
         "byPitch": {
           "カッター": 9,
@@ -2176,60 +2208,60 @@
       "nameJa": "フォスター・グリフィン",
       "pitches": [
         {
-          "ba": 0.218,
-          "hardHit": 38.8,
+          "ba": 0.226,
+          "hardHit": 38.6,
           "hr": 9,
           "nameJa": "カッター",
-          "putAway": 16.9,
-          "rv100": 1.6,
+          "putAway": 16.1,
+          "rv100": 1.5,
           "type": "FC",
-          "usage": 32.2,
-          "velo": 88.3,
-          "whiff": 20.7,
-          "woba": 0.296,
-          "xwoba": 0.323
+          "usage": 32.5,
+          "velo": 88.4,
+          "whiff": 20.4,
+          "woba": 0.303,
+          "xwoba": 0.329
         },
         {
-          "ba": 0.205,
-          "hardHit": 39.1,
+          "ba": 0.208,
+          "hardHit": 36.7,
           "hr": 4,
           "nameJa": "フォーシーム",
-          "putAway": 16.9,
-          "rv100": -0.6,
+          "putAway": 16.6,
+          "rv100": -0.5,
           "type": "FF",
           "usage": 16.6,
           "velo": 91.5,
-          "whiff": 18.4,
-          "woba": 0.327,
-          "xwoba": 0.324
+          "whiff": 17.2,
+          "woba": 0.33,
+          "xwoba": 0.331
         },
         {
-          "ba": 0.253,
-          "hardHit": 47.2,
+          "ba": 0.256,
+          "hardHit": 48.1,
           "hr": 5,
           "nameJa": "スイーパー",
-          "putAway": 23.4,
-          "rv100": 0,
+          "putAway": 23.5,
+          "rv100": -0.2,
           "type": "ST",
           "usage": 14.4,
           "velo": 80,
-          "whiff": 30.6,
-          "woba": 0.329,
-          "xwoba": 0.337
+          "whiff": 31,
+          "woba": 0.332,
+          "xwoba": 0.334
         },
         {
-          "ba": 0.172,
-          "hardHit": 27.7,
+          "ba": 0.164,
+          "hardHit": 28,
           "hr": 0,
           "nameJa": "チェンジアップ",
-          "putAway": 18.6,
-          "rv100": 0.8,
+          "putAway": 17.7,
+          "rv100": 0.9,
           "type": "CH",
-          "usage": 11,
-          "velo": 82.3,
-          "whiff": 34.2,
-          "woba": 0.261,
-          "xwoba": 0.264
+          "usage": 11.1,
+          "velo": 82.4,
+          "whiff": 32.8,
+          "woba": 0.255,
+          "xwoba": 0.268
         },
         {
           "ba": 0.231,
@@ -2239,9 +2271,9 @@
           "putAway": 12.5,
           "rv100": 1,
           "type": "SI",
-          "usage": 10.1,
+          "usage": 9.7,
           "velo": 91.3,
-          "whiff": 17.4,
+          "whiff": 17.3,
           "woba": 0.353,
           "xwoba": 0.348
         },
@@ -2250,33 +2282,33 @@
           "hardHit": 41.3,
           "hr": 4,
           "nameJa": "カーブ",
-          "putAway": 19.7,
-          "rv100": -3.5,
+          "putAway": 19.4,
+          "rv100": -3.3,
           "type": "CU",
-          "usage": 9.7,
+          "usage": 9.5,
           "velo": 77.8,
-          "whiff": 25,
+          "whiff": 24.8,
           "woba": 0.413,
           "xwoba": 0.356
         },
         {
-          "ba": 0.217,
-          "hardHit": 35.7,
+          "ba": 0.208,
+          "hardHit": 33.3,
           "hr": 0,
           "nameJa": "スプリット",
-          "putAway": 15.4,
-          "rv100": -0.6,
+          "putAway": 14,
+          "rv100": -0.3,
           "type": "FS",
-          "usage": 5.9,
+          "usage": 6.3,
           "velo": 81.3,
-          "whiff": 29.2,
-          "woba": 0.218,
-          "xwoba": 0.209
+          "whiff": 26.6,
+          "woba": 0.209,
+          "xwoba": 0.204
         }
       ],
       "team": "",
-      "totalPitches": 2326,
-      "xera": 4.17
+      "totalPitches": 2431,
+      "xera": 4.23
     },
     "656876": {
       "era": 3.02,
@@ -2499,7 +2531,7 @@
           "hr": 0,
           "nameJa": "スイーパー",
           "putAway": 7.1,
-          "rv100": -3.1,
+          "rv100": -3,
           "type": "ST",
           "usage": 2.8,
           "velo": 84.5,
@@ -2577,7 +2609,7 @@
           "velo": 98.1,
           "whiff": 26.9,
           "woba": 0.263,
-          "xwoba": 0.262
+          "xwoba": 0.261
         },
         {
           "ba": 0.129,
@@ -3197,7 +3229,7 @@
       ],
       "team": "",
       "totalPitches": 2426,
-      "xera": 3.88
+      "xera": 3.89
     },
     "669302": {
       "era": 3.35,
@@ -3749,10 +3781,10 @@
       ],
       "team": "",
       "totalPitches": 2369,
-      "xera": 3.34
+      "xera": 3.32
     },
     "673513": {
-      "era": 2.22,
+      "era": 2.17,
       "hrAllowed": {
         "byPitch": {
           "スイーパー": 1,
@@ -3827,63 +3859,73 @@
       "nameJa": "松井裕樹",
       "pitches": [
         {
-          "ba": 0.268,
-          "hardHit": 41.3,
+          "ba": 0.263,
+          "hardHit": 40.4,
           "hr": 3,
           "nameJa": "フォーシーム",
-          "putAway": 15.6,
-          "rv100": -0.3,
+          "putAway": 15,
+          "rv100": -0.2,
           "type": "FF",
           "usage": 37.2,
           "velo": 91.9,
-          "whiff": 24.6,
-          "woba": 0.381,
-          "xwoba": 0.359
+          "whiff": 24,
+          "woba": 0.376,
+          "xwoba": 0.356
         },
         {
-          "ba": 0.106,
+          "ba": 0.104,
           "hardHit": 20,
           "hr": 0,
           "nameJa": "スライダー",
-          "putAway": 28.3,
-          "rv100": 2.6,
+          "putAway": 29.8,
+          "rv100": 2.7,
           "type": "SL",
-          "usage": 30.5,
+          "usage": 30,
           "velo": 85.2,
-          "whiff": 39.8,
-          "woba": 0.147,
-          "xwoba": 0.22
+          "whiff": 40.4,
+          "woba": 0.144,
+          "xwoba": 0.216
         },
         {
-          "ba": 0.14,
-          "hardHit": 23.3,
+          "ba": 0.154,
+          "hardHit": 21.9,
           "hr": 2,
           "nameJa": "スプリット",
-          "putAway": 21.4,
-          "rv100": 0.3,
+          "putAway": 20.2,
+          "rv100": 0.2,
           "type": "FS",
-          "usage": 25.5,
+          "usage": 26.2,
           "velo": 83.4,
-          "whiff": 47.4,
-          "woba": 0.239,
-          "xwoba": 0.242
+          "whiff": 46.7,
+          "woba": 0.246,
+          "xwoba": 0.248
         }
       ],
       "team": "パドレス",
-      "totalPitches": 745,
-      "xera": 3.34
+      "totalPitches": 766,
+      "xera": 3.32
     },
     "673540": {
-      "era": 7.67,
+      "era": 7.79,
       "hrAllowed": {
         "byPitch": {
           "カッター": 1,
           "シンカー": 1,
           "スイーパー": 1,
           "スライダー": 4,
-          "フォーシーム": 5
+          "フォーシーム": 6
         },
         "list": [
+          {
+            "angle": 29,
+            "d": "2026-08-23",
+            "dist": 406,
+            "ev": 102.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96
+          },
           {
             "angle": 26,
             "d": "2026-07-07",
@@ -4005,24 +4047,24 @@
             "velo": 80.6
           }
         ],
-        "total": 12
+        "total": 13
       },
       "league": "NL",
       "nameJa": "千賀滉大",
       "pitches": [
         {
-          "ba": 0.263,
-          "hardHit": 35,
-          "hr": 5,
+          "ba": 0.272,
+          "hardHit": 36.1,
+          "hr": 6,
           "nameJa": "フォーシーム",
           "putAway": 25,
-          "rv100": -1,
+          "rv100": -1.4,
           "type": "FF",
-          "usage": 40.6,
+          "usage": 40.9,
           "velo": 96.3,
-          "whiff": 16.9,
-          "woba": 0.378,
-          "xwoba": 0.351
+          "whiff": 16.7,
+          "woba": 0.395,
+          "xwoba": 0.361
         },
         {
           "ba": 0.111,
@@ -4032,25 +4074,25 @@
           "putAway": 25.4,
           "rv100": 0.1,
           "type": "FS",
-          "usage": 24.6,
+          "usage": 24.5,
           "velo": null,
           "whiff": 46.1,
           "woba": 0.22,
           "xwoba": 0.224
         },
         {
-          "ba": 0.37,
-          "hardHit": 28,
+          "ba": 0.357,
+          "hardHit": 26.9,
           "hr": 1,
           "nameJa": "カッター",
           "putAway": 10,
-          "rv100": -2,
+          "rv100": -1.8,
           "type": "FC",
-          "usage": 14.9,
+          "usage": 14.8,
           "velo": 89.9,
-          "whiff": 27,
-          "woba": 0.469,
-          "xwoba": 0.362
+          "whiff": 26.6,
+          "woba": 0.456,
+          "xwoba": 0.353
         },
         {
           "ba": 0.538,
@@ -4060,7 +4102,7 @@
           "putAway": 25,
           "rv100": -2.1,
           "type": "ST",
-          "usage": 9,
+          "usage": 8.9,
           "velo": 81.5,
           "whiff": 25.9,
           "woba": 0.604,
@@ -4072,7 +4114,7 @@
           "hr": 4,
           "nameJa": "スライダー",
           "putAway": 27.8,
-          "rv100": -6.2,
+          "rv100": -6.3,
           "type": "SL",
           "usage": 7,
           "velo": 86.7,
@@ -4082,8 +4124,8 @@
         }
       ],
       "team": "メッツ",
-      "totalPitches": 917,
-      "xera": 4.91
+      "totalPitches": 926,
+      "xera": 4.98
     },
     "676917": {
       "era": 3.22,
@@ -4258,7 +4300,7 @@
           "hr": 7,
           "nameJa": "フォーシーム",
           "putAway": 19.4,
-          "rv100": -0.8,
+          "rv100": -0.7,
           "type": "FF",
           "usage": 33,
           "velo": 96.8,
@@ -4320,7 +4362,7 @@
           "velo": 89,
           "whiff": 24.1,
           "woba": 0.359,
-          "xwoba": 0.369
+          "xwoba": 0.37
         },
         {
           "ba": 0.269,
@@ -4902,7 +4944,7 @@
       ],
       "team": "",
       "totalPitches": 2304,
-      "xera": 3.56
+      "xera": 3.57
     },
     "680736": {
       "era": 3.56,
@@ -5200,15 +5242,25 @@
       "xera": 4.65
     },
     "684007": {
-      "era": 3.77,
+      "era": 3.78,
       "hrAllowed": {
         "byPitch": {
           "シンカー": 3,
           "スイーパー": 5,
-          "スプリット": 8,
+          "スプリット": 9,
           "フォーシーム": 13
         },
         "list": [
+          {
+            "angle": 34,
+            "d": "2026-08-23",
+            "dist": 358,
+            "ev": 93.8,
+            "name": "Split-Finger",
+            "nameJa": "スプリット",
+            "type": "FS",
+            "velo": 81.4
+          },
           {
             "angle": 24,
             "d": "2026-08-17",
@@ -5500,52 +5552,52 @@
             "velo": 85.1
           }
         ],
-        "total": 29
+        "total": 30
       },
       "league": "NL",
       "nameJa": "今永昇太",
       "pitches": [
         {
-          "ba": 0.236,
-          "hardHit": 43,
+          "ba": 0.242,
+          "hardHit": 43.5,
           "hr": 13,
           "nameJa": "フォーシーム",
-          "putAway": 18.5,
+          "putAway": 18,
           "rv100": 0.4,
           "type": "FF",
-          "usage": 41.2,
+          "usage": 41.4,
           "velo": 91.6,
-          "whiff": 20.4,
-          "woba": 0.317,
-          "xwoba": 0.315
+          "whiff": 20.2,
+          "woba": 0.322,
+          "xwoba": 0.319
         },
         {
-          "ba": 0.202,
+          "ba": 0.21,
           "hardHit": 24.6,
-          "hr": 8,
+          "hr": 9,
           "nameJa": "スプリット",
-          "putAway": 23.9,
-          "rv100": 0.7,
+          "putAway": 23.8,
+          "rv100": 0.5,
           "type": "FS",
-          "usage": 32.8,
+          "usage": 32.7,
           "velo": 82.9,
           "whiff": 41.8,
-          "woba": 0.263,
-          "xwoba": 0.242
+          "woba": 0.276,
+          "xwoba": 0.243
         },
         {
-          "ba": 0.25,
+          "ba": 0.246,
           "hardHit": 27.1,
           "hr": 5,
           "nameJa": "スイーパー",
-          "putAway": 15.1,
-          "rv100": -1.4,
+          "putAway": 15.5,
+          "rv100": -1.3,
           "type": "ST",
           "usage": 14.9,
           "velo": 81,
-          "whiff": 27.8,
-          "woba": 0.364,
-          "xwoba": 0.362
+          "whiff": 27.6,
+          "woba": 0.359,
+          "xwoba": 0.357
         },
         {
           "ba": 0.277,
@@ -5555,7 +5607,7 @@
           "putAway": 31.6,
           "rv100": -0.9,
           "type": "SI",
-          "usage": 6.3,
+          "usage": 6.2,
           "velo": 90.1,
           "whiff": 15.1,
           "woba": 0.375,
@@ -5563,11 +5615,11 @@
         }
       ],
       "team": "カブス",
-      "totalPitches": 2150,
-      "xera": 3.8
+      "totalPitches": 2216,
+      "xera": 3.83
     },
     "690997": {
-      "era": 3.34,
+      "era": 3.21,
       "hrAllowed": {
         "byPitch": {
           "カッター": 2,
@@ -5734,60 +5786,60 @@
       "nameJa": "ノーラン・マクリーン",
       "pitches": [
         {
-          "ba": 0.184,
-          "hardHit": 34.8,
+          "ba": 0.181,
+          "hardHit": 35.4,
           "hr": 3,
           "nameJa": "シンカー",
-          "putAway": 29.2,
+          "putAway": 29.3,
           "rv100": 2.8,
           "type": "SI",
-          "usage": 32.6,
-          "velo": 95.1,
-          "whiff": 13.5,
-          "woba": 0.247,
+          "usage": 32.8,
+          "velo": 95,
+          "whiff": 13.7,
+          "woba": 0.246,
           "xwoba": 0.273
         },
         {
-          "ba": 0.216,
-          "hardHit": 49.3,
+          "ba": 0.211,
+          "hardHit": 47.8,
           "hr": 7,
           "nameJa": "フォーシーム",
-          "putAway": 24.5,
-          "rv100": 0.3,
+          "putAway": 22.9,
+          "rv100": 0.4,
           "type": "FF",
           "usage": 20.4,
           "velo": 96.1,
           "whiff": 27.9,
-          "woba": 0.331,
-          "xwoba": 0.388
+          "woba": 0.328,
+          "xwoba": 0.385
         },
         {
-          "ba": 0.112,
-          "hardHit": 26.5,
+          "ba": 0.108,
+          "hardHit": 28.6,
           "hr": 0,
           "nameJa": "カーブ",
-          "putAway": 23.1,
+          "putAway": 23.3,
           "rv100": 1,
           "type": "CU",
           "usage": 14.8,
           "velo": 81.9,
-          "whiff": 39.8,
-          "woba": 0.165,
+          "whiff": 40.4,
+          "woba": 0.164,
           "xwoba": 0.154
         },
         {
-          "ba": 0.385,
-          "hardHit": 20,
+          "ba": 0.375,
+          "hardHit": 19.4,
           "hr": 2,
           "nameJa": "スイーパー",
-          "putAway": 13.2,
+          "putAway": 12.9,
           "rv100": -2.8,
           "type": "ST",
-          "usage": 13.1,
+          "usage": 13.2,
           "velo": 84.9,
-          "whiff": 27.2,
-          "woba": 0.488,
-          "xwoba": 0.39
+          "whiff": 27.4,
+          "woba": 0.483,
+          "xwoba": 0.394
         },
         {
           "ba": 0.367,
@@ -5797,25 +5849,25 @@
           "putAway": 17.6,
           "rv100": -2.5,
           "type": "FC",
-          "usage": 10.4,
+          "usage": 10.1,
           "velo": 92.1,
           "whiff": 24.2,
           "woba": 0.515,
           "xwoba": 0.391
         },
         {
-          "ba": 0.286,
-          "hardHit": 25.9,
+          "ba": 0.27,
+          "hardHit": 24.1,
           "hr": 1,
           "nameJa": "チェンジアップ",
-          "putAway": 14,
-          "rv100": -1.7,
+          "putAway": 13.8,
+          "rv100": -1.3,
           "type": "CH",
           "usage": 6,
           "velo": 88.1,
           "whiff": 25.3,
-          "woba": 0.364,
-          "xwoba": 0.332
+          "woba": 0.345,
+          "xwoba": 0.317
         },
         {
           "ba": 0,
@@ -5823,18 +5875,18 @@
           "hr": 0,
           "nameJa": "スライダー",
           "putAway": 21.4,
-          "rv100": 1.4,
+          "rv100": 1.7,
           "type": "SL",
-          "usage": 2.5,
-          "velo": 86.5,
-          "whiff": 40,
-          "woba": 0.191,
-          "xwoba": 0.209
+          "usage": 2.7,
+          "velo": 86.4,
+          "whiff": 37.9,
+          "woba": 0.175,
+          "xwoba": 0.192
         }
       ],
       "team": "",
-      "totalPitches": 2359,
-      "xera": 3.7
+      "totalPitches": 2451,
+      "xera": 3.65
     },
     "693433": {
       "era": 4.1,
@@ -6075,7 +6127,7 @@
       ],
       "team": "",
       "totalPitches": 2084,
-      "xera": 3.56
+      "xera": 3.57
     },
     "693645": {
       "era": 2.17,
@@ -6291,7 +6343,7 @@
       ],
       "team": "",
       "totalPitches": 2453,
-      "xera": 2.91
+      "xera": 2.92
     },
     "694819": {
       "era": 1.68,
@@ -6497,7 +6549,7 @@
       ],
       "team": "ブルワーズ",
       "totalPitches": 2151,
-      "xera": 1.98
+      "xera": 1.99
     },
     "694973": {
       "era": 3.95,
@@ -6718,7 +6770,7 @@
           "hr": 2,
           "nameJa": "シンカー",
           "putAway": 18.2,
-          "rv100": -0.8,
+          "rv100": -0.7,
           "type": "SI",
           "usage": 10.5,
           "velo": 96.6,
@@ -7497,7 +7549,7 @@
       ],
       "team": "ドジャース",
       "totalPitches": 1986,
-      "xera": 4.22
+      "xera": 4.23
     },
     "808967": {
       "era": 2.61,
@@ -7861,18 +7913,18 @@
       "nameJa": "今井達也",
       "pitches": [
         {
-          "ba": 0.178,
+          "ba": 0.179,
           "hardHit": 39.8,
           "hr": 6,
           "nameJa": "スライダー",
-          "putAway": 27,
+          "putAway": 26.7,
           "rv100": 0.6,
           "type": "SL",
-          "usage": 45.3,
+          "usage": 45.2,
           "velo": 86.6,
-          "whiff": 40.1,
-          "woba": 0.27,
-          "xwoba": 0.266
+          "whiff": 39.9,
+          "woba": 0.272,
+          "xwoba": 0.268
         },
         {
           "ba": 0.292,
@@ -7904,8 +7956,8 @@
         }
       ],
       "team": "アストロズ",
-      "totalPitches": 1218,
-      "xera": 4.74
+      "totalPitches": 1216,
+      "xera": 4.75
     }
   },
   "season": 2026
