@@ -49,7 +49,9 @@ for (const file of (await readdir(JOURNAL_DIR)).filter((f) => f.endsWith('.json'
   const dates = (journal.entries ?? []).map((e) => e.date).sort();
   const last = dates.at(-1) ?? '';
   // 「次の見どころ」は期限が切れると journalNext が自動で消す＝壊れはしないが、LP から
-  // ブロックごと消える。書けるのは人の編集セッションだけなので、気づけるように印字だけする。
+  // ブロックごと消える。2026-08-26 から scripts/journal-next.mjs（毎時CI）が期限切れを公式
+  // スケジュールの事実で埋めるので、ここに出るのは「CIがまだ回っていない／埋められなかった」
+  // 分だけ＝出たら journal-next.mjs を手で回すか、埋まらない理由（所属不明・試合なし）を見る。
   if (journal.nextJa && (!journal.nextUntil || journal.nextUntil < todayJst)) {
     staleNext.push({ slug, nameJa, nextUntil: journal.nextUntil ?? null });
   }
@@ -84,7 +86,9 @@ if (asJson) {
   }
   if (staleNext.length > 0) {
     // 追記（クラウド可）とは担当が違うので、必ず別枠で出す。
-    console.log(`\n「次の見どころ」が期限切れ ${staleNext.length}件 ＝ LPから消えている（人の編集セッションで書く）`);
+    console.log(
+      `\n「次の見どころ」が期限切れ ${staleNext.length}件 ＝ LPから消えている（node scripts/journal-next.mjs で埋まる）`,
+    );
     for (const s of staleNext) {
       console.log(`  ${s.nameJa}（${s.slug}）nextUntil: ${s.nextUntil ?? '未設定'}`);
     }

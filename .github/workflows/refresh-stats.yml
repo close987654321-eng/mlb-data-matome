@@ -70,6 +70,16 @@ jobs:
           SEASON=$(TZ=Asia/Tokyo date +%Y)
           node scripts/fetch-mlb-stats.mjs team-games "$ASOF" "$SEASON" | tail -2 || echo "team-games スキップ（既存JSONを保持）"
 
+      - name: 観測日誌の「次の見どころ」を埋め直す（期限切れだけ・公式スケジュールの事実のみ）
+        run: |
+          set -euo pipefail
+          # nextJa は「人が編集セッションで書く」運用だったため、書き手が思い出さないと期限切れ→
+          # journalNext がブロックごと落とす→選手LPの末尾が消える、が繰り返した（2026-08-26 に11人中7人）。
+          # 既定モードは **期限切れ・未設定の日誌にしか触らない**＝手書きの予告が生きている間は no-op
+          # （スケジュールAPIも叩かない）。時刻の完全一致ゲートは付けない（cy-young ボードのドリフト事故
+          # と同じ轍を踏まない＝毎時どの分に発火しても、期限が切れた最初の1回で必ず拾う）。
+          node scripts/journal-next.mjs | tail -5 || echo "journal-next スキップ（既存の予告を保持）"
+
       - name: 投手データ（球種＋サイヤング予測）＋MVP予測ボードを1日1回だけ更新
         run: |
           set -euo pipefail
@@ -101,13 +111,13 @@ jobs:
       - name: 変化があればコミット＆push
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json data/team-games.json; then
+          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json data/team-games.json data/player-journal/; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json data/team-games.json
+          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/standings.json data/team-games.json data/player-journal/
           git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
           # 記事の自動マージ等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
           for i in 1 2 3 4 5; do

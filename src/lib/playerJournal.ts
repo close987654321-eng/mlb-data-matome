@@ -69,10 +69,21 @@ export type JournalEntry = {
 export type PlayerJournal = {
   /** 日誌の序文＝編集者がこの選手の物語を数行で立てる（ja）。 */
   introJa?: string;
-  /** 日誌末尾の「次の見どころ」＝次戦・次の節目の予告（編集セッションで人が書く。クラウド禁止）。 */
+  /**
+   * 日誌末尾の「次の見どころ」＝次戦・次の節目の予告。
+   * 書き手は2通り: **人の編集セッション**（読み物として書く。LLM の無人生成は禁止＝地の文と同じ規律）と、
+   * **scripts/journal-next.mjs**（MLB公式スケジュールと snapshot の数値だけを機械で組む・nextAuto: true）。
+   * 手書きが期限内なら機械は触らない＝編集の上書きが常に勝つ。
+   */
   nextJa?: string;
   /** nextJa の賞味期限（JSTの試合日）。過ぎたらビルド時に非表示＝終わった試合の予告を出さない。 */
   nextUntil?: string;
+  /**
+   * この予告が機械生成（journal-next.mjs）であることの印。
+   * 人が書き直したらこのキーを消す＝「手書きは期限内なら上書きしない」の判定に使う。
+   * 表示には出さない（読者から見て内容は同じ事実の予告）。
+   */
+  nextAuto?: boolean;
   entries: JournalEntry[];
 };
 
