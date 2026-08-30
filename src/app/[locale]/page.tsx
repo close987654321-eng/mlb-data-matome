@@ -7,7 +7,7 @@ import { getAllTags } from '@/lib/tags';
 import { PLAYERS } from '@/lib/players';
 import { FIGHTERS } from '@/lib/fighters';
 import { TEAM_HUB_MIN_ARTICLES } from '@/lib/teamHub';
-import { getPlayersSnapshot, type PlayerSeason } from '@/lib/playerStats';
+import { getPlayersSnapshot, seasonYear, type PlayerSeason } from '@/lib/playerStats';
 import { pickHero } from '@/lib/playerHero';
 import { SPORTS, SPORT_INFO, type Sport } from '@/lib/sports';
 import { getTeam } from '@/lib/teams';
@@ -24,18 +24,87 @@ import TwoPillars from '@/components/home/TwoPillars';
 import PlayerRail, { type PlayerRailItem } from '@/components/home/PlayerRail';
 import RaceBoards, { type RaceBoardCard, type RaceRow } from '@/components/home/RaceBoards';
 import SportZones, { type SportZone } from '@/components/home/SportZones';
-import { localeAlternates, absoluteUrl, SITE_URL } from '@/lib/site';
+import { localeAlternates, absoluteUrl, SITE_URL, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import type { Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
 
-// トップは canonical/hreflang のみ補う（title/description は layout の既定を継ぐ）。
+/**
+ * トップの検索スニペット（title / description）。
+ *
+ * なぜトップだけ layout の既定を上書きするか（2026-08-30・GSC 実測）:
+ * 「MLB 海外の反応」クラスタはトップ 1 枚に一本化した（9e197dbd）結果、**順位は取れた**が
+ * クリックに変換できていなかった。2026-08-21〜27 の実測（page = サイトルート）:
+ *
+ *   mlb 海外の反応        375表示 /  2クリック / CTR 0.5% / 順位 4.2
+ *   mlb海外の反応         127表示 /  1クリック / CTR 0.8% / 順位 4.2
+ *   メジャーリーグ 海外の反応  90表示 /  0クリック / CTR 0.0% / 順位 4.6
+ *   メジャーリーグ海外の反応   50表示 /  0クリック / CTR 0.0% / 順位 4.9
+ *   海外の反応 mlb          40表示 /  0クリック / CTR 0.0% / 順位 4.5
+ *   （上位17クエリ計 758表示 / 5クリック＝CTR 0.66%。モバイルは 237表示で 0 クリック）
+ *
+ * 順位 4 台で CTR 0.66% は順位では説明できない＝スニペット側の問題。読みは2つ:
+ *   1. 旧 title の後半「ボクシング・MMA も…」が MLB 検索者には無関係で、
+ *      モバイルの表示幅（全角30字前後）で価値が切れていた。トップは実際には
+ *      ボクシング/MMA のクエリを1件も取っていない＝後半は薄めるだけだった。
+ *   2. 「メジャーリーグ」表記がどこにも無く、その系統（計168表示）が全滅していた。
+ *
+ * 当てる型は自前の実測で勝っているもの＝チーム/選手タグLP（同じ順位帯で CTR 19%）に合わせる:
+ * title は「{主題}の海外の反応まとめ【…現地ファンの声を日本語訳】」、description は
+ * 先頭90字に「海外の反応まとめ」「ファンの反応」を連続一致で収め、後半は**毎日動く実データ**
+ * （今季の主役・記事総数・最終更新日）で鮮度を出す（teamHubDescriptionJa と同じ処方）。
+ *
+ * en は全ページ noindex（layout 参照）なので触らず既定を継ぐ。
+ */
+async function homeSeoJa(): Promise<{ title: string; description: string }> {
+  const [threads, snap] = await Promise.all([getAllThreads(), getPlayersSnapshot()]);
+  // 今季の主役3人＝PlayerRail と同じ選び方（players.ts のカタログ順 × 今季成績がある人）。
+  // ベタ書きしない＝移籍・離脱でカタログが動けばスニペットも自動で追従する。
+  const stars = PLAYERS.filter((p) => !p.rival && snap.players[String(p.mlbId)]?.league != null)
+    .slice(0, 3)
+    .map((p) => p.nameJa);
+  const updated = threads[0]?.fetchedAt.slice(0, 10);
+  const parts = [
+    'MLB（メジャーリーグ）の海外の反応まとめ。現地ファンの反応・コメントを試合直後に日本語訳で毎日更新。',
+    stars.length ? `${seasonYear(snap)}年は${stars.join('・')}ら日本人選手の全試合を網羅。` : '',
+    // 鮮度（件数・最終更新日）は必ず末尾に置きつつ全体を120字前後に収める＝日本語の description は
+    // それ以上が截り落とされる。MVP／サイ・ヤング賞やボクシング・MMA は**この面が取っていない**
+    // クエリ（実測17クエリはすべて MLB 海外の反応 系）＝並べると鮮度を截り落とす側に押し出すだけ。
+    // それぞれ /mvp・/cy-young・/boxing・/mma が自前の description で当てている。
+    `全${threads.length}件を新着順で掲載${updated ? `・最終更新 ${updated}` : ''}。`,
+  ];
+  return {
+    title: 'MLBの海外の反応まとめ【メジャーリーグ現地ファンの声を日本語訳】',
+    description: parts.filter(Boolean).join(''),
+  };
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  return { alternates: localeAlternates(locale, '') };
+  const alternates = localeAlternates(locale, '');
+  if (locale === 'en') return { alternates };
+  const { title, description } = await homeSeoJa();
+  return {
+    // absolute＝layout の template（%s｜海外の反応）を効かせない。title 内に既に「海外の反応」があり
+    // 接尾すると二重になる（選手・チームタグLPと同じ理由）。
+    title: { absolute: title },
+    description,
+    // ⚠️ Next の Metadata は openGraph / twitter を**置換**する（マージしない）。ここで書く以上は
+    // images を必ず渡す＝渡さないと layout の og.png が消えてトップの og:image が1枚も無くなる
+    // （CLAUDE.md §4.2+・2026-07-30 に121ページで起きた事故と同じ穴）。
+    openGraph: {
+      title,
+      description,
+      siteName: '海外の反応',
+      type: 'website',
+      images: OG_IMAGES,
+    },
+    twitter: { card: 'summary_large_image', title, description, images: OG_IMAGES_TW },
+    alternates,
+  };
 }
 
 export default async function HomePage({ params }: { params: Promise<{ locale: Locale }> }) {
