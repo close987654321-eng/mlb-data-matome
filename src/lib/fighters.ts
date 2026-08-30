@@ -403,23 +403,27 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['朝倉海'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '8/29チロン戦',
-      until: '2026-08-29',
-      opponentJa: 'アオリ・チロン',
-      eventJa: 'UFCファイトナイト上海｜上海インドアスタジアム',
-    },
+    // 2026-08-29 のチロン戦を消化。次戦は未発表なので nextFightJa は置かない
+    // （期限切れの予告を掲げ続けないため＝週次の fighter-journal-gaps がここを見る）。
     accoladeJa: '総合格闘家・JAPAN TOP TEAM所属（元RIZINバンタム級王者・第3代/第6代）',
-    record: { wins: 22, losses: 6, draws: 0, kos: 14, asOf: '2026-05-30' },
+    record: { wins: 23, losses: 6, draws: 0, kos: 15, asOf: '2026-08-29' },
     headlineStats: [
-      // 通算22勝のうちKO/TKO決着数（sherdog記録・2026-05-30時点で裏取り）
-      { value: '14KO', labelJa: '通算22勝のうちKO/TKO決着数' },
+      // 通算23勝のうちKO/TKO決着数（2026-08-29 チロン戦のTKO勝ちを加算）
+      { value: '15KO', labelJa: '通算23勝のうちKO/TKO決着数' },
     ],
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E6%9C%9D%E5%80%89%E6%B5%B7',
       'https://en.wikipedia.org/wiki/Kai_Asakura',
     ],
     fights: [
+      {
+        date: '2026-08-29',
+        opponentJa: 'アオリ・チロン',
+        opponentEn: 'Aori Qileng',
+        venueJa: '中国・上海（UFCファイトナイト上海）',
+        resultJa: '2R34秒TKO勝ち',
+        noteJa: '左ハイキックからパウンドでレフェリーストップ。バンタム級で2連勝・完全アウェーのメインイベント',
+      },
       {
         date: '2026-05-30',
         opponentJa: 'キャメロン・スマザーマン',
