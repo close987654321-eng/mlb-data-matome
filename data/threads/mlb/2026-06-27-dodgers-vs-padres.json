@@ -6,7 +6,7 @@
   "fetchedAt": "2026-06-27T16:00:00+09:00",
   "title": {
     "en": "Dodgers vs. Padres Highlights (6/26/26)",
-    "ja": "ドジャース vs パドレス 6月26日ハイライト【海外の反応】"
+    "ja": "佐々木朗希5四球で4回途中KO、ビューラー古巣撃破、ドジャース対パドレス戦【海外の反応】"
   },
   "summaryJa": "佐々木朗希が5四球を与え4回途中でKO、パドレスのウォーカー・ビューラーが古巣ドジャースを7-1で撃破した。コメント欄は「60億円もらってこれか」とタッカーへの怒りが渦巻き、佐々木に「次は必ずやる」と信じるファンが「そうはならん笑」と即座に切り返される展開に。ハイライトのサムネを飾ったのが誰だったか、最後にそっと突っ込まれて締まった。",
   "flair": "Highlights",
@@ -15,7 +15,10 @@
   "series": {
     "id": "dodgers",
     "date": "2026-06-27",
-    "opponent": { "ja": "パドレス", "en": "Padres" }
+    "opponent": {
+      "ja": "パドレス",
+      "en": "Padres"
+    }
   },
   "media": {
     "kind": "video",
@@ -24,7 +27,14 @@
     "publishedAt": "2026-06-27T05:12:52Z",
     "videoTitle": "DODGERS vs. PADRES: Official Full Game Highlights (June 26) | 2026 MLB Season (Shohei Ohtani)"
   },
-  "tags": ["ドジャース", "パドレス", "大谷翔平", "佐々木朗希", "松井裕樹", "海外の反応"],
+  "tags": [
+    "ドジャース",
+    "パドレス",
+    "大谷翔平",
+    "佐々木朗希",
+    "松井裕樹",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "大谷翔平",
@@ -189,8 +199,76 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 6, "record": { "w": 52, "l": 30 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 605141, "name": "Mookie Betts", "no": 10 }] },
-    "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 7, "innings": [0, 3, 0, 0, 0, 0, 0, 4, null], "hits": 7, "errors": 0, "lob": 7, "record": { "w": 43, "l": 37 }, "rank": 2, "league": "NL", "division": "West", "homers": [{ "id": 664034, "name": "Ty France", "no": 10 }] },
-    "decisions": { "winner": "Walker Buehler", "loser": "Roki Sasaki" }
-  }
+    "away": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 1,
+      "innings": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 6,
+      "record": {
+        "w": 52,
+        "l": 30
+      },
+      "rank": 1,
+      "league": "NL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 605141,
+          "name": "Mookie Betts",
+          "no": 10
+        }
+      ]
+    },
+    "home": {
+      "ja": "パドレス",
+      "en": "San Diego Padres",
+      "score": 7,
+      "innings": [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        null
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 43,
+        "l": 37
+      },
+      "rank": 2,
+      "league": "NL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 664034,
+          "name": "Ty France",
+          "no": 10
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Walker Buehler",
+      "loser": "Roki Sasaki"
+    }
+  },
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

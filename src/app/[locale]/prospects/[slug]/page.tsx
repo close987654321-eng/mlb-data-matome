@@ -33,7 +33,9 @@ export async function generateMetadata({
     : '';
   const title = en
     ? `${p.nameEn} — NPB Player on the MLB Radar`
-    : `${p.nameJa} — MLB挑戦が注目されるNPBの逸材`;
+    : // 「{名前} ポスティング」はオフシーズンの頭クエリ（GSC実測: 「牧 ポスティング」が記事側 順位11で
+      // 21表示・8月時点）。冬に跳ねる前に LP のタイトルへ語を入れておく（説明文には従来からある）。
+      `${p.nameJa} — ポスティング・MLB挑戦が注目されるNPBの逸材`;
   const description = en
     ? `${p.nameEn} (${p.team.en}, ${p.pos.en})${statStr ? ` — 2026 ${statStr}.` : '.'} Why MLB scouts are watching, his posting outlook, and a hub of overseas reactions.`
     : `${p.nameJa}（${p.team.ja}・${p.pos.ja}）の2026年成績${statStr ? `（${statStr}）` : ''}、MLB注目ポイント、ポスティング見通し、海外の反応まとめ。`;

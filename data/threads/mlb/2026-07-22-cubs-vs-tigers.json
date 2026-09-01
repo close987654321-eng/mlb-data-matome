@@ -6,7 +6,7 @@
   "sourceUrl": "https://www.youtube.com/watch?v=rbtkCHdZmS4",
   "fetchedAt": "2026-07-22T15:25:00+09:00",
   "title": {
-    "ja": "カブス対タイガース 7月22日【海外の反応】",
+    "ja": "カブスが初回6点の11-2圧勝、鈴木誠也2打点・PCA2安打、対タイガース戦【海外の反応】",
     "en": "Cubs vs Tigers July 22 | MLB Highlights Reaction"
   },
   "series": {
@@ -20,9 +20,76 @@
   "summaryJa": "カブスが初回に一挙6点のビッグイニングを演出しタイガースを11-2で圧倒。タイガース先発フレイムバー・バルデスが1回途中で崩れ「3,800万ドルの腕に5セントの頭」と容赦ない批判を浴びた。鈴木誠也は3打数0安打ながら3四球2打点と出塁でチームに貢献。PCA（ピート・クロウアームストロング）は三塁打を含む2安打3四球でサイクルヒット目前と大暴れ。",
   "totalComments": 43,
   "game": {
-    "away": { "ja": "タイガース", "en": "Detroit Tigers", "score": 2, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 2], "hits": 7, "errors": 0, "lob": 8, "record": { "w": 47, "l": 54 }, "rank": 4, "league": "AL", "division": "Central", "homers": [{ "id": 693307, "name": "Dillon Dingler", "no": 22 }] },
-    "home": { "ja": "カブス", "en": "Chicago Cubs", "score": 11, "innings": [6, 0, 1, 0, 2, 0, 2, 0, null], "hits": 11, "errors": 0, "lob": 12, "record": { "w": 57, "l": 44 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 624424, "name": "Michael Conforto", "no": 9 }] },
-    "decisions": { "winner": "David Peterson", "loser": "Framber Valdez" }
+    "away": {
+      "ja": "タイガース",
+      "en": "Detroit Tigers",
+      "score": 2,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 8,
+      "record": {
+        "w": 47,
+        "l": 54
+      },
+      "rank": 4,
+      "league": "AL",
+      "division": "Central",
+      "homers": [
+        {
+          "id": 693307,
+          "name": "Dillon Dingler",
+          "no": 22
+        }
+      ]
+    },
+    "home": {
+      "ja": "カブス",
+      "en": "Chicago Cubs",
+      "score": 11,
+      "innings": [
+        6,
+        0,
+        1,
+        0,
+        2,
+        0,
+        2,
+        0,
+        null
+      ],
+      "hits": 11,
+      "errors": 0,
+      "lob": 12,
+      "record": {
+        "w": 57,
+        "l": 44
+      },
+      "rank": 2,
+      "league": "NL",
+      "division": "Central",
+      "homers": [
+        {
+          "id": 624424,
+          "name": "Michael Conforto",
+          "no": 9
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "David Peterson",
+      "loser": "Framber Valdez"
+    }
   },
   "stats": [
     {
@@ -50,7 +117,13 @@
     "publishedAt": "2026-07-22T03:23:43Z",
     "videoTitle": "TIGERS vs. CUBS: Official Full Game Highlights (July 21) | 2026 MLB Season"
   },
-  "tags": ["カブス", "タイガース", "鈴木誠也", "ピート・クロウアームストロング", "海外の反応"],
+  "tags": [
+    "カブス",
+    "タイガース",
+    "鈴木誠也",
+    "ピート・クロウアームストロング",
+    "海外の反応"
+  ],
   "comments": [
     {
       "author": "@TigersFanAngry",
@@ -217,5 +290,6 @@
       "bodyEn": "W",
       "bodyJa": "W（勝利）"
     }
-  ]
+  ],
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

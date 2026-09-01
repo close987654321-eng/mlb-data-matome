@@ -37,6 +37,25 @@ import type { Locale } from '@/lib/i18n';
  * 記事本文の見出し（h1）はこの一連の変更を通じて一度も触っていない。
  */
 
+/** series 定型コピー（「海外◯◯ファンと見る…」で始まる title.ja）＝SERP に出しても定型と同じ。 */
+const SERIES_COPY_RE = /^海外\S*ファンと見る/;
+
+/**
+ * 検索結果に出すタイトル（ja・MLB用）。表示タイトル（threadTitle＝series 記事は watch-along の
+ * 定型「海外◯◯ファンと見る {日付} {カード}」）とは役割を分け、SERP には編集タイトル（出来事フック）を出す。
+ *
+ * なぜ分けるか（2026-09-02）: スコア定型タイトルの撤収（上の実測）で「良いタイトルを定型で隠さない」
+ * 方針にしたが、series 記事 157本は threadTitle が定型を返すため、JSON に書かれた出来事フック付きの
+ * 編集タイトル（実測122本）が SERP に出ないままだった＝gameSeoTitle と同じ「隠れ」の残り。
+ * 表示側（h1・カード・/watch ハブ・OGP）は定型のまま＝看板企画のブランドは変えない。
+ * title.ja が定型のコピー（35本）や空のときだけ表示タイトルへ倒す＝改悪はしない。
+ */
+export function serpTitleJa(thread: Thread, displayTitle: string): string {
+  const editorial = thread.title.ja;
+  if (!editorial || SERIES_COPY_RE.test(editorial)) return displayTitle;
+  return editorial;
+}
+
 /** その試合の日付（JST）。series.date 優先・無ければ id 先頭の YYYY-MM-DD。 */
 export function gameDateOf(thread: Thread): string {
   return thread.series?.date ?? thread.id.slice(0, 10);

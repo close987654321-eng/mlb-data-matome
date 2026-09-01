@@ -6,7 +6,7 @@
   "sourceUrl": "https://www.youtube.com/watch?v=siSVeDuHxuw",
   "fetchedAt": "2026-07-22T15:30:00+09:00",
   "title": {
-    "ja": "ホワイトソックス対レンジャーズ 7月22日【海外の反応】",
+    "ja": "ロッカー6回1安打でホワイトソックス完封負け、村上宗隆1安打【海外の反応】",
     "en": "White Sox vs Rangers July 22 | MLB Highlights Reaction"
   },
   "series": {
@@ -20,9 +20,75 @@
   "summaryJa": "レンジャーズがホワイトソックスを10-0で完封。クマー・ロッカーが6回1安打の好投を見せ「ついに先発が安定してきた」と評価を上げた。ワイアット・ラングフォードの3ランも飛び出し、地区首位争いを続けるレンジャーズに期待の声が高まる。村上宗隆は3打数1安打と唯一の安打を放ったが打線全体は沈黙。ミゲル・バルガスも1安打止まりだった。現地ファンは「17ドルのチケットじゃなかったら返金を求めていた」と苦笑いするほどの完敗だった。",
   "totalComments": 22,
   "game": {
-    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 7, "record": { "w": 53, "l": 47 }, "rank": 1, "league": "AL", "division": "Central" },
-    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 10, "innings": [2, 0, 1, 2, 4, 1, 0, 0, null], "hits": 18, "errors": 0, "lob": 9, "record": { "w": 51, "l": 50 }, "rank": 1, "league": "AL", "division": "West", "homers": [{ "id": 694671, "name": "Wyatt Langford", "no": 11 }, { "id": 607043, "name": "Brandon Nimmo", "no": 10 }] },
-    "decisions": { "winner": "Kumar Rocker", "loser": "Noah Schultz", "save": "Marco Gonzales" }
+    "away": {
+      "ja": "ホワイトソックス",
+      "en": "Chicago White Sox",
+      "score": 0,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 3,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 53,
+        "l": 47
+      },
+      "rank": 1,
+      "league": "AL",
+      "division": "Central"
+    },
+    "home": {
+      "ja": "レンジャーズ",
+      "en": "Texas Rangers",
+      "score": 10,
+      "innings": [
+        2,
+        0,
+        1,
+        2,
+        4,
+        1,
+        0,
+        0,
+        null
+      ],
+      "hits": 18,
+      "errors": 0,
+      "lob": 9,
+      "record": {
+        "w": 51,
+        "l": 50
+      },
+      "rank": 1,
+      "league": "AL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 694671,
+          "name": "Wyatt Langford",
+          "no": 11
+        },
+        {
+          "id": 607043,
+          "name": "Brandon Nimmo",
+          "no": 10
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Kumar Rocker",
+      "loser": "Noah Schultz",
+      "save": "Marco Gonzales"
+    }
   },
   "stats": [
     {
@@ -160,5 +226,6 @@
       "bodyEn": "Oh. Someone's gonna be happier than a caveman who got a promotion.",
       "bodyJa": "ああ。昇進した穴居人より幸せな人がいるだろうな"
     }
-  ]
+  ],
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

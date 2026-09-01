@@ -6,7 +6,7 @@
   "sourceUrl": "https://www.youtube.com/watch?v=6sAZXJewJuc",
   "fetchedAt": "2026-07-21T16:15:00+09:00",
   "title": {
-    "ja": "ブルージェイズ対レイズ 7月21日【海外の反応】",
+    "ja": "3失策のブルージェイズがレイズに完敗、岡本和真は無安打【海外の反応】",
     "en": "Rays vs Blue Jays July 21 | MLB Highlights Reaction"
   },
   "summaryJa": "岡本和真が四球を選ぶも無安打と静かな試合に終わり、ブルージェイズはレイズに敗戦。序盤から3エラーを重ねる守備崩壊に、コメント欄ではカナダのファンから「ジェイズを応援するのがリアルに辛くなってきた」「連敗中のチームはジェイズと当たれ」と嘆きの声が続出。「昨年WS2試合残しながらここまで崩れるとは」という衝撃と、「2027年が俺たちの年だ」という苦笑いの希望が交錯するコメント欄は、一言でいえばカナダの秋の気配だった。",
@@ -15,7 +15,10 @@
   "series": {
     "id": "bluejays",
     "date": "2026-07-21",
-    "opponent": { "ja": "レイズ", "en": "Rays" }
+    "opponent": {
+      "ja": "レイズ",
+      "en": "Rays"
+    }
   },
   "media": {
     "kind": "video",
@@ -24,7 +27,12 @@
     "publishedAt": "2026-07-21T02:43:53Z",
     "videoTitle": "RAYS vs. BLUE JAYS: Official Full Game Highlights (July 20) | 2026 MLB Season"
   },
-  "tags": ["ブルージェイズ", "レイズ", "岡本和真", "海外の反応"],
+  "tags": [
+    "ブルージェイズ",
+    "レイズ",
+    "岡本和真",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "岡本和真",
@@ -169,8 +177,79 @@
     }
   ],
   "game": {
-    "away": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 7, "innings": [0, 1, 1, 0, 2, 1, 1, 0, 1], "hits": 13, "errors": 0, "lob": 6, "record": { "w": 57, "l": 42 }, "rank": 1, "league": "AL", "division": "East", "homers": [{ "id": 663743, "name": "Nick Fortes", "no": 3 }, { "id": 683748, "name": "Victor Mesa Jr.", "no": 8 }, { "id": 656775, "name": "Cedric Mullins", "no": 12 }] },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 0], "hits": 8, "errors": 3, "lob": 7, "record": { "w": 46, "l": 54 }, "rank": 5, "league": "AL", "division": "East" },
-    "decisions": { "winner": "Nick Martinez", "loser": "Dylan Cease" }
-  }
+    "away": {
+      "ja": "レイズ",
+      "en": "Tampa Bay Rays",
+      "score": 7,
+      "innings": [
+        0,
+        1,
+        1,
+        0,
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "hits": 13,
+      "errors": 0,
+      "lob": 6,
+      "record": {
+        "w": 57,
+        "l": 42
+      },
+      "rank": 1,
+      "league": "AL",
+      "division": "East",
+      "homers": [
+        {
+          "id": 663743,
+          "name": "Nick Fortes",
+          "no": 3
+        },
+        {
+          "id": 683748,
+          "name": "Victor Mesa Jr.",
+          "no": 8
+        },
+        {
+          "id": 656775,
+          "name": "Cedric Mullins",
+          "no": 12
+        }
+      ]
+    },
+    "home": {
+      "ja": "ブルージェイズ",
+      "en": "Toronto Blue Jays",
+      "score": 1,
+      "innings": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 8,
+      "errors": 3,
+      "lob": 7,
+      "record": {
+        "w": 46,
+        "l": 54
+      },
+      "rank": 5,
+      "league": "AL",
+      "division": "East"
+    },
+    "decisions": {
+      "winner": "Nick Martinez",
+      "loser": "Dylan Cease"
+    }
+  },
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

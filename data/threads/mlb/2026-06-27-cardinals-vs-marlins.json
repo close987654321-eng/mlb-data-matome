@@ -6,7 +6,7 @@
   "fetchedAt": "2026-06-27T16:00:00+09:00",
   "title": {
     "en": "Marlins vs. Cardinals Highlights (6/26/26)",
-    "ja": "カージナルス vs マーリンズ 6月26日ハイライト【海外の反応】"
+    "ja": "マーリンズに4-0完封負け、ヌートバー1安打、カージナルス対マーリンズ戦【海外の反応】"
   },
   "summaryJa": "マーリンズが先発マックス・マイヤーの好投を軸にカージナルスを4-0で完封、今季43勝目を挙げた。ヌートバーは3打数1安打1四球とまずまずの出場。コメント欄では「1997年、2003年、2026年――次にワールドシリーズを獲る年はここだ」とマーリンズファンが気炎を上げ、マイヤーの安定感を絶賛する一方で「やっとブルペンが仕事した」という皮肉な一言も飛び出した。",
   "flair": "Highlights",
@@ -15,7 +15,10 @@
   "series": {
     "id": "cardinals",
     "date": "2026-06-27",
-    "opponent": { "ja": "マーリンズ", "en": "Marlins" }
+    "opponent": {
+      "ja": "マーリンズ",
+      "en": "Marlins"
+    }
   },
   "media": {
     "kind": "video",
@@ -24,7 +27,12 @@
     "publishedAt": "2026-06-27T04:06:22Z",
     "videoTitle": "MARLINS vs. CARDINALS: Official Full Game Highlights (June 26) | 2026 MLB Season"
   },
-  "tags": ["カージナルス", "マーリンズ", "ヌートバー", "海外の反応"],
+  "tags": [
+    "カージナルス",
+    "マーリンズ",
+    "ヌートバー",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "ヌートバー",
@@ -123,8 +131,62 @@
     }
   ],
   "game": {
-    "away": { "ja": "マーリンズ", "en": "Miami Marlins", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 0, 2, 2], "hits": 8, "errors": 0, "lob": 7, "record": { "w": 43, "l": 39 }, "rank": 3, "league": "NL", "division": "East" },
-    "home": { "ja": "カージナルス", "en": "St. Louis Cardinals", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 5, "record": { "w": 42, "l": 37 }, "rank": 3, "league": "NL", "division": "Central" },
-    "decisions": { "winner": "Max Meyer", "loser": "George Soriano" }
-  }
+    "away": {
+      "ja": "マーリンズ",
+      "en": "Miami Marlins",
+      "score": 4,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2
+      ],
+      "hits": 8,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 43,
+        "l": 39
+      },
+      "rank": 3,
+      "league": "NL",
+      "division": "East"
+    },
+    "home": {
+      "ja": "カージナルス",
+      "en": "St. Louis Cardinals",
+      "score": 0,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 3,
+      "errors": 0,
+      "lob": 5,
+      "record": {
+        "w": 42,
+        "l": 37
+      },
+      "rank": 3,
+      "league": "NL",
+      "division": "Central"
+    },
+    "decisions": {
+      "winner": "Max Meyer",
+      "loser": "George Soriano"
+    }
+  },
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

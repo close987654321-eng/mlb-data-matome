@@ -6,7 +6,7 @@
   "sourceUrl": "https://www.youtube.com/watch?v=Z3r_s0iDkhk",
   "fetchedAt": "2026-07-21T16:15:00+09:00",
   "title": {
-    "ja": "ホワイトソックス対レンジャーズ 7月21日【海外の反応】",
+    "ja": "村上宗隆が二塁打で貢献、ホワイトソックス10得点で首位堅持【海外の反応】",
     "en": "White Sox vs Rangers July 21 | MLB Highlights Reaction"
   },
   "summaryJa": "村上宗隆が二塁打を含む出塁で貢献するなか、ホワイトソックスがレンジャーズを10-3で圧倒。10得点・13安打・14奪三振のパフォーマンスでALセントラル首位（53勝46敗）を堅持した。ただし捕手ティールが左足首のX線検査を受けることになり「ティール 😢」とのコメントが相次いだ。「接戦だったのに、途中からそうじゃなくなった 😂」という名言で始まるコメント欄は、レンジャーズファンが自滅を嘆く一方、逆に「ホワイトソックスを弱いチームに見せてくれてありがとう」と皮肉られる展開に。",
@@ -15,7 +15,10 @@
   "series": {
     "id": "whitesox",
     "date": "2026-07-21",
-    "opponent": { "ja": "レンジャーズ", "en": "Rangers" }
+    "opponent": {
+      "ja": "レンジャーズ",
+      "en": "Rangers"
+    }
   },
   "media": {
     "kind": "video",
@@ -24,7 +27,12 @@
     "publishedAt": "2026-07-21T03:50:57Z",
     "videoTitle": "WHITE SOX vs. RANGERS: Official Full Game Highlights (July 20) | 2026 MLB Season"
   },
-  "tags": ["ホワイトソックス", "レンジャーズ", "村上宗隆", "海外の反応"],
+  "tags": [
+    "ホワイトソックス",
+    "レンジャーズ",
+    "村上宗隆",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "村上宗隆",
@@ -168,8 +176,74 @@
     }
   ],
   "game": {
-    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 10, "innings": [0, 0, 1, 0, 4, 0, 0, 0, 5], "hits": 13, "errors": 0, "lob": 7, "record": { "w": 53, "l": 46 }, "rank": 1, "league": "AL", "division": "Central" },
-    "home": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 3, "innings": [1, 1, 0, 0, 0, 0, 1, 0, 0], "hits": 7, "errors": 0, "lob": 5, "record": { "w": 50, "l": 50 }, "rank": 2, "league": "AL", "division": "West", "homers": [{ "id": 669394, "name": "Jake Burger", "no": 17 }, { "id": 592626, "name": "Joc Pederson", "no": 17 }] },
-    "decisions": { "winner": "Chris Murphy", "loser": "Jacob deGrom" }
-  }
+    "away": {
+      "ja": "ホワイトソックス",
+      "en": "Chicago White Sox",
+      "score": 10,
+      "innings": [
+        0,
+        0,
+        1,
+        0,
+        4,
+        0,
+        0,
+        0,
+        5
+      ],
+      "hits": 13,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 53,
+        "l": 46
+      },
+      "rank": 1,
+      "league": "AL",
+      "division": "Central"
+    },
+    "home": {
+      "ja": "レンジャーズ",
+      "en": "Texas Rangers",
+      "score": 3,
+      "innings": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 5,
+      "record": {
+        "w": 50,
+        "l": 50
+      },
+      "rank": 2,
+      "league": "AL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 669394,
+          "name": "Jake Burger",
+          "no": 17
+        },
+        {
+          "id": 592626,
+          "name": "Joc Pederson",
+          "no": 17
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Chris Murphy",
+      "loser": "Jacob deGrom"
+    }
+  },
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

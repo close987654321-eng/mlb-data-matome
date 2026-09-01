@@ -6,7 +6,7 @@
   "sourceUrl": "https://www.youtube.com/watch?v=FkuG3NFFoic",
   "fetchedAt": "2026-07-21T16:15:00+09:00",
   "title": {
-    "ja": "ドジャース対フィリーズ 7月21日【海外の反応】",
+    "ja": "ターナー2発とエラーの珍MVP劇、ドジャース7-10フィリーズ【海外の反応】",
     "en": "Dodgers vs Phillies July 21 | MLB Highlights Reaction"
   },
   "summaryJa": "大谷翔平がフィリーズ戦で4打数0安打2三振と沈黙するなか、ドジャースはフィリーズに7-10で敗戦。この試合のMVPは皮肉にも敵将格のトレア・ターナー（フィリーズ）——守備でエラーを重ねてドジャースに得点を献上しながら、バットでは2本塁打を放つという「両軍MFC（最大の功労者候補）」級の大暴れ。ムーキー・ベッツが今季13号・14号の2発でドジャースの追撃をけん引したが及ばなかった。海外ファンからは「どのチームの選手なんだ」「ターナー、与え、そして奪う」と爆笑コメントが続出。最後の打者もターナーで締まるオチが待っている。",
@@ -15,7 +15,10 @@
   "series": {
     "id": "dodgers",
     "date": "2026-07-21",
-    "opponent": { "ja": "フィリーズ", "en": "Phillies" }
+    "opponent": {
+      "ja": "フィリーズ",
+      "en": "Phillies"
+    }
   },
   "media": {
     "kind": "video",
@@ -25,11 +28,103 @@
     "videoTitle": "DODGERS vs. PHILLIES: Official Full Game Highlights (July 20) | 2026 MLB Season"
   },
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 7, "innings": [0, 0, 0, 1, 0, 2, 1, 0, 3], "hits": 11, "errors": 0, "lob": 9, "record": { "w": 63, "l": 38 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 605141, "name": "Mookie Betts", "hr": 2, "no": 13 }] },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 10, "innings": [0, 4, 0, 0, 0, 4, 1, 1, null], "hits": 11, "errors": 2, "lob": 3, "record": { "w": 56, "l": 45 }, "rank": 2, "league": "NL", "division": "East", "homers": [{ "id": 669016, "name": "Brandon Marsh", "no": 16 }, { "id": 547180, "name": "Bryce Harper", "no": 21 }, { "id": 607208, "name": "Trea Turner", "hr": 2, "no": 14 }, { "id": 656537, "name": "Derek Hill", "no": 8 }] },
-    "decisions": { "winner": "Cristopher Sánchez", "loser": "Emmet Sheehan" }
+    "away": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 7,
+      "innings": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        2,
+        1,
+        0,
+        3
+      ],
+      "hits": 11,
+      "errors": 0,
+      "lob": 9,
+      "record": {
+        "w": 63,
+        "l": 38
+      },
+      "rank": 1,
+      "league": "NL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 605141,
+          "name": "Mookie Betts",
+          "hr": 2,
+          "no": 13
+        }
+      ]
+    },
+    "home": {
+      "ja": "フィリーズ",
+      "en": "Philadelphia Phillies",
+      "score": 10,
+      "innings": [
+        0,
+        4,
+        0,
+        0,
+        0,
+        4,
+        1,
+        1,
+        null
+      ],
+      "hits": 11,
+      "errors": 2,
+      "lob": 3,
+      "record": {
+        "w": 56,
+        "l": 45
+      },
+      "rank": 2,
+      "league": "NL",
+      "division": "East",
+      "homers": [
+        {
+          "id": 669016,
+          "name": "Brandon Marsh",
+          "no": 16
+        },
+        {
+          "id": 547180,
+          "name": "Bryce Harper",
+          "no": 21
+        },
+        {
+          "id": 607208,
+          "name": "Trea Turner",
+          "hr": 2,
+          "no": 14
+        },
+        {
+          "id": 656537,
+          "name": "Derek Hill",
+          "no": 8
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Cristopher Sánchez",
+      "loser": "Emmet Sheehan"
+    }
   },
-  "tags": ["ドジャース", "フィリーズ", "大谷翔平", "ムーキー・ベッツ", "カイル・シュワーバー", "クリストファー・サンチェス", "海外の反応"],
+  "tags": [
+    "ドジャース",
+    "フィリーズ",
+    "大谷翔平",
+    "ムーキー・ベッツ",
+    "カイル・シュワーバー",
+    "クリストファー・サンチェス",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "大谷翔平",
@@ -227,5 +322,6 @@
       "bodyEn": "What a funny game",
       "bodyJa": "なんて笑える試合だ"
     }
-  ]
+  ],
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

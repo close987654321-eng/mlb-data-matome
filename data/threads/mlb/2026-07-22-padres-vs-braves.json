@@ -6,7 +6,7 @@
   "sourceUrl": "https://www.youtube.com/watch?v=dgFqH_9E-rw",
   "fetchedAt": "2026-07-22T15:15:00+09:00",
   "title": {
-    "ja": "パドレス対ブレーブス 7月22日【海外の反応】",
+    "ja": "ミラーが最終回3奪三振で締め、パドレス8-3ブレーブス、松井裕樹も登板【海外の反応】",
     "en": "Padres vs Braves July 22 | MLB Highlights Reaction"
   },
   "series": {
@@ -20,9 +20,80 @@
   "summaryJa": "パドレスがブレーブスの先発陣を打ち崩し8-3で快勝。マチャドとタティスの長打が目立った。松井裕樹は0.2回1失点と不安定な登板となったが、メイソン・ミラーが最終回を3奪三振で締めて貫禄を見せた。「アトランタはトレードデッドラインで先発を補強しないとプレーオフ争いは厳しい」という声が目立つ。「負け越し中のパドレスに負けるとは」とブレーブスファンが嘆いた。",
   "totalComments": 34,
   "game": {
-    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 8, "innings": [1, 0, 0, 3, 1, 1, 0, 2, 0], "hits": 13, "errors": 0, "lob": 7, "record": { "w": 50, "l": 51 }, "rank": 3, "league": "NL", "division": "West", "homers": [{ "id": 701538, "name": "Jackson Merrill", "no": 13 }, { "id": 592518, "name": "Manny Machado", "hr": 2, "no": 22 }, { "id": 665487, "name": "Fernando Tatis Jr.", "no": 8 }] },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [0, 2, 0, 0, 0, 0, 1, 0, 0], "hits": 4, "errors": 0, "lob": 9, "record": { "w": 58, "l": 42 }, "rank": 1, "league": "NL", "division": "East" },
-    "decisions": { "winner": "Walker Buehler", "loser": "Reynaldo López" }
+    "away": {
+      "ja": "パドレス",
+      "en": "San Diego Padres",
+      "score": 8,
+      "innings": [
+        1,
+        0,
+        0,
+        3,
+        1,
+        1,
+        0,
+        2,
+        0
+      ],
+      "hits": 13,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 50,
+        "l": 51
+      },
+      "rank": 3,
+      "league": "NL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 701538,
+          "name": "Jackson Merrill",
+          "no": 13
+        },
+        {
+          "id": 592518,
+          "name": "Manny Machado",
+          "hr": 2,
+          "no": 22
+        },
+        {
+          "id": 665487,
+          "name": "Fernando Tatis Jr.",
+          "no": 8
+        }
+      ]
+    },
+    "home": {
+      "ja": "ブレーブス",
+      "en": "Atlanta Braves",
+      "score": 3,
+      "innings": [
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "hits": 4,
+      "errors": 0,
+      "lob": 9,
+      "record": {
+        "w": 58,
+        "l": 42
+      },
+      "rank": 1,
+      "league": "NL",
+      "division": "East"
+    },
+    "decisions": {
+      "winner": "Walker Buehler",
+      "loser": "Reynaldo López"
+    }
   },
   "stats": [
     {
@@ -57,7 +128,14 @@
     "publishedAt": "2026-07-22T02:32:48Z",
     "videoTitle": "PADRES vs. BRAVES: Official Full Game Highlights (July 21) | 2026 MLB Season"
   },
-  "tags": ["パドレス", "ブレーブス", "松井裕樹", "メイソン・ミラー", "マット・オルソン", "海外の反応"],
+  "tags": [
+    "パドレス",
+    "ブレーブス",
+    "松井裕樹",
+    "メイソン・ミラー",
+    "マット・オルソン",
+    "海外の反応"
+  ],
   "comments": [
     {
       "author": "@PadresFan_SD",
@@ -224,5 +302,6 @@
       "bodyEn": "RD SD❤",
       "bodyJa": "RD SD❤"
     }
-  ]
+  ],
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

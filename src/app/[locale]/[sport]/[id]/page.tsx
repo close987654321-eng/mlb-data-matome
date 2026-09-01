@@ -7,7 +7,7 @@ import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
-import { gameSeoDescription, gameDateOf, gameDateLongJa } from '@/lib/gameSeo';
+import { gameSeoDescription, serpTitleJa, gameDateOf, gameDateLongJa } from '@/lib/gameSeo';
 import { fightSeoTitle } from '@/lib/fightSeo';
 import { coverImage, ogCover, youTubeId } from '@/lib/media';
 import { rankNextReads } from '@/lib/nextRead';
@@ -68,6 +68,9 @@ export async function generateMetadata({
   // 説明文はスコア1文を足したものを使う＝タイトルで引き、答えはスニペット本文で見せる。
   const seoTitle = sport === 'mlb' ? null : fightSeoTitle(thread, locale);
   const description = sport === 'mlb' ? gameSeoDescription(thread, locale) : thread.summaryJa;
+  // MLB は series 記事も SERP には編集タイトル（出来事フック）を出す＝表示（h1・OGP・watch ハブ）は
+  // 定型のまま。判断の経緯は src/lib/gameSeo.ts の serpTitleJa を参照。
+  const serpBase = sport === 'mlb' && locale === 'ja' ? serpTitleJa(thread, title) : title;
   // OGP/Discover は 1200px 幅以上を要求するので、動画は maxresdefault(1280x720) を優先する
   // 大きいカバーを使う（カード表示の coverImage=hqdefault とは別物）。
   const cover = await ogCover(thread);
@@ -75,7 +78,7 @@ export async function generateMetadata({
   // 編集タイトルの多くは末尾が【海外の反応】で、layout の '%s｜海外の反応' テンプレートと重なって
   // 「…【海外の反応】｜海外の反応」になっていた（indexable 121ページで実測）。SERP のタイトルは
   // 表示幅が限られるので重複語を捨てる。記事本文の見出し（h1）は編集タイトルのまま。
-  const metaTitle = seoTitle ?? title.replace(/\s*【海外の反応】\s*$/, '');
+  const metaTitle = seoTitle ?? serpBase.replace(/\s*【海外の反応】\s*$/, '');
 
   return {
     // absolute＝layout のテンプレートを回さない。格闘技の結果記事だけ専用タイトル、それ以外

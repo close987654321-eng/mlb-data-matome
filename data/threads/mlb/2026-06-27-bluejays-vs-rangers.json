@@ -6,7 +6,7 @@
   "fetchedAt": "2026-06-27T16:00:00+09:00",
   "title": {
     "en": "Rangers vs. Blue Jays Highlights (6/26/26)",
-    "ja": "ブルージェイズ vs レンジャーズ 6月26日ハイライト【海外の反応】"
+    "ja": "岡本和真が今季19号含む2安打2打点も、ブルージェイズ逆転負け【海外の反応】"
   },
   "summaryJa": "岡本和真が今季19号本塁打を含む4打数2安打2打点と孤軍奮闘したが、ブルージェイズはレンジャーズに5-4で逆転負け。コメント欄は「ヴラディーは何度ゲッツーを打てば気が済むんだ」「岡本がチームを一人で背負ってる」という嘆きで溢れかえり、フロント批判・監督交代論まで飛び出した。「ヴラデミール・グラウンドアウトJr.」というあだ名が付けられてスレが締まった。",
   "flair": "Highlights",
@@ -15,7 +15,10 @@
   "series": {
     "id": "bluejays",
     "date": "2026-06-27",
-    "opponent": { "ja": "レンジャーズ", "en": "Rangers" }
+    "opponent": {
+      "ja": "レンジャーズ",
+      "en": "Rangers"
+    }
   },
   "media": {
     "kind": "video",
@@ -24,7 +27,12 @@
     "publishedAt": "2026-06-27T02:41:26Z",
     "videoTitle": "RANGERS vs. BLUE JAYS: Official Full Game Highlights (June 26) | 2026 MLB Season (Kazuma Okamoto)"
   },
-  "tags": ["ブルージェイズ", "レンジャーズ", "岡本和真", "海外の反応"],
+  "tags": [
+    "ブルージェイズ",
+    "レンジャーズ",
+    "岡本和真",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "岡本和真",
@@ -146,8 +154,77 @@
     }
   ],
   "game": {
-    "away": { "ja": "レンジャーズ", "en": "Texas Rangers", "score": 5, "innings": [3, 0, 2, 0, 0, 0, 0, 0, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 40, "l": 42 }, "rank": 3, "league": "AL", "division": "West", "homers": [{ "id": 679822, "name": "Justin Foscue", "no": 5 }] },
-    "home": { "ja": "ブルージェイズ", "en": "Toronto Blue Jays", "score": 4, "innings": [0, 0, 0, 0, 0, 0, 0, 4, 0], "hits": 9, "errors": 0, "lob": 7, "record": { "w": 39, "l": 43 }, "rank": 3, "league": "AL", "division": "East", "homers": [{ "id": 672960, "name": "Kazuma Okamoto", "no": 19 }] },
-    "decisions": { "winner": "Nathan Eovaldi", "loser": "Patrick Corbin", "save": "Jacob Latz" }
-  }
+    "away": {
+      "ja": "レンジャーズ",
+      "en": "Texas Rangers",
+      "score": 5,
+      "innings": [
+        3,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 9,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 40,
+        "l": 42
+      },
+      "rank": 3,
+      "league": "AL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 679822,
+          "name": "Justin Foscue",
+          "no": 5
+        }
+      ]
+    },
+    "home": {
+      "ja": "ブルージェイズ",
+      "en": "Toronto Blue Jays",
+      "score": 4,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0
+      ],
+      "hits": 9,
+      "errors": 0,
+      "lob": 7,
+      "record": {
+        "w": 39,
+        "l": 43
+      },
+      "rank": 3,
+      "league": "AL",
+      "division": "East",
+      "homers": [
+        {
+          "id": 672960,
+          "name": "Kazuma Okamoto",
+          "no": 19
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Nathan Eovaldi",
+      "loser": "Patrick Corbin",
+      "save": "Jacob Latz"
+    }
+  },
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

@@ -6,7 +6,7 @@
   "fetchedAt": "2026-06-27T16:00:00+09:00",
   "title": {
     "en": "Cubs vs. Brewers Highlights (6/26/26)",
-    "ja": "カブス vs ブルワーズ 6月26日ハイライト【海外の反応】"
+    "ja": "ミシオロウスキー105.5マイルに鈴木誠也11号で一矢、カブス対ブルワーズ戦【海外の反応】"
   },
   "summaryJa": "ブルワーズの21歳右腕ミシオロウスキーがMLB先発最速の105.5マイル（約169.8キロ）を計測し、カブス打線をほぼ完封する圧巻の投球を披露した6月26日。そのノーヒッター寸前の完璧なマウンドをぶち壊したのは鈴木誠也の今季11号ソロアーチ。コメント欄は「チャップマンの105.8マイルを抜くかも」と沸き、PCAの超人守備を巡る論争も飛び出して、最後はN'SYNCネタで締まった。",
   "flair": "Highlights",
@@ -15,7 +15,10 @@
   "series": {
     "id": "cubs",
     "date": "2026-06-27",
-    "opponent": { "ja": "ブルワーズ", "en": "Brewers" }
+    "opponent": {
+      "ja": "ブルワーズ",
+      "en": "Brewers"
+    }
   },
   "media": {
     "kind": "video",
@@ -24,7 +27,14 @@
     "publishedAt": "2026-06-27T03:14:58Z",
     "videoTitle": "CUBS vs. BREWERS: Official Full Game Highlights (June 26) | 2026 MLB Season (Jacob Misiorowski)"
   },
-  "tags": ["カブス", "ブルワーズ", "鈴木誠也", "ピート・クロウアームストロング", "ミシオロウスキー", "海外の反応"],
+  "tags": [
+    "カブス",
+    "ブルワーズ",
+    "鈴木誠也",
+    "ピート・クロウアームストロング",
+    "ミシオロウスキー",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "鈴木誠也",
@@ -156,8 +166,81 @@
     }
   ],
   "game": {
-    "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 2, "innings": [0, 0, 0, 0, 1, 0, 0, 1, 0], "hits": 3, "errors": 1, "lob": 7, "record": { "w": 44, "l": 38 }, "rank": 2, "league": "NL", "division": "Central", "homers": [{ "id": 673548, "name": "Seiya Suzuki", "no": 11 }] },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 6, "innings": [0, 0, 0, 0, 0, 3, 2, 1, null], "hits": 11, "errors": 0, "lob": 9, "record": { "w": 50, "l": 29 }, "rank": 1, "league": "NL", "division": "Central", "homers": [{ "id": 669003, "name": "Garrett Mitchell", "no": 6 }, { "id": 661388, "name": "William Contreras", "no": 9 }] },
-    "decisions": { "winner": "Jacob Misiorowski", "loser": "Ethan Roberts" }
-  }
+    "away": {
+      "ja": "カブス",
+      "en": "Chicago Cubs",
+      "score": 2,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "hits": 3,
+      "errors": 1,
+      "lob": 7,
+      "record": {
+        "w": 44,
+        "l": 38
+      },
+      "rank": 2,
+      "league": "NL",
+      "division": "Central",
+      "homers": [
+        {
+          "id": 673548,
+          "name": "Seiya Suzuki",
+          "no": 11
+        }
+      ]
+    },
+    "home": {
+      "ja": "ブルワーズ",
+      "en": "Milwaukee Brewers",
+      "score": 6,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        2,
+        1,
+        null
+      ],
+      "hits": 11,
+      "errors": 0,
+      "lob": 9,
+      "record": {
+        "w": 50,
+        "l": 29
+      },
+      "rank": 1,
+      "league": "NL",
+      "division": "Central",
+      "homers": [
+        {
+          "id": 669003,
+          "name": "Garrett Mitchell",
+          "no": 6
+        },
+        {
+          "id": 661388,
+          "name": "William Contreras",
+          "no": 9
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Jacob Misiorowski",
+      "loser": "Ethan Roberts"
+    }
+  },
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

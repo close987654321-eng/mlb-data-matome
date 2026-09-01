@@ -6,7 +6,7 @@
   "sourceUrl": "https://www.youtube.com/watch?v=y-zk9ZQjHuM",
   "fetchedAt": "2026-07-22T15:00:00+09:00",
   "title": {
-    "ja": "ドジャース対フィリーズ 7月22日【海外の反応】",
+    "ja": "マンシー9回に19号逆転弾とリアルミュート逆走劇、ドジャース対フィリーズ戦【海外の反応】",
     "en": "Dodgers vs Phillies July 22 | MLB Highlights Reaction"
   },
   "series": {
@@ -20,9 +20,70 @@
   "summaryJa": "マックス・マンシーが9回に今季19号の逆転2ランを放ち、ドジャースが2-1で逆転勝利。先発ロブレスキーは6.1回1失点の好投で試合を作った。最大の話題はJTリアルミュートの前代未聞の走塁ミス――2死一塁の場面でゴロを打ちながら突然逆走し、内野陣に挟殺されてゲームセット。「35歳のベテランがどっちに走るか忘れるとは」と海外ファンが騒然となった。大谷翔平は4打数1安打2三振。",
   "totalComments": 200,
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [0, 0, 0, 2, 0, 0, 0, 0, 0], "hits": 5, "errors": 1, "lob": 2, "record": { "w": 64, "l": 38 }, "rank": 1, "league": "NL", "division": "West", "homers": [{ "id": 571970, "name": "Max Muncy", "no": 19 }] },
-    "home": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 1, "innings": [1, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 6, "record": { "w": 56, "l": 46 }, "rank": 2, "league": "NL", "division": "East" },
-    "decisions": { "winner": "Justin Wrobleski", "loser": "Zack Wheeler", "save": "Tanner Scott" }
+    "away": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 2,
+      "innings": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 5,
+      "errors": 1,
+      "lob": 2,
+      "record": {
+        "w": 64,
+        "l": 38
+      },
+      "rank": 1,
+      "league": "NL",
+      "division": "West",
+      "homers": [
+        {
+          "id": 571970,
+          "name": "Max Muncy",
+          "no": 19
+        }
+      ]
+    },
+    "home": {
+      "ja": "フィリーズ",
+      "en": "Philadelphia Phillies",
+      "score": 1,
+      "innings": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 6,
+      "record": {
+        "w": 56,
+        "l": 46
+      },
+      "rank": 2,
+      "league": "NL",
+      "division": "East"
+    },
+    "decisions": {
+      "winner": "Justin Wrobleski",
+      "loser": "Zack Wheeler",
+      "save": "Tanner Scott"
+    }
   },
   "stats": [
     {
@@ -40,7 +101,13 @@
     "publishedAt": "2026-07-22T03:18:19Z",
     "videoTitle": "DODGERS vs. PHILLIES: Official Full Game Highlights (July 21) | 2026 MLB Season"
   },
-  "tags": ["ドジャース", "フィリーズ", "大谷翔平", "マックス・マンシー", "海外の反応"],
+  "tags": [
+    "ドジャース",
+    "フィリーズ",
+    "大谷翔平",
+    "マックス・マンシー",
+    "海外の反応"
+  ],
   "comments": [
     {
       "author": "@philly_sports1558",
@@ -209,5 +276,6 @@
       "bodyEn": "Me: Runners on 2nd and 3rd. No way DP can happen.\nLe Realmuto: Hold my beer. LOL",
       "bodyJa": "俺：2・3塁にいるのにゲッツーなんてあり得ない\nリアルミュート：ちょっと見てて。LOL"
     }
-  ]
+  ],
+  "updatedAt": "2026-09-02T06:13:00+09:00"
 }

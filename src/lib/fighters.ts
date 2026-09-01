@@ -483,6 +483,62 @@ export const FIGHTERS: Fighter[] = [
     ],
   },
   {
+    slug: 'shinya-aoki',
+    nameJa: '青木真也',
+    nameEn: 'Shinya Aoki',
+    shortJa: ['青木'],
+    sport: 'mma',
+    voiceScope: 'domestic',
+    // 超RIZIN.5（2026-09-10）で朝倉未来と対戦＝11年ぶりのRIZIN復帰戦。大会レジストリ
+    // （src/lib/rizin5.ts 第2試合）と同時に追加（2026-09-02）。until を過ぎれば自動で消える。
+    nextFightJa: {
+      labelJa: '9/10朝倉未来戦',
+      until: '2026-09-10',
+      opponentJa: '朝倉未来',
+      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
+      href: '/rizin5',
+    },
+    accoladeJa:
+      '総合格闘家（元DREAM・元ONE世界ライト級王者、通称「跳関十段」。RIZIN参戦は旗揚げ戦以来11年ぶり）',
+    // 50勝12敗は rizin5.ts の大会レジストリ（recordAsOf 2025-11-16＝手塚戦まで反映）と同値。
+    // KO勝ち4は Wikipedia の決着内訳（KO4・一本32・判定11）から＝直近の勝ちはすべて一本で増えていない。
+    record: { wins: 50, losses: 12, draws: 0, kos: 4, asOf: '2025-11-16' },
+    headlineStats: [
+      // 一本勝ちの数はレジストリの紹介文（「50勝のうち一本勝ちが32」）と同じ値
+      { value: '一本32', labelJa: '通算50勝のうちサブミッション決着の数' },
+    ],
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E9%9D%92%E6%9C%A8%E7%9C%9F%E4%B9%9F',
+      'https://en.wikipedia.org/wiki/Shinya_Aoki',
+    ],
+    fights: [
+      {
+        date: '2025-11-16',
+        opponentJa: '手塚裕之',
+        opponentEn: 'Hiroyuki Tezuka',
+        venueJa: '東京・有明アリーナ（ONE 173）',
+        resultJa: '2R28秒TKO負け（ボディからの顔面ヒザ）',
+        noteJa: '1Rはツイスターで攻めてリードしたが2R開始直後に逆転された。この負けからの再起がRIZIN復帰戦になる',
+      },
+      {
+        date: '2025-03-23',
+        opponentJa: 'エドゥアルド・フォラヤン',
+        opponentEn: 'Eduard Folayang',
+        venueJa: 'さいたまスーパーアリーナ（ONE 172）',
+        resultJa: '1R53秒 腕ひしぎ十字で一本勝ち',
+        noteJa: '4度目の対戦となる因縁のライバルを1分未満で極めた',
+      },
+      {
+        date: '2024-01-28',
+        opponentJa: 'ジョン・リネカー',
+        opponentEn: 'John Lineker',
+        venueJa: '東京・有明アリーナ（ONE 165）',
+        resultJa: '1R一本勝ち',
+        noteJa: '元Bellator世界バンタム級王者の強打者をグラウンドで仕留めた',
+      },
+    ],
+  },
+  {
     slug: 'kyoma-akimoto',
     nameJa: '秋元強真',
     nameEn: 'Kyoma Akimoto',
@@ -738,6 +794,15 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['冨澤', '大智'],
     sport: 'mma',
     voiceScope: 'domestic',
+    // 超RIZIN.5 出場（rizin5.ts の第8試合）。カタログだけ次戦が空だと LP と /rizin5 の相互配線が
+    // 切れるため追記（2026-09-02。until を過ぎれば自動で消える）。
+    nextFightJa: {
+      labelJa: '9/10ドンマイ川端戦',
+      until: '2026-09-10',
+      opponentJa: 'ドンマイ川端',
+      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
+      href: '/rizin5',
+    },
     accoladeJa:
       "総合格闘家・FIGHTER'S FLOW所属（BreakingDown出身、通称「闘神」。膝蹴りを武器にRIZIN参戦）",
     record: { wins: 3, losses: 2, draws: 0, kos: 2, asOf: '2026-06-06' },
