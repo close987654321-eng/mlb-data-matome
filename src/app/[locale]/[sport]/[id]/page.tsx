@@ -7,7 +7,7 @@ import { getAllColumns } from '@/lib/columns';
 import { formatUpdatedAt } from '@/lib/format';
 import { SPORTS, SPORT_INFO, isSport } from '@/lib/sports';
 import { threadTitle, seriesTitle, getSeries } from '@/lib/series';
-import { gameSeoTitle, gameSeoDescription, gameDateOf, gameDateLongJa } from '@/lib/gameSeo';
+import { gameSeoDescription, gameDateOf, gameDateLongJa } from '@/lib/gameSeo';
 import { fightSeoTitle } from '@/lib/fightSeo';
 import { coverImage, ogCover, youTubeId } from '@/lib/media';
 import { rankNextReads } from '@/lib/nextRead';
@@ -60,11 +60,13 @@ export async function generateMetadata({
   if (!thread) return {};
 
   const title = threadTitle(thread, locale);
-  // 試合記事は検索結果に出すタイトル/説明文だけ組み直す＝スコアと日付を前に出して「対」クエリに答える
-  // （記事本文の見出しは title のまま。理由と実測値は src/lib/gameSeo.ts）。
-  // 格闘技は「{A} vs {B} 結果｜{勝者}が{決着}勝ち」に組み直す（結果クエリ対策・src/lib/fightSeo.ts）。
-  // 説明文は summaryJa のまま＝要約が既に「誰が誰にどう勝ったか」から書き出されているため。
-  const seoTitle = sport === 'mlb' ? gameSeoTitle(thread, locale) : fightSeoTitle(thread, locale);
+  // MLB の試合記事は 2026-09-01 に定型タイトル（スコア前出し）を撤収した＝編集タイトルをそのまま
+  // 検索結果に出す。対戦カードクエリは Google のスコアパネルと速報サイトの面で、151ページ 29,920表示
+  // 11クリック（CTR 0.037%）しか返らなかった。実測と判断の根拠は src/lib/gameSeo.ts。
+  // 格闘技は「{A} vs {B} 結果｜{勝者}が{決着}勝ち」に組み直したまま＝こちらは結果クエリに
+  // 競合が少なく、まとめ記事が1位を取れる面（src/lib/fightSeo.ts）。
+  // 説明文はスコア1文を足したものを使う＝タイトルで引き、答えはスニペット本文で見せる。
+  const seoTitle = sport === 'mlb' ? null : fightSeoTitle(thread, locale);
   const description = sport === 'mlb' ? gameSeoDescription(thread, locale) : thread.summaryJa;
   // OGP/Discover は 1200px 幅以上を要求するので、動画は maxresdefault(1280x720) を優先する
   // 大きいカバーを使う（カード表示の coverImage=hqdefault とは別物）。
@@ -76,8 +78,8 @@ export async function generateMetadata({
   const metaTitle = seoTitle ?? title.replace(/\s*【海外の反応】\s*$/, '');
 
   return {
-    // absolute＝layout のテンプレートを回さない。試合レポートは専用タイトル、それ以外は
-    // 「{編集タイトル}｜海外の反応」を自前で組む（ブランド語を1回だけに保つ）。
+    // absolute＝layout のテンプレートを回さない。格闘技の結果記事だけ専用タイトル、それ以外
+    //（MLB の試合記事を含む）は「{編集タイトル}｜海外の反応」を自前で組む（ブランド語を1回だけに保つ）。
     title: { absolute: seoTitle ?? `${metaTitle}｜海外の反応` },
     description,
     // 薄い記事（isThreadIndexable=false）は検索に出さない。follow は残す＝リンク先の
