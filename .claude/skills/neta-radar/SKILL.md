@@ -57,11 +57,18 @@ node scripts/fetch-youtube.mjs latest <channelId> 10
 台帳が空・古いときは WebSearch で当月の興行（井上尚弥・UFC ナンバー・朝倉海/平良達郎の参戦）を
 確認して追記してから使う。
 
-### D.【手動注文】Reddit 巡回の「買い物リスト」
-Reddit API は承認待ち＝自動で読めない。代わりに**村山に貼ってほしいスレの注文**を候補として明示する
-（例:「昨夜の乱闘、r/baseball の top/day に実況スレがあるはず→開いて全選択コピペで貼ってください」）。
-貼られたら matome の丸コピペ受け入れ（入力セクション）に直結する。巡回先の定番 URL は
-`references/channels.md` 末尾の Reddit 欄。
+### D.【半自動】Reddit 深掘りスキャン（公開RSS ＋ old.reddit HTML）
+公式 API は承認待ちだが、**公開RSS と old.reddit の HTML は通る**＝手動貼り付けを待たずに掘れる
+（`.json` は常に403）。**狙うのは単独の名言でなく、海外ファン同士の2〜4レスの掛け合い**。
+手順の正は **`references/reddit-scan.md`**（ルート実測 → 球団板を選ぶ → 月間トップを選手名で引く →
+コメントRSSは深さ優先＝連番が返信チェーン → 当たりスレの型8種 → 濾す → 渡す）。要点だけ:
+
+- ⭐**コアな会話は r/baseball でなく球団板にある**。ゲームスレは捨て、感想・考察・内輪スレだけ拾う
+- ⭐**日本語圏で既に流通しているネタは捨てる**（面白さとは別の一次フィルタ）
+- ⭐**板の数字は statsapi で当て直す**（ファンの神話化が混ざる）
+- ▲スコアが取れない日がある＝その日は**票数を本文に書かない**
+
+スクリプトは `_local/reddit-scan/`。巡回先の定番 URL は `references/channels.md` 末尾の Reddit 欄。
 
 ### E.【自動】MLB の移籍・契約（オフシーズンの主力）
 ```sh
@@ -104,10 +111,12 @@ node scripts/fetch-transactions.mjs 2026-12-01..2026-12-15   # ウィンター�
 - **捏造しない**: 存在しない動画・スレ・興行を候補にしない。数値（view/comment）は実測のみ。
 - **チャンネル ID は必ず実測で台帳に足す**（`fetch-youtube.mjs search "<チャンネル名>" 3` で確認して
   から。推測で書かない。初回セットアップは村山同席で）。
-- 未承認の Reddit API・`.json` エンドポイントを叩かない（承認後に Step 1-D を自動化して本領）。
+- 未承認の Reddit API・`.json` を叩かない／**他社リーダーの UA を騙らない**（自己申告 UA で公開RSSと
+  old.reddit HTML だけ使う＝BAN根拠を作らない。公式 API 承認後に Step 1-D を全自動化する）。
 - 「MMA 海外の反応」をターゲット語にしない（SERP 汚染＝matome 5クラス表の注記が正）。
 
 ## references/
+- `reddit-scan.md` — **Reddit 深掘りスキャン手順**（Step 1-D の正。当たりスレの型8種と濾し方）
 - `channels.md` — 監視チャンネル台帳（name / channelId / sport / 拾うもの / 足切り目安）＋ Reddit 巡回先
 - `events.md` — 興行カレンダー（ボクシング/UFC。日付JST・カード・注目度）。週1で棚卸し
 - `feedback-log.md` — 足切り閾値・候補の当たり外れの学び（matome と同じ「2回でルール昇格」運用）
@@ -117,3 +126,7 @@ node scripts/fetch-transactions.mjs 2026-12-01..2026-12-15   # ウィンター�
   初めて配線。YouTube 定点監視＋MLB ライバル枠参照＋興行カレンダー＋Reddit 手動注文の4系統・
   候補チケット方式（jp-games の suggestedId 方式の横展開）。Reddit API 承認後に r/baseball ホット
   スキャンを Step 1 に追加予定。
+- 2026-08-24: Step 1-D を「手動注文」から**半自動の深掘りスキャン**に更新（公開RSS＋old.reddit HTML の
+  ルートが実測で通るため。手順は `references/reddit-scan.md` へ分離）。狙いを**海外ファン同士の
+  2〜4レスの掛け合い**に定義し直し、球団板優先・日本語圏既出の排除・板の数字の statsapi 当て直しを
+  一次フィルタとして明文化。
