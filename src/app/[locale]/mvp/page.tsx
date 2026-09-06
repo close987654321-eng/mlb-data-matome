@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getMvpBoard } from '@/lib/mvpBoard';
 import { getAllThreads } from '@/lib/data';
+import { BOARD_COLUMN_TAGS, columnsForBoard } from '@/lib/boardColumns';
 import { buildFeed } from '@/lib/feed';
 import MvpBoard from '@/components/MvpBoard';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
+import BoardColumns from '@/components/BoardColumns';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -82,7 +84,10 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
   const c = copy(en, board.season, leaders, board.asOf);
 
   // MVPレースの海外の反応（MVPタグの記事）＝「MVP 海外の反応」の中身。
-  const all = await getAllThreads();
+  const [all, raceColumns] = await Promise.all([
+    getAllThreads(),
+    columnsForBoard(BOARD_COLUMN_TAGS.mvp),
+  ]);
   const reactionItems = buildFeed(
     all.filter((th) => (th.tags ?? []).some((x) => MVP_TAGS.includes(x))),
     [],
@@ -126,6 +131,17 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
       </section>
 
       <MvpBoard board={board} locale={locale} />
+
+      <BoardColumns
+        columns={raceColumns}
+        locale={locale}
+        heading={en ? 'Reading the race' : 'このレースの読み解き'}
+        lead={
+          en
+            ? 'Why the order moved — our data columns on the award races, written from the same boards.'
+            : '順位が動いた理由を、同じボードの数字から読み解いたコラム。表では分からない差分だけを書いています。'
+        }
+      />
 
       {/* MVPレースの海外の反応＝検索意図「MVP 海外の反応」の受け皿。記事が付くほど厚くなる。 */}
       <section>

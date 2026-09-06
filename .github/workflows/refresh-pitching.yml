@@ -1,4 +1,4 @@
-name: 予測ボード更新（球種＋サイヤング＋MVP・手動）
+name: 予測ボード更新（球種＋サイヤング＋MVP＋新人王・手動）
 
 # 投手の「球種の設計図」(data/pitch-arsenals.json)・「サイヤング予測ボード」(data/cy-young-board.json)・
 # 「MVP予測ボード」(data/mvp-board.json) を取り直し、変化があればコミット→push（Vercel が自動デプロイ）。
@@ -47,24 +47,25 @@ jobs:
           # （直前の cyyoung が書いた data/cy-young-board.json を読む）。失敗しても cyyoung は活かす。
           node scripts/fetch-mlb-stats.mjs arsenal "$SEASON" | tail -2 || echo "arsenal スキップ（cyyoung は反映済み）"
 
-      - name: MVP予測ボードを更新（規定打者をAL/NL別にスコア化＋圏外の日本人野手）
+      - name: MVP・新人王 予測ボードを更新（規定打者／ルーキー資格者をAL/NL別にスコア化）
         run: |
           set -euo pipefail
           SEASON=$(TZ=Asia/Tokyo date +%Y)
           # mvp は statsapi 規定打者＋sabermetrics WAR＋Savant 野手CSV から自前で組む（打者版）。
           node scripts/fetch-mlb-stats.mjs mvp "$SEASON" | tail -2 || echo "mvp スキップ（他ボードは反映済み）"
+          node scripts/fetch-mlb-stats.mjs roy "$SEASON" | tail -2 || echo "roy スキップ（他ボードは反映済み）"
 
       - name: 変化があればコミット＆push
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json; then
+          if git diff --quiet -- data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json
-          git commit -m "chore(stats): 予測ボード更新（球種＋サイヤング＋MVP $(TZ=Asia/Tokyo date '+%Y-%m-%d JST'))"
+          git add data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json
+          git commit -m "chore(stats): 予測ボード更新（球種＋サイヤング＋MVP＋新人王 $(TZ=Asia/Tokyo date '+%Y-%m-%d JST'))"
           # 毎時の snapshot や記事マージが同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
           for i in 1 2 3 4 5; do
             if git push; then echo "push成功"; exit 0; fi

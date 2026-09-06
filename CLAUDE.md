@@ -52,6 +52,7 @@ SSG します。
 │   │   ├── watch/                   # 「海外ファンと見る」ハブ（動画つき記事）
 │   │   ├── player/ + player/[slug]/ # 日本人選手ハブ（成績・徹底分析・滞在5分の検索母艦）
 │   │   ├── ranking/ + allstar/      # 日本人選手ランキング／オールスター特設
+│   │   ├── mvp/ + cy-young/ + roy/  # 賞レース予測ボード（MVP・サイヤング・新人王）
 │   │   ├── prospects/               # NEXT MLB ハブ（NPB 注目株）
 │   │   └── tag/[tag]/ + search/ + columns/ + p/[page]/  # タグ・検索・コラム・ページネーション
 │   ├── components/
@@ -159,6 +160,16 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     のリーダーボード CSV から **OAA（守備範囲）・守備run（FRV相当）・送球 最速mph・走力 ft/s** を取得（MLB公式・
     キー不要）。OAA等は守備位置に就く野手のみ＝投手/DH には付かない（大谷は走力のみ）。Savant 取得が失敗しても
     コア（statsapi）スナップショットは壊さずその指標だけ欠落させて続行。法務 posture は statsapi と同じ（公知の数値だけ）。
+  - **賞レース予測ボード（/mvp・/cy-young・/roy）**: `node scripts/fetch-mlb-stats.mjs mvp|cyyoung|roy [season]` が
+    リーグ内パーセンタイルの重み付き合算でスコア化した順位表を `data/{mvp,cy-young,roy}-board.json` へ書く（CIが1日1回更新）。
+    **新人王（roy）だけは1つの賞を野手と投手が争う**ので式が違う＝WARを役割をまたぐ共通通貨（45%）に置き、
+    役割ごとの中身（35%＝野手wRC+／投手FIP）と出場量（20%）は**それぞれの母集団の中で**percentileを取る
+    （打率と防御率を直接ぶつけない）。ルーキー資格の判定は MLB 公式の `playerPool=rookies` に委ねる＝
+    自前で登録日数を数えない。Savant は使わない（リーダーボードが `min=q` でルーキーがほぼ落ちるため）。
+    ⚠️ **/roy は選手別の詳細ページを持たない**＝/cy-young・/mvp の詳細202ページの索引方針が保留中
+    （メモリ `board-detail-index-decision`）なので、判断前に同型の面を増やさない。
+    検索文言の正は `src/lib/boardSeo.ts`（3ボード共通）。表の直下からデータ定点コラムへ送る導線は
+    `src/lib/boardColumns.ts`＋`BoardColumns`＝タグ交差だけで選ぶ（ボードごとに配線を書き分けない）。
   - **試合結果（`Thread.game`・記事の主役データ）**: `node scripts/fetch-mlb-stats.mjs backfill-games --apply` で
     公式スケジュール（`hydrate=linescore,decisions`）＋ boxscore から **最終スコア・回ごとの得点と H/E/残塁・
     その試合時点の勝敗と地区順位・勝敗投手/セーブ・本塁打の打者と今季号数** を記事 JSON に埋める。記事は要約直下の

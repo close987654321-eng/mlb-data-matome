@@ -3,10 +3,12 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getCyYoungBoard } from '@/lib/cyYoungBoard';
 import { getAllThreads } from '@/lib/data';
+import { BOARD_COLUMN_TAGS, columnsForBoard } from '@/lib/boardColumns';
 import { buildFeed } from '@/lib/feed';
 import CyYoungBoard from '@/components/CyYoungBoard';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
+import BoardColumns from '@/components/BoardColumns';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
@@ -86,7 +88,10 @@ export default async function CyYoungPage({ params }: { params: Promise<{ locale
   const c = copy(en, board.season, leaders, board.asOf);
 
   // サイヤング賞レースの海外の反応（サイ・ヤング賞タグの記事）＝「サイヤング 海外の反応」の中身。
-  const all = await getAllThreads();
+  const [all, raceColumns] = await Promise.all([
+    getAllThreads(),
+    columnsForBoard(BOARD_COLUMN_TAGS.cyYoung),
+  ]);
   const reactionItems = buildFeed(
     all.filter((th) => (th.tags ?? []).some((x) => CY_TAGS.includes(x))),
     [],
@@ -131,6 +136,17 @@ export default async function CyYoungPage({ params }: { params: Promise<{ locale
       </section>
 
       <CyYoungBoard board={board} locale={locale} />
+
+      <BoardColumns
+        columns={raceColumns}
+        locale={locale}
+        heading={en ? 'Reading the race' : 'このレースの読み解き'}
+        lead={
+          en
+            ? 'Why the order moved — our data columns on the award races, written from the same boards.'
+            : '順位が動いた理由を、同じボードの数字から読み解いたコラム。表では分からない差分だけを書いています。'
+        }
+      />
 
       {/* サイヤング賞レースの海外の反応＝検索意図「サイヤング 海外の反応」の受け皿。記事が付くほど厚くなる。 */}
       <section>

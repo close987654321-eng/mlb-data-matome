@@ -2340,6 +2340,220 @@ async function runMvp(season, asOf) {
   console.log(`mvp 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// roy … 新人王（ROY）「予測ボード」を data/roy-board.json に書き出す（cyyoung / mvp の新人版）。
+// 用途: /roy＝ルーキー資格のある選手をAL/NL別に合成スコアで順位予測。2026年は村上宗隆・岡本和真・
+//   今井達也の3人がルーキー資格を持つ＝「新人王 予想」系クエリの受け皿がサイトに無かった穴を埋める
+//   （GSC実測で新人王系クエリは90日で表示0＝面が無くて拾えていなかった。2026-09-06 診断）。
+// スコア: 他の2ボードと同じ「リーグ内パーセンタイルの重み付き合算」だが、新人王だけは1つの賞を
+//   野手と投手が同じ土俵で争う。そこで WAR を役割をまたぐ共通通貨（45%）に置き、
+//   役割ごとの中身（35%）と出場量（20%）は野手・投手それぞれの母集団の中で percentile を取る
+//   ＝どちらの役割でも「その役割の中でどれだけ抜けているか」が同じ尺度に乗る。
+//     野手: wRC+ ／ 打席数     投手: FIP ／ 投球回
+//   FIP を使うのは、ルーキーは母数が小さく守備・運の影響を受けた防御率が暴れやすいため。
+// ルーキー資格の判定は MLB 公式の playerPool=rookies に委ねる（自前で年数・登録日数を数えない
+//   ＝規定の解釈違いで嘘の資格判定を出さないため）。
+// データ源: statsapi の season / sabermetrics（キー不要・公知の数値のみ）。Savant は使わない
+//   ＝Savant のリーダーボードは min=q（規定到達）でルーキーがほぼ落ちるため。
+// 出場量の下限（ROY_MIN_PA / ROY_MIN_IP）未満は表に出さない＝1打席の選手が上位に来る事故を防ぐ。
+//   下限未満の日本人ルーキーは watch 枠に別掲する（他ボードと同じ流儀）。
+// ─────────────────────────────────────────────────────────────────────────────
+const ROY_WEIGHTS = { war: 0.45, role: 0.35, volume: 0.2 };
+const ROY_MIN_PA = 150; // 野手の下限打席
+const ROY_MIN_IP = 40; // 投手の下限投球回
+
+/** ルーキー資格者の一括シーズンスタッツ（league.id 付き）。group は hitting / pitching。 */
+async function fetchRookieSeason(season, group) {
+  const url = `${BASE}/stats?stats=season&group=${group}&season=${season}&sportId=1&limit=1000&playerPool=rookies`;
+  const d = await getJson(url);
+  return (d.stats?.[0]?.splits ?? [])
+    .map((s) => ({
+      id: s.player?.id,
+      nameEn: s.player?.fullName,
+      teamEn: s.team?.name,
+      teamId: s.team?.id,
+      leagueId: s.league?.id,
+      pos: s.position?.abbreviation ?? null,
+      stat: s.stat ?? {},
+    }))
+    .filter((p) => p.id && p.leagueId);
+}
+
+/** ルーキー資格者の sabermetrics（WAR ほか）。id→stat。 */
+async function fetchRookieSaber(season, group) {
+  const url = `${BASE}/stats?stats=sabermetrics&group=${group}&season=${season}&sportId=1&limit=1000&playerPool=rookies`;
+  const d = await getJson(url);
+  const map = new Map();
+  for (const s of d.stats?.[0]?.splits ?? []) if (s.player?.id) map.set(s.player.id, s.stat ?? {});
+  return map;
+}
+
+/** ROY 行の「なぜ」を data から一言生成（percentile>=75 の強みを最大2つ）。捏造しない。 */
+function royWhy(g, en) {
+  const cand =
+    g.role === 'bat'
+      ? [
+          { v: g.pct.role, ja: `wRC+${g.wrcPlus}`, en: `${g.wrcPlus} wRC+` },
+          { v: g.pct.war, ja: `WAR${g.war}`, en: `${g.war} WAR` },
+          { v: g.pct.volume, ja: `${g.pa}打席`, en: `${g.pa} PA` },
+        ]
+      : [
+          { v: g.pct.role, ja: `FIP${g.fip}`, en: `${g.fip} FIP` },
+          { v: g.pct.war, ja: `WAR${g.war}`, en: `${g.war} WAR` },
+          { v: g.pct.volume, ja: `${g.ipDisp}回`, en: `${g.ipDisp} IP` },
+        ];
+  const top = cand
+    .filter((c) => c.v >= 75 && c.ja && !/null|undefined/.test(c.ja))
+    .sort((a, b) => b.v - a.v)
+    .slice(0, 2);
+  if (!top.length) return en ? 'Solid all-around rookie season' : 'ルーキーとして総合力で上位';
+  return en
+    ? `${top.map((c) => c.en).join(', ')} among rookies`
+    : `${top.map((c) => c.ja).join('・')}はルーキー上位`;
+}
+
+async function runRoy(season, asOf) {
+  const [hitRows, pitRows, hitSaber, pitSaber] = await Promise.all([
+    fetchRookieSeason(season, 'hitting'),
+    fetchRookieSeason(season, 'pitching'),
+    fetchRookieSaber(season, 'hitting'),
+    fetchRookieSaber(season, 'pitching'),
+  ]);
+  if (!hitRows.length && !pitRows.length) return console.error('roy: ルーキーが取得できない（season/API を確認）');
+
+  const BAT_JA = loadNamesJa('batter-names-ja.json');
+  const PIT_JA = loadNamesJa('pitcher-names-ja.json');
+
+  const buildBat = (r) => {
+    const s = r.stat;
+    const sb = hitSaber.get(r.id) ?? {};
+    return {
+      id: r.id,
+      role: 'bat',
+      nameJa: DISPLAY_NAMES[r.id] ?? BAT_JA[r.id] ?? r.nameEn,
+      nameEn: r.nameEn,
+      teamJa: TEAM_JA[r.teamEn] ?? r.teamEn,
+      teamEn: r.teamEn,
+      teamId: r.teamId ?? null,
+      league: r.leagueId === 103 ? 'AL' : 'NL',
+      isJp: JP_ID_SET.has(r.id),
+      pos: r.pos,
+      pa: Number(s.plateAppearances) || 0,
+      avg: s.avg ?? null,
+      obp: s.obp ?? null,
+      slg: s.slg ?? null,
+      ops: s.ops ?? null,
+      hr: Number(s.homeRuns) || 0,
+      rbi: Number(s.rbi) || 0,
+      sb: Number(s.stolenBases) || 0,
+      wrcPlus: sb.wRcPlus != null ? Math.round(sb.wRcPlus) : null,
+      war: sb.war != null ? Math.round(sb.war * 100) / 100 : null,
+    };
+  };
+  const buildPit = (r) => {
+    const s = r.stat;
+    const sb = pitSaber.get(r.id) ?? {};
+    return {
+      id: r.id,
+      role: 'pit',
+      nameJa: DISPLAY_NAMES[r.id] ?? PIT_JA[r.id] ?? r.nameEn,
+      nameEn: r.nameEn,
+      teamJa: TEAM_JA[r.teamEn] ?? r.teamEn,
+      teamEn: r.teamEn,
+      teamId: r.teamId ?? null,
+      league: r.leagueId === 103 ? 'AL' : 'NL',
+      isJp: JP_ID_SET.has(r.id),
+      pos: r.pos,
+      ip: ipToFloat(s.inningsPitched),
+      ipDisp: s.inningsPitched ?? null,
+      era: s.era ?? null,
+      w: Number(s.wins) || 0,
+      l: Number(s.losses) || 0,
+      sv: Number(s.saves) || 0,
+      gs: Number(s.gamesStarted) || 0,
+      so: Number(s.strikeOuts) || 0,
+      whip: s.whip ?? null,
+      fip: sb.fip != null ? Math.round(Number(sb.fip) * 100) / 100 : null,
+      war: sb.war != null ? Math.round(sb.war * 100) / 100 : null,
+    };
+  };
+
+  const bats = hitRows.map(buildBat);
+  const pits = pitRows.map(buildPit);
+  // 同一人物が両方に出る（野手が1イニング投げた等）場合は主たる役割だけ残す＝二重掲載を防ぐ。
+  const batIds = new Set(bats.filter((g) => g.pa >= ROY_MIN_PA).map((g) => g.id));
+  const all = [
+    ...bats.filter((g) => g.pa >= ROY_MIN_PA),
+    ...pits.filter((g) => g.ip != null && g.ip >= ROY_MIN_IP && !batIds.has(g.id)),
+  ];
+
+  const leagues = {};
+  for (const lg of ['AL', 'NL']) {
+    const group = all.filter((g) => g.league === lg);
+    // WAR は役割をまたぐ共通通貨＝リーグのルーキー全体で percentile を取る。
+    const warP = percentiles(group.map((g) => g.war), true);
+    group.forEach((g, i) => (g._warP = warP[i]));
+    // 中身と出場量は役割ごとの母集団で percentile を取る（野手と投手を直接比べない）。
+    for (const role of ['bat', 'pit']) {
+      const sub = group.filter((g) => g.role === role);
+      if (!sub.length) continue;
+      const roleP =
+        role === 'bat'
+          ? percentiles(sub.map((g) => g.wrcPlus), true)
+          : percentiles(sub.map((g) => g.fip), false);
+      const volP =
+        role === 'bat'
+          ? percentiles(sub.map((g) => g.pa), true)
+          : percentiles(sub.map((g) => g.ip), true);
+      sub.forEach((g, i) => {
+        g.pct = { war: g._warP, role: roleP[i], volume: volP[i] };
+        g.score =
+          Math.round(
+            (g.pct.war * ROY_WEIGHTS.war + g.pct.role * ROY_WEIGHTS.role + g.pct.volume * ROY_WEIGHTS.volume) * 10,
+          ) / 10;
+      });
+    }
+    group.sort((a, b) => b.score - a.score);
+    leagues[lg] = group.map((g, i) => {
+      const { _warP, ip, ...rest } = g;
+      return { ...rest, rank: i + 1, why: royWhy(g, false), whyEn: royWhy(g, true) };
+    });
+  }
+
+  // 圏外の注目日本人＝ルーキー資格はあるが出場量の下限に届いていない日本人（現在地を正しく示す）。
+  const rankedIds = new Set([...leagues.AL, ...leagues.NL].map((g) => g.id));
+  const watch = [...bats, ...pits]
+    .filter((g) => g.isJp && !rankedIds.has(g.id))
+    .map((g) => ({
+      id: g.id,
+      role: g.role,
+      nameJa: g.nameJa,
+      teamJa: g.teamJa,
+      teamEn: g.teamEn,
+      teamId: g.teamId,
+      league: g.league,
+      ...(g.role === 'bat'
+        ? { pa: g.pa, avg: g.avg, ops: g.ops, hr: g.hr, paGap: Math.max(0, ROY_MIN_PA - g.pa) }
+        : { ipDisp: g.ipDisp, era: g.era, so: g.so, ipGap: Math.max(0, Math.ceil(ROY_MIN_IP - (g.ip ?? 0))) }),
+    }));
+
+  const file = path.join(process.cwd(), 'data', 'roy-board.json');
+  const content = { season, minPa: ROY_MIN_PA, minIp: ROY_MIN_IP, weights: ROY_WEIGHTS, leagues, watch };
+  // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（CI の無駄コミット防止）。
+  let stampedAsOf = asOf;
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    const { asOf: _a, ...rest } = prev;
+    if (stableStringify(rest) === stableStringify(content)) stampedAsOf = prev.asOf || asOf;
+  } catch {
+    /* 初回作成 */
+  }
+  writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
+  console.log(
+    `roy 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}`,
+  );
+}
+
 /**
  * standings: AL/NL 全6地区の順位表を data/standings.json へ書き出す（チームLPの順位表用）。
  * statsapi 1コールのみ・公知の事実（勝敗・勝率・ゲーム差）だけを残す。サイト本体は静的JSONを読む。
@@ -2529,6 +2743,10 @@ async function main() {
     // mvp [season]：規定打者をAL/NL別に合成スコアで順位予測（＋圏外の注目日本人野手）を data/mvp-board.json へ。
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     await runMvp(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
+  } else if (cmd === 'roy') {
+    // roy [season]：ルーキー資格者をAL/NL別に合成スコアで順位予測（＋下限未達の日本人）を data/roy-board.json へ。
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    await runRoy(seasonArg ? Number(seasonArg) : defaultSeason(), jstStamp());
   } else if (cmd === 'standings') {
     // standings ["YYYY-MM-DD HH:MM"(=asOf)] [season]：AL/NL全6地区の順位表を data/standings.json へ（チームLP用）。
     const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
@@ -2562,6 +2780,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs team-games [--days N] # 直近N日(既定30)の全試合結果を data/team-games.json へ（チームLPの試合タイムライン用）',
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',
+        '  node scripts/fetch-mlb-stats.mjs roy [season]       # 新人王予測ボード(ルーキー資格者をAL/NL別にスコア化)を data/roy-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs mvp [season]       # MVP予測ボード(規定打者をAL/NL別にスコア化・二刀流は投手WAR合算＋打球の質/バットスピード)を data/mvp-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs backfill-games [--apply] [--force] # 既存MLB記事に試合結果(thread.game=スコア/線スコア/その試合時点の勝敗・順位/勝敗投手)を埋める（既定dry-run）',
         '  共通: --json（Thread.stats 用 JSON） / --team <名前>（所属で絞る）',

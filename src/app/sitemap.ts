@@ -110,6 +110,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/cy-young', statDate),
     // MVP 予測ボード（規定打者をAL/NL別にスコア化・二刀流は投手WAR合算）。lastmod は成績スナップショットの日付。
     entry('/mvp', statDate),
+    // 新人王 予測ボード（ルーキー資格者を野手・投手まとめてAL/NL別にスコア化）。lastmod は成績スナップショットの日付。
+    entry('/roy', statDate),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     // 超RIZIN.5 特設ハブ（開催前から育てるイベント観測所。lastmod はコンテンツの最終更新日）。
