@@ -10,6 +10,8 @@ import {
   type BdEventSummary,
 } from '@/lib/bdAuditions';
 import EventTimeline from '@/components/EventTimeline';
+import BdReel from '@/components/BdReel';
+import { bdReelSummary } from '@/lib/bdReel';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
@@ -113,10 +115,23 @@ function StatBar({ value, max }: { value: number; max: number }) {
 
 function EventRow({ s, maxViews, maxDensity }: { s: BdEventSummary; maxViews: number; maxDensity: number }) {
   return (
-    <div className="grid grid-cols-[3.5rem_1fr] items-center gap-x-4 gap-y-1.5 py-3 sm:grid-cols-[3.5rem_1fr_1fr] sm:gap-x-6">
+    <div className="grid grid-cols-[5rem_1fr] items-center gap-x-4 gap-y-1.5 py-3 sm:grid-cols-[5rem_1fr_1fr] sm:gap-x-6">
       <div>
         <p className="text-sm font-bold tabular-nums text-ink">BD{s.event}</p>
         <p className="text-[11px] tabular-nums text-ink-mute">{monthJa(s.firstAt.slice(0, 7))}</p>
+        {/* 数字の行から実物へ1タップ＝この行の大会からリールが始まる（BdReel が拾う入口）。
+            枠つきの押せる見た目にする＝下線だけだと本文の強調と区別が付かず、指の的も小さすぎる。 */}
+        <button
+          type="button"
+          data-bd-reel={`event:${s.event}`}
+          aria-label={`BD${s.event}のオーディションを見る`}
+          className="mt-1.5 inline-flex items-center gap-1 rounded-[3px] border border-line px-2 py-1 text-[11px] text-ink-soft transition-colors hover:border-ink hover:text-ink"
+        >
+          <svg viewBox="0 0 24 24" className="h-2.5 w-2.5 fill-current" aria-hidden>
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          見る
+        </button>
       </div>
       <div className="space-y-1">
         <div className="flex items-baseline justify-between gap-2">
@@ -145,12 +160,14 @@ export default async function BdAuditionPage({ params }: { params: Promise<{ loc
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations();
-  const [summaries, totals, voices, fetchedAt, allTags] = await Promise.all([
+  const [summaries, totals, voices, fetchedAt, allTags, reel] = await Promise.all([
     bdEventSummaries(),
     bdTotals(),
     bdVoicesByEvent(),
     bdAuditionsFetchedAt(),
     getAllTags(),
+    // このページは全大会が対象＝大会を絞らない（既定の並びは古い順＝ページの時系列と揃う）。
+    bdReelSummary(null),
   ]);
   const maxViews = Math.max(...summaries.map((s) => s.views));
   const maxDensity = Math.max(...summaries.map((s) => s.density));
@@ -205,6 +222,10 @@ export default async function BdAuditionPage({ params }: { params: Promise<{ loc
           公式チャンネルで。
         </p>
       </header>
+
+      {/* ⓪ 実物を見る導線＝このページは数字と引用だけなので、動画そのものへの入口を先に置く。
+          下の各大会の行・各引用ブロックからも同じリールがその大会／その動画で開く。 */}
+      <BdReel data={reel} />
 
       {/* ① 大会別の再生数×コメント密度（このページの主役データ） */}
       <section className="space-y-5">
@@ -264,7 +285,15 @@ export default async function BdAuditionPage({ params }: { params: Promise<{ loc
                       </figcaption>
                     </figure>
                   ))}
-                  <p className="text-xs">
+                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+                    {/* 引用のとなりに実物への入口。サイトを離れずにその動画から見始められる。 */}
+                    <button
+                      type="button"
+                      data-bd-reel={`video:${video.videoId}`}
+                      className="rounded-[3px] border border-line px-2.5 py-1 text-ink-soft transition-colors hover:border-ink hover:text-ink"
+                    >
+                      この動画を見る
+                    </button>
                     <a
                       href={`https://www.youtube.com/watch?v=${video.videoId}`}
                       target="_blank"
@@ -273,7 +302,7 @@ export default async function BdAuditionPage({ params }: { params: Promise<{ loc
                     >
                       {video.videoTitle} →
                     </a>
-                  </p>
+                  </div>
                 </div>
               </div>
             );

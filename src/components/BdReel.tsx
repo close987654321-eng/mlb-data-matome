@@ -81,7 +81,7 @@ function dayJa(iso: string): string {
   return `${Number(m)}月${Number(d)}日`;
 }
 
-export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eventNameJa: string }) {
+export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eventNameJa?: string }) {
   const [open, setOpen] = useState(false);
   const [stock, setStock] = useState<BdReelVideo[] | null>(null);
   const [loading, setLoading] = useState(false);
@@ -89,6 +89,7 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
   const [lane, setLane] = useState<Lane>(data.event ? 'now' : 'time');
   const [idx, setIdx] = useState(0);
   const [hint, setHint] = useState(false);
+  const [picker, setPicker] = useState(false);
   const openRef = useRef(false);
 
   const slides = useMemo(() => (stock ? buildSlides(stock, data, lane) : []), [stock, data, lane]);
@@ -184,6 +185,30 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
     },
     [after, data.event, lane, nudge, slides],
   );
+
+  /** いま開いている列の中で、その大会の最初のコマへ飛ぶ（大会ジャンプ）。 */
+  const jumpToEvent = useCallback(
+    (ev: number) => {
+      const at = slides.findIndex((x) => x.k === 'v' && x.v.e === ev);
+      if (at < 0) return;
+      settle();
+      busyRef.current = false;
+      pendingRef.current = 0;
+      idxRef.current = at;
+      setIdx(at);
+      setPicker(false);
+      if (at > depthRef.current) depthRef.current = at;
+      track('bd_reel_jump', { to: ev, lane });
+    },
+    [lane, settle, slides],
+  );
+
+  /** 列に入っている大会の一覧（本数つき）。ジャンプ先の選択肢＝在庫のある大会だけ出す。 */
+  const eventList = useMemo(() => {
+    const count = new Map<number, number>();
+    for (const v of stock ?? []) count.set(v.e, (count.get(v.e) ?? 0) + 1);
+    return [...count.entries()].sort((a, b) => a[0] - b[0]).map(([e, n]) => ({ e, n }));
+  }, [stock]);
 
   /** 並び替え（分岐カード）。まだ見ていない最初の動画へ着地する＝「続き」を壊さない。 */
   const switchLane = useCallback(
@@ -315,8 +340,12 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
     return () => window.removeEventListener('keydown', onKey);
   }, [open, go]);
 
-  /** 入口タイル＝ここだけ /bd-reel.json を読み終えてから開く（列が無いまま開くと真っ白になる）。 */
-  const openReel = async () => {
+  /**
+   * 入口＝ここだけ /bd-reel.json を読み終えてから開く（列が無いまま開くと真っ白になる）。
+   * @param to 行き先。全史ページの大会行・引用ブロックから「その大会／その動画」で開くのに使う。
+   *           指定があるときは「続きから」より行き先を優先する（押した場所と違うコマが出ると壊れて見える）。
+   */
+  const openReel = async (to?: { video?: string; event?: number }) => {
     if (loading) return;
     let videos = stock;
     if (!videos) {
@@ -338,28 +367,64 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
     let start = 0;
     let startLane: Lane = data.event ? 'now' : 'time';
     try {
-      const raw = window.localStorage.getItem(STORE_KEY);
-      if (raw) {
-        const saved = JSON.parse(raw) as { lane?: Lane; id?: string };
-        if (saved.lane === 'now' || saved.lane === 'time') startLane = saved.lane;
-        // 終端で閉じた人はそこに続きが無いので先頭に戻す（4号店の規律）。
-        if (saved.id && saved.id !== 'end') {
-          const at = buildSlides(videos, data, startLane).findIndex((s) => s.id === saved.id);
-          if (at > 0) start = at;
-        }
-      }
       setHint(window.localStorage.getItem(`${STORE_KEY}-tip`) !== '1');
     } catch {
       setHint(true); // 保存が読めない環境（プライベートモード等）は毎回ヒントを出すだけ
+    }
+    if (to?.video || to?.event) {
+      // 大会から入るときは時系列にそろえる＝そこから先へ進むと歴史がそのまま続く。
+      if (to.event) startLane = 'time';
+      const list = buildSlides(videos, data, startLane);
+      const at = to.video
+        ? list.findIndex((x) => x.k === 'v' && x.v.i === to.video)
+        : list.findIndex((x) => x.k === 'v' && x.v.e === to.event);
+      if (at > 0) start = at;
+    } else {
+      try {
+        const raw = window.localStorage.getItem(STORE_KEY);
+        if (raw) {
+          const saved = JSON.parse(raw) as { lane?: Lane; id?: string };
+          if (saved.lane === 'now' || saved.lane === 'time') startLane = saved.lane;
+          // 終端で閉じた人はそこに続きが無いので先頭に戻す（4号店の規律）。
+          if (saved.id && saved.id !== 'end') {
+            const at = buildSlides(videos, data, startLane).findIndex((x) => x.id === saved.id);
+            if (at > 0) start = at;
+          }
+        }
+      } catch {
+        /* 保存が読めない環境は先頭から開くだけ */
+      }
     }
     setLane(startLane);
     idxRef.current = start;
     setIdx(start);
     depthRef.current = start;
+    setPicker(false);
     openRef.current = true;
     setOpen(true);
-    track('bd_reel_open', { event: data.event ?? 0, at: start });
+    track('bd_reel_open', { event: data.event ?? 0, at: start, from: to?.event ? 'event' : to?.video ? 'video' : 'tile' });
   };
+  const openRef2 = useRef(openReel);
+  openRef2.current = openReel;
+
+  /**
+   * ページのどこに置いた入口からでも開けるようにする（4号店の `.js-reel` と同じ＝入口だけ増やす）。
+   * サーバーコンポーネントのままの全史ページが `data-bd-reel="event:6"` を書くだけで入口になる。
+   */
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      const el = (e.target as HTMLElement | null)?.closest('[data-bd-reel]');
+      if (!el) return;
+      const raw = el.getAttribute('data-bd-reel') ?? '';
+      e.preventDefault();
+      const [kind, value] = raw.split(':');
+      if (kind === 'event') void openRef2.current({ event: Number(value) });
+      else if (kind === 'video') void openRef2.current({ video: value });
+      else void openRef2.current();
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
 
   useEffect(() => {
     const dlg = dlgRef.current;
@@ -405,7 +470,7 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
         <p className="mt-1 max-w-prose text-sm leading-relaxed text-ink-soft">
           {eventVideos > 0
             ? `${eventNameJa}のオーディション${eventVideos}本を公開順に、そのあと歴代の再生数トップから順に。`
-            : '歴代オーディションを再生数の多い順に。'}
+            : 'BD4からいまの大会まで、歴代のオーディションを古い順に通しで。'}
           1本ずつ、動画・再生数・その動画に付いた人気コメントを縦に送って見ていく。
         </p>
         <p className="mt-2 text-xs tabular-nums text-ink-mute">
@@ -414,7 +479,7 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
         <p className="mt-3">
           <button
             type="button"
-            onClick={openReel}
+            onClick={() => void openReel()}
             disabled={loading}
             className="inline-flex items-center gap-1.5 rounded-[3px] border border-ink bg-ink px-4 py-2 text-sm font-bold text-paper transition-colors hover:bg-ink-soft disabled:opacity-50"
           >
@@ -453,10 +518,19 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
           >
             {/* 上の帯: いまどこか＋閉じる */}
             <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between gap-3 bg-gradient-to-b from-paper via-paper/90 to-transparent px-4 pb-6 pt-3">
-              <span className="text-xs font-medium tabular-nums tracking-wide text-ink-mute">
-                {cur?.k === 'v' ? `BD${cur.v.e}` : 'BreakingDown'}
-                <span className="mx-2 text-line">/</span>
-                {idx + 1} / {slides.length}
+              <span className="pointer-events-auto flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setPicker((v) => !v)}
+                  aria-expanded={picker}
+                  className="rounded-[3px] border border-line bg-paper px-2 py-1 text-xs font-medium tabular-nums tracking-wide text-ink-soft transition-colors hover:border-ink hover:text-ink"
+                >
+                  {cur?.k === 'v' ? `BD${cur.v.e}` : 'BreakingDown'}
+                  <span aria-hidden className="ml-1.5 text-ink-mute">大会を選ぶ</span>
+                </button>
+                <span className="text-xs font-medium tabular-nums tracking-wide text-ink-mute">
+                  {idx + 1} / {slides.length}
+                </span>
               </span>
               <button
                 type="button"
@@ -467,6 +541,37 @@ export default function BdReel({ data, eventNameJa }: { data: BdReelSummary; eve
                 閉じる
               </button>
             </div>
+
+            {/* 大会ジャンプ＝113コマを延々払わなくても目的の大会に行ける。数字だけのページから
+                入ってきた人が「その大会の実物」に最短で着けるようにするための口。 */}
+            {picker && (
+              <div
+                onPointerDown={(e) => e.stopPropagation()}
+                className="absolute inset-x-0 top-[52px] z-30 mx-3 max-h-[60vh] overflow-y-auto border border-ink bg-paper p-3 shadow-[0_8px_24px_rgba(25,26,28,0.12)]"
+              >
+                <p className="mb-2 text-[11px] font-medium uppercase tracking-[0.15em] text-ink-mute">大会で飛ぶ</p>
+                <div className="grid grid-cols-3 gap-1.5 sm:grid-cols-6">
+                  {eventList.map(({ e, n }) => {
+                    const here = cur?.k === 'v' && cur.v.e === e;
+                    return (
+                      <button
+                        key={e}
+                        type="button"
+                        onClick={() => jumpToEvent(e)}
+                        className={`rounded-[3px] border px-2 py-1.5 text-xs tabular-nums transition-colors ${
+                          here
+                            ? 'border-ink bg-ink font-bold text-paper'
+                            : 'border-line text-ink-soft hover:border-ink hover:text-ink'
+                        }`}
+                      >
+                        BD{e}
+                        <span className={`ml-1 ${here ? 'text-paper/70' : 'text-ink-mute'}`}>{n}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
 
             <div ref={trackRef} className="absolute inset-0 will-change-transform">
               {slides.map((s, i) => (
