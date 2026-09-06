@@ -50,6 +50,21 @@ export type EventTicketOffer = {
   validFrom?: string;
 };
 
+/**
+ * 席種ごとの価格（公式販売ページの表をそのまま持つ）。
+ * 「{大会名} チケット」は対戦カードに次ぐ実測クエリ（BD21 は28日で約250表示）で、
+ * 地の文の一段落より表のほうが正面から答えられる。値は公式表記のみ・推測で埋めない。
+ */
+export type EventTicketTier = {
+  nameJa: string;
+  /** 早割・先行の価格（円）。設定が無い席種は省く */
+  earlyJpy?: number;
+  /** 通常価格（円） */
+  regularJpy?: number;
+  /** 学割（円）。設定のある席種だけ */
+  studentJpy?: number;
+};
+
 export type FightEvent = {
   /** イベントページの URL スラッグ（トップ階層フラット。hub=false のうちは未使用） */
   slug: string;
@@ -82,9 +97,19 @@ export type FightEvent = {
   leadJa?: string;
   /** 発表済みの対戦カード（standard ページ用） */
   cards?: EventCard[];
+  /**
+   * カードが未発表のあいだに出す説明（裏取り済みのみ）。
+   * 「対戦カード」で来た読者がいちばん知りたいのは、無いという事実ではなく**なぜまだ無いのか**。
+   * 汎用の cardsTbd 文言だけだと、その問いに答えないまま離脱する（BD21 は本命クエリで平均8.9位）。
+   */
+  cardsNoteJa?: string;
   /** チケット情報（裏取り済みのみ） */
   ticketsJa?: string;
+  /** 席種ごとの価格表（公式販売ページ由来のみ） */
+  ticketTiers?: EventTicketTier[];
   ticketOffer?: EventTicketOffer;
+  /** 会場・アクセス（「{会場名} {大会名}」「{開催地} 〜」クエリ用。裏取り済みのみ） */
+  accessJa?: string;
   /** 視聴方法（裏取り済みのみ。未発表なら未発表と書く） */
   watchJa?: string;
   /** 公式サイト等の一次情報リンク（送客＝引用元への還元） */
@@ -131,8 +156,14 @@ export const EVENTS: FightEvent[] = [
     updatedAt: RIZIN5.updatedAt,
   },
   {
-    // 出典: BreakingDown 公式サイト（breakingdown.jp・2026-08-12 参照）。
-    // 会場正式名称・チケット販売期間・「全試合を BreakingDown LIVE で生中継」は公式サイトの記載。
+    // 出典: BreakingDown 公式サイト（breakingdown.jp・2026-09-06 再参照）。
+    // 会場正式名称・席種価格・チケット販売期間・PPV価格・「全試合を BreakingDown LIVE で生中継」は
+    // すべて公式サイトの記載。席種価格とPPV最安値は BD21 オーディション動画（朝倉未来チャンネル
+    // vol.1〜5）の概要欄の表記（早割最安値 ¥6,300／学割 ¥5,000／PPV 最安値 2,680円）とも一致を確認。
+    // ⚠️ 対戦カードは 2026-09-06 時点で公式サイトが「随時発表」＝正式発表なし。他サイトが載せている
+    //    オーディション由来の仮カードは公式発表ではないので、ここには書かない（§4.4 捏造禁止）。
+    //    この大会で公表されている一次情報は「どの回で誰と誰が動いたか」までで、それは
+    //    data/bd-story/21.json（オーディション実況）が動画タイトルの範囲で扱う。
     slug: 'breakingdown21',
     org: 'breakingdown',
     nameJa: 'BreakingDown 21',
@@ -147,21 +178,37 @@ export const EVENTS: FightEvent[] = [
     matchTags: ['ブレイキングダウン21', 'BreakingDown'],
     leadJa:
       '朝倉未来がCEOを務めるBreakingDownの第21回大会。BreakingDownの北海道進出は今大会が初で、会場は札幌・真駒内セキスイハイムアイスアリーナ。対戦カードは例大会どおりオーディションを経て発表される（発表され次第このページに追記する）。',
+    cardsNoteJa:
+      'BreakingDownは対戦カードを事前に一括発表しない。公式サイトの表記は2026年9月6日時点でも随時発表のままで、正式なカード一覧は出ていない。この大会のカードが実際に動くのは記者会見ではなくオーディションの中で、朝倉未来チャンネルで公開されているBD21オーディションvol.1〜5がその場にあたる。下の「オーディションで何が起きたか」に、どの回で誰と誰が動いたかを動画つきでまとめた。公式の正式発表が出た時点で、この欄をカード一覧に差し替える。',
     ticketsJa:
-      '現地チケットは公式サイトで販売中。先着先行は2026年7月27日18:00〜8月28日23:59、一般販売は8月29日0:00〜9月18日23:59。価格帯は5,000円〜550,000円（席種による）。',
+      '現地チケットは公式サイトで販売中。早割先行は2026年7月27日18:00〜9月6日23:59、一般販売は9月7日0:00〜9月18日23:59。席種は10段階で、最安はB席（早割6,300円／通常7,000円／学割5,000円）、最高はSVIP席の最前列（早割460,000円／通常550,000円）。',
+    ticketTiers: [
+      { nameJa: 'SVIP席【最前列】', earlyJpy: 460_000, regularJpy: 550_000 },
+      { nameJa: 'SVIP席【2列目】', earlyJpy: 250_000, regularJpy: 300_000 },
+      { nameJa: 'VVIP席', earlyJpy: 160_000, regularJpy: 200_000 },
+      { nameJa: 'VIP席【花道席】', earlyJpy: 80_000, regularJpy: 100_000 },
+      { nameJa: 'VIP席', earlyJpy: 64_000, regularJpy: 80_000 },
+      { nameJa: 'SS席', earlyJpy: 22_000, regularJpy: 25_000 },
+      { nameJa: 'S席【スタンド】', earlyJpy: 15_300, regularJpy: 17_000 },
+      { nameJa: 'S席【アリーナ】', earlyJpy: 13_500, regularJpy: 15_000 },
+      { nameJa: 'A席', earlyJpy: 10_800, regularJpy: 12_000, studentJpy: 10_000 },
+      { nameJa: 'B席', earlyJpy: 6_300, regularJpy: 7_000, studentJpy: 5_000 },
+    ],
     ticketOffer: {
       url: 'https://breakingdown.jp/',
       lowPrice: 5000,
       highPrice: 550000,
       validFrom: '2026-07-27T18:00:00+09:00',
     },
+    accessJa:
+      '会場の真駒内セキスイハイムアイスアリーナは札幌市南区にある屋内アイスアリーナで、1972年札幌オリンピックの会場として建てられた施設。BreakingDownが北海道で大会を開くのは今回が初めて。開場・開始時刻は公式サイトでは未発表（発表され次第ここを更新する）。',
     watchJa:
-      '全試合が公式配信プラットフォーム「BreakingDown LIVE」でPPV生中継される（公式サイトの記載）。PPVチケットの価格は未確認＝確認でき次第ここを更新する。公式アプリ「BreakingDown Club」の有料会員はPPVチケットが20%オフになる。',
+      '全試合が公式配信プラットフォーム「BreakingDown LIVE」で独占PPV生中継される。PPVチケットの価格は、公式アプリ経由のアプリ割が新規会員は前売2,680円／当日3,480円、既存会員は前売3,040円／当日3,840円、アプリを使わない通常チケットが前売3,700円／当日4,500円（いずれも公式サイトの表記）。視聴はスマートフォン・タブレット・パソコン・テレビに対応する。',
     officialUrl: 'https://breakingdown.jp/',
     relatedJa: [
       { labelJa: 'BreakingDownオーディション全史（歴代の再生数・人気コメントのデータ観測）', href: '/breakingdown-audition' },
     ],
-    updatedAt: '2026-08-12',
+    updatedAt: '2026-09-06',
   },
   {
     // 出典: RIZIN 公式の大会情報ページ（jp.rizinff.com/_ct/17852438・2026-08-17 参照）＝会場正式名称・

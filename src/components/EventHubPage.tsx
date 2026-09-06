@@ -10,7 +10,9 @@ import EventCountdown from '@/components/EventCountdown';
 import EventTimeline from '@/components/EventTimeline';
 import UpcomingFights from '@/components/UpcomingFights';
 import BdReel from '@/components/BdReel';
+import BdStory from '@/components/BdStory';
 import { bdEventNoFromSlug, bdReelSummary } from '@/lib/bdReel';
+import { bdStory } from '@/lib/bdStory';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -41,14 +43,22 @@ export function createEventRoute(slug: string) {
     const { locale } = await params;
     if (!event) return {};
     // 「対戦カード・チケット・視聴方法」はこの型が正面から答えるクエリ形（layout の
-    // template が「｜海外の反応」を後置する）。カタカナ等の検索表記は queryAliasJa で併記。
-    const alias = event.queryAliasJa ? `（${event.queryAliasJa}）` : '';
-    const title = `${event.nameJa}${alias} 対戦カード・チケット・視聴方法`;
+    // template が「｜海外の反応」を後置する）。
+    // ⚠️ 先頭は queryAliasJa（あれば）＝**実際に検索されている表記**を左端に置く。BD21 の GSC 実測
+    // （2026-08-09〜09-05）では、カタカナ「ブレイキングダウン21 …」系が約280表示なのに対し
+    // 英字「breakingdown21 …」は約24表示で一桁違う。公式表記は H1・本文に残るので英字クエリも拾える。
+    // 語数も詰める＝layout が付ける「｜海外の反応」まで含めて検索結果で切られないようにする。
+    const nameForQuery = event.queryAliasJa ?? event.nameJa;
+    const title = `${nameForQuery} 対戦カード・チケット・視聴方法`;
     const description = `${event.dateLabelJa}${event.venueJa ? `・${event.venueJa}` : ''}${
       event.cityJa ? `（${event.cityJa}）` : ''
     }開催「${event.nameJa}」${
       event.queryAliasJa ? `（${event.queryAliasJa}）` : ''
-    }の観戦ガイド。発表済みの対戦カード・チケット・視聴方法をこの1ページで追い、新情報が出るたび更新する。`;
+    }の観戦ガイド。${
+      event.cards && event.cards.length > 0
+        ? `発表済みの対戦カード${event.cards.length}試合と`
+        : '対戦カードの発表状況と'
+    }チケットの席種・価格、PPVの視聴方法をこの1ページで追い、新情報が出るたび更新する。`;
     const url = absoluteUrl(locale, `/${event.slug}`);
     return {
       title,
@@ -83,10 +93,13 @@ export function createEventRoute(slug: string) {
     // BD はカード発表がオーディション終盤まで無い＝発表前の期間はページが薄いのに検索需要は先に立つ。
     // その空白を、既に公開されているオーディション動画（本戦より本数も再生も多い）で埋める。
     // ja のみ＝動画もコメントも日本語（UpcomingFights と同じ扱い）。
-    const reel =
-      event.org === 'breakingdown' && locale !== 'en'
-        ? await bdReelSummary(bdEventNoFromSlug(event.slug))
-        : null;
+    const bdEventNo = event.org === 'breakingdown' && locale !== 'en' ? bdEventNoFromSlug(event.slug) : null;
+    const reel = bdEventNo !== null ? await bdReelSummary(bdEventNo) : null;
+
+    // 「オーディションで何が起きたか」＝止まって読ませる面（リールは送る面）。
+    // BD のカードは公式発表より先にオーディションで動くので、対戦カードの直後に置く＝
+    // 「{大会名} 対戦カード」で来た読者への実質的な回答がここになる。
+    const story = bdEventNo !== null ? await bdStory(bdEventNo) : null;
 
     const pageUrl = absoluteUrl(locale, `/${event.slug}`);
     const jsonLd = {
@@ -136,6 +149,21 @@ export function createEventRoute(slug: string) {
           url: pageUrl,
           dateModified: event.updatedAt,
         },
+        // オーディション動画（実測の公開日・再生数つき）＝動画リッチリザルト／動画タブの対象。
+        // 出すのは実測値がある記事だけ（§4.2+）＝story が無い大会には1件も出ない。
+        ...(story?.chapters ?? []).map((ch) => ({
+          '@type': 'VideoObject',
+          name: ch.title,
+          description: ch.noteJa,
+          thumbnailUrl: `https://i.ytimg.com/vi/${ch.videoId}/hqdefault.jpg`,
+          uploadDate: ch.publishedAt,
+          embedUrl: `https://www.youtube.com/embed/${ch.videoId}`,
+          interactionStatistic: {
+            '@type': 'InteractionCounter',
+            interactionType: 'https://schema.org/WatchAction',
+            userInteractionCount: ch.viewCount,
+          },
+        })),
         {
           '@type': 'BreadcrumbList',
           itemListElement: [
@@ -198,18 +226,53 @@ export function createEventRoute(slug: string) {
               ))}
             </div>
           ) : (
-            <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{t('events.cardsTbd')}</p>
+            // 未発表のときは「なぜ無いのか」まで書く（cardsNoteJa）。汎用文言だけだと
+            // カードを探しに来た読者の問いに答えないまま終わる。
+            <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
+              {event.cardsNoteJa ?? t('events.cardsTbd')}
+            </p>
           )}
         </section>
 
-        {/* オーディションマラソン（BD のみ）＝カード未発表期の主コンテンツ・回遊の沼 */}
-        {reel && reel.totals.videos > 0 && <BdReel data={reel} eventNameJa={event.shortJa} />}
+        {/* オーディション実況（BD のみ）＝動画＋現地コメントの読み物。本文HTMLに載る＝検索資産 */}
+        {story && <BdStory data={story} eventNameJa={event.shortJa} />}
 
         {/* チケット（裏取り済みのみ） */}
         {event.ticketsJa && (
-          <section className="space-y-5">
+          <section id="tickets" className="space-y-5">
             <SectionHeading label={t('events.ticketsTitle')} />
             <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{event.ticketsJa}</p>
+            {event.ticketTiers && event.ticketTiers.length > 0 && (
+              // 席種は横に伸びるので、はみ出しはこの箱の中だけで解決する（body を横スクロールさせない）
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[22rem] border-collapse text-sm">
+                  <thead>
+                    <tr className="border-y border-line text-xs text-ink-mute">
+                      <th className="py-2 pr-4 text-left font-medium">{t('events.tierSeat')}</th>
+                      <th className="py-2 pr-4 text-right font-medium">{t('events.tierEarly')}</th>
+                      <th className="py-2 pr-4 text-right font-medium">{t('events.tierRegular')}</th>
+                      <th className="py-2 text-right font-medium">{t('events.tierStudent')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-line">
+                    {event.ticketTiers.map((tier) => (
+                      <tr key={tier.nameJa}>
+                        <td className="py-2.5 pr-4 text-ink">{tier.nameJa}</td>
+                        <td className="py-2.5 pr-4 text-right tabular-nums text-ink-soft">
+                          {tier.earlyJpy ? t('events.yen', { n: tier.earlyJpy }) : '—'}
+                        </td>
+                        <td className="py-2.5 pr-4 text-right tabular-nums text-ink-soft">
+                          {tier.regularJpy ? t('events.yen', { n: tier.regularJpy }) : '—'}
+                        </td>
+                        <td className="py-2.5 text-right tabular-nums text-ink-soft">
+                          {tier.studentJpy ? t('events.yen', { n: tier.studentJpy }) : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </section>
         )}
 
@@ -255,6 +318,17 @@ export function createEventRoute(slug: string) {
             )}
           </section>
         )}
+
+        {/* 会場・アクセス（「{会場名} {大会名}」「{開催地} チケット」クエリ用） */}
+        {event.accessJa && (
+          <section id="venue" className="space-y-5">
+            <SectionHeading label={t('events.venueTitle')} />
+            <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{event.accessJa}</p>
+          </section>
+        )}
+
+        {/* オーディションマラソン（BD のみ）＝縦スワイプで送る沼。読み物のあとに置く */}
+        {reel && reel.totals.videos > 0 && <BdReel data={reel} eventNameJa={event.shortJa} />}
 
         {/* この大会の反応記事（matchTags で自動紐付け。無い間はセクションごと出さない） */}
         {feed.length > 0 && (

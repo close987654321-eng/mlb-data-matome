@@ -17,6 +17,11 @@
  *   node scripts/fetch-bd-auditions.mjs           … 動画一覧＋統計を更新
  *   node scripts/fetch-bd-auditions.mjs --voices  … 上に加えて大会代表動画の人気コメントも更新
  *   node scripts/fetch-bd-auditions.mjs --voices-all … 全動画から2件ずつ（縦スワイプのリールの燃料）
+ *   node scripts/fetch-bd-auditions.mjs --comments-full 21 … BD21 の全コメント＋返信を _local へ
+ *
+ * ⚠️ --comments-full は「載せるため」ではなく「選ぶ母数を作るため」の取得。書き出し先は _local/
+ *    （コミットしない）で、data/ に入るのは人が選び抜いた抜粋だけ（data/bd-story/{event}.json）。
+ *    BD21 は5本で 17,447 件＝約175ユニット（無料枠1万/日の1.8%）。全94本を一度に取らないこと。
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -162,12 +167,127 @@ async function fetchVoices(key, video, take = 2) {
     .map(({ authorChannelId, ...rest }) => rest);
 }
 
+/**
+ * 1動画のコメントを全件取る（--comments-full）。order:'time' で最後までページングする
+ * ＝relevance は Google 側が数百件で頭打ちになり「全件」にならないため。
+ * part に replies を足して、各スレッドに付いた返信を最大5件まで一緒に持ち帰る
+ * （BD の読み物の核は「言い争い」＝親コメント単体では絵にならない）。
+ */
+async function fetchAllComments(key, video) {
+  const threads = [];
+  let pageToken;
+  do {
+    const data = await api(key, 'commentThreads', {
+      part: 'snippet,replies',
+      videoId: video.videoId,
+      maxResults: 100,
+      order: 'time',
+      textFormat: 'plainText',
+      ...(pageToken ? { pageToken } : {}),
+    });
+    for (const it of data.items ?? []) {
+      const c = it.snippet.topLevelComment.snippet;
+      threads.push({
+        id: it.snippet.topLevelComment.id,
+        author: c.authorDisplayName,
+        authorChannelId: c.authorChannelId?.value ?? null,
+        likeCount: Number(c.likeCount ?? 0),
+        publishedAt: c.publishedAt,
+        text: c.textOriginal,
+        replyCount: Number(it.snippet.totalReplyCount ?? 0),
+        replies: (it.replies?.comments ?? []).map((r) => ({
+          id: r.id,
+          author: r.snippet.authorDisplayName,
+          authorChannelId: r.snippet.authorChannelId?.value ?? null,
+          likeCount: Number(r.snippet.likeCount ?? 0),
+          publishedAt: r.snippet.publishedAt,
+          text: r.snippet.textOriginal,
+        })),
+      });
+    }
+    pageToken = data.nextPageToken;
+    if (threads.length % 1000 < 100) console.error(`    ${threads.length} 件…`);
+  } while (pageToken);
+  return threads;
+}
+
+/**
+ * 「やり取り」の候補スレッドだけ、返信を全部取り直す。
+ * commentThreads が同梱してくれる返信は最大5件で、しかも並びが選べない＝
+ * 伸びたスレッドほど肝心の応酬が落ちる。いいねが付いていて返信が2件以上ある上位だけ、
+ * comments エンドポイント（1ユニット）で取り直す。
+ */
+async function hydrateReplies(key, threads, take = 40) {
+  const targets = threads
+    .filter((t) => t.replyCount >= 2)
+    .sort((a, b) => b.likeCount - a.likeCount)
+    .slice(0, take);
+  for (const t of targets) {
+    try {
+      const data = await api(key, 'comments', {
+        part: 'snippet',
+        parentId: t.id,
+        maxResults: 100,
+        textFormat: 'plainText',
+      });
+      t.replies = (data.items ?? []).map((r) => ({
+        id: r.id,
+        author: r.snippet.authorDisplayName,
+        authorChannelId: r.snippet.authorChannelId?.value ?? null,
+        likeCount: Number(r.snippet.likeCount ?? 0),
+        publishedAt: r.snippet.publishedAt,
+        text: r.snippet.textOriginal,
+      }));
+      t.repliesHydrated = true;
+    } catch (err) {
+      // 取れなかったスレッドは同梱の5件のまま残す＝1本のために全体を落とさない
+      console.error(`    replies skip ${t.id}: ${err.message ?? err}`);
+    }
+  }
+  return targets.length;
+}
+
+/** --comments-full: 指定大会の全動画のコメントを _local へ落とす（data/ には書かない）。 */
+async function commentsFull(key, eventNo) {
+  const stats = JSON.parse(readFileSync(OUT_STATS, 'utf8'));
+  const videos = stats.videos.filter((v) => v.event === eventNo);
+  if (videos.length === 0) throw new Error(`BD${eventNo} の動画が bd-auditions.json に無い`);
+  const dir = join(RAW_DIR, 'full');
+  mkdirSync(dir, { recursive: true });
+  for (const video of videos) {
+    console.error(`BD${eventNo} ${video.videoId} ${video.title.slice(0, 40)}（公称 ${video.commentCount} 件）`);
+    let threads;
+    try {
+      threads = await fetchAllComments(key, video);
+    } catch (err) {
+      console.error(`  skip: ${err.message ?? err}`);
+      continue;
+    }
+    const hydrated = await hydrateReplies(key, threads);
+    const out = join(dir, `BD${eventNo}-${video.videoId}.json`);
+    writeFileSync(
+      out,
+      JSON.stringify({ fetchedAt: new Date().toISOString(), video, threads }, null, 2),
+    );
+    console.error(`  → ${out}（${threads.length} スレッド / 返信を取り直したスレッド ${hydrated}）`);
+  }
+}
+
 async function main() {
   const key = loadApiKey();
   if (!key) {
     console.error('YOUTUBE_API_KEY が未設定。 .env.local に YOUTUBE_API_KEY=... を書く。');
     process.exit(1);
   }
+  // --comments-full <大会番号> … その大会の全コメント＋返信を _local へ（data/ は触らない）
+  const fullIdx = process.argv.indexOf('--comments-full');
+  if (fullIdx !== -1) {
+    const eventNo = Number(process.argv[fullIdx + 1]);
+    if (!Number.isFinite(eventNo)) throw new Error('--comments-full には大会番号が要る（例: --comments-full 21）');
+    await commentsFull(key, eventNo);
+    return;
+  }
+
   // --voices     … 大会代表動画（最多コメント）だけ＝全史ページの引用に必要な最小限
   // --voices-all … 全オーディション動画から2件ずつ＝縦スワイプのリール（BDイベントページ）の燃料。
   //                1動画あたりの上限（2件）は変えない＝コメントDBにしない posture は据え置き。
