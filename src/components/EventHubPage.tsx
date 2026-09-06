@@ -9,6 +9,8 @@ import { vodOffers } from '@/lib/vod';
 import EventCountdown from '@/components/EventCountdown';
 import EventTimeline from '@/components/EventTimeline';
 import UpcomingFights from '@/components/UpcomingFights';
+import BdReel from '@/components/BdReel';
+import { bdEventNoFromSlug, bdReelSummary } from '@/lib/bdReel';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -76,6 +78,15 @@ export function createEventRoute(slug: string) {
     // RIZIN の視聴CTAは vod.ts の現行販路フラグ（rizinPpv）を再利用＝販路の増減は vod.ts だけで完結。
     // BreakingDown は自社プラットフォーム（アフィ提携なし）なので公式サイトへの一次情報リンクのみ。
     const ppvServices = event.org === 'rizin' ? vodOffers('mma', 'event').filter((o) => o.rizinPpv) : [];
+
+    // BreakingDown の大会ページには「オーディションマラソン」（縦スワイプのリール）を積む。
+    // BD はカード発表がオーディション終盤まで無い＝発表前の期間はページが薄いのに検索需要は先に立つ。
+    // その空白を、既に公開されているオーディション動画（本戦より本数も再生も多い）で埋める。
+    // ja のみ＝動画もコメントも日本語（UpcomingFights と同じ扱い）。
+    const reel =
+      event.org === 'breakingdown' && locale !== 'en'
+        ? await bdReelSummary(bdEventNoFromSlug(event.slug))
+        : null;
 
     const pageUrl = absoluteUrl(locale, `/${event.slug}`);
     const jsonLd = {
@@ -190,6 +201,9 @@ export function createEventRoute(slug: string) {
             <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{t('events.cardsTbd')}</p>
           )}
         </section>
+
+        {/* オーディションマラソン（BD のみ）＝カード未発表期の主コンテンツ・回遊の沼 */}
+        {reel && reel.totals.videos > 0 && <BdReel data={reel} eventNameJa={event.shortJa} />}
 
         {/* チケット（裏取り済みのみ） */}
         {event.ticketsJa && (

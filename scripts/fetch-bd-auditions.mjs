@@ -15,7 +15,8 @@
  *
  * 使い方:
  *   node scripts/fetch-bd-auditions.mjs           … 動画一覧＋統計を更新
- *   node scripts/fetch-bd-auditions.mjs --voices  … 上に加えて人気コメントも更新
+ *   node scripts/fetch-bd-auditions.mjs --voices  … 上に加えて大会代表動画の人気コメントも更新
+ *   node scripts/fetch-bd-auditions.mjs --voices-all … 全動画から2件ずつ（縦スワイプのリールの燃料）
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -167,7 +168,11 @@ async function main() {
     console.error('YOUTUBE_API_KEY が未設定。 .env.local に YOUTUBE_API_KEY=... を書く。');
     process.exit(1);
   }
-  const wantVoices = process.argv.includes('--voices');
+  // --voices     … 大会代表動画（最多コメント）だけ＝全史ページの引用に必要な最小限
+  // --voices-all … 全オーディション動画から2件ずつ＝縦スワイプのリール（BDイベントページ）の燃料。
+  //                1動画あたりの上限（2件）は変えない＝コメントDBにしない posture は据え置き。
+  const wantVoicesAll = process.argv.includes('--voices-all');
+  const wantVoices = wantVoicesAll || process.argv.includes('--voices');
 
   const uploads = await listAllUploads(key);
   const auditions = uploads.filter((v) => isAuditionTitle(v.title) && !EXCLUDE.has(v.videoId));
@@ -191,13 +196,31 @@ async function main() {
   for (const v of unassigned) console.error(`  未割当: ${v.publishedAt.slice(0, 10)} ${v.title}`);
 
   if (wantVoices) {
-    const byEvent = new Map();
-    for (const v of payload.videos) {
-      if (!byEvent.has(v.event) || v.commentCount > byEvent.get(v.event).commentCount) byEvent.set(v.event, v);
+    let targets;
+    if (wantVoicesAll) {
+      // 全動画。リールは1動画1コマなので、代表動画だけだと89コマ中17コマにしか声が乗らない。
+      targets = [...payload.videos].sort(
+        (a, b) => a.event - b.event || a.publishedAt.localeCompare(b.publishedAt),
+      );
+    } else {
+      const byEvent = new Map();
+      for (const v of payload.videos) {
+        if (!byEvent.has(v.event) || v.commentCount > byEvent.get(v.event).commentCount) byEvent.set(v.event, v);
+      }
+      targets = [...byEvent.values()].sort((a, b) => a.event - b.event);
     }
     const voices = [];
-    for (const [event, video] of [...byEvent.entries()].sort((a, b) => a[0] - b[0])) {
-      const picks = await fetchVoices(key, video);
+    for (const video of targets) {
+      const event = video.event;
+      // コメント欄が閉じている動画は commentThreads が 403 を返す＝そこだけ飛ばして続ける
+      // （1本のために全体を落とさない。取れなかった動画には声が乗らないだけ）。
+      let picks = [];
+      try {
+        picks = await fetchVoices(key, video);
+      } catch (err) {
+        console.error(`  voices skip ${video.videoId}: ${err.message ?? err}`);
+        continue;
+      }
       for (const p of picks) {
         voices.push({ event, videoId: video.videoId, videoTitle: video.title, ...p });
       }
