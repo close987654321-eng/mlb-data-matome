@@ -61,7 +61,11 @@ export function createEventRoute(slug: string) {
     }チケットの席種・価格、PPVの視聴方法をこの1ページで追い、新情報が出るたび更新する。`;
     const url = absoluteUrl(locale, `/${event.slug}`);
     return {
-      title,
+      // BreakingDown だけ layout の template（`%s｜海外の反応`）を absolute で外す（2026-09-07 村山さん指示）。
+      // BD は国内興行で、このページが載せているのも日本語の YouTube コメント欄＝「海外の反応」ではない。
+      // 実測クエリも対戦カード・チケット・会場の3つだけで、ブランド語は題字の尺を食うだけになる。
+      // RIZIN の大会ページは r/MMA 由来の海外の反応記事がぶら下がるので、そちらは template のまま。
+      title: event.org === 'breakingdown' ? { absolute: title } : title,
       description,
       // OG 画像は必ず明示（Next の Metadata は openGraph を置換する＝渡し忘れると og:image ゼロ）。
       openGraph: { title, description, type: 'website', url, images: OG_IMAGES },
