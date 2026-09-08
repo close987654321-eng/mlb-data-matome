@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-08 15:01",
+  "asOf": "2026-09-08 20:24",
   "players": {
     "500743": {
       "fielding": {
@@ -61,7 +61,7 @@
       },
       "saber": {
         "hit": 0.61361,
-        "pit": -0.130815,
+        "pit": -0.131044,
         "woba": 0.304723,
         "wrcplus": 91.0577
       },
@@ -78,10 +78,10 @@
         "gamesPlayed": 139,
         "gamesStarted": 139,
         "innings": "1185.2",
-        "oaa": 0,
+        "oaa": -1,
         "position": "一塁",
         "putOuts": 945,
-        "runsPrevented": 0
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 521,
@@ -440,7 +440,7 @@
         "oaa": 10,
         "position": "遊撃",
         "putOuts": 111,
-        "runsPrevented": 8
+        "runsPrevented": 7
       },
       "hitting": {
         "atBats": 414,
@@ -502,9 +502,9 @@
         }
       },
       "saber": {
-        "hit": 2.58486,
-        "woba": 0.317501,
-        "wrcplus": 99.6043
+        "hit": 2.59568,
+        "woba": 0.317549,
+        "wrcplus": 99.7782
       },
       "sprintSpeed": 26.6,
       "team": "ドジャース"
@@ -575,7 +575,7 @@
         "woba": 0.319508,
         "wrcplus": 100.947
       },
-      "sprintSpeed": 28.4,
+      "sprintSpeed": 28.3,
       "team": "ドジャース"
     },
     "608372": {
@@ -789,7 +789,7 @@
         }
       },
       "saber": {
-        "pit": 5.90658
+        "pit": 5.89592
       },
       "team": "フィリーズ"
     },
@@ -1002,10 +1002,10 @@
         }
       },
       "saber": {
-        "hit": 3.88063,
+        "hit": 3.84587,
         "pit": 2.92504,
-        "woba": 0.382872,
-        "wrcplus": 143.325
+        "woba": 0.381489,
+        "wrcplus": 142.588
       },
       "sprintSpeed": 27.7,
       "team": "ドジャース"
@@ -1057,9 +1057,9 @@
         }
       },
       "saber": {
-        "hit": 0.7056,
-        "woba": 0.317324,
-        "wrcplus": 100.21662509225092
+        "hit": 0.68696,
+        "woba": 0.31611,
+        "wrcplus": 99.54180627306273
       },
       "sprintSpeed": 27.5,
       "team": "ダイヤモンドバックス"
@@ -1147,9 +1147,9 @@
         }
       },
       "saber": {
-        "hit": 0.05904,
-        "woba": 0.30474,
-        "wrcplus": 91.0691
+        "hit": -0.02538,
+        "woba": 0.302583,
+        "wrcplus": 89.7575
       },
       "sprintSpeed": 26.5,
       "team": "ドジャース"
@@ -1219,11 +1219,11 @@
         }
       },
       "saber": {
-        "hit": 2.74424,
-        "woba": 0.391874,
-        "wrcplus": 150.651
+        "hit": 2.80954,
+        "woba": 0.392264,
+        "wrcplus": 151.151
       },
-      "sprintSpeed": 25.6,
+      "sprintSpeed": 25.7,
       "team": "メッツ"
     },
     "669242": {
@@ -1236,10 +1236,10 @@
         "gamesPlayed": 45,
         "gamesStarted": 37,
         "innings": "336.1",
-        "oaa": 5,
+        "oaa": 4,
         "position": "二塁",
         "putOuts": 54,
-        "runsPrevented": 4
+        "runsPrevented": 3
       },
       "hitting": {
         "atBats": 235,
@@ -1274,11 +1274,11 @@
         }
       },
       "saber": {
-        "hit": 1.69303,
-        "woba": 0.343548,
-        "wrcplus": 117.024
+        "hit": 1.60722,
+        "woba": 0.338345,
+        "wrcplus": 113.702
       },
-      "sprintSpeed": 27.9,
+      "sprintSpeed": 28,
       "team": "ドジャース"
     },
     "669257": {
@@ -1315,9 +1315,9 @@
       "league": "NL",
       "pitching": null,
       "saber": {
-        "hit": 0.90251,
-        "woba": 0.311625,
-        "wrcplus": 95.6743
+        "hit": 0.88424,
+        "woba": 0.310258,
+        "wrcplus": 94.8965
       },
       "sprintSpeed": 27.2,
       "team": "ドジャース"
@@ -1332,7 +1332,7 @@
         "gamesPlayed": 127,
         "gamesStarted": 123,
         "innings": "1093.2",
-        "oaa": -2,
+        "oaa": -1,
         "position": "三塁",
         "putOuts": 75,
         "runsPrevented": -1
@@ -1446,7 +1446,7 @@
         "wins": 3
       },
       "saber": {
-        "pit": 0.35916
+        "pit": 0.355518
       },
       "team": "パドレス"
     },
@@ -1499,7 +1499,7 @@
         }
       },
       "saber": {
-        "pit": -0.563771
+        "pit": -0.567334
       },
       "team": "メッツ"
     },
@@ -1584,9 +1584,9 @@
         }
       },
       "saber": {
-        "hit": 4.03661,
-        "woba": 0.36894,
-        "wrcplus": 135.729
+        "hit": 4.0354,
+        "woba": 0.368192,
+        "wrcplus": 135.383
       },
       "sprintSpeed": 27.9,
       "team": "カブス"
@@ -1678,9 +1678,9 @@
         }
       },
       "saber": {
-        "hit": 6.53081,
-        "woba": 0.35303,
-        "wrcplus": 124.885
+        "hit": 6.47792,
+        "woba": 0.351194,
+        "wrcplus": 123.507
       },
       "sprintSpeed": 30.1,
       "team": "ロイヤルズ"
@@ -1773,9 +1773,9 @@
         }
       },
       "saber": {
-        "hit": 4.65579,
-        "woba": 0.367171,
-        "wrcplus": 137.388
+        "hit": 4.65035,
+        "woba": 0.367225,
+        "wrcplus": 137.31
       },
       "sprintSpeed": 28.4,
       "team": "ホワイトソックス"
@@ -1834,7 +1834,7 @@
         }
       },
       "saber": {
-        "pit": 1.62219
+        "pit": 1.61419
       },
       "team": "ドジャース"
     },
@@ -1927,9 +1927,9 @@
         }
       },
       "saber": {
-        "hit": 3.9424,
-        "woba": 0.346441,
-        "wrcplus": 118.96
+        "hit": 3.957,
+        "woba": 0.346491,
+        "wrcplus": 119.156
       },
       "sprintSpeed": 28.3,
       "team": "ドジャース"
@@ -2023,9 +2023,9 @@
         }
       },
       "saber": {
-        "hit": 3.25104,
-        "woba": 0.361579,
-        "wrcplus": 126.839
+        "hit": 3.17101,
+        "woba": 0.35918,
+        "wrcplus": 125.354
       },
       "sprintSpeed": 28.5,
       "team": "ナショナルズ"
@@ -2259,7 +2259,7 @@
         "oaa": 25,
         "position": "中堅",
         "putOuts": 363,
-        "runsPrevented": 22
+        "runsPrevented": 23
       },
       "hitting": {
         "atBats": 558,
@@ -2339,7 +2339,7 @@
         "woba": 0.401182,
         "wrcplus": 157.293
       },
-      "sprintSpeed": 29.6,
+      "sprintSpeed": 29.5,
       "team": "カブス"
     },
     "694819": {
@@ -2408,7 +2408,7 @@
         }
       },
       "saber": {
-        "pit": 5.60214
+        "pit": 5.60153
       },
       "team": "ブルワーズ"
     },
@@ -2535,7 +2535,7 @@
         }
       },
       "saber": {
-        "pit": 3.32836
+        "pit": 3.43563
       },
       "team": "パドレス"
     },
@@ -2549,10 +2549,10 @@
         "gamesPlayed": 85,
         "gamesStarted": 78,
         "innings": "682.0",
-        "oaa": -7,
+        "oaa": -8,
         "position": "右翼",
         "putOuts": 154,
-        "runsPrevented": -6
+        "runsPrevented": -7
       },
       "hitting": {
         "atBats": 456,
@@ -2647,7 +2647,7 @@
         "oaa": -6,
         "position": "一塁",
         "putOuts": 416,
-        "runsPrevented": -5
+        "runsPrevented": -4
       },
       "hitting": {
         "atBats": 513,
@@ -2795,9 +2795,9 @@
         }
       },
       "saber": {
-        "hit": 2.65401,
-        "woba": 0.380801,
-        "wrcplus": 138.917
+        "hit": 2.64952,
+        "woba": 0.380853,
+        "wrcplus": 138.834
       },
       "sprintSpeed": 26.6,
       "team": "アスレチックス"
@@ -2838,9 +2838,9 @@
       "league": null,
       "pitching": null,
       "saber": {
-        "hit": -0.13815,
-        "woba": 0.214903,
-        "wrcplus": 31.3665
+        "hit": -0.13848,
+        "woba": 0.214923,
+        "wrcplus": 31.3802
       },
       "sprintSpeed": 28,
       "team": "Charlotte Knights"
@@ -2894,9 +2894,9 @@
         }
       },
       "saber": {
-        "hit": 0.38474,
-        "woba": 0.329719,
-        "wrcplus": 108.14
+        "hit": 0.38284,
+        "woba": 0.329758,
+        "wrcplus": 108.113
       },
       "sprintSpeed": 26.1,
       "team": "レッドソックス"
@@ -3106,7 +3106,7 @@
         }
       },
       "saber": {
-        "pit": 4.05063
+        "pit": 4.04119
       },
       "team": "ドジャース"
     },
@@ -3161,7 +3161,7 @@
         }
       },
       "saber": {
-        "pit": 0.473481
+        "pit": 0.476252
       },
       "team": "アストロズ"
     }
