@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-10 15:01",
+  "asOf": "2026-09-10 20:26",
   "players": {
     "500743": {
       "fielding": {
@@ -444,7 +444,7 @@
         "gamesPlayed": 107,
         "gamesStarted": 105,
         "innings": "924.2",
-        "oaa": 10,
+        "oaa": 9,
         "position": "遊撃",
         "putOuts": 114,
         "runsPrevented": 7
@@ -655,7 +655,7 @@
         "gamesPlayed": 146,
         "gamesStarted": 146,
         "innings": "1288.0",
-        "oaa": 7,
+        "oaa": 8,
         "position": "一塁",
         "putOuts": 1060,
         "runsPrevented": 6
@@ -1068,8 +1068,8 @@
       },
       "saber": {
         "hit": 0.75207,
-        "woba": 0.319267,
-        "wrcplus": 101.66382934782608
+        "woba": 0.319419,
+        "wrcplus": 101.75418309352519
       },
       "sprintSpeed": 27.5,
       "team": "ダイヤモンドバックス"
@@ -1233,7 +1233,7 @@
         "woba": 0.397442,
         "wrcplus": 154.783
       },
-      "sprintSpeed": 25.8,
+      "sprintSpeed": 25.7,
       "team": "メッツ"
     },
     "669242": {
@@ -1288,7 +1288,7 @@
         "woba": 0.335928,
         "wrcplus": 112.226
       },
-      "sprintSpeed": 28,
+      "sprintSpeed": 28.1,
       "team": "ドジャース"
     },
     "669257": {
@@ -1342,10 +1342,10 @@
         "gamesPlayed": 129,
         "gamesStarted": 125,
         "innings": "1110.2",
-        "oaa": -1,
+        "oaa": -2,
         "position": "三塁",
         "putOuts": 77,
-        "runsPrevented": -1
+        "runsPrevented": -2
       },
       "hitting": {
         "atBats": 517,
@@ -1598,7 +1598,7 @@
         "woba": 0.367092,
         "wrcplus": 134.739
       },
-      "sprintSpeed": 27.9,
+      "sprintSpeed": 28,
       "team": "カブス"
     },
     "677951": {
@@ -1611,7 +1611,7 @@
         "gamesPlayed": 125,
         "gamesStarted": 125,
         "innings": "1083.0",
-        "oaa": 23,
+        "oaa": 22,
         "position": "遊撃",
         "putOuts": 155,
         "runsPrevented": 17
@@ -2656,7 +2656,7 @@
         "oaa": -6,
         "position": "一塁",
         "putOuts": 416,
-        "runsPrevented": -5
+        "runsPrevented": -4
       },
       "hitting": {
         "atBats": 519,
@@ -2919,7 +2919,7 @@
         "gamesPlayed": 102,
         "gamesStarted": 101,
         "innings": "892.0",
-        "oaa": 0,
+        "oaa": -1,
         "position": "一塁",
         "putOuts": 748,
         "runsPrevented": 0
@@ -3169,7 +3169,6 @@
         }
       },
       "saber": {
-        "hit": 0,
         "pit": 0.474605
       },
       "team": "アストロズ"
