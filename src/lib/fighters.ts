@@ -173,20 +173,22 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['平本', '蓮'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '9/10ダウトベック戦',
-      until: '2026-09-10',
-      opponentJa: 'カルシャガ・ダウトベック',
-      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
-      href: '/rizin5',
-    },
+    // 2026-09-10 のダウトベック戦（超RIZIN.5）を消化。次戦は未発表なので nextFightJa は持たない。
     accoladeJa: '総合格闘家・剛毅會（元キックボクサー、K-1甲子園2014優勝）',
-    record: { wins: 4, losses: 3, draws: 0, kos: 1, asOf: '2024-07-28' },
+    record: { wins: 5, losses: 3, draws: 0, kos: 1, asOf: '2026-09-10' },
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E5%B9%B3%E6%9C%AC%E8%93%AE',
       'https://en.wikipedia.org/wiki/Ren_Hiramoto',
     ],
     fights: [
+      {
+        date: '2026-09-10',
+        opponentJa: 'カルシャガ・ダウトベック',
+        opponentEn: 'Kalshaga Dautbek',
+        venueJa: '京セラドーム大阪（超RIZIN.5 浪速の超復活祭り）',
+        resultJa: '2-1判定勝ち',
+        noteJa: '左肩負傷から774日ぶりのMMA復帰戦。判定前に敗北を覚悟して涙を見せ、勝者コールに本人が一番驚いた。ダウトベックは判定に不服',
+      },
       {
         date: '2026-05-10',
         opponentJa: '皇治',
@@ -259,26 +261,28 @@ export const FIGHTERS: Fighter[] = [
     nameEn: 'Mikuru Asakura',
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '9/10青木真也戦',
-      until: '2026-09-10',
-      opponentJa: '青木真也',
-      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
-      href: '/rizin5',
-    },
+    // 2026-09-10 の青木真也戦（超RIZIN.5）を消化。次戦は未発表なので nextFightJa は持たない。
     accoladeJa: '総合格闘家・JAPAN TOP TEAM（RIZINフェザー級王座決定戦に3度挑戦も未勝利）',
-    record: { wins: 19, losses: 6, draws: 0, kos: 9, asOf: '2025-12-31' },
+    record: { wins: 20, losses: 6, draws: 0, kos: 10, asOf: '2026-09-10' },
     headlineStats: [
       // 2020(斎藤裕)・2023(ケラモフ)・2025(シェイドゥラエフ)の3度とも王座決定戦で敗退（fights参照）
       { value: '0勝3敗', labelJa: 'RIZINフェザー級王座決定戦（2020・2023・2025年大晦日）' },
       // 2025-12-31シェイドゥラエフ戦から2026-09-10青木戦まで＝253日（rizin5.tsのfeudJaと同一の裏取り値）
-      { value: '253日ぶり', labelJa: '前回の敗戦からの復帰戦（9/10青木真也戦時点）' },
+      { value: '253日ぶり', labelJa: '復帰戦で青木真也を1R TKO（2026年9月10日・超RIZIN.5）' },
     ],
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E6%9C%9D%E5%80%89%E6%9C%AA%E6%9D%A5',
       'https://en.wikipedia.org/wiki/Mikuru_Asakura',
     ],
     fights: [
+      {
+        date: '2026-09-10',
+        opponentJa: '青木真也',
+        opponentEn: 'Shinya Aoki',
+        venueJa: '京セラドーム大阪（超RIZIN.5 浪速の超復活祭り）',
+        resultJa: '1R2分39秒TKO勝ち（レフェリーストップ：グラウンドパンチ）',
+        noteJa: '71kg契約。シェイドゥラエフ戦から253日ぶりの復帰戦で、この大会唯一のKO/TKO決着。青木は2015年以来11年ぶりのRIZIN参戦だった',
+      },
       {
         date: '2025-12-31',
         opponentJa: 'ラジャブアリ・シェイドゥラエフ',
@@ -794,15 +798,8 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['冨澤', '大智'],
     sport: 'mma',
     voiceScope: 'domestic',
-    // 超RIZIN.5 出場（rizin5.ts の第8試合）。カタログだけ次戦が空だと LP と /rizin5 の相互配線が
-    // 切れるため追記（2026-09-02。until を過ぎれば自動で消える）。
-    nextFightJa: {
-      labelJa: '9/10ドンマイ川端戦',
-      until: '2026-09-10',
-      opponentJa: 'ドンマイ川端',
-      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
-      href: '/rizin5',
-    },
+    // 超RIZIN.5（2026-09-10）のドンマイ川端戦は、川端の左眼窩底骨折（全治2〜3ヶ月）で中止
+    // （RIZIN 公式 2026-08-29 発表）。試合が無かったので record は 2026-06-06 のまま。次戦は未発表。
     accoladeJa:
       "総合格闘家・FIGHTER'S FLOW所属（BreakingDown出身、通称「闘神」。膝蹴りを武器にRIZIN参戦）",
     record: { wins: 3, losses: 2, draws: 0, kos: 2, asOf: '2026-06-06' },
@@ -876,28 +873,32 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['シェイドゥラエフ', 'シェイドラエフ'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '9/10マッキー戦',
-      until: '2026-09-10',
-      opponentJa: 'AJ・マッキー',
-      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
-      href: '/rizin5',
-    },
-    accoladeJa: 'RIZINフェザー級王者・キルギス（2025年5月戴冠／RIZIN初のキルギス人選手）',
-    record: { wins: 19, losses: 0, draws: 0, kos: 7, asOf: '2026-04-12' },
+    // 2026-09-10 のマッキー戦（超RIZIN.5・公式表記「RIZIN＆PFLフェザー級ダブルタイトルマッチ」）を消化。
+    // 次戦は未発表なので nextFightJa は持たない。
+    accoladeJa:
+      'RIZIN＆PFLフェザー級2冠王者・キルギス（2025年5月RIZIN戴冠、2026年9月のダブルタイトルマッチでPFL王座も獲得／RIZIN初のキルギス人選手）',
+    record: { wins: 20, losses: 0, draws: 0, kos: 7, asOf: '2026-09-10' },
     headlineStats: [
-      // ヒーローは record から「通算戦績19-0」「KO率」を自動で出す。ここに 19-0 を再掲すると
+      // ヒーローは record から「通算戦績20-0」「KO率」を自動で出す。ここに 20-0 を再掲すると
       // 同じ数字が2枠に並ぶので、record から読み取れない値だけを置く。
-      // 戴冠2025-05-04 → コレスニック・朝倉未来・久保優太で3度防衛（2026年4月時点）
-      { value: '3', labelJa: 'RIZIN王座防衛（2026年4月時点）' },
-      // 19戦すべてフィニッシュ決着＝判定までいったことが一度もない（en.wikipedia の戦績表で全戦確認）
-      { value: '0', labelJa: '判定決着（19戦すべてフィニッシュ）' },
+      // 2026-09-10 超RIZIN.5 のマッキー戦は公式リザルトで「RIZIN＆PFLフェザー級ダブルタイトルマッチ」＝勝って2本のベルト
+      { value: '2団体', labelJa: 'RIZIN＆PFLフェザー級王座（2026年9月10日のダブルタイトルマッチ）' },
+      // 19戦連続フィニッシュ（en.wikipedia の戦績表で全戦確認）。20戦目のマッキー戦（2026-09-10）がキャリア初の判定決着
+      { value: '19', labelJa: '連続フィニッシュ（20戦目のマッキー戦で初めて判定に）' },
     ],
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E3%83%A9%E3%82%B8%E3%83%A3%E3%83%96%E3%82%A2%E3%83%AA%E3%83%BB%E3%82%B7%E3%82%A7%E3%82%A4%E3%83%89%E3%82%A5%E3%83%A9%E3%82%A8%E3%83%95',
       'https://en.wikipedia.org/wiki/Razhabali_Shaydullaev',
     ],
     fights: [
+      {
+        date: '2026-09-10',
+        opponentJa: 'AJ・マッキー',
+        opponentEn: 'A.J. McKee',
+        venueJa: '京セラドーム大阪（超RIZIN.5 浪速の超復活祭り）',
+        resultJa: '3-0判定勝ち',
+        noteJa: 'RIZIN＆PFLフェザー級ダブルタイトルマッチ。キャリア初の判定決着で20連勝、2本のベルトを手にした',
+      },
       {
         date: '2026-04-12',
         opponentJa: '久保優太',
@@ -961,15 +962,9 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['マッキー'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '9/10シェイドゥラエフ戦',
-      until: '2026-09-10',
-      opponentJa: 'ラジャブアリ・シェイドゥラエフ',
-      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
-      href: '/rizin5',
-    },
+    // 2026-09-10 のシェイドゥラエフ戦（超RIZIN.5）を消化。次戦は未発表なので nextFightJa は持たない。
     accoladeJa: '元Bellator世界フェザー級王者・米国（2021年フェザー級グランプリ優勝）',
-    record: { wins: 25, losses: 2, draws: 0, kos: 6, asOf: '2026-06-27' },
+    record: { wins: 25, losses: 3, draws: 0, kos: 6, asOf: '2026-09-10' },
     headlineStats: [
       // デビューから無敗のまま18連勝→2022-04-15 のピットブル再戦で初黒星（en.wikipedia）
       { value: '18-0', labelJa: 'デビューからの連勝（2022年4月に初黒星）' },
@@ -977,6 +972,14 @@ export const FIGHTERS: Fighter[] = [
     ],
     sameAs: ['https://en.wikipedia.org/wiki/A._J._McKee'],
     fights: [
+      {
+        date: '2026-09-10',
+        opponentJa: 'ラジャブアリ・シェイドゥラエフ',
+        opponentEn: 'Razhabali Shaydullaev',
+        venueJa: '京セラドーム大阪（超RIZIN.5 浪速の超復活祭り）',
+        resultJa: '0-3判定負け',
+        noteJa: 'RIZIN＆PFLフェザー級ダブルタイトルマッチ。通算3敗目だがフィニッシュ負けは依然ゼロ',
+      },
       {
         date: '2026-06-27',
         opponentJa: 'サラマト・イスブラエフ',
