@@ -32,7 +32,9 @@ export async function generateMetadata({
   const title = t('rizin5.metaTitle');
   const description = t('rizin5.metaDesc');
   return {
-    title,
+    // layout の template（`%s｜海外の反応`）を absolute で外す（2026-09-07 村山さん指示・大会ページは全て）。
+    // EventHubPage と同じ理由＝観戦ガイド／結果ページはブランド語が題字の尺を食うだけ。
+    title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website', url: absoluteUrl(locale, '/rizin5'), images: [OG] },
     twitter: { card: 'summary_large_image', title, description, images: [OG.url] },
@@ -336,7 +338,8 @@ export default async function Rizin5Page({
               <tr className="border-b border-ink/40 text-[11px] uppercase tracking-[0.1em] text-ink-mute">
                 <th className="py-2 pr-3 font-medium">{t('rizin5.cardListNo')}</th>
                 <th className="py-2 pr-4 font-medium">{t('rizin5.cardListMatch')}</th>
-                <th className="py-2 font-medium">{t('rizin5.cardListWeight')}</th>
+                <th className="py-2 pr-4 font-medium">{t('rizin5.cardListWeight')}</th>
+                <th className="py-2 font-medium">{t('rizin5.cardListResult')}</th>
               </tr>
             </thead>
             <tbody>
@@ -356,7 +359,11 @@ export default async function Rizin5Page({
                       <span className="mt-0.5 block text-xs text-ink-soft">{card.titleJa}</span>
                     )}
                   </td>
-                  <td className="whitespace-nowrap py-2.5 text-xs text-ink-soft">{card.weightJa}</td>
+                  <td className="whitespace-nowrap py-2.5 pr-4 text-xs text-ink-soft">{card.weightJa}</td>
+                  {/* 大会後は公式リザルト（resultJa）／中止カードは cancelledJa。大会前はどちらも無く空欄。 */}
+                  <td className={`py-2.5 text-xs ${card.resultJa ? 'font-bold text-ink' : 'text-ink-mute'}`}>
+                    {card.resultJa ?? card.cancelledJa ?? ''}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -382,6 +389,14 @@ export default async function Rizin5Page({
               <h3 className="mt-2 text-xl font-bold text-ink sm:text-2xl">
                 {card.left.name} <span className="px-1 text-ink-mute">vs</span> {card.right.name}
               </h3>
+              {(card.resultJa || card.cancelledJa) && (
+                <p className="mt-2 border border-ink/25 bg-ink/[0.03] px-3 py-2 text-sm text-ink">
+                  <span className="text-xs font-medium uppercase tracking-[0.15em] text-ink-mute">
+                    {t('rizin5.resultLabel')}
+                  </span>
+                  ｜<span className={card.resultJa ? 'font-bold' : ''}>{card.resultJa ?? card.cancelledJa}</span>
+                </p>
+              )}
 
               {/* 選手2欄（写真・戦績・直近の試合）。データの無い欄は自動で薄くなる。 */}
               <div className="mt-4 flex flex-col gap-5 sm:flex-row sm:gap-8">

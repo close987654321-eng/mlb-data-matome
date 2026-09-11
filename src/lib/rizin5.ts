@@ -64,6 +64,10 @@ export type Rizin5Card = {
   right: Rizin5Fighter;
   /** 因縁ラベル（このカードの背景を1行で。無いカードは持たない） */
   feudJa?: string;
+  /** 試合結果（RIZIN 公式リザルト一覧の転記のみ。大会前は持たない） */
+  resultJa?: string;
+  /** 中止・変更（公式発表の転記。該当しないカードは持たない） */
+  cancelledJa?: string;
   /** 因縁の地の文（俺ボイス）。空配列＝まだ書いていない（画面には出さない） */
   story: string[];
   /** 会見・報道の実在発言（逐語＋出典） */
@@ -167,7 +171,7 @@ export const RIZIN5 = {
   venueJa: '京セラドーム大阪',
   nameJa: '超RIZIN.5 浪速の超復活祭り',
   /** ページ内容の最終更新日（dateModified・sitemap lastmod に使う） */
-  updatedAt: '2026-08-27',
+  updatedAt: '2026-09-11',
   /** この大会の反応記事を束ねるタグ（記事の tags に付けるとハブの関連枠に自動で並ぶ） */
   matchTags: ['RIZIN', '超RIZIN.5'],
 
@@ -376,6 +380,7 @@ export const RIZIN5 = {
   cards: [
     {
       order: 1,
+      resultJa: 'シェイドゥラエフが3R判定3-0で勝利（RIZIN＆PFLフェザー級ダブルタイトルマッチ）',
       weightJa: '66.0kg',
       titleJa: 'RIZIN＆PFLフェザー級タイトルマッチ',
       left: {
@@ -413,6 +418,7 @@ export const RIZIN5 = {
     },
     {
       order: 2,
+      resultJa: '朝倉未来が1R2分39秒TKO（レフェリーストップ：グラウンドパンチ）で勝利',
       weightJa: '71.0kg',
       left: {
         name: '朝倉未来',
@@ -478,6 +484,7 @@ export const RIZIN5 = {
     },
     {
       order: 3,
+      resultJa: 'ホベルト・サトシ・ソウザが3R判定3-0で勝利',
       weightJa: '71.0kg',
       left: {
         name: 'ホベルト・サトシ・ソウザ',
@@ -521,6 +528,7 @@ export const RIZIN5 = {
     },
     {
       order: 4,
+      resultJa: '平本蓮が3R判定2-1で勝利',
       weightJa: '66.0kg',
       left: {
         name: 'カルシャガ・ダウトベック',
@@ -576,6 +584,7 @@ export const RIZIN5 = {
     },
     {
       order: 5,
+      resultJa: '斎藤裕が3R判定3-0で勝利',
       weightJa: '66.0kg',
       left: {
         name: '斎藤裕',
@@ -613,6 +622,7 @@ export const RIZIN5 = {
     },
     {
       order: 6,
+      resultJa: 'ヴガール・ケラモフが3R判定3-0で勝利',
       weightJa: '66.0kg',
       left: {
         name: 'ヴガール・ケラモフ',
@@ -652,6 +662,7 @@ export const RIZIN5 = {
     },
     {
       order: 7,
+      resultJa: 'ナターシャ・クジュティナが2R3分14秒フロントチョーク（タップアウト）で勝利',
       weightJa: '49.0kg',
       left: {
         name: 'RENA',
@@ -685,6 +696,7 @@ export const RIZIN5 = {
     },
     {
       order: 8,
+      cancelledJa: '中止。ドンマイ川端が左眼窩底骨折（全治2〜3ヶ月）と診断され、8月29日にRIZIN公式が発表',
       weightJa: '59.0kg',
       left: {
         name: '冨澤大智',
@@ -721,6 +733,7 @@ export const RIZIN5 = {
     },
     {
       order: 9,
+      resultJa: '宇佐美秀メイソンが3R判定3-0で勝利',
       weightJa: '71.0kg',
       titleJa: 'RIZIN OFGキックボクシングルール（3分3R）',
       left: {
@@ -777,6 +790,20 @@ export const RIZIN5 = {
 
   /** ロード・トゥ・9.10（新しい順に表示。出来事の日付基準）。 */
   road: [
+    {
+      date: '2026-09-10',
+      titleJa: '大会終了。8試合の結果と、翌日の反応まとめ',
+      body: [
+        '京セラドーム大阪、超RIZIN.5が終わった。結果は上の対戦カード一覧に公式リザルトどおり入れてある。メインはシェイドゥラエフがAJ・マッキーに3R判定3-0。19戦全部フィニッシュで来た男がキャリアで初めて判定までいって、RIZINとPFLの2本のベルトを持ち帰った。朝倉未来は青木真也を1R2分39秒TKO、この大会で唯一のKO/TKO決着。平本蓮は774日ぶりのMMA復帰戦をダウトベックに判定2-1、割れた。',
+        '残りは、サトシが野村駿太に判定3-0、斎藤裕がYA-MANに判定3-0、ケラモフが高木凌に判定3-0、RENAはクジュティナに2R3分14秒フロントチョークで一本負け、オープニングのキックは宇佐美秀メイソンがベイノアに判定3-0。冨澤大智vsドンマイ川端は、川端の左眼窩底骨折で8月29日に中止が発表されていた。',
+        '試合直後の反応は、メイン、未来vs青木、平本vsダウトベックの3試合ぶんを個別にまとめた。下の「この大会の反応まとめ」から読める。',
+      ],
+      link: {
+        href: '/mma/2026-09-11-shaydullaev-mckee-result',
+        labelJa: 'シェイドゥラエフvsマッキーの反応まとめを読む',
+        internal: true,
+      },
+    },
     {
       date: '2026-08-27',
       titleJa: '29日に10人が並ぶ。そして大阪の街が先に始まっている',
