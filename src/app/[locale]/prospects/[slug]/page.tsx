@@ -8,6 +8,7 @@ import { buildFeed, feedKey } from '@/lib/feed';
 import FeedCard from '@/components/FeedCard';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import SectionHeading from '@/components/SectionHeading';
+import PostingWatch from '@/components/PostingWatch';
 import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
@@ -31,14 +32,22 @@ export async function generateMetadata({
   const statStr = p.season
     ? p.season.stats.slice(0, 3).map((s) => `${en ? s.en : s.ja}${s.value}`).join(en ? ' · ' : '・')
     : '';
+  // 「{名前} ポスティング」はオフシーズンの頭クエリ（GSC実測: 「牧 ポスティング」が記事側 順位11で
+  // 21表示・8月時点）。冬に跳ねる前に LP のタイトルへ語を入れておく（説明文には従来からある）。
+  // 申請が有力と報じられた選手だけ「最新情報」に切り替える＝読者の意図（いつ・どこへ）と一致させ、
+  // まだ動きの無い選手に同じ看板を掲げない（見出し⇔中身の一致）。layout が「｜海外の反応」を足す。
+  const posted = p.postingWatch?.level === 'expected';
   const title = en
-    ? `${p.nameEn} — NPB Player on the MLB Radar`
-    : // 「{名前} ポスティング」はオフシーズンの頭クエリ（GSC実測: 「牧 ポスティング」が記事側 順位11で
-      // 21表示・8月時点）。冬に跳ねる前に LP のタイトルへ語を入れておく（説明文には従来からある）。
-      `${p.nameJa} — ポスティング・MLB挑戦が注目されるNPBの逸材`;
+    ? `${p.nameEn} — ${posted ? 'MLB Posting Watch' : 'NPB Player on the MLB Radar'}`
+    : posted
+      ? `${p.nameJa} ポスティング最新情報と2026年成績`
+      : `${p.nameJa} — ポスティング・MLB挑戦が注目されるNPBの逸材`;
+  // ポスティングの現在地（報道ベース）を説明文の前方へ。オフに跳ねる「{選手名} ポスティング」で
+  // 来た読者が SERP の時点で答えを受け取れる＝タイトルと合わせて意図一致させる。
+  const watchStr = p.postingWatch ? (en ? p.postingWatch.headline.en : p.postingWatch.headline.ja) : '';
   const description = en
-    ? `${p.nameEn} (${p.team.en}, ${p.pos.en})${statStr ? ` — 2026 ${statStr}.` : '.'} Why MLB scouts are watching, his posting outlook, and a hub of overseas reactions.`
-    : `${p.nameJa}（${p.team.ja}・${p.pos.ja}）の2026年成績${statStr ? `（${statStr}）` : ''}、MLB注目ポイント、ポスティング見通し、海外の反応まとめ。`;
+    ? `${p.nameEn} (${p.team.en}, ${p.pos.en})${statStr ? ` — 2026 ${statStr}.` : '.'} ${watchStr} Why MLB scouts are watching, and a hub of overseas reactions.`
+    : `${p.nameJa}（${p.team.ja}・${p.pos.ja}）の2026年成績${statStr ? `（${statStr}）` : ''}。${watchStr}MLB注目ポイントと海外の反応まとめ。`;
   return {
     title,
     description,
@@ -139,6 +148,20 @@ export default async function ProspectPage({
           </p>
         ) : null}
       </section>
+
+      {/* ポスティングの現在地はページ最上段（H1直下）。検索着地の第一意図がここだから、
+          経歴やcompより先に「いま何が報じられているか」を出す。 */}
+      {p.postingWatch && (
+        <PostingWatch
+          watch={p.postingWatch}
+          en={en}
+          heading={t('prospects.watchTitle')}
+          levelLabel={t(`prospects.watchLevel.${p.postingWatch.level}`)}
+          suitorsLabel={t('prospects.watchSuitors')}
+          timelineLabel={t('prospects.watchTimeline')}
+          asOfLabel={t('prospects.statsAsOf', { date: p.postingWatch.asOf })}
+        />
+      )}
 
       <section>
         <div className="mb-3">

@@ -27,6 +27,26 @@ export type NpbProspect = {
   aliases?: string[];
   /** Wikipedia 等の権威URL（E-E-A-T）。 */
   sameAs?: string[];
+  /**
+   * ポスティング/MLB挑戦の「現在地」（報道ベース・断定しない）。
+   *
+   * なぜ別フィールドか: `posting` は通年で置ける一般論の見通しだが、オフが近づくと読者の検索は
+   * 「{選手名} ポスティング」「{選手名} メジャー どこ」＝**いつ・どこが・誰が報じたか**に変わる。
+   * 一般論の1段落では答えられないので、日付つきの報道時系列と関心球団を構造で持つ。
+   * 書けるのは**実在の報道に書かれた事実だけ**（出典URL必須・§4.4）。憶測・予想は書かない。
+   */
+  postingWatch?: {
+    /** expected=有力と報じられた / rumored=取り沙汰されている / watch=公式な動きはまだ無い */
+    level: 'expected' | 'rumored' | 'watch';
+    /** 更新日（JST）。古いまま置かない＝鮮度がそのまま信頼になる面。 */
+    asOf: string;
+    /** 現在地の1〜2文（LPの見出し直下・meta description にも効く）。 */
+    headline: { ja: string; en: string };
+    /** 関心が「報じられた」球団だけ（推測で足さない）。 */
+    suitors?: { ja: string; en: string }[];
+    /** 報道の時系列（新しい順）。source は実在URL・sourceName は媒体名。 */
+    timeline: { date: string; ja: string; en: string; source: string; sourceName: string }[];
+  };
   /** 今季成績（公知の数値のみ・編集時に手入力。出典は NPB公式 npb.jp。MLB成績APIは NPB を持たないため自動取得しない）。 */
   season?: {
     asOf: string; // 集計時点（例: "2026-06-29"）
@@ -47,28 +67,72 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A left-handed power hitter for the Hanshin Tigers. A 2020 first-round pick, he pairs huge raw power with third-base defense and ranks among the Central League’s premier sluggers.',
     },
     mlbWatch: {
-      ja: '左の長打力と三塁守備の両立はMLBでも希少な素材。コンタクトの安定が課題だが、はまった時の打球速度と飛距離はメジャースカウトが好む。',
-      en: 'A left-handed power bat that can also defend the hot corner is scarce in MLB. Contact consistency is the question, but his exit velocity and raw pop are tools scouts covet.',
+      ja: '左の長打力と三塁守備の両立はMLBでも希少な素材。2026年は打率.321・35本塁打・92打点でセ・リーグ三冠のいずれもトップ争いに立ち、OPSは1.029。2026年WBCでは5試合で打球速度100マイル超を3本記録した。一方でMLB側の評価が割れるのは守備で、「三塁に残れるかは疑問、行き先は一塁では」と見るスカウトもいる。',
+      en: 'A left-handed power bat that can also defend the hot corner is scarce in MLB. In 2026 he is in the hunt for the Central League triple crown (.321, 35 HR, 92 RBI, 1.029 OPS), and he produced three batted balls over 100 mph in five games at the 2026 WBC. Where evaluators split is defense: some question whether he sticks at third base in MLB and see first base as the landing spot.',
     },
     posting: {
-      ja: '海外FA権の取得はまだ先で、当面は球団のポスティング判断次第。今後の成績しだいでMLB挑戦が現実味を帯びる。',
-      en: 'Years from international free agency, so any move depends on the club granting a posting. A strong run would put an MLB jump on the table.',
+      ja: '今オフのポスティングが有力視されている。ポスティング後の交渉期間は45日間だが、現行労使協定が12月1日に切れるため、各球団はそれまでに決着させたい事情がある。ただしポスティングは球団の権利で、阪神が容認するかは確定していない＝国内では「簡単に許せる状況なのか疑問が残る」という見方も出ている。',
+      en: 'A posting this offseason is widely expected. Teams get a 45-day negotiating window once he is posted, but with the current CBA expiring on December 1, clubs have reason to get a deal done before then. The caveat: posting is the club\u2019s call, and Hanshin has not committed \u2014 some in Japan question whether the Tigers are in a position to let him go.',
+    },
+    postingWatch: {
+      level: 'expected',
+      asOf: '2026-09-13',
+      headline: {
+        ja: '今オフ、11月中旬にもポスティング申請の見込み。メッツ・ヤンキース・ドジャース・フィリーズの関心が報じられ、メッツのデビッド・スターンズ編成本部長は来日して視察した。',
+        en: 'Expected to be posted as soon as mid-November. The Mets, Yankees, Dodgers and Phillies have all been linked, and Mets baseball boss David Stearns scouted him in person in Japan.',
+      },
+      suitors: [
+        { ja: 'メッツ', en: 'Mets' },
+        { ja: 'ヤンキース', en: 'Yankees' },
+        { ja: 'ドジャース', en: 'Dodgers' },
+        { ja: 'フィリーズ', en: 'Phillies' },
+      ],
+      timeline: [
+        {
+          date: '2026-09-03',
+          ja: 'MLB公式サイトが「メッツら複数球団が関心」と報道。スターンズ編成本部長が来日して阪神の試合を視察し、その試合で佐藤は32号を放った。',
+          en: 'MLB.com reports multiple clubs are interested. Mets baseball boss David Stearns attended a Tigers game in Japan, where Sato hit his 32nd homer.',
+          source: 'https://www.mlb.com/news/mets-reportedly-interested-in-npb-star-teruaki-sato',
+          sourceName: 'MLB.com',
+        },
+        {
+          date: '2026-08-29',
+          ja: '国内では慎重な見方も。野球評論家の新井宏昌氏は「ポスティングはあくまで球団の権利です。阪神が今、佐藤のメジャー移籍を簡単に許せる状況なのかというと、疑問が残ります」と指摘した。',
+          en: 'A more cautious read from Japan: analyst Hiroaki Arai noted that posting is the club\u2019s right, and questioned whether Hanshin is in a position to simply let Sato leave.',
+          source: 'https://full-count.jp/2026/08/29/post2009308/',
+          sourceName: 'Full-Count',
+        },
+        {
+          date: '2026-08-16',
+          ja: 'ニューヨーク・ポストのジョン・ヘイマン記者が、メッツ・ヤンキース・ドジャース・フィリーズの関心を報道。ポスティングは「11月中旬ごろ」、12月1日のロックアウトで交渉が止まる前に決める必要がある、とも伝えた。',
+          en: 'Jon Heyman of the New York Post reports interest from the Mets, Yankees, Dodgers and Phillies, with a posting expected "mid-November or so" and negotiations freezing at the December 1 lockout.',
+          source: 'https://www.mlbtraderumors.com/2026/08/mets-yankees-dodgers-phillies-interested-in-teruaki-sato.html',
+          sourceName: 'MLB Trade Rumors',
+        },
+        {
+          date: '2026-03-14',
+          ja: 'MLB Trade Rumors が ESPN のホルヘ・カスティーヨ記者の情報として、伊藤大海と佐藤輝明が来オフにポスティングされる見込みだと伝えた。比較対象に挙げられたのはライアン・オハーン。',
+          en: 'MLB Trade Rumors, citing ESPN\u2019s Jorge Castillo, reports that Hiromi Itoh and Teruaki Sato are expected to be posted next winter. Sato\u2019s listed comp: Ryan O\u2019Hearn.',
+          source: 'https://www.mlbtraderumors.com/2026/03/hiromi-itoh-teruaki-sato-expected-to-be-posted-for-mlb-teams-next-winter.html',
+          sourceName: 'MLB Trade Rumors',
+        },
+      ],
     },
     comp: {
-      ja: '長打とパワーで魅せる、左打ちのコーナー・スラッガー型。',
-      en: 'A left-handed corner slugger built around power and loud contact.',
+      ja: '長打とパワーで魅せる、左打ちのコーナー・スラッガー型。MLBTR が挙げた比較対象はライアン・オハーン。',
+      en: 'A left-handed corner slugger built around power and loud contact. MLBTR\u2019s listed comp is Ryan O\u2019Hearn.',
     },
     aliases: ['佐藤輝'],
-    sameAs: ['https://ja.wikipedia.org/wiki/佐藤輝明'],
+    sameAs: ['https://ja.wikipedia.org/wiki/佐藤輝明', 'https://www.mlbtraderumors.com/players/teruaki-sato'],
     season: {
-      asOf: '2026-06-29',
+      asOf: '2026-09-13',
       sourceUrl: 'https://npb.jp/bis/players/41045153.html',
       stats: [
-        { ja: '試合', en: 'G', value: '69' },
-        { ja: '打率', en: 'AVG', value: '.353' },
-        { ja: '本塁打', en: 'HR', value: '16' },
-        { ja: '打点', en: 'RBI', value: '49' },
-        { ja: 'OPS', en: 'OPS', value: '1.087' },
+        { ja: '試合', en: 'G', value: '124' },
+        { ja: '打率', en: 'AVG', value: '.321' },
+        { ja: '本塁打', en: 'HR', value: '35' },
+        { ja: '打点', en: 'RBI', value: '92' },
+        { ja: 'OPS', en: 'OPS', value: '1.029' },
       ],
     },
   },
@@ -118,27 +182,62 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A power right-hander for the Seibu Lions from Ishigaki, Okinawa. Armed with one of NPB’s hardest fastballs, he has succeeded both as a closer and as a starter.',
     },
     mlbWatch: {
-      ja: '球速とアームの強さはMLB級。リリーフでの圧倒的な奪三振力と、先発転向後の対応力の両面でスカウトが注目する。',
-      en: 'His velocity and arm strength play at the MLB level. Scouts track both his dominant relief strikeout stuff and his adjustment to a starting role.',
+      ja: '球速とアームの強さはMLB級。ESPN のジェフ・パッサン記者は直球が平均95.6マイル（約154km/h）で100マイルに届くとし、今オフのFA投手ではタリク・スクーバルに次ぐ2番手になりうると評した。身長5フィート8インチ（約173cm）・220ポンド（約100kg）という体格は現地でも話題で、MLB Trade Rumors は「消火栓の形に鍛え上げられた」と描写した。2026年は先発で防御率1.36（132回）。',
+      en: 'Velocity and arm strength that play in MLB. ESPN\u2019s Jeff Passan notes a fastball averaging 95.6 mph that has touched 100, and rates him a candidate to be the second-best free agent starter available this winter behind Tarik Skubal. His 5-foot-8, 220-pound frame is a talking point abroad \u2014 one write-up described him as "forged in the shape of a fire hydrant." In 2026 he has a 1.36 ERA over 132 innings as a starter.',
     },
     posting: {
-      ja: '海外FA・ポスティングいずれも将来的な可能性として語られる。役割（先発/リリーフ）しだいでMLB評価も変わる注目株。',
-      en: 'Both free agency and a posting are floated as future possibilities. His MLB valuation shifts with his role (starter vs. reliever).',
+      ja: '今オフのポスティングが有力視されている。2027年を終えると9年で海外FA権を得てポスティングの対象外になるため、西武にとっては譲渡金を得られる最後の機会にあたる。交渉は12月1日の労使協定切れ（ロックアウト見込み）より前に決着する見通し。',
+      en: 'A posting this offseason is widely expected. He reaches nine professional seasons after 2027 \u2014 at which point he would be a full free agent and no longer postable \u2014 so this winter is Seibu\u2019s last chance to collect a posting fee. Negotiations are expected to close before the CBA expires on December 1.',
+    },
+    postingWatch: {
+      level: 'expected',
+      asOf: '2026-09-13',
+      headline: {
+        ja: '今オフ、11月上旬にもポスティング申請の見込み（ESPN・ジェフ・パッサン記者）。直近の登板には15球団超が評価担当を送り込んでいる。',
+        en: 'Expected to be posted as soon as early November, per ESPN\u2019s Jeff Passan. More than 15 MLB clubs have sent evaluators to his recent starts.',
+      },
+      suitors: [
+        { ja: 'メッツ', en: 'Mets' },
+        { ja: 'ブルージェイズ', en: 'Blue Jays' },
+        { ja: 'ヤンキース', en: 'Yankees' },
+        { ja: 'パドレス', en: 'Padres' },
+        { ja: 'ホワイトソックス', en: 'White Sox' },
+        { ja: 'カブス', en: 'Cubs' },
+        { ja: 'エンゼルス', en: 'Angels' },
+        { ja: 'マリナーズ', en: 'Mariners' },
+        { ja: 'レンジャーズ', en: 'Rangers' },
+      ],
+      timeline: [
+        {
+          date: '2026-09-10',
+          ja: 'MLB Trade Rumors が ESPN のジェフ・パッサン記者の情報として「11月上旬にもポスティングの見込み」と報道。15球団超が視察し、直球は平均95.6マイル・最速100マイル。今オフのFA投手ではスクーバルに次ぐ2番手になりうると評された。',
+          en: 'MLB Trade Rumors, citing ESPN\u2019s Jeff Passan, reports a posting expected in early November. More than 15 clubs have scouted him; his fastball averages 95.6 mph and has touched 100, and Passan rates him a possible No. 2 free agent starter behind Skubal.',
+          source: 'https://www.mlbtraderumors.com/2026/09/kaima-taira-expected-to-be-posted-for-mlb-teams-this-offseason.html',
+          sourceName: 'MLB Trade Rumors',
+        },
+        {
+          date: '2025-11-26',
+          ja: '日本経済新聞が、平良が3億円で契約更改し先発へ再転向する方針と報道。米挑戦については「早く行けるなら」という本人の言葉を見出しに立てた。',
+          en: 'Nikkei reports he re-signed for 300 million yen and would move back to the rotation, with its headline quoting him on an MLB move: "if I can go soon."',
+          source: 'https://www.nikkei.com/article/DGXZQOKC267OR0W5A121C2000000/',
+          sourceName: '日本経済新聞',
+        },
+      ],
     },
     comp: {
-      ja: '剛速球で押す、リリーフ／先発を兼ねるパワーアーム。',
-      en: 'A high-octane power arm who can work in relief or start.',
+      ja: '剛速球で押す、リリーフ／先発を兼ねるパワーアーム。キャリアの大半はリリーフで、先発をフルシーズン務めたのは2023年と2026年のみ。',
+      en: 'A high-octane power arm who can work in relief or start. Most of his career has come in relief \u2014 2023 and 2026 are his only full seasons in a rotation.',
     },
-    sameAs: ['https://ja.wikipedia.org/wiki/平良海馬'],
+    sameAs: ['https://ja.wikipedia.org/wiki/平良海馬', 'https://www.mlbtraderumors.com/players/kaima-taira'],
     season: {
-      asOf: '2026-06-29',
+      asOf: '2026-09-13',
       sourceUrl: 'https://npb.jp/bis/players/31035136.html',
       stats: [
-        { ja: '登板', en: 'G', value: '11' },
-        { ja: '防御率', en: 'ERA', value: '0.89' },
-        { ja: '勝-敗', en: 'W-L', value: '5-1' },
-        { ja: '投球回', en: 'IP', value: '71.0' },
-        { ja: '奪三振', en: 'SO', value: '66' },
+        { ja: '登板', en: 'G', value: '21' },
+        { ja: '防御率', en: 'ERA', value: '1.36' },
+        { ja: '勝-敗', en: 'W-L', value: '11-4' },
+        { ja: '投球回', en: 'IP', value: '132.0' },
+        { ja: '奪三振', en: 'SO', value: '124' },
       ],
     },
   },
@@ -329,27 +428,58 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A left-handed starter for the Saitama Seibu Lions. A command-and-secondaries pitcher, he threw 159⅔ innings with a 2.65 ERA in 2025. His changeup and splitter are rated abroad as “arguably double-plus” pitches.',
     },
     mlbWatch: {
-      ja: 'FanGraphs によれば2025年は防御率2.59・FIP2.49、K-BB率17.8%は規定投球回到達者で5位。Just Baseball はチェンジアップとスプリットを「ダブルプラス級（Stuff+ 164）」と高評価。ESPNはスカウトが左腕ダニー・クーロムになぞらえると伝える。剛速球ではなく完成度で見せる左腕。',
-      en: 'Per FanGraphs, he posted a 2.59 ERA and 2.49 FIP in 2025, with a 17.8% K-BB rate that ranked fifth among qualifiers. Just Baseball grades his changeup and splitter as “arguably double-plus” (a 164 Stuff+), and ESPN says scouts liken him to lefty Danny Coulombe. A polish-over-power southpaw.',
+      ja: '2026年は防御率2.21・159回で143奪三振に対し与四球はわずか21＝K/BBは6.8に達し、自己最高の年になっている。FanGraphs によれば2025年も防御率2.59・FIP2.49で、K-BB率17.8%は規定投球回到達者の5位。Just Baseball はチェンジアップとスプリットを「ダブルプラス級（Stuff+ 164）」と評価し、直球の平均球速も自己最速の91.9マイルまで上げたと伝える。ESPN はスカウトが左腕ダニー・クーロムになぞらえると報じた。剛速球ではなく完成度で見せる左腕。',
+      en: 'In 2026 he has a 2.21 ERA with 143 strikeouts against just 21 walks in 159 innings \u2014 a 6.8 K/BB and the best year of his career. FanGraphs had him at a 2.59 ERA and 2.49 FIP in 2025, with a 17.8% K-BB rate that ranked fifth among qualifiers. Just Baseball grades his changeup and splitter as "arguably double-plus" (a 164 Stuff+) and notes he pushed his average fastball to a career-best 91.9 mph. ESPN says scouts liken him to lefty Danny Coulombe. A polish-over-power southpaw.',
     },
     posting: {
-      ja: 'ポスティング/FAの公式発表はまだ。西武の先発の柱として続投中。',
-      en: 'No posting or move has been announced; he remains a rotation anchor for Seibu.',
+      ja: 'ポスティング/FAの公式発表はまだ無く、西武の先発の柱として続投中。2022年ドラフト1位入団で海外FA権の取得はまだ先＝MLB挑戦は球団のポスティング判断しだいになる。',
+      en: 'No posting or move has been announced; he remains a rotation anchor for Seibu. As a 2022 first-round pick he is years from international free agency, so an MLB move would depend on the club granting a posting.',
+    },
+    postingWatch: {
+      level: 'watch',
+      asOf: '2026-09-13',
+      headline: {
+        ja: 'ポスティングの公式な動きはまだ無い。ただ西武は今井達也がアストロズへ移り、平良海馬も今オフの流出が見込まれる＝先発の柱として残るのが隅田で、海外メディアは2026年WBC特集で「MLBの次のスターになりうる」と紹介している。',
+        en: 'No posting has been announced. But Seibu has already lost Tatsuya Imai to the Astros and expects to lose Kaima Taira this winter \u2014 leaving Sumida as the rotation anchor, and overseas outlets have flagged him as a potential next MLB star in their 2026 WBC previews.',
+      },
+      timeline: [
+        {
+          date: '2026-09-10',
+          ja: 'チームメートの平良海馬について「11月上旬にもポスティングの見込み」と報道（ESPN・パッサン記者／MLB Trade Rumors 経由）。西武からの投手流出はこれで3年続きとなる見通しで、隅田の去就にも視線が集まる。',
+          en: 'Teammate Kaima Taira is reported as expected to be posted in early November (ESPN\u2019s Jeff Passan, via MLB Trade Rumors), which would make it three straight winters of Seibu pitchers drawing MLB interest.',
+          source: 'https://www.mlbtraderumors.com/2026/09/kaima-taira-expected-to-be-posted-for-mlb-teams-this-offseason.html',
+          sourceName: 'MLB Trade Rumors',
+        },
+        {
+          date: '2026-01-04',
+          ja: '同僚の髙橋光成がMLB3球団からオファーを受けたが西武残留を決断。オプトアウト条項付きの複数年契約で、来オフはFAとして市場に戻れる。',
+          en: 'Teammate Kona Takahashi turned down offers from three MLB clubs and re-signed with Seibu on a multi-year deal with an opt-out that lets him return to the market as a free agent next offseason.',
+          source: 'https://www.mlb.jp/2026/01/04/85920/',
+          sourceName: 'MLB.jp',
+        },
+        {
+          date: '2026-03-14',
+          ja: 'ESPN が2026年WBCの特集で、隅田を「MLBの次のスターになりうる日本代表」の一人として紹介。前年159回2/3を投げて防御率2.65、スカウトの比較対象はダニー・クーロムとした。',
+          en: 'ESPN features Sumida in its 2026 WBC piece on Team Japan players who could be MLB\u2019s next stars, citing his 2.65 ERA over 159\u2153 innings the prior season and a scouting comp to Danny Coulombe.',
+          source: 'https://www.espn.com/mlb/story/_/id/48185225/mlb-2026-wbc-world-baseball-classic-japan-future-stars',
+          sourceName: 'ESPN',
+        },
+      ],
     },
     comp: {
-      ja: 'チェンジアップ／スプリットと制球で見せる、完成度の高い先発左腕。',
-      en: 'A polished left-handed starter who wins with a changeup/splitter and command.',
+      ja: 'チェンジアップ／スプリットと制球で見せる、完成度の高い先発左腕。ESPN が伝えるスカウトの比較対象はダニー・クーロム。',
+      en: 'A polished left-handed starter who wins with a changeup/splitter and command. The scouting comp reported by ESPN is Danny Coulombe.',
     },
-    sameAs: ['https://ja.wikipedia.org/wiki/隅田知一郎'],
+    sameAs: ['https://ja.wikipedia.org/wiki/隅田知一郎', 'https://www.fangraphs.com/players/chihiro-sumida/sa3063941/stats/pitching'],
     season: {
-      asOf: '2026-06-30',
+      asOf: '2026-09-13',
       sourceUrl: 'https://npb.jp/bis/players/21025155.html',
       stats: [
-        { ja: '登板', en: 'G', value: '12' },
-        { ja: '防御率', en: 'ERA', value: '2.30' },
-        { ja: '勝-敗', en: 'W-L', value: '6-4' },
-        { ja: '投球回', en: 'IP', value: '90.0' },
-        { ja: '奪三振', en: 'SO', value: '87' },
+        { ja: '登板', en: 'G', value: '22' },
+        { ja: '防御率', en: 'ERA', value: '2.21' },
+        { ja: '勝-敗', en: 'W-L', value: '9-7' },
+        { ja: '投球回', en: 'IP', value: '159.0' },
+        { ja: '奪三振', en: 'SO', value: '143' },
       ],
     },
   },
@@ -404,6 +534,19 @@ export function getNpbProspect(slug: string): NpbProspect | undefined {
 /** 日本語名/エイリアス → slug。記事タグ → ハブの内部リンク解決に使う。 */
 export function npbProspectSlugByJaName(nameJa: string): string | undefined {
   return BY_JA.get(nameJa)?.slug;
+}
+
+/**
+ * 記事の主役の注目株（タグを先頭から見て最初に一致したもの）。
+ * MLB 記事の `primaryPlayerOf` にあたる役で、記事パンくずに /prospects の選手LPを挟むのに使う
+ * ＝NPB 選手は players.ts に居ないため primaryPlayerOf が効かず、記事→LP が片方向のままだった。
+ */
+export function npbProspectOf(tags: string[] | undefined): NpbProspect | undefined {
+  for (const tag of tags ?? []) {
+    const p = BY_JA.get(tag);
+    if (p) return p;
+  }
+  return undefined;
 }
 
 /** この選手に触れた記事（タグ一致）。npb 記事が増えたら自動でハブの「海外の反応」束に出る。 */

@@ -19,9 +19,23 @@ export async function generateMetadata({
   params: Promise<{ locale: Locale }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations({ locale });
-  const title = t('prospects.indexTitle');
-  const description = t('prospects.indexLead');
+  const en = locale === 'en';
+  // ハブの SERP 文言はブランド名（NEXT MLB）でなく検索語で書く。オフに跳ねるのは
+  // 「ポスティング {年}」「NPB MLB挑戦」系で、"NEXT MLB" では一致しない。h1・ナビの表記は
+  // NEXT MLB のまま＝ブランドは維持し、meta だけ検索意図に寄せる（boardSeo.ts と同じ考え方）。
+  // 年は postingWatch.asOf（手で更新する編集値）から取る＝ハードコードした年が古びるのを防ぐ。
+  const posted = NPB_PROSPECTS.filter((p) => p.postingWatch?.level === 'expected');
+  const year = posted
+    .map((p) => p.postingWatch!.asOf.slice(0, 4))
+    .sort()
+    .at(-1);
+  const names = posted.map((p) => (en ? p.nameEn : p.nameJa));
+  const title = en
+    ? `NPB Posting Watch${year ? ` ${year}` : ''} — Players on the MLB Radar`
+    : `ポスティング候補${year ?? ''} — MLB挑戦が注目されるNPB選手`;
+  const description = en
+    ? `${names.length ? `${names.join(', ')} and other ` : ''}NPB players MLB scouts are watching: posting reports with sources, ${year ?? ''} stats, and overseas reactions, player by player.`
+    : `${names.length ? `${names.join('・')}ら、` : ''}ポスティングでのMLB挑戦が注目されるNPB選手のまとめ。ポスティング報道の時系列（出典つき）、${year ?? ''}年の成績、海外の反応を選手ごとに追う。`;
   return {
     title,
     description,
@@ -109,6 +123,13 @@ export default async function ProspectsPage({
                 </div>
                 <p className="mt-1 text-xs text-ink-soft">
                   {en ? p.team.en : p.team.ja} · {en ? p.pos.en : p.pos.ja}
+                  {/* 今オフ申請が有力と報じられた選手だけ一覧で立てる＝「誰が今年出るのか」を
+                      ハブの時点で答える（オフの検索意図はまず名簿ではなく“今年の3人”）。 */}
+                  {p.postingWatch?.level === 'expected' && (
+                    <span className="ml-2 inline-flex items-center border border-line px-1.5 py-0.5 text-[11px] text-ink">
+                      {t('prospects.watchLevel.expected')}
+                    </span>
+                  )}
                 </p>
                 <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-soft">
                   {en ? p.mlbWatch.en : p.mlbWatch.ja}

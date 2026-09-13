@@ -5,6 +5,8 @@ import type { StoryBlock, ThreadComment } from '@/types/thread';
  * （編集ルールの正は matome R13）。jp-daily（きょうの日本人選手）と、事件性のある大一番・
  * 興行直後の通常記事（Thread.story）が共用する。
  *
+ * score=0（票が未取得＝old.reddit がログイン壁の日など）は記号ごと出さない＝実測0票と
+ * 区別がつかず、読者には不人気コメントに見えるため（値は捏造しないまま表示だけ落とす）。
  * scoreMark はコメントの出所で変わる（youtube=👍 / reddit=▲）。interview のようにスコアを
  * 持たない出所では省略＝スコアを描かない。
  */
@@ -38,7 +40,7 @@ export default function StoryBlocks({
                 className="rounded-[3px] bg-surface px-3 py-1.5 text-sm text-ink ring-1 ring-line"
               >
                 “{c.bodyJa}”
-                {scoreMark && (
+                {scoreMark && c.score > 0 && (
                   <span className="ml-1.5 text-xs tabular-nums text-ink-mute">
                     {scoreMark}
                     {c.score.toLocaleString()}
@@ -62,7 +64,7 @@ function Quote({ comment, scoreMark }: { comment: ThreadComment; scoreMark: stri
       </blockquote>
       <figcaption className="mt-1.5 text-xs text-ink-soft">
         — {comment.author}
-        {scoreMark && (
+        {scoreMark && comment.score > 0 && (
           <>
             {' '}
             <span className="tabular-nums">

@@ -35,6 +35,7 @@ import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
 import { absoluteUrl, SITE_URL, localeAlternates } from '@/lib/site';
 import { getPlayerByJaName, primaryPlayerOf } from '@/lib/players';
+import { npbProspectOf } from '@/lib/npbPlayers';
 import { getTeam, teamOfficialUrl, teamLogoUrl } from '@/lib/teams';
 import { locales, type Locale } from '@/lib/i18n';
 
@@ -123,6 +124,10 @@ export default async function ThreadDetailPage({
   const tagCounts = tagCountMap(allThreads);
   // この記事の「主役選手」＝パンくずの選手階層。タグに居る選手は必ずハブが生成済み＝リンク安全。
   const primaryPlayer = primaryPlayerOf(thread);
+  // NPB（NEXT MLB）記事は主役が players.ts に居ない＝primaryPlayer が付かないので、注目株カタログで引く。
+  // パンくずに /prospects の選手LP（ポスティングの現在地・今季成績・その選手の反応記事一覧）を挟み、
+  // 「{選手名} 海外の反応」で着地した読者を常緑LPへ送る（MLB 記事の選手LP挟み込みと同じ形）。
+  const prospect = primaryPlayer ? undefined : npbProspectOf(thread.tags);
   const primaryPlayerName = primaryPlayer
     ? locale === 'ja'
       ? primaryPlayer.nameJa
@@ -389,10 +394,19 @@ export default async function ThreadDetailPage({
                   item: absoluteUrl(locale, `/tag/${encodeURIComponent(primaryPlayer.nameJa)}`),
                 },
               ]
-            : []),
+            : prospect
+              ? [
+                  {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: prospect.nameJa,
+                    item: absoluteUrl(locale, `/prospects/${prospect.slug}`),
+                  },
+                ]
+              : []),
           {
             '@type': 'ListItem',
-            position: primaryPlayer && primaryPlayerName ? 4 : 3,
+            position: (primaryPlayer && primaryPlayerName) || prospect ? 4 : 3,
             name: title,
           },
         ],
@@ -419,7 +433,9 @@ export default async function ThreadDetailPage({
                     href: `/tag/${encodeURIComponent(primaryPlayer.nameJa)}`,
                   },
                 ]
-              : []),
+              : prospect
+                ? [{ name: prospect.nameJa, href: `/prospects/${prospect.slug}` }]
+                : []),
             { name: title },
           ]}
         />
@@ -612,7 +628,10 @@ export default async function ThreadDetailPage({
                     ) : (
                       <span className="font-medium">{authorLabel(c.author)}</span>
                     )}
-                    {!isInterview && (
+                    {/* 票が取れなかった日（old.reddit がログイン壁の日など）は score=0 のまま保存する
+                        ＝捏造しない。その代わり「▲ 0」は出さない（実測0票ではなく“未取得”なので、
+                        0 を表示すると読者には不人気コメントに見える）。FighterNow と同じ posture。 */}
+                    {!isInterview && c.score > 0 && (
                       <span className="tabular-nums">
                         {scoreMark} {c.score.toLocaleString()}
                       </span>
