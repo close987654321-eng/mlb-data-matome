@@ -738,16 +738,10 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['木村', '萌那'],
     sport: 'mma',
     voiceScope: 'global',
-    nextFightJa: {
-      labelJa: '9/12マリン・ニコル戦',
-      until: '2026-09-12',
-      opponentJa: 'マリン・ニコル',
-      eventJa: 'Krush EX｜国立代々木競技場第二体育館',
-    },
-    accoladeJa: '女子キックボクサー・K-1ジム目黒TEAM TIGER所属（通称「リアル春麗」、Krush/K-1参戦4戦4勝）',
-    record: { wins: 4, losses: 0, draws: 0, kos: 2, asOf: '2026-04-11' },
+    accoladeJa: '女子キックボクサー・K-1ジム目黒TEAM TIGER所属（通称「リアル春麗」、Krush/K-1参戦5戦5勝）',
+    record: { wins: 5, losses: 0, draws: 0, kos: 2, asOf: '2026-09-12' },
     headlineStats: [
-      { value: '4戦4勝', labelJa: 'Krush/K-1参戦後の戦績（2026年4月時点・2KO）' },
+      { value: '5戦5勝', labelJa: 'Krush/K-1参戦後の戦績（2026年9月時点・2KO）' },
       // K-1公式プレスリリース（2026年4月）が発表した「リアル春麗」動画のバズ数
       { value: '約3000万', labelJa: '「リアル春麗」動画の公開1週間の推定バズ数（K-1公式発表）' },
     ],
@@ -756,6 +750,14 @@ export const FIGHTERS: Fighter[] = [
       'https://en.wikipedia.org/wiki/Mona_Kimura',
     ],
     fights: [
+      {
+        date: '2026-09-12',
+        opponentJa: 'マリン・ニコル',
+        opponentEn: 'Marine Nicol',
+        venueJa: '国立代々木競技場第二体育館（K-1 WORLD MAX 2026）',
+        resultJa: '延長判定3-0勝ち（本戦は30-28、30-30、29-30）',
+        noteJa: 'サバット世界選手権-52kg級王者。軸足を狙われ「もな蹴り」が不発、プロ初の延長戦で5連勝',
+      },
       {
         date: '2026-04-11',
         opponentJa: 'チェ・ウンジ',
