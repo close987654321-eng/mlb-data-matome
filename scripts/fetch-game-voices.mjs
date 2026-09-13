@@ -248,6 +248,8 @@ const SPAM = [
   /\bshow(ing)? (multiple |the )?replays?\b/i,
   /\bsound cuts? off\b/i,
   /\bredo the video\b/i,
+  /\bcouldn'?t (you )?show\b/i,
+  /\bwrong score\b/i,
   // 野球と無関係な他競技の「X vs. Y」対戦煽り連投（同一アカウントが複数動画に同型コメントを量産）。
   /\bvs\.?\s+.+\b(nba|nhl|nfl|rivalry)\b/i,
 ];
