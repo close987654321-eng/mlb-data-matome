@@ -22,6 +22,10 @@ export type Player = {
   rival?: boolean; // 非日本人だが比較用に載せる選手（大谷のサイ・ヤング賞争いのライバル等）。
   // 一覧（/player）では日本人の比較表に混ぜず「サイヤング争い」専用ブロックに出す。詳細ページは通常どおり生成。
   aliases?: string[]; // 記事タグの表記ゆれ吸収（例: フルネーム表記）。threadsOf / タグのハブ振り分けで nameJa と同じ扱い。
+  // 現地での通称（例: Pete Crow-Armstrong ＝ PCA）。aliases と同じくタグ解決・記事の紐付け・声の照合に効かせつつ、
+  // タイトル/説明文/H1/地の文にも併記する＝「PCA 成績」のような愛称クエリの受け皿をこのハブに作るため
+  // （コメント本文では本名よりイニシャルで呼ばれることが多く、本名表記だけだと検索でも声の照合でも取りこぼす）。
+  nicknames?: string[];
   // 姓・名の単独表記。コメント本文は「大谷」「翔平」のように略されるので、タグLPの声ピックアップが
   // 「その選手を語っているコメント」を拾うために使う（tagHubVoices）。漢字名は機械分割できないので手で持つ。
   // カタカナ名（ライバル）は nameJa を「・」で割れば足りるため不要。
@@ -116,6 +120,7 @@ export const PLAYERS: Player[] = [
   // nameJa は RIVAL_NAMES（scripts/fetch-mlb-stats.mjs）と一致させる＝記事タグ→ハブの threadsOf 紐付けキー。
   { slug: 'pete-crow-armstrong', nameJa: 'ピート・クロウアームストロング', nameEn: 'Pete Crow-Armstrong', mlbId: 691718, rival: true,
     bio: '卓越した中堅守備と走力で台頭した若手外野手。長打力も伸ばし、MVP争いの中心に立つ。',
+    nicknames: ['PCA'], aliases: ['ピート・クロウ＝アームストロング', 'クロウアームストロング'],
     sameAs: [mlb('pete-crow-armstrong', 691718)] },
   { slug: 'corbin-carroll', nameJa: 'コービン・キャロル', nameEn: 'Corbin Carroll', mlbId: 682998, rival: true,
     bio: '走攻守すべてに優れたスピードスター外野手。新人王に輝いた経歴を持つ。',
@@ -199,6 +204,7 @@ const BY_JA = new Map<string, Player>();
 for (const p of PLAYERS) {
   BY_JA.set(p.nameJa, p);
   for (const a of p.aliases ?? []) BY_JA.set(a, p);
+  for (const n of p.nicknames ?? []) BY_JA.set(n, p); // 通称タグ（「PCA」）もハブに解決させる
 }
 
 export function getPlayer(slug: string): Player | undefined {
@@ -252,7 +258,7 @@ export function primaryPlayerOf(thread: Thread): Player | null {
 
 /** その選手の記事（タグ or 成績ボックスに名前がある記事）。ハブのクラスタ・対象判定で使う。エイリアス表記も拾う。 */
 export function threadsOf(player: Player, all: Thread[]): Thread[] {
-  const names = new Set([player.nameJa, ...(player.aliases ?? [])]);
+  const names = new Set([player.nameJa, ...(player.aliases ?? []), ...(player.nicknames ?? [])]);
   return all.filter(
     (t) =>
       (t.tags ?? []).some((tag) => names.has(tag)) ||

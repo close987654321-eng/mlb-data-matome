@@ -47,6 +47,8 @@ export function playerLede(player: Player, season: PlayerSeason, year: number, l
 
     const sentences: string[] = [];
     sentences.push(`${name}は${year}年シーズン、${team ? `${team}で` : ''}${roleJa}としてプレーしている。`);
+    // 通称（PCA 等）はカタログの事実として地の文にも出す＝愛称で検索した読者が本人のページだと即断できる。
+    if (player.nicknames?.length) sentences.push(`現地では${player.nicknames.join('・')}の愛称で呼ばれる。`);
     if (role === 'two-way' && (bat.length || pit.length)) {
       const parts: string[] = [];
       if (bat.length) parts.push(`打者として${bat.join('・')}`);
@@ -83,6 +85,7 @@ export function playerLede(player: Player, season: PlayerSeason, year: number, l
   }
   const sentences: string[] = [];
   sentences.push(`${name} is playing as a ${roleEn}${team ? ` for ${team}` : ''} in the ${year} MLB season.`);
+  if (player.nicknames?.length) sentences.push(`${name} is widely known as ${player.nicknames.join(' / ')}.`);
   if (role === 'two-way' && (bat.length || pit.length)) {
     const parts: string[] = [];
     if (bat.length) parts.push(`${bat.join(', ')} at the plate`);

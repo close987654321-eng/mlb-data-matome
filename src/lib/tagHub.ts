@@ -119,6 +119,7 @@ export type VoiceSubject = {
   nameEn: string;
   aliases?: string[];
   shortJa?: string[];
+  nicknames?: string[];
   /**
    * 与えた表記だけで照合する（語に割らない）。チーム主題で使う。
    * 人名は姓・名の単独表記で呼ばれる（Ohtani / 大谷）ので語に割って部分一致で拾うのが正しいが、
@@ -134,7 +135,8 @@ function normalize(s: string): string {
     .normalize('NFKD')
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase()
-    .replace(/[・\s]/g, '');
+    // ＝/= も中黒と同じ「姓名のつなぎ」として消す（クロウ＝アームストロング＝クロウアームストロング）
+    .replace(/[・＝=\s]/g, '');
 }
 
 /** 絵文字・記号を除いた実質の文字数。「㊗️🇯🇵スガノ ナイスピッチ👏🎉」のような一言レスを弾くために使う。 */
@@ -158,6 +160,7 @@ export function subjectPatterns(subject: VoiceSubject): string[] {
     subject.nameEn,
     ...(subject.aliases ?? []),
     ...(subject.shortJa ?? []),
+    ...(subject.nicknames ?? []), // 通称（PCA 等）。コメントは本名よりイニシャルで呼ぶことが多い
   ];
   const parts = subject.exact
     ? given

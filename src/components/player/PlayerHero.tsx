@@ -72,7 +72,11 @@ export default async function PlayerHero({
 
           <h1 className="mt-2.5 text-3xl font-bold leading-tight tracking-[-0.01em] text-ink sm:text-4xl">
             {player.nameJa}
-            <span className="ml-2 align-baseline text-base font-normal text-ink-soft">{player.nameEn}</span>
+            <span className="ml-2 align-baseline text-base font-normal text-ink-soft">
+              {player.nameEn}
+              {/* 現地での通称（PCA 等）。読者の照合用＋愛称クエリの受け皿を H1 にも置く。 */}
+              {player.nicknames?.length ? ` (${player.nicknames.join(' / ')})` : ''}
+            </span>
           </h1>
 
           {/* H1 直下に成績キーワードを可視化（「{選手}＋今季成績」の検索適合を底上げ）。

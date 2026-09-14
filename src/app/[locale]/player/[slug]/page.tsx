@@ -53,14 +53,16 @@ export async function generateMetadata({
   const en = locale === 'en';
   // シェア文の今季主要数値（JP整形）は ja の description にだけ使う（英語ページに和文を混ぜない）。
   const statLine = !en && season ? playerShareText(player.nameJa, season, pickHero(season)).split('｜')[1] : '';
+  // 現地での通称（PCA 等）。本名でなくイニシャルで呼ばれる選手を『PCA 成績』のような愛称クエリでも拾う。
+  const nick = player.nicknames?.length ? player.nicknames.join('・') : '';
   // 年号＋最重要KW「成績」を前方に（成績検索の定番『{選手} 成績 2026』に当てる）。英名は description 側へ。
   const title = en
-    ? `${player.nameEn} — ${year} Stats & Fan Reactions`
-    : `${player.nameJa} ${year}年 成績・現地の評判`;
+    ? `${player.nameEn}${nick ? ` (${nick})` : ''} — ${year} Stats & Fan Reactions`
+    : `${player.nameJa}${nick ? `（${nick}）` : ''} ${year}年 成績・現地の評判`;
   const teamCtx = season?.team ? `${season.team}・` : '';
   const description = en
-    ? `${player.nameEn}'s ${year} MLB season stats${season?.team ? ` (${season.team})` : ''} and what overseas fans are saying — Japanese digests of reactions from abroad.`
-    : `${player.nameJa}（${player.nameEn}）の${year}年MLB成績${statLine ? `（${statLine}）` : `（${teamCtx}打率・本塁打・防御率・WAR ほか）`}と、海外の反応まとめ記事を一覧。${snap.asOf ? `${snap.asOf}時点。` : ''}`;
+    ? `${player.nameEn}'s ${year} MLB season stats${season?.team ? ` (${season.team})` : ''} and what overseas fans are saying — Japanese digests of reactions from abroad.${nick ? ` Also known as ${nick}.` : ''}`
+    : `${player.nameJa}（${player.nameEn}${nick ? `・現地での愛称は${nick}` : ''}）の${year}年MLB成績${statLine ? `（${statLine}）` : `（${teamCtx}打率・本塁打・防御率・WAR ほか）`}と、海外の反応まとめ記事を一覧。${snap.asOf ? `${snap.asOf}時点。` : ''}`;
   return {
     title,
     description,
@@ -142,7 +144,8 @@ export default async function PlayerHubPage({
     '@type': ['Person', 'Athlete'],
     '@id': `${hubUrl}#person`,
     name: player.nameJa,
-    alternateName: player.nameEn,
+    // 別名は英語表記＋通称（PCA 等）。エンティティ照合で「本名でない呼ばれ方」を取りこぼさない。
+    alternateName: player.nicknames?.length ? [player.nameEn, ...player.nicknames] : player.nameEn,
     jobTitle: '野球選手',
     sport: 'Baseball',
     url: hubUrl,

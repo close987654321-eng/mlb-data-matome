@@ -66,7 +66,7 @@ export function teamHubTopics(
   const exclude = new Set<string>([nameJa]);
   for (const p of jpPlayers) {
     exclude.add(p.nameJa);
-    for (const a of p.aliases ?? []) exclude.add(a);
+    for (const a of [...(p.aliases ?? []), ...(p.nicknames ?? [])]) exclude.add(a);
   }
   /** そのタグが「別のチームに所属する選手」か（カタログで引ける選手だけ判定できる）。 */
   const isOtherTeamPlayer = (tag: string): boolean => {
