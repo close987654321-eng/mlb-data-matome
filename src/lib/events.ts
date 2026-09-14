@@ -40,6 +40,16 @@ export type EventCard = {
   matchJa: string;
   /** 階級・ルール・位置づけの補足（裏取り済みのみ） */
   noteJa?: string;
+  /**
+   * 「第◯試合」以外の呼び名（例「オープニングファイト1」）。BD はオープニングファイトを
+   * 本戦の番号と別系統で数えるので、order は並び順だけに使い、表示はこちらで上書きする。
+   */
+  labelJa?: string;
+  /**
+   * 出場者が確定していないカード（トーナメント決勝の「◯試合の勝者」など）。
+   * JSON-LD の competitor から外す＝実在しない人名を構造化データに出さないため。
+   */
+  competitorsTbd?: boolean;
 };
 
 /** チケットの実売情報（JSON-LD offers 用）。公式販売ページで裏取りした値のみ。 */
@@ -57,8 +67,11 @@ export type EventTicketOffer = {
  */
 export type EventTicketTier = {
   nameJa: string;
-  /** 早割・先行の価格（円）。設定が無い席種は省く */
-  earlyJpy?: number;
+  /**
+   * 割引価格（円）。何の割引かは大会・時期で変わる（早割先行 → 会期直前はアプリ割など）ので、
+   * 列の見出しは tierDiscountLabelJa で切り替える。設定が無い席種は省く。
+   */
+  discountJpy?: number;
   /** 通常価格（円） */
   regularJpy?: number;
   /** 学割（円）。設定のある席種だけ */
@@ -107,6 +120,8 @@ export type FightEvent = {
   ticketsJa?: string;
   /** 席種ごとの価格表（公式販売ページ由来のみ） */
   ticketTiers?: EventTicketTier[];
+  /** 席種表の割引列の見出し（既定は「早割」）。会期が近づいて割引の種類が変わったら差し替える */
+  tierDiscountLabelJa?: string;
   ticketOffer?: EventTicketOffer;
   /** 会場・アクセス（「{会場名} {大会名}」「{開催地} 〜」クエリ用。裏取り済みのみ） */
   accessJa?: string;
@@ -156,14 +171,16 @@ export const EVENTS: FightEvent[] = [
     updatedAt: RIZIN5.updatedAt,
   },
   {
-    // 出典: BreakingDown 公式サイト（breakingdown.jp・2026-09-06 再参照）。
-    // 会場正式名称・席種価格・チケット販売期間・PPV価格・「全試合を BreakingDown LIVE で生中継」は
-    // すべて公式サイトの記載。席種価格とPPV最安値は BD21 オーディション動画（朝倉未来チャンネル
-    // vol.1〜5）の概要欄の表記（早割最安値 ¥6,300／学割 ¥5,000／PPV 最安値 2,680円）とも一致を確認。
-    // ⚠️ 対戦カードは 2026-09-06 時点で公式サイトが「随時発表」＝正式発表なし。他サイトが載せている
-    //    オーディション由来の仮カードは公式発表ではないので、ここには書かない（§4.4 捏造禁止）。
-    //    この大会で公表されている一次情報は「どの回で誰と誰が動いたか」までで、それは
-    //    data/bd-story/21.json（オーディション実況）が動画タイトルの範囲で扱う。
+    // 出典: BreakingDown 公式サイト（breakingdown.jp・2026-09-14 再参照）＋ BreakingDown 株式会社の
+    // プレスリリース（PR TIMES・2026-09-06「北海道初上陸！CREATOR'ZZ presents BreakingDown21対戦
+    // カード発表！」）＋ イープラス公演ページ（eplus.jp/breakingdown21）。
+    // - 対戦カード: 2026-09-06 に朝倉未来チャンネルで**全35試合が試合順つきで**正式発表された
+    //   （それまでの「随時発表」は解消）。試合順と階級・ルールはゴング格闘技の大会ページ
+    //   （gonkaku.jp/events/JsWzOMZRBM）の一覧、対戦者名の表記は公式カード画像（上記リリース添付）に
+    //   合わせた。両者で食い違ったオープニングファイト1の「大輝」は公式画像の表記を採用。
+    // - 時刻: リリースの「11:00開場／11:45オープニングファイト／12:45開演（第1試合開始）」を採用。
+    //   イープラス・ゴング格闘技の公演情報は発売当初の「開演12:00」のままなので、新しい公式発表を取る。
+    // - 席種価格: 早割先行は終了し、公式サイトの表は「通常／アプリ割／学割」に変わっている（値は公式表記）。
     slug: 'breakingdown21',
     org: 'breakingdown',
     nameJa: 'BreakingDown 21',
@@ -177,23 +194,66 @@ export const EVENTS: FightEvent[] = [
     tier: 'standard',
     matchTags: ['ブレイキングダウン21', 'BreakingDown'],
     leadJa:
-      '朝倉未来がCEOを務めるBreakingDownの第21回大会。BreakingDownの北海道進出は今大会が初で、会場は札幌・真駒内セキスイハイムアイスアリーナ。対戦カードは例大会どおりオーディションを経て発表される（発表され次第このページに追記する）。',
+      '朝倉未来がCEOを務めるBreakingDownの第21回大会。BreakingDownの北海道進出は今大会が初で、会場は札幌・真駒内セキスイハイムアイスアリーナ。対戦カードは2026年9月6日に全35試合（オープニングファイト4試合＋第1〜第31試合）が試合順つきで発表された。メインイベントは第31試合のバンタム級王座決定トーナメント決勝で、第8試合と第9試合の勝者が同じ日のうちに王座を争う。',
     cardsNoteJa:
-      'BreakingDownは対戦カードを事前に一括発表しない。公式サイトの表記は2026年9月6日時点でも随時発表のままで、正式なカード一覧は出ていない。この大会のカードが実際に動くのは記者会見ではなくオーディションの中で、朝倉未来チャンネルで公開されているBD21オーディションvol.1〜5がその場にあたる。下の「オーディションで何が起きたか」に、どの回で誰と誰が動いたかを動画つきでまとめた。公式の正式発表が出た時点で、この欄をカード一覧に差し替える。',
-    ticketsJa:
-      '現地チケットは公式サイトで販売中。早割先行は2026年7月27日18:00〜9月6日23:59、一般販売は9月7日0:00〜9月18日23:59。席種は10段階で、最安はB席（早割6,300円／通常7,000円／学割5,000円）、最高はSVIP席の最前列（早割460,000円／通常550,000円）。',
-    ticketTiers: [
-      { nameJa: 'SVIP席【最前列】', earlyJpy: 460_000, regularJpy: 550_000 },
-      { nameJa: 'SVIP席【2列目】', earlyJpy: 250_000, regularJpy: 300_000 },
-      { nameJa: 'VVIP席', earlyJpy: 160_000, regularJpy: 200_000 },
-      { nameJa: 'VIP席【花道席】', earlyJpy: 80_000, regularJpy: 100_000 },
-      { nameJa: 'VIP席', earlyJpy: 64_000, regularJpy: 80_000 },
-      { nameJa: 'SS席', earlyJpy: 22_000, regularJpy: 25_000 },
-      { nameJa: 'S席【スタンド】', earlyJpy: 15_300, regularJpy: 17_000 },
-      { nameJa: 'S席【アリーナ】', earlyJpy: 13_500, regularJpy: 15_000 },
-      { nameJa: 'A席', earlyJpy: 10_800, regularJpy: 12_000, studentJpy: 10_000 },
-      { nameJa: 'B席', earlyJpy: 6_300, regularJpy: 7_000, studentJpy: 5_000 },
+      'BreakingDownのカードは記者会見ではなくオーディションの中で動く。この大会も朝倉未来チャンネルで公開されたBD21オーディションvol.1〜5で対戦が組まれ、2026年9月6日に全35試合が試合順ごと発表された。第8・第9試合が第3代バンタム級王者を決めるワンデートーナメントの準決勝で、その勝者同士が第31試合＝メインイベントの決勝でぶつかる。第30試合は王者・龍志に挑戦者ドラゴンが挑むフライ級タイトルマッチ。どの回で誰が誰に噛み付いてこのカードになったかは、下の「オーディションで何が起きたか」に動画つきでまとめた。',
+    cards: [
+      { order: -4, labelJa: 'オープニングファイト1', matchJa: '田村陸 vs 大輝', noteJa: 'フェザー級ワンマッチ／キックルール・64kg以下' },
+      { order: -3, labelJa: 'オープニングファイト2', matchJa: '佐々木大斗 vs 須藤龍揮', noteJa: 'バンタム級ワンマッチ／キックルール・59kg以下' },
+      { order: -2, labelJa: 'オープニングファイト3', matchJa: 'きくっち vs 菊池竜二', noteJa: 'フェザー級ワンマッチ／キックルール・65kg以下' },
+      { order: -1, labelJa: 'オープニングファイト4', matchJa: 'KE-TA vs なおちか', noteJa: 'フェザー級ワンマッチ／キックルール・64kg以下' },
+      { order: 1, matchJa: '愛恋 vs しゃち', noteJa: 'フェザー級ワンマッチ／キックルール・63kg以下' },
+      { order: 2, matchJa: 'Golden Gaijin vs ソルジャー沖田', noteJa: 'ミドル級ワンマッチ／キックルール・82kg以下' },
+      { order: 3, matchJa: '大悟 vs 龍之介', noteJa: 'ウェルター級ワンマッチ／MMAルール・75kg以下' },
+      { order: 4, matchJa: 'なぎ vs 平野翔空', noteJa: 'バンタム級ワンマッチ／キックルール・61kg以下' },
+      { order: 5, matchJa: 'みつたか vs 狂犬', noteJa: 'フェザー級ワンマッチ／キックルール・66kg以下' },
+      { order: 6, matchJa: 'ぷろたん vs 井上力斗', noteJa: 'ライト級ワンマッチ／キックルール・68kg以下' },
+      { order: 7, matchJa: 'レオ vs せーや', noteJa: 'バンタム級ワンマッチ／ベアナックルキックルール・58kg以下' },
+      { order: 8, matchJa: 'よーでぃー vs 井原良太郎', noteJa: 'バンタム級王座決定トーナメント準決勝／キックルール・61kg以下' },
+      { order: 9, matchJa: '三河拳士 vs リキ', noteJa: 'バンタム級王座決定トーナメント準決勝／キックルール・61kg以下' },
+      { order: 10, matchJa: 'ハルク福沢 vs Dozer', noteJa: '無差別級ワンマッチ／キックルール' },
+      { order: 11, matchJa: '小林大希 vs 関谷勇次郎', noteJa: 'バンタム級ワンマッチ／キックルール・61kg以下' },
+      { order: 12, matchJa: 'パンチ齋藤 vs 虎之介', noteJa: '無差別級ワンマッチ／ベアナックルMMAルール' },
+      { order: 13, matchJa: '無敗の村長 vs しょーた', noteJa: 'ミドル級ワンマッチ／キックルール・78kg以下' },
+      { order: 14, matchJa: 'TAKUMI vs TETSU', noteJa: 'フェザー級ワンマッチ／キックルール・66kg以下' },
+      { order: 15, matchJa: 'カウアン・オカモト vs としぞう', noteJa: 'フェザー級ワンマッチ／キックルール・63kg以下' },
+      { order: 16, matchJa: 'アンディ南野 vs アウトレイジ森脇', noteJa: 'ライトヘビー級ワンマッチ／ベアナックルキックルール・90kg以下' },
+      { order: 17, matchJa: '平石光一 vs 涼太', noteJa: 'ライト級ワンマッチ／キックルール・70kg以下' },
+      { order: 18, matchJa: '七原嘉輝 vs そうし', noteJa: 'ウェルター級ワンマッチ／キックルール・73kg以下' },
+      { order: 19, matchJa: '金剛駿 vs KK我流', noteJa: 'ライト級ワンマッチ／キックルール・70kg以下' },
+      { order: 20, matchJa: '森 vs シェンロン', noteJa: 'フェザー級ワンマッチ／ベアナックルボクシングルール・65kg以下' },
+      { order: 21, matchJa: '尾田優也 vs sakkki', noteJa: 'ライト級ワンマッチ／キックルール・67kg以下' },
+      { order: 22, matchJa: 'ズールaka殺人トトロ vs 赤パンニキ', noteJa: '無差別級ワンマッチ／キックルール' },
+      { order: 23, matchJa: '藤井啓輔 vs Jerio San Pierre', noteJa: 'ウェルター級ワンマッチ／キックルール・77kg以下' },
+      { order: 24, matchJa: '竜 vs ダイスケ', noteJa: 'ウェルター級ワンマッチ／MMAルール・76kg以下' },
+      { order: 25, matchJa: '西島恭平 vs 野田蒼', noteJa: 'バンタム級ワンマッチ／キックルール・57.5kg以下' },
+      { order: 26, matchJa: 'エリー vs 蛇鬼将矢', noteJa: 'ウェルター級ワンマッチ／MMAルール・75kg以下' },
+      { order: 27, matchJa: '黒柳禅 vs 佐々木大', noteJa: 'ライト級ワンマッチ／MMAルール・71kg以下' },
+      { order: 28, matchJa: 'SATORU vs メカ君', noteJa: '無差別級ワンマッチ／ベアナックルボクシングルール' },
+      { order: 29, matchJa: 'ヒロ三河 vs 溝口勇児', noteJa: 'ミドル級ワンマッチ／キックルール・84kg以下' },
+      { order: 30, matchJa: 'ドラゴン vs 龍志', noteJa: 'フライ級タイトルマッチ／キックルール・56.5kg以下（王者・龍志に挑戦者ドラゴン）' },
+      {
+        order: 31,
+        matchJa: '第8試合の勝者 vs 第9試合の勝者',
+        noteJa: 'バンタム級王座決定トーナメント決勝戦／キックルール（メインイベント）',
+        competitorsTbd: true,
+      },
     ],
+    ticketsJa:
+      '会場チケットは早割先行が終了し、いまは一般発売のみ。イープラスでの受付は2026年9月18日（金）23:59まで（先着）。席種は10段階で、最安はB席（通常7,000円／アプリ割6,300円／学割5,000円）、最高はSVIP席の最前列（通常550,000円／アプリ割495,000円）。公式アプリ経由で買うと各席10%引きになるアプリ割があり、学割はA席とB席のみ。全席共通の来場特典は、公式サイトでは9月14日時点でも「近日公開予定」のまま。',
+    ticketTiers: [
+      { nameJa: 'SVIP席【最前列席】', discountJpy: 495_000, regularJpy: 550_000 },
+      { nameJa: 'SVIP席【2列目席】', discountJpy: 270_000, regularJpy: 300_000 },
+      { nameJa: 'VVIP席', discountJpy: 180_000, regularJpy: 200_000 },
+      { nameJa: 'VIP席【花道席】', discountJpy: 90_000, regularJpy: 100_000 },
+      { nameJa: 'VIP席', discountJpy: 72_000, regularJpy: 80_000 },
+      { nameJa: 'SS席', discountJpy: 22_500, regularJpy: 25_000 },
+      { nameJa: 'S席【アリーナ席】', discountJpy: 13_500, regularJpy: 15_000 },
+      { nameJa: 'S席【スタンド席】', discountJpy: 15_300, regularJpy: 17_000 },
+      { nameJa: 'A席', discountJpy: 10_800, regularJpy: 12_000, studentJpy: 10_000 },
+      { nameJa: 'B席', discountJpy: 6_300, regularJpy: 7_000, studentJpy: 5_000 },
+    ],
+    tierDiscountLabelJa: 'アプリ割',
     ticketOffer: {
       url: 'https://breakingdown.jp/',
       lowPrice: 5000,
@@ -201,14 +261,14 @@ export const EVENTS: FightEvent[] = [
       validFrom: '2026-07-27T18:00:00+09:00',
     },
     accessJa:
-      '会場の真駒内セキスイハイムアイスアリーナは札幌市南区にある屋内アイスアリーナで、1972年札幌オリンピックの会場として建てられた施設。BreakingDownが北海道で大会を開くのは今回が初めて。開場・開始時刻は公式サイトでは未発表（発表され次第ここを更新する）。',
+      '会場の真駒内セキスイハイムアイスアリーナは札幌市南区にある屋内アイスアリーナで、1972年札幌オリンピックの会場として建てられた施設。BreakingDownが北海道で大会を開くのは今回が初めて。当日は11:00開場、11:45にオープニングファイト開始、12:45に開演（第1試合開始）。',
     watchJa:
       '全試合が公式配信プラットフォーム「BreakingDown LIVE」で独占PPV生中継される。PPVチケットの価格は、公式アプリ経由のアプリ割が新規会員は前売2,680円／当日3,480円、既存会員は前売3,040円／当日3,840円、アプリを使わない通常チケットが前売3,700円／当日4,500円（いずれも公式サイトの表記）。視聴はスマートフォン・タブレット・パソコン・テレビに対応する。',
     officialUrl: 'https://breakingdown.jp/',
     relatedJa: [
       { labelJa: 'BreakingDownオーディション全史（歴代の再生数・人気コメントのデータ観測）', href: '/breakingdown-audition' },
     ],
-    updatedAt: '2026-09-06',
+    updatedAt: '2026-09-14',
   },
   {
     // 出典: RIZIN 公式の大会情報ページ（jp.rizinff.com/_ct/17852438・2026-08-17 参照）＝会場正式名称・

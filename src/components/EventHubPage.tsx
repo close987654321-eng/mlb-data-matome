@@ -131,9 +131,11 @@ export function createEventRoute(slug: string) {
           },
           ...(event.cards &&
             event.cards.length > 0 && {
-              competitor: event.cards.flatMap((c) =>
-                c.matchJa.split(' vs ').map((name) => ({ '@type': 'Person', name: name.trim() })),
-              ),
+              competitor: event.cards
+                .filter((c) => !c.competitorsTbd)
+                .flatMap((c) =>
+                  c.matchJa.split(' vs ').map((name) => ({ '@type': 'Person', name: name.trim() })),
+                ),
             }),
           ...(event.ticketOffer && {
             offers: {
@@ -219,17 +221,23 @@ export function createEventRoute(slug: string) {
         <section className="space-y-5">
           <SectionHeading label={t('events.cardsTitle')} count={event.cards?.length} />
           {event.cards && event.cards.length > 0 ? (
-            <div className="divide-y divide-line border-y border-line">
-              {event.cards.map((c) => (
-                <div key={c.order} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3.5">
-                  <span className="shrink-0 text-xs tabular-nums text-ink-mute">
-                    {t('events.cardNo', { no: c.order })}
-                  </span>
-                  <span className="text-sm font-semibold text-ink">{c.matchJa}</span>
-                  {c.noteJa && <span className="text-xs text-ink-mute">{c.noteJa}</span>}
-                </div>
-              ))}
-            </div>
+            <>
+              {/* カードが出たあとも「どう決まったか」は残す＝BD はオーディションが実質の発表の場 */}
+              {event.cardsNoteJa && (
+                <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{event.cardsNoteJa}</p>
+              )}
+              <div className="divide-y divide-line border-y border-line">
+                {event.cards.map((c) => (
+                  <div key={c.order} className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3.5">
+                    <span className="shrink-0 text-xs tabular-nums text-ink-mute">
+                      {c.labelJa ?? t('events.cardNo', { no: c.order })}
+                    </span>
+                    <span className="text-sm font-semibold text-ink">{c.matchJa}</span>
+                    {c.noteJa && <span className="text-xs text-ink-mute">{c.noteJa}</span>}
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
             // 未発表のときは「なぜ無いのか」まで書く（cardsNoteJa）。汎用文言だけだと
             // カードを探しに来た読者の問いに答えないまま終わる。
@@ -254,7 +262,9 @@ export function createEventRoute(slug: string) {
                   <thead>
                     <tr className="border-y border-line text-xs text-ink-mute">
                       <th className="py-2 pr-4 text-left font-medium">{t('events.tierSeat')}</th>
-                      <th className="py-2 pr-4 text-right font-medium">{t('events.tierEarly')}</th>
+                      <th className="py-2 pr-4 text-right font-medium">
+                        {event.tierDiscountLabelJa ?? t('events.tierEarly')}
+                      </th>
                       <th className="py-2 pr-4 text-right font-medium">{t('events.tierRegular')}</th>
                       <th className="py-2 text-right font-medium">{t('events.tierStudent')}</th>
                     </tr>
@@ -264,7 +274,7 @@ export function createEventRoute(slug: string) {
                       <tr key={tier.nameJa}>
                         <td className="py-2.5 pr-4 text-ink">{tier.nameJa}</td>
                         <td className="py-2.5 pr-4 text-right tabular-nums text-ink-soft">
-                          {tier.earlyJpy ? t('events.yen', { n: tier.earlyJpy }) : '—'}
+                          {tier.discountJpy ? t('events.yen', { n: tier.discountJpy }) : '—'}
                         </td>
                         <td className="py-2.5 pr-4 text-right tabular-nums text-ink-soft">
                           {tier.regularJpy ? t('events.yen', { n: tier.regularJpy }) : '—'}
