@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-14 09:14",
+  "asOf": "2026-09-14 14:06",
   "players": {
     "500743": {
       "fielding": {
@@ -939,8 +939,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 16,
-            "mlb": 29
+            "lg": 15,
+            "mlb": 28
           },
           "baseOnBalls": {
             "lg": 9,
@@ -1413,36 +1413,43 @@
         "doublePlays": 0,
         "errors": 1,
         "fielding": ".909",
-        "gamesPlayed": 47,
+        "gamesPlayed": 48,
         "gamesStarted": 0,
-        "innings": "58.0",
+        "innings": "59.0",
         "position": "投手",
         "putOuts": 4
       },
       "hitting": null,
       "league": "NL",
       "pitching": {
-        "avg": ".168",
+        "avg": ".170",
         "baseOnBalls": 32,
         "earnedRuns": 13,
-        "era": "2.02",
-        "gamesPlayed": 47,
+        "era": "1.98",
+        "gamesPlayed": 48,
         "gamesStarted": 0,
-        "hits": 33,
+        "hits": 34,
         "holds": 9,
         "homeRuns": 7,
-        "homeRunsPer9": "1.09",
-        "inningsPitched": "58.0",
+        "homeRunsPer9": "1.07",
+        "inningsPitched": "59.0",
         "losses": 1,
         "runs": 14,
-        "saves": 0,
-        "strikeOuts": 62,
-        "strikeoutWalkRatio": "1.94",
-        "strikeoutsPer9Inn": "9.62",
-        "walksPer9Inn": "4.97",
+        "saves": 1,
+        "strikeOuts": 63,
+        "strikeoutWalkRatio": "1.97",
+        "strikeoutsPer9Inn": "9.61",
+        "walksPer9Inn": "4.88",
         "whip": "1.12",
         "winPercentage": ".750",
         "wins": 3
+      },
+      "ranks": {
+        "pitching": {
+          "saves": {
+            "lg": 76
+          }
+        }
       },
       "saber": {
         "pit": 0.270582
@@ -2285,8 +2292,8 @@
       "ranks": {
         "hitting": {
           "avg": {
-            "lg": 17,
-            "mlb": 31
+            "lg": 16,
+            "mlb": 30
           },
           "baseOnBalls": {
             "lg": 10,
@@ -2468,8 +2475,8 @@
             "mlb": 17
           },
           "winPercentage": {
-            "lg": 16,
-            "mlb": 33
+            "lg": 15,
+            "mlb": 32
           },
           "wins": {
             "lg": 20,
