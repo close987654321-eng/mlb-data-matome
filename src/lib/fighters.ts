@@ -167,6 +167,88 @@ export const FIGHTERS: Fighter[] = [
     ],
   },
   {
+    slug: 'nadaka-yoshinari',
+    nameJa: '吉成名高',
+    nameEn: 'Nadaka Yoshinari',
+    shortJa: ['吉成', '名高', 'ナダカ', 'Nadaka'],
+    sport: 'mma',
+    // ONE 公式（英語・タイ語・マレー語のコメント欄）が主素材＝井上・中谷と同じ「海外の反応」框が実態に合う。
+    voiceScope: 'global',
+    accoladeJa: 'ONEムエタイ世界アトム級王者（初代）・エイワスポーツジム。ラジャダムナン3階級とルンピニーの王座を獲った外国人は史上唯一',
+    // 通算戦績は Wikipedia（ja/en 一致）の 78戦71勝6敗1分44KO。ONE 公式は 2026-04-29 時点で 67-6 と別の数え方をしており、
+    // 連勝数（42）だけは ONE 公式発表の値を使う（headlineStats）。
+    record: { wins: 71, losses: 6, draws: 1, kos: 44, asOf: '2026-09-12' },
+    headlineStats: [
+      // ONE 公式が 2026-09-12 のハー・リン・オム戦後に「42 STRAIGHT WINS」と発表
+      { value: '42連勝', labelJa: '連勝記録（2026年9月12日時点・ONE公式発表）' },
+      // ONE 公式選手ページの ONE 戦績（2026-09-12 時点）
+      { value: '6-0', labelJa: 'ONE戦績（2KO）' },
+      // ラジャダムナン：ミニフライ級（2018）・フライ級（2023）・スーパーフライ級（2024）
+      { value: '3階級', labelJa: 'ラジャダムナン・スタジアム王座（外国人で唯一）' },
+    ],
+    // 10/17 ONE SAMURAI 4（有明アリーナ）＝アトム級ムエタイ世界王座2度目の防衛戦（ONE 公式・イーファイト 2026-08-07 発表）
+    nextFightJa: {
+      labelJa: '10/17 マスドール戦（ONEムエタイ世界アトム級王座・2度目の防衛戦）',
+      until: '2026-10-17',
+      opponentJa: 'リファディン・マスドール',
+      eventJa: 'ONE SAMURAI 4｜東京・有明アリーナ',
+    },
+    sameAs: [
+      'https://ja.wikipedia.org/wiki/%E5%90%89%E6%88%90%E5%90%8D%E9%AB%98',
+      'https://en.wikipedia.org/wiki/Nadaka_Yoshinari',
+      'https://www.onefc.com/athletes/nadaka-yoshinari/',
+    ],
+    fights: [
+      {
+        date: '2026-09-12',
+        opponentJa: 'ハー・リン・オム',
+        opponentEn: 'Har Ling Om',
+        venueJa: '横浜BUNTAI（ONE SAMURAI 3）',
+        resultJa: '3-0判定勝ち（キックボクシングルール・3分3R）',
+        noteJa: 'キャリア初のキックボクシングルール。相手の計量失敗で53.6kg契約に。倒しきれず本人は「悔しい」',
+      },
+      {
+        date: '2026-04-29',
+        opponentJa: 'ソンチャイノーイ',
+        opponentEn: 'Songchainoi Kiatsongrit',
+        venueJa: '東京・有明アリーナ（ONE SAMURAI 1）',
+        resultJa: '3-0判定勝ち',
+        noteJa: 'ONEムエタイ世界アトム級王座の初防衛。2023年に3度のダウンを奪って倒した相手との再戦は両者流血の5R',
+      },
+      {
+        date: '2025-11-16',
+        opponentJa: 'ヌンスリン',
+        opponentEn: 'Numsurin Chor Ketwina',
+        venueJa: '東京・有明アリーナ（ONE 173）',
+        resultJa: '3-0判定勝ち',
+        noteJa: '初代ONEムエタイ世界アトム級王座を獲得。日本人初のONEムエタイ世界王者',
+      },
+      {
+        date: '2025-08-29',
+        opponentJa: 'ハマダ・アズマニ',
+        opponentEn: 'Hamada Azmani',
+        venueJa: 'バンコク・ルンピニースタジアム（ONE Friday Fights 122）',
+        resultJa: '3R TKO勝ち',
+      },
+      {
+        date: '2025-06-27',
+        opponentJa: 'バンルーロック',
+        opponentEn: 'Banluelok Sitwatcharachai',
+        venueJa: 'バンコク・ルンピニースタジアム（ONE Friday Fights 114）',
+        resultJa: '3-0判定勝ち',
+        noteJa: 'ONE参戦後で数少ない「圧倒しなかった」試合と海外ファンが振り返る一戦',
+      },
+      {
+        date: '2025-03-23',
+        opponentJa: 'ラック・エラワン',
+        opponentEn: 'Rak Erawan',
+        venueJa: 'さいたまスーパーアリーナ（ONE 172）',
+        resultJa: '3R KO勝ち（左ストレート）',
+        noteJa: 'ONEデビュー戦。公式フルファイト動画が95万回再生され、海外ファンの「発見」の場になった',
+      },
+    ],
+  },
+  {
     slug: 'ren-hiramoto',
     nameJa: '平本蓮',
     nameEn: 'Ren Hiramoto',
