@@ -170,6 +170,17 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     （メモリ `board-detail-index-decision`）なので、判断前に同型の面を増やさない。
     検索文言の正は `src/lib/boardSeo.ts`（3ボード共通）。表の直下からデータ定点コラムへ送る導線は
     `src/lib/boardColumns.ts`＋`BoardColumns`＝タグ交差だけで選ぶ（ボードごとに配線を書き分けない）。
+    **/roy の増補（2026-09-16・新人王系クエリの流入が立ち上がったため）**: `roy` コマンドはボードと同時に
+    **日次履歴 `data/roy-history.json`**（各リーグ上位12＋日本人の id/表示名/順位/スコア・1日1エントリ・
+    `appendRoyHistory`）を積む＝ボード本体は毎日上書きされるので、首位の在位日数・日本人の昇降はここからしか出ない
+    （09-06〜09-16 は git 履歴から遡って埋めた）。読み手は `src/lib/royHistory.ts`（前日比 `rankDeltas`・
+    首位在位 `leaderStreak`・推移 `seriesOf`）。ページ構成＝表の前に `RoyRaceNow`（首位2枠＋日本人の現在地カード・
+    スコア内訳の上位％バー）→ `RoyBoard`（行に前日比▲▼）→ `RoyTrend`（行＝選手・列＝日付・セル＝順位の推移表）→
+    コラム → `RoyGuide`（日程・投票の仕組み・資格・日本人の歴代受賞者＝定型の事実）→ `FaqList`（`src/lib/royFaq.ts`
+    が板の実データから答えを毎日組み直す・JSON-LD の FAQPage も同じ配列）→ 海外の反応。
+    非日本人ルーキーのカタカナ表記は `data/{batter,pitcher}-names-ja.json` に足す（上位20位まで整備済み・
+    英語名フォールバックが出たら追記）。新人王を実際に語っているスレには `新人王` タグを付ける＝反応セクションと
+    `boardColumns` の両方がそのタグで拾う。
   - **試合結果（`Thread.game`・記事の主役データ）**: `node scripts/fetch-mlb-stats.mjs backfill-games --apply` で
     公式スケジュール（`hydrate=linescore,decisions`）＋ boxscore から **最終スコア・回ごとの得点と H/E/残塁・
     その試合時点の勝敗と地区順位・勝敗投手/セーブ・本塁打の打者と今季号数** を記事 JSON に埋める。記事は要約直下の

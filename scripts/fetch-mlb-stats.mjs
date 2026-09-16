@@ -2549,9 +2549,36 @@ async function runRoy(season, asOf) {
     /* 初回作成 */
   }
   writeFileSync(file, stableStringify({ asOf: stampedAsOf, ...content }) + '\n');
+  const hist = appendRoyHistory(season, stampedAsOf, leagues);
   console.log(
-    `roy 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}`,
+    `roy 書き出し: NL${leagues.NL.length}人 / AL${leagues.AL.length}人 / 圏外日本人${watch.length}人 / asOf ${stampedAsOf} → ${file}（履歴 ${hist}日）`,
   );
+}
+
+// 新人王ボードの日次履歴（data/roy-history.json）。ボード本体は毎日上書きされるので、順位の推移
+// （首位の交代・日本人の昇降）はここに積まないと後から取り出せない（/roy の「順位の推移」と行の▲▼の出典）。
+// 1日1エントリ＝asOf の日付をキーに同日は最新で置き換える。持つのは各リーグの上位 ROY_HISTORY_TOP_N ＋
+// 日本人の行だけ（id・表示名・順位・スコア）＝表に出ている選手の推移が引ければ足りる。
+// ※ 2026-09-06〜09-16 は git 履歴から遡って埋めた（scripts 外の一回きり作業・以後はこの関数が積む）。
+const ROY_HISTORY_TOP_N = 12; // RoyBoard.tsx の TOP_N と同じ値
+function appendRoyHistory(season, asOf, leagues) {
+  const file = path.join(process.cwd(), 'data', 'roy-history.json');
+  let hist = { season, topN: ROY_HISTORY_TOP_N, days: [] };
+  try {
+    const prev = JSON.parse(readFileSync(file, 'utf8'));
+    if (prev?.season === season && Array.isArray(prev.days)) hist = prev;
+  } catch {
+    /* 初回作成 */
+  }
+  const date = String(asOf).slice(0, 10);
+  const slim = (rows) =>
+    rows
+      .filter((r) => r.rank <= ROY_HISTORY_TOP_N || r.isJp)
+      .map((r) => ({ id: r.id, nameJa: r.nameJa, nameEn: r.nameEn, rank: r.rank, score: r.score, isJp: r.isJp }));
+  const entry = { asOf, date, AL: slim(leagues.AL), NL: slim(leagues.NL) };
+  hist.days = [...hist.days.filter((d) => d.date !== date), entry].sort((a, b) => a.date.localeCompare(b.date));
+  writeFileSync(file, JSON.stringify(hist, null, 2) + '\n');
+  return hist.days.length;
 }
 
 /**

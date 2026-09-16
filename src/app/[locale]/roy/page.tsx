@@ -2,11 +2,17 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getRoyBoard } from '@/lib/royBoard';
+import { getRoyHistory, previousDay, rankDeltas } from '@/lib/royHistory';
+import { buildRoyFaq } from '@/lib/royFaq';
 import { getAllThreads } from '@/lib/data';
 import { buildFeed } from '@/lib/feed';
 import { BOARD_COLUMN_TAGS, columnsForBoard } from '@/lib/boardColumns';
 import { PLAYERS } from '@/lib/players';
 import RoyBoard from '@/components/RoyBoard';
+import RoyRaceNow from '@/components/RoyRaceNow';
+import RoyTrend from '@/components/RoyTrend';
+import RoyGuide from '@/components/RoyGuide';
+import FaqList from '@/components/FaqList';
 import BoardColumns from '@/components/BoardColumns';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
@@ -24,6 +30,10 @@ const ROY_TAGS = ['新人王'];
  *
  * 題字・タイトルの主語は「候補」＝検索で実際に打たれる語（根拠は boardSeo.ts）。/cy-young で
  * 「予測」だけの語彙だったのを「候補」に寄せて順位が 9.1→7.9 に動いた実績をそのまま踏襲する。
+ *
+ * 2026-09-16 増補: 新人王系クエリの流入が立ち上がったので、表の前後に「いまのレース」「順位の推移」
+ * 「決まり方と日本人の歴代」「よくある質問」を足した。狙いは表を見た人の次の問い（何日首位か／
+ * いつ決まるか／村上は何位か）にページ内で答え切り、翌日また開く理由（前日比▲▼・推移表）を置くこと。
  */
 function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string) {
   const day = asOfShort(asOf, en);
@@ -32,21 +42,21 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         crumb: 'Rookie of the Year Board',
         eyebrow: `${year} Season`,
         title: `${year} Rookie of the Year Candidates & Prediction Board`,
-        lead: 'Rookie-eligible hitters and pitchers ranked together by a blended score — WAR as the shared currency across roles, plus wRC+/FIP and playing time within each role. A data-driven read on the AL & NL Rookie of the Year races, with Munetaka Murakami, Kazuma Okamoto and Tatsuya Imai highlighted, plus overseas fan reactions.',
+        lead: 'Rookie-eligible hitters and pitchers ranked together by a blended score, with WAR as the shared currency across roles plus wRC+/FIP and playing time within each role. Updated daily with rank changes, a day-by-day trend, where Munetaka Murakami, Kazuma Okamoto and Tatsuya Imai stand, how the award is decided, and overseas fan reactions.',
         metaTitle: `${year} Rookie of the Year Candidates | AL/NL Rankings`,
-        metaDesc: `${year} Rookie of the Year candidates, ranked${day ? ` (as of ${day})` : ''}. ${leadersPhrase(leaders, true)} ${jpRankPhrase(leaders, true)} Rookie hitters and pitchers scored together by WAR, wRC+/FIP and playing time across AL & NL.`,
+        metaDesc: `${year} Rookie of the Year candidates, ranked${day ? ` (as of ${day})` : ''}. ${leadersPhrase(leaders, true)} ${jpRankPhrase(leaders, true)} Daily rank changes, eligibility rules, when the award is announced, and past Japanese winners.`,
       }
     : {
         crumb: '新人王予測',
         eyebrow: `${year} シーズン`,
         title: `新人王候補 ${year} 予測ランキング`,
-        lead: 'ルーキー資格のある野手と投手を1つの表でスコア化した予測ランキング。WARを役割をまたぐ共通の物差しに置き、野手はwRC+と打席数、投手はFIPと投球回でリーグ内の位置を出しています。ア・リーグとナ・リーグの新人王争いを、村上宗隆・岡本和真・今井達也の順位や海外ファンの反応とあわせて追えます。',
+        lead: 'ルーキー資格のある野手と投手を1つの表でスコア化した予測ランキング。WARを役割をまたぐ共通の物差しに置き、野手はwRC+と打席数、投手はFIPと投球回でリーグ内の位置を出しています。毎日更新の前日比と順位の推移、村上宗隆・岡本和真・今井達也の現在地、新人王の資格や発表時期、海外ファンの反応までこのページで追えます。',
         // layout が「｜海外の反応」を足すので、ここは25字以内に抑えて SERP で切られないようにする。
         // ア・リーグ/ナ・リーグ のリーグ別クエリはページ内 h2（表の見出し）が受ける。
         metaTitle: `新人王候補 ${year} 予測ランキング`,
         // 先頭に検索語（候補・予測ランキング）、その直後に「いま誰が有力か」を置く＝スニペットの
-        // 見える範囲でクエリに答えきる。指標の列挙は切られてもいい後半に回す。
-        metaDesc: `${year}年MLB新人王候補の予測ランキング${day ? `（${day}時点）` : ''}。${leadersPhrase(leaders, false)}${jpRankPhrase(leaders, false)}村上宗隆・岡本和真ら日本人ルーキーの順位と、WAR・wRC+・FIPでスコア化した順位表。`,
+        // 見える範囲でクエリに答えきる。後半は「いつ決まる／資格」の問い型クエリを受ける語。
+        metaDesc: `${year}年MLB新人王候補の予測ランキング${day ? `（${day}時点）` : ''}。${leadersPhrase(leaders, false)}${jpRankPhrase(leaders, false)}村上宗隆・岡本和真ら日本人ルーキーの順位と前日比、資格・投票・発表時期、日本人の歴代受賞者まで。`,
       };
 }
 
@@ -80,7 +90,13 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
   const leaders = boardLeaders(board, en);
   const c = copy(en, board.season, leaders, board.asOf);
 
-  const [all, raceColumns] = await Promise.all([getAllThreads(), columnsForBoard(BOARD_COLUMN_TAGS.roy)]);
+  const [all, raceColumns, history] = await Promise.all([
+    getAllThreads(),
+    columnsForBoard(BOARD_COLUMN_TAGS.roy),
+    getRoyHistory(),
+  ]);
+  const deltas = rankDeltas(previousDay(history, board.asOf), board);
+  const faq = buildRoyFaq(board, en);
   const reactionItems = buildFeed(
     all.filter((th) => (th.tags ?? []).some((x) => ROY_TAGS.includes(x))),
     [],
@@ -109,6 +125,15 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
         },
         c.title,
       ),
+      // FAQPage は画面の「よくある質問」と同じ配列から組む＝表示と構造化データが食い違わない。
+      {
+        '@type': 'FAQPage',
+        mainEntity: faq.map((item) => ({
+          '@type': 'Question',
+          name: en ? item.q.en : item.q.ja,
+          acceptedAnswer: { '@type': 'Answer', text: en ? item.a.en : item.a.ja },
+        })),
+      },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -134,7 +159,13 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
         {board.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: board.asOf })}</p>}
       </section>
 
-      <RoyBoard board={board} locale={locale} />
+      {/* 表の前に「いまのレース」＝首位・日本人の現在地・スコアの内訳。表を読む前に問いへ先に答える。 */}
+      <RoyRaceNow board={board} history={history} locale={locale} />
+
+      <RoyBoard board={board} locale={locale} deltas={deltas} />
+
+      {/* 日次履歴が2日以上あるときだけ出る（首位の交代・日本人の昇降が見える唯一の面）。 */}
+      <RoyTrend board={board} history={history} locale={locale} />
 
       <BoardColumns
         columns={raceColumns}
@@ -142,10 +173,14 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
         heading={en ? 'Reading the race' : 'このレースの読み解き'}
         lead={
           en
-            ? 'Why the order moved — our data columns on the award races, written from the same boards.'
+            ? 'Why the order moved: our data columns on the award races, written from the same boards.'
             : '順位が動いた理由を、同じボードの数字から読み解いたコラム。表では分からない差分だけを書いています。'
         }
       />
+
+      <RoyGuide locale={locale} season={board.season} />
+
+      <FaqList faq={faq} en={en} heading={en ? 'Rookie of the Year FAQ' : '新人王レースのよくある質問'} />
 
       {/* 新人王レースの海外の反応＝検索意図「新人王 海外の反応」の受け皿。記事が付くほど厚くなる。 */}
       <section>
@@ -156,7 +191,7 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
         />
         <p className="mb-3 mt-1.5 max-w-prose text-sm text-ink-soft">
           {en
-            ? 'What overseas fans are saying about the rookie class — Murakami, Okamoto and the rest of the field.'
+            ? 'What overseas fans are saying about the rookie class: Murakami, Okamoto and the rest of the field.'
             : '村上宗隆・岡本和真ら新人王候補への海外ファンの反応まとめ。レースが動くたびに記事が増えます。'}
         </p>
         {reactionItems.length > 0 ? (

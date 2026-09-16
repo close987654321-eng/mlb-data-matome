@@ -67,6 +67,7 @@ function LeagueTable({
   en,
   t,
   slugByMlbId,
+  deltas,
 }: {
   league: string;
   rows: RoyRow[];
@@ -74,6 +75,7 @@ function LeagueTable({
   en: boolean;
   t: Cols;
   slugByMlbId: Map<number, string>;
+  deltas: Map<number, number | null>;
 }) {
   // 上位 TOP_N ＋ それ以下に居る日本人（強調）を append。境目に区切りを出す。
   const top = rows.slice(0, TOP_N);
@@ -105,7 +107,15 @@ function LeagueTable({
                   </td>
                 </tr>
               ) : (
-                <Row key={row.id} row={row} maxScore={maxScore} en={en} t={t} slug={slugByMlbId.get(row.id)} />
+                <Row
+                  key={row.id}
+                  row={row}
+                  maxScore={maxScore}
+                  en={en}
+                  t={t}
+                  slug={slugByMlbId.get(row.id)}
+                  delta={deltas.has(row.id) ? deltas.get(row.id) : undefined}
+                />
               ),
             )}
           </tbody>
@@ -121,12 +131,15 @@ function Row({
   en,
   t,
   slug,
+  delta,
 }: {
   row: RoyRow;
   maxScore: number;
   en: boolean;
   t: Cols;
   slug?: string;
+  /** 前日比の順位差（正＝上昇）。null＝前日は記録範囲外、undefined＝履歴なし（何も出さない）。 */
+  delta?: number | null;
 }) {
   const name = en ? row.nameEn : row.nameJa;
   const team = en ? row.teamEn : row.teamJa;
@@ -142,7 +155,20 @@ function Row({
     <tr
       className={`group relative border-b border-line transition-colors last:border-0 hover:bg-ink/[0.06] ${row.isJp ? 'bg-ink/[0.04]' : ''}`}
     >
-      <td className="px-3 py-2 align-top text-ink-mute">{row.rank}</td>
+      <td className="px-3 py-2 align-top text-ink-mute">
+        {row.rank}
+        {/* 前日比＝日次履歴（roy-history.json）との差。動いた行だけ▲▼を添える＝毎日開く理由を表の中に置く。 */}
+        {delta != null && delta !== 0 ? (
+          <span className={`ml-1 text-[10px] ${delta > 0 ? 'text-ink' : 'text-ink-mute'}`} title={en ? 'vs yesterday' : '前日比'}>
+            {delta > 0 ? '▲' : '▼'}
+            {Math.abs(delta)}
+          </span>
+        ) : delta === null ? (
+          <span className="ml-1 text-[10px] text-ink-mute" title={en ? 'new to the recorded range' : '前日は記録範囲外'}>
+            {en ? 'new' : '新'}
+          </span>
+        ) : null}
+      </td>
       <td className="px-3 py-2 align-top">
         <div className="flex items-start gap-2.5">
           <Avatar mlbId={row.id} teamId={row.teamId} name={name} />
@@ -185,7 +211,16 @@ function Row({
  * 数値列は「率／カウント／出場量」の3枠にして役割ごとに中身を差し替える。
  * スコアは断定でなく予測＝式と出典を明示する。サーバーコンポーネント（静的）。
  */
-export default function RoyBoard({ board, locale }: { board: Board; locale: string }) {
+export default function RoyBoard({
+  board,
+  locale,
+  deltas = new Map(),
+}: {
+  board: Board;
+  locale: string;
+  /** id→前日比の順位差（royHistory.rankDeltas）。履歴が無いページでは省略可。 */
+  deltas?: Map<number, number | null>;
+}) {
   const en = locale === 'en';
   const slugByMlbId = new Map(PLAYERS.map((p) => [p.mlbId, p.slug]));
   const w = board.weights;
@@ -256,6 +291,7 @@ export default function RoyBoard({ board, locale }: { board: Board; locale: stri
             en={en}
             t={t.cols}
             slugByMlbId={slugByMlbId}
+            deltas={deltas}
           />
         </section>
       ))}
