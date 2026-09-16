@@ -4,7 +4,7 @@ import path from 'node:path';
 export type HistBoardLike = { asOf: string; leagues: { AL: { id: number; rank: number }[]; NL: { id: number; rank: number }[] } };
 
 /** 履歴を持つボードの種別＝ data/{kind}-history.json。 */
-export type BoardKind = 'roy' | 'cy-young';
+export type BoardKind = 'roy' | 'cy-young' | 'mvp';
 
 /** 履歴1日ぶんの行（ボード行の最小形）。 */
 export type RoyHistRow = { id: number; nameJa: string; nameEn: string; rank: number; score: number; isJp: boolean };
@@ -15,7 +15,7 @@ export type RoyHistDay = { asOf: string; date: string; AL: RoyHistRow[]; NL: Roy
 export type RoyHistory = { season: number; topN: number; days: RoyHistDay[] };
 
 /**
- * 賞レースボードの日次履歴（data/{roy,cy-young}-history.json）の読み手。
+ * 賞レースボードの日次履歴（data/{roy,cy-young,mvp}-history.json）の読み手。
  * ボード本体は毎日上書きされるので、「首位が何日座っているか」「日本人が何位から何位へ動いたか」は
  * この履歴からしか出ない。書き手は scripts/fetch-mlb-stats.mjs の appendBoardHistory（roy / cyyoung コマンド）。
  * 各日は上位 topN ＋ 日本人の行だけを持つ＝表に出ている選手の推移が引ければ足りる。

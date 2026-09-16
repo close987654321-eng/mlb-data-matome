@@ -6,6 +6,12 @@ import { getAllThreads } from '@/lib/data';
 import { BOARD_COLUMN_TAGS, columnsForBoard } from '@/lib/boardColumns';
 import { buildFeed } from '@/lib/feed';
 import MvpBoard from '@/components/MvpBoard';
+import MvpRaceNow from '@/components/MvpRaceNow';
+import BoardTrend from '@/components/BoardTrend';
+import MvpGuide from '@/components/MvpGuide';
+import FaqList from '@/components/FaqList';
+import { getBoardHistory, previousDay, rankDeltas } from '@/lib/boardHistory';
+import { buildMvpFaq } from '@/lib/mvpFaq';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import BoardColumns from '@/components/BoardColumns';
@@ -37,19 +43,19 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         crumb: 'MVP Board',
         eyebrow: `${year} Season`,
         title: `${year} MVP Candidates & Prediction Board`,
-        lead: 'Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR — two-way pitching WAR included). A data-driven read on the AL & NL MVP races — with Shohei Ohtani and Japan’s bats highlighted, plus overseas fan reactions. Tap any row for the full breakdown.',
+        lead: 'Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR, with two-way pitching WAR included). Updated daily with rank changes and a day-by-day trend, where Shohei Ohtani, Seiya Suzuki and Japan’s bats stand, how the vote works, Japanese MVP history, and overseas fan reactions. Tap any row for the full breakdown.',
         metaTitle: `${year} MVP Candidates | AL/NL Hitter Rankings`,
-        metaDesc: `${year} MVP candidates, ranked${day ? ` (as of ${day})` : ''}. ${leadersPhrase(leaders, true)} ${jpRankPhrase(leaders, true)} Qualified hitters scored by wRC+, xwOBA, homers, baserunning, defense and WAR across AL & NL.`,
+        metaDesc: `${year} MVP candidates, ranked${day ? ` (as of ${day})` : ''}. ${leadersPhrase(leaders, true)} ${jpRankPhrase(leaders, true)} Daily rank changes, how the vote works, when it is announced, and Japanese MVP history.`,
       }
     : {
         crumb: 'MVP予測',
         eyebrow: `${year} シーズン`,
         title: `MVP候補 ${year} 予測ランキング`,
-        lead: '規定打席に到達した打者を、wRC+・xwOBA・本塁打・走塁・守備・WARをもとにリーグ内でスコア化した予測ランキング（二刀流の大谷翔平は投手WARも合算）。ア・リーグとナ・リーグのMVP争いを、日本人打者の順位や海外ファンの反応とあわせて追えます。気になる打者の行をタップすると、打球の質・バットスピードまで分かる詳細ページへ。',
+        lead: '規定打席に到達した打者を、wRC+・xwOBA・本塁打・走塁・守備・WARをもとにリーグ内でスコア化した予測ランキング（二刀流の大谷翔平は投手WARも合算）。毎日更新の前日比と順位の推移、大谷翔平・鈴木誠也ら日本人打者の現在地、投票の仕組みや発表時期、日本人のMVP受賞歴、海外ファンの反応までこのページで追えます。気になる打者の行をタップすると、打球の質・バットスピードまで分かる詳細ページへ。',
         // cy-young と同じ＝brand 付与後も切られない長さに抑え、リーグ別クエリは h2 に持たせる。
         metaTitle: `MVP候補 ${year} 予測ランキング`,
         // 構成は cy-young と同じ＝検索語→いま誰が有力か→指標（切られてよい）の順。
-        metaDesc: `${year}年MVP候補の予測ランキング${day ? `（${day}時点）` : ''}。${leadersPhrase(leaders, false)}${jpRankPhrase(leaders, false)}wRC+・xwOBA・本塁打・走塁・守備・WARでリーグ内スコア化した順位と、海外ファンの反応。`,
+        metaDesc: `${year}年MVP候補の予測ランキング${day ? `（${day}時点）` : ''}。${leadersPhrase(leaders, false)}${jpRankPhrase(leaders, false)}大谷翔平・鈴木誠也ら日本人打者の順位と前日比、投票の仕組み・発表時期、日本人のMVP受賞歴まで。`,
       };
 }
 
@@ -84,10 +90,13 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
   const c = copy(en, board.season, leaders, board.asOf);
 
   // MVPレースの海外の反応（MVPタグの記事）＝「MVP 海外の反応」の中身。
-  const [all, raceColumns] = await Promise.all([
+  const [all, raceColumns, history] = await Promise.all([
     getAllThreads(),
     columnsForBoard(BOARD_COLUMN_TAGS.mvp),
+    getBoardHistory('mvp'),
   ]);
+  const deltas = rankDeltas(previousDay(history, board.asOf), board);
+  const faq = buildMvpFaq(board, en);
   const reactionItems = buildFeed(
     all.filter((th) => (th.tags ?? []).some((x) => MVP_TAGS.includes(x))),
     [],
@@ -105,6 +114,15 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
       },
       // 「MVP候補 ランキング」型クエリ向け＝このページが順位表であることを機械可読にする（cy-young と同型）。
       boardItemList(board, en, (row) => absoluteUrl(locale, `/mvp/${row.id}`), c.title),
+      // FAQPage は画面の「よくある質問」と同じ配列から組む＝表示と構造化データが食い違わない。
+      {
+        '@type': 'FAQPage',
+        mainEntity: faq.map((item) => ({
+          '@type': 'Question',
+          name: en ? item.q.en : item.q.ja,
+          acceptedAnswer: { '@type': 'Answer', text: en ? item.a.en : item.a.ja },
+        })),
+      },
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -130,7 +148,13 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
         {board.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: board.asOf })}</p>}
       </section>
 
-      <MvpBoard board={board} locale={locale} />
+      {/* 表の前に「いまのレース」＝首位・日本人の現在地・スコアの内訳。表を読む前に問いへ先に答える。 */}
+      <MvpRaceNow board={board} history={history} locale={locale} />
+
+      <MvpBoard board={board} locale={locale} deltas={deltas} />
+
+      {/* 日次履歴（7月9日から）＝首位の在位・日本人の昇降が見える唯一の面。直近12日を列に出す。 */}
+      <BoardTrend board={board} history={history} locale={locale} />
 
       <BoardColumns
         columns={raceColumns}
@@ -138,10 +162,14 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
         heading={en ? 'Reading the race' : 'このレースの読み解き'}
         lead={
           en
-            ? 'Why the order moved — our data columns on the award races, written from the same boards.'
+            ? 'Why the order moved: our data columns on the award races, written from the same boards.'
             : '順位が動いた理由を、同じボードの数字から読み解いたコラム。表では分からない差分だけを書いています。'
         }
       />
+
+      <MvpGuide locale={locale} season={board.season} qualifyPa={board.qualifyPa} />
+
+      <FaqList faq={faq} en={en} heading={en ? 'MVP FAQ' : 'MVPレースのよくある質問'} />
 
       {/* MVPレースの海外の反応＝検索意図「MVP 海外の反応」の受け皿。記事が付くほど厚くなる。 */}
       <section>

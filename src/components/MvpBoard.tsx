@@ -50,12 +50,14 @@ function LeagueTable({
   maxScore,
   en,
   t,
+  deltas,
 }: {
   league: string;
   rows: MvpRow[];
   maxScore: number;
   en: boolean;
   t: { hitter: string; score: string; wrc: string; ops: string; hr: string; war: string; jp: string; more: string };
+  deltas: Map<number, number | null>;
 }) {
   // 上位 TOP_N ＋ それ以下に居る日本人（強調）を append。境目に区切りを出す。
   const top = rows.slice(0, TOP_N);
@@ -88,7 +90,14 @@ function LeagueTable({
                   </td>
                 </tr>
               ) : (
-                <Row key={row.id} row={row} maxScore={maxScore} en={en} jpLabel={t.jp} />
+                <Row
+                  key={row.id}
+                  row={row}
+                  maxScore={maxScore}
+                  en={en}
+                  jpLabel={t.jp}
+                  delta={deltas.has(row.id) ? deltas.get(row.id) : undefined}
+                />
               ),
             )}
           </tbody>
@@ -98,7 +107,20 @@ function LeagueTable({
   );
 }
 
-function Row({ row, maxScore, en, jpLabel }: { row: MvpRow; maxScore: number; en: boolean; jpLabel: string }) {
+function Row({
+  row,
+  maxScore,
+  en,
+  jpLabel,
+  delta,
+}: {
+  row: MvpRow;
+  maxScore: number;
+  en: boolean;
+  jpLabel: string;
+  /** 前日比の順位差（正＝上昇）。null＝前日は記録範囲外、undefined＝履歴なし（何も出さない）。 */
+  delta?: number | null;
+}) {
   const name = en ? row.nameEn : row.nameJa;
   const team = en ? row.teamEn : row.teamJa;
   const why = en ? row.whyEn : row.why;
@@ -108,7 +130,20 @@ function Row({ row, maxScore, en, jpLabel }: { row: MvpRow; maxScore: number; en
     <tr
       className={`group relative border-b border-line transition-colors last:border-0 hover:bg-ink/[0.06] ${row.isJp ? 'bg-ink/[0.04]' : ''}`}
     >
-      <td className="px-3 py-2 align-top text-ink-mute">{row.rank}</td>
+      <td className="px-3 py-2 align-top text-ink-mute">
+        {row.rank}
+        {/* 前日比＝日次履歴（mvp-history.json）との差。動いた行だけ▲▼を添える＝毎日開く理由を表の中に置く。 */}
+        {delta != null && delta !== 0 ? (
+          <span className={`ml-1 text-[10px] ${delta > 0 ? 'text-ink' : 'text-ink-mute'}`} title={en ? 'vs yesterday' : '前日比'}>
+            {delta > 0 ? '▲' : '▼'}
+            {Math.abs(delta)}
+          </span>
+        ) : delta === null ? (
+          <span className="ml-1 text-[10px] text-ink-mute" title={en ? 'new to the recorded range' : '前日は記録範囲外'}>
+            {en ? 'new' : '新'}
+          </span>
+        ) : null}
+      </td>
       <td className="px-3 py-2 align-top">
         <div className="flex items-start gap-2.5">
           <Avatar mlbId={row.id} teamId={row.teamId} name={name} />
@@ -148,7 +183,16 @@ function Row({ row, maxScore, en, jpLabel }: { row: MvpRow; maxScore: number; en
  * 行全体がリンク＝各行→ /mvp/{id} 詳細ページ（スコア内訳＋打球の質・スイング）へ送客。
  * スコアは断定でなく予測＝式と出典を明示する。サーバーコンポーネント（静的）。
  */
-export default async function MvpBoard({ board, locale }: { board: Board; locale: string }) {
+export default async function MvpBoard({
+  board,
+  locale,
+  deltas = new Map(),
+}: {
+  board: Board;
+  locale: string;
+  /** id→前日比の順位差（boardHistory.rankDeltas）。履歴が無いページでは省略可。 */
+  deltas?: Map<number, number | null>;
+}) {
   const en = locale === 'en';
   const slugByMlbId = new Map(PLAYERS.map((p) => [p.mlbId, p.slug]));
   // 圏外の注目日本人の wRC+ は snapshot（jp-players-stats.json）から引く＝AAA も含む公知の値。
@@ -208,6 +252,7 @@ export default async function MvpBoard({ board, locale }: { board: Board; locale
             maxScore={maxScore}
             en={en}
             t={t.cols}
+            deltas={deltas}
           />
         </section>
       ))}
