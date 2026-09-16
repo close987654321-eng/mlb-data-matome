@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
-import { NPB_PROSPECTS } from '@/lib/npbPlayers';
+import { NPB_PROSPECTS, prospectsOnTheMove } from '@/lib/npbPlayers';
+import { getNpbStats } from '@/lib/npbStats';
+import { POSTING_FACTS, POSTING_SOURCE, postingFactText } from '@/lib/postingSystem';
+import ProspectBoard from '@/components/ProspectBoard';
+import FaqList from '@/components/FaqList';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import SectionHeading from '@/components/SectionHeading';
@@ -24,7 +28,7 @@ export async function generateMetadata({
   // 「ポスティング {年}」「NPB MLB挑戦」系で、"NEXT MLB" では一致しない。h1・ナビの表記は
   // NEXT MLB のまま＝ブランドは維持し、meta だけ検索意図に寄せる（boardSeo.ts と同じ考え方）。
   // 年は postingWatch.asOf（手で更新する編集値）から取る＝ハードコードした年が古びるのを防ぐ。
-  const posted = NPB_PROSPECTS.filter((p) => p.postingWatch?.level === 'expected');
+  const posted = prospectsOnTheMove().filter((p) => p.postingWatch?.level === 'expected');
   const year = posted
     .map((p) => p.postingWatch!.asOf.slice(0, 4))
     .sort()
@@ -54,6 +58,8 @@ export default async function ProspectsPage({
   setRequestLocale(locale);
   const t = await getTranslations();
   const en = locale === 'en';
+  const npb = await getNpbStats();
+  const movers = prospectsOnTheMove();
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -72,6 +78,15 @@ export default async function ProspectsPage({
           name: en ? p.nameEn : p.nameJa,
           url: absoluteUrl(locale, `/prospects/${p.slug}`),
         })),
+      },
+      // 制度の解説を FAQPage で出す。「ポスティングとは」「譲渡金 いくら」は選手名を伴わない
+      // 一般クエリで、受け皿はこのハブしかない（選手LPに重ねると重複になる）。
+      {
+        '@type': 'FAQPage',
+        mainEntity: POSTING_FACTS.map((f) => {
+          const { q, a } = postingFactText(f, locale);
+          return { '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } };
+        }),
       },
       {
         '@type': 'BreadcrumbList',
@@ -99,6 +114,45 @@ export default async function ProspectsPage({
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink-soft">{t('prospects.indexLead')}</p>
       </section>
 
+      {/* 今オフ動く選手の比較表。名簿より先に置く＝オフの第一意図は「今年誰が出るのか」で、
+          そこに答えてから個々の選手へ送る。 */}
+      <ProspectBoard
+        players={movers}
+        stats={npb}
+        locale={locale}
+        heading={t('prospects.boardTitle')}
+        cols={{
+          player: t('prospects.boardPlayer'),
+          team: t('prospects.boardTeam'),
+          route: t('prospects.boardRoute'),
+          timing: t('prospects.boardTiming'),
+          stats: t('prospects.boardStats'),
+        }}
+        routeLabels={{ posting: t('prospects.route.posting'), intlFa: t('prospects.route.intlFa') }}
+        asOfLabel={t('prospects.statsAsOf', { date: npb.asOf })}
+      />
+
+      {/* 制度の解説。選手LPに重ねず、ハブに1か所だけ置いて各LPから送る。
+          見た目は /roy と同じ FaqList＝サイト内で「よくある質問」の形を1つに揃える。 */}
+      <section className="space-y-2">
+        <FaqList
+          faq={POSTING_FACTS}
+          en={en}
+          heading={t('prospects.systemTitle')}
+        />
+        <p className="text-xs text-ink-soft">
+          {t('prospects.systemSource')}{' '}
+          <a
+            href={POSTING_SOURCE.url}
+            target="_blank"
+            rel="noopener noreferrer nofollow"
+            className="underline hover:text-ink"
+          >
+            {POSTING_SOURCE.name} <span aria-hidden>↗</span>
+          </a>
+        </p>
+      </section>
+
       <section>
         <div className="mb-5">
           <SectionHeading label={t('prospects.rosterTitle')} count={NPB_PROSPECTS.length} lead />
@@ -123,13 +177,18 @@ export default async function ProspectsPage({
                 </div>
                 <p className="mt-1 text-xs text-ink-soft">
                   {en ? p.team.en : p.team.ja} · {en ? p.pos.en : p.pos.ja}
-                  {/* 今オフ申請が有力と報じられた選手だけ一覧で立てる＝「誰が今年出るのか」を
-                      ハブの時点で答える（オフの検索意図はまず名簿ではなく“今年の3人”）。 */}
-                  {p.postingWatch?.level === 'expected' && (
+                  {/* 今オフ動く選手だけ一覧で立てる＝「誰が今年出るのか」をハブの時点で答える
+                      （オフの検索意図はまず名簿ではなく“今年の顔ぶれ”）。ポスティングと海外FAは
+                      道筋が違うので同じ看板にせず、海外FA権の保持者はその語で立てる。 */}
+                  {p.postingWatch?.level === 'expected' ? (
                     <span className="ml-2 inline-flex items-center border border-line px-1.5 py-0.5 text-[11px] text-ink">
                       {t('prospects.watchLevel.expected')}
                     </span>
-                  )}
+                  ) : p.postingWatch?.route === 'intl-fa' ? (
+                    <span className="ml-2 inline-flex items-center border border-line px-1.5 py-0.5 text-[11px] text-ink">
+                      {t('prospects.route.intlFa')}
+                    </span>
+                  ) : null}
                 </p>
                 <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-ink-soft">
                   {en ? p.mlbWatch.en : p.mlbWatch.ja}

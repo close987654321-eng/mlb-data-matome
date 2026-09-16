@@ -7,6 +7,7 @@ import { isThreadIndexable } from '@/lib/threadIndex';
 import { PLAYERS, threadsOf, hubEligible, hasMlbStats } from '@/lib/players';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { NPB_PROSPECTS } from '@/lib/npbPlayers';
+import { getNpbStats } from '@/lib/npbStats';
 import { ALLSTAR } from '@/lib/allstar';
 import { RIZIN5 } from '@/lib/rizin5';
 import { standardEventPages } from '@/lib/events';
@@ -41,13 +42,17 @@ function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitema
   };
 }
 
-/** NPB注目株の lastmod。成績を手入力した選手はその集計時点を使う（無ければ undefined）。 */
-function prospectAsOf(p: (typeof NPB_PROSPECTS)[number]): string | undefined {
-  return p.season?.asOf;
+/**
+ * NPB注目株の lastmod。成績は NPB公式から機械取得（全選手で同じ集計時点）なので、
+ * 選手ごとに動くのはポスティング報道の更新日。両方あれば新しいほうを使う。
+ */
+function prospectAsOf(p: (typeof NPB_PROSPECTS)[number], statsAsOf: string): string | undefined {
+  const dates = [p.postingWatch?.asOf, statsAsOf].filter(Boolean) as string[];
+  return dates.length ? [...dates].sort()[dates.length - 1] : undefined;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows] = await Promise.all([
+  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows, npb] = await Promise.all([
     getAllThreads(),
     getAllColumns(),
     getAllTags(),
@@ -56,7 +61,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getWatchSingles(),
     getCyDetailRows(),
     getMvpDetailRows(),
+    getNpbStats(),
   ]);
+  const npbAsOf = npb.asOf;
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
 
   // /watch は動画つき記事のハブ。最新の動画記事の日時を lastModified にする。
@@ -123,9 +130,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...playerEntries,
     // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。
     // ピラーの lastmod は配下で最も新しい成績時点（手キュレーションなので他に動く日付が無い）。
-    entry('/prospects', maxDate(NPB_PROSPECTS.map(prospectAsOf).filter(Boolean) as string[])),
+    entry('/prospects', maxDate(NPB_PROSPECTS.map((p) => prospectAsOf(p, npbAsOf)).filter(Boolean) as string[])),
     // 個別は手入力した成績の集計時点(season.asOf)を lastmod にする（無い選手は undefined）。
-    ...NPB_PROSPECTS.map((p) => entry(`/prospects/${p.slug}`, prospectAsOf(p))),
+    ...NPB_PROSPECTS.map((p) => entry(`/prospects/${p.slug}`, prospectAsOf(p, npbAsOf))),
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。
     ...columns.map((c) => entry(`/columns/${c.id}`, c.publishedAt)),
     // 「海外ファンと見る」シリーズ棚（/watch/series/{id}）と単発一覧。index 可能なのに

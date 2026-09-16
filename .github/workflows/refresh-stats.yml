@@ -109,16 +109,33 @@ jobs:
           node scripts/fetch-mlb-stats.mjs mvp "$SEASON" | tail -2 || echo "mvp スキップ（他ボードは反映済み）"
           node scripts/fetch-mlb-stats.mjs roy "$SEASON" | tail -2 || echo "roy スキップ（他ボードは反映済み）"
 
+      - name: NPB注目株の成績を1日1回だけ更新（/prospects の選手LP用・npb.jp）
+        run: |
+          set -euo pipefail
+          # /prospects の成績は手入力だったため 2026-06-29 の数値が 09-13 まで据え置かれ、ポスティング
+          # 報道で読者が最も来る時期に3か月前の成績を出していた（2026-09-16 に機械取得へ移行）。
+          # NPB は1日1試合なので毎時は要らない＝リーダーズの「◯月◯日現在」が変わる1日1回で足りる。
+          # 判定は時刻の完全一致でなく「今日まだ更新していないか」＝外部トリガーのドリフトで
+          # 静止する事故（cy-young ボードで実際に起きた）を繰り返さない。
+          TODAY_JST=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+          LAST_RUN=$(grep -o '"npbFetchedAt": *"[0-9-]*' data/npb-prospects-stats.json | grep -o '[0-9-]*$' || echo "")
+          if [ "$LAST_RUN" = "$TODAY_JST" ]; then
+            echo "本日分は取得済み（${LAST_RUN}）→ スキップ"
+            exit 0
+          fi
+          SEASON=$(TZ=Asia/Tokyo date +%Y)
+          node scripts/fetch-npb-stats.mjs --year "$SEASON" | tail -3 || echo "npb-stats スキップ（既存JSONを保持）"
+
       - name: 変化があればコミット＆push
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/; then
+          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/ data/npb-prospects-stats.json; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/
+          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/ data/npb-prospects-stats.json
           git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
           # 記事の自動マージ等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
           for i in 1 2 3 4 5; do

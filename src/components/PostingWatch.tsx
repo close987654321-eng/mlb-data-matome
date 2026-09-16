@@ -17,7 +17,10 @@ export default function PostingWatch({
   en,
   heading,
   levelLabel,
+  routeLabel,
+  windowLabel,
   suitorsLabel,
+  marketLabel,
   timelineLabel,
   asOfLabel,
 }: {
@@ -25,7 +28,11 @@ export default function PostingWatch({
   en: boolean;
   heading: string;
   levelLabel: string;
+  /** 「ポスティング」/「海外FA」の既訳ラベル。道筋が違えば読者の次の疑問も違う。 */
+  routeLabel: string;
+  windowLabel: string;
   suitorsLabel: string;
+  marketLabel: string;
   timelineLabel: string;
   /** 「{date} 時点」の既訳文字列。 */
   asOfLabel: string;
@@ -51,12 +58,26 @@ export default function PostingWatch({
             />
             {levelLabel}
           </span>
+          {/* 道筋（ポスティング/海外FA）は段階と同じ高さに置く＝「認められるか」と「本人が決める」の
+              違いが、現在地を読む前提になるため。 */}
+          <span className="inline-flex items-center border border-line px-2 py-1 text-xs tracking-wide text-ink-soft">
+            {routeLabel}
+          </span>
           <span className="text-xs text-ink-mute">{asOfLabel}</span>
         </div>
 
         <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink">
           {en ? watch.headline.en : watch.headline.ja}
         </p>
+
+        {watch.window && (
+          <div className="mt-4 border-t border-line/70 pt-4">
+            <p className="text-xs text-ink-soft">{windowLabel}</p>
+            <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-soft">
+              {en ? watch.window.en : watch.window.ja}
+            </p>
+          </div>
+        )}
 
         {watch.suitors?.length ? (
           <div className="mt-4 border-t border-line/70 pt-4">
@@ -68,6 +89,30 @@ export default function PostingWatch({
                   className="rounded-[2px] border border-line px-2.5 py-1 text-xs text-ink-soft"
                 >
                   {en ? s.en : s.ja}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        {watch.marketValue?.length ? (
+          <div className="mt-4 border-t border-line/70 pt-4">
+            <p className="text-xs text-ink-soft">{marketLabel}</p>
+            <ul className="mt-2 space-y-3">
+              {watch.marketValue.map((m) => (
+                <li key={m.source}>
+                  <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
+                    {en ? m.en : m.ja}
+                  </p>
+                  {/* 金額は必ず「誰が言ったか」とセットで出す＝編集部の予想に見せない。 */}
+                  <a
+                    href={m.source}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="mt-1 inline-flex items-center text-xs text-ink-mute underline decoration-line underline-offset-2 transition-colors hover:text-ink"
+                  >
+                    {m.sourceName} <span aria-hidden className="ml-1">↗</span>
+                  </a>
                 </li>
               ))}
             </ul>

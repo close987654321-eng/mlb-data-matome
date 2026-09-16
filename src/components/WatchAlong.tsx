@@ -62,7 +62,10 @@ export default function WatchAlong({
           >
             <div className="flex items-center justify-between text-xs text-ink-soft">
               <span className="font-medium">{authorLabel(c.author)}</span>
-              {!isInterview && (
+              {/* score=0 は「未取得」（old.reddit がログイン壁の日など）で実測0票ではない。
+                  0 を出すと読者には不人気コメントに見えるので記号ごと落とす＝記事本文・
+                  StoryBlocks・TagVoices と同じ扱い（値は捏造せず保存したまま）。 */}
+              {!isInterview && c.score > 0 && (
                 <span className="tabular-nums">
                   {scoreMark} {c.score.toLocaleString()}
                 </span>

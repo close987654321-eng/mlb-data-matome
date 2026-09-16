@@ -37,7 +37,9 @@ export default function TagVoices({
           <span className="shrink-0 font-medium text-ink-soft">
             {isYoutube || isInterview ? comment.author : `u/${comment.author}`}
           </span>
-          {!isInterview && (
+          {/* score=0（票が未取得＝old.reddit がログイン壁の日など）は記号ごと出さない。
+              実測0票と区別がつかず、読者には不人気コメントに見えるため（StoryBlocks と同じ扱い）。 */}
+          {!isInterview && comment.score > 0 && (
             <span className="shrink-0 tabular-nums">
               {isYoutube ? '👍' : '▲'} {comment.score.toLocaleString()}
             </span>
