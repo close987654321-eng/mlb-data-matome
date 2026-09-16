@@ -218,7 +218,7 @@ export default function RoyBoard({
 }: {
   board: Board;
   locale: string;
-  /** id→前日比の順位差（royHistory.rankDeltas）。履歴が無いページでは省略可。 */
+  /** id→前日比の順位差（boardHistory.rankDeltas）。履歴が無いページでは省略可。 */
   deltas?: Map<number, number | null>;
 }) {
   const en = locale === 'en';

@@ -129,13 +129,13 @@ jobs:
       - name: 変化があればコミット＆push
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/ data/npb-prospects-stats.json; then
+          if git diff --quiet -- data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/cy-young-history.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/ data/npb-prospects-stats.json; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/ data/npb-prospects-stats.json
+          git add data/jp-players-stats.json data/gamelogs/ data/war-race.json data/pitch-arsenals.json data/cy-young-board.json data/cy-young-history.json data/mvp-board.json data/roy-board.json data/roy-history.json data/standings.json data/team-games.json data/player-journal/ data/npb-prospects-stats.json
           git commit -m "chore(stats): 選手成績スナップショット自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
           # 記事の自動マージ等が同時刻に main を進めても落ちないよう、競合時は rebase してリトライ
           for i in 1 2 3 4 5; do

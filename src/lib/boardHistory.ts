@@ -1,6 +1,10 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import type { RoyBoard } from '@/lib/royBoard';
+/** 履歴の読み手が必要とするボードの最小形（RoyBoard / CyYoungBoard のどちらも満たす）。 */
+export type HistBoardLike = { asOf: string; leagues: { AL: { id: number; rank: number }[]; NL: { id: number; rank: number }[] } };
+
+/** 履歴を持つボードの種別＝ data/{kind}-history.json。 */
+export type BoardKind = 'roy' | 'cy-young';
 
 /** 履歴1日ぶんの行（ボード行の最小形）。 */
 export type RoyHistRow = { id: number; nameJa: string; nameEn: string; rank: number; score: number; isJp: boolean };
@@ -11,23 +15,28 @@ export type RoyHistDay = { asOf: string; date: string; AL: RoyHistRow[]; NL: Roy
 export type RoyHistory = { season: number; topN: number; days: RoyHistDay[] };
 
 /**
- * 新人王ボードの日次履歴（data/roy-history.json）の読み手。
- * ボード本体（roy-board.json）は毎日上書きされるので、「首位が何日座っているか」「日本人が何位から
- * 何位へ動いたか」はこの履歴からしか出ない。書き手は scripts/fetch-mlb-stats.mjs roy（appendRoyHistory）。
+ * 賞レースボードの日次履歴（data/{roy,cy-young}-history.json）の読み手。
+ * ボード本体は毎日上書きされるので、「首位が何日座っているか」「日本人が何位から何位へ動いたか」は
+ * この履歴からしか出ない。書き手は scripts/fetch-mlb-stats.mjs の appendBoardHistory（roy / cyyoung コマンド）。
  * 各日は上位 topN ＋ 日本人の行だけを持つ＝表に出ている選手の推移が引ければ足りる。
  */
-const FILE = path.join(process.cwd(), 'data', 'roy-history.json');
+const cache = new Map<BoardKind, RoyHistory | null>();
 
-let cache: RoyHistory | null = null;
-
-export async function getRoyHistory(): Promise<RoyHistory | null> {
-  if (cache) return cache;
+export async function getBoardHistory(kind: BoardKind): Promise<RoyHistory | null> {
+  if (cache.has(kind)) return cache.get(kind) ?? null;
+  let h: RoyHistory | null = null;
   try {
-    cache = JSON.parse(await fs.readFile(FILE, 'utf8')) as RoyHistory;
+    h = JSON.parse(await fs.readFile(path.join(process.cwd(), 'data', `${kind}-history.json`), 'utf8')) as RoyHistory;
   } catch {
-    return null;
+    h = null;
   }
-  return cache;
+  cache.set(kind, h);
+  return h;
+}
+
+/** 後方互換＝新人王ボードの履歴。 */
+export function getRoyHistory(): Promise<RoyHistory | null> {
+  return getBoardHistory('roy');
 }
 
 /** 現在のボード日付より前で、いちばん新しい日のエントリ（今日ぶんの再取得で自分自身と比べない）。 */
@@ -51,7 +60,7 @@ export function dayAtLeastBefore(h: RoyHistory | null, currentAsOf: string, days
  * 前日比の順位差（正＝上昇）。前日のエントリに居ない選手は null（＝新しく表に入った／前日は圏外）。
  * 履歴自体が無い場合は空の Map を返し、呼び手は▲▼を出さない。
  */
-export function rankDeltas(prev: RoyHistDay | null, board: RoyBoard): Map<number, number | null> {
+export function rankDeltas(prev: RoyHistDay | null, board: HistBoardLike): Map<number, number | null> {
   const out = new Map<number, number | null>();
   if (!prev) return out;
   for (const lg of ['AL', 'NL'] as const) {

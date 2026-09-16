@@ -1,18 +1,20 @@
 import SectionHeading from '@/components/SectionHeading';
-import type { RoyBoard } from '@/lib/royBoard';
-import { shortDate, type RoyHistory, type RoyHistRow } from '@/lib/royHistory';
+import { shortDate, type HistBoardLike, type RoyHistory, type RoyHistRow } from '@/lib/boardHistory';
 
 const MAX_DAYS = 12; // 表に出す日数（横スクロールで読める幅）
 const TOP_FOR_ROWS = 3; // 期間内に一度でもこの順位以内に入った選手を行に出す
 
+type NamedBoard = HistBoardLike & { leagues: { AL: { id: number; rank: number; nameJa: string; nameEn: string }[]; NL: { id: number; rank: number; nameJa: string; nameEn: string }[] } };
+
 /**
- * 順位の推移＝日次履歴を「行＝選手・列＝日付・セル＝順位」で並べる表。
+ * 順位の推移＝日次履歴を「行＝選手・列＝日付・セル＝順位」で並べる表（/roy・/cy-young 共通）。
  * ボードページは今日の表しか出せないので、「首位が替わった日」「日本人が抜いた／抜かれた日」は
  * この表でしか見えない。行は各リーグで期間内に上位 TOP_FOR_ROWS に入ったことのある選手＋日本人。
  * 図でなく表なのは、値が離散（順位）で日数も十数日＝数字をそのまま読めるほうが早いから。
  * 表示名は今日のボードの名前を優先（履歴の古い日はカタカナ未整備の英語名が残っていることがある）。
+ * 列は直近 MAX_DAYS 日（履歴が長いボードでも横幅が暴れない）。
  */
-export default function RoyTrend({ board, history, locale }: { board: RoyBoard; history: RoyHistory | null; locale: string }) {
+export default function BoardTrend({ board, history, locale }: { board: NamedBoard; history: RoyHistory | null; locale: string }) {
   if (!history || history.days.length < 2) return null;
   const en = locale === 'en';
   const days = history.days.slice(-MAX_DAYS);

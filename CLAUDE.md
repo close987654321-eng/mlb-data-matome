@@ -182,6 +182,13 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     非日本人ルーキーのカタカナ表記は `data/{batter,pitcher}-names-ja.json` に足す（上位20位まで整備済み・
     英語名フォールバックが出たら追記）。新人王を実際に語っているスレには `新人王` タグを付ける＝反応セクションと
     `boardColumns` の両方がそのタグで拾う。
+    **/cy-young も同日に同じ型で増補**: 履歴は `data/cy-young-history.json`（`cyyoung` コマンドが同じ `appendBoardHistory`
+    で積む・07-09〜は git から遡って埋めた）。読み手は共通の `src/lib/boardHistory.ts`（`getBoardHistory('roy'|'cy-young')`）、
+    推移表は共通の `BoardTrend`（直近12日を列に出す）。投手版の現在地は `CyRaceNow`（内訳＝ERA/xERA/K-BB%/投球回/WHIP の
+    上位％バー・行は `/cy-young/{id}` 詳細へ）。**規定未達で表にも watch にも居ない日本人先発（大谷ら）は「規定投球回の外」
+    カードとして snapshot から組む**＝「大谷 サイヤング」で来た人に居ない理由を成績つきで先に答える（FAQ も同じ値）。
+    `CyGuide`＝日程・投票（5名記入 7-4-3-2-1）・規定投球回・日本人の歴代最高順位（受賞者なし・ダルビッシュ2位×2〜今永5位）。
+    サイ・ヤング賞を語っているスレには `サイ・ヤング賞` タグ（表記ゆれ `サイヤング賞` も拾う）。
   - **試合結果（`Thread.game`・記事の主役データ）**: `node scripts/fetch-mlb-stats.mjs backfill-games --apply` で
     公式スケジュール（`hydrate=linescore,decisions`）＋ boxscore から **最終スコア・回ごとの得点と H/E/残塁・
     その試合時点の勝敗と地区順位・勝敗投手/セーブ・本塁打の打者と今季号数** を記事 JSON に埋める。記事は要約直下の

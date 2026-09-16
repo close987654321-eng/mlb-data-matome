@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getRoyBoard } from '@/lib/royBoard';
-import { getRoyHistory, previousDay, rankDeltas } from '@/lib/royHistory';
+import { getRoyHistory, previousDay, rankDeltas } from '@/lib/boardHistory';
 import { buildRoyFaq } from '@/lib/royFaq';
 import { getAllThreads } from '@/lib/data';
 import { buildFeed } from '@/lib/feed';
@@ -10,7 +10,7 @@ import { BOARD_COLUMN_TAGS, columnsForBoard } from '@/lib/boardColumns';
 import { PLAYERS } from '@/lib/players';
 import RoyBoard from '@/components/RoyBoard';
 import RoyRaceNow from '@/components/RoyRaceNow';
-import RoyTrend from '@/components/RoyTrend';
+import BoardTrend from '@/components/BoardTrend';
 import RoyGuide from '@/components/RoyGuide';
 import FaqList from '@/components/FaqList';
 import BoardColumns from '@/components/BoardColumns';
@@ -165,7 +165,7 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
       <RoyBoard board={board} locale={locale} deltas={deltas} />
 
       {/* 日次履歴が2日以上あるときだけ出る（首位の交代・日本人の昇降が見える唯一の面）。 */}
-      <RoyTrend board={board} history={history} locale={locale} />
+      <BoardTrend board={board} history={history} locale={locale} />
 
       <BoardColumns
         columns={raceColumns}
