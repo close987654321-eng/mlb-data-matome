@@ -121,6 +121,10 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
 X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の人ボイス・リンク無し）と
 **`x-share` スキル**（サイト資産の配信パッケージ・成績カード画像）が正。
 データ形式・運用の詳細は [`scripts/threads-update.md`](./scripts/threads-update.md)。要点:
+**/daily ハブの増補（2026-09-16）**: 「3行＋カード＋ボタン」に加えて、①全員の結果表 ②主役の現地の声2件＋動画サムネ
+③現地ざわつきの見出し＋あすの日本人 ④この1週間の主役 ⑤主役に選ばれた回数（全号集計）⑥FAQ（FAQPage JSON-LD）を出す。
+部品は `src/components/DailyHubSections.tsx`、派生データと FAQ は `src/lib/dailyHub.ts`＝すべて日次記事 JSON の再表示・集計で
+新しい事実は作らない（文言はインライン bilingual・messages は既存キーのみ）。アーカイブのキャプションに主役と節目を添える。
 
 ### 4.1 データ取得
 
