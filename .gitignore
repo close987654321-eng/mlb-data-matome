@@ -16,3 +16,6 @@ tsconfig.tsbuildinfo
 
 # ローカル退避用（コミットしない作業ファイル置き場）
 _local/
+
+# エディタの個人設定（CLAUDE_CONFIG_DIR 等）
+.vscode/
