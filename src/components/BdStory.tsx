@@ -82,8 +82,8 @@ export default function BdStory({
 
       <p className="text-xs text-ink-mute">
         オーディション{data.totals.videos}本・通算{num(data.totals.views)}回再生／
-        コメント{num(data.totals.comments)}件（{data.asOf}時点）。
-        このページに載せている引用は{num(data.quoted)}件で、本文はすべて原文のまま。
+        コメント{num(data.totals.comments)}件（{data.statsAsOf}時点）。
+        このページに載せている引用は{num(data.quoted)}件で、{data.asOf}に抜き出した本文をそのまま載せている。
       </p>
 
       <div className="divide-y divide-line border-t border-line">

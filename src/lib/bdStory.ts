@@ -1,4 +1,4 @@
-import { bdAuditionVideos } from './bdAuditions';
+import { bdAuditionVideos, bdAuditionsFetchedAt } from './bdAuditions';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
@@ -83,7 +83,13 @@ export type BdStoryChapter = BdChapter & {
 
 export type BdStory = {
   event: number;
+  /** 引用を抜き出した日（JST）＝コメント本文といいね数の時点 */
   asOf: string;
+  /**
+   * 再生数・コメント数スナップショットの取得日（JST）。
+   * 数値は CI が更新し続けるので、引用の時点（asOf）と同じ日とは限らない＝別に持って別に表示する。
+   */
+  statsAsOf: string;
   ledeJa: string;
   chapters: BdStoryChapter[];
   /** この大会のオーディション合計（章の実測値の和＝表示用） */
@@ -126,6 +132,7 @@ export async function bdStory(eventNo: number | null): Promise<BdStory | null> {
   return {
     event: raw.event,
     asOf: raw.asOf,
+    statsAsOf: await bdAuditionsFetchedAt(),
     ledeJa: raw.ledeJa,
     chapters,
     totals: {
