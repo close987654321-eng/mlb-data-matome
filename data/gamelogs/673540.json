@@ -1,6 +1,30 @@
 {
-  "asOf": "2026-09-21 03:51",
-  "hitting": [],
+  "asOf": "2026-09-21 06:36",
+  "hitting": [
+    {
+      "ab": 0,
+      "bb": 0,
+      "cs": 0,
+      "d": "2026-09-20",
+      "dbl": 0,
+      "h": 0,
+      "hbp": 0,
+      "home": true,
+      "hr": 0,
+      "ibb": 0,
+      "opp": "Philadelphia Phillies",
+      "oppJa": "フィリーズ",
+      "pa": 0,
+      "r": 0,
+      "rbi": 0,
+      "sb": 0,
+      "sf": 0,
+      "so": 0,
+      "tb": 0,
+      "tpl": 0,
+      "win": false
+    }
+  ],
   "pitching": [
     {
       "bb": 3,
@@ -552,6 +576,25 @@
       "r": 1,
       "so": 2,
       "w": 0
+    },
+    {
+      "bb": 3,
+      "bf": 6,
+      "d": "2026-09-20",
+      "er": 3,
+      "gs": 0,
+      "h": 2,
+      "hbp": 0,
+      "home": true,
+      "hr": 0,
+      "ibb": 0,
+      "l": 0,
+      "opp": "Philadelphia Phillies",
+      "oppJa": "フィリーズ",
+      "outs": 1,
+      "r": 3,
+      "so": 0,
+      "w": 0
     }
   ],
   "player": {
@@ -561,7 +604,7 @@
   },
   "season": 2026,
   "team": "メッツ",
-  "teamGames": 159,
+  "teamGames": 160,
   "warHistory": [
     {
       "d": "2026-06-30",
@@ -897,6 +940,7 @@
     },
     {
       "d": "2026-09-21",
+      "warHit": 0,
       "warPit": -0.5
     }
   ]
