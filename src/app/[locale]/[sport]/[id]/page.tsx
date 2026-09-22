@@ -80,11 +80,17 @@ export async function generateMetadata({
   // 「…【海外の反応】｜海外の反応」になっていた（indexable 121ページで実測）。SERP のタイトルは
   // 表示幅が限られるので重複語を捨てる。記事本文の見出し（h1）は編集タイトルのまま。
   const metaTitle = seoTitle ?? serpBase.replace(/\s*【海外の反応】\s*$/, '');
+  // 日本語コメント主体の記事（matome R7+・thread.japaneseSource）はブランド語を付けない＝
+  // 框（タイトル）と中身（日本語コメント）を一致させる。既存記事（フラグ無し）は従来どおり付与＝
+  // 2026-06-13 の R8 制定前からある英語ソース記事の多くは tags に "海外の反応" も
+  // title.ja の【海外の反応】もすでに欠けているため、フラグの有無だけで判定する（タグ／文言の
+  // 有無で判定すると、これら既存ページの表示が変わってしまう）。
+  const brandSuffix = thread.japaneseSource ? metaTitle : `${metaTitle}｜海外の反応`;
 
   return {
     // absolute＝layout のテンプレートを回さない。格闘技の結果記事だけ専用タイトル、それ以外
     //（MLB の試合記事を含む）は「{編集タイトル}｜海外の反応」を自前で組む（ブランド語を1回だけに保つ）。
-    title: { absolute: seoTitle ?? `${metaTitle}｜海外の反応` },
+    title: { absolute: seoTitle ?? brandSuffix },
     description,
     // 薄い記事（isThreadIndexable=false）は検索に出さない。follow は残す＝リンク先の
     // 選手ハブ・チームLPへの評価の流れは保つ（AdSense再申請の薄コンテンツ手当て）。
