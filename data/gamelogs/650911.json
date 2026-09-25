@@ -1,6 +1,30 @@
 {
-  "asOf": "2026-09-26 05:02",
-  "hitting": [],
+  "asOf": "2026-09-26 08:19",
+  "hitting": [
+    {
+      "ab": 0,
+      "bb": 0,
+      "cs": 0,
+      "d": "2026-09-25",
+      "dbl": 0,
+      "h": 0,
+      "hbp": 0,
+      "home": true,
+      "hr": 0,
+      "ibb": 0,
+      "opp": "Tampa Bay Rays",
+      "oppJa": "レイズ",
+      "pa": 0,
+      "r": 0,
+      "rbi": 0,
+      "sb": 0,
+      "sf": 0,
+      "so": 0,
+      "tb": 0,
+      "tpl": 0,
+      "win": false
+    }
+  ],
   "pitching": [
     {
       "bb": 0,
@@ -609,6 +633,25 @@
       "r": 2,
       "so": 6,
       "w": 1
+    },
+    {
+      "bb": 0,
+      "bf": 14,
+      "d": "2026-09-25",
+      "er": 2,
+      "gs": 1,
+      "h": 5,
+      "hbp": 0,
+      "home": true,
+      "hr": 1,
+      "ibb": 0,
+      "l": 0,
+      "opp": "Tampa Bay Rays",
+      "oppJa": "レイズ",
+      "outs": 9,
+      "r": 2,
+      "so": 2,
+      "w": 0
     }
   ],
   "player": {
