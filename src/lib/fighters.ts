@@ -575,20 +575,14 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['青木'],
     sport: 'mma',
     voiceScope: 'domestic',
-    // 超RIZIN.5（2026-09-10）で朝倉未来と対戦＝11年ぶりのRIZIN復帰戦。大会レジストリ
-    // （src/lib/rizin5.ts 第2試合）と同時に追加（2026-09-02）。until を過ぎれば自動で消える。
-    nextFightJa: {
-      labelJa: '9/10朝倉未来戦',
-      until: '2026-09-10',
-      opponentJa: '朝倉未来',
-      eventJa: '超RIZIN.5 浪速の超復活祭り｜京セラドーム大阪',
-      href: '/rizin5',
-    },
+    // 2026-09-10 の朝倉未来戦（超RIZIN.5）を消化。次戦は未発表なので nextFightJa は持たない。
+    // 大会レジストリ（src/lib/rizin5.ts 第2試合）と同時に追加（2026-09-02）。
     accoladeJa:
       '総合格闘家（元DREAM・元ONE世界ライト級王者、通称「跳関十段」。RIZIN参戦は旗揚げ戦以来11年ぶり）',
-    // 50勝12敗は rizin5.ts の大会レジストリ（recordAsOf 2025-11-16＝手塚戦まで反映）と同値。
+    // 50勝12敗は rizin5.ts の大会レジストリ（recordAsOf 2025-11-16＝手塚戦まで反映）と同値で、
+    // そこへ 2026-09-10 の朝倉未来戦（TKO負け・rizin5.ts 第2試合の公式リザルト）を足して50勝13敗。
     // KO勝ち4は Wikipedia の決着内訳（KO4・一本32・判定11）から＝直近の勝ちはすべて一本で増えていない。
-    record: { wins: 50, losses: 12, draws: 0, kos: 4, asOf: '2025-11-16' },
+    record: { wins: 50, losses: 13, draws: 0, kos: 4, asOf: '2026-09-10' },
     headlineStats: [
       // 一本勝ちの数はレジストリの紹介文（「50勝のうち一本勝ちが32」）と同じ値
       { value: '一本32', labelJa: '通算50勝のうちサブミッション決着の数' },
@@ -598,6 +592,14 @@ export const FIGHTERS: Fighter[] = [
       'https://en.wikipedia.org/wiki/Shinya_Aoki',
     ],
     fights: [
+      {
+        date: '2026-09-10',
+        opponentJa: '朝倉未来',
+        opponentEn: 'Mikuru Asakura',
+        venueJa: '京セラドーム大阪（超RIZIN.5 浪速の超復活祭り）',
+        resultJa: '1R2分39秒TKO負け（レフェリーストップ：グラウンドパンチ）',
+        noteJa: '71kg契約。2015年以来11年ぶりのRIZIN参戦で、この大会唯一のKO/TKO決着になった',
+      },
       {
         date: '2025-11-16',
         opponentJa: '手塚裕之',
