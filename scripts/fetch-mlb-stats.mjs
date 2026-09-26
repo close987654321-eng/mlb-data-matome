@@ -890,6 +890,11 @@ function addDays(dateStr, n) {
 /** ポストシーズンの試合種別（F=ワイルドカードシリーズ D=地区シリーズ L=リーグ優勝決定シリーズ W=ワールドシリーズ）。 */
 const PS_GAME_TYPES = new Set(['F', 'D', 'L', 'W']);
 
+/** ラウンドの日本語名（src/lib/postseason.ts の roundName と同じ表記＝記事のタグにそのまま使う）。 */
+const PS_ROUND_JA = { F: 'ワイルドカードシリーズ', D: '地区シリーズ', L: 'リーグ優勝決定シリーズ', W: 'ワールドシリーズ' };
+/** 記事 id の末尾（例 2026-09-30-cubs-vs-padres-wc-g1）。同カードが連日続くので第何戦まで入れて衝突させない。 */
+const PS_ID_TOKEN = { F: 'wc', D: 'ds', L: 'cs', W: 'ws' };
+
 /** 公式ハイライトのタイトルに入るラウンド表記（2025年の実タイトル: "NL Wild Card Game 3" "NLCS Game 4"）。 */
 function psTitleToken(g) {
   const lg = LEAGUE_BY_TEAM[g.home] ?? LEAGUE_BY_TEAM[g.away] ?? '';
@@ -1060,6 +1065,9 @@ function loadExistingArticles() {
         id: t.id ?? f.replace(/\.json$/, ''),
         date: t.series?.date ?? (t.id ?? '').slice(0, 10),
         teamTags: (t.tags ?? []).filter((x) => TEAM_JA_SET.has(x)),
+        // 日次記事（jp-daily）は複数の試合のチームタグを持つ＝「その試合の記事」ではない。ポストシーズンは
+        // 全試合を個別記事にするので、日次記事を作成済みと誤判定しないよう区別する。
+        daily: Boolean(t.daily),
       });
     } catch {
       /* 壊れた JSON はスキップ */
@@ -1088,18 +1096,28 @@ async function gamesForDate(season, date, ids, existing, { team } = {}) {
   const rows = [];
   for (const g of games) {
     const jpPlayers = [...(byTeam.get(g.away) ?? []), ...(byTeam.get(g.home) ?? [])];
-    if (!jpPlayers.length) continue; // 日本人が出ていない試合は対象外
-    if (team && !jpPlayers.some((x) => x.team.includes(team))) continue;
+    // ポストシーズンは日本人・ライバルが出ていない試合も全部載せる（2026-09-26 村山決定＝全試合を個別記事にする）。
+    const isPs = PS_GAME_TYPES.has(g.gameType);
+    if (!jpPlayers.length && !isPs) continue; // レギュラーシーズンは日本人（＋ライバル）が出ていない試合は対象外
+    if (/postponed|cancel/i.test(g.status)) continue;
+    if (team && !jpPlayers.some((x) => x.team.includes(team)) && !(TEAM_JA[g.away] ?? '').includes(team) && !(TEAM_JA[g.home] ?? '').includes(team)) continue;
     const awayJa = TEAM_JA[g.away] ?? g.away;
     const homeJa = TEAM_JA[g.home] ?? g.home;
     const gameDateJst = addDays(g.etDate, 1); // ET の試合は必ず翌日のJST（記事 id / series.date は JST）
     // 記事の左側（自軍）は watch-along シリーズを持つチームを優先、無ければ日本人が出た側。
     const jpTeamsEn = [g.away, g.home].filter((tn) => byTeam.get(tn)?.length);
-    const leftEn = jpTeamsEn.find((tn) => TEAM_SERIES[tn]) ?? jpTeamsEn[0];
+    // 日本人が居ないポストシーズンの試合は、シリーズ（看板企画）を持つ側→本拠地の順で自軍を決める。
+    const leftEn =
+      jpTeamsEn.find((tn) => TEAM_SERIES[tn]) ?? jpTeamsEn[0] ?? [g.away, g.home].find((tn) => TEAM_SERIES[tn]) ?? g.home;
     const rightEn = leftEn === g.away ? g.home : g.away;
     const match = existing.find(
-      (e) => e.date === gameDateJst && e.teamTags.includes(awayJa) && e.teamTags.includes(homeJa),
+      (e) =>
+        !(isPs && e.daily) &&
+        e.date === gameDateJst &&
+        e.teamTags.includes(awayJa) &&
+        e.teamTags.includes(homeJa),
     );
+    const psSuffix = isPs ? `-${PS_ID_TOKEN[g.gameType]}-g${g.seriesGameNumber ?? 1}` : '';
     rows.push({
       etDate: g.etDate,
       gameDateJst,
@@ -1112,7 +1130,7 @@ async function gamesForDate(season, date, ids, existing, { team } = {}) {
       seriesId: TEAM_SERIES[leftEn] ?? null,
       selfTeamJa: TEAM_JA[leftEn] ?? leftEn,
       opponentJa: TEAM_JA[rightEn] ?? rightEn,
-      suggestedId: `${gameDateJst}-${TEAM_SLUG[leftEn] ?? 'team'}-vs-${TEAM_SLUG[rightEn] ?? 'team'}`,
+      suggestedId: `${gameDateJst}-${TEAM_SLUG[leftEn] ?? 'team'}-vs-${TEAM_SLUG[rightEn] ?? 'team'}${psSuffix}`,
       searchQuery: PS_GAME_TYPES.has(g.gameType)
         ? `${g.away} vs. ${g.home} ${psTitleToken(g)} Game ${g.seriesGameNumber ?? 1} Highlights`
         : `${g.away} vs. ${g.home} Game Highlights`,
@@ -1125,6 +1143,8 @@ async function gamesForDate(season, date, ids, existing, { team } = {}) {
         ? {
             postseason: {
               round: g.gameType,
+              // 記事タイトル・タグに使う日本語のラウンド名（表記の正は src/lib/postseason.ts の roundName）。
+              roundJa: PS_ROUND_JA[g.gameType],
               game: g.seriesGameNumber ?? null,
               titleToken: `${psTitleToken(g)} Game ${g.seriesGameNumber ?? 1}`,
               titleDates: [`(${titleDateName(g.etDate)})`, ...titleDatesNumeric(g.etDate).map((d) => `(${d})`)],
@@ -1154,8 +1174,9 @@ async function runGames(dates, { asJson, team } = {}) {
   if (!all.length) return console.log('（この期間に日本人選手の出場試合は確認できず）');
   for (const g of all) {
     const mark = g.existingArticle ? `✓ ${g.existingArticle}` : '▶ 未記事化';
-    console.log(`${mark}  [動画: (${g.titleDateName})] ${g.matchup}${g.doubleHeader ? `（DH第${g.gameNumber}試合）` : ''}`);
-    console.log(`    出場: ${g.jpPlayers.map((p) => `${p.player}（${p.today || '出場'}）`).join(' / ')}`);
+    const ps = g.postseason ? `【${g.postseason.roundJa} 第${g.postseason.game}戦】` : '';
+    console.log(`${mark}  ${ps}[動画: (${g.titleDateName})] ${g.matchup}${g.doubleHeader ? `（DH第${g.gameNumber}試合）` : ''}`);
+    console.log(`    出場: ${g.jpPlayers.length ? g.jpPlayers.map((p) => `${p.player}（${p.today || '出場'}）`).join(' / ') : '（日本人・ライバルなし）'}`);
     if (!g.existingArticle) {
       console.log(`    候補id: ${g.suggestedId}${g.seriesId ? ` / series:${g.seriesId}` : ''}`);
       console.log(`    検索: node scripts/fetch-youtube.mjs search "${g.searchQuery}" 5 --channel ${MLB_YT_CHANNEL}`);
@@ -1526,7 +1547,9 @@ async function runBackfillGames({ apply, force } = {}) {
     // おり現行の自動生成（TEAM_SLUG）は "whitesox"/"bluejays"。ハイフンを除いて正規スラッグに突き合わせる
     // （30球団の正規スラッグは全て単一トークン＝ハイフン無しなので誤マッチしない）。
     let slugA, slugB;
-    const mt = id.match(/^(\d{4}-\d{2}-\d{2})-(.+)-vs-(.+?)(?:-(?:game|g)(\d))?$/);
+    // ポストシーズンの id は末尾に "-wc-g2" のようなラウンド＋第何戦が付く（gamesForDate の suggestedId）。
+    // これはダブルヘッダーの試合番号ではない＝DH の "-g1"/"-game2" と別のグループで読み捨てる。
+    const mt = id.match(/^(\d{4}-\d{2}-\d{2})-(.+)-vs-(.+?)(?:-(?:wc|ds|cs|ws)-g\d+|-(?:game|g)(\d))?$/);
     if (mt) {
       const a = mt[2].replace(/-/g, ''), b = mt[3].replace(/-/g, '');
       if (TEAM_SLUGS.has(a) && TEAM_SLUGS.has(b)) { slugA = a; slugB = b; }
@@ -1572,7 +1595,11 @@ async function runBackfillGames({ apply, force } = {}) {
     if (!rankCache.has(etDate)) {
       rankCache.set(etDate, await fetchRanksOn(Number(etDate.slice(0, 4)), etDate));
     }
-    const ranks = rankCache.get(etDate);
+    // ポストシーズンの leagueRecord は**シリーズの勝敗**で、順位はレギュラーシーズンの確定値＝試合結果ボックスに
+    // 「1勝0敗」「地区1位」と出すと今季の成績に読める。号数（seasonStats）もポストシーズン通算になるので
+    // 「今季◯号」と区別できない。ポストシーズンの試合はこの3つを書かない（スコア・線スコア・勝敗投手・打者は書く）。
+    const isPs = PS_GAME_TYPES.has(g.gameType);
+    const ranks = isPs ? new Map() : rankCache.get(etDate);
     const homers = await fetchHomers(g.gamePk); // 本塁打の打者（取れなければ null）
     /** API の1チーム分を JSON の1行（インライン）に組む。取れなかった項目は書かない＝捏造しない。 */
     const sideLine = (src, enName, hrs) => {
@@ -1586,7 +1613,7 @@ async function runBackfillGames({ apply, force } = {}) {
       if (src.hits != null) parts.push(`"hits": ${src.hits}`);
       if (src.errors != null) parts.push(`"errors": ${src.errors}`);
       if (src.lob != null) parts.push(`"lob": ${src.lob}`);
-      if (src.record) parts.push(`"record": { "w": ${src.record.w}, "l": ${src.record.l} }`);
+      if (src.record && !isPs) parts.push(`"record": { "w": ${src.record.w}, "l": ${src.record.l} }`);
       const r = ranks.get(src.teamId);
       if (r) parts.push(`"rank": ${r.rank}, "league": "${r.league}", "division": "${r.division}"`);
       if (hrs?.length) {
@@ -1594,7 +1621,7 @@ async function runBackfillGames({ apply, force } = {}) {
           .map((p) =>
             `{ "id": ${p.id}, "name": ${JSON.stringify(p.name)}` +
             (p.hr > 1 ? `, "hr": ${p.hr}` : '') +
-            (p.no != null ? `, "no": ${p.no}` : '') +
+            (p.no != null && !isPs ? `, "no": ${p.no}` : '') +
             ' }',
           )
           .join(', ');

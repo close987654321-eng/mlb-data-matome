@@ -81,6 +81,7 @@ SSG します。
     ├── journal-next.mjs        # 観測日誌の「次の見どころ」を公式スケジュールから機械生成（毎時CI・§4.7+）
     ├── fighter-journal-gaps.mjs # ファイターLPの日誌の取りこぼし検出（kpi-weekly Step 2c・上の格闘技版）
     ├── check-editor-notes.mjs  # 編集部ノートの引用が実在コメントか逐語照合（§4.7）
+    ├── check-comment-overlap.mjs # 記事どうしの引用コメントの重複検査（ポストシーズンの試合記事⇔日次記事・§4）
     ├── check-affiliate-links.mjs # 貼ってあるアフィリンクの死活検査（kpi-weekly Step 2b・§8）
     ├── editor-note-candidates.mjs # 編集部ノートの鮮度検出＋素材抽出（チーム/選手/ファイター・§4.7）
     └── threads-update.md       # 更新手順
@@ -116,6 +117,8 @@ matome 委譲）は **`jp-games` スキル**（`.claude/skills/jp-games/SKILL.md
 現地コメントを証言として差し込む読み物）→③残り全員ひと言ずつ→④きょうの現地ざわつき→⑤きょうの1枚
 （カード配布・保存/転載OK）→⑥あすの日本人。**日本人が絡む試合はこの日次記事に集約**し、jp-games の
 個別記事はライバル（非日本人）だけの試合に限る＝同じ日の記事どうしが食い合うのを避けるため（2026-07-30 合意）。
+**例外＝ポストシーズン**は日本人の有無に関係なく全試合を個別記事にする（2026-09-26 合意）。日次記事は続けるが、
+同じ動画を使うときは引用コメントを重ねない（`scripts/check-comment-overlap.mjs --with` で照合）。段取りの正は jp-games。
 ネタの**発見**（YouTube 定点監視・MLB ライバル枠・興行カレンダー・Reddit 巡回注文）は **`neta-radar`
 スキル**（`.claude/skills/neta-radar/SKILL.md`）。「今日のネタある？」「ネタ探して」等で発動し、候補
 チケットを出して matome / jp-games に委譲する（記事化はしない）。
