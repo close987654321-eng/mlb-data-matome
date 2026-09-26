@@ -33,6 +33,12 @@ const DIV_JA = {
   AL: 'ア・リーグ', NL: 'ナ・リーグ',
   East: '東地区', Central: '中地区', West: '西地区',
 };
+/** ラウンド名（F/D/L/W → 日本語）。表記の正は src/lib/postseason.ts の ROUND_NAME＝そこから読む。 */
+const ROUND_JA = Object.fromEntries(
+  [...readFileSync(path.join(root, 'src/lib/postseason.ts'), 'utf8').matchAll(/^ {2}([FDLW]): \{ ja: '([^']+)'/gm)].map(
+    (m) => [m[1], m[2]],
+  ),
+);
 
 const args = process.argv.slice(2);
 const topIdx = args.indexOf('--top');
@@ -77,6 +83,10 @@ function gamesOf(teamId) {
         s: home ? g.hs : g.as,
         os: home ? g.as : g.hs,
         no: g.no,
+        // ポストシーズンだけ: 自軍視点のシリーズの勝敗（その試合終了時点）。今季の勝敗ではない。
+        ps: g.ps
+          ? { ...g.ps, w: home ? g.ps.hw : g.ps.aw, l: home ? g.ps.aw : g.ps.hw }
+          : undefined,
       };
     });
 }
@@ -95,6 +105,50 @@ for (const [id, slug] of Object.entries(TEAM_SLUG)) {
   const g = today[0];
   const win = g.s > g.os;
   const margin = Math.abs(g.s - g.os);
+  if (g.ps) {
+    // ポストシーズン: standings.json はレギュラーシーズン終了時点で止まっている＝順位・連勝・直近10試合は
+    // この試合の文脈ではない。事実はシリーズの勝敗（team-games.json の ps）だけから引く。
+    const { r, g: n, bo, w, l } = g.ps;
+    const need = bo ? Math.ceil(bo / 2) : null;
+    const hasRec = w != null && l != null;
+    const decided = hasRec && need != null && (w === need || l === need);
+    const matchPoint = hasRec && need != null && !decided && (w === need - 1 || l === need - 1);
+    const series = !hasRec
+      ? ''
+      : decided
+        ? `・${w}勝${l}敗で${w === need ? (r === 'W' ? '世界一' : '突破') : '敗退'}`
+        : `・シリーズ${w}勝${l}敗`;
+    let score = 1; // ポストシーズンの試合はすべて候補に出す（節目は下で加点）
+    const why = [ROUND_JA[r] ?? r];
+    if (decided) {
+      score += 3;
+      why.push(w === need ? (r === 'W' ? '世界一' : 'シリーズ突破') : '敗退');
+    } else if (matchPoint) {
+      score += 1;
+      why.push(w === l ? '最終戦へ' : w === need - 1 ? '王手' : '王手をかけられた');
+    }
+    if (margin === 1) {
+      score += 1;
+      why.push('1点差');
+    }
+    if (margin >= 8) {
+      score += 1;
+      why.push(`${margin}点差`);
+    }
+    cands.push({
+      slug,
+      nameJa: row.nameJa,
+      date,
+      score,
+      why,
+      facts: [
+        `この試合: ${win ? '○' : '●'} ${g.s}-${g.os} ${g.oppJa}戦（${g.home ? 'ホーム' : 'ビジター'}）`,
+        `ラウンド: ${ROUND_JA[r] ?? r} 第${n}戦${series}`,
+        `直近の並び: ${all.slice(0, 6).map((x) => `${x.d.slice(5)}${x.s > x.os ? '○' : '●'}${x.s}-${x.os}${x.oppJa}${x.ps ? `(${ROUND_JA[x.ps.r] ?? x.ps.r}第${x.ps.g}戦)` : ''}`).join(' ')}`,
+      ],
+    });
+    continue;
+  }
   // 直近3試合が同じ相手＝スイープ（3連勝/3連敗）か
   const last3 = all.slice(0, 3);
   const sweptFor =

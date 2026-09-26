@@ -2970,16 +2970,24 @@ function jstDateOf(iso) {
  *
  * ⚠️ 日付は **JST**（gameDate を Asia/Tokyo に直した日）。記事の series.date が JST なので、
  * ET の officialDate をそのまま入れると1日ズレて記事と突き合わせできない（ET夜の試合＝JST翌日）。
+ *
+ * ポストシーズン（F/D/L/W）も同じ配列に入れる（2026-09-26）。以前は gameType=R だけを取っていたので、
+ * 10月は進出チームのLPでタイムラインが9月末で止まって見えた。ポストシーズンの行だけ `ps` を持つ
+ * ＝ラウンド・第何戦・何戦制と、**その試合終了時点のシリーズの勝敗**。
+ * ⚠️ ポストシーズンの leagueRecord は今季の勝敗ではなくシリーズの勝敗（2025年の実データで確認:
+ * NLCS 第4戦のドジャースは 4-0）。今季の勝敗として扱わないよう、キーを ps の中に閉じ込めている。
  */
 async function runTeamGames(season, asOf, days = 30) {
   const to = etToday();
   const from = addDays(to, -days);
   const data = await getJson(
-    `${BASE}/schedule?sportId=1&startDate=${from}&endDate=${to}&gameType=R`,
+    `${BASE}/schedule?sportId=1&startDate=${from}&endDate=${to}&gameType=R,${[...PS_GAME_TYPES].join(',')}`,
   );
   const all = (data.dates ?? []).flatMap((d) => d.games ?? []);
   const games = [];
+  // 30球団そろっているかはレギュラーシーズンの試合だけで数える（ポストシーズンは最大12球団）。
   const teamsSeen = new Set();
+  const regularDates = new Set();
   for (const g of all) {
     // 確定した試合だけ。未消化・中止・サスペンデッド継続中は載せない（結果が無い行を作らない）。
     if ((g.status?.abstractGameState ?? '') !== 'Final') continue;
@@ -2989,7 +2997,14 @@ async function runTeamGames(season, asOf, days = 30) {
     const hId = h?.team?.id;
     if (!TEAM_ID_JA[aId] || !TEAM_ID_JA[hId]) continue;
     if (a?.score == null || h?.score == null) continue;
-    teamsSeen.add(aId).add(hId);
+    const post = PS_GAME_TYPES.has(g.gameType);
+    if (!post) {
+      teamsSeen.add(aId).add(hId);
+      regularDates.add(g.officialDate);
+    }
+    const aw = a.leagueRecord?.wins;
+    const hw = h.leagueRecord?.wins;
+    const n = g.seriesGameNumber;
     games.push({
       d: jstDateOf(g.gameDate),
       a: aId,
@@ -2998,10 +3013,24 @@ async function runTeamGames(season, asOf, days = 30) {
       hs: h.score,
       // ダブルヘッダーだけ試合番号を持つ＝同じ日・同じ相手の2試合を区別する
       ...(g.doubleHeader === 'Y' && g.gameNumber ? { no: g.gameNumber } : {}),
+      // シリーズの勝敗は「両軍の勝ち数の和＝第何戦」で辻褄が合うときだけ書く（合わない値は出さない）。
+      ...(post && n
+        ? {
+            ps: {
+              r: g.gameType,
+              g: n,
+              ...(g.gamesInSeries ? { bo: g.gamesInSeries } : {}),
+              ...(Number.isInteger(aw) && Number.isInteger(hw) && aw + hw === n ? { aw, hw } : {}),
+            },
+          }
+        : {}),
     });
   }
   if (games.length === 0) throw new Error('team-games: 確定した試合が0件＝異常とみなし書き込み中止');
-  if (teamsSeen.size < 30) {
+  // 全球団の検査はレギュラーシーズンの日が窓に7日以上あるときだけ。シーズン終了から窓が進むと
+  // （10月末〜）レギュラーの試合が窓から消えるので、無条件に検査するとワールドシリーズの試合が
+  // 書けなくなる。開幕直後の少数試合の日（海外開幕シリーズ等）も同じ理由で誤検知しない。
+  if (regularDates.size >= 7 && teamsSeen.size < 30) {
     throw new Error(`team-games: 出現球団が ${teamsSeen.size}（30想定）＝異常とみなし書き込み中止`);
   }
   games.sort((x, y) => y.d.localeCompare(x.d) || (y.no ?? 0) - (x.no ?? 0) || x.a - y.a);

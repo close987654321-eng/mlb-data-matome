@@ -506,7 +506,12 @@
     "gameLoss": "Loss",
     "gameFromDaily": "Covered in the daily digest",
     "gameHomers": "HR: {names}",
-    "gameNoteBy": "Editor's note"
+    "gameNoteBy": "Editor's note",
+    "gamePostseason": "{round} Game {game}",
+    "gameSeries": "Series {w}-{l}",
+    "gameSeriesWon": "Won series {w}-{l}",
+    "gameSeriesLost": "Lost series {w}-{l}",
+    "gameSeriesChampion": "Won the World Series {w}-{l}"
   },
   "daily": {
     "threeLines": "Today in 3 lines",

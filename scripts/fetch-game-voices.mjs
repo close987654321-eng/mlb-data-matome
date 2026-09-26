@@ -174,8 +174,74 @@ function articleVoiceKeys() {
 
 /* ------------------------------------------------------------------ 動画の同定 */
 
+const MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+const pad2 = (n) => String(n).padStart(2, '0');
+
+/** "2026-10-17" を n 日ずらす。Date は正午UTC固定で TZ 事故を避ける。 */
+function addDays(dateStr, n) {
+  const d = new Date(`${dateStr}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
 /**
- * MLB公式の投稿一覧から `AWAY vs. HOME: Official Full Game Highlights (Month D)` を集める。
+ * MLB公式の試合ハイライトのタイトルを読む。書式は2系統ある:
+ *  - レギュラーシーズン（2026）: `BREWERS vs. ORIOLES: Official Full Game Highlights (September 20) | 2026 MLB Season`
+ *  - ポストシーズン（2025年の実タイトル）: `Brewers vs. Dodgers NLCS Game 4 Highlights (10/17/25) | MLB Highlights`
+ *    ／`Padres vs. Cubs NL Wild Card Game 3 Highlights (10/2/25)`／`Dodgers vs. Phillies NL Divisional Series Game 1 …`
+ *    ／`Tigers vs. Mariners Game Highlights (10/4/25)`（ラウンドも第何戦も無い回があった）。日付のゼロ埋めは不統一。
+ * 2026年のポストシーズンの書式は未確認なので、ラウンド・第何戦・日付（月名／数字）をそれぞれ独立に拾う。
+ * `etMd` は現地(ET)の試合日の月日（"10-17"）＝月名表記には年が無いので月日だけ持つ。
+ * 「◯◯ Game (N) Highlights (日付)」の形でないもの（名場面集・会見・1プレー動画）は null。
+ */
+function parseHighlightTitle(title) {
+  const date = title.match(/\bGame(?: \d)? Highlights \((?:([A-Za-z]+) (\d{1,2})|(\d{1,2})\/(\d{1,2})\/\d{2,4})\)/);
+  const teams = title.match(
+    /^(.+?) vs\. (.+?)(?=:| [AN]L\b| [AN]L[DC]S\b| World Series\b| Wild Card\b| Game (?:\d|Highlights))/,
+  );
+  if (!date || !teams) return null;
+  const month = date[1] ? MONTHS.indexOf(date[1].toLowerCase()) + 1 : Number(date[3]);
+  const day = Number(date[1] ? date[2] : date[4]);
+  if (!(month >= 1 && month <= 12) || !(day >= 1 && day <= 31)) return null;
+  const round = /\bWorld Series\b/.test(title)
+    ? 'W'
+    : /\b[AN]L ?CS\b|Championship Series/.test(title)
+      ? 'L'
+      : /\b[AN]L ?DS\b|Division(?:al)? Series/.test(title)
+        ? 'D'
+        : /\bWild Card\b/.test(title)
+          ? 'F'
+          : null;
+  const gameNo = title.match(/\bGame (\d)\b/);
+  return {
+    awayEn: teams[1].trim(),
+    homeEn: teams[2].trim(),
+    etMd: `${pad2(month)}-${pad2(day)}`,
+    round,
+    gameNo: gameNo ? Number(gameNo[1]) : null,
+  };
+}
+
+/**
+ * その動画がその試合（data/team-games.json の1行）のハイライトか。
+ * チームは主客の向きまで一致・タイトルの日付は現地の試合日（JST の試合日の当日か前日＝ET夜はJST翌日）。
+ * レギュラーシーズンは従来どおり投稿日（JST）＝試合日で絞る。ポストシーズンはラウンドと第何戦も
+ * 突き合わせる（同じ2球団が同じポストシーズンで2度当たることは無い＝第何戦まで合えば1本に決まる）。
+ */
+function videoMatchesGame(v, g, teams) {
+  const a = teams.byUpperEn.get(v.awayEn.toUpperCase());
+  const h = teams.byUpperEn.get(v.homeEn.toUpperCase());
+  if (a?.id !== g.a || h?.id !== g.h) return false;
+  if (![g.d, addDays(g.d, -1)].some((d) => d.slice(5) === v.etMd)) return false;
+  if (!g.ps) return !v.round && !v.gameNo && v.jst === g.d;
+  if (v.round && v.round !== g.ps.r) return false;
+  if (v.gameNo) return v.gameNo === g.ps.g && v.jst >= g.d && v.jst <= addDays(g.d, 1);
+  // ラウンドも第何戦も書いていない回（2025年 ALDS 第1戦で実例）はレギュラーと同じく投稿日で絞る。
+  return v.jst === g.d;
+}
+
+/**
+ * MLB公式の投稿一覧から試合ハイライト（parseHighlightTitle が読める動画）を集める。
  * 全試合ぶん確実に存在する唯一の定型枠＝ここだけを見る（検索は 100 ユニット/回で高い）。
  */
 async function fetchHighlightVideos(key, sinceJst) {
@@ -199,14 +265,11 @@ async function fetchHighlightVideos(key, sinceJst) {
       const publishedAt = it.contentDetails?.videoPublishedAt ?? it.snippet?.publishedAt;
       if (!publishedAt) continue;
       oldest = jstDateOf(publishedAt);
-      const m = (it.snippet?.title ?? '').match(
-        /^(.+?) vs\. (.+?): Official Full Game Highlights \(([A-Za-z]+ \d+)\)/,
-      );
-      if (!m) continue;
+      const parsed = parseHighlightTitle(it.snippet?.title ?? '');
+      if (!parsed) continue;
       videos.push({
         videoId: it.contentDetails?.videoId ?? it.snippet?.resourceId?.videoId,
-        awayEn: m[1],
-        homeEn: m[2],
+        ...parsed,
         jst: jstDateOf(publishedAt),
       });
     }
@@ -452,13 +515,9 @@ async function main() {
 
   for (const g of targets.slice(0, limit)) {
     const awayJa = teams.byId.get(g.a);
-    const homeJa = teams.byId.get(g.h);
-    const cands = videos.filter((v) => {
-      const a = teams.byUpperEn.get(v.awayEn.toUpperCase());
-      const h = teams.byUpperEn.get(v.homeEn.toUpperCase());
-      // 動画の投稿は試合直後＝投稿の JST 日付が試合の JST 日付と一致する（ET夜＝JST翌日も揃う）
-      return a?.id === g.a && h?.id === g.h && v.jst === g.d;
-    });
+    // ポストシーズンはログにラウンドと第何戦を添える（同じカードが連日並ぶので見分けがつくように）
+    const homeJa = `${teams.byId.get(g.h)}${g.ps ? ` [${g.ps.r}-G${g.ps.g}]` : ''}`;
+    const cands = videos.filter((v) => videoMatchesGame(v, g, teams));
     // ダブルヘッダーはタイトルに試合番号が無く、どちらの試合か決められない＝取らない（推測しない）
     if (cands.length !== 1) {
       noVideo++;

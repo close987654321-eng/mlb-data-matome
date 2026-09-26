@@ -506,7 +506,12 @@
     "gameLoss": "負け",
     "gameFromDaily": "この日のまとめで触れている",
     "gameHomers": "本塁打 {names}",
-    "gameNoteBy": "中の人メモ"
+    "gameNoteBy": "中の人メモ",
+    "gamePostseason": "{round} 第{game}戦",
+    "gameSeries": "シリーズ{w}勝{l}敗",
+    "gameSeriesWon": "{w}勝{l}敗で突破",
+    "gameSeriesLost": "{w}勝{l}敗で敗退",
+    "gameSeriesChampion": "{w}勝{l}敗で世界一"
   },
   "daily": {
     "threeLines": "きょうの3行",

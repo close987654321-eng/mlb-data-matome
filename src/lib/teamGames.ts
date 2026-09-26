@@ -4,6 +4,7 @@ import { gameDateOf } from './gameSeo';
 import { getTeam, getTeamById } from './teams';
 import { allComments } from './daily';
 import type { GameVoice } from './gameVoices';
+import type { Round } from './postseason';
 import type { StoryBlock, Thread, ThreadComment, ThreadHomer } from '@/types/thread';
 
 /**
@@ -27,6 +28,11 @@ type ScheduleGame = {
   as: number; // ビジターの得点
   hs: number; // ホームの得点
   no?: number; // ダブルヘッダーの試合番号
+  /**
+   * ポストシーズンの試合だけ: ラウンド・第何戦・何戦制と、その試合終了時点の**シリーズの勝敗**
+   * （aw=ビジター・hw=ホームの勝ち数）。今季の勝敗ではないので、行に出すときもシリーズとして出す。
+   */
+  ps?: { r: Round; g: number; bo?: number; aw?: number; hw?: number };
 };
 export type TeamSchedule = { asOf: string; season: number; from: string; to: string; games: ScheduleGame[] };
 
@@ -57,6 +63,8 @@ export type TeamGameRow = {
   win: boolean | null;
   /** ダブルヘッダーの試合番号（通常の試合は無い）。 */
   gameNo?: number;
+  /** ポストシーズンの試合だけ: ラウンド・第何戦と、自軍視点のシリーズの勝敗（その試合終了時点）。 */
+  post?: { round: Round; game: number; bestOf?: number; wins?: number; losses?: number };
   /** その試合を扱った記事。無い試合は結果だけの行になる。 */
   thread: Thread | null;
   /** 記事がその試合そのもののまとめか（false = 日次記事の中で触れているだけ）。表示の出し分けに使う。 */
@@ -228,6 +236,17 @@ export function teamGameRows(
     const homers = homersOf(src, isHome);
     // 記事が声を持たない試合だけ声レイヤーで埋める（記事の声のほうが編集済みで文脈も濃い）。
     const lay = src?.comment ? undefined : layer.get(key);
+    const ps = g.ps;
+    const post = ps
+      ? {
+          round: ps.r,
+          game: ps.g,
+          ...(ps.bo ? { bestOf: ps.bo } : {}),
+          ...(ps.aw != null && ps.hw != null
+            ? { wins: isHome ? ps.hw : ps.aw, losses: isHome ? ps.aw : ps.hw }
+            : {}),
+        }
+      : undefined;
     rows.push({
       date: g.d,
       home: isHome,
@@ -237,6 +256,7 @@ export function teamGameRows(
       oppEn: opp.info.nameEn,
       win: score === oppScore ? null : score > oppScore,
       ...(g.no ? { gameNo: g.no } : {}),
+      ...(post ? { post } : {}),
       thread: src?.thread ?? null,
       dedicated: src?.dedicated ?? false,
       voice: src?.comment ?? lay?.comment ?? null,

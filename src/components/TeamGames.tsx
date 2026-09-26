@@ -3,6 +3,7 @@ import { Link } from '@/lib/navigation';
 import SectionHeading from '@/components/SectionHeading';
 import { threadTitle } from '@/lib/series';
 import { playerLabel } from '@/lib/playerNames';
+import { roundName } from '@/lib/postseason';
 import type { TeamGameRow } from '@/lib/teamGames';
 import type { Locale } from '@/lib/i18n';
 
@@ -64,8 +65,26 @@ export default async function TeamGames({
     }),
   );
 
+  /**
+   * ポストシーズンの行に添える「地区シリーズ 第2戦・シリーズ2勝0敗」。勝敗は**シリーズの**勝敗
+   * （その試合終了時点）＝今季の勝敗と取り違えないよう、必ず「シリーズ」か突破/敗退の言葉と一緒に出す。
+   */
+  const postLabel = (post: NonNullable<TeamGameRow['post']>): string => {
+    const head = t('tag.gamePostseason', { round: roundName(post.round, en), game: post.game });
+    if (post.wins == null || post.losses == null) return head;
+    const need = post.bestOf ? Math.ceil(post.bestOf / 2) : null;
+    const rec = { w: post.wins, l: post.losses };
+    const tail =
+      need && post.wins === need
+        ? t(post.round === 'W' ? 'tag.gameSeriesChampion' : 'tag.gameSeriesWon', rec)
+        : need && post.losses === need
+          ? t('tag.gameSeriesLost', rec)
+          : t('tag.gameSeries', rec);
+    return `${head}${en ? ' · ' : '・'}${tail}`;
+  };
+
   const items = rows.map((row, i) => {
-    const { date, score, oppScore, oppJa, oppEn, win, home, gameNo, thread, dedicated, voice, voiceUrl } =
+    const { date, score, oppScore, oppJa, oppEn, win, home, gameNo, post, thread, dedicated, voice, voiceUrl } =
       row;
     const mark = win == null ? '－' : en ? (win ? 'W' : 'L') : win ? '○' : '●';
     const [, m, d] = date.split('-');
@@ -107,12 +126,14 @@ export default async function TeamGames({
         )}
       </div>
     );
+    const postLine = post ? <p className="mt-1 pl-14 text-xs text-ink-mute">{postLabel(post)}</p> : null;
 
     return (
       <li key={`${date}-${oppJa}-${gameNo ?? 0}-${score}-${oppScore}`} className="py-3.5">
         {thread ? (
           <Link href={`/${thread.sport}/${thread.id}`} className="group block">
             {head}
+            {postLine}
             {homerLines[i] && (
               <p className="mt-1.5 pl-14 text-xs text-ink-mute">
                 {t('tag.gameHomers', { names: homerLines[i]! })}
@@ -127,7 +148,10 @@ export default async function TeamGames({
             </p>
           </Link>
         ) : (
-          head
+          <>
+            {head}
+            {postLine}
+          </>
         )}
         {/* その試合の現地の声＝タイムラインを「結果表」で終わらせない。記事が無い試合は
             声レイヤー（公式ハイライトのコメント1件）が埋め、著者名が引用元動画への送客になる。 */}
