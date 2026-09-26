@@ -50,7 +50,10 @@ const norm = (s) => s.replace(/\s+/g, ' ').trim();
 function bodies(node, acc = []) {
   if (Array.isArray(node)) node.forEach((x) => bodies(x, acc));
   else if (node && typeof node === 'object') {
-    if (typeof node.bodyEn === 'string' && node.bodyEn.trim()) acc.push(`${node.author ?? ''}\u0000${norm(node.bodyEn)}`);
+    // 日本語ソースのコメントは bodyEn が空で bodyJa が原文（matome R7+）＝原文側で照合する。
+    // 英語コメントの bodyJa は訳なので使わない（訳の言い回しが偶然重なっても同じコメントではない）。
+    const original = typeof node.bodyEn === 'string' && node.bodyEn.trim() ? node.bodyEn : node.author && typeof node.bodyJa === 'string' && node.bodyEn === '' ? node.bodyJa : null;
+    if (original && original.trim()) acc.push(`${node.author ?? ''}\u0000${norm(original)}`);
     for (const v of Object.values(node)) if (v && typeof v === 'object') bodies(v, acc);
   }
   return acc;
