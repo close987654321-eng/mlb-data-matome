@@ -3,7 +3,7 @@ import NavLink from '@/components/NavLink';
 import { ALLSTAR } from '@/lib/allstar';
 
 /**
- * 日本人選手クラスタ（選手成績 / 賞レースボード / ランキング / オールスター / NEXT MLB）の横断タブ。
+ * 日本人選手クラスタ（選手成績 / ポストシーズン / 賞レースボード / ランキング / オールスター / NEXT MLB）の横断タブ。
  * グローバルヘッダーには「選手成績」だけを置き、子ハブへの導線はこのタブが受け持つ
  * ＝ヘッダーの MLB 項目肥大を解消しつつ、クラスタ内の相互リンク（トピッククラスタ）を
  * コンテンツ上部で明示する（SEO/AEO）。オールスターは会期フラグ（ALLSTAR.enabled）で
@@ -22,6 +22,10 @@ export default function PlayerHubNav() {
       </NavLink>
       <NavLink href="/daily" className={item}>
         {t('nav.daily')}
+      </NavLink>
+      {/* 年号なしの恒久ハブ＝閉幕後も結果のアーカイブとして出し続ける（翌年9月に次の年へ切り替わる）。 */}
+      <NavLink href="/postseason" className={item}>
+        {t('nav.postseason')}
       </NavLink>
       <NavLink href="/mvp" className={item}>
         {t('nav.mvp')}

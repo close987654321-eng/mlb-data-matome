@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/navigation';
 import { getAllTags } from '@/lib/tags';
 import { divisionOfTeam, divisionLabel, getStandings } from '@/lib/standings';
+import { getPostseason, postseasonStatusOf } from '@/lib/postseason';
 import { teamLogoUrl } from '@/lib/teams';
 import { teamHubOf, TEAM_HUB_MIN_ARTICLES } from '@/lib/teamHub';
 import SectionHeading from '@/components/SectionHeading';
@@ -13,13 +14,18 @@ import type { Locale } from '@/lib/i18n';
  * リンク＝チームLP同士の相互回遊網を順位表が兼ねる。未生成なら何も描画しない（ビルド安全）。
  */
 export default async function TeamStandings({ teamId, locale }: { teamId: number; locale: Locale }) {
-  const [division, { asOf }, tags] = await Promise.all([
+  const [division, { asOf, season }, tags, postseason] = await Promise.all([
     divisionOfTeam(teamId),
     getStandings(),
     getAllTags(),
+    getPostseason(),
   ]);
   if (!division) return null;
   const t = await getTranslations();
+  // 9月下旬〜10月は「このチームはポストシーズンに出るのか・どこまで勝ち上がったか」が順位表の次の問い。
+  // 答えを1行で添えて /postseason（トーナメント表）へ送る。前年のアーカイブ表示中（年が違う）は出さない。
+  const psStatus = postseason && postseason.season === season ? postseasonStatusOf(postseason, teamId) : null;
+  const en = locale === 'en';
   // LP昇格済みのチームタグだけリンク化（薄いタグページへ誘導しない＝isTagIndexable と同じ規律）。
   const linkable = new Set(
     tags
@@ -90,6 +96,18 @@ export default async function TeamStandings({ teamId, locale }: { teamId: number
         </table>
       </div>
       {asOf && <p className="mt-2 text-xs text-ink-mute">{t('standings.asOf', { date: asOf })}</p>}
+      {psStatus && (
+        <p className="mt-3 text-sm text-ink">
+          <span className="text-ink-soft">{en ? 'Postseason: ' : 'ポストシーズン：'}</span>
+          <span className="font-semibold">{en ? psStatus.en : psStatus.ja}</span>
+          <Link
+            href="/postseason"
+            className="ml-2 text-ink-soft underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
+          >
+            {en ? 'Full bracket →' : 'トーナメント表を見る →'}
+          </Link>
+        </p>
+      )}
     </section>
   );
 }

@@ -1,0 +1,1436 @@
+{
+  "asOf": "2026-09-26 17:22",
+  "champion": null,
+  "dates": {
+    "postStart": "2026-09-28",
+    "regularEnd": "2026-09-27"
+  },
+  "phase": "race",
+  "race": {
+    "AL": [
+      {
+        "clinch": "z",
+        "divElim": "-",
+        "division": "East",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 139,
+        "l": 63,
+        "nameJa": "レイズ",
+        "pct": ".606",
+        "remaining": 2,
+        "w": 97,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "x",
+        "divElim": "-",
+        "division": "Central",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 114,
+        "l": 76,
+        "nameJa": "ガーディアンズ",
+        "pct": ".525",
+        "remaining": 2,
+        "w": 84,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": null,
+        "divElim": "-",
+        "division": "West",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 117,
+        "l": 81,
+        "nameJa": "アストロズ",
+        "pct": ".494",
+        "remaining": 2,
+        "w": 79,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "East",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "4.5",
+        "id": 147,
+        "l": 68,
+        "nameJa": "ヤンキース",
+        "pct": ".578",
+        "remaining": 1,
+        "w": 93,
+        "wcElim": "-",
+        "wcGb": "+9.5",
+        "wcRank": 1
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "East",
+        "divisionLeader": false,
+        "divisionRank": 3,
+        "gb": "10.5",
+        "id": 111,
+        "l": 74,
+        "nameJa": "レッドソックス",
+        "pct": ".540",
+        "remaining": 1,
+        "w": 87,
+        "wcElim": "-",
+        "wcGb": "+3.5",
+        "wcRank": 2
+      },
+      {
+        "clinch": "x",
+        "divElim": "2",
+        "division": "Central",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "1.0",
+        "id": 145,
+        "l": 77,
+        "nameJa": "ホワイトソックス",
+        "pct": ".519",
+        "remaining": 2,
+        "w": 83,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": 3
+      },
+      {
+        "clinch": null,
+        "divElim": "-",
+        "division": "West",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "-",
+        "id": 140,
+        "l": 81,
+        "nameJa": "レンジャーズ",
+        "pct": ".494",
+        "remaining": 2,
+        "w": 79,
+        "wcElim": "E",
+        "wcGb": "4.0",
+        "wcRank": 4
+      }
+    ],
+    "NL": [
+      {
+        "clinch": "z",
+        "divElim": "-",
+        "division": "Central",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 158,
+        "l": 59,
+        "nameJa": "ブルワーズ",
+        "pct": ".631",
+        "remaining": 2,
+        "w": 101,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "y",
+        "divElim": "-",
+        "division": "West",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 119,
+        "l": 62,
+        "nameJa": "ドジャース",
+        "pct": ".613",
+        "remaining": 2,
+        "w": 98,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "y",
+        "divElim": "-",
+        "division": "East",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 144,
+        "l": 67,
+        "nameJa": "ブレーブス",
+        "pct": ".581",
+        "remaining": 2,
+        "w": 93,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "West",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "9.0",
+        "id": 135,
+        "l": 71,
+        "nameJa": "パドレス",
+        "pct": ".556",
+        "remaining": 2,
+        "w": 89,
+        "wcElim": "-",
+        "wcGb": "+2.0",
+        "wcRank": 1
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "Central",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "13.5",
+        "id": 112,
+        "l": 73,
+        "nameJa": "カブス",
+        "pct": ".547",
+        "remaining": 1,
+        "w": 88,
+        "wcElim": "-",
+        "wcGb": "+0.5",
+        "wcRank": 2
+      },
+      {
+        "clinch": null,
+        "divElim": "E",
+        "division": "East",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "6.0",
+        "id": 143,
+        "l": 73,
+        "nameJa": "フィリーズ",
+        "pct": ".544",
+        "remaining": 2,
+        "w": 87,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": 3
+      },
+      {
+        "clinch": null,
+        "divElim": "E",
+        "division": "West",
+        "divisionLeader": false,
+        "divisionRank": 3,
+        "gb": "12.0",
+        "id": 109,
+        "l": 74,
+        "nameJa": "ダイヤモンドバックス",
+        "pct": ".538",
+        "remaining": 2,
+        "w": 86,
+        "wcElim": "2",
+        "wcGb": "1.0",
+        "wcRank": 4
+      }
+    ]
+  },
+  "season": 2026,
+  "series": [
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": null,
+        "placeholder": "HOU/TEX",
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-29",
+          "gamePk": 849849,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-09-29T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-30",
+          "gamePk": 849846,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-09-30T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-01",
+          "gamePk": 849850,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 3,
+          "start": "2026-10-01T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "F_1",
+      "label": "A",
+      "league": "AL",
+      "round": "F",
+      "top": {
+        "id": null,
+        "placeholder": "CWS/CLE",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": 147,
+        "nameJa": "ヤンキース",
+        "seed": 4,
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": 111,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-29",
+          "gamePk": 849851,
+          "home": {
+            "id": 147,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-09-29T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 111,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-30",
+          "gamePk": 849848,
+          "home": {
+            "id": 147,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-09-30T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 111,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-01",
+          "gamePk": 849847,
+          "home": {
+            "id": 147,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 3,
+          "start": "2026-10-01T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "F_2",
+      "label": "B",
+      "league": "AL",
+      "round": "F",
+      "top": {
+        "id": 111,
+        "nameJa": "レッドソックス",
+        "seed": 5,
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": 144,
+        "nameJa": "ブレーブス",
+        "seed": 3,
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-29",
+          "gamePk": 849845,
+          "home": {
+            "id": 144,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-09-29T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-30",
+          "gamePk": 849841,
+          "home": {
+            "id": 144,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-09-30T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-01",
+          "gamePk": 849844,
+          "home": {
+            "id": 144,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 3,
+          "start": "2026-10-01T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "F_3",
+      "label": "A",
+      "league": "NL",
+      "round": "F",
+      "top": {
+        "id": null,
+        "placeholder": "NL Wild Card #3",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": null,
+        "placeholder": "NL Wild Card #1",
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-29",
+          "gamePk": 849843,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-09-29T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-09-30",
+          "gamePk": 849842,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-09-30T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-01",
+          "gamePk": 849840,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 3,
+          "start": "2026-10-01T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "F_4",
+      "label": "B",
+      "league": "NL",
+      "round": "F",
+      "top": {
+        "id": null,
+        "placeholder": "NL Wild Card #2",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": 139,
+        "nameJa": "レイズ",
+        "seed": 1,
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-03",
+          "gamePk": 849835,
+          "home": {
+            "id": 139,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-10-03T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-05",
+          "gamePk": 849839,
+          "home": {
+            "id": 139,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-10-05T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 139,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-07",
+          "gamePk": 849838,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2026-10-07T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 139,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-08",
+          "gamePk": 849837,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 4,
+          "start": "2026-10-08T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-10",
+          "gamePk": 849836,
+          "home": {
+            "id": 139,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 5,
+          "start": "2026-10-10T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "D_1",
+      "label": "A",
+      "league": "AL",
+      "round": "D",
+      "top": {
+        "id": null,
+        "placeholder": "AL 4/5 Winner",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": null,
+        "placeholder": "CLE/CWS",
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-03",
+          "gamePk": 849829,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-10-03T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-05",
+          "gamePk": 849834,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-10-05T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-07",
+          "gamePk": 849833,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2026-10-07T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-08",
+          "gamePk": 849832,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 4,
+          "start": "2026-10-08T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-10",
+          "gamePk": 849831,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 5,
+          "start": "2026-10-10T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "D_2",
+      "label": "B",
+      "league": "AL",
+      "round": "D",
+      "top": {
+        "id": null,
+        "placeholder": "AL 3/6 Winner",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": 158,
+        "nameJa": "ブルワーズ",
+        "seed": 1,
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-03",
+          "gamePk": 849830,
+          "home": {
+            "id": 158,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-10-03T08:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-04",
+          "gamePk": 849825,
+          "home": {
+            "id": 158,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-10-04T08:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 158,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-06",
+          "gamePk": 849826,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2026-10-06T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 158,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-07",
+          "gamePk": 849827,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 4,
+          "start": "2026-10-07T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-09",
+          "gamePk": 849824,
+          "home": {
+            "id": 158,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 5,
+          "start": "2026-10-09T08:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "D_3",
+      "label": "A",
+      "league": "NL",
+      "round": "D",
+      "top": {
+        "id": null,
+        "placeholder": "NL 4/5 Winner",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": 119,
+        "nameJa": "ドジャース",
+        "seed": 2,
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-03",
+          "gamePk": 849828,
+          "home": {
+            "id": 119,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-10-03T10:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-04",
+          "gamePk": 849823,
+          "home": {
+            "id": 119,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-10-04T10:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 119,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-06",
+          "gamePk": 849819,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2026-10-06T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": 119,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-07",
+          "gamePk": 849822,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 4,
+          "start": "2026-10-07T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-09",
+          "gamePk": 849821,
+          "home": {
+            "id": 119,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 5,
+          "start": "2026-10-09T10:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "D_4",
+      "label": "B",
+      "league": "NL",
+      "round": "D",
+      "top": {
+        "id": null,
+        "placeholder": "NL 3/6 Winner",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 7,
+      "bottom": {
+        "id": null,
+        "placeholder": "AL Higher Seed",
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-12",
+          "gamePk": 849820,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-10-12T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-13",
+          "gamePk": 849813,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-10-13T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-15",
+          "gamePk": 849818,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2026-10-15T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-16",
+          "gamePk": 849817,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2026-10-16T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-17",
+          "gamePk": 849816,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 5,
+          "start": "2026-10-17T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-19",
+          "gamePk": 849815,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 6,
+          "start": "2026-10-19T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-20",
+          "gamePk": 849814,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 7,
+          "start": "2026-10-20T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "L_1",
+      "label": null,
+      "league": "AL",
+      "round": "L",
+      "top": {
+        "id": null,
+        "placeholder": "AL Lower Seed",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 7,
+      "bottom": {
+        "id": null,
+        "placeholder": "NL Higher Seed",
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-11",
+          "gamePk": 849809,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-10-11T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-12",
+          "gamePk": 849812,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-10-12T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-14",
+          "gamePk": 849811,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2026-10-14T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-15",
+          "gamePk": 849810,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2026-10-15T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-16",
+          "gamePk": 849808,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 5,
+          "start": "2026-10-16T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-18",
+          "gamePk": 849806,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 6,
+          "start": "2026-10-18T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-19",
+          "gamePk": 849807,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 7,
+          "start": "2026-10-19T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "L_2",
+      "label": null,
+      "league": "NL",
+      "round": "L",
+      "top": {
+        "id": null,
+        "placeholder": "NL Lower Seed",
+        "wins": 0
+      },
+      "winnerId": null
+    },
+    {
+      "bestOf": 7,
+      "bottom": {
+        "id": null,
+        "placeholder": "Higher Seed League Champion",
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-23",
+          "gamePk": 849805,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2026-10-23T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-24",
+          "gamePk": 849802,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2026-10-24T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-26",
+          "gamePk": 849804,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2026-10-26T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-27",
+          "gamePk": 849803,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2026-10-27T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-28",
+          "gamePk": 849799,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 5,
+          "start": "2026-10-28T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-30",
+          "gamePk": 849801,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 6,
+          "start": "2026-10-30T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        },
+        {
+          "away": {
+            "id": null,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-31",
+          "gamePk": 849800,
+          "home": {
+            "id": null,
+            "score": null
+          },
+          "ifNecessary": true,
+          "n": 7,
+          "start": "2026-10-31T07:33:00Z",
+          "state": "Preview",
+          "tbd": true
+        }
+      ],
+      "id": "W_1",
+      "label": null,
+      "league": null,
+      "round": "W",
+      "top": {
+        "id": null,
+        "placeholder": "Lower Seed League Champion",
+        "wins": 0
+      },
+      "winnerId": null
+    }
+  ]
+}

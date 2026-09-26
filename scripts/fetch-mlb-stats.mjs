@@ -260,7 +260,7 @@ async function fetchJapanesePlayers(season) {
  * - 省略          … 今季累計（type=season）
  * 角括弧は %5B/%5D に必ずエンコードする（生 [] だと API が空応答を返す）。
  */
-async function fetchStats(ids, season, { date, start, end } = {}) {
+async function fetchStats(ids, season, { date, start, end, gameType } = {}) {
   let type = 'season';
   let range = '';
   if (date) {
@@ -270,9 +270,32 @@ async function fetchStats(ids, season, { date, start, end } = {}) {
     type = 'byDateRange';
     range = `startDate=${start},endDate=${end},`;
   }
-  const hydrate = `currentTeam,stats(group=%5Bhitting,pitching%5D,type=${type},${range}season=${season})`;
+  // gameType を省略すると API はレギュラーシーズン(R)だけを返す。単日の取得でそれをやると
+  // ポストシーズンの日が「出場0人」になり、jp-daily / jp-games が黙って止まる（2025-10-17 の
+  // NLCS 第4戦で実測）。単日は全種別を含め、期間累計は R のまま＝「今季」にポストシーズンを混ぜない。
+  const gt = gameType ?? (date ? '%5BR,F,D,L,W%5D' : null);
+  const hydrate = `currentTeam,stats(group=%5Bhitting,pitching%5D,type=${type},${range}season=${season}${gt ? `,gameType=${gt}` : ''})`;
   const data = await getJson(`${BASE}/people?personIds=${ids.join(',')}&hydrate=${hydrate}`);
   return data.people ?? [];
+}
+
+/**
+ * シーズンの区切り日（MLB公式 /seasons の実測値・ET）。取れなければ null の項目で返す。
+ * ポストシーズンかどうかは「レギュラーシーズン最終日より後か」で判定する（isPostseasonDate）。
+ */
+async function fetchSeasonDates(season) {
+  const s = await getJson(`${BASE}/seasons?sportId=1&season=${season}`)
+    .then((d) => d.seasons?.[0] ?? {})
+    .catch(() => ({}));
+  return {
+    opener: s.regularSeasonStartDate ?? null,
+    regularEnd: s.regularSeasonEndDate ?? null,
+    postStart: s.postSeasonStartDate ?? null,
+  };
+}
+
+function isPostseasonDate(date, seasonDates) {
+  return Boolean(seasonDates?.regularEnd && seasonDates.postStart && date > seasonDates.regularEnd);
 }
 
 /**
@@ -615,14 +638,20 @@ const HEADER_NOTE = [
  * opts.datePerson/prevPerson … 指定日モードのその日 / 前日まで累計（today・note・delta 用）
  * opts.ranks … 順位表
  */
-function toStatRecord(seasonPerson, { datePerson, prevPerson, ranks, saber } = {}) {
+function toStatRecord(seasonPerson, { datePerson, prevPerson, ranks, saber, postseason = false, psPerson } = {}) {
   const rec = { player: jpName(seasonPerson), team: teamJa(seasonPerson) };
   if (datePerson) {
     const today = dayLine(datePerson);
     if (today) rec.today = today;
     const dh = pickSplit(datePerson, 'hitting');
     const sh = pickSplit(seasonPerson, 'hitting');
-    if (dh && dh.homeRuns && sh && sh.homeRuns) rec.note = `今季${sh.homeRuns}号`;
+    // ポストシーズンの本塁打は今季の号数に数えない（公式記録も別枠）。ポストシーズンの日は
+    // psPerson（ポストシーズン累計）で「ポストシーズン◯号」と数える。今季の累計で数えると
+    // 「今季46号」と誤った号数を焼き込む。累計が取れなかった日は号数ごと出さない。
+    const ph = psPerson ? pickSplit(psPerson, 'hitting') : null;
+    if (postseason) {
+      if (dh && dh.homeRuns && ph && ph.homeRuns) rec.note = `ポストシーズン${ph.homeRuns}号`;
+    } else if (dh && dh.homeRuns && sh && sh.homeRuns) rec.note = `今季${sh.homeRuns}号`;
   }
   const season = seasonLine(seasonPerson);
   if (season) rec.season = season;
@@ -658,22 +687,29 @@ async function runJp(season, { date, asJson, team } = {}) {
   const [ranks, saberMap] = await Promise.all([fetchRanks(season), fetchWar(ids, season)]);
 
   if (date) {
-    const [todayPeople, cumPeople, prevPeople] = await Promise.all([
+    const seasonDates = await fetchSeasonDates(season);
+    const post = isPostseasonDate(date, seasonDates);
+    const [todayPeople, cumPeople, prevPeople, psPeople] = await Promise.all([
       fetchStats(ids, season, { date }),
       fetchStats(ids, season, { start: seasonStart(season), end: date }),
       fetchStats(ids, season, { start: seasonStart(season), end: prevDay(date) }),
+      post ? fetchStats(ids, season, { start: seasonDates.postStart, end: date, gameType: 'P' }) : [],
     ]);
     const cumById = new Map(cumPeople.map((p) => [p.id, p]));
     const prevById = new Map(prevPeople.map((p) => [p.id, p]));
+    const psById = new Map(psPeople.map((p) => [p.id, p]));
     const played = todayPeople
       .filter((p) => pickSplit(p, 'hitting') || pickSplit(p, 'pitching'))
       .filter((p) => matchesTeam(cumById.get(p.id) ?? p, team));
     const recs = played.map((dp) =>
       toStatRecord(cumById.get(dp.id) ?? dp, {
         datePerson: dp,
-        prevPerson: prevById.get(dp.id),
+        // ポストシーズンの日は「今季」がレギュラーシーズンの確定値で動かない＝前回比を出さない。
+        prevPerson: post ? undefined : prevById.get(dp.id),
         ranks,
         saber: saberMap.get(dp.id),
+        postseason: post,
+        psPerson: post ? psById.get(dp.id) : undefined,
       }),
     );
     if (asJson) return console.log(JSON.stringify(recs, null, 2));
@@ -708,17 +744,21 @@ async function runJp(season, { date, asJson, team } = {}) {
 async function runJpDay(season, { date } = {}) {
   const ids = [...new Set([...Object.keys(JP_NAMES).map(Number), ...EXTRA_IDS])];
   // 開幕日＝カードの通し番号（DAY 127）に使う。毎日同じ体裁＋通し番号が「集める」動機になる。
-  const opener = await getJson(`${BASE}/seasons?sportId=1&season=${season}`)
-    .then((d) => d.seasons?.[0]?.regularSeasonStartDate ?? null)
-    .catch(() => null);
+  const seasonDates = await fetchSeasonDates(season);
+  const opener = seasonDates.opener;
+  // ポストシーズンの日は「その試合」を全種別で取り、今季はレギュラーシーズンの確定値のまま、
+  // 別にポストシーズン累計（psSeason）を足す。jp-daily の記事でどちらの数字かを取り違えないため。
+  const post = isPostseasonDate(date, seasonDates);
   const [ranks, saberMap] = await Promise.all([fetchRanks(season), fetchWar(ids, season)]);
-  const [todayPeople, cumPeople, prevPeople] = await Promise.all([
+  const [todayPeople, cumPeople, prevPeople, psPeople] = await Promise.all([
     fetchStats(ids, season, { date }),
     fetchStats(ids, season, { start: seasonStart(season), end: date }),
     fetchStats(ids, season, { start: seasonStart(season), end: prevDay(date) }),
+    post ? fetchStats(ids, season, { start: seasonDates.postStart, end: date, gameType: 'P' }) : [],
   ]);
   const cumById = new Map(cumPeople.map((p) => [p.id, p]));
   const prevById = new Map(prevPeople.map((p) => [p.id, p]));
+  const psById = new Map(psPeople.map((p) => [p.id, p]));
 
   // その日の全試合＝所属チームの勝敗をカードの各行に出すため（「6-3 W」）。取得に失敗しても
   // 成績カード自体は成立するので、空配列にして続行する。
@@ -755,7 +795,15 @@ async function runJpDay(season, { date } = {}) {
     .filter((p) => pickSplit(p, 'hitting') || pickSplit(p, 'pitching'))
     .map((dp) => {
       const cum = cumById.get(dp.id) ?? dp;
-      const rec = toStatRecord(cum, { datePerson: dp, prevPerson: prevById.get(dp.id), ranks, saber: saberMap.get(dp.id) });
+      const ps = psById.get(dp.id);
+      const rec = toStatRecord(cum, {
+        datePerson: dp,
+        prevPerson: post ? undefined : prevById.get(dp.id),
+        ranks,
+        saber: saberMap.get(dp.id),
+        postseason: post,
+        psPerson: ps,
+      });
       const h = pickSplit(dp, 'hitting');
       const p = pickSplit(dp, 'pitching');
       const ch = pickSplit(cum, 'hitting');
@@ -770,6 +818,8 @@ async function runJpDay(season, { date } = {}) {
         today: rec.today ?? '',
         note: rec.note ?? null,
         season: rec.season ?? '',
+        // ポストシーズンの日だけ: ポストシーズン通算の成績行（`season` はレギュラーシーズンの確定値）。
+        psSeason: post && ps ? seasonLine(ps) || null : null,
         war: rec.war ?? null,
         rank: rec.rank ?? null,
         seasonHr: ch ? num(ch.homeRuns) : null, // 節目バッジ（今季◯号）の裏取り用
@@ -792,7 +842,12 @@ async function runJpDay(season, { date } = {}) {
       };
     });
   const day = opener ? Math.floor((Date.parse(`${date}T12:00:00Z`) - Date.parse(`${opener}T12:00:00Z`)) / 86400000) + 1 : null;
-  console.log(JSON.stringify({ date, season, opener, day, players }, null, 2));
+  // 9月下旬〜10月は「その試合がレースにどう効いたか」が記事の主題になる。順位・ゲーム差・確定/敗退と
+  // ポストシーズンの勝ち上がりを、API の値そのままで添える（記事側で計算・推測させない）。
+  // レース終盤（レギュラーシーズン最終日の14日前以降）とポストシーズンの日だけ付ける。取得失敗は null で続行。
+  const late = seasonDates.regularEnd && date >= addDays(seasonDates.regularEnd, -14);
+  const postseasonState = late || post ? await buildPostseasonState(season).catch(() => null) : null;
+  console.log(JSON.stringify({ date, season, opener, day, postseason: post, players, postseasonState }, null, 2));
 }
 
 async function runPlayer(query, season, { asJson } = {}) {
@@ -832,6 +887,25 @@ function addDays(dateStr, n) {
   d.setUTCDate(d.getUTCDate() + n);
   return d.toISOString().slice(0, 10);
 }
+/** ポストシーズンの試合種別（F=ワイルドカードシリーズ D=地区シリーズ L=リーグ優勝決定シリーズ W=ワールドシリーズ）。 */
+const PS_GAME_TYPES = new Set(['F', 'D', 'L', 'W']);
+
+/** 公式ハイライトのタイトルに入るラウンド表記（2025年の実タイトル: "NL Wild Card Game 3" "NLCS Game 4"）。 */
+function psTitleToken(g) {
+  const lg = LEAGUE_BY_TEAM[g.home] ?? LEAGUE_BY_TEAM[g.away] ?? '';
+  if (g.gameType === 'F') return `${lg} Wild Card`;
+  if (g.gameType === 'D') return `${lg}DS`;
+  if (g.gameType === 'L') return `${lg}CS`;
+  return 'World Series';
+}
+
+/** ET 試合日の数字表記（"10/2/25" と "10/02/25"）。2025年のポストシーズンのタイトルは両方が混在した。 */
+function titleDatesNumeric(etDate) {
+  const [y, m, d] = etDate.split('-');
+  const yy = y.slice(2);
+  return [...new Set([`${Number(m)}/${Number(d)}/${yy}`, `${m}/${d}/${yy}`, `${Number(m)}/${d}/${yy}`])];
+}
+
 /** 今日(ET)。既定日（直近に終わった slate = ET 昨日）の算出に使う。 */
 function etToday() {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(new Date());
@@ -890,6 +964,8 @@ async function fetchSchedule(date) {
   };
   return games.map((g) => ({
     gamePk: g.gamePk,
+    gameType: g.gameType,
+    seriesGameNumber: g.seriesGameNumber ?? null,
     etDate: g.officialDate,
     status: g.status?.detailedState ?? g.status?.abstractGameState ?? '',
     doubleHeader: g.doubleHeader === 'Y',
@@ -1037,9 +1113,24 @@ async function gamesForDate(season, date, ids, existing, { team } = {}) {
       selfTeamJa: TEAM_JA[leftEn] ?? leftEn,
       opponentJa: TEAM_JA[rightEn] ?? rightEn,
       suggestedId: `${gameDateJst}-${TEAM_SLUG[leftEn] ?? 'team'}-vs-${TEAM_SLUG[rightEn] ?? 'team'}`,
-      searchQuery: `${g.away} vs. ${g.home} Game Highlights`,
+      searchQuery: PS_GAME_TYPES.has(g.gameType)
+        ? `${g.away} vs. ${g.home} ${psTitleToken(g)} Game ${g.seriesGameNumber ?? 1} Highlights`
+        : `${g.away} vs. ${g.home} Game Highlights`,
       titleDateName: titleDateName(g.etDate),
       titleDateUS: titleDateUS(g.etDate),
+      // ポストシーズンの公式ハイライトは「NLCS Game 4」のようにラウンドと第何戦が入り、2025年は日付が
+      // 数字表記（(10/17/25) と (10/01/25) が混在）だった。2026年の書式は未確認なので、月名表記
+      // （titleDateName）と数字表記の両方を照合候補として渡す。連戦の取り違え防止はラウンド＋第何戦が担う。
+      ...(PS_GAME_TYPES.has(g.gameType)
+        ? {
+            postseason: {
+              round: g.gameType,
+              game: g.seriesGameNumber ?? null,
+              titleToken: `${psTitleToken(g)} Game ${g.seriesGameNumber ?? 1}`,
+              titleDates: [`(${titleDateName(g.etDate)})`, ...titleDatesNumeric(g.etDate).map((d) => `(${d})`)],
+            },
+          }
+        : {}),
       existingArticle: match ? match.id : null,
     });
   }
@@ -2639,6 +2730,202 @@ async function runStandings(season, asOf) {
   console.log(`standings 書き出し: 6地区${total}球団 / asOf ${stampedAsOf} → ${file}`);
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// postseason … /postseason ハブ（トーナメント表＋海外の反応）の元データ。
+//
+// なぜ要るか: ポストシーズンは毎年10月に「組み合わせ」「日程」「結果」「海外の反応」の検索が集中するのに、
+// それを受けるページが無かった（GSC 6/1〜9/25 でワイルドカード・ポストシーズン系の表示0）。
+// 賞レースボードと同じく「年号なしURL＋毎年上書き＋閉幕後はアーカイブ」の恒久ハブにする（2026-09-26 合意）。
+//
+// 中身は API の値そのまま＝進出争いの順位・確定マーク・自力消滅の数と、12球団のトーナメント枠
+// （シード・勝敗・日程・スコア）と優勝チーム。記事側（jp-daily）はこれを読んで事実だけを書く。
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** ラウンドの並び（ワイルドカードシリーズ → 地区シリーズ → リーグ優勝決定シリーズ → ワールドシリーズ）。 */
+const PS_ROUND_ORDER = ['F', 'D', 'L', 'W'];
+
+/**
+ * 枠（ラウンド×A/B）ごとの第1戦の本拠地/ビジターのシード（2022年からの12球団制）。
+ * 2025年の実データで照合済み: WC 'A' = 3位 vs 6位・'B' = 4位 vs 5位・DS 'A' の本拠地 = 1位・'B' = 2位。
+ * 地区シリーズのビジターはワイルドカードシリーズの勝者＝そのチームのシードを引き継ぐ（seedById で伝播）。
+ */
+const PS_SEED_SLOTS = {
+  'F:A': { home: 3, away: 6 },
+  'F:B': { home: 4, away: 5 },
+  'D:A': { home: 1 },
+  'D:B': { home: 2 },
+};
+
+async function buildPostseasonState(season) {
+  const [seasonDates, seriesData, standingsData] = await Promise.all([
+    fetchSeasonDates(season),
+    getJson(`${BASE}/schedule/postseason/series?sportId=1&season=${season}`),
+    getJson(`${BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason`),
+  ]);
+
+  // 進出争い: 確定済み or まだ望みがあるチームだけ（地区もワイルドカードも E＝消滅なら落とす）。
+  const race = { AL: [], NL: [] };
+  for (const rec of standingsData.records ?? []) {
+    const info = DIVISION_INFO[rec.division?.id];
+    if (!info) continue;
+    for (const t of rec.teamRecords ?? []) {
+      const clinch = t.clinchIndicator ?? null;
+      const divElim = t.eliminationNumber ?? null;
+      const wcElim = t.wildCardEliminationNumber ?? null;
+      if (!clinch && divElim === 'E' && wcElim === 'E') continue;
+      race[info.league].push({
+        id: t.team?.id,
+        nameJa: TEAM_ID_JA[t.team?.id] ?? t.team?.name ?? '',
+        division: info.division,
+        w: t.wins,
+        l: t.losses,
+        pct: t.winningPercentage,
+        divisionRank: Number(t.divisionRank),
+        divisionLeader: Boolean(t.divisionLeader),
+        gb: t.gamesBack,
+        wcRank: t.wildCardRank ? Number(t.wildCardRank) : null,
+        wcGb: t.wildCardGamesBack ?? null,
+        divElim,
+        wcElim,
+        // x=進出確定 y=地区優勝 z=リーグ最高勝率 w=ワイルドカード確定（MLB公式の凡例）
+        clinch,
+        remaining: Math.max(0, 162 - (t.gamesPlayed ?? 0)),
+      });
+    }
+  }
+  // 並び: 地区首位（勝率順）→ ワイルドカード順位。「いま終わったらこの12球団」が上から読める。
+  for (const lg of ['AL', 'NL']) {
+    race[lg].sort((a, b) => {
+      if (a.divisionLeader !== b.divisionLeader) return a.divisionLeader ? -1 : 1;
+      if (a.divisionLeader) return Number(b.pct) - Number(a.pct);
+      return (a.wcRank ?? 99) - (b.wcRank ?? 99);
+    });
+  }
+
+  const realTeam = (t) => (t && TEAM_ID_JA[t.id] ? { id: t.id, nameJa: TEAM_ID_JA[t.id] } : null);
+  const isFinal = (g) => g.status?.abstractGameState === 'Final' && !/postponed|cancel|suspend/i.test(g.status?.detailedState ?? '');
+  const seedById = new Map();
+
+  const series = (seriesData.series ?? [])
+    .map((s) => {
+      const games = [...(s.games ?? [])].sort((a, b) => (a.seriesGameNumber ?? 0) - (b.seriesGameNumber ?? 0));
+      const g1 = games.find((g) => g.seriesGameNumber === 1) ?? games[0];
+      if (!g1) return null;
+      const round = s.series?.gameType ?? g1.gameType;
+      const desc = g1.seriesDescription ?? '';
+      const league = /^AL\b/.test(desc) ? 'AL' : /^NL\b/.test(desc) ? 'NL' : null;
+      const label = (g1.description ?? '').match(/'([AB])'/)?.[1] ?? null;
+      const bestOf = g1.gamesInSeries ?? games.length;
+      const finals = games.filter(isFinal);
+      const winsOf = (id) =>
+        id == null
+          ? 0
+          : finals.filter((g) => ['away', 'home'].some((sd) => g.teams?.[sd]?.team?.id === id && g.teams?.[sd]?.isWinner)).length;
+      const side = (sd) => {
+        const t = g1.teams?.[sd]?.team;
+        const real = realTeam(t);
+        return real ? { ...real, wins: winsOf(real.id) } : { id: null, placeholder: t?.name ?? null, wins: 0 };
+      };
+      // top＝第1戦のビジター（下位シード）・bottom＝第1戦の本拠地（上位シード）
+      const top = side('away');
+      const bottom = side('home');
+      const slot = PS_SEED_SLOTS[`${round}:${label}`];
+      if (slot?.home && bottom.id) seedById.set(bottom.id, slot.home);
+      if (slot?.away && top.id) seedById.set(top.id, slot.away);
+      const need = Math.ceil(bestOf / 2);
+      const winner = [top, bottom].find((x) => x.id && x.wins >= need) ?? null;
+      const gameRows = games
+        // 決着後の「必要なら」試合（未実施）は並べない。
+        .filter((g) => isFinal(g) || !winner)
+        .map((g) => ({
+          n: g.seriesGameNumber ?? null,
+          gamePk: g.gamePk,
+          etDate: g.officialDate,
+          start: g.gameDate,
+          tbd: Boolean(g.status?.startTimeTBD),
+          state: g.status?.abstractGameState ?? '',
+          detailed: g.status?.detailedState ?? '',
+          ifNecessary: g.ifNecessary === 'Y',
+          away: { id: realTeam(g.teams?.away?.team)?.id ?? null, score: g.teams?.away?.score ?? null },
+          home: { id: realTeam(g.teams?.home?.team)?.id ?? null, score: g.teams?.home?.score ?? null },
+        }));
+      return { id: s.series?.id ?? `${round}_${label ?? ''}`, round, league, label, bestOf, top, bottom, winnerId: winner?.id ?? null, games: gameRows };
+    })
+    .filter(Boolean)
+    .map((s) => ({
+      ...s,
+      top: s.top.id ? { ...s.top, seed: seedById.get(s.top.id) ?? null } : s.top,
+      bottom: s.bottom.id ? { ...s.bottom, seed: seedById.get(s.bottom.id) ?? null } : s.bottom,
+    }))
+    .sort(
+      (a, b) =>
+        PS_ROUND_ORDER.indexOf(a.round) - PS_ROUND_ORDER.indexOf(b.round) ||
+        String(a.league ?? '').localeCompare(String(b.league ?? '')) ||
+        String(a.label ?? '').localeCompare(String(b.label ?? '')),
+    );
+
+  const ws = series.find((s) => s.round === 'W');
+  const champion = ws?.winnerId ? { id: ws.winnerId, nameJa: TEAM_ID_JA[ws.winnerId] } : null;
+  const phase = champion
+    ? 'final'
+    : seasonDates.regularEnd && etToday() > seasonDates.regularEnd
+      ? 'postseason'
+      : 'race';
+  return {
+    season,
+    dates: { regularEnd: seasonDates.regularEnd, postStart: seasonDates.postStart },
+    phase,
+    race,
+    series,
+    champion,
+  };
+}
+
+/**
+ * data/postseason.json を書く。閉幕（ワールドシリーズ決着）後は data/postseason-archive/{season}.json にも
+ * 同じ内容を固定する＝翌年に本体が上書きされても、その年の結果は残り続ける。
+ * 翌シーズンへの切り替えは9月1日（JST）から＝春に日程が発表されても、ハブは前年の結果を出したまま待つ。
+ */
+async function runPostseason(season, asOf) {
+  const file = path.join(process.cwd(), 'data', 'postseason.json');
+  let prev = null;
+  try {
+    prev = JSON.parse(readFileSync(file, 'utf8'));
+  } catch {
+    /* 初回作成 */
+  }
+  const todayJst = jstStamp().slice(0, 10);
+  if (prev && prev.season < season && todayJst < `${season}-09-01`) {
+    console.log(`postseason: ${prev.season}年の結果を表示中（${season}年への切り替えは ${season}-09-01 から）→ 据え置き`);
+    return;
+  }
+  const state = await buildPostseasonState(season);
+  const teamsInRace = state.race.AL.length + state.race.NL.length;
+  if (!state.series.length && !teamsInRace) throw new Error('postseason: 枠も順位も空＝異常とみなし書き込み中止');
+  if (!state.series.length && prev) {
+    console.log(`postseason: ${season}年の枠が未発表 → 既存（${prev.season}年）を据え置き`);
+    return;
+  }
+
+  // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（毎時 cron の無駄コミット防止）。
+  let stampedAsOf = asOf;
+  if (prev) {
+    const { asOf: _a, ...rest } = prev;
+    if (stableStringify(rest) === stableStringify(state)) stampedAsOf = prev.asOf || asOf;
+  }
+  const body = stableStringify({ asOf: stampedAsOf, ...state }) + '\n';
+  writeFileSync(file, body);
+  if (state.phase === 'final') {
+    const dir = path.join(process.cwd(), 'data', 'postseason-archive');
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(path.join(dir, `${season}.json`), body);
+  }
+  const decided = state.series.filter((s) => s.winnerId).length;
+  console.log(
+    `postseason 書き出し: ${season} phase=${state.phase} / 枠${state.series.length}（決着${decided}）/ 争い AL${state.race.AL.length}・NL${state.race.NL.length} / asOf ${stampedAsOf} → ${file}`,
+  );
+}
+
 /** ISO日時（UTC）→ その試合の日本時間の日付。記事の日付（series.date）と同じ基準に揃える。 */
 function jstDateOf(iso) {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo' }).format(new Date(iso));
@@ -2785,6 +3072,12 @@ async function main() {
     const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
     const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
     await runStandings(seasonArg ? Number(seasonArg) : defaultSeason(), asOf);
+  } else if (cmd === 'postseason') {
+    // postseason ["YYYY-MM-DD HH:MM"(=asOf)] [season]：進出争い＋トーナメント表を data/postseason.json へ
+    // （/postseason ハブ用・閉幕後は data/postseason-archive/{season}.json にも固定）。
+    const asOf = arg && /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(arg) ? arg : jstStamp();
+    const seasonArg = [arg, arg2].find((x) => x && /^\d{4}$/.test(x));
+    await runPostseason(seasonArg ? Number(seasonArg) : defaultSeason(), asOf);
   } else if (cmd === 'team-games') {
     // team-games ["YYYY-MM-DD HH:MM"(=asOf)] [season] [--days N]：直近N日の全試合結果を
     // data/team-games.json へ（チームLPの試合タイムライン用・記事の有無に関わらず全試合）。
@@ -2810,6 +3103,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs gamelogs [season]  # MLBロースター級 全選手の試合別ログを一括更新（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs warrace            # 大谷＋ライバルの累計WARを war-race.json に1日1点 積む（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs standings          # AL/NL全6地区の順位表を data/standings.json へ（チームLP用）',
+        '  node scripts/fetch-mlb-stats.mjs postseason [season] # 進出争い＋トーナメント表を data/postseason.json へ（/postseason ハブ用）',
         '  node scripts/fetch-mlb-stats.mjs team-games [--days N] # 直近N日(既定30)の全試合結果を data/team-games.json へ（チームLPの試合タイムライン用）',
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',

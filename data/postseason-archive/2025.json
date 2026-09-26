@@ -1,0 +1,1347 @@
+{
+  "asOf": "2026-09-26 17:23",
+  "champion": {
+    "id": 119,
+    "nameJa": "ドジャース"
+  },
+  "dates": {
+    "postStart": "2025-09-30",
+    "regularEnd": "2025-09-28"
+  },
+  "phase": "final",
+  "race": {
+    "AL": [
+      {
+        "clinch": "z",
+        "divElim": "-",
+        "division": "East",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 141,
+        "l": 68,
+        "nameJa": "ブルージェイズ",
+        "pct": ".580",
+        "remaining": 0,
+        "w": 94,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "y",
+        "divElim": "-",
+        "division": "West",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 136,
+        "l": 72,
+        "nameJa": "マリナーズ",
+        "pct": ".556",
+        "remaining": 0,
+        "w": 90,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "y",
+        "divElim": "-",
+        "division": "Central",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 114,
+        "l": 74,
+        "nameJa": "ガーディアンズ",
+        "pct": ".543",
+        "remaining": 0,
+        "w": 88,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "w",
+        "divElim": "-",
+        "division": "East",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "-",
+        "id": 147,
+        "l": 68,
+        "nameJa": "ヤンキース",
+        "pct": ".580",
+        "remaining": 0,
+        "w": 94,
+        "wcElim": "-",
+        "wcGb": "+7.0",
+        "wcRank": 1
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "East",
+        "divisionLeader": false,
+        "divisionRank": 3,
+        "gb": "5.0",
+        "id": 111,
+        "l": 73,
+        "nameJa": "レッドソックス",
+        "pct": ".549",
+        "remaining": 0,
+        "w": 89,
+        "wcElim": "-",
+        "wcGb": "+2.0",
+        "wcRank": 2
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "Central",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "1.0",
+        "id": 116,
+        "l": 75,
+        "nameJa": "タイガース",
+        "pct": ".537",
+        "remaining": 0,
+        "w": 87,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": 3
+      },
+      {
+        "clinch": null,
+        "divElim": "E",
+        "division": "West",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "3.0",
+        "id": 117,
+        "l": 75,
+        "nameJa": "アストロズ",
+        "pct": ".537",
+        "remaining": 0,
+        "w": 87,
+        "wcElim": "1",
+        "wcGb": "-",
+        "wcRank": 4
+      }
+    ],
+    "NL": [
+      {
+        "clinch": "z",
+        "divElim": "-",
+        "division": "Central",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 158,
+        "l": 65,
+        "nameJa": "ブルワーズ",
+        "pct": ".599",
+        "remaining": 0,
+        "w": 97,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "y",
+        "divElim": "-",
+        "division": "East",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 143,
+        "l": 66,
+        "nameJa": "フィリーズ",
+        "pct": ".593",
+        "remaining": 0,
+        "w": 96,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "y",
+        "divElim": "-",
+        "division": "West",
+        "divisionLeader": true,
+        "divisionRank": 1,
+        "gb": "-",
+        "id": 119,
+        "l": 69,
+        "nameJa": "ドジャース",
+        "pct": ".574",
+        "remaining": 0,
+        "w": 93,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": null
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "Central",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "5.0",
+        "id": 112,
+        "l": 70,
+        "nameJa": "カブス",
+        "pct": ".568",
+        "remaining": 0,
+        "w": 92,
+        "wcElim": "-",
+        "wcGb": "+9.0",
+        "wcRank": 1
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "West",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "3.0",
+        "id": 135,
+        "l": 72,
+        "nameJa": "パドレス",
+        "pct": ".556",
+        "remaining": 0,
+        "w": 90,
+        "wcElim": "-",
+        "wcGb": "+7.0",
+        "wcRank": 2
+      },
+      {
+        "clinch": "w",
+        "divElim": "E",
+        "division": "Central",
+        "divisionLeader": false,
+        "divisionRank": 3,
+        "gb": "14.0",
+        "id": 113,
+        "l": 79,
+        "nameJa": "レッズ",
+        "pct": ".512",
+        "remaining": 0,
+        "w": 83,
+        "wcElim": "-",
+        "wcGb": "-",
+        "wcRank": 3
+      },
+      {
+        "clinch": null,
+        "divElim": "E",
+        "division": "East",
+        "divisionLeader": false,
+        "divisionRank": 2,
+        "gb": "13.0",
+        "id": 121,
+        "l": 79,
+        "nameJa": "メッツ",
+        "pct": ".512",
+        "remaining": 0,
+        "w": 83,
+        "wcElim": "1",
+        "wcGb": "-",
+        "wcRank": 4
+      }
+    ]
+  },
+  "season": 2025,
+  "series": [
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": 114,
+        "nameJa": "ガーディアンズ",
+        "seed": 3,
+        "wins": 1
+      },
+      "games": [
+        {
+          "away": {
+            "id": 116,
+            "score": 2
+          },
+          "detailed": "Final",
+          "etDate": "2025-09-30",
+          "gamePk": 813072,
+          "home": {
+            "id": 114,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-09-30T17:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 116,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-01",
+          "gamePk": 813071,
+          "home": {
+            "id": 114,
+            "score": 6
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-01T17:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 116,
+            "score": 6
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-02",
+          "gamePk": 813073,
+          "home": {
+            "id": 114,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-02T19:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "F_1",
+      "label": "A",
+      "league": "AL",
+      "round": "F",
+      "top": {
+        "id": 116,
+        "nameJa": "タイガース",
+        "seed": 6,
+        "wins": 2
+      },
+      "winnerId": 116
+    },
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": 147,
+        "nameJa": "ヤンキース",
+        "seed": 4,
+        "wins": 2
+      },
+      "games": [
+        {
+          "away": {
+            "id": 111,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-09-30",
+          "gamePk": 813074,
+          "home": {
+            "id": 147,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-09-30T22:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 111,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-01",
+          "gamePk": 813070,
+          "home": {
+            "id": 147,
+            "score": 4
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-01T22:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 111,
+            "score": 0
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-02",
+          "gamePk": 813065,
+          "home": {
+            "id": 147,
+            "score": 4
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-03T00:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "F_2",
+      "label": "B",
+      "league": "AL",
+      "round": "F",
+      "top": {
+        "id": 111,
+        "nameJa": "レッドソックス",
+        "seed": 5,
+        "wins": 1
+      },
+      "winnerId": 147
+    },
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": 119,
+        "nameJa": "ドジャース",
+        "seed": 3,
+        "wins": 2
+      },
+      "games": [
+        {
+          "away": {
+            "id": 113,
+            "score": 5
+          },
+          "detailed": "Final",
+          "etDate": "2025-09-30",
+          "gamePk": 813069,
+          "home": {
+            "id": 119,
+            "score": 10
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-01T01:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 113,
+            "score": 4
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-01",
+          "gamePk": 813068,
+          "home": {
+            "id": 119,
+            "score": 8
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-02T01:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "F_3",
+      "label": "A",
+      "league": "NL",
+      "round": "F",
+      "top": {
+        "id": 113,
+        "nameJa": "レッズ",
+        "seed": 6,
+        "wins": 0
+      },
+      "winnerId": 119
+    },
+    {
+      "bestOf": 3,
+      "bottom": {
+        "id": 112,
+        "nameJa": "カブス",
+        "seed": 4,
+        "wins": 2
+      },
+      "games": [
+        {
+          "away": {
+            "id": 135,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-09-30",
+          "gamePk": 813066,
+          "home": {
+            "id": 112,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-09-30T19:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 135,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-01",
+          "gamePk": 813064,
+          "home": {
+            "id": 112,
+            "score": 0
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-01T19:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 135,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-02",
+          "gamePk": 813059,
+          "home": {
+            "id": 112,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-02T21:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "F_4",
+      "label": "B",
+      "league": "NL",
+      "round": "F",
+      "top": {
+        "id": 135,
+        "nameJa": "パドレス",
+        "seed": 5,
+        "wins": 1
+      },
+      "winnerId": 112
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": 141,
+        "nameJa": "ブルージェイズ",
+        "seed": 1,
+        "wins": 3
+      },
+      "games": [
+        {
+          "away": {
+            "id": 147,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-04",
+          "gamePk": 813063,
+          "home": {
+            "id": 141,
+            "score": 10
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-04T20:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 147,
+            "score": 7
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-05",
+          "gamePk": 813062,
+          "home": {
+            "id": 141,
+            "score": 13
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-05T20:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 6
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-07",
+          "gamePk": 813061,
+          "home": {
+            "id": 147,
+            "score": 9
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-08T00:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 5
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-08",
+          "gamePk": 813060,
+          "home": {
+            "id": 147,
+            "score": 2
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2025-10-08T23:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "D_1",
+      "label": "A",
+      "league": "AL",
+      "round": "D",
+      "top": {
+        "id": 147,
+        "nameJa": "ヤンキース",
+        "seed": 4,
+        "wins": 1
+      },
+      "winnerId": 141
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": 136,
+        "nameJa": "マリナーズ",
+        "seed": 2,
+        "wins": 3
+      },
+      "games": [
+        {
+          "away": {
+            "id": 116,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-04",
+          "gamePk": 813058,
+          "home": {
+            "id": 136,
+            "score": 2
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-05T00:38:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 116,
+            "score": 2
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-05",
+          "gamePk": 813057,
+          "home": {
+            "id": 136,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-06T00:03:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 136,
+            "score": 8
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-07",
+          "gamePk": 813056,
+          "home": {
+            "id": 116,
+            "score": 4
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-07T20:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 136,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-08",
+          "gamePk": 813055,
+          "home": {
+            "id": 116,
+            "score": 9
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2025-10-08T19:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 116,
+            "score": 2
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-10",
+          "gamePk": 813054,
+          "home": {
+            "id": 136,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 5,
+          "start": "2025-10-11T00:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "D_2",
+      "label": "B",
+      "league": "AL",
+      "round": "D",
+      "top": {
+        "id": 116,
+        "nameJa": "タイガース",
+        "seed": 6,
+        "wins": 2
+      },
+      "winnerId": 136
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": 158,
+        "nameJa": "ブルワーズ",
+        "seed": 1,
+        "wins": 3
+      },
+      "games": [
+        {
+          "away": {
+            "id": 112,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-04",
+          "gamePk": 813047,
+          "home": {
+            "id": 158,
+            "score": 9
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-04T18:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 112,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-06",
+          "gamePk": 813048,
+          "home": {
+            "id": 158,
+            "score": 7
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-07T01:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 158,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-08",
+          "gamePk": 813049,
+          "home": {
+            "id": 112,
+            "score": 4
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-08T21:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 158,
+            "score": 0
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-09",
+          "gamePk": 813050,
+          "home": {
+            "id": 112,
+            "score": 6
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2025-10-10T01:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 112,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-11",
+          "gamePk": 813046,
+          "home": {
+            "id": 158,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 5,
+          "start": "2025-10-12T00:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "D_3",
+      "label": "A",
+      "league": "NL",
+      "round": "D",
+      "top": {
+        "id": 112,
+        "nameJa": "カブス",
+        "seed": 4,
+        "wins": 2
+      },
+      "winnerId": 158
+    },
+    {
+      "bestOf": 5,
+      "bottom": {
+        "id": 143,
+        "nameJa": "フィリーズ",
+        "seed": 2,
+        "wins": 1
+      },
+      "games": [
+        {
+          "away": {
+            "id": 119,
+            "score": 5
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-04",
+          "gamePk": 813051,
+          "home": {
+            "id": 143,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-04T22:38:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 119,
+            "score": 4
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-06",
+          "gamePk": 813052,
+          "home": {
+            "id": 143,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-06T22:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 143,
+            "score": 8
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-08",
+          "gamePk": 813041,
+          "home": {
+            "id": 119,
+            "score": 2
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-09T01:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 143,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-09",
+          "gamePk": 813042,
+          "home": {
+            "id": 119,
+            "score": 2
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2025-10-09T22:08:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "D_4",
+      "label": "B",
+      "league": "NL",
+      "round": "D",
+      "top": {
+        "id": 119,
+        "nameJa": "ドジャース",
+        "seed": 3,
+        "wins": 3
+      },
+      "winnerId": 119
+    },
+    {
+      "bestOf": 7,
+      "bottom": {
+        "id": 141,
+        "nameJa": "ブルージェイズ",
+        "seed": 1,
+        "wins": 4
+      },
+      "games": [
+        {
+          "away": {
+            "id": 136,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-12",
+          "gamePk": 813040,
+          "home": {
+            "id": 141,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-13T00:03:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 136,
+            "score": 10
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-13",
+          "gamePk": 813044,
+          "home": {
+            "id": 141,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-13T21:03:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 13
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-15",
+          "gamePk": 813043,
+          "home": {
+            "id": 136,
+            "score": 4
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-16T00:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 8
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-16",
+          "gamePk": 813035,
+          "home": {
+            "id": 136,
+            "score": 2
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2025-10-17T00:33:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 2
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-17",
+          "gamePk": 813039,
+          "home": {
+            "id": 136,
+            "score": 6
+          },
+          "ifNecessary": false,
+          "n": 5,
+          "start": "2025-10-17T22:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 136,
+            "score": 2
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-19",
+          "gamePk": 813038,
+          "home": {
+            "id": 141,
+            "score": 6
+          },
+          "ifNecessary": false,
+          "n": 6,
+          "start": "2025-10-20T00:03:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 136,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-20",
+          "gamePk": 813037,
+          "home": {
+            "id": 141,
+            "score": 4
+          },
+          "ifNecessary": false,
+          "n": 7,
+          "start": "2025-10-21T00:10:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "L_1",
+      "label": null,
+      "league": "AL",
+      "round": "L",
+      "top": {
+        "id": 136,
+        "nameJa": "マリナーズ",
+        "seed": 2,
+        "wins": 3
+      },
+      "winnerId": 141
+    },
+    {
+      "bestOf": 7,
+      "bottom": {
+        "id": 158,
+        "nameJa": "ブルワーズ",
+        "seed": 1,
+        "wins": 0
+      },
+      "games": [
+        {
+          "away": {
+            "id": 119,
+            "score": 2
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-13",
+          "gamePk": 813036,
+          "home": {
+            "id": 158,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-14T00:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 119,
+            "score": 5
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-14",
+          "gamePk": 813034,
+          "home": {
+            "id": 158,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-15T00:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 158,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-16",
+          "gamePk": 813033,
+          "home": {
+            "id": 119,
+            "score": 3
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-16T22:08:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 158,
+            "score": 1
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-17",
+          "gamePk": 813031,
+          "home": {
+            "id": 119,
+            "score": 5
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2025-10-18T00:38:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "L_2",
+      "label": null,
+      "league": "NL",
+      "round": "L",
+      "top": {
+        "id": 119,
+        "nameJa": "ドジャース",
+        "seed": 3,
+        "wins": 4
+      },
+      "winnerId": 119
+    },
+    {
+      "bestOf": 7,
+      "bottom": {
+        "id": 141,
+        "nameJa": "ブルージェイズ",
+        "seed": 1,
+        "wins": 3
+      },
+      "games": [
+        {
+          "away": {
+            "id": 119,
+            "score": 4
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-24",
+          "gamePk": 813027,
+          "home": {
+            "id": 141,
+            "score": 11
+          },
+          "ifNecessary": false,
+          "n": 1,
+          "start": "2025-10-25T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 119,
+            "score": 5
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-25",
+          "gamePk": 813026,
+          "home": {
+            "id": 141,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 2,
+          "start": "2025-10-26T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 5
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-27",
+          "gamePk": 813032,
+          "home": {
+            "id": 119,
+            "score": 6
+          },
+          "ifNecessary": false,
+          "n": 3,
+          "start": "2025-10-28T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 6
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-28",
+          "gamePk": 813023,
+          "home": {
+            "id": 119,
+            "score": 2
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2025-10-29T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 141,
+            "score": 6
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-29",
+          "gamePk": 813022,
+          "home": {
+            "id": 119,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 5,
+          "start": "2025-10-30T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 119,
+            "score": 3
+          },
+          "detailed": "Final",
+          "etDate": "2025-10-31",
+          "gamePk": 813025,
+          "home": {
+            "id": 141,
+            "score": 1
+          },
+          "ifNecessary": false,
+          "n": 6,
+          "start": "2025-11-01T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 119,
+            "score": 5
+          },
+          "detailed": "Final",
+          "etDate": "2025-11-01",
+          "gamePk": 813024,
+          "home": {
+            "id": 141,
+            "score": 4
+          },
+          "ifNecessary": false,
+          "n": 7,
+          "start": "2025-11-02T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        }
+      ],
+      "id": "W_1",
+      "label": null,
+      "league": null,
+      "round": "W",
+      "top": {
+        "id": 119,
+        "nameJa": "ドジャース",
+        "seed": 3,
+        "wins": 4
+      },
+      "winnerId": 119
+    }
+  ]
+}

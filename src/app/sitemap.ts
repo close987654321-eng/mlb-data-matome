@@ -16,6 +16,7 @@ import { SPORTS } from '@/lib/sports';
 import { SERIES } from '@/lib/series';
 import { getCyDetailRows } from '@/lib/cyYoungBoard';
 import { getMvpDetailRows } from '@/lib/mvpBoard';
+import { getPostseason } from '@/lib/postseason';
 import { locales, defaultLocale } from '@/lib/i18n';
 
 // 本番ドメイン。プレビュー等で差し替えたい場合は NEXT_PUBLIC_SITE_URL で上書きする。
@@ -52,7 +53,7 @@ function prospectAsOf(p: (typeof NPB_PROSPECTS)[number], statsAsOf: string): str
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows, npb] = await Promise.all([
+  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows, npb, postseason] = await Promise.all([
     getAllThreads(),
     getAllColumns(),
     getAllTags(),
@@ -62,6 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getCyDetailRows(),
     getMvpDetailRows(),
     getNpbStats(),
+    getPostseason(),
   ]);
   const npbAsOf = npb.asOf;
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
@@ -119,6 +121,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/mvp', statDate),
     // 新人王 予測ボード（ルーキー資格者を野手・投手まとめてAL/NL別にスコア化）。lastmod は成績スナップショットの日付。
     entry('/roy', statDate),
+    // ポストシーズンの恒久ハブ（年号なしURL・閉幕後は結果のアーカイブとして残る）。
+    ...(postseason ? [entry('/postseason', postseason.asOf ? postseason.asOf.slice(0, 10) : undefined)] : []),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     // 超RIZIN.5 特設ハブ（開催前から育てるイベント観測所。lastmod はコンテンツの最終更新日）。

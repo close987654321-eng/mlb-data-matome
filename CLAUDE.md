@@ -53,6 +53,7 @@ SSG します。
 │   │   ├── player/ + player/[slug]/ # 日本人選手ハブ（成績・徹底分析・滞在5分の検索母艦）
 │   │   ├── ranking/ + allstar/      # 日本人選手ランキング／オールスター特設
 │   │   ├── mvp/ + cy-young/ + roy/  # 賞レース予測ボード（MVP・サイヤング・新人王）
+│   │   ├── postseason/              # ポストシーズンの恒久ハブ（トーナメント表＋ラウンド別の海外の反応）
 │   │   ├── prospects/               # NEXT MLB ハブ（NPB 注目株）
 │   │   └── tag/[tag]/ + search/ + columns/ + p/[page]/  # タグ・検索・コラム・ページネーション
 │   ├── components/
@@ -198,6 +199,17 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     守備バーを出さない）・`MvpGuide`（10名記入 14-9-8-…-1・規定打席 3.1×試合数・日本人受賞＝イチロー2001＋大谷4回満票・2022年2位）・
     `mvpFaq`（大谷の投手成績が評価に入るかは warPitch のある行から動的に組む）。MVPを語っているスレには `MVP` タグ。
     3ボードとも同じ並び＝いまのレース→表（前日比）→推移表→コラム→決まり方→FAQ→海外の反応。
+  - **ポストシーズン（/postseason・2026-09-26 新設）**: `node scripts/fetch-mlb-stats.mjs postseason` が
+    進出争い（順位・確定マーク x/y/z/w・自力消滅の数・残り試合）と12球団の枠（シード・勝敗・日程・スコア）と
+    優勝チームを `data/postseason.json` へ（毎時CI）。**URL に年号を入れない恒久ハブ**（/mvp と同じ型）＝
+    ワールドシリーズ決着で `data/postseason-archive/{season}.json` に固定し、**翌年9月1日までは前年の結果を出したまま**待つ。
+    シードは枠の位置から決まる（WC 'A'＝3位対6位・'B'＝4位対5位・DS 'A' 本拠地＝1位・'B'＝2位。2025年の実データで照合済み）。
+    主役は表ではなく**ラウンド別の海外の反応**（「ワイルドカード 順位」のような表のクエリはポータルの縄張り）＝
+    記事のタグ（`src/lib/postseason.ts` の `POSTSEASON_TAGS`）で各ラウンドの棚に自動で並ぶ。チームLPの順位表の下に
+    「ポストシーズン：◯◯」の1行とハブへのリンクが出る。jp-daily は `jpday` の `postseasonState` で立場を1文添える。
+    ⚠️ **成績APIは gameType を省くとレギュラーシーズンしか返さない**＝単日取得（`fetchStats({date})`）は全種別
+    `[R,F,D,L,W]` を指定している（2026-09-26 まではポストシーズンの日が「出場0人」になり jp-daily / jp-games が
+    10月に黙って止まる状態だった）。期間累計はレギュラーシーズンのまま＝「今季」にポストシーズンを混ぜない。
   - **試合結果（`Thread.game`・記事の主役データ）**: `node scripts/fetch-mlb-stats.mjs backfill-games --apply` で
     公式スケジュール（`hydrate=linescore,decisions`）＋ boxscore から **最終スコア・回ごとの得点と H/E/残塁・
     その試合時点の勝敗と地区順位・勝敗投手/セーブ・本塁打の打者と今季号数** を記事 JSON に埋める。記事は要約直下の
