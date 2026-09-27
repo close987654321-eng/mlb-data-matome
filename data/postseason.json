@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-28 04:47",
+  "asOf": "2026-09-28 08:06",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -16,10 +16,10 @@
         "divisionRank": 1,
         "gb": "-",
         "id": 139,
-        "l": 63,
+        "l": 64,
         "nameJa": "レイズ",
-        "pct": ".609",
-        "remaining": 1,
+        "pct": ".605",
+        "remaining": 0,
         "w": 98,
         "wcElim": "-",
         "wcGb": "-",
@@ -33,17 +33,17 @@
         "divisionRank": 1,
         "gb": "-",
         "id": 114,
-        "l": 76,
+        "l": 77,
         "nameJa": "ガーディアンズ",
-        "pct": ".528",
-        "remaining": 1,
+        "pct": ".525",
+        "remaining": 0,
         "w": 85,
         "wcElim": "-",
         "wcGb": "-",
         "wcRank": null
       },
       {
-        "clinch": null,
+        "clinch": "y",
         "divElim": "-",
         "division": "West",
         "divisionLeader": true,
@@ -52,9 +52,9 @@
         "id": 117,
         "l": 81,
         "nameJa": "アストロズ",
-        "pct": ".497",
-        "remaining": 1,
-        "w": 80,
+        "pct": ".500",
+        "remaining": 0,
+        "w": 81,
         "wcElim": "-",
         "wcGb": "-",
         "wcRank": null
@@ -65,7 +65,7 @@
         "division": "East",
         "divisionLeader": false,
         "divisionRank": 2,
-        "gb": "5.0",
+        "gb": "4.5",
         "id": 147,
         "l": 68,
         "nameJa": "ヤンキース",
@@ -73,7 +73,7 @@
         "remaining": 1,
         "w": 93,
         "wcElim": "-",
-        "wcGb": "+10.0",
+        "wcGb": "+9.5",
         "wcRank": 1
       },
       {
@@ -84,13 +84,13 @@
         "divisionRank": 3,
         "gb": "11.0",
         "id": 111,
-        "l": 74,
+        "l": 75,
         "nameJa": "レッドソックス",
-        "pct": ".540",
-        "remaining": 1,
+        "pct": ".537",
+        "remaining": 0,
         "w": 87,
         "wcElim": "-",
-        "wcGb": "+4.0",
+        "wcGb": "+3.0",
         "wcRank": 2
       },
       {
@@ -99,33 +99,16 @@
         "division": "Central",
         "divisionLeader": false,
         "divisionRank": 2,
-        "gb": "2.0",
+        "gb": "1.0",
         "id": 145,
         "l": 78,
         "nameJa": "ホワイトソックス",
-        "pct": ".516",
-        "remaining": 1,
-        "w": 83,
+        "pct": ".519",
+        "remaining": 0,
+        "w": 84,
         "wcElim": "-",
         "wcGb": "-",
         "wcRank": 3
-      },
-      {
-        "clinch": null,
-        "divElim": "-",
-        "division": "West",
-        "divisionLeader": false,
-        "divisionRank": 2,
-        "gb": "-",
-        "id": 140,
-        "l": 81,
-        "nameJa": "レンジャーズ",
-        "pct": ".497",
-        "remaining": 1,
-        "w": 80,
-        "wcElim": "E",
-        "wcGb": "3.0",
-        "wcRank": 4
       }
     ],
     "NL": [
@@ -139,9 +122,9 @@
         "id": 158,
         "l": 59,
         "nameJa": "ブルワーズ",
-        "pct": ".634",
-        "remaining": 1,
-        "w": 102,
+        "pct": ".636",
+        "remaining": 0,
+        "w": 103,
         "wcElim": "-",
         "wcGb": "-",
         "wcRank": null
@@ -156,9 +139,9 @@
         "id": 119,
         "l": 62,
         "nameJa": "ドジャース",
-        "pct": ".615",
-        "remaining": 1,
-        "w": 99,
+        "pct": ".617",
+        "remaining": 0,
+        "w": 100,
         "wcElim": "-",
         "wcGb": "-",
         "wcRank": null
@@ -171,10 +154,10 @@
         "divisionRank": 1,
         "gb": "-",
         "id": 144,
-        "l": 67,
+        "l": 68,
         "nameJa": "ブレーブス",
-        "pct": ".584",
-        "remaining": 1,
+        "pct": ".580",
+        "remaining": 0,
         "w": 94,
         "wcElim": "-",
         "wcGb": "-",
@@ -190,9 +173,9 @@
         "id": 135,
         "l": 71,
         "nameJa": "パドレス",
-        "pct": ".559",
-        "remaining": 1,
-        "w": 90,
+        "pct": ".562",
+        "remaining": 0,
+        "w": 91,
         "wcElim": "-",
         "wcGb": "+3.0",
         "wcRank": 1
@@ -207,46 +190,29 @@
         "id": 112,
         "l": 73,
         "nameJa": "カブス",
-        "pct": ".547",
-        "remaining": 1,
-        "w": 88,
+        "pct": ".549",
+        "remaining": 0,
+        "w": 89,
         "wcElim": "-",
         "wcGb": "+1.0",
         "wcRank": 2
       },
       {
-        "clinch": null,
+        "clinch": "w",
         "divElim": "E",
         "division": "East",
         "divisionLeader": false,
         "divisionRank": 2,
-        "gb": "7.0",
+        "gb": "6.0",
         "id": 143,
         "l": 74,
         "nameJa": "フィリーズ",
-        "pct": ".540",
-        "remaining": 1,
-        "w": 87,
+        "pct": ".543",
+        "remaining": 0,
+        "w": 88,
         "wcElim": "-",
         "wcGb": "-",
         "wcRank": 3
-      },
-      {
-        "clinch": null,
-        "divElim": "E",
-        "division": "West",
-        "divisionLeader": false,
-        "divisionRank": 3,
-        "gb": "13.0",
-        "id": 109,
-        "l": 75,
-        "nameJa": "ダイヤモンドバックス",
-        "pct": ".534",
-        "remaining": 1,
-        "w": 86,
-        "wcElim": "1",
-        "wcGb": "1.0",
-        "wcRank": 4
       }
     ]
   },
@@ -255,8 +221,9 @@
     {
       "bestOf": 3,
       "bottom": {
-        "id": null,
-        "placeholder": "HOU/TEX",
+        "id": 117,
+        "nameJa": "アストロズ",
+        "seed": 3,
         "wins": 0
       },
       "games": [
@@ -269,7 +236,7 @@
           "etDate": "2026-09-29",
           "gamePk": 849849,
           "home": {
-            "id": null,
+            "id": 117,
             "score": null
           },
           "ifNecessary": false,
@@ -287,7 +254,7 @@
           "etDate": "2026-09-30",
           "gamePk": 849846,
           "home": {
-            "id": null,
+            "id": 117,
             "score": null
           },
           "ifNecessary": false,
@@ -305,7 +272,7 @@
           "etDate": "2026-10-01",
           "gamePk": 849850,
           "home": {
-            "id": null,
+            "id": 117,
             "score": null
           },
           "ifNecessary": true,
@@ -414,7 +381,7 @@
       "games": [
         {
           "away": {
-            "id": null,
+            "id": 143,
             "score": null
           },
           "detailed": "Scheduled",
@@ -432,7 +399,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 143,
             "score": null
           },
           "detailed": "Scheduled",
@@ -450,7 +417,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 143,
             "score": null
           },
           "detailed": "Scheduled",
@@ -472,8 +439,9 @@
       "league": "NL",
       "round": "F",
       "top": {
-        "id": null,
-        "placeholder": "PHI/ARI",
+        "id": 143,
+        "nameJa": "フィリーズ",
+        "seed": 6,
         "wins": 0
       },
       "winnerId": null
@@ -660,7 +628,7 @@
       "round": "D",
       "top": {
         "id": null,
-        "placeholder": "AL 4/5 Winner",
+        "placeholder": "NYY/BOS",
         "wins": 0
       },
       "winnerId": null
@@ -771,7 +739,7 @@
       "round": "D",
       "top": {
         "id": null,
-        "placeholder": "AL 3/6 Winner",
+        "placeholder": "HOU/CWS",
         "wins": 0
       },
       "winnerId": null
@@ -882,7 +850,7 @@
       "round": "D",
       "top": {
         "id": null,
-        "placeholder": "NL 4/5 Winner",
+        "placeholder": "SD/CHC",
         "wins": 0
       },
       "winnerId": null
@@ -993,7 +961,7 @@
       "round": "D",
       "top": {
         "id": null,
-        "placeholder": "NL 3/6 Winner",
+        "placeholder": "ATL/PHI",
         "wins": 0
       },
       "winnerId": null
