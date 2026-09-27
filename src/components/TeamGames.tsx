@@ -6,6 +6,7 @@ import { playerLabel } from '@/lib/playerNames';
 import { roundName } from '@/lib/postseason';
 import type { TeamGameRow } from '@/lib/teamGames';
 import type { Locale } from '@/lib/i18n';
+import { scoreLabel } from '@/lib/scoreLabel';
 
 /**
  * チームLPの「試合結果と海外の反応」タイムライン＝ファイターLPの主要試合タイムラインのチーム版。
@@ -175,9 +176,10 @@ export default async function TeamGames({
                   {voiceKind === 'reddit' ? `u/${voice.author}` : voice.author}
                 </span>
               )}
-              {voiceKind !== 'interview' && (
+              {/* 票が未取得（0）の声は数字ごと出さない＝「0」は不人気に見えるが実測ではない。 */}
+              {voiceKind !== 'interview' && voice.score > 0 && (
                 <span className="ml-2 tabular-nums">
-                  {voiceKind === 'reddit' ? '▲' : '👍'} {voice.score.toLocaleString()}
+                  {scoreLabel(voice.score, voiceKind === 'reddit' ? 'reddit' : 'youtube', locale)}
                 </span>
               )}
             </figcaption>
@@ -198,7 +200,7 @@ export default async function TeamGames({
   const rest = items.slice(VISIBLE);
 
   return (
-    <section id="team-games" className="scroll-mt-20 space-y-3">
+    <section id="team-games" className="space-y-3">
       <SectionHeading label={label} count={rows.length} />
       <div className="border-y border-line">
         <ul className="divide-y divide-line">{head}</ul>

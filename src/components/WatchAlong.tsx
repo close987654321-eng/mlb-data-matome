@@ -1,5 +1,7 @@
 import StickyVideo from './StickyVideo';
 import Transcript from './Transcript';
+import SectionHeading from './SectionHeading';
+import { scoreLabel } from '@/lib/scoreLabel';
 import type { Thread, ThreadComment } from '@/types/thread';
 
 type Props = {
@@ -10,6 +12,7 @@ type Props = {
   transcriptLabel: string; // 番組トークの見出し（あるときだけ使う）
   unpinLabel: string; // 動画のピン留めをやめる
   pinLabel: string; // 動画のピン留めに戻す
+  locale: string; // 票数ラベルの言い方（ja=「いいね 1,869」/ en=「1,869 likes」）
 };
 
 /**
@@ -25,12 +28,14 @@ export default function WatchAlong({
   transcriptLabel,
   unpinLabel,
   pinLabel,
+  locale,
 }: Props) {
-  // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+👍
+  // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+「いいね」
   const isInterview = thread.format === 'interview';
   const isYoutube = thread.format === 'youtube';
   const authorLabel = (a: string) => (isInterview || isYoutube ? a : `u/${a}`);
-  const scoreMark = isYoutube ? '👍' : '▲';
+  // 訳（bodyJa）は en 面でも日本語＝html の lang="en" を打ち消して和文として組ませる（ja 面では継ぐ）。
+  const jaLang = locale === 'ja' ? undefined : 'ja';
   return (
     <section className="mt-8">
       {thread.media && (
@@ -45,36 +50,50 @@ export default function WatchAlong({
 
       {/* 番組トーク（あれば）を動画とコメントの間に挟む。海外ファンのコメントに入る前の文脈。 */}
       {thread.transcript && thread.transcript.length > 0 && (
-        <Transcript segments={thread.transcript} heading={transcriptLabel} />
+        <Transcript segments={thread.transcript} heading={transcriptLabel} locale={locale} />
       )}
 
-      <h2 className="mb-4 mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-        <span className="h-3 w-[2px] bg-ink" />
-        {pickedLabel}
-      </h2>
-      <ul className="space-y-4">
+      <div className="mt-5">
+        <SectionHeading label={pickedLabel} />
+      </div>
+      {/* 罫線のリスト（1件ずつの枠付きカードはやめた）。発言と発言の間（上下 py-5＝40px＋罫）を
+          発言の中の間（名前→訳 6px・訳→原文 8px）の2倍以上に取り、「ここから次の人」を余白で分ける。
+          強調（isHighlight）は背景の濃淡ではなく左の余白側に墨の2px線を引く＝本文の左端は他の
+          コメントとそろえたまま目印だけ足す（-left-3＝12px は main の左右余白 20px の内側に収まる）。 */}
+      <ul className="divide-y divide-line">
         {comments.map((c, i) => (
           <li
             key={i}
-            className={`rounded-xl border p-5 ${
-              c.isHighlight ? 'border-ink/20 bg-ink/[0.03]' : 'border-line bg-surface'
+            className={`py-5 ${
+              c.isHighlight
+                ? 'relative before:absolute before:-left-3 before:bottom-5 before:top-5 before:w-[2px] before:bg-ink'
+                : ''
             }`}
           >
-            <div className="flex items-center justify-between text-xs text-ink-soft">
-              <span className="font-medium">{authorLabel(c.author)}</span>
+            <div className="flex min-w-0 items-baseline justify-between gap-3 text-xs text-ink-soft">
+              {/* 長いハンドル名でも横にはみ出さないよう、どこでも折り返せるようにする */}
+              <span className="min-w-0 font-medium [overflow-wrap:anywhere]">
+                {authorLabel(c.author)}
+              </span>
               {/* score=0 は「未取得」（old.reddit がログイン壁の日など）で実測0票ではない。
                   0 を出すと読者には不人気コメントに見えるので記号ごと落とす＝記事本文・
                   StoryBlocks・TagVoices と同じ扱い（値は捏造せず保存したまま）。 */}
               {!isInterview && c.score > 0 && (
-                <span className="tabular-nums">
-                  {scoreMark} {c.score.toLocaleString()}
+                <span className="shrink-0 tabular-nums">
+                  {scoreLabel(c.score, isYoutube ? 'youtube' : 'reddit', locale)}
                 </span>
               )}
             </div>
-            <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
-            <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">
-              {c.bodyEn}
+            <p lang={jaLang} className="mt-1.5 text-base leading-[1.8] text-ink">
+              {c.bodyJa}
             </p>
+            {/* 原文（英語）は訳の補足。斜体はやめ（和文の中で読みにくい）、lang="en" で英語として組ませる。
+                日本語ソース（原文＝訳）では bodyEn が空なので併記しない。 */}
+            {c.bodyEn && (
+              <p lang="en" className="mt-2 text-[13px] leading-[1.6] text-ink-soft">
+                {c.bodyEn}
+              </p>
+            )}
           </li>
         ))}
       </ul>

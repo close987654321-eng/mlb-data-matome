@@ -32,7 +32,8 @@ export default function StatBox({
   lpTags,
 }: Props) {
   return (
-    <section className="mt-8">
+    // 成績の数字は桁をそろえて読む＝記事本文（article）の和欧間の自動アキを切る。
+    <section className="mt-8 [text-autospace:no-autospace]">
       {/* 見出しはサイト共通プリミティブ（真上の試合結果ボックスと記号を揃える）。 */}
       <SectionHeading label={heading} />
       <div className="mt-4 space-y-4 rounded-xl border border-line bg-surface p-5">

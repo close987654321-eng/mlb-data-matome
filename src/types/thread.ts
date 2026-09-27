@@ -232,7 +232,7 @@ export type Thread = {
   id: string; // "2026-06-09-judge-walkoff" のような日付プレフィックス付き kebab-case
   sport: Sport; // どの競技か（data/threads/{sport}/ のフォルダから決まる）
   subreddit: string; // "r/baseball" など、転載元コミュニティの表示名
-  format?: 'reddit' | 'interview' | 'youtube'; // コメントの出所。'interview'=選手/監督インタビュー（u/接頭辞と▲スコアを出さない）。'youtube'=動画コメント（author そのまま・👍スコア）。既定は 'reddit'
+  format?: 'reddit' | 'interview' | 'youtube'; // コメントの出所。'interview'=選手/監督インタビュー（u/接頭辞と▲スコアを出さない）。'youtube'=動画コメント（author そのまま・「いいね」の票数）。既定は 'reddit'
   // 日本語コメント主体のソース（matome R7+）。立てると検索結果タイトルの自動 "｜海外の反応" 付与を止める
   // （src/app/[locale]/[sport]/[id]/page.tsx）。§4.4 の禁止表現と同じ理由＝素材が英語話者の反応でない記事に
   // ブランド文言を付けると見出し⇔中身が食い違う。2026-06-13 以前の古い記事（tags に "海外の反応" が無い・

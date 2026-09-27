@@ -6,6 +6,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { useTranslations, useLocale } from 'next-intl';
 import LocaleSwitcher from '@/components/LocaleSwitcher';
 import ScrollToTop from '@/components/ScrollToTop';
+import HeaderHeightSync from '@/components/HeaderHeightSync';
 import SearchPill from '@/components/home/SearchPill';
 import NavLink from '@/components/NavLink';
 import { Link } from '@/lib/navigation';
@@ -117,6 +118,8 @@ export default async function LocaleLayout({
           <main className="mx-auto w-full max-w-5xl flex-1 px-5 pt-5 pb-10 sm:py-14">{children}</main>
           <SiteFooter />
           <ScrollToTop />
+          {/* ヘッダー実寸を --header-h に反映（固定動画・アンカー着地がヘッダーに潜らないように） */}
+          <HeaderHeightSync />
         </NextIntlClientProvider>
       </body>
     </html>

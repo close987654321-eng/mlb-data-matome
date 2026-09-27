@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server';
-import { Link } from '@/lib/navigation';
+import NextReadLink from '@/components/NextReadLink';
 import { threadTitle } from '@/lib/series';
 import { allComments } from '@/lib/daily';
 import { reasonLabel, type Ranked } from '@/lib/nextRead';
@@ -14,7 +14,16 @@ import type { Locale } from '@/lib/i18n';
  * （フック引用を見せられるため）。column のときは null を返し、related 側で通常カードとして出す。
  * 配色は無彩色（サイトの design system＝赤は題字罫とシリーズバッジ専用）。塗りは footer から移設した ink 塗り。
  */
-export default async function NextReadCard({ pick, locale }: { pick: Ranked; locale: Locale }) {
+export default async function NextReadCard({
+  pick,
+  locale,
+  fromId,
+}: {
+  pick: Ranked;
+  locale: Locale;
+  /** いま読んでいる記事の ID（next_read_click の計測で「どの記事から次へ進んだか」を取る）。 */
+  fromId?: string;
+}) {
   const t = await getTranslations();
   const { item, reason } = pick;
   if (item.kind !== 'thread') return null;
@@ -35,8 +44,11 @@ export default async function NextReadCard({ pick, locale }: { pick: Ranked; loc
   const label = reasonLabel(reason, locale, t as (key: string) => string);
 
   return (
-    <Link
+    // クリック計測（next_read_click）のためリンクだけクライアントの殻に入れる。中身はサーバー描画のまま。
+    <NextReadLink
       href={`/${thread.sport}/${thread.id}`}
+      destinationId={thread.id}
+      fromId={fromId}
       className="group mt-10 block rounded-[3px] border border-ink/20 bg-ink/[0.03] p-6 transition-colors hover:bg-ink/[0.06]"
     >
       <span className="text-[11px] font-semibold uppercase tracking-wider text-ink-soft">
@@ -53,6 +65,6 @@ export default async function NextReadCard({ pick, locale }: { pick: Ranked; loc
           →
         </span>
       </span>
-    </Link>
+    </NextReadLink>
   );
 }

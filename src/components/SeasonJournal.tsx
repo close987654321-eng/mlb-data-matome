@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/lib/navigation";
 import SectionHeading from "@/components/SectionHeading";
+import { scoreLabel } from "@/lib/scoreLabel";
 import {
   journalChapters,
   journalNext,
@@ -31,8 +32,8 @@ function rangeJa(entries: JournalEntry[]): string {
   return first === last ? first : `${first} — ${last}`;
 }
 
-/** 票数の出し方は TagVoices と同じ規約（YouTube=👍 / Reddit=▲ / interview=票なし）。 */
-function quoteMeta(entry: JournalEntry, author: string, score: number) {
+/** 票数の出し方は TagVoices と同じ規約（YouTube=「いいね」/ Reddit=▲ / interview=票なし）。 */
+function quoteMeta(entry: JournalEntry, author: string, score: number, locale: string) {
   const isYoutube = entry.format === "youtube" || Boolean(entry.video);
   const isInterview = entry.format === "interview";
   return (
@@ -40,9 +41,10 @@ function quoteMeta(entry: JournalEntry, author: string, score: number) {
       <span className="font-medium text-ink-soft">
         {isYoutube || isInterview ? author : `u/${author}`}
       </span>
-      {!isInterview && (
+      {/* 票が未取得（0）の声は数字ごと出さない＝「0」は不人気に見えるが実測ではない。 */}
+      {!isInterview && score > 0 && (
         <span className="tabular-nums">
-          {isYoutube ? "👍" : "▲"} {score.toLocaleString()}
+          {scoreLabel(score, isYoutube ? "youtube" : "reddit", locale)}
         </span>
       )}
     </span>
@@ -106,6 +108,7 @@ function Beat({
   entry: JournalEntry;
   variant: JournalVariant;
 }) {
+  const locale = useLocale();
   return (
     <li className="relative py-4 pl-8">
       <span
@@ -130,7 +133,7 @@ function Beat({
               <p className="text-sm leading-relaxed text-ink-soft">
                 “{(q.bodyJa ?? "").trim() || q.bodyEn}”
               </p>
-              <div className="mt-1">{quoteMeta(entry, q.author, q.score)}</div>
+              <div className="mt-1">{quoteMeta(entry, q.author, q.score, locale)}</div>
             </li>
           ))}
         </ul>
@@ -150,6 +153,7 @@ function PeakBeat({
   entry: JournalEntry;
   variant: JournalVariant;
 }) {
+  const locale = useLocale();
   return (
     <li className="relative py-5 pl-8">
       <span
@@ -189,7 +193,7 @@ function PeakBeat({
                     “{(q.bodyJa ?? "").trim() || q.bodyEn}”
                   </p>
                   <div className="mt-1.5">
-                    {quoteMeta(entry, q.author, q.score)}
+                    {quoteMeta(entry, q.author, q.score, locale)}
                   </div>
                 </li>
               ))}
@@ -226,11 +230,11 @@ export default function SeasonJournal({
       </p>
       <div className="space-y-9">
         {chapters.map((chapter, ci) => (
-          // 最終章＝最新の観測。「いま」ブロックのアンカーの着地点（sticky ヘッダー分の余白つき）。
+          // 最終章＝最新の観測。「いま」ブロックのアンカーの着地点（sticky ヘッダー分の逃がしは
+          // html の scroll-padding-top が担う＝ここで scroll-mt を足すと加算されて行き過ぎる）。
           <div
             key={ci}
             id={ci === chapters.length - 1 ? "journal-latest" : undefined}
-            className="scroll-mt-24"
           >
             {/* 章見出し＝編集者が幕を割る。番号＋期間で「上から時系列」であることも同時に言う。 */}
             <div className="border-b border-ink pb-2.5">

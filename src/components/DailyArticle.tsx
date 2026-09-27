@@ -7,6 +7,7 @@ import MediaEmbed from '@/components/MediaEmbed';
 import DailyCardShare from '@/components/DailyCardShare';
 import StoryBlocks from '@/components/StoryBlocks';
 import VodCta from '@/components/VodCta';
+import { scoreLabel } from '@/lib/scoreLabel';
 import type { ThreadDaily } from '@/types/thread';
 import type { Locale } from '@/lib/i18n';
 
@@ -24,22 +25,28 @@ export default async function DailyArticle({
   daily,
   sourceUrl,
   locale,
+  afterBody,
 }: {
   daily: ThreadDaily;
   sourceUrl: string; // 埋め込めない動画のときの送客先
   locale: Locale;
+  /** 本文（①〜⑥）の直後・視聴 CTA の手前に差し込む要素（読了の番兵など）。 */
+  afterBody?: React.ReactNode;
 }) {
   const t = await getTranslations();
   const heroSlug = playerSlugByJaName(daily.hero.player);
+  // 本文（3行・ひと言・引用・ざわつき・あす）は en 面でも日本語＝html の lang="en" を打ち消して
+  // 和文として組ませる（ja 面では継ぐ）。見出しは面の言語なので付けない。
+  const jaLang = locale === 'ja' ? undefined : 'ja';
 
   return (
     <div>
       {/* ① きょうの3行 — 忙しい人はここで帰ってOK。先に全部言うことが信頼＝毎日開く理由になる。 */}
       <section className="mt-8">
         <SectionHeading label={t('daily.threeLines')} />
-        <ul className="mt-4 space-y-2.5 border-l-2 border-ink pl-5">
+        <ul lang={jaLang} className="mt-4 space-y-2.5 border-l-2 border-ink pl-5">
           {daily.threeLines.map((line, i) => (
-            <li key={i} className="text-[15px] font-medium leading-relaxed text-ink">
+            <li key={i} className="text-base font-medium leading-[1.8] text-ink">
               {line}
             </li>
           ))}
@@ -80,7 +87,7 @@ export default async function DailyArticle({
           <MediaEmbed media={daily.hero.media} sourceUrl={daily.hero.media.url || sourceUrl} />
         )}
 
-        <StoryBlocks blocks={daily.hero.blocks} />
+        <StoryBlocks blocks={daily.hero.blocks} locale={locale} />
       </section>
 
       {/* ③ 残り全員、ひと言ずつ — 網羅性はここで担保。反応が無い日は正直にそう書く。 */}
@@ -110,12 +117,21 @@ export default async function DailyArticle({
                     {t('daily.seasonPrefix')} {s.season}
                   </p>
                 )}
-                <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{s.text}</p>
+                <p lang={jaLang} className="mt-2 text-base leading-[1.8] text-ink-soft">
+                  {s.text}
+                </p>
                 {s.quotes?.map((c, i) => (
                   <blockquote key={i} className="mt-3 border-l-2 border-line pl-4">
-                    <p className="text-sm leading-relaxed text-ink">“{c.bodyJa}”</p>
-                    <footer className="mt-1 text-xs text-ink-mute">
-                      — {c.author} <span className="tabular-nums">👍{c.score.toLocaleString()}</span>
+                    <p lang={jaLang} className="text-base leading-[1.8] text-ink">
+                      “{c.bodyJa}”
+                    </p>
+                    <footer className="mt-1 min-w-0 text-xs text-ink-mute [overflow-wrap:anywhere]">
+                      — {c.author}
+                      {/* 票が未取得（0）の引用は数字ごと出さない＝「0」は不人気に見えるが実測ではない。
+                          日次は MLB 公式ハイライト（YouTube）由来なので「いいね」で数える。 */}
+                      {c.score > 0 && (
+                        <span className="ml-1.5 tabular-nums">{scoreLabel(c.score, 'youtube', locale)}</span>
+                      )}
                     </footer>
                   </blockquote>
                 ))}
@@ -130,9 +146,11 @@ export default async function DailyArticle({
       {(daily.buzz ?? []).map((buzz, i) => (
         <section key={buzz.title} className={i === 0 ? 'mt-12' : 'mt-10'}>
           {i === 0 && <SectionHeading label={t('daily.buzz')} />}
-          <h3 className="mt-4 text-xl font-bold leading-snug text-ink sm:text-2xl">{buzz.title}</h3>
+          <h3 lang={jaLang} className="mt-4 text-xl font-bold leading-snug text-ink sm:text-2xl">
+            {buzz.title}
+          </h3>
           {buzz.media && <MediaEmbed media={buzz.media} sourceUrl={buzz.media.url || sourceUrl} />}
-          <StoryBlocks blocks={buzz.blocks} />
+          <StoryBlocks blocks={buzz.blocks} locale={locale} />
         </section>
       ))}
 
@@ -190,16 +208,18 @@ export default async function DailyArticle({
       {daily.tomorrow && daily.tomorrow.length > 0 && (
         <section className="mt-12">
           <SectionHeading label={t('daily.tomorrow')} />
-          <ul className="mt-4 space-y-2 text-[15px] leading-relaxed text-ink">
+          <ul lang={jaLang} className="mt-4 space-y-2 text-base leading-[1.8] text-ink">
             {daily.tomorrow.map((line, i) => (
               <li key={i} className="flex gap-3">
-                <span aria-hidden className="mt-[0.7em] h-px w-4 shrink-0 bg-ink" />
+                <span aria-hidden className="mt-[0.8em] h-px w-4 shrink-0 bg-ink" />
                 {line}
               </li>
             ))}
           </ul>
         </section>
       )}
+
+      {afterBody}
 
       {/* ⑥の直後＝日次記事で唯一の換金点。「あすの試合」の話をした直後に視聴導線を置くのが最も自然で、
           記事末（関連記事の下）より文脈が強い。日次は sport=mlb 固定なので競技は決め打ちでよい。

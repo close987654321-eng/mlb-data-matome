@@ -9,6 +9,7 @@ import type { JpRank } from '@/lib/jpRank';
 import type { EditorNote } from '@/lib/editorNotes';
 import type { JournalEntry, JournalQuote } from '@/lib/playerJournal';
 import type { Locale } from '@/lib/i18n';
+import { scoreLabel } from '@/lib/scoreLabel';
 
 /**
  * 選手タグLPの「いま」ブロック＝検索着地の第一意図「直近、海外なんて言ってる？」に
@@ -43,16 +44,16 @@ function Sparkline({ points }: { points: number[] }) {
   );
 }
 
-/** 引用の話者行（規約は TagVoices / SeasonJournal と同じ: YouTube=👍 / Reddit=▲ + u/ 接頭）。 */
-function quoteAuthor(entry: JournalEntry, quote: JournalQuote) {
+/** 引用の話者行（規約は TagVoices / SeasonJournal と同じ: YouTube=「いいね」/ Reddit=▲ + u/ 接頭）。 */
+function quoteAuthor(entry: JournalEntry, quote: JournalQuote, locale: Locale) {
   const isYoutube = entry.format === 'youtube' || Boolean(entry.video);
   return (
     <>
       <span className="font-medium text-ink-soft">{isYoutube ? quote.author : `u/${quote.author}`}</span>
-      {/* 票が付いていない声は「👍 0」を出さない＝LPの顔に0を並べて弱く見せない（値は捏造しない） */}
+      {/* 票が付いていない声は「いいね 0」を出さない＝LPの顔に0を並べて弱く見せない（値は捏造しない） */}
       {quote.score > 0 && (
         <span className="tabular-nums">
-          {isYoutube ? '👍' : '▲'} {quote.score.toLocaleString()}
+          {scoreLabel(quote.score, isYoutube ? 'youtube' : 'reddit', locale)}
         </span>
       )}
     </>
@@ -158,7 +159,7 @@ export default function PlayerNow({
               “{quoteBody}”
             </blockquote>
             <figcaption className="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-ink-mute">
-              {quoteAuthor(highlight.entry, highlight.quote)}
+              {quoteAuthor(highlight.entry, highlight.quote, locale)}
               <span>
                 {dateJa(highlight.entry.date)}・{highlight.entry.headingJa}
               </span>

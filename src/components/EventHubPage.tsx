@@ -248,7 +248,7 @@ export function createEventRoute(slug: string) {
         </section>
 
         {/* オーディション実況（BD のみ）＝動画＋現地コメントの読み物。本文HTMLに載る＝検索資産 */}
-        {story && <BdStory data={story} eventNameJa={event.shortJa} />}
+        {story && <BdStory data={story} eventNameJa={event.shortJa} eventSlug={event.slug} />}
 
         {/* チケット（裏取り済みのみ） */}
         {event.ticketsJa && (

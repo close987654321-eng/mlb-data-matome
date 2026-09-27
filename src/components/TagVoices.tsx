@@ -4,6 +4,7 @@ import SectionHeading from '@/components/SectionHeading';
 import { threadTitle } from '@/lib/series';
 import { VOICES_VISIBLE, voiceDate, voiceFormat, type TagVoice } from '@/lib/tagHub';
 import type { Locale } from '@/lib/i18n';
+import { scoreLabel } from '@/lib/scoreLabel';
 
 /**
  * 選手・ファイタータグLPの「現地ファンの声ピックアップ」。
@@ -34,14 +35,17 @@ export default function TagVoices({
       <li key={`${thread ? `${thread.sport}/${thread.id}` : game?.url}/${i}`} className="py-4">
         <p className="text-sm leading-relaxed text-ink">“{body}”</p>
         <div className="mt-2 flex items-center gap-3 text-xs text-ink-mute">
-          <span className="shrink-0 font-medium text-ink-soft">
+          {/* 著者は縮めない（短いハンドルが2行に割れないように）が、幅は行の6割まで。
+              媒体引用の著者（「ESPN・◯◯ 記者（◯◯ 経由）」のような長い名前）はその中で折り返し、
+              スマホ幅で行が横にはみ出さないようにする。右の記事リンクは残り幅で省略表示。 */}
+          <span className="min-w-0 max-w-[60%] shrink-0 font-medium text-ink-soft [overflow-wrap:anywhere]">
             {isYoutube || isInterview ? comment.author : `u/${comment.author}`}
           </span>
           {/* score=0（票が未取得＝old.reddit がログイン壁の日など）は記号ごと出さない。
               実測0票と区別がつかず、読者には不人気コメントに見えるため（StoryBlocks と同じ扱い）。 */}
           {!isInterview && comment.score > 0 && (
             <span className="shrink-0 tabular-nums">
-              {isYoutube ? '👍' : '▲'} {comment.score.toLocaleString()}
+              {scoreLabel(comment.score, isYoutube ? 'youtube' : 'reddit', locale)}
             </span>
           )}
           {thread ? (

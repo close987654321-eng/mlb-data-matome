@@ -64,7 +64,8 @@ export default async function SearchPage({
             defaultValue={query}
             placeholder={t('search.placeholder')}
             aria-label={t('search.heading')}
-            className="w-full rounded-lg border border-line bg-white px-4 py-2 text-sm text-ink outline-none focus:border-ink"
+            // 16px 未満の入力欄は iPhone がフォーカス時に画面を自動拡大する＝ text-base（16px）に保つ。
+            className="w-full rounded-lg border border-line bg-white px-4 py-2 text-base text-ink outline-none focus:border-ink"
           />
           <button
             type="submit"

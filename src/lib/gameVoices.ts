@@ -22,7 +22,7 @@ export type GameVoice = {
   hs: number; // ホームの得点
   v: string; // 引用元の YouTube 動画ID（送客先）
   author: string;
-  score: number; // 👍 数
+  score: number; // 高評価（いいね）数
   en: string; // 原文（スクリプトが取得結果からそのまま書く）
   ja: string; // 日本語訳（ここだけ後から埋める）
 };

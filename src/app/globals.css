@@ -3,18 +3,110 @@
 @tailwind utilities;
 
 @layer base {
+  /* sticky ヘッダーの実寸。StickyVideo の固定位置とアンカー着地（scroll-padding）の唯一の正。
+     値は layout.tsx の SiteHeader のマークアップから積み上げた計算値（実測ではなく設計値）:
+     - スマホ（<640px）＝ 108px
+       1段目: py-4（16+16）＋ 最も背の高い子＝検索ピル（py-1.5 の 12 ＋ 枠 2 ＋ アイコン h-4 の 16 ＝ 30。
+              ロゴ h-7 の 28 より高い）＝ 62
+       2段目: スマホ用ナビ＝ border-t 1 ＋ 各リンク min-h-[44px] ＝ 45
+       header の border-b 1 → 62 ＋ 45 ＋ 1 ＝ 108
+     - sm 以上（>=640px）＝ 65px
+       1段目のみ: py-4（32）＋ ロゴ sm:h-8 の 32（検索ピル 30・ナビ text-sm 20 より高い）＝ 64
+       ＋ border-b 1 → 65（スマホ用ナビは sm:hidden）
+       ※ ただしデスクトップ用ナビが1行に収まるのは約 720px から。640〜719px ではナビの項目名が
+         折り返してヘッダーが高くなる（ja 79px・en 73〜93px を実測）。この帯は CSS では決め打ちせず、
+         HeaderHeightSync（layout.tsx に常駐）が実寸を測って :root のインライン指定で上書きする。
+         ここの値は SSR と JS 実行前の既定値。
+     ヘッダーの段・余白・ロゴ寸法を変えたらここも直す（直さないと JS 実行前の固定動画がヘッダーに潜る）。 */
+  :root {
+    --header-h: 108px;
+  }
+  @media (min-width: 640px) {
+    :root {
+      --header-h: 65px;
+    }
+  }
+
+  html {
+    /* アンカー着地をヘッダーの下に揃える（+8px は見出しがヘッダー罫に貼りつかない息継ぎ）。
+       scroll-margin（scroll-mt-*）はこれに「加算」されるので、ヘッダー逃がしのためだけの
+       scroll-mt は置かない（置くと着地が行き過ぎる）。 */
+    scroll-padding-top: calc(var(--header-h) + 8px);
+  }
+
   html,
   body {
     @apply bg-paper text-ink;
-    font-feature-settings: 'palt'; /* 日本語の約物詰め（上質に見える） */
+    /* palt（約物・仮名の詰め）は本文にかけない。長い本文で字間が不均一になり読むリズムが崩れるため、
+       見出しと短いラベルだけに限定する（下の h1〜h4 / .uppercase / nav）。 */
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* 詰めて締まって見えるのが効くのは短い行だけ＝見出し・英字大文字のラベル（uppercase は
+     このサイトではラベル専用の書式）・ナビ（ヘッダー/パンくず/フッターの項目名）。
+     ナビを外すとスマホのヘッダーナビが横に伸びて、画面に収まる項目が減る。 */
+  h1,
+  h2,
+  h3,
+  h4,
+  .uppercase,
+  nav {
+    font-feature-settings: 'palt';
+  }
+
+  /* 見出しは行長をそろえて「行末に1〜2字だけ残る」を防ぐ。段落は最終行の孤立語だけを避ける。 */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p,
+  li,
+  blockquote,
+  dd {
+    text-wrap: pretty;
+  }
+
+  /* 行頭禁則を厳格に（小書きの仮名・長音が行頭に来ない）。 */
+  :lang(ja) {
+    line-break: strict;
+  }
+
+  /* 読み物（記事・コラムは <article>）は和文と英数字の間に自動で四分アキを入れる。
+     表・等幅数字（スコア・成績）は桁がそろわなくなるので入れない。 */
+  article {
+    text-autospace: normal;
+  }
+  table,
+  .tabular-nums {
+    text-autospace: no-autospace;
   }
 
   /* 選択色はインク基調（無彩色）。赤は誌面の一点に温存し、選択ハイライトでは主張させない。 */
   ::selection {
     background-color: #191A1C;
     color: #FAFAF9;
+  }
+}
+
+@layer components {
+  /* 横スクロールする表の「続きがある」合図（CSSだけのスクロールシャドウ）。
+     1枚目＝地色の覆い（local＝中身と一緒に動き、中身の右端に張りつく）、
+     2枚目＝右端の薄い影（scroll＝枠に固定）。右端まで送ると覆いが影に重なって消える。
+     どちらも背景なので最終列の文字の上には乗らない。地色は置き場所の地に合わせて
+     --scroll-hint-bg で差し替える（既定は紙白）。 */
+  .scroll-hint {
+    --scroll-hint-bg: theme('colors.paper');
+    background:
+      linear-gradient(to left, var(--scroll-hint-bg) 40%, transparent) right center / 2.5rem 100%
+        no-repeat local,
+      radial-gradient(farthest-side at 100% 50%, theme('colors.ink / 14%'), transparent) right
+        center / 0.875rem 100% no-repeat scroll;
+    background-color: var(--scroll-hint-bg);
+  }
+  .scroll-hint-surface {
+    --scroll-hint-bg: theme('colors.surface');
   }
 }
 

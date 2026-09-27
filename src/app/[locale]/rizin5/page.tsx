@@ -379,8 +379,8 @@ export default async function Rizin5Page({
             <article
               key={card.order}
               id={`fight-${card.order}`}
-              // 一覧表からのアンカー着地でヘッダーに潜らないよう余白を確保する。
-              className="scroll-mt-20 border border-line p-5 sm:p-6"
+              // 一覧表からのアンカー着地のヘッダー逃がしは html の scroll-padding-top（globals.css）が担う。
+              className="border border-line p-5 sm:p-6"
             >
               <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-mute">
                 {String(card.order).padStart(2, '0')} ／ {card.weightJa}

@@ -636,7 +636,9 @@ export default function GamelogAnalysis({
   };
 
   return (
-    <section id="card" className="scroll-mt-24 space-y-4" aria-label={t.heading}>
+    // ヘッダーの逃がしは html の scroll-padding-top が担う。ここで足すのは選手ページだけにある
+    // 凝縮ミニヘッダ（PlayerStickyBar＝h-11＋罫で 45px）の分だけ（scroll-margin は padding に加算される）。
+    <section id="card" className="scroll-mt-12 space-y-4" aria-label={t.heading}>
       <div>
         <div className="flex flex-wrap items-center gap-2.5">
           <h2 className="text-base font-bold tracking-wide text-ink sm:text-lg">{t.heading}</h2>

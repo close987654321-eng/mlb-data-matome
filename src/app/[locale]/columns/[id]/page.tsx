@@ -10,6 +10,7 @@ import ArticleCover from '@/components/ArticleCover';
 import MediaEmbed from '@/components/MediaEmbed';
 import StickyVideo from '@/components/StickyVideo';
 import RelatedArticles from '@/components/RelatedArticles';
+import ReadEndSentinel from '@/components/ReadEndSentinel';
 import TagList from '@/components/TagList';
 import ShareButtons from '@/components/ShareButtons';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -76,6 +77,9 @@ export default async function ColumnDetailPage({
   const kindLabel = t(`columns.kind.${column.kind}`);
   const title = locale === 'ja' ? column.title.ja : column.title.en;
   const subtitle = locale === 'ja' ? column.title.en : column.title.ja;
+  // 本文（リード・見出し・段落・引用）は en 面でも日本語＝html の lang="en" を打ち消して
+  // 和文として組ませる（行頭禁則・字形・読み上げ）。ja 面では html の lang を継ぐので付けない。
+  const jaLang = locale === 'ja' ? undefined : 'ja';
   // 動画つきコラムは記事と同じ「動画ピン留め＋本文が裏を流れる」形にする。
   // 最初の動画ブロックを上部に固定し、本文中では二重表示しないようそのブロックは飛ばす。
   const pinnedVideoIndex = column.blocks.findIndex((block) => block.type === 'video');
@@ -185,7 +189,11 @@ export default async function ColumnDetailPage({
 
       {column.heroQuote && (
         <figure className="mt-8 border-l-4 border-ink pl-5">
-          <blockquote className="text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug">
+          {/* 見出し級の大きな引用なので、段落用の pretty ではなく行長をそろえる balance で組む */}
+          <blockquote
+            lang={jaLang}
+            className="text-balance text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug"
+          >
             “{column.heroQuote.text}”
           </blockquote>
           {column.heroQuote.cite && (
@@ -194,7 +202,9 @@ export default async function ColumnDetailPage({
         </figure>
       )}
 
-      <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{column.lead}</p>
+      <p lang={jaLang} className="mt-7 text-base leading-[1.8] text-ink-soft">
+        {column.lead}
+      </p>
 
       {/* 動画は本文と同じ親の中に置いて sticky を成立させる（本文が動画の裏を流れる）。 */}
       <div className="mt-8 space-y-6">
@@ -213,6 +223,7 @@ export default async function ColumnDetailPage({
             return (
               <h2
                 key={i}
+                lang={jaLang}
                 className="mt-10 flex items-center gap-2 text-lg font-bold leading-snug text-ink sm:text-xl"
               >
                 <span className="h-5 w-[2px] bg-ink" />
@@ -223,7 +234,7 @@ export default async function ColumnDetailPage({
           if (block.type === 'quote') {
             return (
               <figure key={i} className="border-l-4 border-ink/50 pl-5">
-                <blockquote className="text-[17px] font-medium leading-relaxed text-ink">
+                <blockquote lang={jaLang} className="text-[17px] font-medium leading-relaxed text-ink">
                   “{block.quote.text}”
                 </blockquote>
                 {block.quote.cite && (
@@ -239,12 +250,16 @@ export default async function ColumnDetailPage({
             return <MediaEmbed key={i} media={block.media} sourceUrl={column.sourceUrl ?? ''} />;
           }
           return (
-            <p key={i} className="text-[15px] leading-relaxed text-ink">
+            // 長文の読み物＝本文は 16px・行間 1.8（コメント列・要約とそろえる）。
+            <p key={i} lang={jaLang} className="text-base leading-[1.8] text-ink">
               {block.text}
             </p>
           );
         })}
       </div>
+
+      {/* 読了の番兵＝コラム本文の直後（出典リンク・共有・関連記事は本文に数えない）。 */}
+      <ReadEndSentinel id={column.id} category={column.sport} format="column" />
 
       <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         {column.sourceUrl && (

@@ -29,7 +29,8 @@ const PREF_KEY = 'matome:video-unpinned';
  *
  * sticky が効くよう、これと後続コンテンツは同じ親の直下に縦並びで置くこと。
  * bg-paper + z-10 で、スクロールした本文が動画の背後にきれいに隠れる。
- * top はグローバルの sticky ヘッダー高に合わせる（モバイル ~96px / sm+ ~64px）。
+ * top はグローバルの sticky ヘッダー実寸（globals.css の --header-h）に吸着させる。以前の
+ * 決め打ち top-[96px] は実寸 108px より浅く、固定した動画の上端がヘッダーの下に潜っていた。
  */
 export default function StickyVideo({ media, sourceUrl, hintLabel, unpinLabel, pinLabel }: Props) {
   const [played, setPlayed] = useState(false);
@@ -50,8 +51,11 @@ export default function StickyVideo({ media, sourceUrl, hintLabel, unpinLabel, p
 
   return (
     // padding は両状態で同じ＝固定に切り替わった瞬間に本文が跳ねない。
+    // 紙色の背景は左右 16px（-mx-4 px-4）まで張り出す＝コメント列の強調線（左の余白 12px の位置に
+    // 引く 2px の墨線）も固定した動画の裏に隠れる。8px だと線だけが動画の横に残って見えていた。
+    // 16px は main の左右余白 20px の内側なので、スマホでも横スクロールは出ない（動画の幅は不変）。
     <div
-      className={`-mx-2 bg-paper px-2 pb-3 pt-1 ${isSticky ? 'sticky top-[96px] z-10 sm:top-16' : ''}`}
+      className={`-mx-4 bg-paper px-4 pb-3 pt-1 ${isSticky ? 'sticky top-[var(--header-h)] z-10' : ''}`}
     >
       <MediaEmbed media={media} sourceUrl={sourceUrl} onVideoActivate={() => setPlayed(true)} />
 

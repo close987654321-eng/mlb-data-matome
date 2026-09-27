@@ -92,7 +92,7 @@ export function voiceDate(voice: TagVoice): string {
   return voice.game?.date ?? voice.thread?.fetchedAt.slice(0, 10) ?? '';
 }
 
-/** 票数の出し方（YouTube=👍 / Reddit=▲ / interview=票なし）の判定。声レイヤーは常に YouTube。 */
+/** 票数の出し方（YouTube=「いいね」/ Reddit=▲ / interview=票なし）の判定。声レイヤーは常に YouTube。 */
 export function voiceFormat(voice: TagVoice): 'youtube' | 'interview' | 'reddit' {
   if (voice.game) return 'youtube';
   return voice.thread?.format === 'youtube'

@@ -28,12 +28,15 @@ import GameResultCard from '@/components/GameResultCard';
 import WatchAlong from '@/components/WatchAlong';
 import RelatedArticles from '@/components/RelatedArticles';
 import NextReadCard from '@/components/NextReadCard';
+import ReadEndSentinel from '@/components/ReadEndSentinel';
+import SectionHeading from '@/components/SectionHeading';
 import SeriesNav from '@/components/SeriesNav';
 import TagList from '@/components/TagList';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
 import { absoluteUrl, SITE_URL, localeAlternates } from '@/lib/site';
+import { scoreLabel, type ScoreKind } from '@/lib/scoreLabel';
 import { getPlayerByJaName, primaryPlayerOf } from '@/lib/players';
 import { npbProspectOf } from '@/lib/npbPlayers';
 import { getTeam, teamOfficialUrl, teamLogoUrl } from '@/lib/teams';
@@ -172,11 +175,17 @@ export default async function ThreadDetailPage({
   // 動画つきの記事は「動画ピン留め＋コメントが裏を流れる」watch-along をデフォルトにする。
   // story 記事は動画があっても watch-along にしない（コメントが空＝流すものが無い。動画は本文に埋め込む）。
   const isWatchAlong = !daily && !story && thread.media?.kind === 'video';
-  // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+👍
+  // コメントの出所で表示を変える: reddit=u/接頭辞+▲ / interview=名前のみ / youtube=名前そのまま+「いいね」
   const isInterview = thread.format === 'interview';
   const isYoutube = thread.format === 'youtube';
   const authorLabel = (a: string) => (isInterview || isYoutube ? a : `u/${a}`);
-  const scoreMark = isYoutube ? '👍' : '▲';
+  const scoreKind: ScoreKind = isYoutube ? 'youtube' : 'reddit';
+  // 読了計測（read_end）の形式ラベル。本文の組み方ごとに読了率を比べられるようにする。
+  const readFormat = isWatchAlong ? 'watch_along' : story ? 'story' : (thread.format ?? 'reddit');
+  // 本文（訳・要約・語り）は en 面でも日本語のまま＝html は lang="en" なので、日本語の要素にだけ
+  // lang="ja" を付けて和文として組ませる（行頭禁則 :lang(ja)・字形・読み上げの声が日本語になる）。
+  // ja 面では html の lang をそのまま継ぐので付けない。
+  const jaLang = locale === 'ja' ? undefined : 'ja';
 
   // 構造化データ（JSON-LD）。Discover/検索のリッチリザルト＝パンくず表示・記事カードに効く。
   // VideoObject は動画公開日(uploadDate)が必須だが手元に無いので入れない（捏造しない）。
@@ -482,7 +491,11 @@ export default async function ThreadDetailPage({
 
       {hook && (
         <figure className="mt-8 border-l-4 border-ink pl-5">
-          <blockquote className="text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug">
+          {/* 見出し級の大きな引用なので、段落用の pretty ではなく行長をそろえる balance で組む */}
+          <blockquote
+            lang={jaLang}
+            className="text-balance text-xl font-bold leading-relaxed text-ink sm:text-[1.7rem] sm:leading-snug"
+          >
             “{hook.bodyJa}”
           </blockquote>
           <figcaption className="mt-2 text-sm text-ink-soft">
@@ -499,7 +512,9 @@ export default async function ThreadDetailPage({
 
       {/* 日次記事はリードを「きょうの3行」（DailyArticle ①）が担うので要約段落は出さない（メタ説明には使う）。 */}
       {!daily && (
-        <p className="mt-7 text-[15px] leading-relaxed text-ink-soft">{thread.summaryJa}</p>
+        <p lang={jaLang} className="mt-7 text-base leading-[1.8] text-ink-soft">
+          {thread.summaryJa}
+        </p>
       )}
 
       {/* 試合結果ボックス。「◯◯ 対 ◯◯」で来た読者が先に知りたいのは勝敗＝結論を成績より上に置く。
@@ -574,7 +589,13 @@ export default async function ThreadDetailPage({
       )}
 
       {daily ? (
-        <DailyArticle daily={daily} sourceUrl={thread.sourceUrl} locale={locale} />
+        <DailyArticle
+          daily={daily}
+          sourceUrl={thread.sourceUrl}
+          locale={locale}
+          // 日次の本文の終わり＝⑥あすの日本人の直後（その下の視聴 CTA は本文に数えない）。
+          afterBody={<ReadEndSentinel id={thread.id} category={sport} format="daily" />}
+        />
       ) : isWatchAlong ? (
         // 動画つき記事：再生した人にだけ動画をピン留めし、その裏をコメントが流れる。
         <WatchAlong
@@ -585,6 +606,7 @@ export default async function ThreadDetailPage({
           transcriptLabel={t('threads.transcript')}
           unpinLabel={t('threads.unpinVideo')}
           pinLabel={t('threads.pinVideo')}
+          locale={locale}
         />
       ) : (
         <>
@@ -595,7 +617,7 @@ export default async function ThreadDetailPage({
 
           {/* 番組トーク（あれば）を動画とコメントの間に挟む。 */}
           {thread.transcript && thread.transcript.length > 0 && (
-            <Transcript segments={thread.transcript} heading={t('threads.transcript')} />
+            <Transcript segments={thread.transcript} heading={t('threads.transcript')} locale={locale} />
           )}
 
           {/* 追加メディア（連続フレーム等）は本文に順に差し込む。 */}
@@ -605,49 +627,54 @@ export default async function ThreadDetailPage({
 
           {/* 語り形式（R13）は地の文×証言引用で描き、コメント列は出さない（story がコメントを内包する）。 */}
           {story ? (
-            <StoryBlocks blocks={story} scoreMark={isInterview ? null : scoreMark} />
+            <StoryBlocks blocks={story} scoreKind={isInterview ? null : scoreKind} locale={locale} />
           ) : (
           <section className="mt-10">
-            <h2 className="mb-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-ink-soft">
-              <span className="h-3 w-[2px] bg-ink" />
-              {t('threads.pickedComments', { total: thread.totalComments })}
-            </h2>
-            <ul className="space-y-5">
+            <SectionHeading label={t('threads.pickedComments', { total: thread.totalComments })} />
+            {/* 罫線のリスト。組み方の理由は WatchAlong と同じ（余白の比率・強調線を左の余白側に）。 */}
+            <ul className="divide-y divide-line">
               {comments.map((c, i) => (
                 <li
                   key={i}
-                  className={`rounded-xl border p-5 ${
-                    c.isHighlight ? 'border-ink/20 bg-ink/[0.03]' : 'border-line bg-surface'
+                  className={`py-5 ${
+                    c.isHighlight
+                      ? 'relative before:absolute before:-left-3 before:bottom-5 before:top-5 before:w-[2px] before:bg-ink'
+                      : ''
                   }`}
                 >
-                  <div className="flex items-center justify-between text-xs text-ink-soft">
-                    {/* 媒体引用は著者名から出典へ送客（海外メディア評価の記事＝媒体ごとにリンク）。 */}
+                  <div className="flex min-w-0 items-baseline justify-between gap-3 text-xs text-ink-soft">
+                    {/* 媒体引用は著者名から出典へ送客（海外メディア評価の記事＝媒体ごとにリンク）。
+                        長いハンドル名でも横にはみ出さないよう、どこでも折り返せるようにする。 */}
                     {c.sourceUrl ? (
                       <a
                         href={c.sourceUrl}
                         target="_blank"
                         rel="noopener noreferrer nofollow"
-                        className="font-medium underline decoration-line underline-offset-2 transition-colors hover:text-ink"
+                        className="min-w-0 font-medium underline decoration-line underline-offset-2 transition-colors [overflow-wrap:anywhere] hover:text-ink"
                       >
                         {authorLabel(c.author)}
                       </a>
                     ) : (
-                      <span className="font-medium">{authorLabel(c.author)}</span>
+                      <span className="min-w-0 font-medium [overflow-wrap:anywhere]">
+                        {authorLabel(c.author)}
+                      </span>
                     )}
                     {/* 票が取れなかった日（old.reddit がログイン壁の日など）は score=0 のまま保存する
                         ＝捏造しない。その代わり「▲ 0」は出さない（実測0票ではなく“未取得”なので、
                         0 を表示すると読者には不人気コメントに見える）。FighterNow と同じ posture。 */}
                     {!isInterview && c.score > 0 && (
-                      <span className="tabular-nums">
-                        {scoreMark} {c.score.toLocaleString()}
+                      <span className="shrink-0 tabular-nums">
+                        {scoreLabel(c.score, scoreKind, locale)}
                       </span>
                     )}
                   </div>
-                  <p className="mt-2 text-[15px] leading-relaxed text-ink">{c.bodyJa}</p>
-                  {/* 原文（英語）の併記。日本語ソース（Netflix Japan 等の日本語コメント）では原文＝訳で
-                      重複するので bodyEn を空にして併記を省く */}
+                  <p lang={jaLang} className="mt-1.5 text-base leading-[1.8] text-ink">
+                    {c.bodyJa}
+                  </p>
+                  {/* 原文（英語）の併記。斜体はやめ lang="en" で英語として組ませる。日本語ソース
+                      （Netflix Japan 等の日本語コメント）では原文＝訳で重複するので bodyEn を空にして併記を省く */}
                   {c.bodyEn && (
-                    <p className="mt-2 border-t border-line/70 pt-2 text-xs italic leading-relaxed text-ink-soft">
+                    <p lang="en" className="mt-2 text-[13px] leading-[1.6] text-ink-soft">
                       {c.bodyEn}
                     </p>
                   )}
@@ -659,11 +686,14 @@ export default async function ThreadDetailPage({
         </>
       )}
 
+      {/* 読了の番兵＝最後のコメント（語り形式は本文）の直後。日次記事は DailyArticle の中に置く。 */}
+      {!daily && <ReadEndSentinel id={thread.id} category={sport} format={readFormat} />}
+
       {/* シリーズ記事なら前試合/次試合の直列ナビ（毎試合追う読者の回遊）。1本しか無い間は何も出さない。 */}
       <SeriesNav thread={thread} threads={allThreads} locale={locale} />
 
       {/* オチ直後（感情のピーク）＝回遊の一等地。ページ唯一の塗り CTA をここへ移す。 */}
-      {nextPick && <NextReadCard pick={nextPick} locale={locale} />}
+      {nextPick && <NextReadCard pick={nextPick} locale={locale} fromId={thread.id} />}
 
       {/* 元スレ導線はテキストリンクに降格（送客の引用要件は維持しつつ「去る」導線は主役から外す）。
           出典が消えた記事（sourceRemoved）はリンクを外して注記に落とす＝404 へ送らない。 */}

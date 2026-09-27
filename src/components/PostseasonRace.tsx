@@ -93,7 +93,7 @@ export default function PostseasonRace({
   const en = locale === 'en';
   if (data.phase !== 'race') return null;
   return (
-    <section id="race" className="scroll-mt-20">
+    <section id="race">
       <SectionHeading label={en ? 'The Wild Card race' : 'ワイルドカード争い・地区優勝争い'} lead />
       <p className="mb-4 mt-1.5 max-w-prose text-sm text-ink-soft">
         {en

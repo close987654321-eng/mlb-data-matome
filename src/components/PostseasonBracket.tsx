@@ -148,7 +148,7 @@ export default function PostseasonBracket({
   const colHead = [roundName('F', en, true), roundName('D', en, true), roundName('L', en, true)];
 
   return (
-    <section id="bracket" className="scroll-mt-20">
+    <section id="bracket">
       <SectionHeading label={en ? `${data.season} Postseason bracket` : `${data.season}年 トーナメント表`} lead />
       <p className="mb-4 mt-1.5 max-w-prose text-sm text-ink-soft">
         {en
@@ -159,7 +159,7 @@ export default function PostseasonBracket({
         {(['AL', 'NL'] as League[]).map((lg) => {
           const m = byKey(lg);
           return (
-            <div key={lg} id={lg.toLowerCase()} className="scroll-mt-20">
+            <div key={lg} id={lg.toLowerCase()}>
               <h3 className="mb-3 text-sm font-semibold text-ink">{leagueName(lg, en)}</h3>
               <div className="grid gap-4 sm:grid-cols-3">
                 {PATH_ORDER[lg].map((col, i) => (
@@ -176,7 +176,7 @@ export default function PostseasonBracket({
           );
         })}
         {ws && (
-          <div id="world-series" className="scroll-mt-20">
+          <div id="world-series">
             <h3 className="mb-3 text-sm font-semibold text-ink">{roundName('W', en)}</h3>
             <div className="max-w-sm">
               <SeriesCard s={ws} en={en} linkable={linkable} jp={jp} />

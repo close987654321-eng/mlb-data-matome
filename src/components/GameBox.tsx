@@ -82,7 +82,11 @@ export default async function GameBox({
     : undefined;
 
   return (
-    <section className={className ?? 'mt-8'} aria-label={t('game.heading')}>
+    // スコア・勝敗・成績は桁をそろえて読む＝記事本文（article）の和欧間の自動アキを切る。
+    <section
+      className={`${className ?? 'mt-8'} [text-autospace:no-autospace]`}
+      aria-label={t('game.heading')}
+    >
       {heading !== null && <SectionHeading label={heading ?? t('game.heading')} />}
 
       <div className={`${heading === null ? '' : 'mt-4 '}rounded-xl border border-line bg-surface`}>
@@ -152,9 +156,11 @@ export default async function GameBox({
           })}
         </div>
 
-        {/* ② 線スコア。9回＋R/H/E/残＝最大14列なので、本文を横スクロールさせず表だけを流す */}
+        {/* ② 線スコア。9回＋R/H/E/残＝最大14列なので、本文を横スクロールさせず表だけを流す。
+            スマホでは表の幅（27rem）が画面より広い＝右端に薄い影を出して「続きがある」と知らせる
+            （scroll-hint＝CSSだけのスクロールシャドウ。右端まで送ると消える。地はボックスの surface）。 */}
         {hasLine && (
-          <div className="overflow-x-auto border-t border-line">
+          <div className="scroll-hint scroll-hint-surface overflow-x-auto border-t border-line">
             <table className="w-full min-w-[27rem] border-collapse text-center text-xs">
               <caption className="sr-only">{t('game.lineCaption')}</caption>
               <thead>

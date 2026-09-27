@@ -1,10 +1,11 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import SectionHeading from "@/components/SectionHeading";
 import { Link } from "@/lib/navigation";
 import { fightDayJa, fighterNextFight } from "@/lib/fighterHub";
 import type { Fighter } from "@/lib/fighters";
 import type { EditorNote } from "@/lib/editorNotes";
 import type { JournalEntry, JournalQuote } from "@/lib/playerJournal";
+import { scoreLabel } from "@/lib/scoreLabel";
 
 /**
  * 格闘技タグLPの「いま」ブロック＝PlayerNow のファイター版。検索着地の第一意図
@@ -29,18 +30,18 @@ function dateJa(date: string): string {
   return `${y === thisYear ? "" : `${Number(y)}年`}${Number(m)}月${Number(d)}日`;
 }
 
-/** 引用の話者行（規約は SeasonJournal / PlayerNow と同じ: YouTube=👍 / Reddit=▲ + u/ 接頭）。 */
-function quoteAuthor(entry: JournalEntry, quote: JournalQuote) {
+/** 引用の話者行（規約は SeasonJournal / PlayerNow と同じ: YouTube=「いいね」/ Reddit=▲ + u/ 接頭）。 */
+function quoteAuthor(entry: JournalEntry, quote: JournalQuote, locale: string) {
   const isYoutube = entry.format === "youtube" || Boolean(entry.video);
   return (
     <>
       <span className="font-medium text-ink-soft">
         {isYoutube ? quote.author : `u/${quote.author}`}
       </span>
-      {/* 票が付いていない声は「👍 0」を出さない＝LPの顔に0を並べて弱く見せない（値は捏造しない） */}
+      {/* 票が付いていない声は「いいね 0」を出さない＝LPの顔に0を並べて弱く見せない（値は捏造しない） */}
       {quote.score > 0 && (
         <span className="tabular-nums">
-          {isYoutube ? "👍" : "▲"} {quote.score.toLocaleString()}
+          {scoreLabel(quote.score, isYoutube ? "youtube" : "reddit", locale)}
         </span>
       )}
     </>
@@ -59,6 +60,7 @@ export default function FighterNow({
   showJournalJump?: boolean;
 }) {
   const t = useTranslations();
+  const locale = useLocale();
   const r = fighter.record;
   const record = `${r.wins}-${r.losses}${r.draws > 0 ? `-${r.draws}` : ""}`;
   // KO率＝勝利のうちKO決着の割合（公知の戦績からの単純演算。母数0は出さない）
@@ -125,7 +127,7 @@ export default function FighterNow({
               “{quoteBody}”
             </blockquote>
             <figcaption className="mt-2.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-ink-mute">
-              {quoteAuthor(highlight.entry, highlight.quote)}
+              {quoteAuthor(highlight.entry, highlight.quote, locale)}
               <span>
                 {dateJa(highlight.entry.date)}・{highlight.entry.headingJa}
               </span>

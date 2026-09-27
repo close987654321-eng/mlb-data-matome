@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 /**
  * 縦に長い選手ページの“現在地”を示す凝縮ミニヘッダ。唯一のクライアント島（<1KB・IO 1個）。
  * ヒーロー帯直後の番兵(sentinel)が画面上に消えたら出す。fixed なので非表示時にレイアウトの隙間を作らない。
- * サイトヘッダ(z-20)の規約 top-[96px] sm:top-16 に合わせ z-10 で潜らせ、本物のヘッダと喧嘩させない。
+ * サイトヘッダ(z-20)の下端（globals.css の --header-h）に合わせ z-10 で潜らせ、本物のヘッダと喧嘩させない。
  */
 export default function PlayerStickyBar({
   name,
@@ -57,7 +57,7 @@ export default function PlayerStickyBar({
            margin-top:2rem を足す。position:fixed の top はマージン辺を基準に置くため、その 2rem が
            バーをヘッダ下端からちょうど 32px 押し下げ＝隙間の正体だった（top の実測値は正しかった）。
            important で space-y のマージンだけ打ち消し、ヘッダ下端にピタリ吸着させる。 */
-        className="fixed inset-x-0 top-[96px] z-10 !mt-0 border-b border-line bg-paper/90 backdrop-blur transition-[opacity,transform] duration-200 motion-reduce:transition-none data-[stuck=false]:pointer-events-none data-[stuck=false]:-translate-y-1 data-[stuck=false]:opacity-0 data-[stuck=true]:translate-y-0 data-[stuck=true]:opacity-100 sm:top-16"
+        className="fixed inset-x-0 top-[var(--header-h)] z-10 !mt-0 border-b border-line bg-paper/90 backdrop-blur transition-[opacity,transform] duration-200 motion-reduce:transition-none data-[stuck=false]:pointer-events-none data-[stuck=false]:-translate-y-1 data-[stuck=false]:opacity-0 data-[stuck=true]:translate-y-0 data-[stuck=true]:opacity-100"
       >
         <div className="mx-auto flex h-11 max-w-5xl items-center justify-between gap-3 px-5">
           <div className="flex min-w-0 items-center gap-2">

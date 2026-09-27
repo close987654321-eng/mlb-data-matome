@@ -1,5 +1,6 @@
 import LiteVideo from './LiteVideo';
 import SectionHeading from './SectionHeading';
+import ReadEndSentinel from './ReadEndSentinel';
 import type { BdStory as BdStoryData, BdBeat } from '@/lib/bdStory';
 
 /**
@@ -35,7 +36,8 @@ function Attribution({ author, likeCount }: { author: string; likeCount: number 
 function Beat({ beat }: { beat: BdBeat }) {
   return (
     <li className="py-5">
-      <p className="whitespace-pre-line text-sm leading-relaxed text-ink">{beat.text}</p>
+      {/* 引用の本文は読み物の本体＝記事のコメント列と同じ 16px・行間 1.8（出典行は小さいまま） */}
+      <p className="whitespace-pre-line text-base leading-[1.8] text-ink">{beat.text}</p>
       <Attribution author={beat.author} likeCount={beat.likeCount} />
       {beat.roleJa && (
         <p className="mt-1 text-xs font-medium text-ink-soft">{beat.roleJa}</p>
@@ -51,7 +53,7 @@ function Beat({ beat }: { beat: BdBeat }) {
           <ul className="mt-2 space-y-3">
             {beat.replies.map((r) => (
               <li key={`${r.author}-${r.likeCount}-${r.text.slice(0, 12)}`}>
-                <p className="whitespace-pre-line text-sm leading-relaxed text-ink-soft">
+                <p className="whitespace-pre-line text-base leading-[1.8] text-ink-soft">
                   {r.text}
                 </p>
                 <Attribution author={r.author} likeCount={r.likeCount} />
@@ -67,16 +69,19 @@ function Beat({ beat }: { beat: BdBeat }) {
 export default function BdStory({
   data,
   eventNameJa,
+  eventSlug,
 }: {
   data: BdStoryData;
   eventNameJa: string;
+  /** 読了計測（read_end）の ID＝大会ページの slug（例: breakingdown21） */
+  eventSlug: string;
 }) {
   return (
     <section id="audition" className="space-y-6">
       <SectionHeading label={`${eventNameJa} オーディションで何が起きたか`} />
 
       {/* 中の人の導入（人が書く地の文。事実だけ・評価は引用に語らせる） */}
-      <p className="max-w-prose whitespace-pre-line text-sm leading-loose text-ink">
+      <p className="max-w-prose whitespace-pre-line text-base leading-[1.8] text-ink">
         {data.ledeJa}
       </p>
 
@@ -86,65 +91,70 @@ export default function BdStory({
         このページに載せている引用は{num(data.quoted)}件で、{data.asOf}に抜き出した本文をそのまま載せている。
       </p>
 
-      <div className="divide-y divide-line border-t border-line">
-        {data.chapters.map((ch) => (
-          <article key={ch.videoId} id={`vol${ch.vol}`} className="space-y-4 py-8">
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
-                vol.{ch.vol}
-              </span>
-              <span className="text-xs tabular-nums text-ink-mute">
-                {ch.publishedAt}
-                <span className="mx-2 text-line">/</span>
-                {num(ch.viewCount)}回再生
-                <span className="mx-2 text-line">/</span>
-                コメント{num(ch.commentCount)}件
-              </span>
-            </div>
+      {/* 章の列と読了の番兵を1つの箱に入れる＝番兵が section の space-y の余白を増やさない。 */}
+      <div>
+        <div className="divide-y divide-line border-t border-line">
+          {data.chapters.map((ch) => (
+            <article key={ch.videoId} id={`vol${ch.vol}`} className="space-y-4 py-8">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
+                  vol.{ch.vol}
+                </span>
+                <span className="text-xs tabular-nums text-ink-mute">
+                  {ch.publishedAt}
+                  <span className="mx-2 text-line">/</span>
+                  {num(ch.viewCount)}回再生
+                  <span className="mx-2 text-line">/</span>
+                  コメント{num(ch.commentCount)}件
+                </span>
+              </div>
 
-            <h3 className="text-base font-bold leading-snug text-ink sm:text-lg">{ch.title}</h3>
+              <h3 className="text-base font-bold leading-snug text-ink sm:text-lg">{ch.title}</h3>
 
-            {/* 動画タイトルが報じている範囲だけ＝公式の正式発表ではないことは見出しで断る */}
-            {ch.matchJa && (
-              <p className="inline-block border border-line px-3 py-1.5 text-xs text-ink-soft">
-                この回で動いた対戦：{ch.matchJa}
+              {/* 動画タイトルが報じている範囲だけ＝公式の正式発表ではないことは見出しで断る */}
+              {ch.matchJa && (
+                <p className="inline-block border border-line px-3 py-1.5 text-xs text-ink-soft">
+                  この回で動いた対戦：{ch.matchJa}
+                </p>
+              )}
+
+              {/* ファサード＝クリックするまで iframe を作らない（5本ぶんのプレイヤーを初期ロードしない） */}
+              <div className="relative aspect-video overflow-hidden bg-black">
+                <LiteVideo
+                  embedUrl={`https://www.youtube.com/embed/${ch.videoId}`}
+                  thumbUrl={`https://i.ytimg.com/vi/${ch.videoId}/hqdefault.jpg`}
+                  title={ch.title}
+                />
+              </div>
+
+              <div className="max-w-prose space-y-1">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
+                  中の人メモ
+                </p>
+                <p className="whitespace-pre-line text-base leading-[1.8] text-ink">{ch.noteJa}</p>
+              </div>
+
+              <ul className="divide-y divide-line border-t border-line">
+                {ch.beats.map((b) => (
+                  <Beat key={`${b.author}-${b.likeCount}`} beat={b} />
+                ))}
+              </ul>
+
+              <p>
+                <a
+                  href={`https://www.youtube.com/watch?v=${ch.videoId}`}
+                  target="_blank"
+                  rel="noopener"
+                  className="text-sm text-ink-soft underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
+                >
+                  この回をYouTubeで見る <span aria-hidden>→</span>
+                </a>
               </p>
-            )}
-
-            {/* ファサード＝クリックするまで iframe を作らない（5本ぶんのプレイヤーを初期ロードしない） */}
-            <div className="relative aspect-video overflow-hidden bg-black">
-              <LiteVideo
-                embedUrl={`https://www.youtube.com/embed/${ch.videoId}`}
-                thumbUrl={`https://i.ytimg.com/vi/${ch.videoId}/hqdefault.jpg`}
-                title={ch.title}
-              />
-            </div>
-
-            <div className="max-w-prose space-y-1">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">
-                中の人メモ
-              </p>
-              <p className="whitespace-pre-line text-sm leading-loose text-ink">{ch.noteJa}</p>
-            </div>
-
-            <ul className="divide-y divide-line border-t border-line">
-              {ch.beats.map((b) => (
-                <Beat key={`${b.author}-${b.likeCount}`} beat={b} />
-              ))}
-            </ul>
-
-            <p>
-              <a
-                href={`https://www.youtube.com/watch?v=${ch.videoId}`}
-                target="_blank"
-                rel="noopener"
-                className="text-sm text-ink-soft underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
-              >
-                この回をYouTubeで見る <span aria-hidden>→</span>
-              </a>
-            </p>
-          </article>
-        ))}
+            </article>
+          ))}
+        </div>
+        {/* 読了の番兵＝最後の章の直後（この読み物の終わり。下のチケット等は本文に数えない）。 */}
+        <ReadEndSentinel id={eventSlug} category="mma" format="story" />
       </div>
     </section>
   );

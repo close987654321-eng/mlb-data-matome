@@ -5,6 +5,7 @@ import SectionHeading from '@/components/SectionHeading';
 import { issueDate } from '@/lib/frontpage';
 import { dailyRows, heroTopQuotes, heroCounts } from '@/lib/dailyHub';
 import type { Thread } from '@/types/thread';
+import { scoreLabel } from '@/lib/scoreLabel';
 
 /**
  * /daily（きょうの日本人選手ハブ）の増補ブロック群（2026-09-16）。
@@ -115,7 +116,11 @@ export function DailyHeroTeaser({ latest, locale }: { latest: Thread; locale: st
                   <li key={i} className="border-l-2 border-line pl-4">
                     <p className="text-sm leading-relaxed text-ink">“{c.bodyJa}”</p>
                     <p className="mt-1 text-xs text-ink-mute">
-                      {c.author} <span className="tabular-nums">👍{(c.score ?? 0).toLocaleString()}</span>
+                      {c.author}
+                      {/* 票が未取得（0・欠落）の引用は数字ごと出さない＝「0」は不人気に見えるが実測ではない。 */}
+                      {(c.score ?? 0) > 0 && (
+                        <span className="ml-1.5 tabular-nums">{scoreLabel(c.score, 'youtube', locale)}</span>
+                      )}
                     </p>
                   </li>
                 ))}

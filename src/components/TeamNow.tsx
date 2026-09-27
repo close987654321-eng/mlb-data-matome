@@ -5,6 +5,7 @@ import { divisionLabel, type StandingRow, type StandingsDivision } from '@/lib/s
 import type { TeamHub } from '@/lib/teamHub';
 import { voiceDate, voiceFormat, type TagVoice } from '@/lib/tagHub';
 import type { Locale } from '@/lib/i18n';
+import { scoreLabel } from '@/lib/scoreLabel';
 
 /**
  * チームタグLPの「いま」ブロック＝選手LPの PlayerNow のチーム版。
@@ -82,10 +83,14 @@ export default function TeamNow({
                   ? `u/${voice.comment.author}`
                   : voice.comment.author}
               </span>
-              {voiceFormat(voice) !== 'interview' && (
+              {/* 票が未取得（0）の声は数字ごと出さない＝「0」は不人気に見えるが実測ではない。 */}
+              {voiceFormat(voice) !== 'interview' && voice.comment.score > 0 && (
                 <span className="tabular-nums">
-                  {voiceFormat(voice) === 'youtube' ? '👍' : '▲'}{' '}
-                  {voice.comment.score.toLocaleString()}
+                  {scoreLabel(
+                    voice.comment.score,
+                    voiceFormat(voice) === 'youtube' ? 'youtube' : 'reddit',
+                    locale,
+                  )}
                 </span>
               )}
               {/* 出どころ＝記事（内部リンク先はこの下の一覧が持つ）か、声レイヤーなら試合のカード。 */}
