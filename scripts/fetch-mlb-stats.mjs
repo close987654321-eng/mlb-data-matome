@@ -511,7 +511,12 @@ const teamJa = (p) => TEAM_JA[p.currentTeam?.name] ?? p.currentTeam?.name ?? '';
 /** stats 配列から hitting / pitching の split（その粒度の1件）を取り出す */
 function pickSplit(person, group) {
   const block = (person.stats ?? []).find((s) => s.group?.displayName === group);
-  return block?.splits?.[0]?.stat ?? null;
+  const splits = block?.splits ?? [];
+  // 今季途中で移籍した選手は、球団別の split と合算の split（team なし）が並ぶ。合算の位置は type で
+  // 変わる（season は先頭・byDateRange は末尾）ので、先頭決め打ちだと期間累計が移籍後の球団ぶんだけになる
+  // （2026-09-25 ヌートバーの本塁打が合算8号なのに「今季5号」とカードに出た）。
+  const total = splits.length > 1 ? splits.find((sp) => !sp.team) : null;
+  return (total ?? splits[0])?.stat ?? null;
 }
 
 function hitterSeason(s) {
