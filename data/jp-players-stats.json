@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-29 07:05",
+  "asOf": "2026-09-29 17:37",
   "players": {
     "500743": {
       "fielding": {
@@ -78,10 +78,10 @@
         "gamesPlayed": 152,
         "gamesStarted": 152,
         "innings": "1289.2",
-        "oaa": 0,
+        "oaa": -1,
         "position": "一塁",
         "putOuts": 1015,
-        "runsPrevented": 0
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 579,
@@ -721,9 +721,9 @@
         }
       },
       "saber": {
-        "hit": 3.94075,
-        "woba": 0.35106,
-        "wrcplus": 121.833
+        "hit": 3.93907,
+        "woba": 0.351059,
+        "wrcplus": 121.84
       },
       "sprintSpeed": 25.3,
       "team": "ブレーブス"
@@ -1226,9 +1226,9 @@
         }
       },
       "saber": {
-        "hit": 3.13029,
-        "woba": 0.385031,
-        "wrcplus": 146.734
+        "hit": 3.13171,
+        "woba": 0.38503,
+        "wrcplus": 146.742
       },
       "sprintSpeed": 25.6,
       "team": "メッツ"
@@ -1339,7 +1339,7 @@
         "gamesPlayed": 143,
         "gamesStarted": 139,
         "innings": "1227.2",
-        "oaa": -3,
+        "oaa": -2,
         "position": "三塁",
         "putOuts": 89,
         "runsPrevented": -2
@@ -1640,7 +1640,7 @@
         "gamesPlayed": 140,
         "gamesStarted": 140,
         "innings": "1209.0",
-        "oaa": 23,
+        "oaa": 24,
         "position": "遊撃",
         "putOuts": 180,
         "runsPrevented": 18
@@ -2676,10 +2676,10 @@
         "gamesPlayed": 56,
         "gamesStarted": 53,
         "innings": "474.2",
-        "oaa": -6,
+        "oaa": -7,
         "position": "一塁",
         "putOuts": 422,
-        "runsPrevented": -4
+        "runsPrevented": -5
       },
       "hitting": {
         "atBats": 573,
@@ -2823,9 +2823,9 @@
         }
       },
       "saber": {
-        "hit": 2.60181,
-        "woba": 0.380688,
-        "wrcplus": 138.16
+        "hit": 2.60088,
+        "woba": 0.380687,
+        "wrcplus": 138.159
       },
       "sprintSpeed": 26.6,
       "team": "アスレチックス"
@@ -2933,10 +2933,10 @@
         "gamesPlayed": 119,
         "gamesStarted": 116,
         "innings": "1029.2",
-        "oaa": -1,
+        "oaa": 0,
         "position": "一塁",
         "putOuts": 865,
-        "runsPrevented": -1
+        "runsPrevented": 0
       },
       "hitting": {
         "atBats": 454,
