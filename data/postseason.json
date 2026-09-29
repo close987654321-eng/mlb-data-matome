@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-28 17:44",
+  "asOf": "2026-09-30 05:51",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -230,19 +230,19 @@
         {
           "away": {
             "id": 145,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "Warmup",
           "etDate": "2026-09-29",
           "gamePk": 849849,
           "home": {
             "id": 117,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 1,
           "start": "2026-09-29T21:00:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
@@ -306,14 +306,14 @@
         {
           "away": {
             "id": 111,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "Pre-Game",
           "etDate": "2026-09-29",
           "gamePk": 849851,
           "home": {
             "id": 147,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 1,
@@ -376,25 +376,25 @@
         "id": 144,
         "nameJa": "ブレーブス",
         "seed": 3,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
           "away": {
             "id": 143,
-            "score": null
+            "score": 3
           },
-          "detailed": "Scheduled",
+          "detailed": "Game Over",
           "etDate": "2026-09-29",
           "gamePk": 849845,
           "home": {
             "id": 144,
-            "score": null
+            "score": 5
           },
           "ifNecessary": false,
           "n": 1,
           "start": "2026-09-29T18:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         },
         {
