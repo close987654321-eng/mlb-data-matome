@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-30 05:52",
+  "asOf": "2026-09-30 22:50",
   "leagues": {
     "AL": [
       {
@@ -209,7 +209,7 @@
           "hardHit": 43.8,
           "hardSwing": 42.4,
           "maxEv": 112.9,
-          "oaa": -6,
+          "oaa": -7,
           "sprint": 28.6,
           "squaredUp": 26.3,
           "sweetSpot": 39.4
@@ -369,7 +369,7 @@
           "hardHit": 56.2,
           "hardSwing": 47.3,
           "maxEv": 114.6,
-          "oaa": 1,
+          "oaa": 0,
           "sprint": 24.9,
           "squaredUp": 25.1,
           "sweetSpot": 36.8
@@ -421,7 +421,7 @@
             "name": "Slider",
             "nameJa": "スライダー",
             "pa": 96,
-            "rv100": 2.5,
+            "rv100": 2.4,
             "slg": "0.577",
             "type": "SL",
             "usage": 14.4,
@@ -438,7 +438,7 @@
             "rv100": 1.1,
             "slg": "0.442",
             "type": "ST",
-            "usage": 10.4,
+            "usage": 10.5,
             "whiff": 35.6,
             "woba": 0.348,
             "xwoba": 0.363
@@ -863,7 +863,7 @@
           "hardHit": 48.6,
           "hardSwing": 24.3,
           "maxEv": 110.9,
-          "oaa": -7,
+          "oaa": -6,
           "sprint": 26.8,
           "squaredUp": 27.5,
           "sweetSpot": 38.4
@@ -1689,11 +1689,11 @@
           "batSpeed": 74.7,
           "ev": 93.9,
           "hardHit": 56.8,
-          "hardSwing": 49.9,
+          "hardSwing": 49.8,
           "maxEv": 114.1,
-          "oaa": 0,
+          "oaa": -1,
           "sprint": 26.8,
-          "squaredUp": 19.5,
+          "squaredUp": 19.4,
           "sweetSpot": 30.5
         },
         "score": 71.6,
@@ -3197,7 +3197,7 @@
             "usage": 4.6,
             "whiff": 23.5,
             "woba": 0.475,
-            "xwoba": 0.366
+            "xwoba": 0.367
           }
         ],
         "war": 3.7,
@@ -4448,7 +4448,7 @@
           "hardSwing": 1,
           "maxEv": 110.2,
           "oaa": 10,
-          "sprint": 27.3,
+          "sprint": 27.4,
           "squaredUp": 29.4,
           "sweetSpot": 33.9
         },
@@ -5237,7 +5237,7 @@
             "name": "Sweeper",
             "nameJa": "スイーパー",
             "pa": 33,
-            "rv100": -0.1,
+            "rv100": -0.2,
             "slg": "0.222",
             "type": "ST",
             "usage": 7.6,
@@ -5504,7 +5504,7 @@
             "rv100": 0.7,
             "slg": "0.468",
             "type": "SI",
-            "usage": 18.3,
+            "usage": 18.4,
             "whiff": 11.3,
             "woba": 0.41,
             "xwoba": 0.404
@@ -5532,7 +5532,7 @@
             "rv100": 0.1,
             "slg": "0.214",
             "type": "CH",
-            "usage": 11.2,
+            "usage": 11.1,
             "whiff": 18.1,
             "woba": 0.257,
             "xwoba": 0.267
@@ -5797,8 +5797,8 @@
           "hardHit": 31.9,
           "hardSwing": 6.9,
           "maxEv": 109.9,
-          "oaa": 16,
-          "sprint": 28.9,
+          "oaa": 17,
+          "sprint": 29,
           "squaredUp": 24.5,
           "sweetSpot": 34.5
         },
@@ -6051,10 +6051,10 @@
             "name": "Cutter",
             "nameJa": "カッター",
             "pa": 34,
-            "rv100": -0.6,
+            "rv100": -0.5,
             "slg": "0.333",
             "type": "FC",
-            "usage": 8.5,
+            "usage": 8.6,
             "whiff": 39.7,
             "woba": 0.365,
             "xwoba": 0.372
@@ -6766,14 +6766,14 @@
         "sbs": 0,
         "sc": {
           "barrel": 9.6,
-          "batSpeed": 74.3,
+          "batSpeed": 74.4,
           "ev": 89,
           "hardHit": 40.7,
-          "hardSwing": 43.6,
+          "hardSwing": 43.7,
           "maxEv": 112.5,
           "oaa": 3,
-          "sprint": 26,
-          "squaredUp": 20.4,
+          "sprint": 25.9,
+          "squaredUp": 20.3,
           "sweetSpot": 31.9
         },
         "score": 40.6,
@@ -6846,32 +6846,32 @@
             "xwoba": 0.24
           },
           {
-            "ba": "0.204",
-            "hardHit": 35.7,
-            "name": "Sweeper",
-            "nameJa": "スイーパー",
-            "pa": 52,
-            "rv100": -0.1,
-            "slg": "0.347",
-            "type": "ST",
-            "usage": 9,
-            "whiff": 41,
-            "woba": 0.262,
-            "xwoba": 0.207
-          },
-          {
-            "ba": "0.196",
-            "hardHit": 42.9,
+            "ba": "0.191",
+            "hardHit": 41.9,
             "name": "Cutter",
             "nameJa": "カッター",
-            "pa": 49,
-            "rv100": -1.9,
-            "slg": "0.37",
+            "pa": 50,
+            "rv100": -2.1,
+            "slg": "0.362",
             "type": "FC",
+            "usage": 9,
+            "whiff": 23.9,
+            "woba": 0.248,
+            "xwoba": 0.301
+          },
+          {
+            "ba": "0.208",
+            "hardHit": 37,
+            "name": "Sweeper",
+            "nameJa": "スイーパー",
+            "pa": 51,
+            "rv100": 0.1,
+            "slg": "0.354",
+            "type": "ST",
             "usage": 8.9,
-            "whiff": 24.3,
-            "woba": 0.253,
-            "xwoba": 0.303
+            "whiff": 41.7,
+            "woba": 0.267,
+            "xwoba": 0.207
           },
           {
             "ba": "0.227",
@@ -8496,7 +8496,7 @@
             "rv100": 0.6,
             "slg": "0.47",
             "type": "FF",
-            "usage": 25.3,
+            "usage": 25.4,
             "whiff": 24.4,
             "woba": 0.358,
             "xwoba": 0.317
@@ -8538,7 +8538,7 @@
             "rv100": -0.8,
             "slg": "0.327",
             "type": "ST",
-            "usage": 11.9,
+            "usage": 11.8,
             "whiff": 51.3,
             "woba": 0.19,
             "xwoba": 0.195
@@ -8577,10 +8577,10 @@
             "name": "Cutter",
             "nameJa": "カッター",
             "pa": 43,
-            "rv100": -3.4,
+            "rv100": -3.3,
             "slg": "0.308",
             "type": "FC",
-            "usage": 7.7,
+            "usage": 7.8,
             "whiff": 27.4,
             "woba": 0.237,
             "xwoba": 0.393
@@ -8803,7 +8803,7 @@
           "hardHit": 44.3,
           "hardSwing": 62.4,
           "maxEv": 116.3,
-          "oaa": 4,
+          "oaa": 6,
           "sprint": 26.4,
           "squaredUp": 26.4,
           "sweetSpot": 28.7
@@ -8991,7 +8991,7 @@
             "slg": "0.435",
             "type": "FF",
             "usage": 26.9,
-            "whiff": 21,
+            "whiff": 20.7,
             "woba": 0.348,
             "xwoba": 0.329
           },
@@ -9057,11 +9057,11 @@
             "name": "Cutter",
             "nameJa": "カッター",
             "pa": 38,
-            "rv100": 3.1,
+            "rv100": 3,
             "slg": "0.563",
             "type": "FC",
             "usage": 7,
-            "whiff": 17.6,
+            "whiff": 18.8,
             "woba": 0.438,
             "xwoba": 0.497
           },
@@ -9469,10 +9469,10 @@
           "batSpeed": 75,
           "ev": 89.6,
           "hardHit": 39.9,
-          "hardSwing": 50.8,
+          "hardSwing": 50.9,
           "maxEv": 114.7,
           "oaa": 6,
-          "sprint": 29,
+          "sprint": 29.1,
           "squaredUp": 20,
           "sweetSpot": 31.3
         },
@@ -9745,7 +9745,7 @@
             "usage": 7.3,
             "whiff": 21.4,
             "woba": 0.327,
-            "xwoba": 0.278
+            "xwoba": 0.279
           },
           {
             "ba": "0.25",
@@ -9805,7 +9805,7 @@
           "hardHit": 40.2,
           "hardSwing": 54.5,
           "maxEv": 112.4,
-          "oaa": -3,
+          "oaa": -4,
           "sprint": 27.7,
           "squaredUp": 20,
           "sweetSpot": 33.4
@@ -9966,7 +9966,7 @@
           "hardSwing": 9.1,
           "maxEv": 108.7,
           "oaa": -10,
-          "sprint": 27.5,
+          "sprint": 27.6,
           "squaredUp": 28.3,
           "sweetSpot": 31.8
         },
@@ -11273,11 +11273,11 @@
           "batSpeed": 75.1,
           "ev": 90.6,
           "hardHit": 48.6,
-          "hardSwing": 53.7,
+          "hardSwing": 53.6,
           "maxEv": 114.6,
           "oaa": 25,
           "sprint": 29.5,
-          "squaredUp": 20.6,
+          "squaredUp": 20.5,
           "sweetSpot": 37.8
         },
         "score": 97.5,
@@ -11664,7 +11664,7 @@
             "rv100": 2.8,
             "slg": "0.563",
             "type": "CH",
-            "usage": 15.3,
+            "usage": 15.2,
             "whiff": 34.8,
             "woba": 0.442,
             "xwoba": 0.41
@@ -11675,10 +11675,10 @@
             "name": "Curveball",
             "nameJa": "カーブ",
             "pa": 85,
-            "rv100": -1.1,
+            "rv100": -1.2,
             "slg": "0.272",
             "type": "CU",
-            "usage": 15.2,
+            "usage": 15.1,
             "whiff": 39.9,
             "woba": 0.227,
             "xwoba": 0.253
@@ -11689,7 +11689,7 @@
             "name": "Sinker",
             "nameJa": "シンカー",
             "pa": 96,
-            "rv100": 1.3,
+            "rv100": 1.4,
             "slg": "0.506",
             "type": "SI",
             "usage": 12.1,
@@ -11717,10 +11717,10 @@
             "name": "Sweeper",
             "nameJa": "スイーパー",
             "pa": 45,
-            "rv100": -1.1,
+            "rv100": -1,
             "slg": "0.237",
             "type": "ST",
-            "usage": 7.6,
+            "usage": 7.7,
             "whiff": 36.5,
             "woba": 0.237,
             "xwoba": 0.212
@@ -12117,7 +12117,7 @@
           "hardHit": 51.9,
           "hardSwing": 68.1,
           "maxEv": 114.8,
-          "oaa": -8,
+          "oaa": -7,
           "sprint": 26.9,
           "squaredUp": 23.4,
           "sweetSpot": 38.6
@@ -12338,18 +12338,18 @@
             "xwoba": 0.42
           },
           {
-            "ba": "0.211",
+            "ba": "0.214",
             "hardHit": 35.6,
             "name": "Slider",
             "nameJa": "スライダー",
-            "pa": 76,
-            "rv100": -0.3,
-            "slg": "0.366",
+            "pa": 75,
+            "rv100": -0.2,
+            "slg": "0.371",
             "type": "SL",
             "usage": 15.4,
             "whiff": 20.4,
-            "woba": 0.282,
-            "xwoba": 0.266
+            "woba": 0.285,
+            "xwoba": 0.27
           },
           {
             "ba": "0.378",
@@ -12380,18 +12380,18 @@
             "xwoba": 0.339
           },
           {
-            "ba": "0.313",
+            "ba": "0.303",
             "hardHit": 48.4,
             "name": "Cutter",
             "nameJa": "カッター",
-            "pa": 36,
-            "rv100": 0.5,
-            "slg": "0.531",
+            "pa": 37,
+            "rv100": 0.4,
+            "slg": "0.515",
             "type": "FC",
             "usage": 7.6,
             "whiff": 17.7,
-            "woba": 0.397,
-            "xwoba": 0.391
+            "woba": 0.386,
+            "xwoba": 0.38
           },
           {
             "ba": "0.172",
@@ -12526,18 +12526,18 @@
             "xwoba": 0.275
           },
           {
-            "ba": "0.348",
-            "hardHit": 54.8,
+            "ba": "0.362",
+            "hardHit": 53.1,
             "name": "Curveball",
             "nameJa": "カーブ",
-            "pa": 49,
+            "pa": 50,
             "rv100": 3,
-            "slg": "0.5",
+            "slg": "0.511",
             "type": "CU",
             "usage": 7.5,
-            "whiff": 19.4,
-            "woba": 0.389,
-            "xwoba": 0.326
+            "whiff": 19.1,
+            "woba": 0.399,
+            "xwoba": 0.327
           },
           {
             "ba": "0.368",
@@ -12554,18 +12554,18 @@
             "xwoba": 0.427
           },
           {
-            "ba": "0.235",
-            "hardHit": 37.5,
+            "ba": "0.212",
+            "hardHit": 39.1,
             "name": "Sweeper",
             "nameJa": "スイーパー",
-            "pa": 38,
+            "pa": 37,
             "rv100": 1.1,
-            "slg": "0.559",
+            "slg": "0.545",
             "type": "ST",
             "usage": 6.6,
-            "whiff": 24.1,
-            "woba": 0.35,
-            "xwoba": 0.326
+            "whiff": 24.6,
+            "woba": 0.335,
+            "xwoba": 0.325
           },
           {
             "ba": "0.238",
@@ -12722,8 +12722,8 @@
             "rv100": -2.1,
             "slg": "0.148",
             "type": "ST",
-            "usage": 7.2,
-            "whiff": 44.4,
+            "usage": 7.3,
+            "whiff": 45.5,
             "woba": 0.113,
             "xwoba": 0.127
           },
@@ -12736,8 +12736,8 @@
             "rv100": 1.1,
             "slg": "0.676",
             "type": "FC",
-            "usage": 7,
-            "whiff": 20.7,
+            "usage": 6.9,
+            "whiff": 19.8,
             "woba": 0.434,
             "xwoba": 0.458
           },
@@ -13014,7 +13014,7 @@
             "rv100": 2.7,
             "slg": "0.633",
             "type": "SL",
-            "usage": 12.6,
+            "usage": 12.5,
             "whiff": 36.1,
             "woba": 0.395,
             "xwoba": 0.339
@@ -13067,10 +13067,10 @@
             "name": "Curveball",
             "nameJa": "カーブ",
             "pa": 57,
-            "rv100": -1.6,
+            "rv100": -1.5,
             "slg": "0.315",
             "type": "CU",
-            "usage": 7.6,
+            "usage": 7.7,
             "whiff": 26.6,
             "woba": 0.254,
             "xwoba": 0.221
@@ -14311,7 +14311,7 @@
           "maxEv": 114.9,
           "oaa": 13,
           "sprint": 27.7,
-          "squaredUp": 24.2,
+          "squaredUp": 24.1,
           "sweetSpot": 31.7
         },
         "score": 68.4,
@@ -14520,14 +14520,14 @@
             "hardHit": 39.3,
             "name": "Sinker",
             "nameJa": "シンカー",
-            "pa": 170,
+            "pa": 169,
             "rv100": 0.3,
             "slg": "0.389",
             "type": "SI",
             "usage": 20.7,
             "whiff": 4.2,
-            "woba": 0.368,
-            "xwoba": 0.36
+            "woba": 0.366,
+            "xwoba": 0.358
           },
           {
             "ba": "0.224",
@@ -14576,14 +14576,14 @@
             "hardHit": 31.7,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
-            "pa": 56,
-            "rv100": 2.7,
+            "pa": 57,
+            "rv100": 2.8,
             "slg": "0.479",
             "type": "CH",
-            "usage": 8,
+            "usage": 8.1,
             "whiff": 21.9,
-            "woba": 0.373,
-            "xwoba": 0.353
+            "woba": 0.379,
+            "xwoba": 0.359
           },
           {
             "ba": "0.255",
@@ -14638,14 +14638,14 @@
         "sbs": 3,
         "sc": {
           "barrel": 12.9,
-          "batSpeed": 75.4,
+          "batSpeed": 75.3,
           "ev": 91.5,
           "hardHit": 50.6,
           "hardSwing": 56.7,
           "maxEv": 112.8,
           "oaa": null,
           "sprint": 26,
-          "squaredUp": 24.5,
+          "squaredUp": 24.6,
           "sweetSpot": 37.5
         },
         "score": 68.1,
@@ -14993,7 +14993,7 @@
           "maxEv": 112.7,
           "oaa": 6,
           "sprint": 29,
-          "squaredUp": 22.9,
+          "squaredUp": 22.8,
           "sweetSpot": 39.8
         },
         "score": 63.8,
@@ -15447,7 +15447,7 @@
             "name": "Cutter",
             "nameJa": "カッター",
             "pa": 41,
-            "rv100": 3,
+            "rv100": 3.1,
             "slg": "0.595",
             "type": "FC",
             "usage": 6.8,
@@ -16107,7 +16107,7 @@
             "usage": 7.1,
             "whiff": 30.1,
             "woba": 0.551,
-            "xwoba": 0.459
+            "xwoba": 0.46
           }
         ],
         "war": 2.7,
@@ -16567,10 +16567,10 @@
             "name": "Changeup",
             "nameJa": "チェンジアップ",
             "pa": 69,
-            "rv100": -0.5,
+            "rv100": -0.4,
             "slg": "0.267",
             "type": "CH",
-            "usage": 11.4,
+            "usage": 11.5,
             "whiff": 22.4,
             "woba": 0.278,
             "xwoba": 0.35
@@ -16585,7 +16585,7 @@
             "slg": "0.78",
             "type": "FC",
             "usage": 8.6,
-            "whiff": 23,
+            "whiff": 23.1,
             "woba": 0.539,
             "xwoba": 0.465
           },
@@ -16613,7 +16613,7 @@
             "slg": "0.333",
             "type": "ST",
             "usage": 7,
-            "whiff": 28.1,
+            "whiff": 27.8,
             "woba": 0.304,
             "xwoba": 0.32
           }
@@ -16727,10 +16727,10 @@
             "name": "Slider",
             "nameJa": "スライダー",
             "pa": 78,
-            "rv100": 2.1,
+            "rv100": 2.2,
             "slg": "0.412",
             "type": "SL",
-            "usage": 11.1,
+            "usage": 11,
             "whiff": 16.3,
             "woba": 0.371,
             "xwoba": 0.329
@@ -17225,7 +17225,7 @@
             "slg": "0.422",
             "type": "SL",
             "usage": 10.3,
-            "whiff": 21.9,
+            "whiff": 21.3,
             "woba": 0.287,
             "xwoba": 0.34
           },
@@ -17253,7 +17253,7 @@
             "slg": "0.5",
             "type": "CU",
             "usage": 9,
-            "whiff": 22.6,
+            "whiff": 23.8,
             "woba": 0.359,
             "xwoba": 0.384
           },
@@ -17281,7 +17281,7 @@
             "slg": "0.515",
             "type": "ST",
             "usage": 7.2,
-            "whiff": 32.1,
+            "whiff": 31.7,
             "woba": 0.39,
             "xwoba": 0.305
           },
@@ -17995,11 +17995,11 @@
           "batSpeed": 69.9,
           "ev": 89.4,
           "hardHit": 37.7,
-          "hardSwing": 7.2,
+          "hardSwing": 7.3,
           "maxEv": 111.9,
           "oaa": 9,
           "sprint": 28.3,
-          "squaredUp": 31.4,
+          "squaredUp": 31.3,
           "sweetSpot": 34.8
         },
         "score": 43.2,
@@ -18897,7 +18897,7 @@
             "usage": 15.1,
             "whiff": 42.3,
             "woba": 0.321,
-            "xwoba": 0.272
+            "xwoba": 0.271
           },
           {
             "ba": "0.27",
@@ -19029,7 +19029,7 @@
           "maxEv": 111.5,
           "oaa": 2,
           "sprint": 28,
-          "squaredUp": 20.6,
+          "squaredUp": 20.7,
           "sweetSpot": 31.8
         },
         "score": 36.6,
@@ -19522,7 +19522,7 @@
           "hardSwing": 28.6,
           "maxEv": 112,
           "oaa": 2,
-          "sprint": 27.1,
+          "sprint": 27,
           "squaredUp": 29.2,
           "sweetSpot": 27.9
         },
@@ -20129,7 +20129,7 @@
             "usage": 2.9,
             "whiff": 31,
             "woba": 0.331,
-            "xwoba": 0.368
+            "xwoba": 0.369
           }
         ],
         "war": 2,
@@ -20606,8 +20606,8 @@
             "rv100": 0.4,
             "slg": "0.5",
             "type": "FC",
-            "usage": 8.5,
-            "whiff": 15,
+            "usage": 8.4,
+            "whiff": 15.1,
             "woba": 0.39,
             "xwoba": 0.345
           },
@@ -20634,8 +20634,8 @@
             "rv100": 3.1,
             "slg": "0.75",
             "type": "ST",
-            "usage": 6.7,
-            "whiff": 29.6,
+            "usage": 6.8,
+            "whiff": 29.1,
             "woba": 0.474,
             "xwoba": 0.365
           },
@@ -21087,7 +21087,7 @@
             "slg": "0.383",
             "type": "SL",
             "usage": 14.6,
-            "whiff": 17.4,
+            "whiff": 16.9,
             "woba": 0.318,
             "xwoba": 0.289
           },
@@ -21142,8 +21142,8 @@
             "rv100": 2.6,
             "slg": "0.55",
             "type": "ST",
-            "usage": 6.9,
-            "whiff": 9.7,
+            "usage": 7,
+            "whiff": 11,
             "woba": 0.379,
             "xwoba": 0.286
           }
@@ -21210,18 +21210,18 @@
         "teamJa": "フィリーズ",
         "vsPitch": [
           {
-            "ba": "0.309",
-            "hardHit": 52.2,
+            "ba": "0.314",
+            "hardHit": 52.6,
             "name": "4-Seam Fastball",
             "nameJa": "フォーシーム",
-            "pa": 175,
+            "pa": 176,
             "rv100": 0.9,
-            "slg": "0.474",
+            "slg": "0.484",
             "type": "FF",
-            "usage": 26.7,
-            "whiff": 22.2,
-            "woba": 0.386,
-            "xwoba": 0.331
+            "usage": 26.8,
+            "whiff": 22.1,
+            "woba": 0.391,
+            "xwoba": 0.333
           },
           {
             "ba": "0.242",
@@ -21280,18 +21280,18 @@
             "xwoba": 0.278
           },
           {
-            "ba": "0.224",
-            "hardHit": 23.7,
+            "ba": "0.208",
+            "hardHit": 21.6,
             "name": "Cutter",
             "nameJa": "カッター",
-            "pa": 55,
-            "rv100": -1.5,
-            "slg": "0.347",
+            "pa": 54,
+            "rv100": -1.7,
+            "slg": "0.313",
             "type": "FC",
             "usage": 8.8,
-            "whiff": 28.1,
-            "woba": 0.312,
-            "xwoba": 0.306
+            "whiff": 28.3,
+            "woba": 0.294,
+            "xwoba": 0.298
           },
           {
             "ba": "0.293",
@@ -21363,7 +21363,7 @@
           "batSpeed": 75.8,
           "ev": 91.3,
           "hardHit": 44.3,
-          "hardSwing": 59.1,
+          "hardSwing": 59,
           "maxEv": 112.2,
           "oaa": 1,
           "sprint": 27.9,
@@ -21737,7 +21737,7 @@
             "name": "Slider",
             "nameJa": "スライダー",
             "pa": 88,
-            "rv100": -2.4,
+            "rv100": -2.3,
             "slg": "0.229",
             "type": "SL",
             "usage": 16,
@@ -21754,7 +21754,7 @@
             "rv100": 2.1,
             "slg": "0.452",
             "type": "ST",
-            "usage": 9.3,
+            "usage": 9.4,
             "whiff": 33.3,
             "woba": 0.336,
             "xwoba": 0.339
@@ -22003,11 +22003,11 @@
           "batSpeed": 71.6,
           "ev": 89.2,
           "hardHit": 42.6,
-          "hardSwing": 16.2,
+          "hardSwing": 16.3,
           "maxEv": 110.1,
           "oaa": -1,
           "sprint": 28.1,
-          "squaredUp": 25.2,
+          "squaredUp": 25.3,
           "sweetSpot": 40.8
         },
         "score": 15.7,
@@ -22181,7 +22181,7 @@
           "maxEv": 108.7,
           "oaa": 0,
           "sprint": 27.1,
-          "squaredUp": 26.2,
+          "squaredUp": 26.1,
           "sweetSpot": 32.3
         },
         "score": 15.2,
