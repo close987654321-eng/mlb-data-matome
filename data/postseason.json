@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-30 09:31",
+  "asOf": "2026-09-30 15:47",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -232,7 +232,7 @@
             "id": 145,
             "score": 6
           },
-          "detailed": "Game Over",
+          "detailed": "Final",
           "etDate": "2026-09-29",
           "gamePk": 849849,
           "home": {
@@ -300,7 +300,7 @@
         "id": 147,
         "nameJa": "ヤンキース",
         "seed": 4,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
@@ -308,17 +308,17 @@
             "id": 111,
             "score": 0
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-09-29",
           "gamePk": 849851,
           "home": {
             "id": 147,
-            "score": 0
+            "score": 9
           },
           "ifNecessary": false,
           "n": 1,
           "start": "2026-09-30T00:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
@@ -452,7 +452,7 @@
         "id": 135,
         "nameJa": "パドレス",
         "seed": 4,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
@@ -460,17 +460,17 @@
             "id": 112,
             "score": 0
           },
-          "detailed": "Pre-Game",
+          "detailed": "Final",
           "etDate": "2026-09-29",
           "gamePk": 849843,
           "home": {
             "id": 135,
-            "score": 0
+            "score": 8
           },
           "ifNecessary": false,
           "n": 1,
           "start": "2026-09-30T02:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         },
         {
