@@ -421,14 +421,13 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['那須川', '天心'],
     sport: 'boxing',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '9/27井上拓真戦',
-      until: '2026-09-27',
-      opponentJa: '井上拓真',
-      eventJa: 'Prime Video Boxing 16｜TOYOTA ARENA TOKYO',
-    },
-    accoladeJa: 'プロボクシング・WBC世界バンタム級ランキング1位（元WBOアジアパシフィックバンタム級王者）',
-    record: { wins: 8, losses: 1, draws: 0, kos: 3, asOf: '2026-04-11' },
+    // 2026-09-27 の井上拓真戦（Prime Video Boxing 16）を消化。次戦は未発表なので nextFightJa は持たない。
+    // ランキングは再戦に挑んだ時点の序列（efight 2026-09-27 結果記事の「同級1位・那須川天心」）＝敗戦後の
+    // 最新ランキングは未確認なので、時点を書いて現在形で言い切らない。
+    accoladeJa: 'プロボクシング・元WBOアジアパシフィックバンタム級王者（2026年9月の井上拓真戦時点でWBC世界バンタム級1位）',
+    // 8勝2敗（3KO）＝boxingnews24（2026-09-27 結果記事）の試合後戦績 8-2（3 KOs）と同値。efight 同日記事の
+    // 試合前戦績「9戦8勝（3KO）1敗」にこの負けを足した数とも一致。
+    record: { wins: 8, losses: 2, draws: 0, kos: 3, asOf: '2026-09-27' },
     headlineStats: [
       // キックボクシング時代の通算戦績（2022-06-19 THE MATCH 2022引退時点）
       { value: '42-0', labelJa: 'キックボクシング時代の無敗記録（28KO・2022年引退）' },
@@ -440,6 +439,14 @@ export const FIGHTERS: Fighter[] = [
       'https://en.wikipedia.org/wiki/Tenshin_Nasukawa',
     ],
     fights: [
+      {
+        date: '2026-09-27',
+        opponentJa: '井上拓真',
+        opponentEn: 'Takuma Inoue',
+        venueJa: 'TOYOTA ARENA TOKYO（WBC世界バンタム級タイトルマッチ・Prime Video Boxing 16）',
+        resultJa: '0-3判定負け（111-116、111-116、113-114）',
+        noteJa: '7回に左ストレートでダウンを奪うも12回判定で再び敗れる。井上拓真は2度目の防衛',
+      },
       {
         date: '2026-04-11',
         opponentJa: 'ファン・フランシスコ・エストラーダ',
