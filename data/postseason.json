@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-30 15:47",
+  "asOf": "2026-10-01 05:50",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -248,19 +248,19 @@
         {
           "away": {
             "id": 145,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "Warmup",
           "etDate": "2026-09-30",
           "gamePk": 849846,
           "home": {
             "id": 117,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-09-30T21:00:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
@@ -324,14 +324,14 @@
         {
           "away": {
             "id": 111,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "Pre-Game",
           "etDate": "2026-09-30",
           "gamePk": 849848,
           "home": {
             "id": 147,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 2,
@@ -400,19 +400,19 @@
         {
           "away": {
             "id": 143,
-            "score": null
+            "score": 3
           },
-          "detailed": "Scheduled",
+          "detailed": "In Progress",
           "etDate": "2026-09-30",
           "gamePk": 849841,
           "home": {
             "id": 144,
-            "score": null
+            "score": 3
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-09-30T18:00:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
