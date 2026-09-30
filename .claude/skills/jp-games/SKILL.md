@@ -117,10 +117,15 @@ node scripts/fetch-youtube.mjs search "<その試合の searchQuery>" 5 --channe
   - ⚠️ MLB は 2026-06 末にタイトル書式を **`(6/21/26)` → `(July 1)`（月名+日）** に変えた。`titleDateName` で照合する
     （M/D/YY の `titleDateUS` は実タイトルに無い＝そのまま grep すると全試合「動画未投稿」と誤判定する。実測 2026-07-02）。
     もし将来また書式が変わったら、まず `search` の生タイトルを見て、その表記に合わせて照合キーを更新する。
-  - **ポストシーズン**（行に `postseason` がある試合）はタイトルにラウンドと第何戦が入る（2025年の実例:
-    `Padres vs. Cubs NL Wild Card Game 3 Highlights (10/2/25)`）。`searchQuery` もそれに合わせて出る。採用は
-    **`postseason.titleToken` を含み、かつ `postseason.titleDates` のどれかを含む**動画（2026年の日付書式は未確認＝
-    月名表記と数字表記を両方当てる。2025年は `(10/01/25)` と `(10/2/25)` が混在した）。
+  - **ポストシーズン**（行に `postseason` がある試合）はタイトルにラウンドと第何戦が入る（2026年の実例:
+    `CUBS vs. PADRES: Wild Card Full Game 1 Highlights (September 29)` /
+    `PHILLIES vs. BRAVES: Wild Card Game 1 Full Game Highlights (September 29)`）。採用は、タイトルが
+    **`postseason.roundTokens` のどれか・`postseason.gameToken`・`postseason.titleDates` のどれかを全部含み、
+    かつ両チーム名が入っている**動画（同じ日にワイルドカードが4試合並ぶ＝日付だけでは決まらない）。
+    ⚠️ 2025年は `NL Wild Card Game 3 Highlights (10/2/25)` のような連結表記だったが、2026年はリーグ名が落ちて
+    `Full` が挟まる。連結の `titleToken` で照合すると全試合が「動画待ち」になる（2026-10-01 に実測）。
+    地区シリーズ以降の2026年の書式は未確認なので、外れたら `search` の生タイトルを見て `psRoundTokens` を足す。
+    `Full Game Highlights` は2026年の通常版ハイライト（試合まるごとの録画ではない）なので採用してよい。
 - ⚠️ **その日付の動画が無ければ「まだ未投稿」**＝記事化しない。別カードの動画や前後日で代用しない・
   捏造しない（CLAUDE.md §4.4）。ギャップ表に「動画待ち」として残し、後でもう一度回す。
 - **二重作成の最終ガード**（id の日付規約ブレ対策）: 採用した videoId が既存記事に無いか確認する。

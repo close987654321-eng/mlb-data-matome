@@ -909,6 +909,21 @@ function psTitleToken(g) {
   return 'World Series';
 }
 
+/**
+ * 採用判定に使うラウンド表記の候補（どれか1つを含めばよい）。2026年は書式が変わり、リーグ名が落ちて
+ * 「Full」が挟まる（実タイトル: "CUBS vs. PADRES: Wild Card Full Game 1 Highlights (September 29)" /
+ * "PHILLIES vs. BRAVES: Wild Card Game 1 Full Game Highlights (September 29)"）。2025年の "NL Wild Card Game 3" の
+ * ように連結した titleToken だけで照合すると全試合が「動画待ち」になる（2026-10-01 に実測）。地区シリーズ以降の
+ * 2026年の書式は未確認なので、略称と正式名の両方を候補にする。第何戦は gameToken で別に当てる。
+ */
+function psRoundTokens(g) {
+  const lg = LEAGUE_BY_TEAM[g.home] ?? LEAGUE_BY_TEAM[g.away] ?? '';
+  if (g.gameType === 'F') return ['Wild Card'];
+  if (g.gameType === 'D') return [`${lg}DS`, 'Division Series'];
+  if (g.gameType === 'L') return [`${lg}CS`, 'Championship Series'];
+  return ['World Series'];
+}
+
 /** ET 試合日の数字表記（"10/2/25" と "10/02/25"）。2025年のポストシーズンのタイトルは両方が混在した。 */
 function titleDatesNumeric(etDate) {
   const [y, m, d] = etDate.split('-');
@@ -1152,6 +1167,8 @@ async function gamesForDate(season, date, ids, existing, { team } = {}) {
               roundJa: PS_ROUND_JA[g.gameType],
               game: g.seriesGameNumber ?? null,
               titleToken: `${psTitleToken(g)} Game ${g.seriesGameNumber ?? 1}`,
+              roundTokens: psRoundTokens(g),
+              gameToken: `Game ${g.seriesGameNumber ?? 1}`,
               titleDates: [`(${titleDateName(g.etDate)})`, ...titleDatesNumeric(g.etDate).map((d) => `(${d})`)],
             },
           }

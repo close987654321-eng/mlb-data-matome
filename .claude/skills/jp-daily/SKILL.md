@@ -113,10 +113,14 @@ node scripts/fetch-youtube.mjs search "<searchQuery>" 5 --channel UCoLrcjPV5PbUr
 
 - 採用は **channel が `MLB` かつ title に `(July 29)` がそのまま入っている**動画だけ。連戦は日付一致でしか確定しない。
 - **ポストシーズンの試合**（`games` の行に `postseason` がある）は、公式ハイライトのタイトルにラウンドと第何戦が入る
-  （2025年の実例: `Brewers vs. Dodgers NLCS Game 4 Highlights (10/17/25)`）。採用は **`postseason.titleToken`
-  （例 `NL Wild Card Game 1`）を含み、かつ `postseason.titleDates` のどれか（`(September 29)` / `(9/29/26)` /
-  `(09/29/26)`）を含む**動画。2026年の日付の書式は未確認なので候補を全部当てる。ダイジェスト・日本語版
-  （`日本語試合ハイライト`）・`FULL GAME` は採用しない（通常のハイライト1本だけ）。
+  （2026年の実例: `CUBS vs. PADRES: Wild Card Full Game 1 Highlights (September 29)` /
+  `PHILLIES vs. BRAVES: Wild Card Game 1 Full Game Highlights (September 29)`）。採用は、タイトルが
+  **`postseason.roundTokens` のどれか（例 `Wild Card`）と `postseason.gameToken`（例 `Game 1`）と
+  `postseason.titleDates` のどれか（`(September 29)` など）を全部含み、かつ両チーム名が入っている**動画。
+  ⚠️ 2025年の `NL Wild Card Game 3` のような連結表記（`titleToken`）は2026年のタイトルに無い＝それで照合すると
+  全試合が「動画待ち」になる（2026-10-01 に実測）。2026年の公式ハイライトはタイトルに `Full Game Highlights`
+  が入るのが通常版なので、それは採用してよい。ダイジェスト・日本語版（`日本語試合ハイライト`）・試合まるごとの
+  録画（`FULL GAME:` で始まる長尺）は採用しない（通常のハイライト1本だけ）。
 - 主役の動画が無ければ**主役を2番手にずらす**（動画がある選手を主役にする）。カードは作り直す。
 - 誰の動画も無ければ**記事は作らずカードだけ**出す（Slack にその旨を書く）。
 - ④ざわつきが主役と別の試合なら、その試合の動画も同定して `buzz[n].media` に付ける。
