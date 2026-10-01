@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-09-30 05:52",
+  "asOf": "2026-10-01 23:34",
   "leagues": {
     "AL": [
       {
@@ -59,9 +59,9 @@
         "teamEn": "Detroit Tigers",
         "teamId": 116,
         "teamJa": "タイガース",
-        "war": 5.38,
-        "why": "WAR5.38・707打席はルーキー上位",
-        "whyEn": "5.38 WAR, 707 PA among rookies",
+        "war": 5.39,
+        "why": "WAR5.39・707打席はルーキー上位",
+        "whyEn": "5.39 WAR, 707 PA among rookies",
         "wrcPlus": 129
       },
       {
@@ -152,9 +152,9 @@
         "teamEn": "Chicago White Sox",
         "teamId": 145,
         "teamJa": "ホワイトソックス",
-        "war": 2.9,
-        "why": "wRC+129・WAR2.9はルーキー上位",
-        "whyEn": "129 wRC+, 2.9 WAR among rookies",
+        "war": 2.92,
+        "why": "wRC+129・WAR2.92はルーキー上位",
+        "whyEn": "129 wRC+, 2.92 WAR among rookies",
         "wrcPlus": 129
       },
       {
@@ -214,9 +214,9 @@
         "teamEn": "Chicago White Sox",
         "teamId": 145,
         "teamJa": "ホワイトソックス",
-        "war": 3.56,
-        "why": "WAR3.56はルーキー上位",
-        "whyEn": "3.56 WAR among rookies",
+        "war": 3.54,
+        "why": "WAR3.54はルーキー上位",
+        "whyEn": "3.54 WAR among rookies",
         "wrcPlus": 118
       },
       {
@@ -245,9 +245,9 @@
         "teamEn": "Toronto Blue Jays",
         "teamId": 141,
         "teamJa": "ブルージェイズ",
-        "war": 2.94,
-        "why": "636打席・WAR2.94はルーキー上位",
-        "whyEn": "636 PA, 2.94 WAR among rookies",
+        "war": 2.96,
+        "why": "636打席・WAR2.96はルーキー上位",
+        "whyEn": "636 PA, 2.96 WAR among rookies",
         "wrcPlus": 113
       },
       {
@@ -276,13 +276,13 @@
         "teamEn": "Chicago White Sox",
         "teamId": 145,
         "teamJa": "ホワイトソックス",
-        "war": 2.32,
+        "war": 2.31,
         "why": "557打席・wRC+122はルーキー上位",
         "whyEn": "557 PA, 122 wRC+ among rookies",
         "wrcPlus": 122
       },
       {
-        "era": "2.63",
+        "era": "2.73",
         "fip": 2.65,
         "gs": 8,
         "id": 693686,
@@ -375,37 +375,6 @@
         "whyEn": "148.1 IP, 2.55 WAR among rookies"
       },
       {
-        "avg": ".245",
-        "hr": 15,
-        "id": 683953,
-        "isJp": false,
-        "league": "AL",
-        "nameEn": "Travis Bazzana",
-        "nameJa": "トラビス・バザーナ",
-        "obp": ".335",
-        "ops": ".743",
-        "pa": 517,
-        "pct": {
-          "role": 54,
-          "volume": 77,
-          "war": 84
-        },
-        "pos": "2B",
-        "rank": 13,
-        "rbi": 57,
-        "role": "bat",
-        "sb": 19,
-        "score": 72.1,
-        "slg": ".408",
-        "teamEn": "Cleveland Guardians",
-        "teamId": 114,
-        "teamJa": "ガーディアンズ",
-        "war": 2.79,
-        "why": "WAR2.79・517打席はルーキー上位",
-        "whyEn": "2.79 WAR, 517 PA among rookies",
-        "wrcPlus": 110
-      },
-      {
         "era": "3.60",
         "fip": 3.96,
         "gs": 31,
@@ -422,7 +391,7 @@
           "war": 80
         },
         "pos": "P",
-        "rank": 14,
+        "rank": 13,
         "role": "pit",
         "score": 72,
         "so": 158,
@@ -435,6 +404,68 @@
         "whip": "1.21",
         "why": "172.2回・WAR2.6はルーキー上位",
         "whyEn": "172.2 IP, 2.6 WAR among rookies"
+      },
+      {
+        "avg": ".277",
+        "hr": 11,
+        "id": 703607,
+        "isJp": false,
+        "league": "AL",
+        "nameEn": "Henry Bolte",
+        "nameJa": "ヘンリー・ボルティ",
+        "obp": ".359",
+        "ops": ".764",
+        "pa": 473,
+        "pct": {
+          "role": 58,
+          "volume": 69,
+          "war": 84
+        },
+        "pos": "CF",
+        "rank": 14,
+        "rbi": 38,
+        "role": "bat",
+        "sb": 21,
+        "score": 71.9,
+        "slg": ".405",
+        "teamEn": "Athletics",
+        "teamId": 133,
+        "teamJa": "アスレチックス",
+        "war": 2.79,
+        "why": "WAR2.79はルーキー上位",
+        "whyEn": "2.79 WAR among rookies",
+        "wrcPlus": 111
+      },
+      {
+        "avg": ".245",
+        "hr": 15,
+        "id": 683953,
+        "isJp": false,
+        "league": "AL",
+        "nameEn": "Travis Bazzana",
+        "nameJa": "トラビス・バザーナ",
+        "obp": ".335",
+        "ops": ".743",
+        "pa": 517,
+        "pct": {
+          "role": 54,
+          "volume": 77,
+          "war": 82
+        },
+        "pos": "2B",
+        "rank": 15,
+        "rbi": 57,
+        "role": "bat",
+        "sb": 19,
+        "score": 71.2,
+        "slg": ".408",
+        "teamEn": "Cleveland Guardians",
+        "teamId": 114,
+        "teamJa": "ガーディアンズ",
+        "war": 2.75,
+        "why": "WAR2.75・517打席はルーキー上位",
+        "whyEn": "2.75 WAR, 517 PA among rookies",
+        "wrcPlus": 110
       },
       {
         "avg": ".260",
@@ -453,7 +484,7 @@
           "war": 78
         },
         "pos": "RF",
-        "rank": 15,
+        "rank": 16,
         "rbi": 34,
         "role": "bat",
         "sb": 9,
@@ -468,35 +499,35 @@
         "wrcPlus": 128
       },
       {
-        "avg": ".277",
-        "hr": 11,
-        "id": 703607,
+        "avg": ".300",
+        "hr": 3,
+        "id": 685133,
         "isJp": false,
         "league": "AL",
-        "nameEn": "Henry Bolte",
-        "nameJa": "ヘンリー・ボルティ",
-        "obp": ".359",
-        "ops": ".764",
-        "pa": 473,
+        "nameEn": "Wade Meckler",
+        "nameJa": "ウェイド・メクラー",
+        "obp": ".373",
+        "ops": ".760",
+        "pa": 337,
         "pct": {
-          "role": 58,
-          "volume": 69,
-          "war": 82
+          "role": 77,
+          "volume": 46,
+          "war": 68
         },
-        "pos": "CF",
-        "rank": 16,
-        "rbi": 38,
+        "pos": "LF",
+        "rank": 17,
+        "rbi": 27,
         "role": "bat",
-        "sb": 21,
-        "score": 71,
-        "slg": ".405",
-        "teamEn": "Athletics",
-        "teamId": 133,
-        "teamJa": "アスレチックス",
-        "war": 2.78,
-        "why": "WAR2.78はルーキー上位",
-        "whyEn": "2.78 WAR among rookies",
-        "wrcPlus": 111
+        "sb": 8,
+        "score": 66.8,
+        "slg": ".387",
+        "teamEn": "Los Angeles Angels",
+        "teamId": 108,
+        "teamJa": "エンゼルス",
+        "war": 2.02,
+        "why": "wRC+120はルーキー上位",
+        "whyEn": "120 wRC+ among rookies",
+        "wrcPlus": 120
       },
       {
         "era": "4.87",
@@ -515,7 +546,7 @@
           "war": 66
         },
         "pos": "P",
-        "rank": 17,
+        "rank": 18,
         "role": "pit",
         "score": 66.3,
         "so": 128,
@@ -528,37 +559,6 @@
         "whip": "1.29",
         "why": "125.2回はルーキー上位",
         "whyEn": "125.2 IP among rookies"
-      },
-      {
-        "avg": ".300",
-        "hr": 3,
-        "id": 685133,
-        "isJp": false,
-        "league": "AL",
-        "nameEn": "Wade Meckler",
-        "nameJa": "ウェイド・メクラー",
-        "obp": ".373",
-        "ops": ".760",
-        "pa": 337,
-        "pct": {
-          "role": 77,
-          "volume": 46,
-          "war": 66
-        },
-        "pos": "LF",
-        "rank": 18,
-        "rbi": 27,
-        "role": "bat",
-        "sb": 8,
-        "score": 65.9,
-        "slg": ".387",
-        "teamEn": "Los Angeles Angels",
-        "teamId": 108,
-        "teamJa": "エンゼルス",
-        "war": 2.01,
-        "why": "wRC+120はルーキー上位",
-        "whyEn": "120 wRC+ among rookies",
-        "wrcPlus": 120
       },
       {
         "avg": ".329",
@@ -586,7 +586,7 @@
         "teamEn": "Toronto Blue Jays",
         "teamId": 141,
         "teamJa": "ブルージェイズ",
-        "war": 1.93,
+        "war": 1.92,
         "why": "wRC+138はルーキー上位",
         "whyEn": "138 wRC+ among rookies",
         "wrcPlus": 138
@@ -685,15 +685,15 @@
         "wrcPlus": 115
       },
       {
-        "avg": ".226",
+        "avg": ".222",
         "hr": 9,
         "id": 678218,
         "isJp": false,
         "league": "AL",
         "nameEn": "Brandon Valenzuela",
         "nameJa": "ブランドン・バレンズエラ",
-        "obp": ".311",
-        "ops": ".688",
+        "obp": ".307",
+        "ops": ".679",
         "pa": 271,
         "pct": {
           "role": 38,
@@ -702,11 +702,11 @@
         },
         "pos": "C",
         "rank": 23,
-        "rbi": 24,
+        "rbi": 23,
         "role": "bat",
         "sb": 2,
         "score": 51.8,
-        "slg": ".377",
+        "slg": ".372",
         "teamEn": "Toronto Blue Jays",
         "teamId": 141,
         "teamJa": "ブルージェイズ",
@@ -834,7 +834,7 @@
         "teamEn": "Detroit Tigers",
         "teamId": 116,
         "teamJa": "タイガース",
-        "war": 0.49,
+        "war": 0.5,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 107
@@ -1175,7 +1175,7 @@
         "teamEn": "New York Yankees",
         "teamId": 147,
         "teamJa": "ヤンキース",
-        "war": 0.43,
+        "war": 0.42,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 93
@@ -1206,7 +1206,7 @@
         "teamEn": "Baltimore Orioles",
         "teamId": 110,
         "teamJa": "オリオールズ",
-        "war": -0.19,
+        "war": -0.2,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 94
@@ -1361,7 +1361,7 @@
         "teamEn": "Los Angeles Angels",
         "teamId": 108,
         "teamJa": "エンゼルス",
-        "war": -0.02,
+        "war": -0.06,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 68
@@ -1454,7 +1454,7 @@
         "teamEn": "Seattle Mariners",
         "teamId": 136,
         "teamJa": "マリナーズ",
-        "war": -0.08,
+        "war": -0.09,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 67
@@ -1578,7 +1578,7 @@
         "teamEn": "Athletics",
         "teamId": 133,
         "teamJa": "アスレチックス",
-        "war": -0.81,
+        "war": -0.88,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 57
@@ -1642,9 +1642,9 @@
         "teamEn": "Colorado Rockies",
         "teamId": 115,
         "teamJa": "ロッキーズ",
-        "war": 2.54,
-        "why": "WAR2.54・631打席はルーキー上位",
-        "whyEn": "2.54 WAR, 631 PA among rookies",
+        "war": 2.55,
+        "why": "WAR2.55・631打席はルーキー上位",
+        "whyEn": "2.55 WAR, 631 PA among rookies",
         "wrcPlus": 124
       },
       {
@@ -1710,6 +1710,37 @@
         "wrcPlus": 101
       },
       {
+        "avg": ".263",
+        "hr": 32,
+        "id": 701398,
+        "isJp": false,
+        "league": "NL",
+        "nameEn": "Sal Stewart",
+        "nameJa": "サル・スチュワート",
+        "obp": ".330",
+        "ops": ".787",
+        "pa": 700,
+        "pct": {
+          "role": 83,
+          "volume": 100,
+          "war": 81
+        },
+        "pos": "1B",
+        "rank": 5,
+        "rbi": 112,
+        "role": "bat",
+        "sb": 15,
+        "score": 85.5,
+        "slg": ".457",
+        "teamEn": "Cincinnati Reds",
+        "teamId": 113,
+        "teamJa": "レッズ",
+        "war": 1.97,
+        "why": "700打席・wRC+112はルーキー上位",
+        "whyEn": "700 PA, 112 wRC+ among rookies",
+        "wrcPlus": 112
+      },
+      {
         "avg": ".269",
         "hr": 17,
         "id": 805811,
@@ -1726,7 +1757,7 @@
           "war": 78
         },
         "pos": "DH",
-        "rank": 5,
+        "rank": 6,
         "rbi": 57,
         "role": "bat",
         "sb": 1,
@@ -1735,9 +1766,9 @@
         "teamEn": "San Francisco Giants",
         "teamId": 137,
         "teamJa": "ジャイアンツ",
-        "war": 1.81,
-        "why": "wRC+131・WAR1.81はルーキー上位",
-        "whyEn": "131 wRC+, 1.81 WAR among rookies",
+        "war": 1.82,
+        "why": "wRC+131・WAR1.82はルーキー上位",
+        "whyEn": "131 wRC+, 1.82 WAR among rookies",
         "wrcPlus": 131
       },
       {
@@ -1757,7 +1788,7 @@
           "war": 93
         },
         "pos": "P",
-        "rank": 6,
+        "rank": 7,
         "role": "pit",
         "score": 85.3,
         "so": 114,
@@ -1770,37 +1801,6 @@
         "whip": "1.30",
         "why": "WAR2.48・FIP3.32はルーキー上位",
         "whyEn": "2.48 WAR, 3.32 FIP among rookies"
-      },
-      {
-        "avg": ".263",
-        "hr": 32,
-        "id": 701398,
-        "isJp": false,
-        "league": "NL",
-        "nameEn": "Sal Stewart",
-        "nameJa": "サル・スチュワート",
-        "obp": ".330",
-        "ops": ".787",
-        "pa": 700,
-        "pct": {
-          "role": 83,
-          "volume": 100,
-          "war": 80
-        },
-        "pos": "1B",
-        "rank": 7,
-        "rbi": 111,
-        "role": "bat",
-        "sb": 15,
-        "score": 85.1,
-        "slg": ".457",
-        "teamEn": "Cincinnati Reds",
-        "teamId": 113,
-        "teamJa": "レッズ",
-        "war": 1.95,
-        "why": "700打席・wRC+112はルーキー上位",
-        "whyEn": "700 PA, 112 wRC+ among rookies",
-        "wrcPlus": 112
       },
       {
         "era": "2.47",
@@ -1921,9 +1921,9 @@
         "teamEn": "Colorado Rockies",
         "teamId": 115,
         "teamJa": "ロッキーズ",
-        "war": 1.67,
-        "why": "wRC+110・WAR1.67はルーキー上位",
-        "whyEn": "110 wRC+, 1.67 WAR among rookies",
+        "war": 1.69,
+        "why": "wRC+110・WAR1.69はルーキー上位",
+        "whyEn": "110 wRC+, 1.69 WAR among rookies",
         "wrcPlus": 110
       },
       {
@@ -2002,14 +2002,14 @@
         "pct": {
           "role": 59,
           "volume": 86,
-          "war": 81
+          "war": 80
         },
         "pos": "CF",
         "rank": 14,
         "rbi": 43,
         "role": "bat",
         "sb": 25,
-        "score": 74.3,
+        "score": 73.9,
         "slg": ".376",
         "teamEn": "New York Mets",
         "teamId": 121,
@@ -2020,7 +2020,7 @@
         "wrcPlus": 97
       },
       {
-        "era": "4.62",
+        "era": "4.50",
         "fip": 4.24,
         "gs": 30,
         "id": 696149,
@@ -2107,7 +2107,7 @@
         "teamEn": "Milwaukee Brewers",
         "teamId": 158,
         "teamJa": "ブルワーズ",
-        "war": 1.62,
+        "war": 1.65,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 102
@@ -2169,7 +2169,7 @@
         "teamEn": "Pittsburgh Pirates",
         "teamId": 134,
         "teamJa": "パイレーツ",
-        "war": 1.35,
+        "war": 1.37,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 98
@@ -2200,7 +2200,7 @@
         "teamEn": "Pittsburgh Pirates",
         "teamId": 134,
         "teamJa": "パイレーツ",
-        "war": 1.22,
+        "war": 1.2,
         "why": "wRC+130はルーキー上位",
         "whyEn": "130 wRC+ among rookies",
         "wrcPlus": 130
@@ -2250,19 +2250,19 @@
         "pct": {
           "role": 66,
           "volume": 45,
-          "war": 54
+          "war": 56
         },
         "pos": "2B",
         "rank": 22,
         "rbi": 32,
         "role": "bat",
         "sb": 9,
-        "score": 56.4,
+        "score": 57.3,
         "slg": ".402",
         "teamEn": "Chicago Cubs",
         "teamId": 112,
         "teamJa": "カブス",
-        "war": 1.06,
+        "war": 1.1,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 100
@@ -2281,14 +2281,14 @@
         "pct": {
           "role": 55,
           "volume": 55,
-          "war": 57
+          "war": 56
         },
         "pos": "CF",
         "rank": 23,
         "rbi": 22,
         "role": "bat",
         "sb": 7,
-        "score": 55.9,
+        "score": 55.5,
         "slg": ".368",
         "teamEn": "Arizona Diamondbacks",
         "teamId": 109,
@@ -2330,37 +2330,6 @@
         "whyEn": "133.1 IP among rookies"
       },
       {
-        "era": "6.33",
-        "fip": 4.04,
-        "gs": 13,
-        "id": 687312,
-        "ipDisp": "64.0",
-        "isJp": false,
-        "l": 8,
-        "league": "NL",
-        "nameEn": "Gabriel Hughes",
-        "nameJa": "ガブリエル・ヒューズ",
-        "pct": {
-          "role": 54,
-          "volume": 38,
-          "war": 56
-        },
-        "pos": "P",
-        "rank": 25,
-        "role": "pit",
-        "score": 51.7,
-        "so": 56,
-        "sv": 1,
-        "teamEn": "Colorado Rockies",
-        "teamId": 115,
-        "teamJa": "ロッキーズ",
-        "w": 0,
-        "war": 1.07,
-        "whip": "1.44",
-        "why": "ルーキーとして総合力で上位",
-        "whyEn": "Solid all-around rookie season"
-      },
-      {
         "era": "5.40",
         "fip": 4.67,
         "gs": 23,
@@ -2377,7 +2346,7 @@
           "war": 59
         },
         "pos": "P",
-        "rank": 26,
+        "rank": 25,
         "role": "pit",
         "score": 51.5,
         "so": 115,
@@ -2390,6 +2359,37 @@
         "whip": "1.41",
         "why": "126.2回はルーキー上位",
         "whyEn": "126.2 IP among rookies"
+      },
+      {
+        "era": "6.33",
+        "fip": 4.04,
+        "gs": 13,
+        "id": 687312,
+        "ipDisp": "64.0",
+        "isJp": false,
+        "l": 8,
+        "league": "NL",
+        "nameEn": "Gabriel Hughes",
+        "nameJa": "ガブリエル・ヒューズ",
+        "pct": {
+          "role": 54,
+          "volume": 38,
+          "war": 54
+        },
+        "pos": "P",
+        "rank": 26,
+        "role": "pit",
+        "score": 50.8,
+        "so": 56,
+        "sv": 1,
+        "teamEn": "Colorado Rockies",
+        "teamId": 115,
+        "teamJa": "ロッキーズ",
+        "w": 0,
+        "war": 1.07,
+        "whip": "1.44",
+        "why": "ルーキーとして総合力で上位",
+        "whyEn": "Solid all-around rookie season"
       },
       {
         "avg": ".293",
@@ -2665,7 +2665,7 @@
         "teamEn": "San Francisco Giants",
         "teamId": 137,
         "teamJa": "ジャイアンツ",
-        "war": 0.65,
+        "war": 0.56,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 91
@@ -2944,7 +2944,7 @@
         "teamEn": "Arizona Diamondbacks",
         "teamId": 109,
         "teamJa": "ダイヤモンドバックス",
-        "war": 0.2,
+        "war": 0.19,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 79
@@ -3136,6 +3136,37 @@
         "wrcPlus": 77
       },
       {
+        "avg": ".220",
+        "hr": 7,
+        "id": 694378,
+        "isJp": false,
+        "league": "NL",
+        "nameEn": "Jacob Gonzalez",
+        "nameJa": "Jacob Gonzalez",
+        "obp": ".274",
+        "ops": ".638",
+        "pa": 227,
+        "pct": {
+          "role": 7,
+          "volume": 41,
+          "war": 7
+        },
+        "pos": "SS",
+        "rank": 51,
+        "rbi": 31,
+        "role": "bat",
+        "sb": 2,
+        "score": 13.8,
+        "slg": ".364",
+        "teamEn": "Pittsburgh Pirates",
+        "teamId": 134,
+        "teamJa": "パイレーツ",
+        "war": -0.08,
+        "why": "ルーキーとして総合力で上位",
+        "whyEn": "Solid all-around rookie season",
+        "wrcPlus": 75
+      },
+      {
         "avg": ".229",
         "hr": 6,
         "id": 699302,
@@ -3152,7 +3183,7 @@
           "war": 6
         },
         "pos": "RF",
-        "rank": 51,
+        "rank": 52,
         "rbi": 17,
         "role": "bat",
         "sb": 0,
@@ -3161,41 +3192,10 @@
         "teamEn": "Cincinnati Reds",
         "teamId": 113,
         "teamJa": "レッズ",
-        "war": -0.1,
+        "war": -0.09,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 82
-      },
-      {
-        "avg": ".220",
-        "hr": 7,
-        "id": 694378,
-        "isJp": false,
-        "league": "NL",
-        "nameEn": "Jacob Gonzalez",
-        "nameJa": "Jacob Gonzalez",
-        "obp": ".274",
-        "ops": ".638",
-        "pa": 227,
-        "pct": {
-          "role": 7,
-          "volume": 41,
-          "war": 6
-        },
-        "pos": "SS",
-        "rank": 52,
-        "rbi": 31,
-        "role": "bat",
-        "sb": 2,
-        "score": 13.4,
-        "slg": ".364",
-        "teamEn": "Pittsburgh Pirates",
-        "teamId": 134,
-        "teamJa": "パイレーツ",
-        "war": -0.1,
-        "why": "ルーキーとして総合力で上位",
-        "whyEn": "Solid all-around rookie season",
-        "wrcPlus": 75
       },
       {
         "avg": ".191",
@@ -3223,7 +3223,7 @@
         "teamEn": "San Diego Padres",
         "teamId": 135,
         "teamJa": "パドレス",
-        "war": 0.23,
+        "war": 0.24,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 58
