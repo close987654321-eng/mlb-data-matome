@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-01 05:50",
+  "asOf": "2026-10-01 09:35",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -248,37 +248,19 @@
         {
           "away": {
             "id": 145,
-            "score": 0
+            "score": 7
           },
-          "detailed": "Warmup",
+          "detailed": "Final",
           "etDate": "2026-09-30",
           "gamePk": 849846,
           "home": {
             "id": 117,
-            "score": 0
+            "score": 3
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-09-30T21:00:00Z",
-          "state": "Live",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 145,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-01",
-          "gamePk": 849850,
-          "home": {
-            "id": 117,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 3,
-          "start": "2026-10-01T21:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -290,9 +272,9 @@
         "id": 145,
         "nameJa": "ホワイトソックス",
         "seed": 6,
-        "wins": 1
+        "wins": 2
       },
-      "winnerId": null
+      "winnerId": 145
     },
     {
       "bestOf": 3,
@@ -326,7 +308,7 @@
             "id": 111,
             "score": 0
           },
-          "detailed": "Pre-Game",
+          "detailed": "In Progress",
           "etDate": "2026-09-30",
           "gamePk": 849848,
           "home": {
@@ -336,7 +318,7 @@
           "ifNecessary": false,
           "n": 2,
           "start": "2026-10-01T00:00:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
@@ -400,9 +382,9 @@
         {
           "away": {
             "id": 143,
-            "score": 3
+            "score": 4
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-09-30",
           "gamePk": 849841,
           "home": {
@@ -412,7 +394,7 @@
           "ifNecessary": false,
           "n": 2,
           "start": "2026-09-30T18:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
@@ -427,7 +409,7 @@
             "id": 144,
             "score": null
           },
-          "ifNecessary": true,
+          "ifNecessary": false,
           "n": 3,
           "start": "2026-10-01T18:00:00Z",
           "state": "Preview",
@@ -442,7 +424,7 @@
         "id": 143,
         "nameJa": "フィリーズ",
         "seed": 6,
-        "wins": 0
+        "wins": 1
       },
       "winnerId": null
     },
@@ -476,14 +458,14 @@
         {
           "away": {
             "id": 112,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "Pre-Game",
           "etDate": "2026-09-30",
           "gamePk": 849842,
           "home": {
             "id": 135,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 2,
@@ -644,7 +626,7 @@
       "games": [
         {
           "away": {
-            "id": null,
+            "id": 145,
             "score": null
           },
           "detailed": "Scheduled",
@@ -662,7 +644,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 145,
             "score": null
           },
           "detailed": "Scheduled",
@@ -687,7 +669,7 @@
           "etDate": "2026-10-07",
           "gamePk": 849833,
           "home": {
-            "id": null,
+            "id": 145,
             "score": null
           },
           "ifNecessary": false,
@@ -705,7 +687,7 @@
           "etDate": "2026-10-08",
           "gamePk": 849832,
           "home": {
-            "id": null,
+            "id": 145,
             "score": null
           },
           "ifNecessary": true,
@@ -716,7 +698,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 145,
             "score": null
           },
           "detailed": "Scheduled",
@@ -738,8 +720,9 @@
       "league": "AL",
       "round": "D",
       "top": {
-        "id": null,
-        "placeholder": "HOU/CWS",
+        "id": 145,
+        "nameJa": "ホワイトソックス",
+        "seed": 6,
         "wins": 0
       },
       "winnerId": null
