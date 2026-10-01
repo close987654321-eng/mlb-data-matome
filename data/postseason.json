@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-01 09:35",
+  "asOf": "2026-10-01 16:12",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -282,7 +282,7 @@
         "id": 147,
         "nameJa": "ヤンキース",
         "seed": 4,
-        "wins": 1
+        "wins": 2
       },
       "games": [
         {
@@ -306,37 +306,19 @@
         {
           "away": {
             "id": 111,
-            "score": 0
+            "score": 2
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-09-30",
           "gamePk": 849848,
           "home": {
             "id": 147,
-            "score": 0
+            "score": 9
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-10-01T00:00:00Z",
-          "state": "Live",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 111,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-01",
-          "gamePk": 849847,
-          "home": {
-            "id": 147,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 3,
-          "start": "2026-10-02T00:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -350,7 +332,7 @@
         "seed": 5,
         "wins": 0
       },
-      "winnerId": null
+      "winnerId": 147
     },
     {
       "bestOf": 3,
@@ -411,7 +393,7 @@
           },
           "ifNecessary": false,
           "n": 3,
-          "start": "2026-10-01T18:00:00Z",
+          "start": "2026-10-02T00:00:00Z",
           "state": "Preview",
           "tbd": false
         }
@@ -434,7 +416,7 @@
         "id": 135,
         "nameJa": "パドレス",
         "seed": 4,
-        "wins": 1
+        "wins": 2
       },
       "games": [
         {
@@ -458,37 +440,19 @@
         {
           "away": {
             "id": 112,
-            "score": 0
+            "score": 1
           },
-          "detailed": "Pre-Game",
+          "detailed": "Final",
           "etDate": "2026-09-30",
           "gamePk": 849842,
           "home": {
             "id": 135,
-            "score": 0
+            "score": 4
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-10-01T02:00:00Z",
-          "state": "Preview",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 112,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-01",
-          "gamePk": 849840,
-          "home": {
-            "id": 135,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 3,
-          "start": "2026-10-02T02:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -502,7 +466,7 @@
         "seed": 5,
         "wins": 0
       },
-      "winnerId": null
+      "winnerId": 135
     },
     {
       "bestOf": 5,
@@ -515,7 +479,7 @@
       "games": [
         {
           "away": {
-            "id": null,
+            "id": 147,
             "score": null
           },
           "detailed": "Scheduled",
@@ -533,7 +497,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 147,
             "score": null
           },
           "detailed": "Scheduled",
@@ -558,7 +522,7 @@
           "etDate": "2026-10-07",
           "gamePk": 849838,
           "home": {
-            "id": null,
+            "id": 147,
             "score": null
           },
           "ifNecessary": false,
@@ -576,7 +540,7 @@
           "etDate": "2026-10-08",
           "gamePk": 849837,
           "home": {
-            "id": null,
+            "id": 147,
             "score": null
           },
           "ifNecessary": true,
@@ -587,7 +551,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 147,
             "score": null
           },
           "detailed": "Scheduled",
@@ -609,8 +573,9 @@
       "league": "AL",
       "round": "D",
       "top": {
-        "id": null,
-        "placeholder": "NYY/BOS",
+        "id": 147,
+        "nameJa": "ヤンキース",
+        "seed": 4,
         "wins": 0
       },
       "winnerId": null
@@ -738,7 +703,7 @@
       "games": [
         {
           "away": {
-            "id": null,
+            "id": 135,
             "score": null
           },
           "detailed": "Scheduled",
@@ -750,13 +715,13 @@
           },
           "ifNecessary": false,
           "n": 1,
-          "start": "2026-10-03T08:33:00Z",
+          "start": "2026-10-04T00:30:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
-            "id": null,
+            "id": 135,
             "score": null
           },
           "detailed": "Scheduled",
@@ -781,7 +746,7 @@
           "etDate": "2026-10-06",
           "gamePk": 849826,
           "home": {
-            "id": null,
+            "id": 135,
             "score": null
           },
           "ifNecessary": false,
@@ -799,7 +764,7 @@
           "etDate": "2026-10-07",
           "gamePk": 849827,
           "home": {
-            "id": null,
+            "id": 135,
             "score": null
           },
           "ifNecessary": true,
@@ -810,7 +775,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 135,
             "score": null
           },
           "detailed": "Scheduled",
@@ -832,8 +797,9 @@
       "league": "NL",
       "round": "D",
       "top": {
-        "id": null,
-        "placeholder": "SD/CHC",
+        "id": 135,
+        "nameJa": "パドレス",
+        "seed": 4,
         "wins": 0
       },
       "winnerId": null
@@ -861,9 +827,9 @@
           },
           "ifNecessary": false,
           "n": 1,
-          "start": "2026-10-03T10:33:00Z",
+          "start": "2026-10-03T20:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
