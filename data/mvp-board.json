@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-01 23:34",
+  "asOf": "2026-10-02 22:55",
   "leagues": {
     "AL": [
       {
@@ -369,7 +369,7 @@
           "hardHit": 56.2,
           "hardSwing": 47.3,
           "maxEv": 114.6,
-          "oaa": 1,
+          "oaa": 0,
           "sprint": 24.9,
           "squaredUp": 25.1,
           "sweetSpot": 36.8
@@ -537,10 +537,10 @@
         "score": 85.8,
         "slg": ".524",
         "st": {
-          "all": 34.2,
-          "chase": 17.1,
-          "heart": -1.9,
-          "shadow": 4.3,
+          "all": 34.1,
+          "chase": 17,
+          "heart": -1.8,
+          "shadow": 4.4,
           "waste": 14.6
         },
         "teamEn": "Tampa Bay Rays",
@@ -553,7 +553,7 @@
             "name": "4-Seam Fastball",
             "nameJa": "フォーシーム",
             "pa": 136,
-            "rv100": 1.3,
+            "rv100": 1.4,
             "slg": "0.641",
             "type": "FF",
             "usage": 21.3,
@@ -811,10 +811,10 @@
             "name": "Curveball",
             "nameJa": "カーブ",
             "pa": 48,
-            "rv100": 3.1,
+            "rv100": 3.2,
             "slg": "0.524",
             "type": "CU",
-            "usage": 6.6,
+            "usage": 6.5,
             "whiff": 22.4,
             "woba": 0.388,
             "xwoba": 0.321
@@ -863,7 +863,7 @@
           "hardHit": 48.6,
           "hardSwing": 24.3,
           "maxEv": 110.9,
-          "oaa": -7,
+          "oaa": -6,
           "sprint": 26.8,
           "squaredUp": 27.5,
           "sweetSpot": 38.4
@@ -1045,7 +1045,7 @@
         "score": 81.3,
         "slg": ".441",
         "st": {
-          "all": 15.3,
+          "all": 15.4,
           "chase": 13.1,
           "heart": 5.1,
           "shadow": -14.9,
@@ -1540,8 +1540,8 @@
         "slg": ".421",
         "st": {
           "all": 21.5,
-          "chase": 29.3,
-          "heart": -10,
+          "chase": 29.2,
+          "heart": -9.9,
           "shadow": -11.9,
           "waste": 14.1
         },
@@ -1691,7 +1691,7 @@
           "hardHit": 56.8,
           "hardSwing": 49.8,
           "maxEv": 114.1,
-          "oaa": 0,
+          "oaa": -1,
           "sprint": 26.8,
           "squaredUp": 19.4,
           "sweetSpot": 30.5
@@ -1862,7 +1862,7 @@
           "all": 8.9,
           "chase": 11.2,
           "heart": -0.4,
-          "shadow": -10.5,
+          "shadow": -10.4,
           "waste": 8.6
         },
         "teamEn": "Detroit Tigers",
@@ -1945,7 +1945,7 @@
             "name": "Sweeper",
             "nameJa": "スイーパー",
             "pa": 49,
-            "rv100": 1.6,
+            "rv100": 1.7,
             "slg": "0.565",
             "type": "ST",
             "usage": 7.7,
@@ -1973,7 +1973,7 @@
             "name": "Split-Finger",
             "nameJa": "スプリット",
             "pa": 20,
-            "rv100": -1.1,
+            "rv100": -1.2,
             "slg": "0.118",
             "type": "FS",
             "usage": 2.8,
@@ -2208,7 +2208,7 @@
         "slg": ".447",
         "st": {
           "all": 26.5,
-          "chase": 31.9,
+          "chase": 31.8,
           "heart": -5,
           "shadow": -15.4,
           "waste": 15.1
@@ -2381,7 +2381,7 @@
         "score": 68.1,
         "slg": ".484",
         "st": {
-          "all": 12.7,
+          "all": 12.8,
           "chase": 8.1,
           "heart": 3.9,
           "shadow": -7.7,
@@ -2556,7 +2556,7 @@
         "slg": ".457",
         "st": {
           "all": 14.4,
-          "chase": 18.2,
+          "chase": 18.1,
           "heart": -7.9,
           "shadow": -7.9,
           "waste": 12.1
@@ -3252,7 +3252,7 @@
         "slg": ".446",
         "st": {
           "all": 10.7,
-          "chase": 16.8,
+          "chase": 16.7,
           "heart": -13.5,
           "shadow": -6,
           "waste": 13.5
@@ -3600,7 +3600,7 @@
         "slg": ".429",
         "st": {
           "all": 13,
-          "chase": 16.8,
+          "chase": 16.7,
           "heart": -2.8,
           "shadow": -10.6,
           "waste": 9.6
@@ -3773,10 +3773,10 @@
         "score": 60,
         "slg": ".434",
         "st": {
-          "all": 16.8,
+          "all": 16.9,
           "chase": 25.2,
           "heart": -18,
-          "shadow": -4.7,
+          "shadow": -4.6,
           "waste": 14.3
         },
         "teamEn": "Tampa Bay Rays",
@@ -4107,9 +4107,9 @@
         "score": 57.6,
         "slg": ".403",
         "st": {
-          "all": 9,
+          "all": 8.8,
           "chase": 13.7,
-          "heart": -3,
+          "heart": -3.2,
           "shadow": -19.7,
           "waste": 18.1
         },
@@ -4160,13 +4160,13 @@
             "xwoba": 0.267
           },
           {
-            "ba": "0.235",
+            "ba": "0.224",
             "hardHit": 45.3,
             "name": "Changeup",
             "nameJa": "チェンジアップ",
             "pa": 90,
-            "rv100": 0.8,
-            "slg": "0.435",
+            "rv100": 0.7,
+            "slg": "0.424",
             "type": "CH",
             "usage": 12.9,
             "whiff": 23.9,
@@ -4456,7 +4456,7 @@
         "slg": ".415",
         "st": {
           "all": 7.1,
-          "chase": 17.3,
+          "chase": 17.2,
           "heart": -15.5,
           "shadow": -6.6,
           "waste": 12
@@ -4979,7 +4979,7 @@
         "st": {
           "all": 9.4,
           "chase": 10.8,
-          "heart": -9.1,
+          "heart": -9,
           "shadow": -3.2,
           "waste": 10.9
         },
@@ -5139,7 +5139,7 @@
         "st": {
           "all": 14.7,
           "chase": 17.4,
-          "heart": -7.8,
+          "heart": -7.7,
           "shadow": -6.8,
           "waste": 11.9
         },
@@ -5510,18 +5510,18 @@
             "xwoba": 0.356
           },
           {
-            "ba": "0.212",
-            "hardHit": 30.2,
+            "ba": "0.221",
+            "hardHit": 31.3,
             "name": "Slider",
             "nameJa": "スライダー",
-            "pa": 92,
-            "rv100": -0.7,
-            "slg": "0.412",
+            "pa": 93,
+            "rv100": -0.5,
+            "slg": "0.419",
             "type": "SL",
             "usage": 15.1,
-            "whiff": 33.8,
-            "woba": 0.289,
-            "xwoba": 0.301
+            "whiff": 33.6,
+            "woba": 0.296,
+            "xwoba": 0.302
           },
           {
             "ba": "0.302",
@@ -5552,18 +5552,18 @@
             "xwoba": 0.276
           },
           {
-            "ba": "0.306",
-            "hardHit": 39,
+            "ba": "0.292",
+            "hardHit": 37.5,
             "name": "Cutter",
             "nameJa": "カッター",
-            "pa": 53,
-            "rv100": -1.3,
-            "slg": "0.367",
+            "pa": 52,
+            "rv100": -1.6,
+            "slg": "0.354",
             "type": "FC",
             "usage": 9.5,
-            "whiff": 26.4,
-            "woba": 0.314,
-            "xwoba": 0.335
+            "whiff": 26.7,
+            "woba": 0.303,
+            "xwoba": 0.334
           },
           {
             "ba": "0.171",
@@ -5647,7 +5647,7 @@
         "st": {
           "all": 19.1,
           "chase": 20.4,
-          "heart": -16,
+          "heart": -15.9,
           "shadow": -1.7,
           "waste": 16.3
         },
@@ -5816,13 +5816,13 @@
         "teamJa": "レッドソックス",
         "vsPitch": [
           {
-            "ba": "0.257",
+            "ba": "0.263",
             "hardHit": 33.3,
             "name": "4-Seam Fastball",
             "nameJa": "フォーシーム",
             "pa": 164,
             "rv100": -0.9,
-            "slg": "0.342",
+            "slg": "0.349",
             "type": "FF",
             "usage": 30,
             "whiff": 26,
@@ -6460,7 +6460,7 @@
         "slg": ".421",
         "st": {
           "all": -4.2,
-          "chase": 6.4,
+          "chase": 6.3,
           "heart": 0,
           "shadow": -21.4,
           "waste": 10.9
@@ -6621,7 +6621,7 @@
         "st": {
           "all": 3.6,
           "chase": 16.2,
-          "heart": -3.3,
+          "heart": -3.2,
           "shadow": -19.2,
           "waste": 9.9
         },
@@ -6780,7 +6780,7 @@
         "slg": ".427",
         "st": {
           "all": 3.9,
-          "chase": 9.6,
+          "chase": 9.5,
           "heart": 5.2,
           "shadow": -24.1,
           "waste": 13.2
@@ -6818,18 +6818,18 @@
             "xwoba": 0.365
           },
           {
-            "ba": "0.293",
-            "hardHit": 36.1,
+            "ba": "0.3",
+            "hardHit": 37,
             "name": "Slider",
             "nameJa": "スライダー",
-            "pa": 103,
-            "rv100": 2.4,
-            "slg": "0.616",
+            "pa": 104,
+            "rv100": 2.7,
+            "slg": "0.65",
             "type": "SL",
             "usage": 14.4,
-            "whiff": 39.7,
-            "woba": 0.398,
-            "xwoba": 0.309
+            "whiff": 39.5,
+            "woba": 0.413,
+            "xwoba": 0.315
           },
           {
             "ba": "0.154",
@@ -6860,18 +6860,18 @@
             "xwoba": 0.207
           },
           {
-            "ba": "0.196",
-            "hardHit": 41.9,
+            "ba": "0.178",
+            "hardHit": 40.5,
             "name": "Cutter",
             "nameJa": "カッター",
-            "pa": 49,
-            "rv100": -2.1,
-            "slg": "0.37",
+            "pa": 48,
+            "rv100": -2.6,
+            "slg": "0.289",
             "type": "FC",
             "usage": 8.9,
-            "whiff": 23.9,
-            "woba": 0.253,
-            "xwoba": 0.307
+            "whiff": 24.1,
+            "woba": 0.217,
+            "xwoba": 0.295
           },
           {
             "ba": "0.227",
@@ -6939,7 +6939,7 @@
         "score": 40,
         "slg": ".391",
         "st": {
-          "all": -7.3,
+          "all": -7.2,
           "chase": 13.6,
           "heart": -17.3,
           "shadow": -16.4,
@@ -7289,7 +7289,7 @@
         "st": {
           "all": 4.4,
           "chase": 18.1,
-          "heart": -9.5,
+          "heart": -9.4,
           "shadow": -15,
           "waste": 10.7
         },
@@ -7453,7 +7453,7 @@
           "hardHit": 40.9,
           "hardSwing": 70.6,
           "maxEv": 115.4,
-          "oaa": 14,
+          "oaa": 15,
           "sprint": 26.6,
           "squaredUp": 14.6,
           "sweetSpot": 32.9
@@ -7463,8 +7463,8 @@
         "st": {
           "all": -4.7,
           "chase": 7,
-          "heart": 6.2,
-          "shadow": -30.9,
+          "heart": 6.3,
+          "shadow": -30.8,
           "waste": 12.9
         },
         "teamEn": "Chicago White Sox",
@@ -7627,7 +7627,7 @@
           "hardHit": 25,
           "hardSwing": 6.1,
           "maxEv": 107.9,
-          "oaa": 7,
+          "oaa": 6,
           "sprint": 27.9,
           "squaredUp": 27.2,
           "sweetSpot": 28.9
@@ -7636,8 +7636,8 @@
         "slg": ".378",
         "st": {
           "all": 2.3,
-          "chase": 18.8,
-          "heart": -17.4,
+          "chase": 18.7,
+          "heart": -17.3,
           "shadow": -11,
           "waste": 11.9
         },
@@ -8016,7 +8016,7 @@
             "rv100": 0.2,
             "slg": "0.508",
             "type": "SL",
-            "usage": 11.3,
+            "usage": 11.2,
             "whiff": 39.4,
             "woba": 0.303,
             "xwoba": 0.255
@@ -8086,7 +8086,7 @@
             "rv100": 0.9,
             "slg": "0.318",
             "type": "FS",
-            "usage": 4.9,
+            "usage": 5,
             "whiff": 34.7,
             "woba": 0.336,
             "xwoba": 0.335
@@ -8145,7 +8145,7 @@
         "st": {
           "all": -9.8,
           "chase": 17.4,
-          "heart": -15.7,
+          "heart": -15.6,
           "shadow": -24,
           "waste": 12.5
         },
@@ -8319,7 +8319,7 @@
         "st": {
           "all": -8.3,
           "chase": 10.1,
-          "heart": -14.8,
+          "heart": -14.7,
           "shadow": -16,
           "waste": 12.4
         },
@@ -8481,7 +8481,7 @@
           "chase": 9.6,
           "heart": -12.9,
           "shadow": -19.7,
-          "waste": 12.1
+          "waste": 12
         },
         "teamEn": "Houston Astros",
         "teamId": 117,
@@ -8963,7 +8963,7 @@
           "hardHit": 44.3,
           "hardSwing": 62.4,
           "maxEv": 116.3,
-          "oaa": 4,
+          "oaa": 6,
           "sprint": 26.4,
           "squaredUp": 26.4,
           "sweetSpot": 28.7
@@ -9133,8 +9133,8 @@
         "st": {
           "all": 2,
           "chase": 14.6,
-          "heart": -3.8,
-          "shadow": -20.4,
+          "heart": -3.7,
+          "shadow": -20.3,
           "waste": 11.5
         },
         "teamEn": "Athletics",
@@ -9189,10 +9189,10 @@
             "name": "Slider",
             "nameJa": "スライダー",
             "pa": 57,
-            "rv100": 1.3,
+            "rv100": 1.4,
             "slg": "0.489",
             "type": "SL",
-            "usage": 10.4,
+            "usage": 10.5,
             "whiff": 38.4,
             "woba": 0.398,
             "xwoba": 0.374
@@ -9206,7 +9206,7 @@
             "rv100": 2.7,
             "slg": "0.614",
             "type": "FC",
-            "usage": 8.3,
+            "usage": 8.2,
             "whiff": 21.3,
             "woba": 0.405,
             "xwoba": 0.39
@@ -9481,9 +9481,9 @@
         "st": {
           "all": -29.5,
           "chase": 3.9,
-          "heart": -9.1,
+          "heart": -9,
           "shadow": -33.4,
-          "waste": 9.1
+          "waste": 9
         },
         "teamEn": "Boston Red Sox",
         "teamId": 111,
@@ -9565,7 +9565,7 @@
             "name": "Cutter",
             "nameJa": "カッター",
             "pa": 58,
-            "rv100": 0.3,
+            "rv100": 0.2,
             "slg": "0.521",
             "type": "FC",
             "usage": 8.2,
@@ -9745,7 +9745,7 @@
             "usage": 7.3,
             "whiff": 21.4,
             "woba": 0.327,
-            "xwoba": 0.278
+            "xwoba": 0.279
           },
           {
             "ba": "0.25",
@@ -9805,7 +9805,7 @@
           "hardHit": 40.2,
           "hardSwing": 54.5,
           "maxEv": 112.4,
-          "oaa": -3,
+          "oaa": -4,
           "sprint": 27.7,
           "squaredUp": 20,
           "sweetSpot": 33.4
@@ -9816,7 +9816,7 @@
           "all": -13.5,
           "chase": 9.9,
           "heart": -8.5,
-          "shadow": -21.9,
+          "shadow": -21.8,
           "waste": 7
         },
         "teamEn": "Minnesota Twins",
@@ -9965,7 +9965,7 @@
           "hardHit": 31.3,
           "hardSwing": 9.1,
           "maxEv": 108.7,
-          "oaa": -10,
+          "oaa": -9,
           "sprint": 27.6,
           "squaredUp": 28.3,
           "sweetSpot": 31.8
@@ -10135,9 +10135,9 @@
         "st": {
           "all": -13.7,
           "chase": -2.8,
-          "heart": -8.4,
-          "shadow": -14.7,
-          "waste": 12.1
+          "heart": -8.3,
+          "shadow": -14.6,
+          "waste": 12
         },
         "teamEn": "Kansas City Royals",
         "teamId": 118,
@@ -10374,32 +10374,32 @@
             "xwoba": 0.334
           },
           {
-            "ba": "0.195",
-            "hardHit": 31,
+            "ba": "0.2",
+            "hardHit": 32.1,
             "name": "Curveball",
             "nameJa": "カーブ",
-            "pa": 44,
-            "rv100": -0.6,
-            "slg": "0.293",
+            "pa": 43,
+            "rv100": -0.4,
+            "slg": "0.3",
             "type": "CU",
-            "usage": 9.3,
-            "whiff": 31.3,
-            "woba": 0.264,
-            "xwoba": 0.209
+            "usage": 9.2,
+            "whiff": 31.6,
+            "woba": 0.27,
+            "xwoba": 0.212
           },
           {
-            "ba": "0.378",
-            "hardHit": 25,
+            "ba": "0.368",
+            "hardHit": 24.1,
             "name": "Sweeper",
             "nameJa": "スイーパー",
-            "pa": 39,
-            "rv100": 2.7,
-            "slg": "0.595",
+            "pa": 40,
+            "rv100": 2.5,
+            "slg": "0.579",
             "type": "ST",
-            "usage": 7.3,
-            "whiff": 27,
-            "woba": 0.433,
-            "xwoba": 0.36
+            "usage": 7.4,
+            "whiff": 26.7,
+            "woba": 0.423,
+            "xwoba": 0.353
           },
           {
             "ba": "0.286",
@@ -10628,7 +10628,7 @@
         "slg": ".344",
         "st": {
           "all": -13,
-          "chase": 13.6,
+          "chase": 13.5,
           "heart": -11.6,
           "shadow": -24.6,
           "waste": 9.7
@@ -10826,18 +10826,18 @@
             "xwoba": 0.284
           },
           {
-            "ba": "0.1",
-            "hardHit": 25.5,
+            "ba": "0.098",
+            "hardHit": 25,
             "name": "Slider",
             "nameJa": "スライダー",
-            "pa": 67,
-            "rv100": -3.2,
-            "slg": "0.117",
+            "pa": 68,
+            "rv100": -3.3,
+            "slg": "0.115",
             "type": "SL",
             "usage": 13.2,
-            "whiff": 21.3,
-            "woba": 0.164,
-            "xwoba": 0.257
+            "whiff": 21.2,
+            "woba": 0.162,
+            "xwoba": 0.254
           },
           {
             "ba": "0.262",
@@ -10854,18 +10854,18 @@
             "xwoba": 0.307
           },
           {
-            "ba": "0.405",
-            "hardHit": 21.9,
+            "ba": "0.417",
+            "hardHit": 22.6,
             "name": "Cutter",
             "nameJa": "カッター",
-            "pa": 42,
-            "rv100": 0.8,
-            "slg": "0.595",
+            "pa": 41,
+            "rv100": 0.9,
+            "slg": "0.611",
             "type": "FC",
-            "usage": 9.9,
-            "whiff": 18.5,
-            "woba": 0.448,
-            "xwoba": 0.319
+            "usage": 9.8,
+            "whiff": 18.7,
+            "woba": 0.459,
+            "xwoba": 0.326
           },
           {
             "ba": "0.28",
@@ -11125,7 +11125,7 @@
           "chase": 9.6,
           "heart": -18.5,
           "shadow": -16.3,
-          "waste": 5.6
+          "waste": 5.5
         },
         "teamEn": "Toronto Blue Jays",
         "teamId": 141,
@@ -11275,7 +11275,7 @@
           "hardHit": 48.6,
           "hardSwing": 53.6,
           "maxEv": 114.6,
-          "oaa": 25,
+          "oaa": 26,
           "sprint": 29.5,
           "squaredUp": 20.5,
           "sweetSpot": 37.8
@@ -11835,7 +11835,7 @@
             "name": "Sinker",
             "nameJa": "シンカー",
             "pa": 158,
-            "rv100": 0.6,
+            "rv100": 0.7,
             "slg": "0.417",
             "type": "SI",
             "usage": 21.9,
@@ -11894,7 +11894,7 @@
             "rv100": 2.6,
             "slg": "0.609",
             "type": "FC",
-            "usage": 7.3,
+            "usage": 7.2,
             "whiff": 28.7,
             "woba": 0.484,
             "xwoba": 0.475
@@ -11966,10 +11966,10 @@
         "slg": ".503",
         "st": {
           "all": 26.3,
-          "chase": 25.7,
+          "chase": 25.6,
           "heart": 5.5,
           "shadow": -19.3,
-          "waste": 14.5
+          "waste": 14.4
         },
         "teamEn": "Washington Nationals",
         "teamId": 120,
@@ -12117,7 +12117,7 @@
           "hardHit": 51.9,
           "hardSwing": 68.1,
           "maxEv": 114.8,
-          "oaa": -8,
+          "oaa": -7,
           "sprint": 26.9,
           "squaredUp": 23.4,
           "sweetSpot": 38.6
@@ -12126,8 +12126,8 @@
         "slg": ".484",
         "st": {
           "all": 26.6,
-          "chase": 22.7,
-          "heart": 10.6,
+          "chase": 22.6,
+          "heart": 10.7,
           "shadow": -17.7,
           "waste": 11.1
         },
@@ -12663,7 +12663,7 @@
             "name": "Sinker",
             "nameJa": "シンカー",
             "pa": 121,
-            "rv100": -0.2,
+            "rv100": -0.1,
             "slg": "0.419",
             "type": "SI",
             "usage": 18.8,
@@ -12794,7 +12794,7 @@
         "slg": ".490",
         "st": {
           "all": 21.8,
-          "chase": 17.4,
+          "chase": 17.3,
           "heart": 13.6,
           "shadow": -21.8,
           "waste": 12.7
@@ -13014,7 +13014,7 @@
             "rv100": 2.7,
             "slg": "0.633",
             "type": "SL",
-            "usage": 12.5,
+            "usage": 12.6,
             "whiff": 36.1,
             "woba": 0.395,
             "xwoba": 0.339
@@ -13131,7 +13131,7 @@
           "chase": 21.3,
           "heart": 6.6,
           "shadow": -9.5,
-          "waste": 14.7
+          "waste": 14.6
         },
         "teamEn": "Philadelphia Phillies",
         "teamId": 143,
@@ -13302,10 +13302,10 @@
         "slg": ".503",
         "st": {
           "all": 39.4,
-          "chase": 26.5,
+          "chase": 26.4,
           "heart": 11.9,
           "shadow": -18.7,
-          "waste": 19.8
+          "waste": 19.7
         },
         "teamEn": "Philadelphia Phillies",
         "teamId": 143,
@@ -13853,7 +13853,7 @@
             "name": "Sinker",
             "nameJa": "シンカー",
             "pa": 99,
-            "rv100": -0.9,
+            "rv100": -0.8,
             "slg": "0.391",
             "type": "SI",
             "usage": 14.6,
@@ -13983,7 +13983,7 @@
         "score": 68.7,
         "slg": ".491",
         "st": {
-          "all": 11,
+          "all": 11.1,
           "chase": 1.3,
           "heart": 7.3,
           "shadow": -4,
@@ -14022,18 +14022,18 @@
             "xwoba": 0.349
           },
           {
-            "ba": "0.273",
-            "hardHit": 48.6,
+            "ba": "0.27",
+            "hardHit": 47.9,
             "name": "Slider",
             "nameJa": "スライダー",
-            "pa": 90,
-            "rv100": 1.6,
-            "slg": "0.545",
+            "pa": 91,
+            "rv100": 1.5,
+            "slg": "0.539",
             "type": "SL",
-            "usage": 11.8,
-            "whiff": 28.4,
-            "woba": 0.358,
-            "xwoba": 0.34
+            "usage": 11.9,
+            "whiff": 28.2,
+            "woba": 0.354,
+            "xwoba": 0.336
           },
           {
             "ba": "0.293",
@@ -14078,18 +14078,18 @@
             "xwoba": 0.201
           },
           {
-            "ba": "0.244",
-            "hardHit": 30.8,
+            "ba": "0.25",
+            "hardHit": 31.6,
             "name": "Cutter",
             "nameJa": "カッター",
-            "pa": 43,
-            "rv100": -0.8,
-            "slg": "0.439",
+            "pa": 42,
+            "rv100": -0.7,
+            "slg": "0.45",
             "type": "FC",
             "usage": 7.9,
-            "whiff": 19.6,
-            "woba": 0.3,
-            "xwoba": 0.358
+            "whiff": 19.8,
+            "woba": 0.307,
+            "xwoba": 0.367
           },
           {
             "ba": "0.333",
@@ -14320,7 +14320,7 @@
           "all": 20.5,
           "chase": 18.3,
           "heart": -4.8,
-          "shadow": -4.9,
+          "shadow": -4.8,
           "waste": 11.9
         },
         "teamEn": "St. Louis Cardinals",
@@ -14417,7 +14417,7 @@
             "name": "Sweeper",
             "nameJa": "スイーパー",
             "pa": 48,
-            "rv100": -0.8,
+            "rv100": -0.7,
             "slg": "0.209",
             "type": "ST",
             "usage": 8.3,
@@ -14638,20 +14638,20 @@
         "sbs": 3,
         "sc": {
           "barrel": 12.9,
-          "batSpeed": 75.3,
+          "batSpeed": 75.4,
           "ev": 91.5,
           "hardHit": 50.6,
           "hardSwing": 56.7,
           "maxEv": 112.8,
           "oaa": null,
           "sprint": 26,
-          "squaredUp": 24.6,
+          "squaredUp": 24.5,
           "sweetSpot": 37.5
         },
         "score": 68.1,
         "slg": ".459",
         "st": {
-          "all": 19.2,
+          "all": 19.1,
           "chase": 20.6,
           "heart": -2,
           "shadow": -10.5,
@@ -14883,7 +14883,7 @@
             "name": "Curveball",
             "nameJa": "カーブ",
             "pa": 73,
-            "rv100": 2.2,
+            "rv100": 2.3,
             "slg": "0.477",
             "type": "CU",
             "usage": 11.3,
@@ -15066,18 +15066,18 @@
             "xwoba": 0.323
           },
           {
-            "ba": "0.297",
-            "hardHit": 43.8,
+            "ba": "0.302",
+            "hardHit": 42.6,
             "name": "Curveball",
             "nameJa": "カーブ",
-            "pa": 67,
-            "rv100": 2.6,
-            "slg": "0.484",
+            "pa": 66,
+            "rv100": 2.8,
+            "slg": "0.492",
             "type": "CU",
-            "usage": 8.5,
-            "whiff": 29.8,
-            "woba": 0.364,
-            "xwoba": 0.335
+            "usage": 8.4,
+            "whiff": 29.5,
+            "woba": 0.37,
+            "xwoba": 0.332
           },
           {
             "ba": "0.261",
@@ -15094,18 +15094,18 @@
             "xwoba": 0.412
           },
           {
-            "ba": "0.135",
-            "hardHit": 37,
+            "ba": "0.132",
+            "hardHit": 39.3,
             "name": "Sweeper",
             "nameJa": "スイーパー",
-            "pa": 39,
-            "rv100": -1.1,
-            "slg": "0.297",
+            "pa": 40,
+            "rv100": -1.3,
+            "slg": "0.289",
             "type": "ST",
-            "usage": 6.5,
-            "whiff": 28.9,
-            "woba": 0.208,
-            "xwoba": 0.307
+            "usage": 6.6,
+            "whiff": 29.3,
+            "woba": 0.203,
+            "xwoba": 0.313
           },
           {
             "ba": "0.143",
@@ -15174,7 +15174,7 @@
         "slg": ".430",
         "st": {
           "all": 16.4,
-          "chase": 20.5,
+          "chase": 20.4,
           "heart": 1.7,
           "shadow": -16.9,
           "waste": 11.1
@@ -15607,7 +15607,7 @@
             "name": "Sweeper",
             "nameJa": "スイーパー",
             "pa": 44,
-            "rv100": 1.3,
+            "rv100": 1.4,
             "slg": "0.385",
             "type": "ST",
             "usage": 7.8,
@@ -15682,7 +15682,7 @@
         "slg": ".454",
         "st": {
           "all": 12.1,
-          "chase": 16.1,
+          "chase": 16,
           "heart": -5.5,
           "shadow": -6.9,
           "waste": 8.4
@@ -15933,7 +15933,7 @@
             "usage": 7.1,
             "whiff": 30.1,
             "woba": 0.551,
-            "xwoba": 0.46
+            "xwoba": 0.459
           },
           {
             "ba": "0.283",
@@ -16002,7 +16002,7 @@
         "slg": ".424",
         "st": {
           "all": 19.7,
-          "chase": 22.8,
+          "chase": 22.7,
           "heart": 3.5,
           "shadow": -22.9,
           "waste": 16.4
@@ -16669,11 +16669,11 @@
         "score": 52.2,
         "slg": ".377",
         "st": {
-          "all": 11.5,
-          "chase": 32.9,
+          "all": 11.4,
+          "chase": 32.8,
           "heart": -20.8,
           "shadow": -17.4,
-          "waste": 16.9
+          "waste": 16.8
         },
         "teamEn": "Arizona Diamondbacks",
         "teamId": 109,
@@ -16755,7 +16755,7 @@
             "name": "Curveball",
             "nameJa": "カーブ",
             "pa": 33,
-            "rv100": 1.5,
+            "rv100": 1.6,
             "slg": "0.214",
             "type": "CU",
             "usage": 7.7,
@@ -17225,7 +17225,7 @@
             "slg": "0.422",
             "type": "SL",
             "usage": 10.3,
-            "whiff": 21.3,
+            "whiff": 21.1,
             "woba": 0.287,
             "xwoba": 0.34
           },
@@ -17267,7 +17267,7 @@
             "slg": "0.25",
             "type": "FC",
             "usage": 7.6,
-            "whiff": 14.3,
+            "whiff": 14.5,
             "woba": 0.263,
             "xwoba": 0.285
           },
@@ -17513,7 +17513,7 @@
         "st": {
           "all": 10.4,
           "chase": 12.6,
-          "heart": -2.4,
+          "heart": -2.3,
           "shadow": -12.4,
           "waste": 12.6
         },
@@ -17527,7 +17527,7 @@
             "name": "4-Seam Fastball",
             "nameJa": "フォーシーム",
             "pa": 154,
-            "rv100": -0.7,
+            "rv100": -0.6,
             "slg": "0.353",
             "type": "FF",
             "usage": 26.8,
@@ -17569,7 +17569,7 @@
             "name": "Sweeper",
             "nameJa": "スイーパー",
             "pa": 66,
-            "rv100": -0.9,
+            "rv100": -0.8,
             "slg": "0.339",
             "type": "ST",
             "usage": 11.2,
@@ -17743,7 +17743,7 @@
             "name": "Curveball",
             "nameJa": "カーブ",
             "pa": 48,
-            "rv100": 2,
+            "rv100": 1.9,
             "slg": "0.442",
             "type": "CU",
             "usage": 8.7,
@@ -17849,7 +17849,7 @@
           "chase": 17.2,
           "heart": -9.9,
           "shadow": -13.8,
-          "waste": 10.4
+          "waste": 10.3
         },
         "teamEn": "Philadelphia Phillies",
         "teamId": 143,
@@ -18105,7 +18105,7 @@
             "name": "Curveball",
             "nameJa": "カーブ",
             "pa": 46,
-            "rv100": 0,
+            "rv100": -0.1,
             "slg": "0.409",
             "type": "CU",
             "usage": 8.7,
@@ -18198,7 +18198,7 @@
             "rv100": -0.5,
             "slg": "0.421",
             "type": "FF",
-            "usage": 36.2,
+            "usage": 36.3,
             "whiff": 8,
             "woba": 0.335,
             "xwoba": 0.303
@@ -18226,7 +18226,7 @@
             "rv100": -0.5,
             "slg": "0.36",
             "type": "SL",
-            "usage": 13,
+            "usage": 12.9,
             "whiff": 9.6,
             "woba": 0.301,
             "xwoba": 0.319
@@ -18354,7 +18354,7 @@
         "slg": ".407",
         "st": {
           "all": -0.9,
-          "chase": 19.6,
+          "chase": 19.5,
           "heart": -13,
           "shadow": -21.5,
           "waste": 14.1
@@ -18400,7 +18400,7 @@
             "rv100": -0.3,
             "slg": "0.382",
             "type": "SL",
-            "usage": 13.4,
+            "usage": 13.5,
             "whiff": 30.4,
             "woba": 0.285,
             "xwoba": 0.264
@@ -18442,7 +18442,7 @@
             "rv100": 0.5,
             "slg": "0.537",
             "type": "FC",
-            "usage": 7.9,
+            "usage": 7.8,
             "whiff": 12.8,
             "woba": 0.389,
             "xwoba": 0.411
@@ -18515,7 +18515,7 @@
         "st": {
           "all": 10.3,
           "chase": 19.5,
-          "heart": -8,
+          "heart": -7.9,
           "shadow": -10.2,
           "waste": 8.9
         },
@@ -18689,7 +18689,7 @@
         "st": {
           "all": 10.5,
           "chase": 8.1,
-          "heart": 8.1,
+          "heart": 8.2,
           "shadow": -16.3,
           "waste": 10.6
         },
@@ -18853,7 +18853,7 @@
           "hardHit": 39.8,
           "hardSwing": 5.4,
           "maxEv": 109.2,
-          "oaa": 3,
+          "oaa": 2,
           "sprint": 26,
           "squaredUp": 28.7,
           "sweetSpot": 34.3
@@ -18865,7 +18865,7 @@
           "chase": 24,
           "heart": -1.4,
           "shadow": -22.3,
-          "waste": 15.3
+          "waste": 15.2
         },
         "teamEn": "Chicago Cubs",
         "teamId": 112,
@@ -18897,7 +18897,7 @@
             "usage": 15.1,
             "whiff": 42.3,
             "woba": 0.321,
-            "xwoba": 0.271
+            "xwoba": 0.272
           },
           {
             "ba": "0.27",
@@ -19035,7 +19035,7 @@
         "score": 36.6,
         "slg": ".412",
         "st": {
-          "all": 2.1,
+          "all": 2.2,
           "chase": 25.5,
           "heart": -8.3,
           "shadow": -31.2,
@@ -19690,7 +19690,7 @@
         "slg": ".350",
         "st": {
           "all": -9,
-          "chase": 11.5,
+          "chase": 11.4,
           "heart": -19.4,
           "shadow": -10.8,
           "waste": 9.7
@@ -19851,7 +19851,7 @@
         "st": {
           "all": 8.3,
           "chase": 13.4,
-          "heart": 3.4,
+          "heart": 3.5,
           "shadow": -19.1,
           "waste": 10.6
         },
@@ -20010,9 +20010,9 @@
         "slg": ".390",
         "st": {
           "all": -8,
-          "chase": 10.6,
-          "heart": -14.9,
-          "shadow": -16.2,
+          "chase": 10.5,
+          "heart": -14.8,
+          "shadow": -16.1,
           "waste": 12.4
         },
         "teamEn": "New York Mets",
@@ -20358,7 +20358,7 @@
         "slg": ".359",
         "st": {
           "all": 2.2,
-          "chase": 22.5,
+          "chase": 22.4,
           "heart": -15,
           "shadow": -17.8,
           "waste": 12.6
@@ -20531,7 +20531,7 @@
         "score": 25.3,
         "slg": ".385",
         "st": {
-          "all": 2,
+          "all": 2.1,
           "chase": 23.1,
           "heart": -4.3,
           "shadow": -29.1,
@@ -20706,8 +20706,8 @@
         "slg": ".371",
         "st": {
           "all": 1.5,
-          "chase": 21.2,
-          "heart": -20.8,
+          "chase": 21.1,
+          "heart": -20.7,
           "shadow": -8.2,
           "waste": 9.2
         },
@@ -21041,8 +21041,8 @@
         "st": {
           "all": -0.5,
           "chase": 11.5,
-          "heart": -13.3,
-          "shadow": -8.2,
+          "heart": -13.2,
+          "shadow": -8.1,
           "waste": 9.4
         },
         "teamEn": "San Francisco Giants",
@@ -21191,7 +21191,7 @@
           "hardHit": 39.3,
           "hardSwing": 19,
           "maxEv": 110.1,
-          "oaa": -9,
+          "oaa": -8,
           "sprint": 29.9,
           "squaredUp": 24.9,
           "sweetSpot": 31.7
@@ -21199,7 +21199,7 @@
         "score": 17.5,
         "slg": ".378",
         "st": {
-          "all": -9,
+          "all": -8.9,
           "chase": 12.3,
           "heart": -15.6,
           "shadow": -17.8,
@@ -21363,7 +21363,7 @@
           "batSpeed": 75.8,
           "ev": 91.3,
           "hardHit": 44.3,
-          "hardSwing": 59,
+          "hardSwing": 59.1,
           "maxEv": 112.2,
           "oaa": 1,
           "sprint": 27.9,
@@ -21373,8 +21373,8 @@
         "score": 16.4,
         "slg": ".364",
         "st": {
-          "all": -17.6,
-          "chase": 9.5,
+          "all": -17.7,
+          "chase": 9.4,
           "heart": -2.3,
           "shadow": -39.1,
           "waste": 14.3
@@ -21695,7 +21695,7 @@
         "st": {
           "all": -1.6,
           "chase": 14.3,
-          "heart": -9.8,
+          "heart": -9.7,
           "shadow": -19,
           "waste": 12.9
         },
@@ -21853,10 +21853,10 @@
         "score": 16,
         "slg": ".424",
         "st": {
-          "all": 2.9,
+          "all": 3,
           "chase": 7.8,
           "heart": 5.2,
-          "shadow": -17.2,
+          "shadow": -17.1,
           "waste": 7.1
         },
         "teamEn": "San Francisco Giants",
@@ -22005,7 +22005,7 @@
           "hardHit": 27.7,
           "hardSwing": 5.1,
           "maxEv": 108.7,
-          "oaa": 0,
+          "oaa": 1,
           "sprint": 27.1,
           "squaredUp": 26.2,
           "sweetSpot": 32.3
@@ -22014,8 +22014,8 @@
         "slg": ".392",
         "st": {
           "all": -12.3,
-          "chase": 12.5,
-          "heart": -12.2,
+          "chase": 12.4,
+          "heart": -12.1,
           "shadow": -25.9,
           "waste": 13.3
         },
@@ -22400,18 +22400,18 @@
             "xwoba": 0.196
           },
           {
-            "ba": "0.286",
-            "hardHit": 46.5,
+            "ba": "0.292",
+            "hardHit": 46,
             "name": "Sinker",
             "nameJa": "シンカー",
-            "pa": 126,
-            "rv100": -0.1,
-            "slg": "0.455",
+            "pa": 127,
+            "rv100": 0,
+            "slg": "0.46",
             "type": "SI",
-            "usage": 18,
+            "usage": 18.1,
             "whiff": 8.9,
-            "woba": 0.355,
-            "xwoba": 0.367
+            "woba": 0.36,
+            "xwoba": 0.365
           },
           {
             "ba": "0.136",
@@ -22525,7 +22525,7 @@
           "chase": 3,
           "heart": 0.7,
           "shadow": -34.3,
-          "waste": 6.7
+          "waste": 6.6
         },
         "teamEn": "Colorado Rockies",
         "teamId": 115,
