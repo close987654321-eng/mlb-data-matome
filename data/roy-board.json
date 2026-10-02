@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-01 23:34",
+  "asOf": "2026-10-03 05:48",
   "leagues": {
     "AL": [
       {
@@ -152,9 +152,9 @@
         "teamEn": "Chicago White Sox",
         "teamId": 145,
         "teamJa": "ホワイトソックス",
-        "war": 2.92,
-        "why": "wRC+129・WAR2.92はルーキー上位",
-        "whyEn": "129 wRC+, 2.92 WAR among rookies",
+        "war": 2.89,
+        "why": "wRC+129・WAR2.89はルーキー上位",
+        "whyEn": "129 wRC+, 2.89 WAR among rookies",
         "wrcPlus": 129
       },
       {
@@ -431,9 +431,9 @@
         "teamEn": "Athletics",
         "teamId": 133,
         "teamJa": "アスレチックス",
-        "war": 2.79,
-        "why": "WAR2.79はルーキー上位",
-        "whyEn": "2.79 WAR among rookies",
+        "war": 2.77,
+        "why": "WAR2.77はルーキー上位",
+        "whyEn": "2.77 WAR among rookies",
         "wrcPlus": 111
       },
       {
@@ -524,7 +524,7 @@
         "teamEn": "Los Angeles Angels",
         "teamId": 108,
         "teamJa": "エンゼルス",
-        "war": 2.02,
+        "war": 2.03,
         "why": "wRC+120はルーキー上位",
         "whyEn": "120 wRC+ among rookies",
         "wrcPlus": 120
@@ -586,7 +586,7 @@
         "teamEn": "Toronto Blue Jays",
         "teamId": 141,
         "teamJa": "ブルージェイズ",
-        "war": 1.92,
+        "war": 1.93,
         "why": "wRC+138はルーキー上位",
         "whyEn": "138 wRC+ among rookies",
         "wrcPlus": 138
@@ -865,7 +865,7 @@
         "teamEn": "New York Yankees",
         "teamId": 147,
         "teamJa": "ヤンキース",
-        "war": 0.67,
+        "war": 0.68,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 106
@@ -1206,7 +1206,7 @@
         "teamEn": "Baltimore Orioles",
         "teamId": 110,
         "teamJa": "オリオールズ",
-        "war": -0.2,
+        "war": -0.19,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 94
@@ -1349,19 +1349,19 @@
         "pct": {
           "role": 15,
           "volume": 42,
-          "war": 14
+          "war": 12
         },
         "pos": "3B",
         "rank": 44,
         "rbi": 33,
         "role": "bat",
         "sb": 2,
-        "score": 20,
+        "score": 19.1,
         "slg": ".336",
         "teamEn": "Los Angeles Angels",
         "teamId": 108,
         "teamJa": "エンゼルス",
-        "war": -0.06,
+        "war": -0.07,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 68
@@ -1611,9 +1611,9 @@
         "teamEn": "New York Mets",
         "teamId": 121,
         "teamJa": "メッツ",
-        "war": 4.31,
-        "why": "WAR4.31・654打席はルーキー上位",
-        "whyEn": "4.31 WAR, 654 PA among rookies",
+        "war": 4.28,
+        "why": "WAR4.28・654打席はルーキー上位",
+        "whyEn": "4.28 WAR, 654 PA among rookies",
         "wrcPlus": 118
       },
       {
@@ -1766,9 +1766,9 @@
         "teamEn": "San Francisco Giants",
         "teamId": 137,
         "teamJa": "ジャイアンツ",
-        "war": 1.82,
-        "why": "wRC+131・WAR1.82はルーキー上位",
-        "whyEn": "131 wRC+, 1.82 WAR among rookies",
+        "war": 1.81,
+        "why": "wRC+131・WAR1.81はルーキー上位",
+        "whyEn": "131 wRC+, 1.81 WAR among rookies",
         "wrcPlus": 131
       },
       {
@@ -1921,9 +1921,9 @@
         "teamEn": "Colorado Rockies",
         "teamId": 115,
         "teamJa": "ロッキーズ",
-        "war": 1.69,
-        "why": "wRC+110・WAR1.69はルーキー上位",
-        "whyEn": "110 wRC+, 1.69 WAR among rookies",
+        "war": 1.72,
+        "why": "wRC+110・WAR1.72はルーキー上位",
+        "whyEn": "110 wRC+, 1.72 WAR among rookies",
         "wrcPlus": 110
       },
       {
@@ -2417,7 +2417,7 @@
         "teamEn": "San Diego Padres",
         "teamId": 135,
         "teamJa": "パドレス",
-        "war": 0.94,
+        "war": 0.95,
         "why": "wRC+109はルーキー上位",
         "whyEn": "109 wRC+ among rookies",
         "wrcPlus": 109
@@ -2944,7 +2944,7 @@
         "teamEn": "Arizona Diamondbacks",
         "teamId": 109,
         "teamJa": "ダイヤモンドバックス",
-        "war": 0.19,
+        "war": 0.22,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 79
@@ -3192,7 +3192,7 @@
         "teamEn": "Cincinnati Reds",
         "teamId": 113,
         "teamJa": "レッズ",
-        "war": -0.09,
+        "war": -0.1,
         "why": "ルーキーとして総合力で上位",
         "whyEn": "Solid all-around rookie season",
         "wrcPlus": 82
