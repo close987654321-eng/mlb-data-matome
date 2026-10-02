@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-02 09:50",
+  "asOf": "2026-10-02 16:02",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -340,7 +340,7 @@
         "id": 144,
         "nameJa": "ブレーブス",
         "seed": 3,
-        "wins": 1
+        "wins": 2
       },
       "games": [
         {
@@ -382,19 +382,19 @@
         {
           "away": {
             "id": 143,
-            "score": 0
+            "score": 2
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-01",
           "gamePk": 849844,
           "home": {
             "id": 144,
-            "score": 3
+            "score": 6
           },
           "ifNecessary": false,
           "n": 3,
           "start": "2026-10-02T00:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -408,7 +408,7 @@
         "seed": 6,
         "wins": 1
       },
-      "winnerId": null
+      "winnerId": 144
     },
     {
       "bestOf": 3,
@@ -815,7 +815,7 @@
       "games": [
         {
           "away": {
-            "id": null,
+            "id": 144,
             "score": null
           },
           "detailed": "Scheduled",
@@ -833,7 +833,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 144,
             "score": null
           },
           "detailed": "Scheduled",
@@ -858,7 +858,7 @@
           "etDate": "2026-10-06",
           "gamePk": 849819,
           "home": {
-            "id": null,
+            "id": 144,
             "score": null
           },
           "ifNecessary": false,
@@ -876,7 +876,7 @@
           "etDate": "2026-10-07",
           "gamePk": 849822,
           "home": {
-            "id": null,
+            "id": 144,
             "score": null
           },
           "ifNecessary": true,
@@ -887,7 +887,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 144,
             "score": null
           },
           "detailed": "Scheduled",
@@ -909,8 +909,9 @@
       "league": "NL",
       "round": "D",
       "top": {
-        "id": null,
-        "placeholder": "ATL/PHI",
+        "id": 144,
+        "nameJa": "ブレーブス",
+        "seed": 3,
         "wins": 0
       },
       "winnerId": null
