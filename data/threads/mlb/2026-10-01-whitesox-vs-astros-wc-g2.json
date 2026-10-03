@@ -15,16 +15,27 @@
   "series": {
     "id": "whitesox",
     "date": "2026-10-01",
-    "opponent": { "ja": "アストロズ", "en": "Astros" }
+    "opponent": {
+      "ja": "アストロズ",
+      "en": "Astros"
+    }
   },
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=HwWp7A7tElg",
+    "thumbUrl": "/media/2026-10-01-whitesox-vs-astros-wc-g2-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-10-01T00:49:52Z",
     "videoTitle": "WHITE SOX vs. ASTROS: Wild Card Full Game 2 Highlights (September 30) | 2026 MLB Season"
   },
-  "tags": ["村上宗隆", "ホワイトソックス", "アストロズ", "ポストシーズン", "ワイルドカードシリーズ", "海外の反応"],
+  "tags": [
+    "村上宗隆",
+    "ホワイトソックス",
+    "アストロズ",
+    "ポストシーズン",
+    "ワイルドカードシリーズ",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "村上宗隆",
@@ -211,8 +222,67 @@
     }
   ],
   "game": {
-    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 7, "innings": [4, 0, 0, 0, 0, 3, 0, 0, 0], "hits": 8, "errors": 0, "lob": 6, "homers": [{ "id": 805367, "name": "Chase Meidroth" }] },
-    "home": { "ja": "アストロズ", "en": "Houston Astros", "score": 3, "innings": [1, 1, 0, 1, 0, 0, 0, 0, 0], "hits": 5, "errors": 2, "lob": 5, "homers": [{ "id": 701358, "name": "Cam Smith" }, { "id": 514888, "name": "Jose Altuve" }, { "id": 665161, "name": "Jeremy Peña" }] },
-    "decisions": { "winner": "Anthony Kay", "loser": "Hunter Brown" }
+    "away": {
+      "ja": "ホワイトソックス",
+      "en": "Chicago White Sox",
+      "score": 7,
+      "innings": [
+        4,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      "hits": 8,
+      "errors": 0,
+      "lob": 6,
+      "homers": [
+        {
+          "id": 805367,
+          "name": "Chase Meidroth"
+        }
+      ]
+    },
+    "home": {
+      "ja": "アストロズ",
+      "en": "Houston Astros",
+      "score": 3,
+      "innings": [
+        1,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 5,
+      "errors": 2,
+      "lob": 5,
+      "homers": [
+        {
+          "id": 701358,
+          "name": "Cam Smith"
+        },
+        {
+          "id": 514888,
+          "name": "Jose Altuve"
+        },
+        {
+          "id": 665161,
+          "name": "Jeremy Peña"
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Anthony Kay",
+      "loser": "Hunter Brown"
+    }
   }
 }

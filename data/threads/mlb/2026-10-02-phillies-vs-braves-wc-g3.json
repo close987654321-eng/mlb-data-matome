@@ -15,11 +15,21 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=9GChxIB_Cek",
+    "thumbUrl": "/media/2026-10-02-phillies-vs-braves-wc-g3-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-10-02T03:28:43Z",
     "videoTitle": "PHILLIES vs. BRAVES: Wild Card Full Game 3 Highlights (October 1) | 2026 MLB Season"
   },
-  "tags": ["カイル・シュワーバー", "クリス・セール", "マット・オルソン", "フィリーズ", "ブレーブス", "ポストシーズン", "ワイルドカードシリーズ", "海外の反応"],
+  "tags": [
+    "カイル・シュワーバー",
+    "クリス・セール",
+    "マット・オルソン",
+    "フィリーズ",
+    "ブレーブス",
+    "ポストシーズン",
+    "ワイルドカードシリーズ",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "クリス・セール",
@@ -215,8 +225,61 @@
     }
   ],
   "game": {
-    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 6, "errors": 0, "lob": 5 },
-    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6, "innings": [3, 0, 0, 2, 0, 0, 1, 0, null], "hits": 6, "errors": 0, "lob": 5, "homers": [{ "id": 671739, "name": "Michael Harris II" }, { "id": 621566, "name": "Matt Olson" }, { "id": 645277, "name": "Ozzie Albies" }] },
-    "decisions": { "winner": "Grant Holmes", "loser": "Aaron Nola" }
+    "away": {
+      "ja": "フィリーズ",
+      "en": "Philadelphia Phillies",
+      "score": 2,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "hits": 6,
+      "errors": 0,
+      "lob": 5
+    },
+    "home": {
+      "ja": "ブレーブス",
+      "en": "Atlanta Braves",
+      "score": 6,
+      "innings": [
+        3,
+        0,
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        null
+      ],
+      "hits": 6,
+      "errors": 0,
+      "lob": 5,
+      "homers": [
+        {
+          "id": 671739,
+          "name": "Michael Harris II"
+        },
+        {
+          "id": 621566,
+          "name": "Matt Olson"
+        },
+        {
+          "id": 645277,
+          "name": "Ozzie Albies"
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Grant Holmes",
+      "loser": "Aaron Nola"
+    }
   }
 }
