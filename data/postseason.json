@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-04 09:42",
+  "asOf": "2026-10-04 15:59",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -474,7 +474,7 @@
         "id": 139,
         "nameJa": "レイズ",
         "seed": 1,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
@@ -482,7 +482,7 @@
             "id": 147,
             "score": 0
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-03",
           "gamePk": 849835,
           "home": {
@@ -492,7 +492,7 @@
           "ifNecessary": false,
           "n": 1,
           "start": "2026-10-03T22:30:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
@@ -698,25 +698,25 @@
         "id": 158,
         "nameJa": "ブルワーズ",
         "seed": 1,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
           "away": {
             "id": 135,
-            "score": 0
+            "score": 2
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-03",
           "gamePk": 849830,
           "home": {
             "id": 158,
-            "score": 0
+            "score": 3
           },
           "ifNecessary": false,
           "n": 1,
           "start": "2026-10-04T00:30:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
