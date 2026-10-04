@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-04 07:12",
+  "asOf": "2026-10-04 09:42",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -482,12 +482,12 @@
             "id": 147,
             "score": 0
           },
-          "detailed": "Warmup",
+          "detailed": "In Progress",
           "etDate": "2026-10-03",
           "gamePk": 849835,
           "home": {
             "id": 139,
-            "score": 0
+            "score": 1
           },
           "ifNecessary": false,
           "n": 1,
@@ -706,7 +706,7 @@
             "id": 135,
             "score": 0
           },
-          "detailed": "Pre-Game",
+          "detailed": "In Progress",
           "etDate": "2026-10-03",
           "gamePk": 849830,
           "home": {
@@ -716,7 +716,7 @@
           "ifNecessary": false,
           "n": 1,
           "start": "2026-10-04T00:30:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
@@ -810,15 +810,15 @@
         "id": 119,
         "nameJa": "ドジャース",
         "seed": 2,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
           "away": {
             "id": 144,
-            "score": 1
+            "score": 3
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-03",
           "gamePk": 849828,
           "home": {
@@ -828,7 +828,7 @@
           "ifNecessary": false,
           "n": 1,
           "start": "2026-10-03T20:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
