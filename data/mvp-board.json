@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-03 21:37",
+  "asOf": "2026-10-04 22:16",
   "leagues": {
     "AL": [
       {
@@ -369,7 +369,7 @@
           "hardHit": 56.2,
           "hardSwing": 47.3,
           "maxEv": 114.6,
-          "oaa": 1,
+          "oaa": 0,
           "sprint": 24.9,
           "squaredUp": 25.1,
           "sweetSpot": 36.8
@@ -863,7 +863,7 @@
           "hardHit": 48.6,
           "hardSwing": 24.3,
           "maxEv": 110.9,
-          "oaa": -7,
+          "oaa": -6,
           "sprint": 26.8,
           "squaredUp": 27.5,
           "sweetSpot": 38.4
@@ -1863,11 +1863,11 @@
           "batSpeed": 74.7,
           "ev": 93.9,
           "hardHit": 56.8,
-          "hardSwing": 49.8,
+          "hardSwing": 49.9,
           "maxEv": 114.1,
-          "oaa": 0,
+          "oaa": -1,
           "sprint": 26.8,
-          "squaredUp": 19.4,
+          "squaredUp": 19.5,
           "sweetSpot": 30.5
         },
         "score": 71.4,
@@ -2549,7 +2549,7 @@
           "maxEv": 111.2,
           "oaa": 2,
           "sprint": 26.6,
-          "squaredUp": 35,
+          "squaredUp": 34.9,
           "sweetSpot": 35.1
         },
         "score": 66.7,
@@ -3418,7 +3418,7 @@
           "hardSwing": 45.3,
           "maxEv": 114,
           "oaa": 3,
-          "sprint": 26.4,
+          "sprint": 26.3,
           "squaredUp": 26.7,
           "sweetSpot": 33
         },
@@ -4448,7 +4448,7 @@
           "hardSwing": 1,
           "maxEv": 110.2,
           "oaa": 10,
-          "sprint": 27.3,
+          "sprint": 27.4,
           "squaredUp": 29.5,
           "sweetSpot": 33.9
         },
@@ -4795,7 +4795,7 @@
           "hardHit": 10.5,
           "hardSwing": 0.3,
           "maxEv": 102.2,
-          "oaa": 8,
+          "oaa": 7,
           "sprint": 27.4,
           "squaredUp": 42.8,
           "sweetSpot": 40.6
@@ -7451,7 +7451,7 @@
           "batSpeed": 76.6,
           "ev": 88.6,
           "hardHit": 40.9,
-          "hardSwing": 70.6,
+          "hardSwing": 70.5,
           "maxEv": 115.4,
           "oaa": 15,
           "sprint": 26.6,
@@ -8307,7 +8307,7 @@
           "batSpeed": 77.4,
           "ev": 90.4,
           "hardHit": 44.9,
-          "hardSwing": 72.5,
+          "hardSwing": 72.6,
           "maxEv": 116.8,
           "oaa": -6,
           "sprint": 28.3,
@@ -8963,7 +8963,7 @@
           "hardHit": 44.3,
           "hardSwing": 62.4,
           "maxEv": 116.3,
-          "oaa": 4,
+          "oaa": 6,
           "sprint": 26.4,
           "squaredUp": 26.4,
           "sweetSpot": 28.7
@@ -9745,7 +9745,7 @@
             "usage": 7.3,
             "whiff": 21.4,
             "woba": 0.327,
-            "xwoba": 0.279
+            "xwoba": 0.278
           },
           {
             "ba": "0.25",
@@ -9805,7 +9805,7 @@
           "hardHit": 40.2,
           "hardSwing": 54.5,
           "maxEv": 112.4,
-          "oaa": -3,
+          "oaa": -4,
           "sprint": 27.7,
           "squaredUp": 20,
           "sweetSpot": 33.4
@@ -11795,11 +11795,11 @@
           "batSpeed": 76.3,
           "ev": 92.9,
           "hardHit": 53.9,
-          "hardSwing": 64.6,
+          "hardSwing": 64.5,
           "maxEv": 115.7,
           "oaa": 4,
-          "sprint": 28.9,
-          "squaredUp": 28,
+          "sprint": 29,
+          "squaredUp": 27.9,
           "sweetSpot": 31.8
         },
         "score": 84.5,
@@ -12117,7 +12117,7 @@
           "hardHit": 51.9,
           "hardSwing": 68.1,
           "maxEv": 114.8,
-          "oaa": -8,
+          "oaa": -7,
           "sprint": 26.9,
           "squaredUp": 23.4,
           "sweetSpot": 38.6
@@ -13973,7 +13973,7 @@
           "batSpeed": 73,
           "ev": 88.9,
           "hardHit": 42.3,
-          "hardSwing": 28.4,
+          "hardSwing": 28.5,
           "maxEv": 109.7,
           "oaa": 9,
           "sprint": 28.3,
@@ -15668,14 +15668,14 @@
         "sbs": 2,
         "sc": {
           "barrel": 7.8,
-          "batSpeed": 69.6,
+          "batSpeed": 69.7,
           "ev": 90.2,
           "hardHit": 38,
           "hardSwing": 8.8,
           "maxEv": 108.1,
           "oaa": 7,
           "sprint": 26.7,
-          "squaredUp": 41.5,
+          "squaredUp": 41.6,
           "sweetSpot": 40.4
         },
         "score": 57.2,
@@ -15933,7 +15933,7 @@
             "usage": 7.2,
             "whiff": 30.1,
             "woba": 0.551,
-            "xwoba": 0.459
+            "xwoba": 0.46
           },
           {
             "ba": "0.283",
@@ -17401,7 +17401,7 @@
             "usage": 13.5,
             "whiff": 41.7,
             "woba": 0.461,
-            "xwoba": 0.417
+            "xwoba": 0.416
           },
           {
             "ba": "0.196",
@@ -20866,14 +20866,14 @@
         "sbs": 10,
         "sc": {
           "barrel": 4,
-          "batSpeed": 69.2,
+          "batSpeed": 69.1,
           "ev": 86.5,
           "hardHit": 29.4,
           "hardSwing": 4.7,
           "maxEv": 108.3,
           "oaa": 6,
           "sprint": 26.8,
-          "squaredUp": 28.1,
+          "squaredUp": 28,
           "sweetSpot": 36.3
         },
         "score": 23.5,
@@ -22007,7 +22007,7 @@
           "maxEv": 108.7,
           "oaa": 1,
           "sprint": 27.1,
-          "squaredUp": 26.2,
+          "squaredUp": 26.1,
           "sweetSpot": 32.3
         },
         "score": 16,
