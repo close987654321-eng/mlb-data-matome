@@ -1277,23 +1277,26 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['ウィテカー'],
     sport: 'boxing',
     voiceScope: 'global',
-    nextFightJa: {
-      labelJa: '10/3コナー・ウォレス戦',
-      until: '2026-10-03',
-      opponentJa: 'コナー・ウォレス',
-      eventJa: 'IBFライトヘビー級 最終挑戦者決定戦｜Utilita Arena Birmingham',
-    },
+    // 2026-10-03 のコナー・ウォレス戦（IBF挑戦者決定戦）を消化。次戦は未発表なので nextFightJa は持たない。
     accoladeJa: 'プロボクシング・ライトヘビー級。2020年東京五輪銀メダリスト（プロは無敗を継続中）',
-    record: { wins: 12, losses: 0, draws: 1, kos: 9, asOf: '2026-06-27' },
+    record: { wins: 13, losses: 0, draws: 1, kos: 9, asOf: '2026-10-03' },
     headlineStats: [
       // 唯一の非勝利は2024-10-12キャメロン戦のリング外転落による技術ドロー（KO/敗北ではない）
-      { value: '12勝0敗1分', labelJa: 'プロ無敗を継続中（唯一の1分はリング外転落による技術ドロー）' },
+      { value: '13勝0敗1分', labelJa: 'プロ無敗を継続中（唯一の1分はリング外転落による技術ドロー）' },
     ],
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E3%83%99%E3%83%B3%E3%82%B8%E3%83%A3%E3%83%9F%E3%83%B3%E3%83%BB%E3%82%A6%E3%82%A3%E3%83%86%E3%82%AB%E3%83%BC',
       'https://en.wikipedia.org/wiki/Benjamin_Whittaker',
     ],
     fights: [
+      {
+        date: '2026-10-03',
+        opponentJa: 'コナー・ウォレス',
+        opponentEn: 'Conor Wallace',
+        venueJa: 'バーミンガム（ユーティリタ・アリーナ）',
+        resultJa: '3-0判定勝ち（117-111、116-112、115-113）',
+        noteJa: 'IBFライトヘビー級の挑戦者決定戦。序盤は支配したが終盤に追い込まれ、12回に3度キャンバスに落ちた（いずれもダウンの宣告なし）',
+      },
       {
         date: '2026-06-27',
         opponentJa: 'リチャード・リベラ',
