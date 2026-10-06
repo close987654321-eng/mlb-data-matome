@@ -13,6 +13,9 @@ import { SPORTS, SPORT_INFO, type Sport } from '@/lib/sports';
 import { getTeam } from '@/lib/teams';
 import { getMvpBoard } from '@/lib/mvpBoard';
 import { getCyYoungBoard } from '@/lib/cyYoungBoard';
+import { getPostseason } from '@/lib/postseason';
+import { buildScenes, getScenesFile } from '@/lib/postseasonScenes';
+import { SceneTeaser } from '@/components/PostseasonScenes';
 import FeedCard from '@/components/FeedCard';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
@@ -111,14 +114,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations();
-  const [threads, columns, snap, allTags, mvpBoard, cyBoard] = await Promise.all([
+  const [threads, columns, snap, allTags, mvpBoard, cyBoard, postseason] = await Promise.all([
     getAllThreads(),
     getAllColumns(),
     getPlayersSnapshot(),
     getAllTags(),
     getMvpBoard(),
     getCyYoungBoard(),
+    getPostseason(),
   ]);
+  // ポストシーズン名場面の入口は開催中だけ出す（閉幕後・オフは /postseason/live に名場面集として残るだけ）。
+  const psScenes =
+    postseason?.phase === 'postseason' ? buildScenes(threads, postseason, await getScenesFile(postseason.season)) : [];
 
   // 新着フィード（反応まとめ＋コラムを日付順に混ぜる）。
   const feed = buildFeed(threads, columns);
@@ -298,6 +305,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </h1>
         <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-soft">{t('home.heroBody')}</p>
       </section>
+
+      {/* 10月だけの入口＝「mlb 海外の反応」で来た人がいま一番熱い場面へ1タップで行けるように、ダイジェストの前に置く。 */}
+      <SceneTeaser scenes={psScenes} locale={locale} />
 
       <MlbToday
         threads={mlbThreads.slice(0, 20)}

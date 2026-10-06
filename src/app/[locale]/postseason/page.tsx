@@ -26,6 +26,8 @@ import PostseasonSchedule from '@/components/PostseasonSchedule';
 import PostseasonBroadcast from '@/components/PostseasonBroadcast';
 import VodCta from '@/components/VodCta';
 import FaqList from '@/components/FaqList';
+import { SceneTeaser } from '@/components/PostseasonScenes';
+import { buildScenes, getScenesFile } from '@/lib/postseasonScenes';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -132,6 +134,7 @@ export default async function PostseasonPage({ params }: { params: Promise<{ loc
   const jp = japaneseByTeam(snap);
   const faq = buildPostseasonFaq(data, jp);
   const groups = postseasonReactions(all, data.season);
+  const scenes = buildScenes(all, data, await getScenesFile(data.season));
   const reactionCount = groups.reduce((n, g) => n + g.threads.length, 0);
 
   const jsonLd = {
@@ -183,6 +186,7 @@ export default async function PostseasonPage({ params }: { params: Promise<{ loc
             { href: '#schedule', ja: '日程・結果（日本時間）', en: 'Schedule (JST)' },
             ...(showBroadcast(data) ? [{ href: '#watch', ja: '放送・配信', en: 'How to watch' }] : []),
             { href: '#reactions', ja: '海外の反応', en: 'Reactions' },
+            ...(scenes.length ? [{ href: '/postseason/live', ja: '名場面ライブ', en: 'Moments' }] : []),
             { href: '#faq', ja: 'よくある質問', en: 'FAQ' },
           ].map((l) => (
             <a key={l.href} href={l.href} className="text-ink-soft underline-offset-4 hover:text-ink hover:underline">
@@ -193,6 +197,9 @@ export default async function PostseasonPage({ params }: { params: Promise<{ loc
       </section>
 
       <PostseasonNow data={data} locale={locale} />
+
+      {/* 名場面ライブ（/postseason/live）への入口。表を見に来た人を、いちばん熱い場面の読み物へ送る。 */}
+      <SceneTeaser scenes={scenes} locale={locale} />
 
       {/* レギュラーシーズン終盤だけ出る＝「ワイルドカード争い」で来た人に表の前で答える。 */}
       <PostseasonRace data={data} locale={locale} linkable={linkable} />

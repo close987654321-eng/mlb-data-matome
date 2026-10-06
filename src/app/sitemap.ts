@@ -1,3 +1,4 @@
+import type { Thread } from '@/types/thread';
 import type { MetadataRoute } from 'next';
 import { getAllThreads, getWatchAlongThreads, getWatchSingles } from '@/lib/data';
 import { getAllColumns } from '@/lib/columns';
@@ -50,6 +51,14 @@ function entry(path: string, lastModified?: string | Date): MetadataRoute.Sitema
 function prospectAsOf(p: (typeof NPB_PROSPECTS)[number], statsAsOf: string): string | undefined {
   const dates = [p.postingWatch?.asOf, statsAsOf].filter(Boolean) as string[];
   return dates.length ? [...dates].sort()[dates.length - 1] : undefined;
+}
+
+/** 名場面ライブの lastmod＝その年のポストシーズン試合記事（ラウンドのタグ付き・日次以外）のいちばん新しい公開日。 */
+function latestPostseasonArticle(threads: Thread[], season: number): string | undefined {
+  const rounds = ['ワイルドカードシリーズ', '地区シリーズ', 'リーグ優勝決定シリーズ', 'ワールドシリーズ'];
+  return threads.find(
+    (t) => !t.daily && t.fetchedAt.startsWith(String(season)) && (t.tags ?? []).some((x) => rounds.includes(x)),
+  )?.fetchedAt;
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -123,6 +132,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/roy', statDate),
     // ポストシーズンの恒久ハブ（年号なしURL・閉幕後は結果のアーカイブとして残る）。
     ...(postseason ? [entry('/postseason', postseason.asOf ? postseason.asOf.slice(0, 10) : undefined)] : []),
+    // 名場面ライブ（/postseason/live）。最終更新＝いちばん新しいポストシーズン記事の公開日。
+    ...(postseason ? [entry('/postseason/live', latestPostseasonArticle(threads, postseason.season))] : []),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     // 超RIZIN.5 特設ハブ（開催前から育てるイベント観測所。lastmod はコンテンツの最終更新日）。

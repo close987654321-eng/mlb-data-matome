@@ -219,6 +219,12 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     現在トップ」→「最終成績・1位でシーズンを終えた」、前日比を出さず履歴は `SEASON_FINAL_FROM` で閉じる。最終日は
     `REGULAR_SEASON_END` が唯一の正＝年ごとに更新）。CI もレギュラーシーズン最終日の3日後以降はボード更新を止める
     （値が動かず cy-young の asOf が据え置かれ、日次ゲートが毎時素通りして Savant を取り直し続けていたため）。
+    **名場面ライブ（/postseason/live・2026-10-06 新設）**: 動画を置かず「見出し（編集）＋状況（事実）＋海外の反応（引用）＋
+    中の人のひと言」だけで各試合の山場を追う面（LiveBlogPosting）。正は `data/postseason-scenes/{season}.json`＝引用は
+    本文を持たず**記事のコメントを投稿者名で参照**（同名が複数なら `{ author, en }` で書き出し指定）。まだ編集していない
+    試合記事も「速報（記事から自動掲載）」として即載る＝クラウドの日次ルーチンが記事を出した時点で反映。中の人のひと言は
+    **編集セッションでだけ書く**（クラウド禁止）。段取り＝`node scripts/check-postseason-scenes.mjs --todo`（未編集と素材）→
+    場面を足す → `--live`（引用が元動画に実在するか YouTube API で照合）。入口は /postseason の局面の直下と、開催中だけ TOP。
   - **試合結果（`Thread.game`・記事の主役データ）**: `node scripts/fetch-mlb-stats.mjs backfill-games --apply` で
     公式スケジュール（`hydrate=linescore,decisions`）＋ boxscore から **最終スコア・回ごとの得点と H/E/残塁・
     その試合時点の勝敗と地区順位・勝敗投手/セーブ・本塁打の打者と今季号数** を記事 JSON に埋める。記事は要約直下の
