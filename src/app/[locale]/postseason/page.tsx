@@ -9,6 +9,7 @@ import {
   japaneseByTeam,
   postseasonReactions,
   roundName,
+  showBroadcast,
   teamLabel,
   type PostseasonData,
   type ReactionGroup,
@@ -21,6 +22,9 @@ import { getPlayersSnapshot } from '@/lib/playerStats';
 import PostseasonNow from '@/components/PostseasonNow';
 import PostseasonRace from '@/components/PostseasonRace';
 import PostseasonBracket from '@/components/PostseasonBracket';
+import PostseasonSchedule from '@/components/PostseasonSchedule';
+import PostseasonBroadcast from '@/components/PostseasonBroadcast';
+import VodCta from '@/components/VodCta';
 import FaqList from '@/components/FaqList';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
@@ -37,6 +41,10 @@ import { type Locale } from '@/lib/i18n';
  * 「ポストシーズン 海外の反応」「{ラウンド} 海外の反応」。「ワイルドカード 順位」のような表を見に来る
  * クエリはポータルと順位表サイトの縄張りで、このサイトで取れるのは「海外の反応」を含む側（GSC実測で
  * クリックの72%）＝表は入口、主役は各ラウンドの海外の反応に置く。
+ *
+ * 2026-10-06 増補: 開幕後は Google トレンド（日本・30日）で「ポストシーズン 放送」「日程」「トーナメント表」
+ * 「地区シリーズ 何勝」が急上昇し、GSC でも「組み合わせ」系がこのページの最大クエリ（8〜9位）になった。
+ * 表の次の問い（いつ・日本時間で何時・どこで見られる）に答える日程表と放送・配信を足した。主役は変えない。
  *
  * URL に年号を入れない（/mvp と同じ型）＝毎年同じURLが育つ。閉幕後は結果のアーカイブとして
  * 翌年9月まで残る（切り替えは scripts/fetch-mlb-stats.mjs postseason が9月1日に行う）。
@@ -57,8 +65,8 @@ function copy(en: boolean, data: PostseasonData) {
       eyebrow: `${y} MLB Postseason`,
       title: `${y} MLB Postseason Bracket & Overseas Reactions`,
       lead: 'The full 12-team bracket from the Wild Card Series to the World Series, with seeds, schedule and every game score, plus what overseas fans are saying about each round.',
-      metaTitle: `${y} MLB Postseason Bracket & Results`,
-      metaDesc: `${y} MLB postseason bracket${day ? ` (as of ${day})` : ''}. ${state} Seeds, schedule, results and overseas fan reactions for every round, plus how the Wild Card works.`,
+      metaTitle: `${y} MLB Postseason Bracket, Schedule & Results`,
+      metaDesc: `${y} MLB postseason bracket${day ? ` (as of ${day})` : ''}. ${state} Seeds, schedule in JST, results, how to watch in Japan and overseas fan reactions for every round.`,
     };
   }
   const state = champ
@@ -70,10 +78,11 @@ function copy(en: boolean, data: PostseasonData) {
     crumb: 'ポストシーズン',
     eyebrow: `${y}年 MLBポストシーズン`,
     title: `MLBポストシーズン${y} トーナメント表と海外の反応`,
-    lead: 'ワイルドカードシリーズからワールドシリーズまで、12球団の組み合わせ・シード・日程・試合ごとのスコアを1枚のトーナメント表にまとめました。各ラウンドの海外ファンの反応もこのページに集まります。',
-    // layout が「｜海外の反応」を足すので25字以内。「組み合わせ」「結果」はこの時期に実際に打たれる語。
-    metaTitle: `MLBポストシーズン${y} 組み合わせ・結果`,
-    metaDesc: `${y}年MLBポストシーズンのトーナメント表${day ? `（${day}時点）` : ''}。${state}ワイルドカードシリーズからワールドシリーズまでの組み合わせ・日程・結果と、各ラウンドの海外ファンの反応。ワイルドカードの仕組みも。`,
+    lead: 'ワイルドカードシリーズからワールドシリーズまで、12球団の組み合わせ・シード・試合ごとのスコアを1枚のトーナメント表に、全試合の日程と結果を日本時間の一覧にまとめました。日本での放送・配信と、各ラウンドの海外ファンの反応もこのページに集まります。',
+    // layout が「｜海外の反応」を足すので25字前後。「組み合わせ」「日程」「結果」はこの時期に実際に打たれる語
+    // （2026-10-06 の Google トレンドで「日程」「日本時間」「放送」が急上昇・GSC では「組み合わせ」が最大）。
+    metaTitle: `MLBポストシーズン${y} 組み合わせ・日程・結果`,
+    metaDesc: `${y}年MLBポストシーズンのトーナメント表${day ? `（${day}時点）` : ''}。${state}ワイルドカードシリーズからワールドシリーズまでの組み合わせ・日程（日本時間）・結果と、日本での放送・配信、各ラウンドの海外ファンの反応。`,
   };
 }
 
@@ -167,6 +176,20 @@ export default async function PostseasonPage({ params }: { params: Promise<{ loc
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{c.title}</h1>
         <p className="mt-2 max-w-prose text-sm text-ink-soft">{c.lead}</p>
         {data.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: data.asOf })}</p>}
+        {/* ページ内の目次。「組み合わせ／日程／放送／海外の反応」は別々のクエリで来る＝来た目的の面へ1タップで送る。 */}
+        <nav aria-label={en ? 'On this page' : 'このページの内容'} className="mt-4 flex flex-wrap gap-x-4 gap-y-1.5 text-sm">
+          {[
+            { href: '#bracket', ja: 'トーナメント表', en: 'Bracket' },
+            { href: '#schedule', ja: '日程・結果（日本時間）', en: 'Schedule (JST)' },
+            ...(showBroadcast(data) ? [{ href: '#watch', ja: '放送・配信', en: 'How to watch' }] : []),
+            { href: '#reactions', ja: '海外の反応', en: 'Reactions' },
+            { href: '#faq', ja: 'よくある質問', en: 'FAQ' },
+          ].map((l) => (
+            <a key={l.href} href={l.href} className="text-ink-soft underline-offset-4 hover:text-ink hover:underline">
+              {en ? l.en : l.ja}
+            </a>
+          ))}
+        </nav>
       </section>
 
       <PostseasonNow data={data} locale={locale} />
@@ -176,8 +199,24 @@ export default async function PostseasonPage({ params }: { params: Promise<{ loc
 
       <PostseasonBracket data={data} locale={locale} linkable={linkable} jp={jp} />
 
+      {/* 日付から引く日程表（日本時間）。トーナメント表はシリーズ単位で畳んでいるので「日程」で来た人の受け皿が別に要る。 */}
+      <PostseasonSchedule data={data} locale={locale} />
+
+      {/* 日本での放送・配信＋視聴CTA（PR）。閉幕後・年が合わない年は両方とも出さない。 */}
+      <PostseasonBroadcast data={data} locale={locale} />
+      {showBroadcast(data) && (
+        <VodCta
+          sport="mlb"
+          locale={locale}
+          heading={t('vod.heading', { sport: 'MLB' })}
+          prLabel={t('vod.pr')}
+          watchLabel={t('vod.watch')}
+          placement="hub"
+        />
+      )}
+
       {/* 主役＝各ラウンドの海外の反応。記事のタグ（src/lib/postseason.ts の POSTSEASON_TAGS）で自動的に集まる。 */}
-      <section className="space-y-8">
+      <section id="reactions" className="space-y-8">
         <div>
           <SectionHeading label={en ? 'Overseas reactions' : 'ポストシーズンの海外の反応'} count={reactionCount || undefined} lead />
           <p className="mt-1.5 max-w-prose text-sm text-ink-soft">
@@ -198,7 +237,9 @@ export default async function PostseasonPage({ params }: { params: Promise<{ loc
         )}
       </section>
 
-      <FaqList faq={faq} en={en} heading={en ? 'Postseason FAQ' : 'ポストシーズンのよくある質問'} />
+      <div id="faq">
+        <FaqList faq={faq} en={en} heading={en ? 'Postseason FAQ' : 'ポストシーズンのよくある質問'} />
+      </div>
 
       {archive.length > 0 && (
         <section>

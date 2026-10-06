@@ -10,7 +10,7 @@ import CyRaceNow from '@/components/CyRaceNow';
 import BoardTrend from '@/components/BoardTrend';
 import CyGuide from '@/components/CyGuide';
 import FaqList from '@/components/FaqList';
-import { getBoardHistory, previousDay, rankDeltas } from '@/lib/boardHistory';
+import { getBoardHistory, historyThrough, previousDay, rankDeltas } from '@/lib/boardHistory';
 import { buildCyFaq, type CyOutsider } from '@/lib/cyFaq';
 import { getPlayersSnapshot } from '@/lib/playerStats';
 import { PLAYERS } from '@/lib/players';
@@ -22,11 +22,14 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import {
-  asOfShort,
+  asOfOrFinal,
   boardItemList,
   boardLeaders,
+  isSeasonFinal,
   jpRankPhrase,
   leadersPhrase,
+  seasonFinalNotice,
+  SEASON_FINAL_FROM,
   type BoardLeaders,
 } from '@/lib/boardSeo';
 import { type Locale } from '@/lib/i18n';
@@ -49,27 +52,29 @@ function ipToFloat(disp: string): number | null {
  * 説明文には現在のトップと日本人最上位を実データから差し込む（毎日CIで動く＝鮮度も兼ねる）。
  */
 function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string) {
-  const day = asOfShort(asOf, en);
+  // 確定後（10月以降）は「◯月◯日時点・現在トップ」をやめ「最終成績・1位でシーズンを終えた」に替える（boardSeo.ts）。
+  const final = isSeasonFinal(year, asOf);
+  const when = asOfOrFinal(asOf, en, final);
   return en
     ? {
         crumb: 'Cy Young Board',
         eyebrow: `${year} Season`,
         title: `${year} Cy Young Candidates & Prediction Board`,
-        lead: 'Qualified starters ranked by a blended, within-league score (ERA + xERA, K-BB%, innings, WHIP, HR/9). Updated daily with rank changes and a day-by-day trend, where Yoshinobu Yamamoto, Shota Imanaga and Shohei Ohtani stand, how the award is decided, the best finishes by Japanese pitchers, and overseas fan reactions. Tap any row for the full breakdown.',
+        lead: `Qualified starters ranked by a blended, within-league score (ERA + xERA, K-BB%, innings, WHIP, HR/9). ${final ? 'Final regular-season numbers with the late-season trend,' : 'Updated daily with rank changes and a day-by-day trend,'} where Yoshinobu Yamamoto, Shota Imanaga and Shohei Ohtani stand, how the award is decided, the best finishes by Japanese pitchers, and overseas fan reactions. Tap any row for the full breakdown.`,
         metaTitle: `${year} Cy Young Candidates | AL/NL Pitcher Rankings`,
-        metaDesc: `${year} Cy Young candidates, ranked${day ? ` (as of ${day})` : ''}. ${leadersPhrase(leaders, true)} ${jpRankPhrase(leaders, true)} Daily rank changes, how the vote works, when it is announced, and the best finishes by Japanese pitchers.`,
+        metaDesc: `${year} Cy Young candidates, ranked${when ? ` (${when})` : ''}. ${leadersPhrase(leaders, true, final)} ${jpRankPhrase(leaders, true)} ${final ? 'Winners are announced in November. Final rankings' : 'Daily rank changes'}, how the vote works, when it is announced, and the best finishes by Japanese pitchers.`,
       }
     : {
         crumb: 'サイヤング予測',
         eyebrow: `${year} シーズン`,
         title: `サイ・ヤング賞候補 ${year} 予測ランキング`,
-        lead: '規定投球回に到達した先発投手を、ERA・xERA・K-BB%・投球回・WHIP・HR/9をもとにリーグ内でスコア化した予測ランキング。毎日更新の前日比と順位の推移、山本由伸・今永昇太・大谷翔平の現在地、投票の仕組みや発表時期、日本人投手の歴代最高順位、海外ファンの反応までこのページで追えます。気になる投手の行をタップすると詳細ページへ。',
+        lead: `規定投球回に到達した先発投手を、ERA・xERA・K-BB%・投球回・WHIP・HR/9をもとにリーグ内でスコア化した予測ランキング。${final ? 'シーズン最終盤の順位の推移、' : '毎日更新の前日比と順位の推移、'}山本由伸・今永昇太・大谷翔平の現在地、投票の仕組みや発表時期、日本人投手の歴代最高順位、海外ファンの反応までこのページで追えます。気になる投手の行をタップすると詳細ページへ。`,
         // layout が「｜海外の反応」を足すので、ここは25字以内に抑えて SERP で切られないようにする。
         // ア・リーグ/ナ・リーグ のリーグ別クエリはページ内 h2（表の見出し）が受ける。
         metaTitle: `サイ・ヤング賞候補 ${year} 予測ランキング`,
         // 先頭に検索語（候補・予測ランキング）、その直後に「いま誰が有力か」を置く＝スニペットの
         // 見える範囲でクエリに答えきる。指標の列挙は切られてもいい後半に回す。
-        metaDesc: `${year}年サイ・ヤング賞候補の予測ランキング${day ? `（${day}時点）` : ''}。${leadersPhrase(leaders, false)}${jpRankPhrase(leaders, false)}山本由伸ら日本人投手の順位と前日比、投票の仕組み・発表時期、日本人の歴代最高順位まで。`,
+        metaDesc: `${year}年サイ・ヤング賞候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? '受賞者の発表は11月。山本由伸ら日本人投手の最終順位' : '山本由伸ら日本人投手の順位と前日比'}、投票の仕組み・発表時期、日本人の歴代最高順位まで。`,
       };
 }
 
@@ -110,7 +115,10 @@ export default async function CyYoungPage({ params }: { params: Promise<{ locale
     getBoardHistory('cy-young'),
     getPlayersSnapshot(),
   ]);
-  const deltas = rankDeltas(previousDay(history, board.asOf), board);
+  // 確定後は前日比を出さない（10月の再取得は指標の改訂だけ）。履歴は最終成績の日で閉じる＝首位の連続日数・推移表をシーズン内に収める。
+  const final = isSeasonFinal(board.season, board.asOf);
+  const hist = final ? historyThrough(history, SEASON_FINAL_FROM) : history;
+  const deltas = final ? new Map<number, number | null>() : rankDeltas(previousDay(history, board.asOf), board);
   // 規定未達で表にも watch にも居ない日本人先発（大谷ら＝規定まで遠い）の現在地。検索は「大谷 サイヤング」で
   // このページに来るので、居ない理由を成績つきで先に答える。snapshot の公知の数値の再表示だけ。
   const onBoard = new Set([...board.leagues.NL, ...board.leagues.AL, ...board.watch].map((r) => r.id));
@@ -198,15 +206,16 @@ export default async function CyYoungPage({ params }: { params: Promise<{ locale
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{c.title}</h1>
         <p className="mt-2 max-w-prose text-sm text-ink-soft">{c.lead}</p>
         {board.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: board.asOf })}</p>}
+        {final && <p className="mt-3 max-w-prose border-l-2 border-ink pl-3 text-sm leading-relaxed text-ink">{seasonFinalNotice('cy', en)}</p>}
       </section>
 
       {/* 表の前に「いまのレース」＝首位・日本人の現在地・スコアの内訳。表を読む前に問いへ先に答える。 */}
-      <CyRaceNow board={board} history={history} outsiders={outsiders} locale={locale} />
+      <CyRaceNow board={board} history={hist} outsiders={outsiders} locale={locale} final={final} />
 
       <CyYoungBoard board={board} locale={locale} deltas={deltas} />
 
       {/* 日次履歴（7月9日から）＝首位の在位・日本人の昇降が見える唯一の面。直近12日を列に出す。 */}
-      <BoardTrend board={board} history={history} locale={locale} />
+      <BoardTrend board={board} history={hist} locale={locale} />
 
       <BoardColumns
         columns={raceColumns}
@@ -219,7 +228,7 @@ export default async function CyYoungPage({ params }: { params: Promise<{ locale
         }
       />
 
-      <CyGuide locale={locale} season={board.season} qualifyIp={board.qualifyIp} />
+      <CyGuide locale={locale} season={board.season} qualifyIp={board.qualifyIp} final={final} />
 
       <FaqList faq={faq} en={en} heading={en ? 'Cy Young FAQ' : 'サイ・ヤング賞レースのよくある質問'} />
 

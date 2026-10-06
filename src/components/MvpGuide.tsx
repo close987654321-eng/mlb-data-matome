@@ -1,5 +1,6 @@
 import SectionHeading from '@/components/SectionHeading';
 import { ROY_SEASON_END } from '@/lib/royFaq';
+import { PRIOR_AWARD_DATES } from '@/lib/boardSeo';
 
 /**
  * MVPレースの「見方」＝日程・決め方・規定打席・日本人の受賞歴。
@@ -19,15 +20,28 @@ const JP_WINNERS = [
 /** 受賞は逃したが上位に入った日本人。 */
 const JP_NEAR = [{ year: 2022, league: 'AL', nameJa: '大谷翔平', nameEn: 'Shohei Ohtani', teamJa: 'エンゼルス', teamEn: 'Angels', placeJa: '2位（1位票2）', placeEn: '2nd (2 first-place votes)' }];
 
-export default function MvpGuide({ locale, season, qualifyPa }: { locale: string; season: number; qualifyPa: number }) {
+export default function MvpGuide({
+  locale,
+  season,
+  qualifyPa,
+  final = false,
+}: {
+  locale: string;
+  season: number;
+  qualifyPa: number;
+  final?: boolean;
+}) {
   const en = locale === 'en';
   const t = en
     ? {
         heading: 'How the award is decided',
         steps: [
-          { k: `Regular season ends ${ROY_SEASON_END.en}`, v: 'Everything on this board counts through the final day. Postseason games do not.' },
+          { k: `Regular season ends ${ROY_SEASON_END.en}`, v: final
+              ? 'The season is over: this board now shows final regular-season numbers. Postseason games do not count.'
+              : 'Everything on this board counts through the final day. Postseason games do not.',
+          },
           { k: 'Ballots due before the postseason', v: 'Two BBWAA writers per club, 30 per league, each rank ten players. Points run 14-9-8-7-6-5-4-3-2-1.' },
-          { k: 'Winners announced in November', v: 'After the World Series. One winner per league; hitters and pitchers are eligible alike.' },
+          { k: 'Winners announced in November', v: `After the World Series (${PRIOR_AWARD_DATES.year}: ${PRIOR_AWARD_DATES.mvp.en} ET). One winner per league; hitters and pitchers are eligible alike.` },
         ],
         qualTitle: 'Plate-appearance qualification',
         qual: `3.1 PA per team game (502 for a full season). Mid-season the bar is the games played so far, which is why this board’s line sits around ${qualifyPa} PA right now. Voters are not bound by it; this table is.`,
@@ -40,9 +54,12 @@ export default function MvpGuide({ locale, season, qualifyPa }: { locale: string
     : {
         heading: 'MVPの決まり方',
         steps: [
-          { k: `レギュラーシーズン最終日は${ROY_SEASON_END.ja}`, v: 'このボードの成績は最終日まで動きます。ポストシーズンの成績は評価に入りません。' },
+          { k: `レギュラーシーズン最終日は${ROY_SEASON_END.ja}`, v: final
+              ? '全日程が終わり、このボードは最終成績で確定しました。ポストシーズンの成績は評価に入りません。'
+              : 'このボードの成績は最終日まで動きます。ポストシーズンの成績は評価に入りません。',
+          },
           { k: '投票はポストシーズン開幕前に締め切り', v: '全米野球記者協会（BBWAA）の記者が各球団2名×15球団＝リーグ30人。1〜10位を記入し、1位14点・2位9点・3位8点、以下7・6・5・4・3・2・1点。' },
-          { k: '発表は11月', v: 'ワールドシリーズ終了後に発表。各リーグ1人で、打者と投手を分けずに選びます。' },
+          { k: '発表は11月', v: `ワールドシリーズ終了後に発表（${PRIOR_AWARD_DATES.year}年は${PRIOR_AWARD_DATES.mvp.ja}・日本時間${PRIOR_AWARD_DATES.mvp.jstJa}の朝）。各リーグ1人で、打者と投手を分けずに選びます。` },
         ],
         qualTitle: '規定打席',
         qual: `チームの試合数×3.1打席（シーズン全体で502打席）。シーズン途中はその時点の試合数で判定するので、このボードの目安はいま約${qualifyPa}打席です。投票する記者は規定に縛られませんが、この順位表は規定到達者だけを比べています。`,

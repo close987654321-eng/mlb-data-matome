@@ -396,9 +396,9 @@ export function buildPostseasonFaq(data: PostseasonData, jp: Map<number, string[
       },
     },
     {
-      q: { ja: '地区シリーズ・リーグ優勝決定シリーズ・ワールドシリーズは何戦制？', en: 'How long are the later rounds?' },
+      q: { ja: '地区シリーズ・リーグ優勝決定シリーズ・ワールドシリーズは何戦制（何勝で勝ち抜け）？', en: 'How long are the later rounds?' },
       a: {
-        ja: '地区シリーズは5戦3勝制、リーグ優勝決定シリーズとワールドシリーズは7戦4勝制です。勝ち上がるたびに組み直す再シーディングはなく、トーナメント表の組み合わせのまま進みます。',
+        ja: '地区シリーズは5戦3勝制（先に3勝で勝ち抜け）、リーグ優勝決定シリーズとワールドシリーズは7戦4勝制（先に4勝で勝ち抜け）です。勝ち上がるたびに組み直す再シーディングはなく、トーナメント表の組み合わせのまま進みます。',
         en: 'The Division Series is best-of-five; the League Championship Series and World Series are best-of-seven. There is no reseeding: winners advance along the bracket.',
       },
     },
@@ -496,6 +496,36 @@ export function buildPostseasonFaq(data: PostseasonData, jp: Map<number, string[
     });
   }
 
+  // 「何時から？」＝時刻が決まった試合の実データから答える（未明〜昼に散らばるので幅で言う）。
+  const hours = jstStartHourRange(data);
+  if (hours && !data.champion) {
+    const next = nextScheduledGame(data);
+    const nextJa = next
+      ? `次の試合は${gameWhen(next.game, false)}開始の${roundName(next.series.round, false)}第${next.game.n}戦、${teamJa(next.game.away.id!)}対${teamJa(next.game.home.id!)}です。`
+      : '';
+    const nextEn = next
+      ? ` Next up: ${roundName(next.series.round, true)} Game ${next.game.n}, ${teamLabel(next.game.away.id!, true)} at ${teamLabel(next.game.home.id!, true)}, ${gameWhen(next.game, true)}.`
+      : '';
+    faq.push({
+      q: { ja: `${y}年のポストシーズンは日本時間で何時から？`, en: `What time are ${y} postseason games in Japan?` },
+      a: {
+        ja: `現地の昼〜夜に行われるため、日本時間ではおおむね${hours.min}時台〜${hours.max}時台の開始です（決まっている試合の実績）。${nextJa}各試合の開始時刻はこのページの日程表に日本時間で載せています。`,
+        en: `Games start between about ${hours.min}:00 and ${hours.max}:00 JST, based on the scheduled games so far.${nextEn} Every start time is listed in JST in the schedule on this page.`,
+      },
+    });
+  }
+
+  if (showBroadcast(data)) {
+    const b = POSTSEASON_BROADCAST;
+    faq.push({
+      q: { ja: `${y}年のポストシーズンは日本でどこで見られる？（放送・配信）`, en: `How can I watch the ${y} postseason in Japan?` },
+      a: {
+        ja: `${b.items.map((i) => `${i.name}：${i.ja}`).join('')}（${b.sourceJa}）`,
+        en: `${b.items.map((i) => `${'nameEn' in i ? i.nameEn : i.name}: ${i.en}`).join(' ')} (${b.sourceEn})`,
+      },
+    });
+  }
+
   if (data.champion) {
     const ws = data.series.find((s) => s.round === 'W');
     const champ = ws && (ws.top.id === data.champion.id ? ws.top : ws.bottom);
@@ -511,4 +541,122 @@ export function buildPostseasonFaq(data: PostseasonData, jp: Map<number, string[
     }
   }
   return faq;
+}
+
+// ───────────────────────────────────────────── 日程（日本時間）
+
+/** 日程表の1行＝どのシリーズの何戦目か。 */
+export type ScheduleRow = { game: SeriesGame; series: Series };
+/** 日本時間の1日ぶん（時刻未定の試合は現地日付で別の日として持つ）。 */
+export type ScheduleDay = { key: string; label: string; tbd: boolean; rows: ScheduleRow[] };
+
+const JST_DATE = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit' });
+const JST_HOUR = new Intl.DateTimeFormat('en-US', { timeZone: 'Asia/Tokyo', hour: 'numeric', hourCycle: 'h23' });
+
+function jstDayLabel(iso: string, en: boolean): string {
+  const d = new Date(iso);
+  return new Intl.DateTimeFormat(en ? 'en-US' : 'ja-JP', {
+    timeZone: 'Asia/Tokyo',
+    month: en ? 'short' : 'numeric',
+    day: 'numeric',
+    weekday: 'short',
+  }).format(d);
+}
+
+/**
+ * 試合を日本時間の日付ごとにまとめた日程表（「mlb ポストシーズン 日程 日本時間」に答える面）。
+ * 対戦相手が決まっている試合だけを並べる＝「未定 vs 未定」の行で表を水増ししない。
+ * シリーズが決着した後の「必要な場合」の試合は行われないので落とす。
+ * 値は data/postseason.json の再表示だけ（CI が毎時更新）。
+ */
+export function scheduleByJstDay(data: PostseasonData, en: boolean): { upcoming: ScheduleDay[]; past: ScheduleDay[] } {
+  const rows: ScheduleRow[] = [];
+  for (const s of data.series) {
+    for (const g of s.games) {
+      if (!g.away.id || !g.home.id) continue;
+      if (s.winnerId && g.state !== 'Final') continue;
+      rows.push({ game: g, series: s });
+    }
+  }
+  rows.sort((a, b) => a.game.start.localeCompare(b.game.start));
+  const group = (list: ScheduleRow[]): ScheduleDay[] => {
+    const days = new Map<string, ScheduleDay>();
+    for (const r of list) {
+      const tbd = r.game.tbd;
+      const key = tbd ? `et:${r.game.etDate}` : JST_DATE.format(new Date(r.game.start));
+      let day = days.get(key);
+      if (!day) {
+        const [, m, d] = r.game.etDate.split('-').map(Number);
+        day = { key, tbd, label: tbd ? (en ? `${m}/${d} (ET, time TBD)` : `現地${m}月${d}日（時刻未定）`) : jstDayLabel(r.game.start, en), rows: [] };
+        days.set(key, day);
+      }
+      day.rows.push(r);
+    }
+    return [...days.values()];
+  };
+  return {
+    upcoming: group(rows.filter((r) => r.game.state !== 'Final')),
+    past: group(rows.filter((r) => r.game.state === 'Final')).reverse(),
+  };
+}
+
+/** 時刻が決まっている試合の開始時刻（日本時間）の幅。FAQ「日本時間で何時から？」の答えに使う。 */
+export function jstStartHourRange(data: PostseasonData): { min: number; max: number } | null {
+  const hours = data.series
+    .flatMap((s) => s.games)
+    .filter((g) => !g.tbd && g.away.id && g.home.id)
+    .map((g) => Number(JST_HOUR.format(new Date(g.start))));
+  if (!hours.length) return null;
+  return { min: Math.min(...hours), max: Math.max(...hours) };
+}
+
+/** いちばん近いこれからの試合（時刻確定・対戦相手確定のもの）。 */
+export function nextScheduledGame(data: PostseasonData): ScheduleRow | null {
+  const rows = data.series
+    .flatMap((s) => s.games.map((game) => ({ game, series: s })))
+    .filter(({ game, series }) => !game.tbd && game.away.id && game.home.id && game.state !== 'Final' && game.state !== 'Live' && !series.winnerId)
+    .sort((a, b) => a.game.start.localeCompare(b.game.start));
+  return rows[0] ?? null;
+}
+
+// ───────────────────────────────────────────── 日本での放送・配信
+
+/**
+ * 日本での放送・配信（「mlb ポストシーズン 放送」は Google トレンドで急上昇・2026-10-06 確認）。
+ * 書いてよいのは各社の公式発表の範囲だけ＝景表法上「全試合無料」のような言い過ぎは書かない。
+ * - SPOTV NOW: 2026-09-28 プレスリリース（PR TIMES）＝WC〜WS全試合を日本語実況でライブ配信、
+ *   各シリーズ初戦の注目1試合は無料会員登録でライブ視聴可。
+ * - Prime Video（SPOTVチャンネル）: 2026-03-26 Amazon プレスリリース＝ポストシーズンは試合開催日に
+ *   毎日1試合を厳選して配信、プライム会員は追加料金なし。
+ * - NHK: 総合・BS で注目試合を中継（カードは NHK の番組表で発表）。
+ * 年が替わったら発表を確かめて書き直す（season が合わない年は出さない）。
+ */
+export const POSTSEASON_BROADCAST = {
+  season: 2026,
+  items: [
+    {
+      name: 'SPOTV NOW',
+      ja: 'ワイルドカードシリーズからワールドシリーズまで全試合を日本語実況つきでライブ配信（有料会員）。各シリーズ初戦の注目1試合は無料会員登録でライブ視聴できます。',
+      en: 'Every game from the Wild Card Series to the World Series, live with Japanese commentary (paid plan). One featured Game 1 per series is free with a free account.',
+    },
+    {
+      name: 'Prime Video（SPOTVチャンネル）',
+      nameEn: 'Prime Video (SPOTV channel)',
+      ja: 'ポストシーズンは試合開催日に毎日1試合を厳選してライブ配信。プライム会員なら追加料金なしで見られます。',
+      en: 'One selected game on every postseason game day, at no extra cost for Prime members.',
+    },
+    {
+      name: 'NHK（総合・BS）',
+      nameEn: 'NHK (General / BS)',
+      ja: '注目試合をテレビで中継。放送するカードと時間はNHKの番組表で発表されます。',
+      en: 'Selected games on TV. Check NHK’s listings for which games air.',
+    },
+  ],
+  sourceJa: 'SPOTV NOW（2026年9月28日）・Amazon（2026年3月26日）の公式発表より。放送・配信の予定は変わることがあります。',
+  sourceEn: 'From official announcements by SPOTV NOW (Sep 28, 2026) and Amazon (Mar 26, 2026). Schedules may change.',
+} as const;
+
+/** その年の放送情報を出してよいか（年が合い、まだ閉幕していない）。 */
+export function showBroadcast(data: PostseasonData): boolean {
+  return data.season === POSTSEASON_BROADCAST.season && !data.champion;
 }

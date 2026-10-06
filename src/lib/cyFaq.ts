@@ -1,6 +1,7 @@
 import type { CyRow, CyYoungBoard } from '@/lib/cyYoungBoard';
 import type { FaqItem } from '@/components/FaqList';
 import { ROY_SEASON_END } from '@/lib/royFaq';
+import { priorAwardDatePhrase } from '@/lib/boardSeo';
 
 /**
  * /cy-young の「よくある質問」。画面（FaqList）と JSON-LD の FAQPage を同じ配列から組む。
@@ -71,8 +72,8 @@ export function buildCyFaq(board: CyYoungBoard, en: boolean, outsiders: CyOutsid
     {
       q: { ja: `${year}年のサイ・ヤング賞はいつ決まる？`, en: `When is the ${year} Cy Young Award announced?` },
       a: {
-        ja: `レギュラーシーズン最終日は${ROY_SEASON_END.ja}で、記者の投票はポストシーズン開幕前に締め切られます。10月のプレーオフでの投球は評価に入りません。受賞者の発表はワールドシリーズ終了後の11月です。`,
-        en: `The regular season ends ${ROY_SEASON_END.en}, and ballots are due before the postseason begins, so October starts do not count. Winners are announced in November after the World Series.`,
+        ja: `レギュラーシーズン最終日は${ROY_SEASON_END.ja}で、記者の投票はポストシーズン開幕前に締め切られます。10月のプレーオフでの投球は評価に入りません。受賞者の発表はワールドシリーズ終了後の11月です。${priorAwardDatePhrase('cy', false)}`,
+        en: `The regular season ends ${ROY_SEASON_END.en}, and ballots are due before the postseason begins, so October starts do not count. Winners are announced in November after the World Series. ${priorAwardDatePhrase('cy', true)}`,
       },
     },
     {

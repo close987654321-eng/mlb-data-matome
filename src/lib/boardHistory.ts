@@ -39,6 +39,16 @@ export function getRoyHistory(): Promise<RoyHistory | null> {
   return getBoardHistory('roy');
 }
 
+/**
+ * lastDate（YYYY-MM-DD）までの日だけに絞った履歴。レギュラーシーズン確定後に使う＝10月に入っても
+ * 再取得のたびに同じ順位の日が積まれるので、絞らないと「首位◯日連続」が試合の無い日まで数えて膨らみ、
+ * 推移表の列も動かない10月の日付で埋まる。
+ */
+export function historyThrough(h: RoyHistory | null, lastDate: string): RoyHistory | null {
+  if (!h) return null;
+  return { ...h, days: h.days.filter((d) => d.date <= lastDate) };
+}
+
 /** 現在のボード日付より前で、いちばん新しい日のエントリ（今日ぶんの再取得で自分自身と比べない）。 */
 export function previousDay(h: RoyHistory | null, currentAsOf: string): RoyHistDay | null {
   if (!h) return null;

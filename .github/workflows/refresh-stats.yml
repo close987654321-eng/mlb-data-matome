@@ -112,6 +112,15 @@ jobs:
             exit 0
           fi
           SEASON=$(TZ=Asia/Tokyo date +%Y)
+          # レギュラーシーズン確定後（最終日の3日後以降）は回さない。4ボードはレギュラーシーズンの成績だけで組むので
+          # 10月以降は値が動かず、cy-young は asOf を据え置く＝上の「今日まだ更新していないか」の判定が毎時素通りし、
+          # 毎時ジョブのたびに Savant の CSV を4ボードぶん取り直していた（2026-09-29〜10-06・API への負荷だけが残る）。
+          # 年またぎで postseason.json の season が今年と違えば判定しない＝翌シーズンは自動で再開する。
+          FREEZE_FROM=$(node -e 'const p=require("./data/postseason.json");const e=p.dates&&p.dates.regularEnd;if(!e||String(p.season)!==process.argv[1])process.exit(0);const d=new Date(e+"T00:00:00Z");d.setUTCDate(d.getUTCDate()+3);console.log(d.toISOString().slice(0,10))' "$SEASON" 2>/dev/null || echo "")
+          if [ -n "$FREEZE_FROM" ] && [[ ! "$TODAY_JST" < "$FREEZE_FROM" ]]; then
+            echo "レギュラーシーズン確定済み（${FREEZE_FROM}以降）＝ボードは最終成績のまま → スキップ"
+            exit 0
+          fi
           # cyyoung を先に（arsenal がボード上位5名を詳細ページ用に取り込むため）。失敗しても他は活かす。
           node scripts/fetch-mlb-stats.mjs cyyoung "$SEASON" | tail -2 || echo "cyyoung スキップ"
           node scripts/fetch-mlb-stats.mjs arsenal "$SEASON" | tail -2 || echo "arsenal スキップ（cyyoung は反映済み）"

@@ -11,13 +11,28 @@ import { dayAtLeastBefore, leaderStreak, previousDay, type RoyHistory } from '@/
  *   3) その順位はスコアのどの内訳（wRC+／xwOBA／本塁打／WAR／走塁／守備）から来ているか
  * すべてボード JSON と日次履歴の再表示だけ＝文章の値は毎日CIで組み替わる。断定の語は使わない。
  */
-export default function MvpRaceNow({ board, history, locale }: { board: MvpBoard; history: RoyHistory | null; locale: string }) {
+export default function MvpRaceNow({
+  board,
+  history,
+  locale,
+  final = false,
+}: {
+  board: MvpBoard;
+  history: RoyHistory | null;
+  locale: string;
+  /** レギュラーシーズン確定後（isSeasonFinal）。見出しを最終順位に替え、前日比を出さない。 */
+  final?: boolean;
+}) {
   const en = locale === 'en';
-  const prev = previousDay(history, board.asOf);
-  const weekAgo = dayAtLeastBefore(history, board.asOf, 6);
+  // 確定後（final）は履歴の最終日を基準にする＝「前日比」は出さず（10月の再取得は指標の改訂だけでレースは動いていない）、
+  // 週比は「シーズン最後の1週間でどう動いたか」になる。
+  const lastDay = history?.days[history.days.length - 1];
+  const refAsOf = final && lastDay ? lastDay.asOf : board.asOf;
+  const prev = final ? null : previousDay(history, refAsOf);
+  const weekAgo = dayAtLeastBefore(history, refAsOf, 6);
   const jpRows = [...board.leagues.NL, ...board.leagues.AL].filter((r) => r.isJp).sort((a, b) => a.rank - b.rank);
 
-  const t = en
+  const base = en
     ? {
         heading: 'The race right now',
         leader: (lg: 'AL' | 'NL') => (lg === 'AL' ? 'AL leader' : 'NL leader'),
@@ -48,6 +63,18 @@ export default function MvpRaceNow({ board, history, locale }: { board: MvpBoard
         detail: 'スコアの内訳を見る',
         noHistory: '日次の履歴はきょうから積み上がります。',
       };
+  // 確定後の見出し＝「いま」ではなく最終順位。首位の連続日数は最終日までの記録として読ませる。
+  const t = final
+    ? {
+        ...base,
+        heading: en ? 'Final regular-season standings' : '最終順位（レギュラーシーズン）',
+        jpHeading: en ? 'Where the Japanese hitters finished' : '日本人打者の最終順位',
+        streak: (d: number, c: number, _back: boolean, from: string) =>
+          en
+            ? `${d > 1 ? `Finished with ${d} straight recorded days on top` : 'Took the lead on the final day'} · ${c} lead change${c === 1 ? '' : 's'} since ${from}`
+            : `${d > 1 ? `最終日まで記録のある${d}日連続で首位` : '最終日に首位へ'}・${from}以降の首位交代${c}回`,
+      }
+    : base;
 
   return (
     <section className="space-y-5">

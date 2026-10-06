@@ -213,6 +213,12 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     ⚠️ **成績APIは gameType を省くとレギュラーシーズンしか返さない**＝単日取得（`fetchStats({date})`）は全種別
     `[R,F,D,L,W]` を指定している（2026-09-26 まではポストシーズンの日が「出場0人」になり jp-daily / jp-games が
     10月に黙って止まる状態だった）。期間累計はレギュラーシーズンのまま＝「今季」にポストシーズンを混ぜない。
+    **2026-10-06 増補**: 開幕後に急上昇した「日程（日本時間）」「放送」に答える `PostseasonSchedule`（日付→試合の一覧）と
+    `PostseasonBroadcast`（`POSTSEASON_BROADCAST`＝各社の公式発表の範囲だけ・**年が替わったら発表を確かめて書き直す**）を追加。
+    同日、賞レース3ボードは**レギュラーシーズン確定後に表示を切り替える**（`boardSeo.ts` の `isSeasonFinal`＝「◯月◯日時点・
+    現在トップ」→「最終成績・1位でシーズンを終えた」、前日比を出さず履歴は `SEASON_FINAL_FROM` で閉じる。最終日は
+    `REGULAR_SEASON_END` が唯一の正＝年ごとに更新）。CI もレギュラーシーズン最終日の3日後以降はボード更新を止める
+    （値が動かず cy-young の asOf が据え置かれ、日次ゲートが毎時素通りして Savant を取り直し続けていたため）。
   - **試合結果（`Thread.game`・記事の主役データ）**: `node scripts/fetch-mlb-stats.mjs backfill-games --apply` で
     公式スケジュール（`hydrate=linescore,decisions`）＋ boxscore から **最終スコア・回ごとの得点と H/E/残塁・
     その試合時点の勝敗と地区順位・勝敗投手/セーブ・本塁打の打者と今季号数** を記事 JSON に埋める。記事は要約直下の

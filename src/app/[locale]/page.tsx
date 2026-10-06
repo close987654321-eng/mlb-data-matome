@@ -290,6 +290,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
             </span>
           )}
         </div>
+        {/* h1 と直下の説明は検索結果のスニペットに使われる（2026-10-06 実測: 「mlb 海外の反応」で Google は
+            meta description でなくここを表示し、4位で CTR 2%）。旧文言「MLB・ボクシング・MMA。」はクエリの
+            MLB と噛み合わなかったので、題字の主語を「MLBの海外の反応」に揃えた（title と同じ語）。 */}
         <h1 className="mt-5 text-lg font-bold leading-snug tracking-[-0.01em] text-ink sm:text-xl">
           {t('home.heroTitle')}
         </h1>

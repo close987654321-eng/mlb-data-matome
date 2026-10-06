@@ -72,18 +72,42 @@ const vcTag = (pid: string) =>
 const vcPixel = (pid: string) =>
   `https://ad.jp.ap.valuecommerce.com/servlet/gifbanner?sid=${VC_SID}&pid=${pid}`;
 
+/**
+ * MLB（Prime Video）の訴求文をビルド日で切り替える。ビルドは毎時の成績CIのコミットで走るので日付ずれは最大1時間。
+ * レギュラーシーズン後も「350試合ライブ配信」と書き続けると、10月に読む人には事実と違う案内になる
+ * （2026-10-06 の点検で全MLB記事の記事下がこの状態だった）。日付は Amazon・MLB の公式日程の範囲。
+ */
+const MLB_POSTSEASON_JST = { from: '2026-09-29', until: '2026-11-02' };
+function mlbPrimePitch(now = new Date()): Record<Locale, string> {
+  const today = new Date(now.getTime() + 9 * 3600e3).toISOString().slice(0, 10);
+  if (today >= MLB_POSTSEASON_JST.from && today < MLB_POSTSEASON_JST.until) {
+    return {
+      ja: 'プライム会員なら追加料金なし。SPOTVチャンネルで2026年ポストシーズンを試合開催日に毎日1試合ライブ配信（Amazon公式発表）。',
+      en: 'Included with Prime at no extra cost. One selected 2026 postseason game is streamed live on every game day via the SPOTV channel.',
+    };
+  }
+  if (today >= MLB_POSTSEASON_JST.until) {
+    return {
+      ja: 'プライム会員なら追加料金なし。SPOTVチャンネルでMLBをライブ配信（2026年はレギュラーシーズン350試合以上、ポストシーズンは毎日1試合）。',
+      en: 'Included with Prime at no extra cost. Live MLB via the SPOTV channel (350+ regular-season games and one postseason game per day in 2026).',
+    };
+  }
+  return {
+    ja: 'プライム会員なら追加料金なし。SPOTVチャンネルで 2026 レギュラーシーズンを350試合以上ライブ配信（ドジャース戦ほか日本人選手の所属チーム中心）。',
+    en: 'Included with Prime at no extra cost. 350+ live MLB regular-season games in 2026 via the SPOTV channel.',
+  };
+}
+
 export const VOD_OFFERS: Record<Sport, VodOffer[]> = {
   // 2026-08-12: 止めたままだった SPOTV NOW 枠（href:null）を畳み、アマプラ1本に絞る。
   // MLB は全記事の8割超＝最大の面なので、選択肢を並べず「1クリックで決まる」形にする。
   mlb: [
     {
       service: 'Amazon Prime Video',
-      // 訴求は Amazon 公式発表（2026-03-27 配信開始・SPOTVチャンネル）の事実のみ。景表法上、
-      // 「全試合見放題」等の言い過ぎは書かない＝配信は350試合以上（全2430試合ではない）。
-      pitch: {
-        ja: 'プライム会員なら追加料金なし。SPOTVチャンネルで 2026 レギュラーシーズンを350試合以上ライブ配信（ドジャース戦ほか日本人選手の所属チーム中心）。',
-        en: 'Included with Prime at no extra cost. 350+ live MLB regular-season games in 2026 via the SPOTV channel.',
-      },
+      // 訴求は Amazon 公式発表（2026-03-26 プレスリリース・SPOTVチャンネル）の事実のみ。景表法上、
+      // 「全試合見放題」等の言い過ぎは書かない＝レギュラーシーズンは350試合以上（全2430試合ではない）、
+      // ポストシーズンは「試合開催日に毎日1試合を厳選」（全試合ではない）。
+      pitch: mlbPrimePitch(),
       // バリューコマースの Amazon Prime Video 紹介プログラム（2026-08-12 提携・成果地点=申込完了）。
       // 広告は1本（広告ID 2920656・自由テキスト）で、pid が違うのは「広告スペース」＝設置場所の
       // 計測枠の違い。sid=3777710 は本サイト。元タグは protocol-relative（//ck.jp.ap…）なので

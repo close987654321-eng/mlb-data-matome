@@ -10,7 +10,7 @@ import MvpRaceNow from '@/components/MvpRaceNow';
 import BoardTrend from '@/components/BoardTrend';
 import MvpGuide from '@/components/MvpGuide';
 import FaqList from '@/components/FaqList';
-import { getBoardHistory, previousDay, rankDeltas } from '@/lib/boardHistory';
+import { getBoardHistory, historyThrough, previousDay, rankDeltas } from '@/lib/boardHistory';
 import { buildMvpFaq } from '@/lib/mvpFaq';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
@@ -19,11 +19,14 @@ import Breadcrumbs from '@/components/Breadcrumbs';
 import PlayerHubNav from '@/components/PlayerHubNav';
 import { absoluteUrl, localeAlternates } from '@/lib/site';
 import {
-  asOfShort,
+  asOfOrFinal,
   boardItemList,
   boardLeaders,
+  isSeasonFinal,
   jpRankPhrase,
   leadersPhrase,
+  seasonFinalNotice,
+  SEASON_FINAL_FROM,
   type BoardLeaders,
 } from '@/lib/boardSeo';
 import { type Locale } from '@/lib/i18n';
@@ -37,25 +40,27 @@ const MVP_TAGS = ['MVP'];
  * boardSeo.ts（サイヤング側で実測した検索語のズレ）と同じ。ボード2種は改良をパリティ移植する。
  */
 function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string) {
-  const day = asOfShort(asOf, en);
+  // 確定後（10月以降）は「◯月◯日時点・現在トップ」をやめ「最終成績・1位でシーズンを終えた」に替える（boardSeo.ts）。
+  const final = isSeasonFinal(year, asOf);
+  const when = asOfOrFinal(asOf, en, final);
   return en
     ? {
         crumb: 'MVP Board',
         eyebrow: `${year} Season`,
         title: `${year} MVP Candidates & Prediction Board`,
-        lead: 'Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR, with two-way pitching WAR included). Updated daily with rank changes and a day-by-day trend, where Shohei Ohtani, Seiya Suzuki and Japan’s bats stand, how the vote works, Japanese MVP history, and overseas fan reactions. Tap any row for the full breakdown.',
+        lead: `Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR, with two-way pitching WAR included). ${final ? 'Final regular-season numbers with the late-season trend,' : 'Updated daily with rank changes and a day-by-day trend,'} where Shohei Ohtani, Seiya Suzuki and Japan’s bats stand, how the vote works, Japanese MVP history, and overseas fan reactions. Tap any row for the full breakdown.`,
         metaTitle: `${year} MVP Candidates | AL/NL Hitter Rankings`,
-        metaDesc: `${year} MVP candidates, ranked${day ? ` (as of ${day})` : ''}. ${leadersPhrase(leaders, true)} ${jpRankPhrase(leaders, true)} Daily rank changes, how the vote works, when it is announced, and Japanese MVP history.`,
+        metaDesc: `${year} MVP candidates, ranked${when ? ` (${when})` : ''}. ${leadersPhrase(leaders, true, final)} ${jpRankPhrase(leaders, true)} ${final ? 'Winners are announced in November. Final rankings' : 'Daily rank changes'}, how the vote works, when it is announced, and Japanese MVP history.`,
       }
     : {
         crumb: 'MVP予測',
         eyebrow: `${year} シーズン`,
         title: `MVP候補 ${year} 予測ランキング`,
-        lead: '規定打席に到達した打者を、wRC+・xwOBA・本塁打・走塁・守備・WARをもとにリーグ内でスコア化した予測ランキング（二刀流の大谷翔平は投手WARも合算）。毎日更新の前日比と順位の推移、大谷翔平・鈴木誠也ら日本人打者の現在地、投票の仕組みや発表時期、日本人のMVP受賞歴、海外ファンの反応までこのページで追えます。気になる打者の行をタップすると、打球の質・バットスピードまで分かる詳細ページへ。',
+        lead: `規定打席に到達した打者を、wRC+・xwOBA・本塁打・走塁・守備・WARをもとにリーグ内でスコア化した予測ランキング（二刀流の大谷翔平は投手WARも合算）。${final ? 'シーズン最終盤の順位の推移、' : '毎日更新の前日比と順位の推移、'}大谷翔平・鈴木誠也ら日本人打者の現在地、投票の仕組みや発表時期、日本人のMVP受賞歴、海外ファンの反応までこのページで追えます。気になる打者の行をタップすると、打球の質・バットスピードまで分かる詳細ページへ。`,
         // cy-young と同じ＝brand 付与後も切られない長さに抑え、リーグ別クエリは h2 に持たせる。
         metaTitle: `MVP候補 ${year} 予測ランキング`,
         // 構成は cy-young と同じ＝検索語→いま誰が有力か→指標（切られてよい）の順。
-        metaDesc: `${year}年MVP候補の予測ランキング${day ? `（${day}時点）` : ''}。${leadersPhrase(leaders, false)}${jpRankPhrase(leaders, false)}大谷翔平・鈴木誠也ら日本人打者の順位と前日比、投票の仕組み・発表時期、日本人のMVP受賞歴まで。`,
+        metaDesc: `${year}年MVP候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? '受賞者の発表は11月。大谷翔平・鈴木誠也ら日本人打者の最終順位' : '大谷翔平・鈴木誠也ら日本人打者の順位と前日比'}、投票の仕組み・発表時期、日本人のMVP受賞歴まで。`,
       };
 }
 
@@ -95,7 +100,10 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
     columnsForBoard(BOARD_COLUMN_TAGS.mvp),
     getBoardHistory('mvp'),
   ]);
-  const deltas = rankDeltas(previousDay(history, board.asOf), board);
+  // 確定後は前日比を出さない（10月の再取得は指標の改訂だけ）。履歴は最終成績の日で閉じる＝首位の連続日数・推移表をシーズン内に収める。
+  const final = isSeasonFinal(board.season, board.asOf);
+  const hist = final ? historyThrough(history, SEASON_FINAL_FROM) : history;
+  const deltas = final ? new Map<number, number | null>() : rankDeltas(previousDay(history, board.asOf), board);
   const faq = buildMvpFaq(board, en);
   const reactionItems = buildFeed(
     all.filter((th) => (th.tags ?? []).some((x) => MVP_TAGS.includes(x))),
@@ -146,15 +154,16 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{c.title}</h1>
         <p className="mt-2 max-w-prose text-sm text-ink-soft">{c.lead}</p>
         {board.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: board.asOf })}</p>}
+        {final && <p className="mt-3 max-w-prose border-l-2 border-ink pl-3 text-sm leading-relaxed text-ink">{seasonFinalNotice('mvp', en)}</p>}
       </section>
 
       {/* 表の前に「いまのレース」＝首位・日本人の現在地・スコアの内訳。表を読む前に問いへ先に答える。 */}
-      <MvpRaceNow board={board} history={history} locale={locale} />
+      <MvpRaceNow board={board} history={hist} locale={locale} final={final} />
 
       <MvpBoard board={board} locale={locale} deltas={deltas} />
 
       {/* 日次履歴（7月9日から）＝首位の在位・日本人の昇降が見える唯一の面。直近12日を列に出す。 */}
-      <BoardTrend board={board} history={history} locale={locale} />
+      <BoardTrend board={board} history={hist} locale={locale} />
 
       <BoardColumns
         columns={raceColumns}
@@ -167,7 +176,7 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
         }
       />
 
-      <MvpGuide locale={locale} season={board.season} qualifyPa={board.qualifyPa} />
+      <MvpGuide locale={locale} season={board.season} qualifyPa={board.qualifyPa} final={final} />
 
       <FaqList faq={faq} en={en} heading={en ? 'MVP FAQ' : 'MVPレースのよくある質問'} />
 
