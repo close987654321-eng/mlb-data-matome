@@ -226,61 +226,15 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "フィリーズ",
-      "en": "Philadelphia Phillies",
-      "score": 2,
-      "innings": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        1,
-        0
-      ],
-      "hits": 6,
-      "errors": 0,
-      "lob": 5
-    },
-    "home": {
-      "ja": "ブレーブス",
-      "en": "Atlanta Braves",
-      "score": 6,
-      "innings": [
-        3,
-        0,
-        0,
-        2,
-        0,
-        0,
-        1,
-        0,
-        null
-      ],
-      "hits": 6,
-      "errors": 0,
-      "lob": 5,
-      "homers": [
-        {
-          "id": 671739,
-          "name": "Michael Harris II"
-        },
-        {
-          "id": 621566,
-          "name": "Matt Olson"
-        },
-        {
-          "id": 645277,
-          "name": "Ozzie Albies"
-        }
-      ]
-    },
-    "decisions": {
-      "winner": "Grant Holmes",
-      "loser": "Aaron Nola"
-    }
+    "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 0, 1, 0], "hits": 6, "errors": 0, "lob": 5 },
+    "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 6, "innings": [3, 0, 0, 2, 0, 0, 1, 0, null], "hits": 6, "errors": 0, "lob": 5, "homers": [{ "id": 671739, "name": "Michael Harris II" }, { "id": 621566, "name": "Matt Olson" }, { "id": 645277, "name": "Ozzie Albies" }] },
+    "decisions": { "winner": "Grant Holmes", "loser": "Aaron Nola" },
+    "scoring": [
+      { "inning": 1, "top": false, "batterId": 671739, "batter": "Michael Harris II", "event": "Home Run", "away": 0, "home": 3 },
+      { "inning": 4, "top": false, "batterId": 645277, "batter": "Ozzie Albies", "event": "Home Run", "away": 0, "home": 5 },
+      { "inning": 6, "top": true, "batterId": 664761, "batter": "Alec Bohm", "event": "Groundout", "away": 1, "home": 5 },
+      { "inning": 7, "top": false, "batterId": 621566, "batter": "Matt Olson", "event": "Home Run", "away": 1, "home": 6 },
+      { "inning": 8, "top": true, "batterId": 607208, "batter": "Trea Turner", "event": "Sac Fly", "away": 2, "home": 6 }
+    ]
   }
 }

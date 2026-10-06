@@ -193,58 +193,14 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "パドレス",
-      "en": "San Diego Padres",
-      "score": 2,
-      "innings": [
-        0,
-        2,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "hits": 9,
-      "errors": 1,
-      "lob": 12
-    },
-    "home": {
-      "ja": "ブルワーズ",
-      "en": "Milwaukee Brewers",
-      "score": 3,
-      "innings": [
-        0,
-        0,
-        2,
-        0,
-        0,
-        0,
-        1,
-        0,
-        null
-      ],
-      "hits": 7,
-      "errors": 0,
-      "lob": 9,
-      "homers": [
-        {
-          "id": 694192,
-          "name": "Jackson Chourio"
-        },
-        {
-          "id": 661388,
-          "name": "William Contreras"
-        }
-      ]
-    },
-    "decisions": {
-      "winner": "DL Hall",
-      "loser": "Adrian Morejon",
-      "save": "Trevor Megill"
-    }
+    "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 2, "innings": [0, 2, 0, 0, 0, 0, 0, 0, 0], "hits": 9, "errors": 1, "lob": 12 },
+    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 3, "innings": [0, 0, 2, 0, 0, 0, 1, 0, null], "hits": 7, "errors": 0, "lob": 9, "homers": [{ "id": 694192, "name": "Jackson Chourio" }, { "id": 661388, "name": "William Contreras" }] },
+    "decisions": { "winner": "DL Hall", "loser": "Adrian Morejon", "save": "Trevor Megill" },
+    "scoring": [
+      { "inning": 2, "top": true, "batterId": 669134, "batter": "Luis Campusano", "event": "Single", "away": 1, "home": 0 },
+      { "inning": 2, "top": true, "batterId": 630105, "batter": "Jake Cronenworth", "event": "Fielders Choice", "away": 2, "home": 0 },
+      { "inning": 3, "top": false, "batterId": 694192, "batter": "Jackson Chourio", "event": "Home Run", "away": 2, "home": 2 },
+      { "inning": 7, "top": false, "batterId": 661388, "batter": "William Contreras", "event": "Home Run", "away": 2, "home": 3 }
+    ]
   }
 }

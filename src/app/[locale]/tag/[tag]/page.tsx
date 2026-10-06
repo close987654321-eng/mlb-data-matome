@@ -50,6 +50,8 @@ import {
   type TeamHub,
 } from '@/lib/teamHub';
 import { getTeamSchedule, teamGameRows, type TeamGameRow } from '@/lib/teamGames';
+import { getPostseason } from '@/lib/postseason';
+import { teamPostseasonRun, flowVoices, voiceKey, PS_VOICES_PER_GAME, type TeamPsRun } from '@/lib/teamPostseason';
 import { getGameVoices } from '@/lib/gameVoices';
 import { getTeamNotes } from '@/lib/teamNotes';
 import { getTeam, headshotUrl, teamLogoUrl, teamOfficialUrl, type TeamInfo } from '@/lib/teams';
@@ -71,6 +73,7 @@ import SeasonJournal from '@/components/SeasonJournal';
 import TeamStandings from '@/components/TeamStandings';
 import TeamNow from '@/components/TeamNow';
 import TeamGames from '@/components/TeamGames';
+import TeamPostseason from '@/components/TeamPostseason';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
@@ -206,15 +209,28 @@ export async function generateMetadata({
     description = `${fighterHubIntroJa(fighter, feed.length)}${updated ? `最終更新: ${updated}。` : ''}`;
   } else if (teamLp && locale !== 'en') {
     // チームタグLP: 所属日本人選手・地区順位・件数・最終更新入りの短縮文（毎日動く実データ＝鮮度）。
-    const [snap, standing] = await Promise.all([getPlayersSnapshot(), standingOfTeam(teamLp.info.id)]);
+    const [snap, standing, postseason] = await Promise.all([
+      getPlayersSnapshot(),
+      standingOfTeam(teamLp.info.id),
+      getPostseason(),
+    ]);
     const jp = teamJpPlayers(snap, decoded);
+    // ポストシーズン中（と閉幕後のオフ）は地区順位より勝ち上がりの現在地のほうが検索者の答えになる。
+    const run =
+      postseason && postseason.season === seasonYear(snap)
+        ? teamPostseasonRun(postseason, teamLp.info.id, [])
+        : null;
     description = teamHubDescriptionJa(
       teamLp,
       seasonYear(snap),
       jp,
       feed.length,
       updated,
-      standing ? standingPhraseJa(standing.row, standing.division) : undefined,
+      run
+        ? run.statusJa
+        : standing
+          ? `現在${standingPhraseJa(standing.row, standing.division)}。`
+          : undefined,
     );
   }
   const url = absoluteUrl(locale, `/tag/${encodeURIComponent(decoded)}`);
@@ -308,6 +324,11 @@ export default async function TagPage({
   let teamGames: TeamGameRow[] = [];
   let teamNotes = new Map<string, string>();
   let teamAsOf: string | undefined;
+  // ポストシーズンの勝ち上がり（チームLPのみ）。ある間は「いま」ブロックの位置にこの欄を置く。
+  let psRun: TeamPsRun | null = null;
+  // ポストシーズン欄に出した声と試合。下の声ピックアップ・タイムラインで同じ声を2度出さない。
+  const psVoiceKeys = new Set<string>();
+  const psThreadIds = new Set<string>();
   if (hub) {
     // 所属は ja/en どちらのLPでも顔写真の横に出すので、導入文（ja のみ）と切り離して取る。
     const [snap, season, gamelog, layer] = await Promise.all([
@@ -346,7 +367,7 @@ export default async function TagPage({
   } else if (teamLp) {
     // タイムラインの声は**全記事**から拾う（タグ絞りのフィードではない）＝日次記事がその試合に
     // 触れていれば、専用記事がまだ無い直近の試合にも現地の声を出せる。
-    const [snap, standing, standings, schedule, notes, allThreads, layer] = await Promise.all([
+    const [snap, standing, standings, schedule, notes, allThreads, layer, postseason] = await Promise.all([
       getPlayersSnapshot(),
       standingOfTeam(teamLp.info.id),
       getStandings(),
@@ -354,7 +375,18 @@ export default async function TagPage({
       getTeamNotes(teamLp.info.slug),
       getAllThreads(),
       getGameVoices(),
+      getPostseason(),
     ]);
+    psRun =
+      postseason && postseason.season === seasonYear(snap)
+        ? teamPostseasonRun(postseason, teamLp.info.id, allThreads)
+        : null;
+    for (const g of psRun?.rounds.flatMap((r) => r.games) ?? []) {
+      if (!g.thread) continue;
+      psThreadIds.add(g.thread.id);
+      const { hook, voices: shown } = flowVoices(g.thread, PS_VOICES_PER_GAME, locale === 'en');
+      for (const c of hook ? [hook, ...shown] : shown) psVoiceKeys.add(voiceKey(c));
+    }
     teamPlayers = teamJpPlayers(snap, decoded);
     teamStanding = standing;
     teamAsOf = standings.asOf || undefined;
@@ -364,7 +396,9 @@ export default async function TagPage({
     teamNotes = notes;
     // チームLPの声ピックアップ＝記事由来＋声レイヤー（自軍の試合の声）を新しい順に。
     // 先頭1件は「いま」ブロックの顔なので、ここが止まると LP 全体が古く見える。
-    voices = voicesRecentFirst(voices, gameVoicesFor(layer, { teamId: teamLp.info.id, locale }));
+    voices = voicesRecentFirst(voices, gameVoicesFor(layer, { teamId: teamLp.info.id, locale })).filter(
+      (v) => !psVoiceKeys.has(voiceKey(v.comment)),
+    );
     // 反応記事が1件以上ある選手だけタグLP（海外の反応まとめ）へリンクする。0件のタグLPは
     // notFound()（上の feed ガードと同じ条件）＝リンクを出すと404に送ってしまうため。
     const tagCounts = tagCountMap(allThreads);
@@ -380,7 +414,11 @@ export default async function TagPage({
         teamPlayers,
         teamHubTopics(feed.map(tagsOfItem), decoded, teamPlayers, snap),
         feed.length,
-        standing ? standingPhraseJa(standing.row, standing.division) : undefined,
+        psRun
+          ? psRun.statusJa
+          : standing
+            ? `現在${standingPhraseJa(standing.row, standing.division)}。`
+            : undefined,
       );
       // チームも選手・ファイターと同じ編集部ノートを持てる（キーは teams.ts の slug＝whitesox 等。
       // 選手 slug と衝突しない）。導入文・順位表が全チーム共通の生成物なのに対し、ノートは
@@ -391,6 +429,9 @@ export default async function TagPage({
 
   // 「いま」ブロックの声は日替わりで回す（journalNowHighlight）。その中で本人が主語の声を優先するための判定。
   const nowSubject: VoiceSubject | null = hub ?? fighter;
+  const psNoteOnTop = Boolean(
+    psRun && editorNote && psRun.postStart && editorNote.updatedAt >= psRun.postStart,
+  );
   const nowAbout = nowSubject
     ? { isAbout: (text: string) => mentionsSubject(text, subjectPatterns(nowSubject)) }
     : undefined;
@@ -596,7 +637,26 @@ export default async function TagPage({
 
       {/* チームLP: 「いま」ブロック＝最新の現地の声＋順位・勝敗・ゲーム差の現在地（PlayerNow のチーム版）。
           着地の第一意図「いま現地はどう言ってる？／どういう状況？」にファーストビューで答える。 */}
-      {teamLp && (
+      {/* ポストシーズン中（と閉幕後のオフ）は「いま」をポストシーズン欄に差し替える＝地区順位は確定済みで、
+          来た人が知りたいのは勝ち上がりの現在地・次の試合・各試合の流れと現地の沸き方（2026-10-06 村山）。 */}
+      {teamLp && psRun && (
+        <TeamPostseason run={psRun} hub={teamLp} locale={locale} jpPlayers={teamPlayers} notes={teamNotes}>
+          {/* 編集部ノートは現在地のすぐ下へ＝「どう見られているか」を試合カードの前に30秒で掴ませる。
+              ポストシーズンに入ってから書き直したノートだけ（古いノートを先頭に掲げない＝下の定位置に出す）。 */}
+          {psNoteOnTop && editorNote && (
+            <div className="border-l-2 border-ink pl-4">
+              <p className="text-xs font-semibold text-ink-soft">
+                {t('tag.editorNote', { name: teamLp.nameJa })}
+              </p>
+              <p className="mt-2 max-w-prose text-[15px] leading-[1.8] text-ink">{editorNote.noteJa}</p>
+              <p className="mt-2 text-xs text-ink-mute">
+                {t('tag.editorNoteBy')} ・ {t('tag.updated', { date: editorNote.updatedAt })}
+              </p>
+            </div>
+          )}
+        </TeamPostseason>
+      )}
+      {teamLp && !psRun && (
         <TeamNow
           locale={locale}
           hub={teamLp}
@@ -614,6 +674,7 @@ export default async function TagPage({
           rows={teamGames}
           locale={locale}
           notes={teamNotes}
+          covered={psThreadIds}
           label={t('tag.teamGames', {
             name: locale === 'en' ? teamLp.info.nameEn : teamLp.nameJa,
           })}
@@ -626,7 +687,7 @@ export default async function TagPage({
       {/* チームLP: 現地ファンの声ピックアップ（選手LPと同じ機構）。先頭1件は「いま」が使うので外す。 */}
       {teamLp && (
         <TagVoices
-          voices={voices.slice(1)}
+          voices={psRun ? voices : voices.slice(1)}
           locale={locale}
           label={t('tag.voices', {
             name: locale === 'en' ? teamLp.info.nameEn : teamLp.nameJa,
@@ -676,7 +737,7 @@ export default async function TagPage({
       {/* 編集部ノート＝「海外でどう見られているか」の要約（ja のみ・手書き）。
           選手は「いま」（PlayerNow）、ファイターは FighterNow に吸収済みなので、
           ここに出すのは日誌なしの選手とチーム。 */}
-      {((hub && !journal) || teamLp) && editorNote && (
+      {((hub && !journal) || (teamLp && !psNoteOnTop)) && editorNote && (
         <section className="space-y-5">
           <SectionHeading
             label={t('tag.editorNote', { name: hub?.nameJa ?? teamLp!.nameJa })}

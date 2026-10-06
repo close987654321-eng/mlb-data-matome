@@ -5,6 +5,7 @@
   "format": "youtube",
   "sourceUrl": "https://www.youtube.com/watch?v=X_vy0pKs2eg",
   "fetchedAt": "2026-10-04T16:35:00+09:00",
+  "updatedAt": "2026-10-06T14:00:00+09:00",
   "title": {
     "en": "Murakami's first postseason homer lifts White Sox over Guardians in ALDS Game 1",
     "ja": "村上宗隆がポストシーズン初本塁打、ホワイトソックス対ガーディアンズ 地区シリーズ第1戦【海外の反応】"
@@ -19,6 +20,7 @@
     "publishedAt": "2026-10-03T20:24:00Z",
     "videoTitle": "WHITE SOX vs. GUARDIANS: ALDS Full Game 1 Highlights (October 3) | 2026 MLB | Munetaka Murakami "
   },
+  "series": { "id": "whitesox", "date": "2026-10-04", "opponent": { "ja": "ガーディアンズ", "en": "Guardians" } },
   "tags": ["村上宗隆", "ミゲル・バルガス", "ホワイトソックス", "ガーディアンズ", "ポストシーズン", "地区シリーズ", "海外の反応"],
   "stats": [
     {
@@ -70,6 +72,10 @@
   "game": {
     "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 3, "innings": [0, 0, 0, 2, 0, 0, 1, 0, 0], "hits": 6, "errors": 0, "lob": 4, "homers": [{ "id": 808959, "name": "Munetaka Murakami" }] },
     "home": { "ja": "ガーディアンズ", "en": "Cleveland Guardians", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 0, "lob": 7 },
-    "decisions": { "winner": "Bryan Hudson", "loser": "Parker Messick", "save": "Grant Taylor" }
+    "decisions": { "winner": "Bryan Hudson", "loser": "Parker Messick", "save": "Grant Taylor" },
+    "scoring": [
+      { "inning": 4, "top": true, "batterId": 808959, "batter": "Munetaka Murakami", "event": "Home Run", "away": 2, "home": 0 },
+      { "inning": 7, "top": true, "batterId": 695657, "batter": "Colson Montgomery", "event": "Double", "away": 3, "home": 0 }
+    ]
   }
 }

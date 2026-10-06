@@ -120,11 +120,27 @@ export type ThreadGameSide = {
   league?: 'AL' | 'NL'; // 地区ラベルの組み立て用（standings.ts の League と同じ）
   division?: 'East' | 'Central' | 'West'; // 同上（DivisionName と同じ）
 };
+/**
+ * 得点経過の1プレー（API の scoringPlays 由来の公知の事実）。ポストシーズンの試合だけ持つ。
+ * 説明文は持たない＝打者名と event から表示側（src/lib/scoring.ts）が日本語で組む。
+ */
+export type ThreadScoringPlay = {
+  inning: number;
+  top: boolean; // 表（ビジターの攻撃）か
+  batterId: number; // MLB 選手ID（日本語表記はカタログで引く）
+  batter: string; // 公式英語表記
+  event: string; // API の result.event（"Single" / "Home Run" / "Error" など）
+  away: number; // このプレー直後のビジターの得点
+  home: number; // 同ホームの得点
+};
+
 export type ThreadGame = {
   away: ThreadGameSide; // ビジター（表）
   home: ThreadGameSide; // ホーム（裏）
   /** 勝敗投手・セーブ（API の decisions）。選手名は英語表記のまま＝公式表記 */
   decisions?: { winner?: string; loser?: string; save?: string };
+  /** 得点経過（ポストシーズンの試合だけ・backfill-games が書く）。試合の流れを事実だけで見せる */
+  scoring?: ThreadScoringPlay[];
 };
 
 /**

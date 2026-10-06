@@ -58,6 +58,13 @@
   "game": {
     "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [0, 0, 0, 0, 0, 1, 0, 0, 2], "hits": 4, "errors": 0, "lob": 4, "homers": [{ "id": 669221, "name": "Sean Murphy" }, { "id": 645277, "name": "Ozzie Albies" }] },
     "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 5, "innings": [0, 0, 0, 2, 0, 3, 0, 0, null], "hits": 8, "errors": 0, "lob": 6, "homers": [{ "id": 663656, "name": "Kyle Tucker" }, { "id": 571970, "name": "Max Muncy" }, { "id": 606192, "name": "Teoscar Hernández" }] },
-    "decisions": { "winner": "Tarik Skubal", "loser": "Victor Mederos", "save": "Evan Phillips" }
+    "decisions": { "winner": "Tarik Skubal", "loser": "Victor Mederos", "save": "Evan Phillips" },
+    "scoring": [
+      { "inning": 4, "top": false, "batterId": 606192, "batter": "Teoscar Hernández", "event": "Home Run", "away": 0, "home": 2 },
+      { "inning": 6, "top": true, "batterId": 669221, "batter": "Sean Murphy", "event": "Home Run", "away": 1, "home": 2 },
+      { "inning": 6, "top": false, "batterId": 663656, "batter": "Kyle Tucker", "event": "Home Run", "away": 1, "home": 4 },
+      { "inning": 6, "top": false, "batterId": 571970, "batter": "Max Muncy", "event": "Home Run", "away": 1, "home": 5 },
+      { "inning": 9, "top": true, "batterId": 645277, "batter": "Ozzie Albies", "event": "Home Run", "away": 3, "home": 5 }
+    ]
   }
 }

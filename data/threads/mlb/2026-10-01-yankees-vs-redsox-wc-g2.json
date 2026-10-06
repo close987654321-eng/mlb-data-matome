@@ -188,6 +188,17 @@
   "game": {
     "away": { "ja": "レッドソックス", "en": "Boston Red Sox", "score": 2, "innings": [0, 0, 0, 0, 0, 1, 1, 0, 0], "hits": 4, "errors": 1, "lob": 4, "homers": [{ "id": 575929, "name": "Willson Contreras" }, { "id": 686765, "name": "Nick Sogard" }] },
     "home": { "ja": "ヤンキース", "en": "New York Yankees", "score": 9, "innings": [0, 0, 0, 1, 1, 6, 1, 0, null], "hits": 14, "errors": 0, "lob": 7, "homers": [{ "id": 641355, "name": "Cody Bellinger" }, { "id": 671277, "name": "Luis García Jr." }] },
-    "decisions": { "winner": "Max Fried", "loser": "Sonny Gray" }
+    "decisions": { "winner": "Max Fried", "loser": "Sonny Gray" },
+    "scoring": [
+      { "inning": 4, "top": false, "batterId": 671277, "batter": "Luis García Jr.", "event": "Home Run", "away": 0, "home": 1 },
+      { "inning": 5, "top": false, "batterId": 641355, "batter": "Cody Bellinger", "event": "Single", "away": 0, "home": 2 },
+      { "inning": 6, "top": true, "batterId": 575929, "batter": "Willson Contreras", "event": "Home Run", "away": 1, "home": 2 },
+      { "inning": 6, "top": false, "batterId": 806146, "batter": "George Lombard Jr.", "event": "Single", "away": 1, "home": 3 },
+      { "inning": 6, "top": false, "batterId": 669224, "batter": "Austin Wells", "event": "Sac Fly", "away": 1, "home": 4 },
+      { "inning": 6, "top": false, "batterId": 641857, "batter": "Ryan McMahon", "event": "Groundout", "away": 1, "home": 5 },
+      { "inning": 6, "top": false, "batterId": 641355, "batter": "Cody Bellinger", "event": "Home Run", "away": 1, "home": 8 },
+      { "inning": 7, "top": true, "batterId": 686765, "batter": "Nick Sogard", "event": "Home Run", "away": 2, "home": 8 },
+      { "inning": 7, "top": false, "batterId": 669224, "batter": "Austin Wells", "event": "Single", "away": 2, "home": 9 }
+    ]
   }
 }

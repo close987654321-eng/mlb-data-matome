@@ -223,67 +223,17 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ホワイトソックス",
-      "en": "Chicago White Sox",
-      "score": 7,
-      "innings": [
-        4,
-        0,
-        0,
-        0,
-        0,
-        3,
-        0,
-        0,
-        0
-      ],
-      "hits": 8,
-      "errors": 0,
-      "lob": 6,
-      "homers": [
-        {
-          "id": 805367,
-          "name": "Chase Meidroth"
-        }
-      ]
-    },
-    "home": {
-      "ja": "アストロズ",
-      "en": "Houston Astros",
-      "score": 3,
-      "innings": [
-        1,
-        1,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "hits": 5,
-      "errors": 2,
-      "lob": 5,
-      "homers": [
-        {
-          "id": 701358,
-          "name": "Cam Smith"
-        },
-        {
-          "id": 514888,
-          "name": "Jose Altuve"
-        },
-        {
-          "id": 665161,
-          "name": "Jeremy Peña"
-        }
-      ]
-    },
-    "decisions": {
-      "winner": "Anthony Kay",
-      "loser": "Hunter Brown"
-    }
+    "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 7, "innings": [4, 0, 0, 0, 0, 3, 0, 0, 0], "hits": 8, "errors": 0, "lob": 6, "homers": [{ "id": 805367, "name": "Chase Meidroth" }] },
+    "home": { "ja": "アストロズ", "en": "Houston Astros", "score": 3, "innings": [1, 1, 0, 1, 0, 0, 0, 0, 0], "hits": 5, "errors": 2, "lob": 5, "homers": [{ "id": 701358, "name": "Cam Smith" }, { "id": 514888, "name": "Jose Altuve" }, { "id": 665161, "name": "Jeremy Peña" }] },
+    "decisions": { "winner": "Anthony Kay", "loser": "Hunter Brown" },
+    "scoring": [
+      { "inning": 1, "top": true, "batterId": 691019, "batter": "Kyle Teel", "event": "Single", "away": 1, "home": 0 },
+      { "inning": 1, "top": true, "batterId": 643217, "batter": "Andrew Benintendi", "event": "Single", "away": 3, "home": 0 },
+      { "inning": 1, "top": true, "batterId": 671976, "batter": "Tristan Peters", "event": "Single", "away": 4, "home": 0 },
+      { "inning": 1, "top": false, "batterId": 665161, "batter": "Jeremy Peña", "event": "Home Run", "away": 4, "home": 1 },
+      { "inning": 2, "top": false, "batterId": 701358, "batter": "Cam Smith", "event": "Home Run", "away": 4, "home": 2 },
+      { "inning": 4, "top": false, "batterId": 514888, "batter": "Jose Altuve", "event": "Home Run", "away": 4, "home": 3 },
+      { "inning": 6, "top": true, "batterId": 805367, "batter": "Chase Meidroth", "event": "Home Run", "away": 7, "home": 3 }
+    ]
   }
 }

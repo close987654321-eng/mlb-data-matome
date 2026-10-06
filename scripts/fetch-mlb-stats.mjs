@@ -1038,6 +1038,35 @@ async function fetchHomers(gamePk) {
 }
 
 /**
+ * その試合の得点経過（何回の表/裏に・誰の打席の・何のプレーで・その時点のスコア）。
+ * ポストシーズンの試合だけ記事に焼き込む＝チームLPのポストシーズン欄と試合結果ボックスで
+ * 「1回に先制される→4回に村上のタイムリー→6回に逆転」という**試合の流れ**を事実だけで見せるため
+ * （2026-10-06 村山「流れがわかるように」）。説明文（description）は API が選手名を
+ * テンプレート（${person|fullName|id}）で返すので持たない＝打者名と event から表示側で組む。
+ * 取れなければ null を返し、得点経過だけ欠けた状態で続行する（記事を壊さない）。
+ */
+async function fetchScoringPlays(gamePk) {
+  try {
+    const j = await getJson(`${BASE}/schedule?gamePk=${gamePk}&hydrate=scoringplays`);
+    const plays = j.dates?.[0]?.games?.[0]?.scoringPlays ?? [];
+    return plays
+      .map((p) => ({
+        inning: p.about?.inning,
+        top: p.about?.halfInning === 'top',
+        batterId: p.matchup?.batter?.id,
+        batter: p.matchup?.batter?.fullName,
+        event: p.result?.event,
+        away: p.result?.awayScore,
+        home: p.result?.homeScore,
+      }))
+      .filter((p) => p.inning && p.batterId && p.batter && p.event && p.away != null && p.home != null);
+  } catch (e) {
+    console.log(`  （gamePk ${gamePk} の得点経過を取得できず省略: ${e.message}）`);
+    return null;
+  }
+}
+
+/**
  * 指定日(ET)時点の地区順位（teamId → {rank, league, division}）。
  * standings は date 指定でその日の順位を返す＝過去記事にも「その試合時点の順位」を焼き込める
  * （data/standings.json＝常に最新 を過去記事に出すと順位が嘘になる）。
@@ -1559,9 +1588,11 @@ async function runBackfillGames({ apply, force } = {}) {
     const file = path.join(dir, f);
     let t;
     try { t = JSON.parse(readFileSync(file, 'utf8')); } catch { continue; }
-    // 線スコアまで入っている記事は完成扱い（--force のときだけ書き直す）。
-    if (t.game?.away?.innings?.length && !force) { already++; continue; }
     const id = t.id ?? f.replace(/\.json$/, '');
+    // 線スコアまで入っている記事は完成扱い（--force のときだけ書き直す）。ポストシーズンの試合記事
+    // （id 末尾が "-ds-g2" 等）は得点経過（scoring）まで入って完成＝導入前に書いた記事にも後から足す。
+    const psId = /-(?:wc|ds|cs|ws)-g\d+$/.test(id);
+    if (t.game?.away?.innings?.length && !force && !(psId && !t.game.scoring)) { already++; continue; }
     // 対戦2チームの特定は ①id の "X-vs-Y" ②記事が既に持つ game の英語チーム名 の順に試す。
     // ②があるので "ohtani-bat-goes-flying" のような単発ハイライト記事や、DH の "-g1"/"-game2" 付き
     // id でも拾える（②は記事に書かれている事実だけを使う＝推測しない）。
@@ -1623,6 +1654,7 @@ async function runBackfillGames({ apply, force } = {}) {
     const isPs = PS_GAME_TYPES.has(g.gameType);
     const ranks = isPs ? new Map() : rankCache.get(etDate);
     const homers = await fetchHomers(g.gamePk); // 本塁打の打者（取れなければ null）
+    const scoring = isPs ? await fetchScoringPlays(g.gamePk) : null; // 得点経過（ポストシーズンだけ）
     /** API の1チーム分を JSON の1行（インライン）に組む。取れなかった項目は書かない＝捏造しない。 */
     const sideLine = (src, enName, hrs) => {
       const parts = [
@@ -1657,12 +1689,22 @@ async function runBackfillGames({ apply, force } = {}) {
       d.loser && `"loser": ${JSON.stringify(d.loser)}`,
       d.save && `"save": ${JSON.stringify(d.save)}`,
     ].filter(Boolean);
-    const block =
-      '  "game": {\n' +
-      `    "away": ${sideLine(g.awaySide, g.away, homers?.away)},\n` +
-      `    "home": ${sideLine(g.homeSide, g.home, homers?.home)}` +
-      (decisionParts.length ? `,\n    "decisions": { ${decisionParts.join(', ')} }\n` : '\n') +
-      '  }';
+    const fields = [
+      `    "away": ${sideLine(g.awaySide, g.away, homers?.away)}`,
+      `    "home": ${sideLine(g.homeSide, g.home, homers?.home)}`,
+    ];
+    if (decisionParts.length) fields.push(`    "decisions": { ${decisionParts.join(', ')} }`);
+    // 得点経過は1プレー1行（差分で読めるように）。最終スコアと食い違う取得は書かない＝途中で切れた経過を出さない。
+    const last = scoring?.at(-1);
+    if (scoring?.length && last.away === g.awayScore && last.home === g.homeScore) {
+      const rows = scoring.map(
+        (p) =>
+          `      { "inning": ${p.inning}, "top": ${p.top}, "batterId": ${p.batterId}, "batter": ${JSON.stringify(p.batter)}, ` +
+          `"event": ${JSON.stringify(p.event)}, "away": ${p.away}, "home": ${p.home} }`,
+      );
+      fields.push(`    "scoring": [\n${rows.join(',\n')}\n    ]`);
+    }
+    const block = '  "game": {\n' + fields.join(',\n') + '\n  }';
     const isNew = !t.game;
     if (apply) {
       // JSON.stringify で全文を書き戻すと既存のインライン整形（opponent/tags の1行表記）まで展開され

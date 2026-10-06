@@ -224,6 +224,15 @@
   "game": {
     "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 4, "innings": [1, 0, 0, 0, 0, 0, 0, 2, 0, 1], "hits": 12, "errors": 0, "lob": 9, "homers": [{ "id": 547180, "name": "Bryce Harper" }, { "id": 664761, "name": "Alec Bohm" }, { "id": 656941, "name": "Kyle Schwarber" }] },
     "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [1, 0, 0, 0, 0, 0, 2, 0, 0, 0], "hits": 9, "errors": 0, "lob": 11 },
-    "decisions": { "winner": "Andrew Painter", "loser": "Didier Fuentes" }
+    "decisions": { "winner": "Andrew Painter", "loser": "Didier Fuentes" },
+    "scoring": [
+      { "inning": 1, "top": true, "batterId": 547180, "batter": "Bryce Harper", "event": "Single", "away": 1, "home": 0 },
+      { "inning": 1, "top": false, "batterId": 621566, "batter": "Matt Olson", "event": "Single", "away": 1, "home": 1 },
+      { "inning": 7, "top": false, "batterId": 686948, "batter": "Drake Baldwin", "event": "Double", "away": 1, "home": 2 },
+      { "inning": 7, "top": false, "batterId": 621566, "batter": "Matt Olson", "event": "Sac Fly", "away": 1, "home": 3 },
+      { "inning": 8, "top": true, "batterId": 656941, "batter": "Kyle Schwarber", "event": "Home Run", "away": 2, "home": 3 },
+      { "inning": 8, "top": true, "batterId": 547180, "batter": "Bryce Harper", "event": "Home Run", "away": 3, "home": 3 },
+      { "inning": 10, "top": true, "batterId": 664761, "batter": "Alec Bohm", "event": "Home Run", "away": 4, "home": 3 }
+    ]
   }
 }

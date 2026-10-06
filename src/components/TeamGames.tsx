@@ -30,12 +30,18 @@ export default async function TeamGames({
   locale,
   label,
   notes,
+  covered,
 }: {
   rows: TeamGameRow[];
   locale: Locale;
   label: string;
   /** 試合日（JST）→ 中の人メモ。data/team-notes.json 由来（ja のみ）。 */
   notes: Map<string, string>;
+  /**
+   * 上のポストシーズン欄が声とメモをもう出している試合の記事ID。その行は結果とリンクだけにして、
+   * 同じ声・同じメモを1ページに2度並べない。
+   */
+  covered?: Set<string>;
 }) {
   if (rows.length === 0) return null;
   const t = await getTranslations();
@@ -89,9 +95,11 @@ export default async function TeamGames({
       row;
     const mark = win == null ? '－' : en ? (win ? 'W' : 'L') : win ? '○' : '●';
     const [, m, d] = date.split('-');
-    const note = en ? undefined : notes.get(date);
+    const shownAbove = Boolean(thread && covered?.has(thread.id));
+    const note = en || shownAbove ? undefined : notes.get(date);
     // 声は**声が取れた全試合**に出す（2026-08-07 村山「各試合に海外ファンのコメントを」）。
-    const voiceBody = voice ? (en ? voice.bodyEn || voice.bodyJa : voice.bodyJa) : '';
+    // ポストシーズン欄が同じ試合の声をまとめて出している行だけは省く（同じ声の二重掲載を避ける）。
+    const voiceBody = voice && !shownAbove ? (en ? voice.bodyEn || voice.bodyJa : voice.bodyJa) : '';
     // 著者名の書式と票数の記号は媒体で変わる。声レイヤーは常に YouTube 由来。
     const voiceKind = voiceUrl ? 'youtube' : (thread?.format ?? 'reddit');
 

@@ -58,6 +58,9 @@
   "game": {
     "away": { "ja": "ヤンキース", "en": "New York Yankees", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 1, "errors": 0, "lob": 2 },
     "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 1, "innings": [0, 0, 1, 0, 0, 0, 0, 0, null], "hits": 5, "errors": 0, "lob": 7, "homers": [{ "id": 666018, "name": "Jonathan Aranda" }] },
-    "decisions": { "winner": "Drew Rasmussen", "loser": "Gerrit Cole", "save": "Bryan Baker" }
+    "decisions": { "winner": "Drew Rasmussen", "loser": "Gerrit Cole", "save": "Bryan Baker" },
+    "scoring": [
+      { "inning": 3, "top": false, "batterId": 666018, "batter": "Jonathan Aranda", "event": "Home Run", "away": 0, "home": 1 }
+    ]
   }
 }

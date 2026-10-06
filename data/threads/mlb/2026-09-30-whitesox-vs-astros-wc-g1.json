@@ -286,6 +286,15 @@
   "game": {
     "away": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 6, "innings": [1, 2, 0, 1, 1, 0, 1, 0, 0], "hits": 11, "errors": 1, "lob": 9, "homers": [{ "id": 695657, "name": "Colson Montgomery" }] },
     "home": { "ja": "アストロズ", "en": "Houston Astros", "score": 3, "innings": [0, 0, 0, 0, 2, 0, 0, 1, 0], "hits": 6, "errors": 1, "lob": 6, "homers": [{ "id": 676369, "name": "Nelson Velázquez" }] },
-    "decisions": { "winner": "Jordan Hicks", "loser": "AJ Blubaugh" }
+    "decisions": { "winner": "Jordan Hicks", "loser": "AJ Blubaugh" },
+    "scoring": [
+      { "inning": 1, "top": true, "batterId": 808959, "batter": "Munetaka Murakami", "event": "Sac Fly", "away": 1, "home": 0 },
+      { "inning": 2, "top": true, "batterId": 803011, "batter": "Sam Antonacci", "event": "Single", "away": 3, "home": 0 },
+      { "inning": 4, "top": true, "batterId": 695657, "batter": "Colson Montgomery", "event": "Home Run", "away": 4, "home": 0 },
+      { "inning": 5, "top": true, "batterId": 805367, "batter": "Chase Meidroth", "event": "Single", "away": 5, "home": 0 },
+      { "inning": 5, "top": false, "batterId": 676369, "batter": "Nelson Velázquez", "event": "Home Run", "away": 5, "home": 2 },
+      { "inning": 7, "top": true, "batterId": 695731, "batter": "Braden Montgomery", "event": "Wild Pitch", "away": 6, "home": 2 },
+      { "inning": 8, "top": false, "batterId": 514888, "batter": "Jose Altuve", "event": "Error", "away": 6, "home": 3 }
+    ]
   }
 }

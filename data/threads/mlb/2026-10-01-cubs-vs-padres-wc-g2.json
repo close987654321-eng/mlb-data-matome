@@ -228,6 +228,12 @@
   "game": {
     "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 1, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 0], "hits": 5, "errors": 0, "lob": 7 },
     "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 4, "innings": [0, 2, 0, 2, 0, 0, 0, 0, null], "hits": 8, "errors": 0, "lob": 5, "homers": [{ "id": 657757, "name": "Gavin Sheets" }] },
-    "decisions": { "winner": "Bradgley Rodriguez", "loser": "Kevin Gausman", "save": "Mason Miller" }
+    "decisions": { "winner": "Bradgley Rodriguez", "loser": "Kevin Gausman", "save": "Mason Miller" },
+    "scoring": [
+      { "inning": 2, "top": false, "batterId": 593428, "batter": "Xander Bogaerts", "event": "Single", "away": 0, "home": 1 },
+      { "inning": 2, "top": false, "batterId": 806956, "batter": "Ethan Salas", "event": "Sac Fly", "away": 0, "home": 2 },
+      { "inning": 4, "top": true, "batterId": 663538, "batter": "Nico Hoerner", "event": "Single", "away": 1, "home": 2 },
+      { "inning": 4, "top": false, "batterId": 657757, "batter": "Gavin Sheets", "event": "Home Run", "away": 1, "home": 4 }
+    ]
   }
 }

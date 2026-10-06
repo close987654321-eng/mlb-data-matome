@@ -216,58 +216,15 @@
     }
   ],
   "game": {
-    "away": {
-      "ja": "ブレーブス",
-      "en": "Atlanta Braves",
-      "score": 3,
-      "innings": [
-        1,
-        0,
-        0,
-        0,
-        1,
-        0,
-        1,
-        0,
-        0
-      ],
-      "hits": 6,
-      "errors": 0,
-      "lob": 11
-    },
-    "home": {
-      "ja": "ドジャース",
-      "en": "Los Angeles Dodgers",
-      "score": 2,
-      "innings": [
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        1
-      ],
-      "hits": 6,
-      "errors": 0,
-      "lob": 7,
-      "homers": [
-        {
-          "id": 571970,
-          "name": "Max Muncy"
-        },
-        {
-          "id": 518692,
-          "name": "Freddie Freeman"
-        }
-      ]
-    },
-    "decisions": {
-      "winner": "Dylan Lee",
-      "loser": "Kris Bubic",
-      "save": "Raisel Iglesias"
-    }
+    "away": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 3, "innings": [1, 0, 0, 0, 1, 0, 1, 0, 0], "hits": 6, "errors": 0, "lob": 11 },
+    "home": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 2, "innings": [0, 0, 0, 1, 0, 0, 0, 0, 1], "hits": 6, "errors": 0, "lob": 7, "homers": [{ "id": 571970, "name": "Max Muncy" }, { "id": 518692, "name": "Freddie Freeman" }] },
+    "decisions": { "winner": "Dylan Lee", "loser": "Kris Bubic", "save": "Raisel Iglesias" },
+    "scoring": [
+      { "inning": 1, "top": true, "batterId": 643289, "batter": "Mauricio Dubón", "event": "Single", "away": 1, "home": 0 },
+      { "inning": 4, "top": false, "batterId": 518692, "batter": "Freddie Freeman", "event": "Home Run", "away": 1, "home": 1 },
+      { "inning": 5, "top": true, "batterId": 643289, "batter": "Mauricio Dubón", "event": "Wild Pitch", "away": 2, "home": 1 },
+      { "inning": 7, "top": true, "batterId": 671739, "batter": "Michael Harris II", "event": "Double", "away": 3, "home": 1 },
+      { "inning": 9, "top": false, "batterId": 571970, "batter": "Max Muncy", "event": "Home Run", "away": 3, "home": 2 }
+    ]
   }
 }

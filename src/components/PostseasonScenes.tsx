@@ -83,6 +83,7 @@ export function SceneCard({ scene: s, locale }: { scene: Scene; locale: string }
           lpTags={s.thread.tags}
           heading={null}
           className="mt-5"
+          showScoring={false}
         />
       )}
 

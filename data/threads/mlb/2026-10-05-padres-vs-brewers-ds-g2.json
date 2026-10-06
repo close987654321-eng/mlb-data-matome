@@ -57,6 +57,14 @@
   "game": {
     "away": { "ja": "パドレス", "en": "San Diego Padres", "score": 3, "innings": [1, 0, 0, 0, 1, 0, 1, 0, 0], "hits": 5, "errors": 2, "lob": 8 },
     "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 4, "innings": [0, 0, 0, 0, 1, 0, 1, 0, 2], "hits": 5, "errors": 3, "lob": 7 },
-    "decisions": { "winner": "Trevor Megill", "loser": "Mason Miller" }
+    "decisions": { "winner": "Trevor Megill", "loser": "Mason Miller" },
+    "scoring": [
+      { "inning": 1, "top": true, "batterId": 664034, "batter": "Ty France", "event": "Single", "away": 1, "home": 0 },
+      { "inning": 5, "top": true, "batterId": 687957, "batter": "Dustin Harris", "event": "Forceout", "away": 2, "home": 0 },
+      { "inning": 5, "top": false, "batterId": 686217, "batter": "Sal Frelick", "event": "Single", "away": 2, "home": 1 },
+      { "inning": 7, "top": true, "batterId": 664034, "batter": "Ty France", "event": "Single", "away": 3, "home": 1 },
+      { "inning": 7, "top": false, "batterId": 666152, "batter": "David Hamilton", "event": "Field Error", "away": 3, "home": 2 },
+      { "inning": 9, "top": false, "batterId": 694192, "batter": "Jackson Chourio", "event": "Single", "away": 3, "home": 4 }
+    ]
   }
 }

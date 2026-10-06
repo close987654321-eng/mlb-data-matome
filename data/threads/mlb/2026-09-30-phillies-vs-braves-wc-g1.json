@@ -280,6 +280,13 @@
   "game": {
     "away": { "ja": "フィリーズ", "en": "Philadelphia Phillies", "score": 3, "innings": [1, 0, 0, 0, 0, 0, 2, 0, 0], "hits": 6, "errors": 0, "lob": 4 },
     "home": { "ja": "ブレーブス", "en": "Atlanta Braves", "score": 5, "innings": [0, 1, 0, 0, 0, 1, 0, 3, null], "hits": 7, "errors": 0, "lob": 6, "homers": [{ "id": 663586, "name": "Austin Riley" }] },
-    "decisions": { "winner": "Dylan Lee", "loser": "Jhoan Duran", "save": "Raisel Iglesias" }
+    "decisions": { "winner": "Dylan Lee", "loser": "Jhoan Duran", "save": "Raisel Iglesias" },
+    "scoring": [
+      { "inning": 1, "top": true, "batterId": 664761, "batter": "Alec Bohm", "event": "Double", "away": 1, "home": 0 },
+      { "inning": 2, "top": false, "batterId": 573262, "batter": "Mike Yastrzemski", "event": "Single", "away": 1, "home": 1 },
+      { "inning": 6, "top": false, "batterId": 645277, "batter": "Ozzie Albies", "event": "Triple", "away": 1, "home": 2 },
+      { "inning": 7, "top": true, "batterId": 592663, "batter": "J.T. Realmuto", "event": "Triple", "away": 3, "home": 2 },
+      { "inning": 8, "top": false, "batterId": 663586, "batter": "Austin Riley", "event": "Home Run", "away": 3, "home": 5 }
+    ]
   }
 }

@@ -314,6 +314,15 @@
   "game": {
     "away": { "ja": "カブス", "en": "Chicago Cubs", "score": 0, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 0], "hits": 3, "errors": 1, "lob": 8 },
     "home": { "ja": "パドレス", "en": "San Diego Padres", "score": 8, "innings": [2, 0, 1, 1, 3, 0, 1, 0, null], "hits": 13, "errors": 1, "lob": 4, "homers": [{ "id": 592518, "name": "Manny Machado" }, { "id": 665487, "name": "Fernando Tatis Jr." }, { "id": 593428, "name": "Xander Bogaerts" }] },
-    "decisions": { "winner": "Michael King", "loser": "Matthew Boyd" }
+    "decisions": { "winner": "Michael King", "loser": "Matthew Boyd" },
+    "scoring": [
+      { "inning": 1, "top": false, "batterId": 665487, "batter": "Fernando Tatis Jr.", "event": "Home Run", "away": 0, "home": 1 },
+      { "inning": 1, "top": false, "batterId": 592518, "batter": "Manny Machado", "event": "Home Run", "away": 0, "home": 2 },
+      { "inning": 3, "top": false, "batterId": 592518, "batter": "Manny Machado", "event": "Double", "away": 0, "home": 3 },
+      { "inning": 4, "top": false, "batterId": 593428, "batter": "Xander Bogaerts", "event": "Home Run", "away": 0, "home": 4 },
+      { "inning": 5, "top": false, "batterId": 701538, "batter": "Jackson Merrill", "event": "Single", "away": 0, "home": 6 },
+      { "inning": 5, "top": false, "batterId": 669720, "batter": "Austin Hays", "event": "Passed Ball", "away": 0, "home": 7 },
+      { "inning": 7, "top": false, "batterId": 687957, "batter": "Dustin Harris", "event": "Stolen Base", "away": 0, "home": 8 }
+    ]
   }
 }

@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/lib/navigation';
 import { getTeam, teamLogoUrl, teamAbbr } from '@/lib/teams';
 import { playerLabel, type PlayerLabel } from '@/lib/playerNames';
+import { scoringLines } from '@/lib/scoring';
 import { divisionRankShort } from '@/lib/standings';
 import { teamHubOf, TEAM_HUB_MIN_ARTICLES } from '@/lib/teamHub';
 import { getAllTags } from '@/lib/tags';
@@ -30,6 +31,7 @@ export default async function GameBox({
   heading,
   className,
   lpTags,
+  showScoring = true,
 }: {
   game: ThreadGame;
   /** 試合日の表示（例: 2026.7.30）。記事の series.date / id 由来＝JST */
@@ -43,6 +45,8 @@ export default async function GameBox({
   heading?: React.ReactNode | null;
   /** 外側の余白の差し替え（既定 mt-8）。 */
   className?: string;
+  /** 得点経過を出すか（名場面ライブのように場面の説明が別にある面では畳む）。 */
+  showScoring?: boolean;
 }) {
   const t = await getTranslations();
   const { away, home } = game;
@@ -72,6 +76,8 @@ export default async function GameBox({
       homerLabels.set(h.id, await playerLabel(h.name, { locale, mlbId: h.id }));
     }
   }
+  // 得点経過（ポストシーズンの試合だけ持つ）。スコアは「ビジター-ホーム」の順＝上の線スコアと同じ並び。
+  const scoring = showScoring ? await scoringLines(game, locale) : [];
   const dec = game.decisions;
   const decisions = dec
     ? {
@@ -263,6 +269,33 @@ export default async function GameBox({
                   </span>
                 );
               })}
+          </div>
+        )}
+
+        {/* ③+ 得点経過＝試合の流れ（何回に誰の何で何点・その時点のスコア・先制/逆転などの節目） */}
+        {scoring.length > 0 && (
+          <div className="border-t border-line px-5 py-3">
+            <p className="text-xs text-ink-mute">{locale === 'en' ? 'Scoring' : '得点経過'}</p>
+            <ol className="mt-1.5 space-y-1">
+              {scoring.map((l, i) => (
+                <li key={i} className="flex items-baseline gap-2.5 text-xs">
+                  <span className="w-12 shrink-0 tabular-nums text-ink-mute">{l.inning}</span>
+                  <span className="min-w-0 flex-1 text-ink-soft">
+                    <span className="mr-1.5 font-semibold text-ink-mute">
+                      {teamAbbr(getTeam(l.teamJa)?.id) ?? l.team}
+                    </span>
+                    {l.text}
+                    <span className="ml-1 tabular-nums text-ink-mute">+{l.runs}</span>
+                    {l.turn && (
+                      <span className="ml-1.5 rounded-[2px] px-1 py-px font-semibold text-ink ring-1 ring-line">
+                        {l.turn}
+                      </span>
+                    )}
+                  </span>
+                  <span className="shrink-0 font-semibold tabular-nums text-ink">{l.score}</span>
+                </li>
+              ))}
+            </ol>
           </div>
         )}
 
