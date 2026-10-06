@@ -58,6 +58,12 @@ import type { Metadata } from 'next';
  *
  * en は全ページ noindex（layout 参照）なので触らず既定を継ぐ。
  */
+/**
+ * トップの看板（ja）。<title> と h1 の唯一の正＝検索結果のタイトルと、ページを開いて最初に目に入る見出しを
+ * 同じ文言にそろえる（2026-10-06 村山指示）。h1 はスニペットにも使われるので、クエリ「MLB 海外の反応」と同じ語で始める。
+ */
+const HOME_TITLE_JA = 'MLBの海外の反応まとめ【メジャーリーグ現地ファンの声を日本語訳】';
+
 async function homeSeoJa(): Promise<{ title: string; description: string }> {
   const [threads, snap] = await Promise.all([getAllThreads(), getPlayersSnapshot()]);
   // 今季の主役3人＝PlayerRail と同じ選び方（players.ts のカタログ順 × 今季成績がある人）。
@@ -76,7 +82,7 @@ async function homeSeoJa(): Promise<{ title: string; description: string }> {
     `全${threads.length}件を新着順で掲載${updated ? `・最終更新 ${updated}` : ''}。`,
   ];
   return {
-    title: 'MLBの海外の反応まとめ【メジャーリーグ現地ファンの声を日本語訳】',
+    title: HOME_TITLE_JA,
     description: parts.filter(Boolean).join(''),
   };
 }
@@ -299,9 +305,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
         </div>
         {/* h1 と直下の説明は検索結果のスニペットに使われる（2026-10-06 実測: 「mlb 海外の反応」で Google は
             meta description でなくここを表示し、4位で CTR 2%）。旧文言「MLB・ボクシング・MMA。」はクエリの
-            MLB と噛み合わなかったので、題字の主語を「MLBの海外の反応」に揃えた（title と同じ語）。 */}
+            MLB と噛み合わなかった。ja は <title> と同じ文言（HOME_TITLE_JA）を h1 に出す。 */}
         <h1 className="mt-5 text-lg font-bold leading-snug tracking-[-0.01em] text-ink sm:text-xl">
-          {t('home.heroTitle')}
+          {locale === 'ja' ? HOME_TITLE_JA : t('home.heroTitle')}
         </h1>
         <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-soft">{t('home.heroBody')}</p>
       </section>

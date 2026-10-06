@@ -2,12 +2,16 @@ import { Link } from '@/lib/navigation';
 import { scoreLabel } from '@/lib/scoreLabel';
 import { leagueName, roundName } from '@/lib/postseason';
 import type { Scene } from '@/lib/postseasonScenes';
+import type { Locale } from '@/lib/i18n';
+import GameBox from '@/components/GameBox';
 
 /**
  * ポストシーズン名場面の部品（/postseason/live の本体と、/postseason・TOP の入口）。
  *
  * 動画を埋め込まない＝テキストだけで山場の熱を伝える面。だから1場面の中の順番を固定する:
- * 試合の情報（どの試合か）→ 見出し（何が起きたか）→ 状況（事実だけ）→ 海外の反応（現地の熱）→ 中の人（読者の隣で見ている人の一言）。
+ * 試合の情報（どの試合か）→ 見出し（何が起きたか）→ 状況（事実だけ）→ スコアカード（記事と同じ GameBox）→
+ * 海外の反応（現地の熱）→ 中の人（読者の隣で見ている人の一言）。
+ * スコアカードは2026-10-06追加（村山依頼）＝動画が無いぶん、何回にどう点が動いたかを線スコアで見せる。
  * 読み心地の規律（CLAUDE.md §6）どおり、コメント列は枠で囲まず罫線と余白、強調は左の2px墨線、票数は scoreLabel。
  */
 
@@ -25,6 +29,12 @@ function roundLine(s: Scene, en: boolean): string {
   const lg = s.league ? `${en ? s.league : leagueName(s.league, false)} ` : '';
   const g = s.gameN ? (en ? ` Game ${s.gameN}` : ` 第${s.gameN}戦`) : '';
   return `${lg}${roundName(s.round, en)}${g}`;
+}
+
+/** スコアカードの日付表示（記事ページの GameBox と同じ規則＝記事の日付・JST）。 */
+function gameDateLabel(s: Scene): string {
+  const g = (s.thread.series?.date ?? s.thread.id.slice(0, 10)).split('-');
+  return `${g[0]}.${Number(g[1])}.${Number(g[2])}`;
 }
 
 function ScoreLine({ s }: { s: Scene }) {
@@ -46,7 +56,8 @@ export function SceneCard({ scene: s, locale }: { scene: Scene; locale: string }
     <article id={s.thread.id} className="border-b border-line pb-10 pt-8 first:pt-2">
       <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs text-ink-mute">
         <span className="font-medium tracking-wide">{roundLine(s, en)}</span>
-        <ScoreLine s={s} />
+        {/* スコアカードが出る試合は下の GameBox が勝敗を見せる＝ここでの二重表示はしない。 */}
+        {!s.thread.game && <ScoreLine s={s} />}
         {s.jp.length > 0 && (
           <span lang={jaLang} className="rounded-[2px] border border-ink px-1.5 py-px text-[11px] font-semibold text-ink">
             {s.jp.join('・')}
@@ -62,6 +73,17 @@ export function SceneCard({ scene: s, locale }: { scene: Scene; locale: string }
         <p lang={jaLang} className="mt-2 max-w-prose text-sm leading-relaxed text-ink-soft">
           {s.lead}
         </p>
+      )}
+
+      {s.thread.game && (
+        <GameBox
+          game={s.thread.game}
+          dateLabel={gameDateLabel(s)}
+          locale={locale as Locale}
+          lpTags={s.thread.tags}
+          heading={null}
+          className="mt-5"
+        />
       )}
 
       {s.quotes.length > 0 && (
