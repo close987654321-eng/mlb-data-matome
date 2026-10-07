@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-07 12:13",
+  "asOf": "2026-10-07 14:34",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -740,19 +740,19 @@
         {
           "away": {
             "id": 158,
-            "score": 2
+            "score": 3
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-06",
           "gamePk": 849826,
           "home": {
             "id": 135,
-            "score": 2
+            "score": 4
           },
           "ifNecessary": false,
           "n": 3,
           "start": "2026-10-07T01:30:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
@@ -767,7 +767,7 @@
             "id": 135,
             "score": null
           },
-          "ifNecessary": true,
+          "ifNecessary": false,
           "n": 4,
           "start": "2026-10-08T02:00:00Z",
           "state": "Preview",
@@ -800,7 +800,7 @@
         "id": 135,
         "nameJa": "パドレス",
         "seed": 4,
-        "wins": 0
+        "wins": 1
       },
       "winnerId": null
     },
