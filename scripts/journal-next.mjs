@@ -3,6 +3,11 @@
 //   node scripts/journal-next.mjs              # 期限切れ・未設定の日誌だけ埋める（既定＝CIの日課）
 //   node scripts/journal-next.mjs --all        # 手書きも含めて全部を機械文に置き換える
 //   node scripts/journal-next.mjs --dry-run    # 書かずに出力だけ見る
+//   node scripts/journal-next.mjs --slug shohei-ohtani,yoshinobu-yamamoto  # 指定の選手だけ作り直す（期限内でも）
+//
+// ポストシーズン（gameType F/D/L/W）は**次の1試合とシリーズの勝敗**で予告する。レギュラーシーズンの
+// 「15勝目に王手」「100奪三振まであと5」はポストシーズンの勝ち星・三振では動かない＝10月に出すと嘘になる
+// （2026-10-07 に山本由伸のLPで実際に出ていた）。期限は次の試合の日＝試合が終わるたびに毎時CIが作り直す。
 //
 // なぜ要るか: nextJa は「人が編集セッションで書く（クラウド禁止）」運用だったため、書き手が
 // 思い出さないと期限切れ → journalNext がブロックごと落とす → LPの末尾が消える、が繰り返した
@@ -22,6 +27,16 @@ const BASE = 'https://statsapi.mlb.com/api/v1';
 const argv = process.argv.slice(2);
 const all = argv.includes('--all');
 const dryRun = argv.includes('--dry-run');
+const slugArg = argv[argv.indexOf('--slug') + 1];
+const onlySlugs = argv.includes('--slug') && slugArg ? new Set(slugArg.split(',')) : null;
+
+/** ポストシーズンのラウンド（schedule の gameType）→ 表記と「勝てば」の行き先。表記は src/lib/postseason.ts と揃える。 */
+const PS_ROUND = {
+  F: { ja: 'ワイルドカードシリーズ', next: '地区シリーズ進出' },
+  D: { ja: '地区シリーズ', next: 'リーグ優勝決定シリーズ進出' },
+  L: { ja: 'リーグ優勝決定シリーズ', next: 'ワールドシリーズ進出' },
+  W: { ja: 'ワールドシリーズ', next: 'ワールドシリーズ制覇' },
+};
 /** 予告に載せる先の日数（これ以上先はカードが決まっていても読者の役に立たない）。 */
 const WINDOW_DAYS = 9;
 
@@ -61,22 +76,33 @@ const scheduleCache = new Map();
 async function teamSchedule(teamId) {
   if (scheduleCache.has(teamId)) return scheduleCache.get(teamId);
   const data = await getJson(
-    `${BASE}/schedule?sportId=1&teamId=${teamId}&startDate=${todayJst}&endDate=${endYmd}&hydrate=probablePitcher`,
+    `${BASE}/schedule?sportId=1&teamId=${teamId}&startDate=${todayJst}&endDate=${endYmd}&hydrate=probablePitcher,seriesStatus`,
   );
   const games = [];
   for (const day of data.dates ?? []) {
     for (const g of day.games ?? []) {
       // 中止・延期は予告に出さない（読者に嘘の予定を掲げない）。
       if (/Postponed|Cancelled|Suspended/i.test(g.status?.detailedState ?? '')) continue;
+      // 日本時間で今日の試合でも、もう始まった・終わった試合は「次」ではない。
+      if (g.status?.abstractGameState && g.status.abstractGameState !== 'Preview') continue;
       const home = g.teams.home.team.id === teamId;
       const opp = home ? g.teams.away.team : g.teams.home.team;
       const jst = jstDate(new Date(g.gameDate));
       if (jst < todayJst) continue; // 日本時間で既に始まった試合は「次」ではない
+      // シリーズの勝敗はこのチームから見た数に直す（seriesStatus は勝っている側基準）。
+      let ps = null;
+      if (PS_ROUND[g.gameType]) {
+        const st = g.seriesStatus ?? {};
+        const leading = st.winningTeam?.id;
+        const [mine, theirs] = st.isTied || !leading ? [st.wins ?? 0, st.wins ?? 0] : leading === teamId ? [st.wins, st.losses] : [st.losses, st.wins];
+        ps = { type: g.gameType, gameNo: g.seriesGameNumber, bestOf: g.gamesInSeries, mine: mine ?? 0, theirs: theirs ?? 0 };
+      }
       games.push({
         jst,
         home,
         oppJa: teamJa.get(opp.id) ?? opp.name,
         probables: [g.teams.home.probablePitcher?.id, g.teams.away.probablePitcher?.id].filter(Boolean),
+        ps,
       });
     }
   }
@@ -105,7 +131,7 @@ function seriesPhrase(s, first) {
 }
 
 /** 今季の現在地を一文で（スナップショットの数値そのまま＝公知の事実）。 */
-function statLine(stats) {
+function statLine(stats, lead = '今季は') {
   const h = stats?.hitting;
   const p = stats?.pitching;
   const parts = [];
@@ -115,7 +141,29 @@ function statLine(stats) {
     const rec = `${p.wins}勝${p.losses}敗${p.saves > 0 ? `${p.saves}セーブ` : ''}`;
     parts.push(`${parts.length ? '投げては' : ''}${rec}・防御率${p.era}`);
   }
-  return parts.length ? `今季は${parts.join('、')}。` : '';
+  return parts.length ? `${lead}${parts.join('、')}。` : '';
+}
+
+/** ポストシーズンの予告＝次の1試合（ラウンド・第何戦・場所）＋シリーズの勝敗と、勝てば／負ければの事実。 */
+function postseasonNext(g, starts) {
+  const r = PS_ROUND[g.ps.type];
+  const where = g.home ? `本拠地で${g.oppJa}戦` : `敵地で${g.oppJa}戦`;
+  const head = starts
+    ? `次の登板は日本時間${jaDay(g.jst)}の${r.ja}第${g.ps.gameNo}戦、${where}の先発と発表済み。`
+    : `次は日本時間${jaDay(g.jst)}の${r.ja}第${g.ps.gameNo}戦、${where}。`;
+  const { mine, theirs, bestOf } = g.ps;
+  if (mine + theirs === 0 || !bestOf) return head;
+  const need = Math.ceil(bestOf / 2);
+  const state = mine === theirs ? `シリーズは${mine}勝${theirs}敗のタイ` : `シリーズは${mine}勝${theirs}敗`;
+  const stake =
+    mine === need - 1 && theirs === need - 1
+      ? '勝った方が次へ進む'
+      : mine === need - 1
+        ? `勝てば${r.next}`
+        : theirs === need - 1
+          ? '負ければ敗退'
+          : '';
+  return `${head}${state}${stake ? `、${stake}` : ''}。`;
 }
 
 /**
@@ -155,8 +203,9 @@ for (const file of (await readdir(JOURNAL_DIR)).filter((f) => f.endsWith('.json'
   }
   const journal = JSON.parse(await readFile(path.join(JOURNAL_DIR, file), 'utf8'));
   const expired = !journal.nextJa || !journal.nextUntil || journal.nextUntil < todayJst;
+  if (onlySlugs && !onlySlugs.has(slug)) continue;
   // 手書き（nextAuto なし）が生きているうちは触らない＝編集の上書きが常に勝つ。
-  if (!all && !expired) {
+  if (!all && !onlySlugs && !expired) {
     results.push({ slug, skip: `期限内（${journal.nextUntil}）` });
     continue;
   }
@@ -173,6 +222,19 @@ for (const file of (await readdir(JOURNAL_DIR)).filter((f) => f.endsWith('.json'
     continue;
   }
   const start = games.find((g) => g.probables.includes(meta.mlbId));
+  if (games[0].ps) {
+    // ポストシーズン: 次の1試合だけを予告し、今季の数字は「レギュラーシーズンは」と過去形の文脈で添える。
+    // 節目（milestone）は出さない＝ポストシーズンの成績では動かない数字だから。
+    const nextJa = postseasonNext(games[0], start?.jst === games[0].jst) + statLine(stats, 'レギュラーシーズンは');
+    const nextUntil = games[0].jst;
+    results.push({ slug, nameJa: meta.nameJa, nextJa, nextUntil, was: journal.nextUntil ?? null });
+    if (!dryRun) {
+      const updated = { ...journal, nextJa, nextUntil, nextAuto: true };
+      delete updated.entries;
+      await writeFile(path.join(JOURNAL_DIR, file), `${JSON.stringify({ ...updated, entries: journal.entries }, null, 2)}\n`);
+    }
+    continue;
+  }
   let series = toSeries(games);
   const sentences = [];
   if (start) {
