@@ -1,0 +1,293 @@
+{
+  "id": "2026-10-08-whitesox-vs-guardians-ds-g3",
+  "sport": "mlb",
+  "subreddit": "YouTube",
+  "format": "youtube",
+  "sourceUrl": "https://www.youtube.com/watch?v=pgYSFd7YWx4",
+  "fetchedAt": "2026-10-08T16:22:52+09:00",
+  "title": {
+    "en": "Guardians rout White Sox 9-3 to stay alive in ALDS Game 3",
+    "ja": "ラミレス2打点、ホワイトソックス対ガーディアンズ地区シリーズ第3戦【海外の反応】"
+  },
+  "summaryJa": "ホセ・ラミレスが二塁打・三塁打を含む4打数2安打2打点、守備でも好プレーを見せ、ガーディアンズが敵地でホワイトソックスに9-3で快勝、地区シリーズの敗退をひとまず回避した。YouTube公式ハイライトのコメント欄では、10四球・19奪三振と制球を乱したホワイトソックス投手陣への厳しい声や、先発ニューカムを早期に降板させた継投采配への疑問が相次いだ一方、ガーディアンズの“土壇場での粘り”を称える声も広がった。4打数無安打3三振に終わった村上宗隆への直接の言及は少なく、コメント欄の主役はもっぱらラミレスと白ソックス投手陣の乱調だった。最後は、既に消化試合を終えた他地区ファンの軽口で締めくくられる。",
+  "flair": "Highlights",
+  "totalComments": 192,
+  "media": {
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=pgYSFd7YWx4",
+    "thumbUrl": "https://i.ytimg.com/vi/pgYSFd7YWx4/maxresdefault.jpg",
+    "credit": "MLB（YouTube公式ハイライト）",
+    "publishedAt": "2026-10-08T00:09:38Z",
+    "videoTitle": "GUARDIANS vs. WHITE SOX: ALDS Full Game 3 Highlights (October 7) | 2026 MLB Postseason"
+  },
+  "game": {
+    "away": { "ja": "ガーディアンズ", "en": "Cleveland Guardians", "score": 9, "innings": [0, 0, 4, 0, 1, 0, 0, 2, 2], "hits": 11, "errors": 0, "lob": 10 },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 3, "innings": [1, 0, 0, 1, 0, 1, 0, 0, 0], "hits": 6, "errors": 0, "lob": 8 },
+    "decisions": { "winner": "Foster Griffin", "loser": "Bryan Hudson" },
+    "scoring": [
+      { "inning": 1, "top": false, "batterId": 691019, "batter": "Kyle Teel", "event": "Double", "away": 0, "home": 1 },
+      { "inning": 3, "top": true, "batterId": 680757, "batter": "Steven Kwan", "event": "Single", "away": 1, "home": 1 },
+      { "inning": 3, "top": true, "batterId": 666176, "batter": "Jo Adell", "event": "Triple", "away": 4, "home": 1 },
+      { "inning": 4, "top": false, "batterId": 671976, "batter": "Tristan Peters", "event": "Double", "away": 4, "home": 2 },
+      { "inning": 5, "top": true, "batterId": 800050, "batter": "Chase DeLauter", "event": "Fielders Choice", "away": 5, "home": 2 },
+      { "inning": 6, "top": false, "batterId": 803011, "batter": "Sam Antonacci", "event": "Hit By Pitch", "away": 5, "home": 3 },
+      { "inning": 8, "top": true, "batterId": 608070, "batter": "José Ramírez", "event": "Triple", "away": 7, "home": 3 },
+      { "inning": 9, "top": true, "batterId": 694197, "batter": "Angel Genao", "event": "Double", "away": 8, "home": 3 },
+      { "inning": 9, "top": true, "batterId": 677587, "batter": "Brayan Rocchio", "event": "Single", "away": 9, "home": 3 }
+    ]
+  },
+  "tags": [
+    "村上宗隆",
+    "ホセ・ラミレス",
+    "フォスター・グリフィン",
+    "ホワイトソックス",
+    "ガーディアンズ",
+    "ポストシーズン",
+    "地区シリーズ",
+    "海外の反応"
+  ],
+  "stats": [
+    {
+      "player": "ホセ・ラミレス",
+      "team": "ガーディアンズ",
+      "today": "4打数2安打（二塁打、三塁打）1四球2打点2得点1盗塁",
+      "season": "打率.235 12本 53打点 OPS.688（125試合）",
+      "war": "2.2"
+    },
+    {
+      "player": "ジョー・アデル",
+      "team": "ガーディアンズ",
+      "today": "4打数2安打（三塁打）1四球3打点1三振",
+      "season": "打率.240 23本 94打点 OPS.699（159試合）",
+      "war": "0.6"
+    },
+    {
+      "player": "フォスター・グリフィン",
+      "team": "ガーディアンズ",
+      "today": "2.2回1失点（自責1）7奪三振0四球",
+      "note": "救援勝利",
+      "season": "15勝6敗 防御率3.60 WHIP1.21 158奪三振（172.2回）",
+      "war": "2.6",
+      "rank": "防御率 MLB21位"
+    },
+    {
+      "player": "村上宗隆",
+      "team": "ホワイトソックス",
+      "today": "4打数無安打3三振",
+      "season": "打率.207 35本 77打点 OPS.825（127試合）",
+      "war": "2.9",
+      "rank": "本塁打 MLB10位"
+    }
+  ],
+  "comments": [
+    {
+      "author": "@spikesanders3162",
+      "score": 90,
+      "bodyEn": "Guardians weren't ready to go home",
+      "bodyJa": "ガーディアンズはまだ家に帰る気はなかったってことだな",
+      "isHook": true
+    },
+    {
+      "author": "@howardzhang88",
+      "score": 9,
+      "bodyEn": "Ya, they are going home for game 5",
+      "bodyJa": "いや、第5戦のために帰るだけだろ"
+    },
+    {
+      "author": "@GeoAce777",
+      "score": 4,
+      "bodyEn": "@howardzhang88 as a diehard White Sox, this is a strong and scary possibility 😳",
+      "bodyJa": "生粋のホワイトソックスファンとしては、それはかなり怖い可能性だわ😳"
+    },
+    {
+      "author": "@Myteamsarebetter",
+      "score": 3,
+      "bodyEn": "Don't worry they'll choke as usual 😂",
+      "bodyJa": "心配すんな、どうせいつも通り土壇場でコケるさ😂"
+    },
+    {
+      "author": "@tubemoozful",
+      "score": 67,
+      "bodyEn": "Chicago crowd was electric... Ramirez (& Griffin) saved Cleveland's season",
+      "bodyJa": "シカゴの観客は最高に盛り上がってた…ラミレス（とグリフィン）がクリーブランドのシーズンを救ったな",
+      "isHighlight": true
+    },
+    {
+      "author": "@BBB444PPPEEE",
+      "score": 2,
+      "bodyEn": "And Adell",
+      "bodyJa": "あとアデルもな"
+    },
+    {
+      "author": "@wplswvxfcndly",
+      "score": 3,
+      "bodyEn": "",
+      "bodyJa": "アデルは4打数2安打（1塁打、3塁打）1四球3打点 村上は4打数0安打"
+    },
+    {
+      "author": "@DukeEdwards29",
+      "score": 84,
+      "bodyEn": "Jose doing what Jose does. Manufacturing runs and building team confidence. You love to see it.",
+      "bodyJa": "ホセがいつも通りの仕事をしてる。得点を作り出してチームに自信をつけさせる。こういうの見ると最高だよな",
+      "isHighlight": true
+    },
+    {
+      "author": "@Chito-tg2ow",
+      "score": 5,
+      "bodyEn": "This is the Jose we were missing",
+      "bodyJa": "これぞ俺たちが待ってたホセだ"
+    },
+    {
+      "author": "@EssentialEMAW",
+      "score": 9,
+      "bodyEn": "Man that stop by Ramirez was insane. Play of the game and maybe the season for CLE",
+      "bodyJa": "いやあのラミレスの守備は異次元だった。今日のベストプレーどころか、クリーブランドのシーズンを救ったプレーかもな"
+    },
+    {
+      "author": "@JRamglazer",
+      "score": 15,
+      "bodyEn": "What a game from my guy",
+      "bodyJa": "俺の推しが大活躍の試合だった"
+    },
+    {
+      "author": "@wickedpawn5437",
+      "score": 10,
+      "bodyEn": "I don't recall a postseason game with two 2-out RBI triples.",
+      "bodyJa": "2アウトからの三塁打で打点が入るシーン、しかも1試合で2回なんて、ポストシーズンで見た記憶がないわ"
+    },
+    {
+      "author": "@MaestroGeo",
+      "score": 2,
+      "bodyEn": "Especially the \"ringing\" triples they hit...cheapest triples I've ever seen...",
+      "bodyJa": "しかもあの『かすった』感じの三塁打がな…今まで見た中で一番安っぽい三塁打だった…"
+    },
+    {
+      "author": "@disdatanddaudder",
+      "score": 50,
+      "bodyEn": "White Sox Fan and the turnaround this year is nothing less than a miracle. Having said that this teams Pitching is highly compromised. Cleveland has better pitching and I was wondering when the other shoe was going to fall. Especially once the White Sox started facing the longer series with teams that have their pitching in order. This was an awful first loss. I hope they take the series Thursday because a young team like this can be turned on their back quickly by a team that has been perpetually in the post season mix.",
+      "bodyJa": "ホワイトソックスファンだけど、今年の立て直しはもう奇跡としか言いようがない。とはいえこのチームの投手陣はかなり危うい。クリーブランドの方が投手力は上で、いつかボロが出るんじゃないかとずっと思ってた。特にこの先、長いシリーズで投手陣が整ったチームと当たるようになったらなおさらだ。今日の初黒星はひどい内容だった。木曜にシリーズを決めてほしい、こういう若いチームはポストシーズンの常連みたいなチーム相手だとあっという間にひっくり返されかねないから。",
+      "isHighlight": true
+    },
+    {
+      "author": "@MisterKareem75",
+      "score": 2,
+      "bodyEn": "I knew that Cleveland was not going to go out without a fight. I am not knocking them. That’s what they do. However, the way the White Sox played was UNACCEPTABLE!! No excuse for Sox pitchers walking 10 batters and Sox hitters striking out 19 times. Venable needs to make the whole team stay at the park and work on hitting and pitching.",
+      "bodyJa": "クリーブランドが黙って負けるわけがないのは分かってた。あのチームを批判してるわけじゃない、そういうチームだからな。でもホワイトソックスのプレー内容は受け入れられない！投手陣が10四球、打線が19三振なんて言い訳のしようがない。ベナブル監督はチーム全員を球場に残して打撃と投球をみっちりやり直させるべきだ"
+    },
+    {
+      "author": "@joecovarrubia8108",
+      "score": 20,
+      "bodyEn": "All of a sudden guardians know how to play baseball",
+      "bodyJa": "急にガーディアンズが野球のやり方を思い出したな"
+    },
+    {
+      "author": "@ballingatthestri6609",
+      "score": 2,
+      "bodyEn": "Bro This the bullshit I be talking about",
+      "bodyJa": "だから俺が言ってたこういうクソみたいな展開だよ"
+    },
+    {
+      "author": "@petedog9581",
+      "score": 4,
+      "bodyEn": "19K's.",
+      "bodyJa": "19奪三振"
+    },
+    {
+      "author": "@FuhQueue_2",
+      "score": 3,
+      "bodyEn": "Herrin and smith were absolutely nasty today!!",
+      "bodyJa": "今日のヘリンとスミスはマジでえげつなかった！！"
+    },
+    {
+      "author": "@joshuambean",
+      "score": 2,
+      "bodyEn": "Why in the world did they take Newcomb out of the game? He pitched two amazing innings and then they took him out and his relief gave up all the runs.",
+      "bodyJa": "なんでニューカムを降板させたんだ？2イニング素晴らしい投球をしてたのに、代えた途端に後続が全部の点を献上した"
+    },
+    {
+      "author": "@AmericasChoice",
+      "score": 1,
+      "bodyEn": "analytics...",
+      "bodyJa": "アナリティクスだよ…"
+    },
+    {
+      "author": "@luisduveral",
+      "score": 2,
+      "bodyEn": "The W SOX Manager threw away the match in the 3rd inning taking out The opener pitcher Newcom",
+      "bodyJa": "ホワイトソックスの監督が3回にオープナーのニューカムを降板させた時点で試合を投げ捨てたようなもんだ"
+    },
+    {
+      "author": "@carystorm1863",
+      "score": 0,
+      "bodyEn": "Murakami down on strikes, you don't here that very often..........jj.",
+      "bodyJa": "村上が見逃し三振、これはなかなか見ないパターンだな…"
+    },
+    {
+      "author": "@kevincrozier8625",
+      "score": 0,
+      "bodyEn": "Way too many strike outs and walks by the Sox. Murikami has always been either lights out or strike outs. Same with PCA of the Cubs.",
+      "bodyJa": "ソックスは三振と四球が多すぎる。村上はいつも『大当たりか三振か』のどちらかだな。カブスのPCA（クロウ＝アームストロング）も同じタイプだ"
+    },
+    {
+      "author": "@skymoon-v1i2m",
+      "score": 0,
+      "bodyEn": "무라카미가 다 말아먹노 ㅋㅋㅋ",
+      "bodyJa": "村上が全部台無しにしてるなｗｗｗ"
+    },
+    {
+      "author": "@stevehafke3614",
+      "score": 1,
+      "bodyEn": "11:52 \"cut the lead in half\"?  The announcer needs to take remedial math.  The lead went from 3 to 2 runs.  Last time I checked that was not 1/2.",
+      "bodyJa": "11:52 『リードを半分に』？実況は算数をやり直した方がいい。リードは3点から2点になっただけだ。俺の知る限りそれは半分じゃない"
+    },
+    {
+      "author": "@robertward5230",
+      "score": 1,
+      "bodyEn": "I noticed that too.  The announcers were kind of annoying the whole extended clip.",
+      "bodyJa": "俺もそこ気になった。この拡大版クリップ、実況がずっとちょっとウザかった"
+    },
+    {
+      "author": "@gabrieldutra8880",
+      "score": 2,
+      "bodyEn": "never seen this stadium so packed",
+      "bodyJa": "このスタジアムがこんなに満員なの初めて見た"
+    },
+    {
+      "author": "@dennissologaistoa3376",
+      "score": 4,
+      "bodyEn": "A black out from the biggest fairweather fans in baseball... lol",
+      "bodyJa": "野球界随一の“にわかファン”たちによるブラックアウトな…ｗ"
+    },
+    {
+      "author": "@Jose-q2s9d",
+      "score": 4,
+      "bodyEn": "I been a Sox fan since like 95 as a kid but I garantee 50 percent of those fans are just Hype wagon fans because social media now. Who are already talking WS. We can win this series but against The Rays that's a whole different level.",
+      "bodyJa": "俺は95年あたりからのソックスファンだけど、今のファン層の半分くらいはSNS時代の便乗組だと断言する。もうワールドシリーズの話をしてるような連中だ。このシリーズは勝てるかもしれないが、レイズ相手だと次元が違うぞ"
+    },
+    {
+      "author": "@therealBL4CKH4L0",
+      "score": 19,
+      "bodyEn": "HUGE win for the Guards! This is the same team that came back from 15.5 games down to win the division last season. And the same team that came back from 7 games down to win the division this season. They can come back and win this series just as well. Go Guards! 😤",
+      "bodyJa": "ガーディアンズにとってめちゃくちゃ大きな勝利だ！去年15.5ゲーム差から地区優勝をもぎ取ったのと同じチームで、今季も7ゲーム差から地区優勝したのと同じチームだ。このシリーズだって同じように逆転できる。行けガーディアンズ！😤"
+    },
+    {
+      "author": "@dn9597",
+      "score": 29,
+      "bodyEn": "Don't underestimate the Guards! They are more experienced team than White Sox so they know how to comeback and win the Series!\nMmmm, that's right!!!",
+      "bodyJa": "ガーディアンズを甘く見るなよ！ホワイトソックスより経験豊富なチームだから、逆転してシリーズを取る術を知ってる！そう、そういうことだ！！！",
+      "isHighlight": true
+    },
+    {
+      "author": "@Chris_P_Bacon11",
+      "score": 5,
+      "bodyEn": "Just like the 2016 world series huh?",
+      "bodyJa": "まるで2016年のワールドシリーズみたいだな？"
+    },
+    {
+      "author": "@Numbnuts007",
+      "score": 0,
+      "bodyEn": "So this is an actual series now, cool! Well, my Rays are done sweeping the Yankees. Can't wait to see either one of you guys in the championship series, whoever wins 😁",
+      "bodyJa": "お、これでようやくちゃんとしたシリーズになったな、いいね！まあ俺のレイズはヤンキースをスイープしてもう終わらせたけど。どっちが勝ち上がってきても、リーグ優勝決定シリーズで見られるのが楽しみだよ😁"
+    }
+  ]
+}
