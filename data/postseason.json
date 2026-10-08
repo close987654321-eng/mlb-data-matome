@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-08 06:20",
+  "asOf": "2026-10-08 11:00",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -516,19 +516,19 @@
         {
           "away": {
             "id": 139,
-            "score": 0
+            "score": 4
           },
-          "detailed": "Pre-Game",
+          "detailed": "In Progress",
           "etDate": "2026-10-07",
           "gamePk": 849838,
           "home": {
             "id": 147,
-            "score": 0
+            "score": 2
           },
           "ifNecessary": false,
           "n": 3,
           "start": "2026-10-08T00:00:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
@@ -586,7 +586,7 @@
         "id": 114,
         "nameJa": "ガーディアンズ",
         "seed": 2,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
@@ -628,19 +628,19 @@
         {
           "away": {
             "id": 114,
-            "score": 4
+            "score": 9
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-07",
           "gamePk": 849833,
           "home": {
             "id": 145,
-            "score": 1
+            "score": 3
           },
           "ifNecessary": false,
           "n": 3,
           "start": "2026-10-07T20:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
@@ -655,7 +655,7 @@
             "id": 145,
             "score": null
           },
-          "ifNecessary": true,
+          "ifNecessary": false,
           "n": 4,
           "start": "2026-10-08T21:00:00Z",
           "state": "Preview",
@@ -758,19 +758,19 @@
         {
           "away": {
             "id": 158,
-            "score": null
+            "score": 0
           },
-          "detailed": "Pre-Game",
+          "detailed": "Warmup",
           "etDate": "2026-10-07",
           "gamePk": 849827,
           "home": {
             "id": 135,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 4,
           "start": "2026-10-08T02:00:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
@@ -787,7 +787,7 @@
           },
           "ifNecessary": true,
           "n": 5,
-          "start": "2026-10-09T20:30:00Z",
+          "start": "2026-10-10T00:00:00Z",
           "state": "Preview",
           "tbd": false
         }
@@ -810,7 +810,7 @@
         "id": 119,
         "nameJa": "ドジャース",
         "seed": 2,
-        "wins": 2
+        "wins": 3
       },
       "games": [
         {
@@ -870,37 +870,19 @@
         {
           "away": {
             "id": 119,
-            "score": 0
+            "score": 4
           },
-          "detailed": "Pre-Game",
+          "detailed": "Final",
           "etDate": "2026-10-07",
           "gamePk": 849822,
           "home": {
             "id": 144,
-            "score": 0
+            "score": 1
           },
           "ifNecessary": false,
           "n": 4,
           "start": "2026-10-07T22:00:00Z",
-          "state": "Preview",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 144,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-09",
-          "gamePk": 849821,
-          "home": {
-            "id": 119,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 5,
-          "start": "2026-10-10T00:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -914,7 +896,7 @@
         "seed": 3,
         "wins": 1
       },
-      "winnerId": null
+      "winnerId": 119
     },
     {
       "bestOf": 7,
@@ -1066,7 +1048,7 @@
       "bestOf": 7,
       "bottom": {
         "id": null,
-        "placeholder": "NL Higher Seed",
+        "placeholder": "MIL/LAD",
         "wins": 0
       },
       "games": [
@@ -1203,7 +1185,7 @@
       "round": "L",
       "top": {
         "id": null,
-        "placeholder": "NL Lower Seed",
+        "placeholder": "LAD/SD",
         "wins": 0
       },
       "winnerId": null
