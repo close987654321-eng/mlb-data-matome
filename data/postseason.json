@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-08 18:04",
+  "asOf": "2026-10-09 06:22",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -610,14 +610,14 @@
         {
           "away": {
             "id": 114,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "Pre-Game",
           "etDate": "2026-10-08",
           "gamePk": 849832,
           "home": {
             "id": 145,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 4,
@@ -1143,7 +1143,7 @@
       "bestOf": 7,
       "bottom": {
         "id": null,
-        "placeholder": "Higher Seed League Champion",
+        "placeholder": "NL Champion",
         "wins": 0
       },
       "games": [
@@ -1280,7 +1280,7 @@
       "round": "W",
       "top": {
         "id": null,
-        "placeholder": "Lower Seed League Champion",
+        "placeholder": "AL Champion",
         "wins": 0
       },
       "winnerId": null
