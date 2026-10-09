@@ -1,0 +1,246 @@
+{
+  "id": "2026-10-09-whitesox-vs-guardians-ds-g4",
+  "sport": "mlb",
+  "subreddit": "YouTube",
+  "format": "youtube",
+  "sourceUrl": "https://www.youtube.com/watch?v=xWEDmKwdZvg",
+  "fetchedAt": "2026-10-09T16:10:00+09:00",
+  "title": {
+    "en": "Guardians erupt for five in the sixth to force decisive Game 5 of ALDS",
+    "ja": "ラミレス一発3打点、ホワイトソックス対ガーディアンズ地区シリーズ第4戦【海外の反応】"
+  },
+  "summaryJa": "ホセ・ラミレスが5打数2安打1本塁打3打点2得点と活躍し、ガーディアンズが敵地シカゴでホワイトソックスを9-5で下し、地区シリーズを2勝2敗のタイに戻した。YouTube公式ハイライトのコメント欄は、3回に村上宗隆の押し出し四球で先制しながら6回に5失点で突き放されたホワイトソックス投手陣への厳しい声で埋まり、守備型捕手として知られる途中出場のパトリック・ベイリーの一発を称える声も目立った。最後は、勝ち上がった先に待つ相手への諦め混じりの軽口で締めくくられる。",
+  "flair": "Highlights",
+  "totalComments": 186,
+  "media": {
+    "kind": "video",
+    "url": "https://www.youtube.com/watch?v=xWEDmKwdZvg",
+    "thumbUrl": "https://i.ytimg.com/vi/xWEDmKwdZvg/maxresdefault.jpg",
+    "credit": "MLB（YouTube公式ハイライト）",
+    "publishedAt": "2026-10-09T04:20:50Z",
+    "videoTitle": "GUARDIANS vs. WHITE SOX: ALDS Full Game 4 Highlights (October 8) | 2026 MLB Postseason"
+  },
+  "game": {
+    "away": { "ja": "ガーディアンズ", "en": "Cleveland Guardians", "score": 9, "innings": [0, 0, 0, 0, 3, 6, 0, 0, 0], "hits": 10, "errors": 0, "lob": 7, "homers": [{ "id": 672275, "name": "Patrick Bailey" }, { "id": 608070, "name": "José Ramírez" }] },
+    "home": { "ja": "ホワイトソックス", "en": "Chicago White Sox", "score": 5, "innings": [0, 0, 2, 0, 2, 0, 0, 0, 1], "hits": 8, "errors": 0, "lob": 12, "homers": [{ "id": 678246, "name": "Miguel Vargas" }] },
+    "decisions": { "winner": "Erik Sabrowski", "loser": "Anthony Kay" },
+    "scoring": [
+      { "inning": 3, "top": false, "batterId": 808959, "batter": "Munetaka Murakami", "event": "Walk", "away": 0, "home": 1 },
+      { "inning": 3, "top": false, "batterId": 803011, "batter": "Sam Antonacci", "event": "Sac Fly", "away": 0, "home": 2 },
+      { "inning": 5, "top": true, "batterId": 672275, "batter": "Patrick Bailey", "event": "Home Run", "away": 1, "home": 2 },
+      { "inning": 5, "top": true, "batterId": 608070, "batter": "José Ramírez", "event": "Home Run", "away": 3, "home": 2 },
+      { "inning": 5, "top": false, "batterId": 803011, "batter": "Sam Antonacci", "event": "Hit By Pitch", "away": 3, "home": 3 },
+      { "inning": 5, "top": false, "batterId": 686668, "batter": "Brenton Doyle", "event": "Sac Fly", "away": 3, "home": 4 },
+      { "inning": 6, "top": true, "batterId": 683953, "batter": "Travis Bazzana", "event": "Double", "away": 4, "home": 4 },
+      { "inning": 6, "top": true, "batterId": 672275, "batter": "Patrick Bailey", "event": "Single", "away": 5, "home": 4 },
+      { "inning": 6, "top": true, "batterId": 608070, "batter": "José Ramírez", "event": "Single", "away": 6, "home": 4 },
+      { "inning": 6, "top": true, "batterId": 800050, "batter": "Chase DeLauter", "event": "Single", "away": 7, "home": 4 },
+      { "inning": 6, "top": true, "batterId": 666176, "batter": "Jo Adell", "event": "Single", "away": 9, "home": 4 },
+      { "inning": 9, "top": false, "batterId": 678246, "batter": "Miguel Vargas", "event": "Home Run", "away": 9, "home": 5 }
+    ]
+  },
+  "tags": ["村上宗隆", "ホセ・ラミレス", "ジョー・アデル", "ホワイトソックス", "ガーディアンズ", "ポストシーズン", "地区シリーズ", "海外の反応"],
+  "stats": [
+    {
+      "player": "村上宗隆",
+      "team": "ホワイトソックス",
+      "today": "3打数1安打 1打点 2四球 1盗塁 1三振",
+      "season": "打率.207 35本 77打点 OPS.825（127試合）",
+      "war": "2.9",
+      "rank": "本塁打 MLB10位"
+    },
+    {
+      "player": "ホセ・ラミレス",
+      "team": "ガーディアンズ",
+      "today": "5打数2安打（本塁打）1四球3打点2得点",
+      "season": "打率.235 12本 53打点 OPS.688（125試合）",
+      "war": "2.2"
+    },
+    {
+      "player": "ジョー・アデル",
+      "team": "ガーディアンズ",
+      "today": "4打数1安打 1四球2打点1三振",
+      "season": "打率.240 23本 94打点 OPS.699（159試合）",
+      "war": "0.6"
+    }
+  ],
+  "comments": [
+    {
+      "author": "@whitesox26wschamps",
+      "score": 51,
+      "bodyEn": "If sox lose Saturday I'm gonna quit my job and start drinking again.",
+      "bodyJa": "もし土曜日にソックスが負けたら、仕事辞めてまた酒浸りの生活に戻るわ",
+      "isHook": true
+    },
+    {
+      "author": "@aidanmichelson6735",
+      "score": 2,
+      "bodyEn": "Lol",
+      "bodyJa": "笑"
+    },
+    {
+      "author": "@justinfranstrekal1304",
+      "score": 3,
+      "bodyEn": "You should start now",
+      "bodyJa": "もう今から始めとけよ"
+    },
+    {
+      "author": "@febrianhelmi1211",
+      "score": 14,
+      "bodyEn": "This is why it's called post season baby",
+      "bodyJa": "だからこそポストシーズンって呼ばれるんだよな"
+    },
+    {
+      "author": "@phoenixbillion1842",
+      "score": 2,
+      "bodyEn": "We've got 'em right where we want 'em. Go White Sox!",
+      "bodyJa": "思い通りの展開に持ち込めてるぞ。行けホワイトソックス！"
+    },
+    {
+      "author": "@ACountryman1774",
+      "score": 6,
+      "bodyEn": "Why oh why oh why do managers pull in the infield?? Sox would have given up 1 run with the fielders at normal depth, instead they gave up 4.",
+      "bodyJa": "なんでなんでなんで監督は内野を前進守備にするんだ？？ 普通の守備位置だったら1失点で済んだのに、4失点もしちまった"
+    },
+    {
+      "author": "@James_Ford4815",
+      "score": 1,
+      "bodyEn": "Bases loaded with one out, YOU HAVE A DOUBLE PLAY AT ALL BASES WITH A AVG SPEED HITTER UP, THERES NO NEED TO HAVE IF PLAY IN. That inning should of ended with CLE at 5 runs.",
+      "bodyJa": "満塁一死で平均的な足の速さの打者が打席にいるなら、どの塁でも併殺が取れる状況だ。前進守備にする必要なんて無かった。あの回はクリーブランドの5失点で終わらせるべきだった"
+    },
+    {
+      "author": "@TJSpooker271",
+      "score": 0,
+      "bodyEn": "Why is nobody mentioning the pinch hit homer by Patrick Bailey? Super super impressive from a defensive catcher who isn't known at all for his bat. WOW",
+      "bodyJa": "なんで誰もパトリック・ベイリーの代打本塁打に触れないんだ？バットなんて全く期待されてない守備型捕手なのに、めちゃくちゃ凄いじゃないか。WOW",
+      "isHighlight": true
+    },
+    {
+      "author": "@Will-iw2ug",
+      "score": 4,
+      "bodyEn": "I love Stephen Vogt , Bay Area guy. But you DON'T USE your Game 5 Starter when you had a sufficient lead. Just like Braves WASTING Chris Sale in Game 3 against the Phillies.",
+      "bodyJa": "ベイエリア出身のスティーブン・ヴォートは好きな監督なんだが、十分なリードがある時に第5戦の先発投手を使っちゃダメだろ。フィリーズ戦の第3戦でクリス・セールを無駄遣いしたブレーブスと同じだ"
+    },
+    {
+      "author": "@hankfanelli719",
+      "score": 0,
+      "bodyEn": "The Sox relief pitching is the reason Cleveland won the division. All year long the relief pitching in the 6th 7th 8th and ninth has been terrible and probably accounted for half the seasons losses, it showed up again the last 2 games and is the primary reason that they're not way better than their record. Cleveland will win at home to complete the typical let down from this team in late innings with the game on the line.",
+      "bodyJa": "ソックスのリリーフ陣こそ、クリーブランドが地区優勝した理由だ。1年通して6〜9回のリリーフは酷くて、今季の負けの半分くらいはそれが原因だろう。この2試合でもまた同じことが起きた。これがこのチームが戦績より良く見えない一番の理由だ。クリーブランドは本拠地で勝って、土壇場でのいつもの失速をまたやらかすんだろうな"
+    },
+    {
+      "author": "@Kovman9",
+      "score": 0,
+      "bodyEn": "This is what happens when the bullpen is 1 ace",
+      "bodyJa": "ブルペンにエースが1人しかいないとこうなる"
+    },
+    {
+      "author": "@mervinedward3679",
+      "score": 0,
+      "bodyEn": "Horrible defense horrible pitching for whitesox so so many walks this series",
+      "bodyJa": "ホワイトソックスは守備も投球も酷すぎる、このシリーズ四球が多すぎるわ"
+    },
+    {
+      "author": "@billbaumhardt5188",
+      "score": 0,
+      "bodyEn": "Eric Fedde is only a good picture when he pitches for the White Sox lol",
+      "bodyJa": "エリック・フェデは、ホワイトソックスを相手に投げる時だけ良いピッチャーになるんだよな笑"
+    },
+    {
+      "author": "@imreh5588",
+      "score": 2,
+      "bodyEn": "TOM HAMILTONS CALL FOR THE CLEVELAND SCORES! WHATS WRONG WITH YOU GUYS.!",
+      "bodyJa": "クリーブランドの得点シーンはトム・ハミルトンの実況で聞きたかったのに！お前らどうかしてるぞ！"
+    },
+    {
+      "author": "@daishanx",
+      "score": 11,
+      "bodyEn": "The 6th highlights should've just been Hamilton. But let's be real, ALL highlights should be Hammy.",
+      "bodyJa": "6回のハイライトはハミルトンの実況だけで良かったのに。てか正直、ハイライトは全部ハミルトンの実況にすべきだろ"
+    },
+    {
+      "author": "@peachy8868",
+      "score": 1,
+      "bodyEn": "Believeland! 🥰",
+      "bodyJa": "ビリーブランド！🥰"
+    },
+    {
+      "author": "@bernardtarver",
+      "score": 0,
+      "bodyEn": "Guards. Browns. Cavs. Let's go, Cleveland!",
+      "bodyJa": "ガーディアンズ、ブラウンズ、キャバリアーズ。行けクリーブランド！"
+    },
+    {
+      "author": "@twanxz4955",
+      "score": 5,
+      "bodyEn": "This is the year. As a Tribe fan I just want to dream!",
+      "bodyJa": "今年こそだ。トライブファンとして、夢を見させてくれ！"
+    },
+    {
+      "author": "@nsnick199",
+      "score": 3,
+      "bodyEn": "Both teams have payrolls among the bottom-5 in the league. Cleveland hasn't won a World Series in over 75 years.",
+      "bodyJa": "両チームともリーグ下位5番目以内の年俸総額だ。クリーブランドはもう75年以上ワールドシリーズを制してない"
+    },
+    {
+      "author": "@michaelbritt2754",
+      "score": 13,
+      "bodyEn": "So many were responding when the White Sox won the first two... crickets now. Oh well, Go Guardians!! I'm so proud of my team. Took care of business and will finally take it home game 5 and continue on to the ALCS. The most underrated and most disrespected team in baseball, destroy all and win the world title.",
+      "bodyJa": "ホワイトソックスが最初の2連勝した時はみんな騒いでたのに…今は静かなもんだな。まあいいさ、行けガーディアンズ！！俺のチームを誇りに思うよ。やるべきことをやって、最後は第5戦も制してALCSに進んでくれるはずだ。野球界で一番過小評価され、一番軽んじられてるチームが、全部ぶっ潰してワールドチャンピオンになってくれ",
+      "isHighlight": true
+    },
+    {
+      "author": "@mchristr",
+      "score": 0,
+      "bodyEn": "I thought the White Sox were better than this. But neither of these teams will survive the next round.",
+      "bodyJa": "ホワイトソックスはもっと強いと思ってたのに。まあどっちにしろ、次のラウンドは勝ち上がれないだろうけどな"
+    },
+    {
+      "author": "@Crazyfeetdan",
+      "score": 0,
+      "bodyEn": "Neither of these teams are World Series material",
+      "bodyJa": "どっちのチームもワールドシリーズを獲れる器じゃないな"
+    },
+    {
+      "author": "@sdsartor1942",
+      "score": 1,
+      "bodyEn": "Not a single wildcard team is getting out of the 2nd round, maybe byes are actually unfair for teams to have.",
+      "bodyJa": "ワイルドカード勢は1チームも2回戦を突破できてない。シード組の不戦勝、やっぱり不公平なんじゃないか"
+    },
+    {
+      "author": "@eddie992020",
+      "score": 0,
+      "bodyEn": "White Sox don't want it. Cleveland good luck in the ALCS",
+      "bodyJa": "ホワイトソックスにはその気が無いみたいだな。クリーブランド、ALCS頑張れよ"
+    },
+    {
+      "author": "@Well_hello_there_",
+      "score": 0,
+      "bodyEn": "Rays loving this. Whoever wins Saturday has 1 day off for travel to Florida before the ALCS starts.",
+      "bodyJa": "レイズはこの展開を喜んでるだろうな。土曜に勝った方は、ALCS開幕前にフロリダへの移動日が1日しか無いんだから"
+    },
+    {
+      "author": "@IceBlue_2",
+      "score": 1,
+      "bodyEn": "This is going to be cannon fodder for the Rays",
+      "bodyJa": "これじゃレイズの的になるだけだな"
+    },
+    {
+      "author": "@arcejohncula5845",
+      "score": 0,
+      "bodyEn": "MLB is predicting that the Game 5 winner is the Guardians.😂😂😂",
+      "bodyJa": "MLB公式が第5戦の勝者をガーディアンズと予想してるぞ😂😂😂"
+    },
+    {
+      "author": "@krazieecko",
+      "score": 1,
+      "bodyEn": "I got tricked into thinking this was game 5",
+      "bodyJa": "てっきりこれが第5戦だと思って騙されたわ"
+    },
+    {
+      "author": "@CountTrumpula",
+      "score": 0,
+      "bodyEn": "It's Game 4. Too Many Adds. Try harder. See ya Saturday. 👋",
+      "bodyJa": "まだ第4戦だぞ。広告多すぎ。もっと頑張れ。じゃあ土曜日にな👋"
+    }
+  ]
+}
