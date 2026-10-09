@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-09 11:14",
+  "asOf": "2026-10-09 18:14",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -550,7 +550,7 @@
         "id": 114,
         "nameJa": "ガーディアンズ",
         "seed": 2,
-        "wins": 1
+        "wins": 2
       },
       "games": [
         {
@@ -610,19 +610,19 @@
         {
           "away": {
             "id": 114,
-            "score": 3
+            "score": 9
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-08",
           "gamePk": 849832,
           "home": {
             "id": 145,
-            "score": 4
+            "score": 5
           },
           "ifNecessary": false,
           "n": 4,
           "start": "2026-10-09T00:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
@@ -637,7 +637,7 @@
             "id": 114,
             "score": null
           },
-          "ifNecessary": true,
+          "ifNecessary": false,
           "n": 5,
           "start": "2026-10-11T00:00:00Z",
           "state": "Preview",
