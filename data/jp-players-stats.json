@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-10 16:13",
+  "asOf": "2026-10-10 22:48",
   "players": {
     "500743": {
       "fielding": {
@@ -61,7 +61,6 @@
       },
       "saber": {
         "hit": 0.79431,
-        "pit": -0.13051,
         "woba": 0.306456,
         "wrcplus": 92.2249
       },
@@ -358,7 +357,9 @@
         "winPercentage": ".125",
         "wins": 1
       },
-      "saber": {},
+      "saber": {
+        "pit": 1.05223
+      },
       "team": "エンゼルス"
     },
     "592450": {
@@ -501,9 +502,9 @@
         }
       },
       "saber": {
-        "hit": 3.65784,
-        "woba": 0.338302,
-        "wrcplus": 113.585
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 26.7,
       "team": "ドジャース"
@@ -877,9 +878,9 @@
         }
       },
       "saber": {
-        "hit": 2.88928,
-        "woba": 0.368041,
-        "wrcplus": 130.1
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 25.6,
       "team": "フィリーズ"
@@ -1004,10 +1005,10 @@
         }
       },
       "saber": {
-        "hit": 3.68721,
+        "hit": 0,
         "pit": 2.94032,
-        "woba": 0.37653,
-        "wrcplus": 139.225
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 27.7,
       "team": "ドジャース"
@@ -1059,9 +1060,9 @@
         }
       },
       "saber": {
-        "hit": 0.98939,
-        "woba": 0.320485,
-        "wrcplus": 102.2083877245509
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 27.5,
       "team": "ダイヤモンドバックス"
@@ -1224,9 +1225,9 @@
         }
       },
       "saber": {
-        "hit": 3.1113,
-        "woba": 0.38503,
-        "wrcplus": 146.742
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 25.6,
       "team": "メッツ"
@@ -1406,9 +1407,9 @@
         }
       },
       "saber": {
-        "hit": 2.95622,
-        "woba": 0.33172,
-        "wrcplus": 112.857
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 26.4,
       "team": "ブルージェイズ"
@@ -1621,9 +1622,9 @@
         }
       },
       "saber": {
-        "hit": 4.55806,
-        "woba": 0.36605,
-        "wrcplus": 134.034
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 28,
       "team": "カブス"
@@ -1638,7 +1639,7 @@
         "gamesPlayed": 140,
         "gamesStarted": 140,
         "innings": "1209.0",
-        "oaa": 24,
+        "oaa": 23,
         "position": "遊撃",
         "putOuts": 180,
         "runsPrevented": 18
@@ -1867,9 +1868,7 @@
           }
         }
       },
-      "saber": {
-        "pit": 1.94395
-      },
+      "saber": {},
       "team": "ドジャース"
     },
     "681624": {
@@ -2057,9 +2056,9 @@
         }
       },
       "saber": {
-        "hit": 3.68013,
-        "woba": 0.357506,
-        "wrcplus": 124.409
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 28.4,
       "team": "ナショナルズ"
@@ -2152,9 +2151,9 @@
         }
       },
       "saber": {
-        "hit": 0,
-        "woba": 0,
-        "wrcplus": 0
+        "hit": 4.22783,
+        "woba": 0.34106,
+        "wrcplus": 114.922
       },
       "sprintSpeed": 29.7,
       "team": "ダイヤモンドバックス"
@@ -2224,9 +2223,7 @@
           }
         }
       },
-      "saber": {
-        "pit": 1.78585
-      },
+      "saber": {},
       "team": "カブス"
     },
     "687221": {
@@ -2368,9 +2365,9 @@
         }
       },
       "saber": {
-        "hit": 10.61952,
-        "woba": 0.39959,
-        "wrcplus": 156.53
+        "hit": 0,
+        "woba": 0,
+        "wrcplus": 0
       },
       "sprintSpeed": 29.5,
       "team": "カブス"
@@ -2440,9 +2437,7 @@
           }
         }
       },
-      "saber": {
-        "pit": 6.64956
-      },
+      "saber": {},
       "team": "ブルワーズ"
     },
     "694973": {
@@ -2674,10 +2669,10 @@
         "gamesPlayed": 56,
         "gamesStarted": 53,
         "innings": "474.2",
-        "oaa": -7,
+        "oaa": -6,
         "position": "一塁",
         "putOuts": 422,
-        "runsPrevented": -5
+        "runsPrevented": -4
       },
       "hitting": {
         "atBats": 573,
