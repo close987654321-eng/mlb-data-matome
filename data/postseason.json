@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-11 08:36",
+  "asOf": "2026-10-11 14:54",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -550,7 +550,7 @@
         "id": 114,
         "nameJa": "ガーディアンズ",
         "seed": 2,
-        "wins": 2
+        "wins": 3
       },
       "games": [
         {
@@ -630,17 +630,17 @@
             "id": 145,
             "score": 0
           },
-          "detailed": "Warmup",
+          "detailed": "Final",
           "etDate": "2026-10-10",
           "gamePk": 849831,
           "home": {
             "id": 114,
-            "score": 0
+            "score": 2
           },
           "ifNecessary": false,
           "n": 5,
           "start": "2026-10-11T00:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -654,7 +654,7 @@
         "seed": 6,
         "wins": 2
       },
-      "winnerId": null
+      "winnerId": 114
     },
     {
       "bestOf": 5,
@@ -855,7 +855,7 @@
       "games": [
         {
           "away": {
-            "id": null,
+            "id": 114,
             "score": null
           },
           "detailed": "Scheduled",
@@ -873,7 +873,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 114,
             "score": null
           },
           "detailed": "Scheduled",
@@ -898,7 +898,7 @@
           "etDate": "2026-10-15",
           "gamePk": 849818,
           "home": {
-            "id": null,
+            "id": 114,
             "score": null
           },
           "ifNecessary": false,
@@ -916,7 +916,7 @@
           "etDate": "2026-10-16",
           "gamePk": 849817,
           "home": {
-            "id": null,
+            "id": 114,
             "score": null
           },
           "ifNecessary": false,
@@ -934,7 +934,7 @@
           "etDate": "2026-10-17",
           "gamePk": 849816,
           "home": {
-            "id": null,
+            "id": 114,
             "score": null
           },
           "ifNecessary": true,
@@ -945,7 +945,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 114,
             "score": null
           },
           "detailed": "Scheduled",
@@ -963,7 +963,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 114,
             "score": null
           },
           "detailed": "Scheduled",
@@ -985,8 +985,9 @@
       "league": "AL",
       "round": "L",
       "top": {
-        "id": null,
-        "placeholder": "CLE/CWS",
+        "id": 114,
+        "nameJa": "ガーディアンズ",
+        "seed": 2,
         "wins": 0
       },
       "winnerId": null
