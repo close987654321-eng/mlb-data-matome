@@ -15,11 +15,19 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=4j6Lb7_5C0E",
+    "thumbUrl": "/media/2026-10-12-dodgers-vs-brewers-cs-g1-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-10-12T03:58:37Z",
     "videoTitle": "DODGERS vs. BREWERS: NLCS Full Game 1 Highlights (October 11) | 2026 MLB Postseason"
   },
-  "tags": ["大谷翔平", "ドジャース", "ブルワーズ", "ポストシーズン", "リーグ優勝決定シリーズ", "海外の反応"],
+  "tags": [
+    "大谷翔平",
+    "ドジャース",
+    "ブルワーズ",
+    "ポストシーズン",
+    "リーグ優勝決定シリーズ",
+    "海外の反応"
+  ],
   "stats": [
     {
       "player": "大谷翔平",
@@ -227,13 +235,83 @@
     }
   ],
   "game": {
-    "away": { "ja": "ドジャース", "en": "Los Angeles Dodgers", "score": 1, "innings": [0, 1, 0, 0, 0, 0, 0, 0, 0], "hits": 7, "errors": 0, "lob": 9 },
-    "home": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 2, "innings": [0, 0, 0, 1, 1, 0, 0, 0, null], "hits": 6, "errors": 0, "lob": 7, "homers": [{ "id": 668930, "name": "Brice Turang" }] },
-    "decisions": { "winner": "DL Hall", "loser": "Tarik Skubal", "save": "Trevor Megill" },
+    "away": {
+      "ja": "ドジャース",
+      "en": "Los Angeles Dodgers",
+      "score": 1,
+      "innings": [
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 9
+    },
+    "home": {
+      "ja": "ブルワーズ",
+      "en": "Milwaukee Brewers",
+      "score": 2,
+      "innings": [
+        0,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0,
+        null
+      ],
+      "hits": 6,
+      "errors": 0,
+      "lob": 7,
+      "homers": [
+        {
+          "id": 668930,
+          "name": "Brice Turang"
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "DL Hall",
+      "loser": "Tarik Skubal",
+      "save": "Trevor Megill"
+    },
     "scoring": [
-      { "inning": 2, "top": true, "batterId": 681624, "batter": "Andy Pages", "event": "Single", "away": 1, "home": 0 },
-      { "inning": 4, "top": false, "batterId": 668930, "batter": "Brice Turang", "event": "Home Run", "away": 1, "home": 1 },
-      { "inning": 5, "top": false, "batterId": 800325, "batter": "Luis Lara", "event": "Single", "away": 1, "home": 2 }
+      {
+        "inning": 2,
+        "top": true,
+        "batterId": 681624,
+        "batter": "Andy Pages",
+        "event": "Single",
+        "away": 1,
+        "home": 0
+      },
+      {
+        "inning": 4,
+        "top": false,
+        "batterId": 668930,
+        "batter": "Brice Turang",
+        "event": "Home Run",
+        "away": 1,
+        "home": 1
+      },
+      {
+        "inning": 5,
+        "top": false,
+        "batterId": 800325,
+        "batter": "Luis Lara",
+        "event": "Single",
+        "away": 1,
+        "home": 2
+      }
     ]
   }
 }
