@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-13 02:59",
+  "asOf": "2026-10-13 09:46",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -856,19 +856,19 @@
         {
           "away": {
             "id": 114,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "In Progress",
           "etDate": "2026-10-12",
           "gamePk": 849820,
           "home": {
             "id": 139,
-            "score": null
+            "score": 2
           },
           "ifNecessary": false,
           "n": 1,
           "start": "2026-10-13T00:00:00Z",
-          "state": "Preview",
+          "state": "Live",
           "tbd": false
         },
         {
@@ -998,7 +998,7 @@
         "id": 158,
         "nameJa": "ブルワーズ",
         "seed": 1,
-        "wins": 1
+        "wins": 2
       },
       "games": [
         {
@@ -1022,19 +1022,19 @@
         {
           "away": {
             "id": 119,
-            "score": 0
+            "score": 4
           },
-          "detailed": "Pre-Game",
+          "detailed": "Final",
           "etDate": "2026-10-12",
           "gamePk": 849812,
           "home": {
             "id": 158,
-            "score": 0
+            "score": 7
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-10-12T21:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         },
         {
