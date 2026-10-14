@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-14 10:15",
+  "asOf": "2026-10-14 15:14",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -850,7 +850,7 @@
         "id": 139,
         "nameJa": "レイズ",
         "seed": 1,
-        "wins": 0
+        "wins": 1
       },
       "games": [
         {
@@ -874,19 +874,19 @@
         {
           "away": {
             "id": 114,
-            "score": 0
+            "score": 1
           },
-          "detailed": "Manager challenge",
+          "detailed": "Final",
           "etDate": "2026-10-13",
           "gamePk": 849813,
           "home": {
             "id": 139,
-            "score": 0
+            "score": 3
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-10-14T00:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
@@ -937,7 +937,7 @@
             "id": 114,
             "score": null
           },
-          "ifNecessary": true,
+          "ifNecessary": false,
           "n": 5,
           "start": "2026-10-18T00:00:00Z",
           "state": "Preview",
