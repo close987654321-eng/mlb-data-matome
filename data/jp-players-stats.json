@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-16 04:54",
+  "asOf": "2026-10-16 21:31",
   "players": {
     "500743": {
       "fielding": {
@@ -78,7 +78,7 @@
         "gamesPlayed": 152,
         "gamesStarted": 152,
         "innings": "1289.2",
-        "oaa": -1,
+        "oaa": 0,
         "position": "一塁",
         "putOuts": 1015,
         "runsPrevented": 0
@@ -241,10 +241,10 @@
         "gamesPlayed": 145,
         "gamesStarted": 131,
         "innings": "1158.0",
-        "oaa": 0,
+        "oaa": -2,
         "position": "三塁",
         "putOuts": 98,
-        "runsPrevented": 0
+        "runsPrevented": -1
       },
       "hitting": {
         "atBats": 488,
@@ -1157,7 +1157,7 @@
         "woba": 0.318169,
         "wrcplus": 100.074
       },
-      "sprintSpeed": 26.6,
+      "sprintSpeed": 26.7,
       "team": "ドジャース"
     },
     "665742": {
@@ -1884,10 +1884,10 @@
         "gamesPlayed": 132,
         "gamesStarted": 131,
         "innings": "1151.2",
-        "oaa": 9,
+        "oaa": 10,
         "position": "中堅",
         "putOuts": 352,
-        "runsPrevented": 8
+        "runsPrevented": 9
       },
       "hitting": {
         "atBats": 511,
@@ -2676,10 +2676,10 @@
         "gamesPlayed": 56,
         "gamesStarted": 53,
         "innings": "474.2",
-        "oaa": -7,
+        "oaa": -6,
         "position": "一塁",
         "putOuts": 422,
-        "runsPrevented": -5
+        "runsPrevented": -4
       },
       "hitting": {
         "atBats": 573,
@@ -2933,7 +2933,7 @@
         "gamesPlayed": 119,
         "gamesStarted": 116,
         "innings": "1029.2",
-        "oaa": 0,
+        "oaa": -1,
         "position": "一塁",
         "putOuts": 865,
         "runsPrevented": 0
