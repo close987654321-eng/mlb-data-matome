@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-16 10:25",
+  "asOf": "2026-10-16 16:15",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -921,7 +921,7 @@
           },
           "ifNecessary": false,
           "n": 4,
-          "start": "2026-10-16T22:00:00Z",
+          "start": "2026-10-17T00:00:00Z",
           "state": "Preview",
           "tbd": false
         },
@@ -957,7 +957,7 @@
           },
           "ifNecessary": true,
           "n": 6,
-          "start": "2026-10-19T21:00:00Z",
+          "start": "2026-10-20T00:00:00Z",
           "state": "Preview",
           "tbd": false
         },
@@ -998,7 +998,7 @@
         "id": 158,
         "nameJa": "ブルワーズ",
         "seed": 1,
-        "wins": 3
+        "wins": 4
       },
       "games": [
         {
@@ -1058,9 +1058,9 @@
         {
           "away": {
             "id": 158,
-            "score": 2
+            "score": 6
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-15",
           "gamePk": 849810,
           "home": {
@@ -1070,61 +1070,7 @@
           "ifNecessary": false,
           "n": 4,
           "start": "2026-10-16T00:00:00Z",
-          "state": "Live",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 158,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-16",
-          "gamePk": 849808,
-          "home": {
-            "id": 119,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 5,
-          "start": "2026-10-17T01:00:00Z",
-          "state": "Preview",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 119,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-18",
-          "gamePk": 849806,
-          "home": {
-            "id": 158,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 6,
-          "start": "2026-10-19T00:00:00Z",
-          "state": "Preview",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 119,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-19",
-          "gamePk": 849807,
-          "home": {
-            "id": 158,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 7,
-          "start": "2026-10-20T00:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -1138,13 +1084,14 @@
         "seed": 2,
         "wins": 0
       },
-      "winnerId": null
+      "winnerId": 158
     },
     {
       "bestOf": 7,
       "bottom": {
-        "id": null,
-        "placeholder": "NL Champion",
+        "id": 158,
+        "nameJa": "ブルワーズ",
+        "seed": 1,
         "wins": 0
       },
       "games": [
@@ -1157,12 +1104,12 @@
           "etDate": "2026-10-23",
           "gamePk": 849805,
           "home": {
-            "id": null,
+            "id": 158,
             "score": null
           },
           "ifNecessary": false,
           "n": 1,
-          "start": "2026-10-23T07:33:00Z",
+          "start": "2026-10-23T08:33:00Z",
           "state": "Preview",
           "tbd": true
         },
@@ -1175,18 +1122,18 @@
           "etDate": "2026-10-24",
           "gamePk": 849802,
           "home": {
-            "id": null,
+            "id": 158,
             "score": null
           },
           "ifNecessary": false,
           "n": 2,
-          "start": "2026-10-24T07:33:00Z",
+          "start": "2026-10-24T08:33:00Z",
           "state": "Preview",
           "tbd": true
         },
         {
           "away": {
-            "id": null,
+            "id": 158,
             "score": null
           },
           "detailed": "Scheduled",
@@ -1204,7 +1151,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 158,
             "score": null
           },
           "detailed": "Scheduled",
@@ -1222,7 +1169,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 158,
             "score": null
           },
           "detailed": "Scheduled",
@@ -1247,12 +1194,12 @@
           "etDate": "2026-10-30",
           "gamePk": 849801,
           "home": {
-            "id": null,
+            "id": 158,
             "score": null
           },
           "ifNecessary": true,
           "n": 6,
-          "start": "2026-10-30T07:33:00Z",
+          "start": "2026-10-30T08:33:00Z",
           "state": "Preview",
           "tbd": true
         },
@@ -1265,12 +1212,12 @@
           "etDate": "2026-10-31",
           "gamePk": 849800,
           "home": {
-            "id": null,
+            "id": 158,
             "score": null
           },
           "ifNecessary": true,
           "n": 7,
-          "start": "2026-10-31T07:33:00Z",
+          "start": "2026-10-31T08:33:00Z",
           "state": "Preview",
           "tbd": true
         }
