@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-17 04:34",
+  "asOf": "2026-10-17 07:52",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -910,14 +910,14 @@
         {
           "away": {
             "id": 139,
-            "score": null
+            "score": 0
           },
-          "detailed": "Scheduled",
+          "detailed": "Pre-Game",
           "etDate": "2026-10-16",
           "gamePk": 849817,
           "home": {
             "id": 114,
-            "score": null
+            "score": 0
           },
           "ifNecessary": false,
           "n": 4,
@@ -1109,9 +1109,9 @@
           },
           "ifNecessary": false,
           "n": 1,
-          "start": "2026-10-23T08:33:00Z",
+          "start": "2026-10-24T00:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
@@ -1127,9 +1127,9 @@
           },
           "ifNecessary": false,
           "n": 2,
-          "start": "2026-10-24T08:33:00Z",
+          "start": "2026-10-25T00:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
@@ -1145,9 +1145,9 @@
           },
           "ifNecessary": false,
           "n": 3,
-          "start": "2026-10-26T07:33:00Z",
+          "start": "2026-10-27T00:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
@@ -1163,9 +1163,9 @@
           },
           "ifNecessary": false,
           "n": 4,
-          "start": "2026-10-27T07:33:00Z",
+          "start": "2026-10-28T00:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
@@ -1181,9 +1181,9 @@
           },
           "ifNecessary": true,
           "n": 5,
-          "start": "2026-10-28T07:33:00Z",
+          "start": "2026-10-29T00:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
@@ -1199,9 +1199,9 @@
           },
           "ifNecessary": true,
           "n": 6,
-          "start": "2026-10-30T08:33:00Z",
+          "start": "2026-10-31T00:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         },
         {
           "away": {
@@ -1217,9 +1217,9 @@
           },
           "ifNecessary": true,
           "n": 7,
-          "start": "2026-10-31T08:33:00Z",
+          "start": "2026-11-01T00:00:00Z",
           "state": "Preview",
-          "tbd": true
+          "tbd": false
         }
       ],
       "id": "W_1",
