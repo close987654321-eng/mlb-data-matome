@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-17 07:52",
+  "asOf": "2026-10-17 10:21",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -910,18 +910,36 @@
         {
           "away": {
             "id": 139,
-            "score": 0
+            "score": null
           },
-          "detailed": "Pre-Game",
-          "etDate": "2026-10-16",
+          "detailed": "Postponed",
+          "etDate": "2026-10-18",
           "gamePk": 849817,
           "home": {
             "id": 114,
-            "score": 0
+            "score": null
           },
           "ifNecessary": false,
           "n": 4,
           "start": "2026-10-17T00:00:00Z",
+          "state": "Final",
+          "tbd": false
+        },
+        {
+          "away": {
+            "id": 139,
+            "score": null
+          },
+          "detailed": "Scheduled",
+          "etDate": "2026-10-18",
+          "gamePk": 849817,
+          "home": {
+            "id": 114,
+            "score": null
+          },
+          "ifNecessary": false,
+          "n": 4,
+          "start": "2026-10-19T00:00:00Z",
           "state": "Preview",
           "tbd": false
         },
