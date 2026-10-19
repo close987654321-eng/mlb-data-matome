@@ -5,13 +5,20 @@ name: 選手成績スナップショット自動更新
 # サイト本体は API を叩かない方針のまま、編集時取得をCIで「試合がある時間帯だけ毎時」実行して
 # 鮮度を上げる（規約§4.1：恒常データ源にしない＝デッドな時間帯は回さない）。
 # 値が変わらなければ no-op でコミットしない（スナップショットは安定ソートで byte 一致）。
+# オフ（ワールドシリーズ決着の約1週間後〜翌年の開幕戦）は冬モード＝先頭の season ジョブが判定して
+# 取得ジョブを丸ごと飛ばす（skipped＝ワークフローは成功）。失敗が見えたら本当の故障、の状態を冬も保つ。
 
 on:
   schedule:
     # 試合がある時間帯(JST 01:00〜17:00頃＝UTC 16:00〜08:00)だけ毎時。:17 は最混雑の毎時0分を避けるため。
     # GitHubのcronはUTC・ベストエフォート（多少遅れることがある）。デッドな時間帯(US午前)は回さない。
     - cron: '17 0-8,16-23 * * *'
-  workflow_dispatch: {} # 手動実行も可（オフ時間に即更新したいとき）
+  workflow_dispatch: # 手動実行も可（オフ時間に即更新したいとき）
+    inputs:
+      et_date:
+        description: '冬モード判定を試す日（ET・YYYY-MM-DD）。空なら今日。オフの日を入れると取得ジョブは飛ぶ'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -21,7 +28,62 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # 冬モード判定。MLBの試合が無い期間も毎時取りに行くと、動かない値のために statsapi を毎時数十回叩き（gamelogs だけで
+  # 40選手ぶん）、WARの横ばいの点を毎日コミットし、確定試合0件の窓（team-games）や翌年の空の順位表（standings）の
+  # エラーが毎時ログに並ぶ（`|| echo` で緑のまま）＝本当の故障と見分けがつかない。年が明けると翌シーズン（0試合）の
+  # 空で前季の成績・球種を上書きする。判定は日付の決め打ちでなく statsapi の日程の実データ
+  # （fetch-mlb-stats.mjs season-mode＝直近7日に試合なし＆7日以内にポストシーズンの予定なし→off）。
+  # 日程が空なのに公式日程（/seasons）ではシーズン中なら取得の故障として赤くなる＝空を「オフ」と鵜呑みにしない。
+  # オフの判定は ET の日付を鍵にキャッシュする＝同じ日の2回目以降は statsapi を叩かない（オフ中は1日1回・2〜3コール）。
+  # 次の開幕日からは毎回判定し直す＝開幕戦が終わった後の最初の実行で取得が再開する。
+  season:
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.mode.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts # 判定に要るのはスクリプトだけ（data/ は下の取得ジョブが持つ）
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: 判定する日（ET＝MLBの試合日の基準）
+        id: day
+        env:
+          ET_DATE: ${{ inputs.et_date }}
+        run: |
+          set -euo pipefail
+          if [[ "${ET_DATE:-}" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "et=${ET_DATE}" >> "$GITHUB_OUTPUT"
+          else
+            echo "et=$(TZ=America/New_York date +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: その日の判定を復元（オフ中は同じ日の2回目以降 statsapi を叩かない）
+        id: cache
+        uses: actions/cache/restore@v4
+        with:
+          path: .season-mode
+          key: season-mode-${{ steps.day.outputs.et }}
+
+      - name: シーズン判定（オフなら取得ジョブを飛ばす）
+        id: mode
+        run: node scripts/fetch-mlb-stats.mjs season-mode "${{ steps.day.outputs.et }}" --state .season-mode/state.json
+
+      - name: オフの判定を保存（その日の残りの実行は API を叩かずに飛ばす）
+        if: steps.mode.outputs.mode == 'off' && steps.cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .season-mode
+          key: season-mode-${{ steps.day.outputs.et }}
+
   refresh:
+    needs: season
+    # NPB（/prospects）の成績もこのジョブの中＝MLBと同じ冬に休む（開幕・閉幕はMLBとほぼ同時期で、
+    # 閉幕後の成績は動かない。年明けに翌年分を取ると前年の今季成績が消えるのはスクリプト側でも防いでいる）。
+    if: needs.season.outputs.mode == 'on'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

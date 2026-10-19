@@ -197,6 +197,22 @@ console.log(`NPB公式から取得: ${players.length}人 / ${YEAR}年`);
 const leaders = await fetchLeaders(YEAR);
 console.log(`リーダーズ ${Object.keys(leaders.cats).length} 部門（${leaders.asOf} 現在）`);
 
+// 年が明けてから NPB の開幕まで（1月〜3月下旬）は、その年のリーダーズがまだ無い（2026-10 に 2027 年分が 404 を実測）。
+// そのまま進むと年度別に今年の行が無い＝全員の「今季成績」と順位が空のJSONで前年分を上書きする。
+// 前年のJSONを持っているなら開幕前とみなして保持・正常終了（選手ページも取りに行かない＝npb.jp を叩き続けない）。
+if (!Object.keys(leaders.cats).length) {
+  let prevSeason = null;
+  try {
+    prevSeason = JSON.parse(readFileSync(OUT, 'utf8')).season ?? null;
+  } catch {
+    /* 既存なし＝そのまま取りに行く */
+  }
+  if (prevSeason != null && prevSeason < YEAR) {
+    console.log(`${YEAR}年のリーダーズがまだ無い（NPBの開幕前）＝${prevSeason}年のJSONを保持して終了`);
+    process.exit(0);
+  }
+}
+
 // npbFetchedAt（JSTの取得日）は CI の「今日はもう取った」ゲートが読む。asOf（リーダーズの
 // 「◯月◯日現在」）は試合が無い日に動かないので、それを鍵にすると毎時 npb.jp を叩き続けてしまう。
 const jstToday = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);

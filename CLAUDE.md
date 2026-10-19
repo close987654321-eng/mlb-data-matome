@@ -165,6 +165,17 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     自動取得→変化があればコミット（Vercel 自動デプロイ）。これは編集時取得の延長＝**サイト本体ではなく CI が叩く**運用。
     API規約「個人・非商用・非バルク」を踏まえ、デッドな時間帯は回さず低頻度に抑える（恒常的な全時間データ源にはしない）。
     取得失敗・名簿異常時は書かずに失敗（既存JSONを保持）。手動更新は `node scripts/fetch-mlb-stats.mjs snapshot`。
+  - **冬モード（2026-10-19）**: refresh-stats.ymlは先頭のseasonジョブ（`fetch-mlb-stats.mjs season-mode`）が
+    statsapiの日程の実データで判定し、**直近7日に終わった試合も7日以内のポストシーズンの予定も無ければoff**＝取得ジョブを
+    丸ごと飛ばす（WS決着の約1週間後〜翌年の開幕戦が終わるまで。日付の決め打ちはしない）。オフも毎時取りに行くと、動かない値の
+    ためにstatsapiを毎時数十回叩き、WARの横ばいの点を毎日コミットし、確定試合0件の窓や翌年の空の順位表のエラーが毎時ログに
+    並んで（`|| echo`で緑のまま）本当の故障と見分けがつかず、年明けには翌シーズン（0試合）の空で前季の成績・球種を上書きするため。
+    日程が空なのに公式日程（/seasons）ではシーズン中なら**故障として赤くする**＝statsapiは崩れたクエリに200の空を返すので、
+    空を「オフ」と鵜呑みにしない。offの判定はETの日付を鍵にActionsのキャッシュへ置く＝
+    オフ中のstatsapiは1日1回・2〜3コールだけ。次の開幕日からは毎回判定し直し、開幕戦が終わった後の最初の実行で再開する。
+    NPB（/prospects）の取得も同じジョブ内＝同じ冬に休む。スクリプト側にも保険がある（snapshot・gamelogs・warrace・
+    standings・team-games・arsenal・NPBは「翌シーズンの値がまだ無い」なら前季のJSONを保持して正常終了）。
+    判定を試すときは`node scripts/fetch-mlb-stats.mjs season-mode 2025-11-20`（off）／`2026-09-15`（on）。
   - **守備＋走力（Statcast / Baseball Savant）**: snapshot は statsapi の伝統的守備に加え、`baseballsavant.mlb.com`
     のリーダーボード CSV から **OAA（守備範囲）・守備run（FRV相当）・送球 最速mph・走力 ft/s** を取得（MLB公式・
     キー不要）。OAA等は守備位置に就く野手のみ＝投手/DH には付かない（大谷は走力のみ）。Savant 取得が失敗しても

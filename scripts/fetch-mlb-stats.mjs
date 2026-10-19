@@ -27,7 +27,7 @@
  *   node scripts/fetch-mlb-stats.mjs player 大谷 --json
  */
 
-import { writeFileSync, readFileSync, readdirSync, mkdirSync } from 'node:fs';
+import { writeFileSync, readFileSync, readdirSync, mkdirSync, appendFileSync } from 'node:fs';
 import path from 'node:path';
 
 const BASE = 'https://statsapi.mlb.com/api/v1';
@@ -1301,6 +1301,23 @@ async function runSnapshot(season, asOf) {
     };
   }
   const file = path.join(process.cwd(), 'data', 'jp-players-stats.json');
+  // 年が明けると season が翌年に替わり、名簿は翌年分が返る（2026-10 に 2027 を叩いて日本人13人を実測）のに
+  // 成績はまだ誰にも無い。そのまま書くと前季の成績が全員空欄に上書きされる（1月〜開幕戦の選手ハブが白紙）。
+  // 前季より新しいシーズンで全員が空なら開幕前とみなして保持・正常終了。同じシーズンの途中で全員が空なのは取得の故障。
+  if (!Object.values(players).some((pl) => pl.hitting || pl.pitching)) {
+    let prevSeason = null;
+    try {
+      prevSeason = JSON.parse(readFileSync(file, 'utf8')).season ?? null;
+    } catch {
+      /* 既存なし＝故障扱い */
+    }
+    if (prevSeason != null && prevSeason < season) {
+      console.log(`snapshot: ${season}年はまだ誰も出場していない（開幕前）＝${prevSeason}年のスナップショットを保持`);
+      return;
+    }
+    console.error(`snapshot: ${season}年の成績が全員空＝取得の故障とみなし中断（既存JSONは保持）`);
+    process.exit(1);
+  }
   // 時刻つき asOf でも「中身が変わった時だけ」更新する：既存と players が一致するなら前回の asOf を据え置き、
   // ファイルをバイト一致のままにして毎時 cron の無駄コミット/デプロイを防ぐ（時刻が毎時動いても中身が同じなら no-op）。
   let stampedAsOf = asOf;
@@ -1462,6 +1479,12 @@ async function runGamelogs(season, asOf) {
     console.error('snapshot 未生成のため gamelogs をスキップ（先に snapshot を実行）');
     return;
   }
+  // snapshot が前季のまま（開幕前で snapshot が保持した）なのに season だけ翌年になっているときは取らない。
+  // 取ると翌年（0試合）の空のログで前季の試合別ログを上書きする（年明けや、開幕日に日本人がまだ誰も出ていない日）。
+  if (snap.season !== season) {
+    console.log(`gamelogs: snapshot は ${snap.season}年のまま＝${season}年の試合別ログはまだ取らない（既存を保持）`);
+    return;
+  }
   // 対象＝サイト本体が徹底分析を出す条件（hasMlbStats: league あり＋打/投あり）に揃える。AAA等(league=null)は除外。
   const targets = Object.entries(snap.players ?? {}).filter(
     ([, p]) => p.league && (p.hitting || p.pitching),
@@ -1497,6 +1520,11 @@ async function runWarRace(asOf) {
     return;
   }
   const date = (asOf ?? '').slice(0, 10);
+  // snapshot が前季のまま年が明けた（開幕前）なら点を打たない＝前季の累計WARを翌年の日付で積まない。
+  if (date && Number(date.slice(0, 4)) !== snap.season) {
+    console.log(`warrace: snapshot は ${snap.season}年のまま＝${date} の点は打たない（既存を保持）`);
+    return;
+  }
   const file = path.join(process.cwd(), 'data', 'war-race.json');
   let prev = {};
   try {
@@ -1938,6 +1966,9 @@ async function runArsenal(season, asOf) {
     };
   }
 
+  // 0投手＝翌シーズンの開幕前（Savant にまだ球種が無い）か取得の故障。書くと球種の設計図が全員ぶん消えるので
+  // 既存を保持する（cyyoung の「規定投手が取得できない」と同じ扱い。2027年を叩いて0投手で上書きされるのを実測）。
+  if (!Object.keys(pitchers).length) return console.error(`arsenal: ${season}年の球種データが0投手（開幕前か取得の故障）＝書き込まず既存を保持`);
   const file = path.join(process.cwd(), 'data', 'pitch-arsenals.json');
   // asOf 以外が前回と一致なら asOf を据え置き＝バイト一致で no-op（CI の無駄コミット防止・snapshot と同じ）。
   let stampedAsOf = asOf;
@@ -2779,6 +2810,12 @@ async function runStandings(season, asOf) {
     `${BASE}/standings?leagueId=103,104&season=${season}&standingsTypes=regularSeason`,
   );
   const records = data.records ?? [];
+  // 年が明けると season が翌年になるが、翌年の順位表は開幕近くまで空（2026-10 に 2027 を叩いて records 0 を実測）。
+  // オフなら前季の最終順位を保持して正常終了＝シーズン中に空なら故障として下で落とす。
+  if (!records.length && (await seasonPhase(etToday())).mode === 'off') {
+    console.log(`standings: ${season}年の順位表はまだ無い（オフ）＝既存JSONを保持して終了`);
+    return;
+  }
   const order = [201, 202, 200, 204, 205, 203]; // 表示順: AL東/中/西 → NL東/中/西
   const byId = new Map(records.map((r) => [r.division?.id, r]));
   const divisions = order.map((divId) => {
@@ -2805,6 +2842,11 @@ async function runStandings(season, asOf) {
   });
   const total = divisions.reduce((n, d) => n + d.teams.length, 0);
   if (total !== 30) throw new Error(`standings: 球団数が ${total}（30想定）＝異常とみなし書き込み中止`);
+  // 開幕前に翌年の順位表が全球団0勝0敗で出てきても、前季の最終順位を上書きしない（チームLPが冬じゅう0-0になる）。
+  if (divisions.every((d) => d.teams.every((t) => !t.w && !t.l))) {
+    console.log(`standings: ${season}年は全球団0勝0敗（開幕前）＝既存JSONを保持して終了`);
+    return;
+  }
 
   const file = path.join(process.cwd(), 'data', 'standings.json');
   const content = { season, divisions };
@@ -3090,7 +3132,15 @@ async function runTeamGames(season, asOf, days = 30) {
         : {}),
     });
   }
-  if (games.length === 0) throw new Error('team-games: 確定した試合が0件＝異常とみなし書き込み中止');
+  if (games.length === 0) {
+    // オフ（WS 決着の約1週間後〜開幕戦）は窓に確定試合が無いのが正常＝書かずに正常終了する。
+    // シーズン中に0件なら取得の故障（seasonPhase も公式日程と食い違えば故障として落ちる）。
+    if ((await seasonPhase(to)).mode === 'off') {
+      console.log(`team-games: オフ（${to}(ET) の前後に試合なし）＝既存JSONを保持して終了`);
+      return;
+    }
+    throw new Error('team-games: 確定した試合が0件＝異常とみなし書き込み中止');
+  }
   // 全球団の検査はレギュラーシーズンの日が窓に7日以上あるときだけ。シーズン終了から窓が進むと
   // （10月末〜）レギュラーの試合が窓から消えるので、無条件に検査するとワールドシリーズの試合が
   // 書けなくなる。開幕直後の少数試合の日（海外開幕シリーズ等）も同じ理由で誤検知しない。
@@ -3115,6 +3165,108 @@ async function runTeamGames(season, asOf, days = 30) {
   console.log(
     `team-games 書き出し: ${games.length}試合 / ${from}〜${to}(ET) / asOf ${stampedAsOf} → ${file}`,
   );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// season-mode … 毎時CI（refresh-stats.yml）の冬モード判定。
+//
+// なぜ要るか: ワールドシリーズが終わると翌年3月下旬まで MLB の試合が無い。それでも毎時ジョブを回すと、動かない値の
+// ために gamelogs・journal-next が statsapi を毎時数十回叩き、WAR の横ばいの点を毎日コミットし、team-games（確定試合
+// 0件）や standings（翌年の順位表は空）のエラーが毎時ログに並ぶ（CI は `|| echo` で緑のまま）＝本当の故障と見分けが
+// つかない（CI が green のまま10日静止した事故＝cy-young ボードの件もある）。年が明けると season が翌年になり、
+// snapshot・arsenal が翌シーズン（まだ0試合）の空で前季の成績・球種を上書きする。
+//
+// 判定は日付の決め打ちでなく公式スケジュールの実データ（ET の試合日・gameType R/F/D/L/W）:
+//   - 直近7日に終わった（または進行中の）試合がある → on（決着の後も1週間は最終結果とアーカイブを書く）
+//   - 7日以内にポストシーズンの試合が予定されている → on（LCS→WS の谷間でも日程・開始時刻を取り続ける）
+//   - どちらも無い → off（WS 決着の約1週間後〜翌年の開幕戦が終わるまで）
+// 開幕前は R の予定があっても off のまま＝最初の試合が終わるまで前季のJSONを出し続ける。
+//
+// 「取得が壊れて空が返った」との見分け: off なのに /seasons の公式日程ではシーズン中（開幕2日後〜
+// ポストシーズン最終日）なら故障とみなして非ゼロ終了する（＝CI が赤くなる）。statsapi はクエリが
+// 崩れると 200 で空を返す（fetchStats のコメント参照）ので、空＝オフと鵜呑みにしない。
+// ─────────────────────────────────────────────────────────────────────────────
+const SEASON_RECENT_DAYS = 7;
+const SEASON_PS_AHEAD_DAYS = 7;
+
+async function seasonPhase(etDate) {
+  const from = addDays(etDate, -SEASON_RECENT_DAYS);
+  const to = addDays(etDate, SEASON_PS_AHEAD_DAYS);
+  const data = await getJson(
+    `${BASE}/schedule?sportId=1&startDate=${from}&endDate=${to}&gameType=R,${[...PS_GAME_TYPES].join(',')}`,
+  );
+  if (!Array.isArray(data.dates)) throw new Error('season-mode: 日程の応答に dates が無い＝取得の故障');
+  const games = data.dates.flatMap((d) => (d.games ?? []).map((g) => ({ date: d.date, g })));
+  const dead = ({ g }) => /postponed|cancel/i.test(g.status?.detailedState ?? '');
+  const played = games.filter(
+    (x) => x.date <= etDate && !dead(x) && ['Final', 'Live'].includes(x.g.status?.abstractGameState),
+  );
+  const psAhead = games.filter(
+    (x) => x.date >= etDate && PS_GAME_TYPES.has(x.g.gameType) && !dead(x) && x.g.status?.abstractGameState !== 'Final',
+  );
+  const lastPlayed = played.map((x) => x.date).sort().at(-1) ?? null;
+  const nextPostseason = psAhead.map((x) => x.date).sort()[0] ?? null;
+  if (played.length || psAhead.length) return { mode: 'on', etDate, lastPlayed, nextPostseason };
+
+  const year = Number(etDate.slice(0, 4));
+  const cur = (await getJson(`${BASE}/seasons?sportId=1&season=${year}`)).seasons?.[0];
+  if (!cur?.regularSeasonStartDate || !cur?.postSeasonEndDate) {
+    throw new Error(`season-mode: ${year}年の公式日程（/seasons）が取れない＝オフかどうか判定できない`);
+  }
+  if (etDate >= addDays(cur.regularSeasonStartDate, 2) && etDate <= cur.postSeasonEndDate) {
+    throw new Error(
+      `season-mode: ${etDate}(ET) は公式日程ではシーズン中（${cur.regularSeasonStartDate}〜${cur.postSeasonEndDate}）なのに` +
+        `直近${SEASON_RECENT_DAYS}日に終わった試合も先7日のポストシーズンも0件＝取得の故障とみなす（ロックアウト等で本当に試合が無いなら /seasons の更新を待つ）`,
+    );
+  }
+  // 次に起きる日＝次の開幕日。今年の開幕がまだ（または開幕日〜最初の試合が終わる前）なら今年、
+  // ポストシーズンが終わった後なら来年（日程が未発表なら null＝毎日判定し直す）。
+  let wakeFrom = cur.regularSeasonStartDate;
+  if (etDate > cur.postSeasonEndDate) {
+    const next = await getJson(`${BASE}/seasons?sportId=1&season=${year + 1}`).catch(() => ({}));
+    wakeFrom = next.seasons?.[0]?.regularSeasonStartDate ?? null;
+  }
+  return { mode: 'off', etDate, lastPlayed: null, nextPostseason: null, wakeFrom };
+}
+
+/**
+ * season-mode コマンド本体。結果を GITHUB_OUTPUT（mode=on|off）に書く。
+ * --state のファイルは CI が ET の日付を鍵にキャッシュする＝オフ中は同じ日の2回目以降 API を叩かない
+ * （statsapi の「非バルク」の posture）。ただし次の開幕日（wakeFrom）からは毎回判定し直す＝
+ * 開幕戦が終わった後の最初の毎時ジョブで on に戻る（開幕日の成績を1日遅れで出さない）。
+ */
+async function runSeasonMode(etDate, { stateFile } = {}) {
+  const emit = (mode) => {
+    if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, `mode=${mode}\n`);
+  };
+  if (stateFile) {
+    try {
+      const st = JSON.parse(readFileSync(stateFile, 'utf8'));
+      if (st.mode === 'off' && st.etDate === etDate && (!st.wakeFrom || etDate < st.wakeFrom)) {
+        console.log(
+          `冬モード（${etDate}(ET) は判定済み・次の開幕 ${st.wakeFrom ?? '未発表'}）→ API を叩かずに以降の取得を飛ばす`,
+        );
+        emit('off');
+        return;
+      }
+    } catch {
+      /* 判定がまだ＝取りに行く */
+    }
+  }
+  const phase = await seasonPhase(etDate);
+  if (stateFile) {
+    mkdirSync(path.dirname(stateFile), { recursive: true });
+    writeFileSync(stateFile, JSON.stringify(phase) + '\n');
+  }
+  if (phase.mode === 'on') {
+    const ps = phase.nextPostseason ? ` / 次のポストシーズン ${phase.nextPostseason}` : '';
+    console.log(`シーズン中（${etDate}(ET)・最後の試合 ${phase.lastPlayed ?? 'なし'}${ps}）→ 取得を続ける`);
+  } else {
+    console.log(
+      `冬モード（${etDate}(ET)・直近${SEASON_RECENT_DAYS}日に試合なし＆ポストシーズンの予定なし・次の開幕 ${phase.wakeFrom ?? '未発表'}）→ 以降の取得を飛ばす`,
+    );
+  }
+  emit(phase.mode);
 }
 
 async function main() {
@@ -3206,6 +3358,12 @@ async function main() {
     const daysIdx = raw.indexOf('--days');
     const days = daysIdx >= 0 && raw[daysIdx + 1] ? Number(raw[daysIdx + 1]) : 30;
     await runTeamGames(seasonArg ? Number(seasonArg) : defaultSeason(), asOf, days);
+  } else if (cmd === 'season-mode') {
+    // season-mode [YYYY-MM-DD(ET)] [--state <file>]：毎時CIの冬モード判定（mode=on|off を GITHUB_OUTPUT へ）。
+    // 日付を渡すと過去・未来の日で判定を試せる（例: 2025-11-20 → off／2026-09-15 → on）。
+    const stateIdx = raw.indexOf('--state');
+    const stateFile = stateIdx >= 0 && raw[stateIdx + 1] ? raw[stateIdx + 1] : null;
+    await runSeasonMode(arg && DATE_RE.test(arg) ? arg : etToday(), { stateFile });
   } else if (cmd === 'backfill-games') {
     // backfill-games [--apply] [--force]：既存MLB記事に試合結果(thread.game)＝スコア・線スコア・
     // その試合時点の勝敗/順位・勝敗投手 を埋める（試合結果ボックス＆カード用）。--force で完成済みも書き直す。
@@ -3225,6 +3383,7 @@ async function main() {
         '  node scripts/fetch-mlb-stats.mjs standings          # AL/NL全6地区の順位表を data/standings.json へ（チームLP用）',
         '  node scripts/fetch-mlb-stats.mjs postseason [season] # 進出争い＋トーナメント表を data/postseason.json へ（/postseason ハブ用）',
         '  node scripts/fetch-mlb-stats.mjs team-games [--days N] # 直近N日(既定30)の全試合結果を data/team-games.json へ（チームLPの試合タイムライン用）',
+        '  node scripts/fetch-mlb-stats.mjs season-mode [YYYY-MM-DD] [--state <file>] # 毎時CIの冬モード判定（直近7日に試合なし＆ポストシーズンの予定なし＝off）',
         '  node scripts/fetch-mlb-stats.mjs arsenal [season]   # MLB投手の球種別 徹底分析(投球割合/空振り/被wOBA/被弾内訳)を data/pitch-arsenals.json へ（snapshot後に実行）',
         '  node scripts/fetch-mlb-stats.mjs cyyoung [season]   # サイヤング予測ボード(規定投手をAL/NL別にスコア化＋圏外の注目日本人)を data/cy-young-board.json へ',
         '  node scripts/fetch-mlb-stats.mjs roy [season]       # 新人王予測ボード(ルーキー資格者をAL/NL別にスコア化)を data/roy-board.json へ',
