@@ -1048,7 +1048,10 @@ async function fetchHomers(gamePk) {
 async function fetchScoringPlays(gamePk) {
   try {
     const j = await getJson(`${BASE}/schedule?gamePk=${gamePk}&hydrate=scoringplays`);
-    const plays = j.dates?.[0]?.games?.[0]?.scoringPlays ?? [];
+    // 延期で同じ gamePk が複数の date に残ることがある（延期スタブ＋消化試合）＝Final を優先する。
+    const allGames = (j.dates ?? []).flatMap((d) => d.games ?? []);
+    const game = allGames.find((g) => g.status?.detailedState === 'Final') ?? allGames[0];
+    const plays = game?.scoringPlays ?? [];
     return plays
       .map((p) => ({
         inning: p.about?.inning,
