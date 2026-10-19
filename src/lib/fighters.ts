@@ -177,28 +177,32 @@ export const FIGHTERS: Fighter[] = [
     accoladeJa: 'ONEムエタイ世界アトム級王者（初代）・エイワスポーツジム。ラジャダムナン3階級とルンピニーの王座を獲った外国人は史上唯一',
     // 通算戦績は Wikipedia（ja/en 一致）の 78戦71勝6敗1分44KO。ONE 公式は 2026-04-29 時点で 67-6 と別の数え方をしており、
     // 連勝数（42）だけは ONE 公式発表の値を使う（headlineStats）。
-    record: { wins: 71, losses: 6, draws: 1, kos: 44, asOf: '2026-09-12' },
+    // 2026-10-17 のマスドール戦（en Wikipedia の戦績表で 79戦72勝6敗1分45KO を確認）まで反映。
+    record: { wins: 72, losses: 6, draws: 1, kos: 45, asOf: '2026-10-17' },
     headlineStats: [
-      // ONE 公式が 2026-09-12 のハー・リン・オム戦後に「42 STRAIGHT WINS」と発表
+      // ONE 公式が 2026-09-12 のハー・リン・オム戦後に「42 STRAIGHT WINS」と発表。10/17 の勝利後の
+      // 公式の連勝数はまだ確かめられていないので、発表済みの値と日付のまま据え置く（自前で足し算しない）
       { value: '42連勝', labelJa: '連勝記録（2026年9月12日時点・ONE公式発表）' },
-      // ONE 公式選手ページの ONE 戦績（2026-09-12 時点）
-      { value: '6-0', labelJa: 'ONE戦績（2KO）' },
+      // ONE 戦績＝9/12 時点の 6-0（2KO）に 10/17 のTKO勝ちを加算（ゴング格闘技「ONE7戦目」）
+      { value: '7-0', labelJa: 'ONE戦績（3KO）' },
       // ラジャダムナン：ミニフライ級（2018）・フライ級（2023）・スーパーフライ級（2024）
       { value: '3階級', labelJa: 'ラジャダムナン・スタジアム王座（外国人で唯一）' },
     ],
-    // 10/17 ONE SAMURAI 4（有明アリーナ）＝アトム級ムエタイ世界王座2度目の防衛戦（ONE 公式・イーファイト 2026-08-07 発表）
-    nextFightJa: {
-      labelJa: '10/17 マスドール戦（ONEムエタイ世界アトム級王座・2度目の防衛戦）',
-      until: '2026-10-17',
-      opponentJa: 'リファディン・マスドール',
-      eventJa: 'ONE SAMURAI 4｜東京・有明アリーナ',
-    },
+    // 2026-10-17 のマスドール戦（ONE SAMURAI 4）を消化。次戦は未発表なので nextFightJa は持たない。
     sameAs: [
       'https://ja.wikipedia.org/wiki/%E5%90%89%E6%88%90%E5%90%8D%E9%AB%98',
       'https://en.wikipedia.org/wiki/Nadaka_Yoshinari',
       'https://www.onefc.com/athletes/nadaka-yoshinari/',
     ],
     fights: [
+      {
+        date: '2026-10-17',
+        opponentJa: 'リファディン・マスドール',
+        opponentEn: 'Rifdean Masdor',
+        venueJa: '東京・有明アリーナ（ONE SAMURAI 4）',
+        resultJa: '2R58秒 左ハイキックでTKO勝ち（ONEムエタイ世界アトム級王座・2度目の防衛）',
+        noteJa: '1Rにカウンターの左でダウンを奪い、2Rに相手のバックハンドブローに合わせた左ハイで仕留めた。相手の計量失敗で53.8kg契約・王座は名高だけが懸ける形に。ONE7戦目で初のボーナス（1500万円）',
+      },
       {
         date: '2026-09-12',
         opponentJa: 'ハー・リン・オム',
@@ -1616,12 +1620,8 @@ export const FIGHTERS: Fighter[] = [
     shortJa: ['安保', '瑠輝也'],
     sport: 'mma',
     voiceScope: 'domestic',
-    nextFightJa: {
-      labelJa: '10/17シュマロフ戦',
-      until: '2026-10-17',
-      opponentJa: 'ボグダン・シュマロフ',
-      eventJa: 'ONE SAMURAI 4｜有明アリーナ',
-    },
+    // 2026-10-17 のシュマロフ戦（ONE SAMURAI 4）は安保の計量・ハイドレーションテスト不合格で中止
+    // （ONE 公式の全試合結果）。試合は成立していないので fights / record には入れない。次戦は未発表。
     accoladeJa: 'キックボクサー・MFL team CLUB es（第4代K-1 WORLD GP スーパー・ライト級王者）',
     // キックボクシング通算のみ（Wikipedia 戦績表）。MMA は 0勝1敗（2023 大晦日の久保優太戦だけ）＝
     // record に混ぜず fights の noteJa と日誌で明示する。
