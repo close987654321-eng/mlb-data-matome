@@ -15,6 +15,7 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=7-cD-1Wa5t0",
+    "thumbUrl": "/media/2026-10-20-rays-vs-guardians-cs-g6-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-10-20T03:45:09Z",
     "videoTitle": "GUARDIANS vs. RAYS: ALCS Full Game 6 Highlights (October 19) | 2026 MLB Postseason"
@@ -221,17 +222,122 @@
     }
   ],
   "game": {
-    "away": { "ja": "ガーディアンズ", "en": "Cleveland Guardians", "score": 3, "innings": [0, 0, 0, 0, 0, 1, 0, 2, 0], "hits": 7, "errors": 0, "lob": 9 },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 7, "innings": [0, 2, 1, 0, 0, 0, 2, 2, null], "hits": 7, "errors": 0, "lob": 8, "homers": [{ "id": 650490, "name": "Yandy Díaz" }, { "id": 691406, "name": "Junior Caminero" }] },
-    "decisions": { "winner": "Freddy Peralta", "loser": "Shawn Armstrong" },
+    "away": {
+      "ja": "ガーディアンズ",
+      "en": "Cleveland Guardians",
+      "score": 3,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        2,
+        0
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 9
+    },
+    "home": {
+      "ja": "レイズ",
+      "en": "Tampa Bay Rays",
+      "score": 7,
+      "innings": [
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        2,
+        2,
+        null
+      ],
+      "hits": 7,
+      "errors": 0,
+      "lob": 8,
+      "homers": [
+        {
+          "id": 650490,
+          "name": "Yandy Díaz"
+        },
+        {
+          "id": 691406,
+          "name": "Junior Caminero"
+        }
+      ]
+    },
+    "decisions": {
+      "winner": "Freddy Peralta",
+      "loser": "Shawn Armstrong"
+    },
     "scoring": [
-      { "inning": 2, "top": false, "batterId": 680700, "batter": "Richie Palacios", "event": "Double", "away": 0, "home": 2 },
-      { "inning": 3, "top": false, "batterId": 676356, "batter": "Jonny DeLuca", "event": "Sac Fly", "away": 0, "home": 3 },
-      { "inning": 6, "top": true, "batterId": 663993, "batter": "Nathaniel Lowe", "event": "Single", "away": 1, "home": 3 },
-      { "inning": 7, "top": false, "batterId": 691406, "batter": "Junior Caminero", "event": "Home Run", "away": 1, "home": 5 },
-      { "inning": 8, "top": true, "batterId": 672275, "batter": "Patrick Bailey", "event": "Walk", "away": 2, "home": 5 },
-      { "inning": 8, "top": true, "batterId": 682657, "batter": "Angel Martínez", "event": "Hit By Pitch", "away": 3, "home": 5 },
-      { "inning": 8, "top": false, "batterId": 650490, "batter": "Yandy Díaz", "event": "Home Run", "away": 3, "home": 7 }
+      {
+        "inning": 2,
+        "top": false,
+        "batterId": 680700,
+        "batter": "Richie Palacios",
+        "event": "Double",
+        "away": 0,
+        "home": 2
+      },
+      {
+        "inning": 3,
+        "top": false,
+        "batterId": 676356,
+        "batter": "Jonny DeLuca",
+        "event": "Sac Fly",
+        "away": 0,
+        "home": 3
+      },
+      {
+        "inning": 6,
+        "top": true,
+        "batterId": 663993,
+        "batter": "Nathaniel Lowe",
+        "event": "Single",
+        "away": 1,
+        "home": 3
+      },
+      {
+        "inning": 7,
+        "top": false,
+        "batterId": 691406,
+        "batter": "Junior Caminero",
+        "event": "Home Run",
+        "away": 1,
+        "home": 5
+      },
+      {
+        "inning": 8,
+        "top": true,
+        "batterId": 672275,
+        "batter": "Patrick Bailey",
+        "event": "Walk",
+        "away": 2,
+        "home": 5
+      },
+      {
+        "inning": 8,
+        "top": true,
+        "batterId": 682657,
+        "batter": "Angel Martínez",
+        "event": "Hit By Pitch",
+        "away": 3,
+        "home": 5
+      },
+      {
+        "inning": 8,
+        "top": false,
+        "batterId": 650490,
+        "batter": "Yandy Díaz",
+        "event": "Home Run",
+        "away": 3,
+        "home": 7
+      }
     ]
   }
 }
