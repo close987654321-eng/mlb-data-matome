@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-20 09:24",
+  "asOf": "2026-10-20 15:05",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -850,7 +850,7 @@
         "id": 139,
         "nameJa": "レイズ",
         "seed": 1,
-        "wins": 3
+        "wins": 4
       },
       "games": [
         {
@@ -910,24 +910,6 @@
         {
           "away": {
             "id": 139,
-            "score": null
-          },
-          "detailed": "Postponed",
-          "etDate": "2026-10-18",
-          "gamePk": 849817,
-          "home": {
-            "id": 114,
-            "score": null
-          },
-          "ifNecessary": false,
-          "n": 4,
-          "start": "2026-10-17T00:00:00Z",
-          "state": "Final",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 139,
             "score": 7
           },
           "detailed": "Final",
@@ -964,37 +946,19 @@
         {
           "away": {
             "id": 114,
-            "score": 0
+            "score": 3
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-19",
           "gamePk": 849815,
           "home": {
             "id": 139,
-            "score": 0
+            "score": 7
           },
           "ifNecessary": false,
           "n": 6,
           "start": "2026-10-20T00:08:00Z",
-          "state": "Live",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 114,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-20",
-          "gamePk": 849814,
-          "home": {
-            "id": 139,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 7,
-          "start": "2026-10-21T00:08:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -1008,7 +972,7 @@
         "seed": 2,
         "wins": 2
       },
-      "winnerId": null
+      "winnerId": 139
     },
     {
       "bestOf": 7,
@@ -1115,7 +1079,7 @@
       "games": [
         {
           "away": {
-            "id": null,
+            "id": 139,
             "score": null
           },
           "detailed": "Scheduled",
@@ -1133,7 +1097,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 139,
             "score": null
           },
           "detailed": "Scheduled",
@@ -1158,7 +1122,7 @@
           "etDate": "2026-10-26",
           "gamePk": 849804,
           "home": {
-            "id": null,
+            "id": 139,
             "score": null
           },
           "ifNecessary": false,
@@ -1176,7 +1140,7 @@
           "etDate": "2026-10-27",
           "gamePk": 849803,
           "home": {
-            "id": null,
+            "id": 139,
             "score": null
           },
           "ifNecessary": false,
@@ -1194,7 +1158,7 @@
           "etDate": "2026-10-28",
           "gamePk": 849799,
           "home": {
-            "id": null,
+            "id": 139,
             "score": null
           },
           "ifNecessary": true,
@@ -1205,7 +1169,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 139,
             "score": null
           },
           "detailed": "Scheduled",
@@ -1223,7 +1187,7 @@
         },
         {
           "away": {
-            "id": null,
+            "id": 139,
             "score": null
           },
           "detailed": "Scheduled",
@@ -1245,8 +1209,9 @@
       "league": null,
       "round": "W",
       "top": {
-        "id": null,
-        "placeholder": "TB/CLE",
+        "id": 139,
+        "nameJa": "レイズ",
+        "seed": 1,
         "wins": 0
       },
       "winnerId": null
