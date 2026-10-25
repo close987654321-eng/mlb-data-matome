@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-25 09:21",
+  "asOf": "2026-10-25 15:12",
   "champion": null,
   "dates": {
     "postStart": "2026-09-28",
@@ -1074,7 +1074,7 @@
         "id": 158,
         "nameJa": "ブルワーズ",
         "seed": 1,
-        "wins": 1
+        "wins": 2
       },
       "games": [
         {
@@ -1098,19 +1098,19 @@
         {
           "away": {
             "id": 139,
-            "score": 2
+            "score": 4
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-24",
           "gamePk": 849802,
           "home": {
             "id": 158,
-            "score": 0
+            "score": 5
           },
           "ifNecessary": false,
           "n": 2,
           "start": "2026-10-25T00:00:00Z",
-          "state": "Live",
+          "state": "Final",
           "tbd": false
         },
         {
