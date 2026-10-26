@@ -109,24 +109,24 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A left-handed power hitter for the Hanshin Tigers. A 2020 first-round pick, he pairs huge raw power with third-base defense and ranks among the Central League’s premier sluggers.',
     },
     mlbWatch: {
-      ja: '左の長打力と三塁守備の両立はMLBでも希少な素材。2026年はセ・リーグの打率・本塁打・打点・安打・出塁率・長打率でそろって上位に立ち、三冠王が視界に入った。2026年WBCでは5試合で打球速度100マイル超を3本記録した。一方でMLB側の評価が割れるのは守備で、「三塁に残れるかは疑問、行き先は一塁では」と見るスカウトもいる。',
-      en: 'A left-handed power bat that can also defend the hot corner is scarce in MLB. In 2026 he leads or sits near the top of the Central League in average, homers, RBI, hits, on-base and slugging, with a triple crown in view, and he produced three batted balls over 100 mph in five games at the 2026 WBC. Where evaluators split is defense: some question whether he sticks at third base in MLB and see first base as the landing spot.',
+      ja: '左の長打力と三塁守備の両立はMLBでも希少な素材。2026年は打率・本塁打・打点の3部門でセ・リーグ1位となり、三冠王に輝いた。2026年WBCでは5試合で打球速度100マイル超を3本記録した。一方でMLB側の評価が割れるのは守備で、「三塁に残れるかは疑問、行き先は一塁では」と見るスカウトもいる。',
+      en: 'A left-handed power bat that can also defend the hot corner is scarce in MLB. In 2026 he led the Central League in average, homers and RBI to win the triple crown, and he produced three batted balls over 100 mph in five games at the 2026 WBC. Where evaluators split is defense: some question whether he sticks at third base in MLB and see first base as the landing spot.',
     },
     posting: {
-      ja: '今オフのポスティングが有力視されている。ポスティング後の交渉期間は45日間だが、現行労使協定が12月1日に切れるため、各球団はそれまでに決着させたい事情がある。ただしポスティングは球団の権利で、阪神が容認するかは確定していない＝国内では「簡単に許せる状況なのか疑問が残る」という見方も出ている。',
-      en: 'A posting this offseason is widely expected. Teams get a 45-day negotiating window once he is posted, but with the current CBA expiring on December 1, clubs have reason to get a deal done before then. The caveat: posting is the club\u2019s call, and Hanshin has not committed \u2014 some in Japan question whether the Tigers are in a position to let him go.',
+      ja: '阪神は2026年10月19日、ポスティングによるMLB移籍の容認を発表した。申請後の交渉期間は45日間だが、現行労使協定が12月1日に切れるとロックアウトで交渉が凍結されるため、各球団はそれまでに決着させたい事情がある。2026年1月の契約更改では代理人が求めた容認の文書化に球団が応じていなかったが、シーズン後に総合的に判断したと説明している。',
+      en: 'On October 19, 2026, Hanshin announced it will post him for MLB clubs. Teams get a 45-day negotiating window once he is posted, but with the current CBA expiring on December 1 and a lockout freezing talks, clubs have reason to get a deal done before then. Hanshin had declined his agent\u2019s request for a written commitment in January 2026 contract talks, and said it reached the decision after weighing everything at season\u2019s end.',
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-09-13',
+      asOf: '2026-10-26',
       headline: {
-        ja: '今オフ、11月中旬にもポスティング申請の見込み。メッツ・ヤンキース・ドジャース・フィリーズの関心が報じられ、メッツのデビッド・スターンズ編成本部長は来日して視察した。',
-        en: 'Expected to be posted as soon as mid-November. The Mets, Yankees, Dodgers and Phillies have all been linked, and Mets baseball boss David Stearns scouted him in person in Japan.',
+        ja: '阪神が10月19日にポスティング容認を発表した。申請は11月1日から可能で、正式な申請は日本シリーズの終了後になる見込み。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
+        en: 'Hanshin announced on October 19 that it will post him. Filings open on November 1, and the formal posting is expected after the Japan Series. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
       },
       route: 'posting',
       window: {
-        ja: '申請は11月中旬の見込み（ニューヨーク・ポストのジョン・ヘイマン記者）。申請後の交渉期間は45日間だが、12月1日に労使協定が切れてロックアウトに入ると交渉は凍結される。ESPNのジェフ・パッサン記者は、佐藤・平良海馬・伊藤大海の3人とも12月1日より前に契約するとみている。',
-        en: 'A posting is expected in mid-November, per Jon Heyman of the New York Post. The negotiating window runs 45 days, but it freezes once the CBA expires and the lockout begins on December 1. ESPN\u2019s Jeff Passan expects Sato, Kaima Taira and Hiromi Itoh all to sign before that date.',
+        ja: '阪神は10月19日に容認を発表し、11月1日から申請できる。NPBの申請受付は12月15日までで、MLB Trade Rumors によれば正式な申請は日本シリーズの終了後になる。申請後の交渉期間は45日間で、期間内に契約しなければ2027年は阪神に戻る。12月1日に労使協定が切れてロックアウトに入れば交渉は凍結され、ESPNのジェフ・パッサン記者は佐藤・平良海馬・伊藤大海の3人とも12月1日より前に契約するとみていた。',
+        en: 'Hanshin announced its approval on October 19, and filings open on November 1. NPB accepts postings through December 15, and MLB Trade Rumors says the formal posting will come after the Japan Series. The negotiating window then runs 45 days; if he does not sign, he returns to Hanshin for 2027. A lockout starting when the CBA expires on December 1 would freeze talks, and ESPN\u2019s Jeff Passan had expected Sato, Kaima Taira and Hiromi Itoh all to sign before that date.',
       },
       marketValue: [
         {
@@ -147,8 +147,23 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ヤンキース', en: 'Yankees' },
         { ja: 'ドジャース', en: 'Dodgers' },
         { ja: 'フィリーズ', en: 'Phillies' },
+        { ja: 'ブルージェイズ', en: 'Blue Jays' },
       ],
       timeline: [
+        {
+          date: '2026-10-19',
+          ja: '阪神がポスティングによるMLB移籍の容認を発表した。嶌村聡球団本部長は「選手の強い要望だけで容認するということはない」としたうえで、2年連続のタイトル獲得や、村上宗隆・岡本和真の活躍でNPBの水準が海外でも証明されつつあることを挙げ、総合的な判断だと説明した。申請手続きは11月1日から。',
+          en: 'Hanshin announced it will post him. Club executive Satoshi Shimamura said the club does not approve a posting on a player’s strong wishes alone, pointing to Sato’s back-to-back title seasons and to Munetaka Murakami and Kazuma Okamoto proving NPB’s level abroad as reasons for a decision made on the whole picture. Filings open on November 1.',
+          source: 'https://www.daily.co.jp/tigers/2026/10/19/0020945650.shtml',
+          sourceName: 'デイリースポーツ',
+        },
+        {
+          date: '2026-10-19',
+          ja: 'MLB Trade Rumors は、容認の時点で少なくとも5球団が関心を示していると伝えた。正式なポスティングは日本シリーズの終了後で、45日以内に契約しなければ2027年は阪神に戻る。12月1日からロックアウトに入った場合、明けた後に残りの交渉期間が約3週間あるとした。',
+          en: 'MLB Trade Rumors reports at least five clubs had shown interest by the time of the announcement. The formal posting comes after the Japan Series, and if he does not sign within 45 days he returns to Hanshin for 2027. If a lockout begins December 1, roughly three weeks of his window would remain once it ends.',
+          source: 'https://www.mlbtraderumors.com/2026/10/hanshin-tigers-agree-to-post-teruaki-sato.html',
+          sourceName: 'MLB Trade Rumors',
+        },
         {
           date: '2026-09-03',
           ja: 'MLB公式サイトが「メッツら複数球団が関心」と報道。スターンズ編成本部長が来日して阪神の試合を視察し、その試合で佐藤は32号を放った。',
@@ -190,16 +205,18 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: '打撃はMLBでも通用するというのが現地の一致した見立て。MLB球団関係者は「打撃に関してはメジャーで十分に通用します」と語り、1年目から村上宗隆と同等の30本塁打級を打てるとみる。', en: 'The bat is the consensus. An MLB official said his hitting will play in the majors, projecting Munetaka Murakami\u2019s level of power \u2014 30-plus homers \u2014 right away.', sourceName: 'J-CASTニュース' },
         { ja: '本塁打の出にくい甲子園を本拠地にしながら長打を量産している点が、現地の分析スレでも繰り返し持ち出される。', en: 'He piles up extra-base hits while calling Koshien home, a park that suppresses homers \u2014 a point raised again and again in overseas analysis threads.' },
         { ja: '2026年WBCでは5試合で打球速度100マイル超を3本記録した。', en: 'At the 2026 WBC he produced three batted balls over 100 mph in five games.' },
+        { ja: '米CBSスポーツは、村上宗隆より身体能力が高く、外野も現実的な選択肢になると評した。', en: 'CBS Sports judged him more athletic than Munetaka Murakami, making the outfield a viable option.', sourceName: 'CBS Sports' },
       ],
       concerns: [
         { ja: '三塁に残れるかどうか。MLB Trade Rumors は「三塁で通用するかは疑問」というスカウトの見方を伝え、最終的な守備位置は一塁になりうるとした。', en: 'Whether he sticks at third base. MLB Trade Rumors relays scouts calling him "questionable" there, with first base as the likely landing spot.', sourceName: 'MLB Trade Rumors' },
         { ja: '国内でも守備が論点。MLB球団関係者は「問題は守備ですね」として三塁からの送球の不安定さを挙げ、外野への転向もありうるとみる。', en: 'The same worry in Japan: an MLB official flagged his throwing from third as unreliable and floated a move to the outfield.', sourceName: 'J-CASTニュース' },
         { ja: '三振の多さはキャリアを通じての課題で、現地の議論でも「教科書どおりのパワーヒッター」と評される。', en: 'Strikeouts have been a career-long issue; overseas discussion files him as a textbook power hitter.' },
+        { ja: '米CBSスポーツはコンタクト率66%（MLB平均77%）を挙げ、長く三塁を守るタイプではないとみる。', en: 'CBS Sports cites a 66% contact rate against the 77% MLB average and does not see him as a long-term third baseman.', sourceName: 'CBS Sports' },
       ],
     },
     contract: {
       debut: { ja: '2020年ドラフト1位（近畿大）。2021年から一軍でプレーしている。', en: 'A 2020 first-round pick out of Kindai University who has been in the top team since 2021.' },
-      fa: { ja: '海外FA権に必要な9年の出場登録日数には届いていない。したがって今オフに動くにはポスティングでの移籍を阪神が認める必要がある。', en: 'He is short of the nine years of service needed for international free agency, so any move this winter requires Hanshin to agree to post him.' },
+      fa: { ja: '海外FA権に必要な9年の出場登録日数には届いていないため、ポスティングでの移籍になる。阪神は2026年10月19日に容認を発表した。', en: 'He is short of the nine years of service needed for international free agency, so his route is a posting. Hanshin announced its approval on October 19, 2026.' },
       salary: {
         ja: '2026年は推定4.5億円プラス出来高、総額5億円規模の単年契約。更改は1月30日までずれ込み、代理人が今オフのポスティング容認を文書で確約するよう求めたが、球団からの確約は得られなかった。',
         en: 'He signed a one-year deal for an estimated ¥450MM plus incentives (around ¥500MM total) on January 30, 2026. Talks dragged that late because his agent sought a written commitment to post him this winter, which the club did not give.',
@@ -210,15 +227,15 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '佐藤輝明はいつメジャーに行く？', en: 'When will Teruaki Sato go to MLB?' },
-        a: { ja: '今オフ、11月中旬にもポスティング申請される見込みだと報じられている。申請後の交渉期間は45日間だが、12月1日に労使協定が切れてロックアウトに入ると交渉は凍結されるため、ESPNのジェフ・パッサン記者はその前に契約すると見ている。ただし申請自体はまだ行われていない。', en: 'Reporting points to a posting as soon as mid-November. The window runs 45 days but freezes at the December 1 lockout, and ESPN\u2019s Jeff Passan expects a deal before then. Nothing has actually been filed yet.' },
+        a: { ja: '阪神は10月19日にポスティング容認を発表した。NPBの申請受付は11月1日からで、正式な申請は日本シリーズの終了後の見込み。申請後の交渉期間は45日間だが、12月1日に労使協定が切れてロックアウトに入れば交渉は凍結され、45日以内に契約しなければ2027年は阪神に戻る。', en: 'Hanshin announced on October 19 that it will post him. NPB filings open on November 1, and the formal posting is expected after the Japan Series. The window runs 45 days but freezes if a lockout begins when the CBA expires on December 1, and if he does not sign within it he returns to Hanshin for 2027.' },
       },
       {
         q: { ja: '佐藤輝明に興味を示しているMLB球団は？', en: 'Which MLB clubs are interested in Teruaki Sato?' },
-        a: { ja: 'ニューヨーク・ポストのジョン・ヘイマン記者がメッツ・ヤンキース・ドジャース・フィリーズの関心を報じた。メッツのデビッド・スターンズ編成本部長は来日して阪神の試合を視察している。', en: 'Jon Heyman of the New York Post has linked the Mets, Yankees, Dodgers and Phillies. Mets baseball boss David Stearns scouted a Tigers game in person in Japan.' },
+        a: { ja: 'ニューヨーク・ポストのジョン・ヘイマン記者がメッツ・ヤンキース・ドジャース・フィリーズの関心を報じ、容認の時点でMLB Trade Rumors は少なくとも5球団が関心を示していると伝えた（ブルージェイズの名前も挙がっている）。メッツのデビッド・スターンズ編成本部長は来日して阪神の試合を視察している。', en: 'Jon Heyman of the New York Post has linked the Mets, Yankees, Dodgers and Phillies, and by the time of the announcement MLB Trade Rumors counted at least five interested clubs, the Blue Jays among them. Mets baseball boss David Stearns scouted a Tigers game in person in Japan.' },
       },
       {
         q: { ja: '阪神はポスティングを認めたの？', en: 'Has Hanshin agreed to post him?' },
-        a: { ja: '認めていない。ポスティングは球団の権利で、2026年1月の契約更改では代理人が求めた容認の文書化に球団が応じなかった。国内では慎重な見方も残っている。', en: 'No. Posting is the club\u2019s call, and in the January 2026 contract talks Hanshin declined his agent\u2019s request to put an approval in writing. Caution remains in the Japanese press.' },
+        a: { ja: '認めた。阪神は2026年10月19日、嶌村聡球団本部長の会見でポスティングによるMLB移籍の容認を発表した。1月の契約更改では代理人が求めた容認の文書化に応じていなかったが、2年連続のタイトル獲得などを踏まえて総合的に判断したと説明している。', en: 'Yes. Club executive Satoshi Shimamura announced on October 19, 2026 that Hanshin will post him. The club had declined his agent\u2019s request for a written commitment in January, and said it decided on the whole picture, including his back-to-back title seasons.' },
       },
       {
         q: { ja: 'MLBではどのポジションを守る？', en: 'What position would he play in MLB?' },
@@ -226,7 +243,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       },
       {
         q: { ja: '契約規模はどれくらいになる？', en: 'How big a contract could he get?' },
-        a: { ja: '本人の契約予想を報じた媒体はまだない。目安になる直近の実額は、岡本和真のブルージェイズ4年6000万ドル、村上宗隆のホワイトソックス2年3400万ドル、鈴木誠也のカブス5年8500万ドル。', en: 'No outlet has published a projection for him yet. The nearest yardsticks are Kazuma Okamoto\u2019s four years and $60MM with the Blue Jays, Munetaka Murakami\u2019s two years and $34MM with the White Sox, and Seiya Suzuki\u2019s five years and $85MM with the Cubs.' },
+        a: { ja: '目安になるのは直近に海を渡った打者の実額で、岡本和真のブルージェイズ4年6000万ドル、村上宗隆のホワイトソックス2年3400万ドル、鈴木誠也のカブス5年8500万ドル。米CBSスポーツは、佐藤は村上の契約を上回りうると書いた。', en: 'The nearest yardsticks are the actual deals of recent NPB bats: Kazuma Okamoto\u2019s four years and $60MM with the Blue Jays, Munetaka Murakami\u2019s two years and $34MM with the White Sox, and Seiya Suzuki\u2019s five years and $85MM with the Cubs. CBS Sports wrote that Sato could command more than Murakami.' },
       },
     ],
   },
@@ -246,20 +263,20 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A right-hander who has long been open about wanting MLB. MLB Trade Rumors credits a seven-pitch mix with a fastball up to 96 mph and, over 828 career innings, a 2.87 ERA pairing a 21.7% strikeout rate with a 6.2% walk rate. ESPN\u2019s Jorge Castillo names Sonny Gray as the comp, and his Olympic and 2023 WBC appearances add to the résumé. The counterweight: his ERA climbed above 3.00 in 2026, and overseas discussion now pairs his name with the question of whether his prime has passed.',
     },
     posting: {
-      ja: 'ポスティングでのMLB移籍が継続的に取り沙汰される。球団との合意が前提だが、近い将来の現実的な候補。',
-      en: 'A posting move is recurrently discussed. It hinges on the club’s blessing, but he is a realistic near-future candidate.',
+      ja: 'ポスティングでのMLB移籍を本人が熟考している。日本ハムは本人が望めば容認する方針と報じられており、決断は本人に委ねられている。',
+      en: 'He is weighing a posting move. Nippon-Ham is reported to be ready to approve it if he commits, leaving the decision in his hands.',
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-09-16',
+      asOf: '2026-10-26',
       headline: {
-        ja: '今オフ、11月上旬にもポスティング申請の見込み（ESPNのジェフ・パッサン記者）。2025年に最多勝・最多奪三振・沢村賞を独占した右腕で、MLB側は佐藤輝明・平良海馬と並ぶ「今オフ来る3人」の一角に数えている。',
-        en: 'Expected to be posted as soon as early November, per ESPN\u2019s Jeff Passan. The right-hander swept the wins title, the strikeout title and the Sawamura Award in 2025, and MLB clubs count him alongside Teruaki Sato and Kaima Taira as the three arriving this winter.',
+        ja: 'ポスティングでのMLB挑戦を本人が熟考しており、10月中に決断する意向（10月23日）。日本ハムは本人が移籍の意向を固めれば容認する方針と報じられ、代理人を通じて球団にメジャー挑戦の意思を伝えたとも報じられた。',
+        en: 'He is weighing a posting and plans to decide by the end of October (October 23). Nippon-Ham is reported to approve a move if he commits, and he has reportedly told the club of his MLB ambition through his agent.',
       },
       route: 'posting',
       window: {
-        ja: '申請は11月上旬の見込み。申請後の交渉期間は45日間だが、12月1日の労使協定切れでロックアウトに入ると凍結されるため、パッサン記者は3人とも12月1日より前に契約するとみている。',
-        en: 'A posting is expected in early November. The 45-day negotiating window freezes when the lockout begins on December 1, so Passan expects all three to sign before that date.',
+        ja: '本人は10月中に決断する意向。申請する場合、NPBの受付は11月1日から12月15日まで。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
+        en: 'He plans to decide by the end of October. If posted, NPB accepts filings from November 1 through December 15. The 45-day window freezes if a lockout begins when the CBA expires on December 1. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
       },
       marketValue: [
         {
@@ -269,7 +286,29 @@ export const NPB_PROSPECTS: NpbProspect[] = [
           sourceName: 'MLB Trade Rumors',
         },
       ],
+      suitors: [{ ja: 'ジャイアンツ', en: 'Giants' }],
       timeline: [
+        {
+          date: '2026-10-23',
+          ja: 'ポスティングでMLB移籍を目指すかどうかを今月中に決断する意向を示し、「人生で一番の悩み。どっちもやりたいことではある。後悔しないように選びたい」と語った。日本ハムは伊藤がメジャー移籍の意向を固めれば容認する方針。',
+          en: 'He said he would decide by the end of October whether to pursue a posting, calling it the hardest choice of his life and saying he wants to choose without regrets. Nippon-Ham plans to approve a move if he commits.',
+          source: 'https://www.jiji.com/jc/article?k=2026102300969&g=spo',
+          sourceName: '時事通信',
+        },
+        {
+          date: '2026-10-17',
+          ja: 'スポーツ報知が、伊藤が今オフのポスティングでのMLB挑戦を検討していると報道。代理人を通じて球団にメジャー挑戦の意思を伝えており、ポストシーズン終了後に正式な話し合いが行われる見込みとした。',
+          en: 'Sports Hochi reports he is considering an MLB move via the posting system this winter, has told the club of his intentions through his agent, and is expected to hold formal talks with Nippon-Ham after the postseason.',
+          source: 'https://pacificleague.com/news/amp/10056109',
+          sourceName: 'パ・リーグ.com（スポーツ報知）',
+        },
+        {
+          date: '2026-10-17',
+          ja: 'サンフランシスコ・クロニクル紙が、ジャイアンツは平良海馬と伊藤をすでに調査していると報じた（FanSidedが紹介）。',
+          en: 'The San Francisco Chronicle reported that the Giants have already looked into Kaima Taira and Itoh, as relayed by FanSided.',
+          source: 'https://fansided.com/mlb/sf-giants-free-agent-target-is-buster-posey-s-last-chance-to-catch-the-dodgers',
+          sourceName: 'FanSided',
+        },
         {
           date: '2026-09-10',
           ja: 'MLB Trade Rumors が ESPN のジェフ・パッサン記者の情報として、佐藤輝明・平良海馬とともに伊藤も11月上旬にポスティングされる見込みだと伝えた。3人とも12月1日のロックアウト前に契約するとの見立て。',
@@ -307,11 +346,12 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       concerns: [
         { ja: '身長5フィート9インチ（約176cm）という体格が、現地では留保材料として挙げられている。', en: 'His 5-foot-9 frame is a caveat raised abroad.', sourceName: 'MLB Trade Rumors' },
         { ja: '2026年は防御率が3点台に乗り、現地の議論では「全盛期を過ぎたのでは」「直球に球速が無いぶん、多くの球団では5番手扱いになる」という見方が出ている。', en: 'His ERA rose above 3.00 in 2026, and overseas discussion now asks whether his prime has passed, with some projecting him as a fifth starter because the fastball lacks velocity.', sourceName: 'r/NPB' },
+        { ja: 'MLBの西地区球団のスカウトは投球スタイルをダルビッシュ有に重ねつつ「気になるのが勤続疲労ですね」と指摘し、今季は直球の平均球速が150キロに届いていないとした。規定投球回は6年連続で、今季の投球回はリーグ最多だった。', en: 'A scout from a West-division MLB club likened his style to Yu Darvish but flagged accumulated wear, noting his average fastball dipped below 150 kph this season. He has qualified for the ERA title six straight years and led the league in innings this season.', sourceName: 'AERA DIGITAL' },
       ],
     },
     contract: {
       debut: { ja: '2020年ドラフト1位（苫小牧駒沢大）。2021年から先発ローテーションに入り、東京五輪と2023年WBCの代表に選ばれた。', en: 'A 2020 first-round pick out of Tomakomai Komazawa University who joined the rotation in 2021 and represented Japan at the Tokyo Olympics and the 2023 WBC.' },
-      fa: { ja: '海外FA権に必要な9年には届いていない。今オフに動くには日本ハムがポスティングを認める必要がある。', en: 'He is short of the nine years needed for international free agency, so a move this winter requires Nippon-Ham to post him.' },
+      fa: { ja: '海外FA権に必要な9年には届いていない。今オフに動くには日本ハムがポスティングを認める必要があり、球団は本人が望めば容認する方針と報じられている。', en: 'He is short of the nine years needed for international free agency, so a move this winter requires Nippon-Ham to post him; the club is reported to be ready to do so if he commits.' },
       salary: {
         ja: '2025年12月の契約更改で1億2000万円増の3億4000万円。入団6年目での3億円台到達は、2010年のダルビッシュ有に並ぶ球団最速となった。',
         en: 'He signed for ¥340MM in December 2025, a ¥120MM raise. Reaching ¥300MM in his sixth year matched Yu Darvish\u2019s 2010 mark as the fastest in franchise history.',
@@ -322,7 +362,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '伊藤大海は今オフにメジャー移籍する？', en: 'Will Hiromi Itoh move to MLB this offseason?' },
-        a: { ja: 'ESPNのジェフ・パッサン記者は、佐藤輝明・平良海馬とともに伊藤も11月上旬にポスティングされる見込みだと伝えた。ただしポスティングは球団の権利で、日本ハムからの正式発表はまだない。', en: 'ESPN\u2019s Jeff Passan reports he is expected to be posted in early November alongside Teruaki Sato and Kaima Taira. Posting is the club\u2019s decision, though, and Nippon-Ham has announced nothing.' },
+        a: { ja: '本人は10月23日、ポスティングでMLB移籍を目指すかどうかを今月中に決めると話し、「人生で一番の悩み」と語った。日本ハムは本人が移籍の意向を固めれば容認する方針と報じられている。', en: 'On October 23 he said he would decide by month\u2019s end whether to pursue a posting, calling it the hardest decision of his life. Nippon-Ham is reported to approve a move if he commits.' },
       },
       {
         q: { ja: 'MLBでの比較対象は？', en: 'What is his MLB comp?' },
@@ -346,24 +386,24 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A power right-hander for the Seibu Lions from Ishigaki, Okinawa. Armed with one of NPB’s hardest fastballs, he has succeeded both as a closer and as a starter.',
     },
     mlbWatch: {
-      ja: '球速とアームの強さはMLB級。ESPN のジェフ・パッサン記者は直球が平均95.6マイル（約154km/h）で100マイルに届くとし、今オフのFA投手ではタリク・スクーバルに次ぐ2番手になりうると評した。身長5フィート8インチ（約173cm）・220ポンド（約100kg）という体格は現地でも話題で、MLB Trade Rumors は「消火栓の形に鍛え上げられた」と描写した。2026年は先発に回り、パ・リーグの防御率でトップを走る。',
-      en: 'Velocity and arm strength that play in MLB. ESPN\u2019s Jeff Passan notes a fastball averaging 95.6 mph that has touched 100, and rates him a candidate to be the second-best free agent starter available this winter behind Tarik Skubal. His 5-foot-8, 220-pound frame is a talking point abroad \u2014 one write-up described him as "forged in the shape of a fire hydrant." In 2026 he moved into the rotation and leads the Pacific League in ERA.',
+      ja: '球速とアームの強さはMLB級。ESPN のジェフ・パッサン記者は直球が平均95.6マイル（約154km/h）で100マイルに届くとし、今オフのFA投手ではタリク・スクーバルに次ぐ2番手になりうると評した。身長5フィート8インチ（約173cm）・220ポンド（約100kg）という体格は現地でも話題で、MLB Trade Rumors は「消火栓の形に鍛え上げられた」と描写した。2026年は先発に回り、パ・リーグの防御率1位でシーズンを終えた。',
+      en: 'Velocity and arm strength that play in MLB. ESPN\u2019s Jeff Passan notes a fastball averaging 95.6 mph that has touched 100, and rates him a candidate to be the second-best free agent starter available this winter behind Tarik Skubal. His 5-foot-8, 220-pound frame is a talking point abroad \u2014 one write-up described him as "forged in the shape of a fire hydrant." In 2026 he moved into the rotation and finished as the Pacific League ERA leader.',
     },
     posting: {
-      ja: '今オフのポスティングが有力視されている。2027年を終えると9年で海外FA権を得てポスティングの対象外になるため、西武にとっては譲渡金を得られる最後の機会にあたる。交渉は12月1日の労使協定切れ（ロックアウト見込み）より前に決着する見通し。',
-      en: 'A posting this offseason is widely expected. He reaches nine professional seasons after 2027 \u2014 at which point he would be a full free agent and no longer postable \u2014 so this winter is Seibu\u2019s last chance to collect a posting fee. Negotiations are expected to close before the CBA expires on December 1.',
+      ja: '今オフのポスティングを本人が希望し、代理人が西武と交渉している。2027年を終えると9年で海外FA権を得てポスティングの対象外になるため、西武にとっては譲渡金を得られる最後の機会にあたる。交渉は12月1日の労使協定切れ（ロックアウト見込み）より前に決着すると見られていた。',
+      en: 'He wants to be posted this winter, and his agent is negotiating with Seibu. He reaches nine professional seasons after 2027 \u2014 at which point he would be a full free agent and no longer postable \u2014 so this winter is Seibu\u2019s last chance to collect a posting fee. A deal had been expected before the CBA expires on December 1.',
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-09-13',
+      asOf: '2026-10-26',
       headline: {
-        ja: '今オフ、11月上旬にもポスティング申請の見込み（ESPN・ジェフ・パッサン記者）。直近の登板には15球団超が評価担当を送り込んでいる。',
-        en: 'Expected to be posted as soon as early November, per ESPN\u2019s Jeff Passan. More than 15 MLB clubs have sent evaluators to his recent starts.',
+        ja: 'ポスティングでのMLB移籍を希望し、代理人が西武と交渉している（10月20日）。本人は「最終決定は球団」とし、広池浩司球団本部長は「代わりのいない選手なので複雑」と話した。西武の正式な容認発表はまだない。',
+        en: 'He wants to be posted, and his agent is negotiating with Seibu (October 20). He has said the final call belongs to the club, and club executive Koji Hiroike called it complicated because he is irreplaceable. Seibu has made no formal announcement.',
       },
       route: 'posting',
       window: {
-        ja: '申請は11月上旬の見込み（ESPNのジェフ・パッサン記者）。NPBの申請は通常11月中旬だが、12月1日の労使協定切れでロックアウトに入る前に交渉時間を確保する狙いとみられる。申請後の交渉期間は45日間。',
-        en: 'A posting is expected in early November, per ESPN\u2019s Jeff Passan \u2014 earlier than NPB\u2019s usual mid-November timing, apparently to buy negotiating time before the December 1 lockout. The window itself runs 45 days.',
+        ja: '代理人が西武と交渉中で、正式な容認発表はまだない。容認されれば、NPBの申請受付は11月1日から12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。',
+        en: 'His agent is negotiating with Seibu, and there is no formal approval yet. If approved, NPB accepts filings from November 1 through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The 45-day window freezes if a lockout begins when the CBA expires on December 1.',
       },
       marketValue: [
         {
@@ -389,8 +429,30 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'エンゼルス', en: 'Angels' },
         { ja: 'マリナーズ', en: 'Mariners' },
         { ja: 'レンジャーズ', en: 'Rangers' },
+        { ja: 'ジャイアンツ', en: 'Giants' },
       ],
       timeline: [
+        {
+          date: '2026-10-20',
+          ja: '代理人が球団と交渉を進めていると本人が明かした。「最終決定は球団」としたうえで、メジャーでは先発で投げたいと話し、「世界最高の選手がそろうところでプレーしたい」と語った。',
+          en: 'He said his agent is negotiating with the club and that the final decision rests with Seibu. He added that he wants to start in the majors and to play where the world’s best players are.',
+          source: 'https://kumanichi.com/articles/2048559',
+          sourceName: '熊本日日新聞（共同通信）',
+        },
+        {
+          date: '2026-10-17',
+          ja: 'サンフランシスコ・クロニクル紙が、ジャイアンツは平良と伊藤大海をすでに調査していると報じた（FanSidedが紹介）。',
+          en: 'The San Francisco Chronicle reported that the Giants have already looked into Taira and Hiromi Itoh, as relayed by FanSided.',
+          source: 'https://fansided.com/mlb/sf-giants-free-agent-target-is-buster-posey-s-last-chance-to-catch-the-dodgers',
+          sourceName: 'FanSided',
+        },
+        {
+          date: '2026-10-12',
+          ja: '西武の広池浩司球団本部長が、平良と話し合いの場を持つ考えを示した。「上を目指すのは理解できるが、代わりのいない選手なので複雑。しっかりと折り合いを付けたい」と述べた。',
+          en: 'Seibu executive Koji Hiroike said the club would sit down with Taira: he understands the ambition, but Taira is irreplaceable, which makes it complicated, and the club wants to reach a proper understanding.',
+          source: 'https://kumanichi.com/articles/2045842',
+          sourceName: '熊本日日新聞（共同通信）',
+        },
         {
           date: '2026-09-10',
           ja: 'MLB Trade Rumors が ESPN のジェフ・パッサン記者の情報として「11月上旬にもポスティングの見込み」と報道。15球団超が視察し、直球は平均95.6マイル・最速100マイル。今オフのFA投手ではスクーバルに次ぐ2番手になりうると評された。',
@@ -417,7 +479,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: '直球は平均95.6マイル（約153.8km/h）で最速100マイル（約161km/h）。ESPNのジェフ・パッサン記者は今オフのFA先発でタリク・スクーバルに次ぐ2番手になりうると評した。', en: 'The fastball averages 95.6 mph and has touched 100. ESPN\u2019s Jeff Passan rates him a candidate to be the second-best free agent starter available behind Tarik Skubal.', sourceName: 'ESPN' },
         { ja: '球種は8つ。打者が的を絞れない球種構成が評価されている。', en: 'He throws eight pitches, a mix evaluators credit with keeping hitters from settling on anything.', sourceName: 'MLB Trade Rumors' },
         { ja: '173cmながらリリースポイントまでの距離が200cmを超える。ナ・リーグのスカウトは「10センチ違うと打者が感じる体感速度も5キロ違うと言われている」と話し、155km/hが160km/h級に見えると評した。', en: 'Despite standing 173 cm he releases the ball more than 200 cm down the mound. An NL scout said every 10 cm of extension is worth about 5 kph of perceived velocity, making his 155 kph play like 160.', sourceName: '東スポWEB' },
-        { ja: '2026年はパ・リーグの防御率でトップを走り、パ・リーグ.comは70年ぶりにリーグ記録（1958年に西鉄の稲尾和久が記録した1.06）を塗り替える可能性にも触れた。', en: 'He leads the Pacific League in ERA in 2026, and Pacific League.com has floated the possibility of breaking Kazuhisa Inao\u2019s 1.06 league record from 1958.', sourceName: 'パ・リーグ.com' },
+        { ja: '2026年はパ・リーグの防御率1位でシーズンを終えた。シーズン中はパ・リーグ.comが、1958年に西鉄の稲尾和久が記録したリーグ記録（1.06）の更新に触れるほどだった。', en: 'He finished 2026 as the Pacific League ERA leader; during the season Pacific League.com even floated the chance of breaking Kazuhisa Inao\u2019s 1.06 league record from 1958.', sourceName: 'パ・リーグ.com' },
       ],
       concerns: [
         { ja: '173cm・99kgという体格。パッサン記者は「消火栓の形に鍛え上げられた」と描写し、FanGraphsは「捕手のような」と表現した。MLBのスカウトは背が低すぎる投手や角ばった体型を避けるよう教えられてきた、とFull-Countは書いている。', en: 'The build. Passan described him as "forged in the shape of a fire hydrant," and FanGraphs called it "catcherly." Full-Count notes MLB scouts are trained to steer clear of pitchers who are too short or too blocky.', sourceName: 'ESPN / FanGraphs' },
@@ -437,7 +499,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '平良海馬はいつポスティングされる？', en: 'When will Kaima Taira be posted?' },
-        a: { ja: 'ESPNのジェフ・パッサン記者は11月上旬にもポスティングされる見込みだと伝えた。NPBの申請は通常11月中旬だが、12月1日のロックアウト前に交渉時間を確保する狙いとみられる。', en: 'ESPN\u2019s Jeff Passan reports a posting as soon as early November. NPB clubs usually post in mid-November; the earlier timing appears aimed at buying negotiating time before the December 1 lockout.' },
+        a: { ja: '本人がポスティングでの移籍を希望し、代理人が西武と交渉している（10月20日）。西武の正式な容認発表はまだない。容認されればNPBの申請受付は11月1日から12月15日までで、ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。', en: 'He wants to be posted and his agent is negotiating with Seibu (October 20), but the club has not announced a decision. If approved, NPB accepts filings from November 1 through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting.' },
       },
       {
         q: { ja: 'なぜ今オフなの？', en: 'Why this offseason?' },
@@ -445,7 +507,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       },
       {
         q: { ja: 'どの球団が視察している？', en: 'Which clubs have scouted him?' },
-        a: { ja: 'MLB Trade Rumors によれば15球団超が評価担当を送り込み、メッツ・ブルージェイズ・ヤンキース・パドレス・ホワイトソックス・カブス・エンゼルス・マリナーズ・レンジャーズの名前が挙がっている。', en: 'MLB Trade Rumors reports more than 15 clubs have sent evaluators, naming the Mets, Blue Jays, Yankees, Padres, White Sox, Cubs, Angels, Mariners and Rangers.' },
+        a: { ja: 'MLB Trade Rumors によれば15球団超が評価担当を送り込み、メッツ・ブルージェイズ・ヤンキース・パドレス・ホワイトソックス・カブス・エンゼルス・マリナーズ・レンジャーズの名前が挙がっている。10月にはサンフランシスコ・クロニクル紙が、ジャイアンツも平良と伊藤大海を調査済みだと報じた。', en: 'MLB Trade Rumors reports more than 15 clubs have sent evaluators, naming the Mets, Blue Jays, Yankees, Padres, White Sox, Cubs, Angels, Mariners and Rangers. In October the San Francisco Chronicle reported the Giants had also looked into Taira and Hiromi Itoh.' },
       },
       {
         q: { ja: '契約規模はどれくらい？', en: 'How big a contract could he get?' },
@@ -469,15 +531,15 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'Seibu posted him after the 2025 season and he drew contract offers from three MLB clubs before deciding to stay. On May 10, 2026 he acquired international free agent rights \u2014 meaning he no longer needs the club\u2019s blessing to reach the market. Among this winter\u2019s NPB names, he is the other doorway alongside the posting candidates.',
     },
     posting: {
-      ja: 'ポスティングではなく海外FAでの移籍になる。2025年オフの残留時に結んだ複数年契約にはオプトアウト条項が含まれており、順調なら今オフに再びメジャー移籍を目指せる形になっていた。海外FA権の行使については本人の意思表示待ち。',
-      en: 'His route is international free agency, not a posting. The multi-year deal he signed when he stayed in the 2025-26 offseason carried an opt-out designed to let him try MLB again this winter. Whether he exercises his rights is his own call, and he has not said.',
+      ja: 'ポスティングではなく海外FAでの移籍になる。2025年オフの残留時に結んだ複数年契約にはオプトアウト条項が含まれており、今オフに再びメジャー移籍を目指せる形になっていた。10月20日に海外FA権の有資格者として公示され、行使するかどうかは本人が決める。西武は残留交渉の方針。',
+      en: 'His route is international free agency, not a posting. The multi-year deal he signed when he stayed in the 2025-26 offseason carried an opt-out designed to let him try MLB again this winter. He was listed as eligible on October 20; whether to exercise the right is his call, and Seibu plans to try to keep him.',
     },
     postingWatch: {
       level: 'rumored',
-      asOf: '2026-09-16',
+      asOf: '2026-10-26',
       headline: {
-        ja: '2026年5月10日に海外FA権を取得。前回（2025年オフ）はポスティングでMLB3球団からオファーを受けたうえで西武残留を選び、オプトアウト条項つきの複数年契約を結んでいた。今オフは球団の承認が要らない立場で市場に出られる。',
-        en: 'He acquired international free agent rights on May 10, 2026. Last winter he was posted, drew offers from three MLB clubs and chose to stay on a multi-year deal with an opt-out. This time he can reach the market without needing the club\u2019s approval.',
+        ja: '10月20日に海外FA権の有資格者として公示された。日刊スポーツは今オフもMLB移籍を模索する考えだと報じ（MLB Trade Rumors経由）、西武は「条件はしっかり出していく」と残留交渉の方針。本人は「いい選択をする準備をしたい」と話している。',
+        en: 'He was listed as eligible for international free agency on October 20. Nikkan Sports reports he is inclined to explore MLB again (via MLB Trade Rumors), while Seibu plans to make a firm offer to keep him. He says he wants to be ready to make a good choice.',
       },
       route: 'intl-fa',
       window: {
@@ -485,6 +547,27 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'Any move comes once this winter\u2019s free agent market opens. International free agency has no 45-day clock and no release fee, unlike a posting, but the market itself freezes if the CBA expires and the lockout starts on December 1.',
       },
       timeline: [
+        {
+          date: '2026-10-20',
+          ja: '海外FA権の有資格者として公示された。選択肢が多いことを踏まえ、本人は「いい選択をする準備をしたい」と語った。',
+          en: 'He was listed as eligible for international free agency and, with many options open, said he wants to be ready to make a good choice.',
+          source: 'https://kumanichi.com/articles/2048559',
+          sourceName: '熊本日日新聞（共同通信）',
+        },
+        {
+          date: '2026-10-15',
+          ja: 'MLB Trade Rumors が、髙橋は今冬に海外FA権を行使できると伝えた（MLB.comのマイケル・クレア記者）。日刊スポーツは2年連続でMLB移籍を模索する考えだと報じた。2026年は22先発で防御率2.54。スカウトの一人はリリーフ向きと見ており、大型契約は見込みにくいとした。',
+          en: 'MLB Trade Rumors, citing MLB.com’s Michael Clair, reports he is eligible for international free agency this winter, and Nikkan Sports says he is inclined to explore MLB for a second straight year. He posted a 2.54 ERA over 22 starts in 2026; one scout sees him as a reliever, and MLBTR does not expect a big contract.',
+          source: 'https://www.mlbtraderumors.com/2026/10/kona-takahashi-could-explore-mlb-opportunities-this-offseason.html',
+          sourceName: 'MLB Trade Rumors',
+        },
+        {
+          date: '2026-10-12',
+          ja: '西武が髙橋と残留交渉を行う方針を示した。広池浩司球団本部長は「チームに残ってほしい。条件はしっかり出していく」と述べた。',
+          en: 'Seibu said it will negotiate to keep him. Club executive Koji Hiroike said the club wants him to stay and will make a firm offer.',
+          source: 'https://kumanichi.com/articles/2045842',
+          sourceName: '熊本日日新聞（共同通信）',
+        },
         {
           date: '2026-09-05',
           ja: '前日の登板を3回で緊急降板し、出場選手登録を抹消された。9勝・防御率2.69とチームの2位を支えてきた右腕で、シーズン終盤の状態が今オフの評価にも関わる。',
@@ -520,20 +603,22 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: '190cm・105kgの体格から投げ下ろす本格派。2022年は12勝・防御率2.20、2023年も防御率2.21と、パ・リーグの先発として長く計算されてきた。', en: 'A big-bodied power arm at 190 cm and 105 kg. He went 12-8 with a 2.20 ERA in 2022 and followed with a 2.21 in 2023, a dependable Pacific League starter for years.' },
         { ja: '2025年オフのポスティングでMLB3球団から実際にオファーが出ている＝評価は言葉ではなく金額で示された。', en: 'Three MLB clubs put actual contract offers on the table during his 2025-26 posting window, so the market has already priced him.', sourceName: 'MLB.jp' },
         { ja: '前橋育英高で夏の甲子園優勝投手。プロ12年で通算77勝を積み上げている。', en: 'He won the summer Koshien title in high school and has piled up 77 wins across 12 pro seasons.', sourceName: 'Full-Count' },
+        { ja: '2026年は22先発で防御率2.54。奪三振率20.7%はキャリア最高で、ゴロ率58.5%も自己最高だった。シンカーを増やし、カーブを減らしている。', en: 'In 2026 he posted a 2.54 ERA over 22 starts with a career-best 20.7% strikeout rate and a career-high 58.5% ground-ball rate, leaning more on his sinker and less on his curveball.', sourceName: 'MLB Trade Rumors' },
       ],
       concerns: [
         { ja: '2024年は15登板で0勝11敗・防御率3.87と大きく崩れた年があり、年ごとの波が評価の留保材料になる。', en: 'He bottomed out in 2024 at 0-11 with a 3.87 ERA over 15 starts, and that year-to-year variance is the caveat evaluators carry.' },
-        { ja: '海外FAでの移籍は球団に譲渡金が入らないため、西武には引き留める動機が残る。', en: 'An international free agent move brings Seibu no release fee, so the club still has reason to try to keep him.' },
+        { ja: '海外FAでの移籍は球団に譲渡金が入らないため、西武には引き留める動機がある。実際に球団は残留交渉の方針を示した。', en: 'An international free agent move brings Seibu no release fee, so the club has reason to keep him, and it has said it will negotiate to do so.' },
+        { ja: 'MLB.comのマイケル・クレア記者が伝えたスカウトの一人はリリーフ向きと見ており、MLB Trade Rumors は大型契約は見込みにくいとした。', en: 'A scout cited by MLB.com\u2019s Michael Clair sees him as a better fit in relief, and MLB Trade Rumors does not expect a large contract.', sourceName: 'MLB Trade Rumors' },
       ],
     },
     contract: {
       debut: { ja: '2014年ドラフト1位（前橋育英高）。2015年に一軍デビューし、2019年に初の10勝を挙げた。', en: 'A 2014 first-round pick out of Maebashi Ikuei High School. He debuted in 2015 and won 10 games for the first time in 2019.' },
-      fa: { ja: '2026年5月10日に海外FA権を取得済み。ポスティングと違い、行使すれば球団の承認なしに市場へ出られる。', en: 'He qualified for international free agency on May 10, 2026. Unlike a posting, exercising it puts him on the market without the club\u2019s consent.' },
+      fa: { ja: '2026年5月10日に海外FA権を取得し、10月20日に有資格者として公示された。ポスティングと違い、行使すれば球団の承認なしに市場へ出られる。', en: 'He qualified for international free agency on May 10, 2026 and was listed as eligible on October 20. Unlike a posting, exercising it puts him on the market without the club\u2019s consent.' },
     },
     faq: [
       {
         q: { ja: '髙橋光成は今オフメジャーに行く？', en: 'Will Kona Takahashi go to MLB this offseason?' },
-        a: { ja: '海外FA権は5月に取得済みで、行使すれば球団の承認なしに市場へ出られる。ただし行使するかどうかの意思表示はまだない。前回（2025年オフ）はポスティングで3球団からオファーを受けたうえで残留を選んだ。', en: 'He has held international free agent rights since May and could reach the market without the club\u2019s consent. He has not said whether he will exercise them. Last winter he was posted, drew three offers and chose to stay.' },
+        a: { ja: '海外FA権は5月に取得済みで、10月20日に有資格者として公示された。行使すれば球団の承認なしに市場へ出られる。日刊スポーツは今オフもMLB移籍を模索する考えだと報じ、西武は残留交渉の方針。本人は「いい選択をする準備をしたい」と話している。前回（2025年オフ）はポスティングで3球団からオファーを受けたうえで残留を選んだ。', en: 'He has held international free agent rights since May and was listed as eligible on October 20, so he can reach the market without the club\u2019s consent. Nikkan Sports reports he is inclined to explore MLB again, while Seibu plans to try to keep him; he says he wants to be ready to make a good choice. Last winter he was posted, drew three offers and chose to stay.' },
       },
       {
         q: { ja: 'ポスティングと海外FAは何が違う？', en: 'How does international free agency differ from a posting?' },

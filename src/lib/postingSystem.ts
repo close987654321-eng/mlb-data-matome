@@ -52,8 +52,8 @@ export const POSTING_FACTS: PostingFact[] = [
   {
     q: { ja: '2026年オフの日程は？', en: 'What is the 2026-27 timetable?' },
     a: {
-      ja: 'NPB球団の申請は通常11月中旬だが、今オフはESPNのジェフ・パッサン記者が「11月上旬」と報じている。MLBの労使協定が12月1日に切れてロックアウトに入れば取引が凍結されるため、それより前に決着させたい事情が双方にある。',
-      en: 'NPB clubs usually post in mid-November, but ESPN’s Jeff Passan reports early November this winter. MLB’s CBA expires on December 1, and a lockout would freeze transactions, so both sides have reason to finish before then.',
+      ja: 'NPB球団の申請受付は11月1日から12月15日まで。例年の申請は11月中旬だが、今オフはESPNのジェフ・パッサン記者が「11月上旬」と報じていた。阪神は10月19日に佐藤輝明の容認を発表している。MLBの労使協定が12月1日に切れてロックアウトに入れば取引が凍結されるため、それより前に決着させたい事情が双方にある。',
+      en: 'NPB clubs can file postings from November 1 through December 15. They usually do so in mid-November, but ESPN’s Jeff Passan had reported early November this winter, and Hanshin announced on October 19 that it will post Teruaki Sato. MLB’s CBA expires on December 1, and a lockout would freeze transactions, so both sides have reason to finish before then.',
     },
   },
 ];
