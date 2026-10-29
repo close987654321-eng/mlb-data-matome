@@ -18,31 +18,48 @@
     {
       "key": "fa-open",
       "afterWs": 1,
-      "ja": "FA解禁。契約が満了した選手はワールドシリーズ終了の翌日にFAになる",
-      "en": "Free agency opens the day after the World Series ends",
-      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
-      "sourceName": "Just Baseball"
-    },
-    {
-      "key": "options",
-      "afterWs": 5,
-      "ja": "オプトアウト・球団オプションの判断期限で、QO（クオリファイング・オファー）の提示期限。FA選手はこの日から他球団と契約できる",
-      "en": "Deadline for opt-outs, club options and qualifying offers; free agents may sign with any club from this day",
+      "jp": {
+        "ja": "鈴木誠也・今永昇太・菅野智之がFAになる",
+        "en": "Seiya Suzuki, Shota Imanaga and Tomoyuki Sugano become free agents"
+      },
+      "ja": "FA解禁。契約が満了した選手がFAになる",
+      "en": "Free agency opens; players with expiring contracts become free agents",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
       "sourceName": "Just Baseball"
     },
     {
       "key": "npb-posting",
       "date": "2026-11-01",
+      "jp": {
+        "ja": "佐藤輝明・平良海馬・伊藤大海らが申請できるようになる",
+        "en": "Teruaki Sato, Kaima Taira, Hiromi Itoh and others can be posted"
+      },
       "ja": "NPBのポスティング申請の受付が始まる（12月15日まで）。交渉期間は申請から45日間",
-      "en": "NPB posting filings open (through December 15); each player gets a 45-day negotiating window",
+      "en": "NPB posting filings open (through December 15); each player gets a 45-day window",
       "source": "https://www.mlbtraderumors.com/2026/10/hanshin-tigers-agree-to-post-teruaki-sato.html",
       "sourceName": "MLB Trade Rumors"
     },
     {
+      "key": "options",
+      "afterWs": 5,
+      "jstShift": 1,
+      "time": {
+        "ja": "午前7時",
+        "en": "7 a.m."
+      },
+      "jp": {
+        "ja": "今井達也・松井裕樹が契約を破棄するかを決める期限。鈴木誠也にQOが出るかもこの時点で決まる",
+        "en": "Tatsuya Imai and Yuki Matsui must decide on their opt-outs; the Cubs must decide on a QO for Seiya Suzuki"
+      },
+      "ja": "オプトアウト・球団オプションの判断期限で、QO（クオリファイング・オファー）の提示期限。FA選手はこの日から全球団と契約できる",
+      "en": "Deadline for opt-outs, club options and qualifying offers; free agents may sign with any club from here",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
       "key": "gm-meetings",
-      "date": "2026-11-09",
-      "end": "2026-11-12",
+      "date": "2026-11-10",
+      "end": "2026-11-13",
       "ja": "GM会議（ラスベガス）",
       "en": "GM Meetings (Las Vegas)",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
@@ -51,6 +68,15 @@
     {
       "key": "qo-accept",
       "afterWs": 15,
+      "jstShift": 1,
+      "time": {
+        "ja": "午前6時",
+        "en": "6 a.m."
+      },
+      "jp": {
+        "ja": "鈴木誠也にQOが出ていれば、受けて残るか断るかの期限",
+        "en": "If the Cubs make Seiya Suzuki a QO, this is his deadline to answer"
+      },
       "ja": "QOの受諾期限（提示から10日）。断った選手を獲った球団はドラフト指名権を失う",
       "en": "Deadline to accept a qualifying offer (10 days after it is made)",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
@@ -58,7 +84,11 @@
     },
     {
       "key": "rule5-protect",
-      "date": "2026-11-17",
+      "date": "2026-11-18",
+      "time": {
+        "ja": "午前8時",
+        "en": "8 a.m."
+      },
       "ja": "40人枠の登録期限（ルール5ドラフトから若手を守る締め切り）",
       "en": "Deadline to add players to the 40-man roster ahead of the Rule 5 Draft",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
@@ -66,7 +96,7 @@
     },
     {
       "key": "non-tender",
-      "date": "2026-11-20",
+      "date": "2026-11-21",
       "ja": "年俸調停の権利を持つ選手に契約を提示するかの期限（ノンテンダー）",
       "en": "Non-tender deadline for arbitration-eligible players",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
@@ -74,26 +104,42 @@
     },
     {
       "key": "cba",
-      "date": "2026-12-01",
-      "ja": "労使協定（CBA）の期限（現地時間の午後11時59分）",
-      "en": "The collective bargaining agreement expires at 11:59 p.m. ET",
+      "date": "2026-12-02",
+      "time": {
+        "ja": "午後1時59分",
+        "en": "1:59 p.m."
+      },
+      "jp": {
+        "ja": "ここまでに契約がまとまらなければ、日本人FAの交渉も止まる",
+        "en": "Any Japanese free agent still unsigned sees talks frozen"
+      },
+      "ja": "労使協定（CBA）の期限",
+      "en": "The collective bargaining agreement expires",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
       "sourceName": "Just Baseball"
     },
     {
       "key": "lockout",
       "date": "2026-12-02",
-      "ja": "新しい協定がなければロックアウトに入る見込み。契約・トレードは止まり、球団と選手は連絡も取れなくなる。前回は2021年12月2日から2022年3月10日まで続いた",
-      "en": "Expected start of a lockout if no new deal is reached. Transactions freeze and clubs cannot talk to players. The last one ran from December 2, 2021 to March 10, 2022",
+      "time": {
+        "ja": "午後2時から",
+        "en": "from 2 p.m."
+      },
+      "jp": {
+        "ja": "佐藤輝明らのポスティングの交渉期間（45日間）も止まる",
+        "en": "The 45-day posting windows for Teruaki Sato and others freeze too"
+      },
+      "ja": "新しい協定がなければロックアウトに入る見込み。契約・トレードは止まり、球団と選手は連絡も取れなくなる。前回は2021年12月から2022年3月まで続いた",
+      "en": "Expected start of a lockout without a new deal. Transactions freeze and clubs cannot talk to players. The last one ran from December 2021 to March 2022",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
       "sourceName": "Just Baseball"
     },
     {
       "key": "winter-meetings",
-      "date": "2026-12-07",
-      "end": "2026-12-09",
+      "date": "2026-12-08",
+      "end": "2026-12-10",
       "ja": "ウィンターミーティング（サンディエゴ）。ロックアウトに入れば中止になるとの見方が強い",
-      "en": "Winter Meetings (San Diego), widely expected to be cancelled if a lockout begins",
+      "en": "Winter Meetings (San Diego), widely expected to be cancelled in a lockout",
       "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
       "sourceName": "Just Baseball"
     },

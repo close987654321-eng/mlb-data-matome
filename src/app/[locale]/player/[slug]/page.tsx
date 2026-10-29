@@ -11,8 +11,17 @@ import { getPitchArsenal } from '@/lib/pitchArsenal';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { playerLede } from '@/lib/playerLede';
 import { buildFeed, feedKey } from '@/lib/feed';
-import { getStoveLeague, getStoveStats, getJpStove, stoveActive, rowStatus, ROUTE_LABEL } from '@/lib/stoveLeague';
+import {
+  getStoveLeague,
+  getStoveStats,
+  getJpStove,
+  stoveActive,
+  rowStatus,
+  worldSeriesEnd,
+  ROUTE_LABEL,
+} from '@/lib/stoveLeague';
 import PostingWatch from '@/components/PostingWatch';
+import { fmtDate } from '@/lib/format';
 import FeedCard from '@/components/FeedCard';
 import ShareButtons from '@/components/ShareButtons';
 import PlayerHero from '@/components/player/PlayerHero';
@@ -252,8 +261,35 @@ export default async function PlayerHubPage({
 
   // 今オフの去就。オフの検索（「{選手} FA」「{選手} 移籍先」）に成績より先に答える＝ヒーロー直下に置く。
   // 表示は NEXT MLB のポスティング最新情報と同じ部品（現在地→日程→相場→報道の時系列）。
-  const stoveStatus = stove ? rowStatus(stove.route, stove.outcome, stoveStats.players[String(player.mlbId)]) : null;
+  // ワールドシリーズが決着するまでは「FA予定」（まだFAではないものをFAと書かない＝ハブと同じ判定）。
+  const stoveWsEnd = stove && stoveCat ? await worldSeriesEnd(stoveCat.season) : null;
+  const stoveStatus = stove
+    ? rowStatus(stove.route, stove.outcome, stoveStats.players[String(player.mlbId)], Boolean(stoveWsEnd))
+    : null;
   const stoveRank = stove && stoveCat?.board.find((b) => b.jpSlug === slug)?.rank;
+  // ヒーローに出す去就の1行（オフの間だけ）。順位があれば順位、無ければ道筋の一言。
+  const stoveHero =
+    stove && stoveStatus && stoveCat && stoveActive(stoveCat)
+      ? {
+          label:
+            locale === 'en'
+              ? `${stoveStatus.label.en}${stoveStatus.team ? `: ${stoveStatus.team.en}` : ''}`
+              : `今オフ${stoveStatus.label.ja}${stoveStatus.team ? `：${stoveStatus.team.ja}` : ''}`,
+          done: stoveStatus.done,
+          text: stoveRank
+            ? locale === 'en'
+              ? `No. ${stoveRank} in MLB.com's free-agent rankings`
+              : `MLB公式のFAランキング${stoveRank}位`
+            : stove.route === 'opt-out'
+              ? locale === 'en'
+                ? 'Holds an opt-out this winter'
+                : '契約を途中で破棄できるオプトアウト権を持つ'
+              : locale === 'en'
+                ? 'Contract is up this winter'
+                : '契約が満了してFAに',
+          linkLabel: locale === 'en' ? 'Latest on his future ↓' : '去就の最新情報 ↓',
+        }
+      : null;
   const stoveBlock =
     stove && stoveStatus && stoveCat && stoveActive(stoveCat) ? (
       <div id="stove" className="space-y-2">
@@ -279,7 +315,8 @@ export default async function PlayerHubPage({
           suitorsLabel={t('prospects.watchSuitors')}
           marketLabel={t('prospects.watchMarket')}
           timelineLabel={t('prospects.watchTimeline')}
-          asOfLabel={locale === 'en' ? `As of ${stove.asOf}` : `${stove.asOf.slice(5).replace('-', '/')}時点`}
+          asOfLabel={locale === 'en' ? `As of ${fmtDate(stove.asOf, true)}` : `${fmtDate(stove.asOf, false)}時点`}
+          timelineLimit={2}
         />
         <Link href="/stove-league" className="inline-flex min-h-[44px] items-center text-sm text-ink-soft hover:text-ink hover:underline">
           {locale === 'en' ? 'All free agents and the offseason calendar' : 'FA注目選手と日程をストーブリーグのまとめで見る'} <span aria-hidden className="ml-1">→</span>
@@ -301,7 +338,22 @@ export default async function PlayerHubPage({
 
       {hasStats && season && hero ? (
         <>
-          <PlayerHero player={player} season={season} hero={hero} labels={rankLabels} asOf={snap.asOf} year={year} lede={lede} warRank={warRankInfo} />
+          <PlayerHero
+            player={player}
+            season={season}
+            hero={hero}
+            labels={rankLabels}
+            asOf={snap.asOf}
+            year={year}
+            lede={
+              // オフの間は地の文の最後に去就の一言を足す＝「成績のページ」に見えて離脱されないように。
+              lede && stoveHero
+                ? `${lede}${locale === 'en' ? ' This winter, the page also tracks where he goes next.' : '今オフの去就の最新情報も、このページで追っている。'}`
+                : lede
+            }
+            warRank={warRankInfo}
+            stove={stoveHero ?? undefined}
+          />
           {stoveBlock}
           <PlayerStickyBar
             name={player.nameJa}

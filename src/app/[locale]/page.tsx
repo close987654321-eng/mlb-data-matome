@@ -16,6 +16,7 @@ import { getCyYoungBoard } from '@/lib/cyYoungBoard';
 import { getPostseason } from '@/lib/postseason';
 import { buildScenes, getScenesFile } from '@/lib/postseasonScenes';
 import { SceneTeaser } from '@/components/PostseasonScenes';
+import StoveEntry from '@/components/StoveEntry';
 import FeedCard from '@/components/FeedCard';
 import FeedGrid from '@/components/FeedGrid';
 import Pagination from '@/components/Pagination';
@@ -314,6 +315,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: L
 
       {/* 10月だけの入口＝「mlb 海外の反応」で来た人がいま一番熱い場面へ1タップで行けるように、ダイジェストの前に置く。 */}
       <SceneTeaser scenes={psScenes} locale={locale} />
+
+      {/* オフ（ストーブリーグの期間）だけの入口。試合の無い11〜2月に TOP へ来た人の関心は「日本人がどこへ行くか」。 */}
+      <StoveEntry locale={locale} />
 
       <MlbToday
         threads={mlbThreads.slice(0, 20)}

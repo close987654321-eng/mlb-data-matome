@@ -1,4 +1,5 @@
 import SectionHeading from '@/components/SectionHeading';
+import { fmtDate } from '@/lib/format';
 import type { NpbProspect } from '@/lib/npbPlayers';
 
 /**
@@ -32,6 +33,7 @@ export default function PostingWatch({
   marketLabel,
   timelineLabel,
   asOfLabel,
+  timelineLimit,
 }: {
   watch: WatchReport;
   en: boolean;
@@ -45,7 +47,32 @@ export default function PostingWatch({
   timelineLabel: string;
   /** 「{date} 時点」の既訳文字列。 */
   asOfLabel: string;
+  /**
+   * 報道の時系列を最初に何件だけ開くか（残りは畳む）。選手LPでは去就ブロックが2画面ぶんになり、
+   * 成績を見に来た人を押し下げていた（2026-10-29 のレビュー）ので、そこでは直近2件だけ開く。
+   */
+  timelineLimit?: number;
 }) {
+  const refYear = Number((watch.timeline[0]?.date ?? '').slice(0, 4)) || undefined;
+  const open = timelineLimit ? watch.timeline.slice(0, timelineLimit) : watch.timeline;
+  const folded = timelineLimit ? watch.timeline.slice(timelineLimit) : [];
+  const item = (t: WatchReport['timeline'][number]) => (
+    <li key={`${t.date}-${t.source}`} className="grid gap-1 sm:grid-cols-[6.5rem_1fr] sm:gap-4">
+      <p className="text-xs tabular-nums text-ink-mute">{fmtDate(t.date, en, refYear)}</p>
+      <div>
+        <p className="max-w-prose text-sm leading-relaxed text-ink-soft">{en ? t.en : t.ja}</p>
+        {/* 出典は必ず送客（報道ベースであることを読者が検証できる状態にする）。 */}
+        <a
+          href={t.source}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          className="mt-1 inline-flex items-center text-xs text-ink-mute underline decoration-line underline-offset-2 transition-colors hover:text-ink"
+        >
+          {t.sourceName} <span aria-hidden className="ml-1">↗</span>
+        </a>
+      </div>
+    </li>
+  );
   return (
     <section>
       <div className="mb-3">
@@ -131,27 +158,16 @@ export default function PostingWatch({
         {watch.timeline.length > 0 && (
           <div className="mt-4 border-t border-line/70 pt-4">
             <p className="text-xs text-ink-soft">{timelineLabel}</p>
-            <ol className="mt-3 space-y-4">
-              {watch.timeline.map((t) => (
-                <li key={`${t.date}-${t.source}`} className="grid gap-1 sm:grid-cols-[6.5rem_1fr] sm:gap-4">
-                  <p className="text-xs tabular-nums text-ink-mute">{t.date}</p>
-                  <div>
-                    <p className="max-w-prose text-sm leading-relaxed text-ink-soft">
-                      {en ? t.en : t.ja}
-                    </p>
-                    {/* 出典は必ず送客（報道ベースであることを読者が検証できる状態にする）。 */}
-                    <a
-                      href={t.source}
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                      className="mt-1 inline-flex items-center text-xs text-ink-mute underline decoration-line underline-offset-2 transition-colors hover:text-ink"
-                    >
-                      {t.sourceName} <span aria-hidden className="ml-1">↗</span>
-                    </a>
-                  </div>
-                </li>
-              ))}
-            </ol>
+            <ol className="mt-3 space-y-4">{open.map(item)}</ol>
+            {folded.length > 0 && (
+              <details className="group mt-3">
+                <summary className="inline-flex min-h-[44px] cursor-pointer list-none items-center text-sm text-ink-soft hover:text-ink [&::-webkit-details-marker]:hidden">
+                  <span className="group-open:hidden">{en ? `Show ${folded.length} earlier reports` : `それ以前の報道（${folded.length}件）を表示`}</span>
+                  <span className="hidden group-open:inline">{en ? 'Hide earlier reports' : '閉じる'}</span>
+                </summary>
+                <ol className="mt-2 space-y-4">{folded.map(item)}</ol>
+              </details>
+            )}
           </div>
         )}
       </div>

@@ -20,6 +20,7 @@ import { Link } from '@/lib/navigation';
 import { absoluteUrl, localeAlternates, OG_IMAGES, OG_IMAGES_TW } from '@/lib/site';
 import { locales, type Locale } from '@/lib/i18n';
 import type { Metadata } from 'next';
+import StoveEntry from '@/components/StoveEntry';
 
 export const dynamicParams = false;
 
@@ -171,6 +172,9 @@ export default async function SportPage({
           </p>
         </section>
       )}
+
+      {/* オフの MLB 一覧の入口（ストーブリーグの期間だけ）。試合記事が止まる時期に、いちばん動いている面へ送る。 */}
+      {sport === 'mlb' && <StoveEntry locale={locale} />}
 
       {/* /mma ポータルの主役枠: 次の大会（events.ts レジストリから自動繰り上がり。旧 Rizin5Promo の後継）。 */}
       {sport === 'mma' && <UpcomingEvents />}

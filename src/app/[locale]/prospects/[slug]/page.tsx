@@ -12,6 +12,7 @@ import TagVoices from '@/components/TagVoices';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import SectionHeading from '@/components/SectionHeading';
 import PostingWatch from '@/components/PostingWatch';
+import StoveEntry from '@/components/StoveEntry';
 import ProspectScouting from '@/components/ProspectScouting';
 import ProspectCareer from '@/components/ProspectCareer';
 import ProspectRanks from '@/components/ProspectRanks';
@@ -217,6 +218,8 @@ export default async function ProspectPage({
           asOfLabel={t('prospects.statsAsOf', { date: p.postingWatch.asOf })}
         />
       )}
+      {/* 今オフ動く選手だけ、ストーブリーグ（MLB組のFA・日程・ロックアウト）へ送る。 */}
+      {p.postingWatch && p.postingWatch.level !== 'watch' && <StoveEntry locale={locale} />}
 
       <section>
         <div className="mb-3">

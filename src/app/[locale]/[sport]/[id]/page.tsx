@@ -32,6 +32,8 @@ import ReadEndSentinel from '@/components/ReadEndSentinel';
 import SectionHeading from '@/components/SectionHeading';
 import SeriesNav from '@/components/SeriesNav';
 import TagList from '@/components/TagList';
+import StoveEntry from '@/components/StoveEntry';
+import { getStoveLeague, stoveThreads } from '@/lib/stoveLeague';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import ShareButtons from '@/components/ShareButtons';
 import VodCta from '@/components/VodCta';
@@ -137,6 +139,10 @@ export default async function ThreadDetailPage({
   // パンくずに /prospects の選手LP（ポスティングの現在地・今季成績・その選手の反応記事一覧）を挟み、
   // 「{選手名} 海外の反応」で着地した読者を常緑LPへ送る（MLB 記事の選手LP挟み込みと同じ形）。
   const prospect = primaryPlayer ? undefined : npbProspectOf(thread.tags);
+  // オフの話題（FA・オプトアウト・ポスティング等）の記事だけ、ストーブリーグのハブへの入口を出す。
+  // 「鈴木誠也 FA」で記事に着地した人がハブ（去就・日程・FA一覧）にたどり着けなかったため（2026-10-29）。
+  const stoveCat = await getStoveLeague();
+  const isStoveArticle = Boolean(stoveCat && stoveThreads([thread], stoveCat.season).length);
   const primaryPlayerName = primaryPlayer
     ? locale === 'ja'
       ? primaryPlayer.nameJa
@@ -550,6 +556,8 @@ export default async function ThreadDetailPage({
           rankLabel={t('threads.statRank')}
         />
       )}
+      {isStoveArticle && <StoveEntry locale={locale} className="mt-6" />}
+
       {/* 残りのチームメイト（非日本人）は畳んで、自軍の選手成績一覧（/player）へ送る。 */}
       {seriesTeam && hiddenTeammates > 0 && (
         <p className="mt-3">

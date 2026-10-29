@@ -68,11 +68,20 @@ export type BoardRow = {
 
 export type StoveDate = {
   key: string;
-  /** 固定日（ET）。 */
+  /**
+   * 固定日（**日本時間**）。サイトの日付は JST に揃える規約（matome R9）＝現地の締め切りは
+   * 日本時間に直して書く（例: 現地12月1日午後11時59分 → 12月2日午後1時59分）。
+   */
   date?: string;
   end?: string;
-  /** ワールドシリーズ終了から N 日後（決着前は日付が決まらない）。 */
+  /** ワールドシリーズ終了（現地の最終戦の日）から N 日後。決着前は日付が決まらない。 */
   afterWs?: number;
+  /** 現地の締め切り時刻が日本時間で翌日になるぶんの日数（夕方 ET の締め切り＝JST の翌朝）。 */
+  jstShift?: number;
+  /** 日本時間の時刻。分かっているものだけ。 */
+  time?: Bi;
+  /** その日が日本人選手にとって何の日か。日程表で日本の読者が読み飛ばさないための一言。 */
+  jp?: Bi;
   ja: string;
   en: string;
   source: string;
@@ -163,6 +172,42 @@ export async function worldSeriesEnd(season: number): Promise<string | null> {
   return finals.at(-1) ?? null;
 }
 
+export type WsState = {
+  done: boolean;
+  lead?: { ja: string; en: string; wins: number };
+  trail?: { ja: string; en: string; wins: number };
+  /** 次の試合（JST の日付）。決着後は無し。 */
+  next?: { n: number | null; jst: string };
+};
+
+/**
+ * ワールドシリーズの現在地。「FA いつから」で来た人には、決着前は「あと何勝で決まるか」が答えになる。
+ * 値は postseason.json（毎時CI）の再表示だけ。
+ */
+export async function worldSeriesState(season: number): Promise<WsState | null> {
+  const cur = await getPostseason();
+  if (!cur || cur.season !== season) return null;
+  const ws = cur.series.find((s) => s.round === 'W');
+  if (!ws?.top?.id || !ws.bottom?.id) return null;
+  const [a, b] = (ws.top.wins ?? 0) >= (ws.bottom.wins ?? 0) ? [ws.top, ws.bottom] : [ws.bottom, ws.top];
+  const label = (x: typeof a) => {
+    const t = getTeamById(x.id);
+    return { ja: x.nameJa ?? t?.nameJa ?? '', en: t?.info.nameEn ?? '', wins: x.wins ?? 0 };
+  };
+  const upcoming = ws.games.find((g) => g.state !== 'Final');
+  return {
+    done: Boolean(cur.champion),
+    lead: label(a),
+    trail: label(b),
+    next:
+      !cur.champion && upcoming?.start
+        ? { n: upcoming.n, jst: new Date(new Date(upcoming.start).getTime() + 9 * 3600 * 1000).toISOString().slice(0, 10) }
+        : undefined,
+  };
+}
+
+export { fmtDate } from './format';
+
 function addDays(iso: string, n: number): string {
   const d = new Date(`${iso}T12:00:00Z`);
   d.setUTCDate(d.getUTCDate() + n);
@@ -171,13 +216,13 @@ function addDays(iso: string, n: number): string {
 
 export type ResolvedDate = StoveDate & { on: string | null; past: boolean };
 
-/** 日程を実日付に解決して日付順に並べる。WS決着前の相対日は on=null のまま先頭側に置く。 */
+/** 日程を実日付（JST）に解決して日付順に並べる。WS決着前の相対日は on=null のまま。 */
 export function resolveDates(cat: StoveCatalog, wsEnd: string | null, today = jstToday()): ResolvedDate[] {
   const rows = cat.dates.map((d) => {
-    const on = d.date ?? (wsEnd && d.afterWs != null ? addDays(wsEnd, d.afterWs) : null);
+    const on =
+      d.date ?? (wsEnd && d.afterWs != null ? addDays(wsEnd, d.afterWs + (d.jstShift ?? 0)) : null);
     const last = d.end ?? on;
-    // 日付は ET。JST の今日がその翌日になってから「済み」にする（時差で前倒しに消さない）。
-    return { ...d, on, past: last ? last < addDays(today, -1) : false };
+    return { ...d, on, past: last ? last < today : false };
   });
   // 決着前の相対日は、例年の最遅（10月31日決着）で仮置きして並べる＝GM会議との前後が大きく崩れない。
   const key = (r: ResolvedDate) => r.on ?? addDays(`${cat.season}-10-31`, r.afterWs ?? 0);
@@ -199,6 +244,16 @@ export function stoveThreads(threads: Thread[], season: number): Thread[] {
     .filter((t) => t.fetchedAt >= from && t.fetchedAt < until)
     .filter((t) => (t.tags ?? []).some((tag) => (STOVE_TAGS as readonly string[]).includes(tag)))
     .sort((a, b) => b.fetchedAt.localeCompare(a.fetchedAt));
+}
+
+/**
+ * FA一覧の外国人選手の行き先。選手LPが無いので、その選手を語ったオフの記事があればそこへ送る
+ * （無ければリンクしない＝行き止まりのタグLPには送らない）。タグはカタカナの姓だけのことが多い
+ * （「タリク・スクーバル」の記事のタグは「スクーバル」）ので、フルネームと姓の両方で引く。
+ */
+export function articleFor(threads: Thread[], labelJa: string): Thread | null {
+  const keys = [labelJa, labelJa.split('・').at(-1) ?? labelJa];
+  return threads.find((t) => (t.tags ?? []).some((tag) => keys.includes(tag))) ?? null;
 }
 
 /** その選手の名前タグが付いたオフ記事から、いちばん前に出したい1件（フック＞ハイライト）を拾う。 */
@@ -277,6 +332,8 @@ export function rowStatus(
   route: StoveRoute,
   outcome: StoveOutcome | undefined,
   s: StovePlayerStats | undefined,
+  /** FA解禁（ワールドシリーズ決着の翌日）を過ぎたか。前は「FA予定」と出す＝まだFAではないものをFAと書かない。 */
+  faOpen = true,
 ): { label: Bi; done: boolean; team?: Bi; terms?: Sourced } {
   if (outcome) return { label: OUTCOME_LABEL[outcome.kind], done: true, team: outcome.team, terms: outcome };
   const sign = latestSigning(s);
@@ -287,6 +344,7 @@ export function rowStatus(
   if (route === 'opt-out' && s?.moves.some((m) => m.type === 'Declared Free Agency')) {
     return { label: { ja: 'オプトアウトしてFA', en: 'Opted out' }, done: false };
   }
+  if (route === 'fa' && !faOpen) return { label: { ja: 'FA予定', en: 'Pending FA' }, done: false };
   return { label: ROUTE_LABEL[route], done: false };
 }
 
@@ -352,7 +410,7 @@ export function buildStoveFaq(
     {
       q: { ja: '12月にロックアウトになるとFA交渉はどうなる？', en: 'What happens to free agency if there is a lockout in December?' },
       a: {
-        ja: '現行の労使協定は12月1日（現地時間）に期限を迎え、新しい協定がなければ12月2日からロックアウトに入る見込み。その間は契約もトレードも止まり、球団と選手は連絡も取れない。前回は2021年12月2日から2022年3月10日まで続き、直前の11月末に大型契約が相次いだ。',
+        ja: '現行の労使協定は現地時間12月1日（日本時間12月2日午後）に期限を迎え、新しい協定がなければそのままロックアウトに入る見込み。その間は契約もトレードも止まり、球団と選手は連絡も取れない。前回は2021年12月2日から2022年3月10日まで続き、直前の11月末に大型契約が相次いだ。',
         en: 'The current CBA expires on December 1 (ET), and a lockout is expected from December 2 without a new deal. Signings and trades freeze and clubs cannot contact players. The last one ran from December 2, 2021 to March 10, 2022, and a flurry of big deals came right before it.',
       },
     },

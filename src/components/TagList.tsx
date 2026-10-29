@@ -2,6 +2,12 @@ import { Link } from '@/lib/navigation';
 import { playerSlugByJaName } from '@/lib/players';
 import { isStopTag } from '@/lib/tags';
 
+/**
+ * タグの行き先をタグ一覧ではなく専用のハブにするもの。タグLPは記事が並ぶだけで、
+ * 「ストーブリーグ」で踏んだ人が知りたい去就・日程はハブにしか無い（2026-10-29 のレビュー）。
+ */
+const HUB_TAGS: Record<string, string> = { ストーブリーグ: '/stove-league' };
+
 type Props = {
   tags: string[];
   /** 全記事でのタグ出現数。1（singleton）は踏むと自分1件のページに落ちるので非リンク化する。 */
@@ -36,6 +42,10 @@ export default function TagList({ tags, counts }: Props) {
   for (const tag of tags) {
     if (playerSlugByJaName(tag)) continue; // 選手チップで既出
     if (isStopTag(tag)) continue; // 汎用は表示ごと省く（識別力ゼロの定型）
+    if (HUB_TAGS[tag]) {
+      linkTags.push(tag);
+      continue;
+    }
     const count = counts?.get(tag) ?? 2; // counts 未指定時はリンク扱い（後方互換）
     if (count <= 1) mutedTags.push(tag);
     else linkTags.push(tag);
@@ -62,7 +72,7 @@ export default function TagList({ tags, counts }: Props) {
       {linkTags.map((tag) => (
         <Link
           key={tag}
-          href={`/tag/${encodeURIComponent(tag)}`}
+          href={HUB_TAGS[tag] ?? `/tag/${encodeURIComponent(tag)}`}
           className="rounded-[2px] border border-line px-2.5 py-0.5 text-xs text-ink-soft transition-colors hover:border-ink hover:text-ink"
         >
           #{tag}

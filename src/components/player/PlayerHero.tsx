@@ -20,6 +20,7 @@ export default async function PlayerHero({
   year,
   lede,
   warRank,
+  stove,
 }: {
   player: Player;
   season: PlayerSeason;
@@ -31,6 +32,11 @@ export default async function PlayerHero({
   lede?: string;
   /** WARレース由来の全体順位。rank===1 のときだけ唯一の赤「MLB 1位」エンブレムを発火する（捏造防止＝§4.4）。 */
   warRank?: WarRank | null;
+  /**
+   * オフの去就（ストーブリーグ）。オフの間は title が「{選手} FA・移籍先の最新情報」になるので、
+   * その約束をファーストビューで果たす1行（状況のラベル＋要点＋下の去就ブロックへのリンク）。
+   */
+  stove?: { label: string; done: boolean; text: string; linkLabel: string };
 }) {
   const t = await getTranslations('player');
 
@@ -82,6 +88,21 @@ export default async function PlayerHero({
           {/* H1 直下に成績キーワードを可視化（「{選手}＋今季成績」の検索適合を底上げ）。
               年は文字列で渡す（ICU の数値引数が桁区切りで「2,026」になるのを防ぐ）。 */}
           <p className="mt-1 text-sm font-semibold text-ink-soft">{t('hubH1Sub', { year: String(year) })}</p>
+          {stove && (
+            <p className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+              <span
+                className={`inline-flex items-center border px-2 py-0.5 text-xs font-semibold ${
+                  stove.done ? 'border-ink bg-ink text-surface' : 'border-ink text-ink'
+                }`}
+              >
+                {stove.label}
+              </span>
+              <span className="text-ink">{stove.text}</span>
+              <a href="#stove" className="inline-flex min-h-[32px] items-center text-ink-soft underline underline-offset-4 hover:text-ink">
+                {stove.linkLabel}
+              </a>
+            </p>
+          )}
         </div>
 
         {/* 顔写真（カラー）＋所属ロゴのバッジ＋チームカラーの下罫。公式CDNの素材は 2:3 の縦長なので
