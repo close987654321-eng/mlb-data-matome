@@ -1,0 +1,738 @@
+{
+  "asOf": "2026-10-29 09:31",
+  "season": 2026,
+  "movesFrom": "2026-09-29",
+  "players": {
+    "543243": {
+      "name": "Sonny Gray",
+      "birthDate": "1989-11-07",
+      "age": 36,
+      "pos": "P",
+      "teamIds": [
+        111
+      ],
+      "lastTeamId": 111,
+      "hitting": null,
+      "pitching": {
+        "g": 29,
+        "gs": 29,
+        "w": 18,
+        "l": 5,
+        "sv": 0,
+        "ip": "169.0",
+        "era": "2.72",
+        "so": 149,
+        "bb": 46,
+        "whip": "1.15"
+      },
+      "moves": []
+    },
+    "592332": {
+      "name": "Kevin Gausman",
+      "birthDate": "1991-01-06",
+      "age": 35,
+      "pos": "P",
+      "teamIds": [
+        141,
+        112
+      ],
+      "lastTeamId": 112,
+      "hitting": null,
+      "pitching": {
+        "g": 32,
+        "gs": 32,
+        "w": 9,
+        "l": 12,
+        "sv": 0,
+        "ip": "177.2",
+        "era": "4.51",
+        "so": 184,
+        "bb": 47,
+        "whip": "1.27"
+      },
+      "moves": []
+    },
+    "592662": {
+      "name": "Robbie Ray",
+      "birthDate": "1991-10-01",
+      "age": 35,
+      "pos": "P",
+      "teamIds": [
+        137,
+        135
+      ],
+      "lastTeamId": 135,
+      "hitting": null,
+      "pitching": {
+        "g": 31,
+        "gs": 30,
+        "w": 13,
+        "l": 8,
+        "sv": 0,
+        "ip": "165.2",
+        "era": "3.59",
+        "so": 140,
+        "bb": 84,
+        "whip": "1.35"
+      },
+      "moves": []
+    },
+    "605280": {
+      "name": "Clay Holmes",
+      "birthDate": "1993-03-27",
+      "age": 33,
+      "pos": "P",
+      "teamIds": [
+        121,
+        112
+      ],
+      "lastTeamId": 112,
+      "hitting": null,
+      "pitching": {
+        "g": 18,
+        "gs": 18,
+        "w": 6,
+        "l": 8,
+        "sv": 0,
+        "ip": "101.1",
+        "era": "3.29",
+        "so": 78,
+        "bb": 42,
+        "whip": "1.19"
+      },
+      "moves": []
+    },
+    "607259": {
+      "name": "Nick Martinez",
+      "birthDate": "1990-08-05",
+      "age": 36,
+      "pos": "P",
+      "teamIds": [
+        139
+      ],
+      "lastTeamId": 139,
+      "hitting": null,
+      "pitching": {
+        "g": 31,
+        "gs": 31,
+        "w": 15,
+        "l": 6,
+        "sv": 0,
+        "ip": "180.0",
+        "era": "3.10",
+        "so": 109,
+        "bb": 26,
+        "whip": "1.09"
+      },
+      "moves": []
+    },
+    "608372": {
+      "name": "Tomoyuki Sugano",
+      "birthDate": "1989-10-11",
+      "age": 37,
+      "pos": "P",
+      "teamIds": [
+        115
+      ],
+      "lastTeamId": 115,
+      "hitting": null,
+      "pitching": {
+        "g": 29,
+        "gs": 29,
+        "w": 12,
+        "l": 12,
+        "sv": 0,
+        "ip": "154.1",
+        "era": "5.37",
+        "so": 96,
+        "bb": 36,
+        "whip": "1.32"
+      },
+      "moves": []
+    },
+    "628452": {
+      "name": "Raisel Iglesias",
+      "birthDate": "1990-01-04",
+      "age": 36,
+      "pos": "P",
+      "teamIds": [
+        144
+      ],
+      "lastTeamId": 144,
+      "hitting": null,
+      "pitching": {
+        "g": 59,
+        "gs": 0,
+        "w": 1,
+        "l": 2,
+        "sv": 34,
+        "ip": "60.0",
+        "era": "2.55",
+        "so": 64,
+        "bb": 17,
+        "whip": "1.08"
+      },
+      "moves": []
+    },
+    "641343": {
+      "name": "Jake Bauers",
+      "birthDate": "1995-10-06",
+      "age": 31,
+      "pos": "1B",
+      "teamIds": [
+        158
+      ],
+      "lastTeamId": 158,
+      "hitting": {
+        "g": 144,
+        "pa": 578,
+        "avg": ".266",
+        "hr": 26,
+        "rbi": 86,
+        "sb": 11,
+        "obp": ".389",
+        "ops": ".873"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "641816": {
+      "name": "Tyler Mahle",
+      "birthDate": "1994-09-29",
+      "age": 32,
+      "pos": "P",
+      "teamIds": [
+        137,
+        144
+      ],
+      "lastTeamId": 144,
+      "hitting": null,
+      "pitching": {
+        "g": 27,
+        "gs": 27,
+        "w": 7,
+        "l": 10,
+        "sv": 0,
+        "ip": "149.0",
+        "era": "3.99",
+        "so": 137,
+        "bb": 46,
+        "whip": "1.23"
+      },
+      "moves": []
+    },
+    "642547": {
+      "name": "Freddy Peralta",
+      "birthDate": "1996-06-04",
+      "age": 30,
+      "pos": "P",
+      "teamIds": [
+        121,
+        139
+      ],
+      "lastTeamId": 139,
+      "hitting": null,
+      "pitching": {
+        "g": 32,
+        "gs": 32,
+        "w": 10,
+        "l": 11,
+        "sv": 0,
+        "ip": "169.0",
+        "era": "4.42",
+        "so": 156,
+        "bb": 63,
+        "whip": "1.33"
+      },
+      "moves": []
+    },
+    "647336": {
+      "name": "Michael Soroka",
+      "birthDate": "1997-08-04",
+      "age": 29,
+      "pos": "P",
+      "teamIds": [
+        109
+      ],
+      "lastTeamId": 109,
+      "hitting": null,
+      "pitching": {
+        "g": 22,
+        "gs": 21,
+        "w": 9,
+        "l": 5,
+        "sv": 0,
+        "ip": "116.0",
+        "era": "3.41",
+        "so": 114,
+        "bb": 29,
+        "whip": "1.09"
+      },
+      "moves": []
+    },
+    "650333": {
+      "name": "Luis Arraez",
+      "birthDate": "1997-04-09",
+      "age": 29,
+      "pos": "2B",
+      "teamIds": [
+        137,
+        143
+      ],
+      "lastTeamId": 143,
+      "hitting": {
+        "g": 151,
+        "pa": 655,
+        "avg": ".310",
+        "hr": 6,
+        "rbi": 64,
+        "sb": 10,
+        "obp": ".345",
+        "ops": ".764"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "650402": {
+      "name": "Gleyber Torres",
+      "birthDate": "1996-12-13",
+      "age": 29,
+      "pos": "2B",
+      "teamIds": [
+        116
+      ],
+      "lastTeamId": 116,
+      "hitting": {
+        "g": 96,
+        "pa": 420,
+        "avg": ".260",
+        "hr": 8,
+        "rbi": 38,
+        "sb": 0,
+        "obp": ".364",
+        "ops": ".727"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "650633": {
+      "name": "Michael King",
+      "birthDate": "1995-05-25",
+      "age": 31,
+      "pos": "P",
+      "teamIds": [
+        135
+      ],
+      "lastTeamId": 135,
+      "hitting": null,
+      "pitching": {
+        "g": 32,
+        "gs": 32,
+        "w": 12,
+        "l": 10,
+        "sv": 0,
+        "ip": "185.0",
+        "era": "3.21",
+        "so": 159,
+        "bb": 70,
+        "whip": "1.18"
+      },
+      "moves": []
+    },
+    "656492": {
+      "name": "Foster Griffin",
+      "birthDate": "1995-07-27",
+      "age": 31,
+      "pos": "P",
+      "teamIds": [
+        120,
+        114
+      ],
+      "lastTeamId": 114,
+      "hitting": null,
+      "pitching": {
+        "g": 31,
+        "gs": 31,
+        "w": 15,
+        "l": 6,
+        "sv": 0,
+        "ip": "172.2",
+        "era": "3.60",
+        "so": 158,
+        "bb": 45,
+        "whip": "1.21"
+      },
+      "moves": []
+    },
+    "663554": {
+      "name": "Casey Mize",
+      "birthDate": "1997-05-01",
+      "age": 29,
+      "pos": "P",
+      "teamIds": [
+        116,
+        135
+      ],
+      "lastTeamId": 135,
+      "hitting": null,
+      "pitching": {
+        "g": 26,
+        "gs": 26,
+        "w": 6,
+        "l": 10,
+        "sv": 0,
+        "ip": "131.1",
+        "era": "4.32",
+        "so": 110,
+        "bb": 38,
+        "whip": "1.23"
+      },
+      "moves": []
+    },
+    "664023": {
+      "name": "Ian Happ",
+      "birthDate": "1994-08-12",
+      "age": 32,
+      "pos": "LF",
+      "teamIds": [
+        112
+      ],
+      "lastTeamId": 112,
+      "hitting": {
+        "g": 156,
+        "pa": 636,
+        "avg": ".218",
+        "hr": 24,
+        "rbi": 68,
+        "sb": 4,
+        "obp": ".326",
+        "ops": ".738"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "664034": {
+      "name": "Ty France",
+      "birthDate": "1994-07-13",
+      "age": 32,
+      "pos": "1B",
+      "teamIds": [
+        135
+      ],
+      "lastTeamId": 135,
+      "hitting": {
+        "g": 133,
+        "pa": 500,
+        "avg": ".295",
+        "hr": 21,
+        "rbi": 72,
+        "sb": 1,
+        "obp": ".363",
+        "ops": ".865"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "664040": {
+      "name": "Brandon Lowe",
+      "birthDate": "1994-07-06",
+      "age": 32,
+      "pos": "2B",
+      "teamIds": [
+        134
+      ],
+      "lastTeamId": 134,
+      "hitting": {
+        "g": 150,
+        "pa": 656,
+        "avg": ".260",
+        "hr": 35,
+        "rbi": 96,
+        "sb": 2,
+        "obp": ".331",
+        "ops": ".824"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "664761": {
+      "name": "Alec Bohm",
+      "birthDate": "1996-08-03",
+      "age": 30,
+      "pos": "3B",
+      "teamIds": [
+        143
+      ],
+      "lastTeamId": 143,
+      "hitting": {
+        "g": 155,
+        "pa": 629,
+        "avg": ".249",
+        "hr": 15,
+        "rbi": 88,
+        "sb": 2,
+        "obp": ".315",
+        "ops": ".698"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "665862": {
+      "name": "Jazz Chisholm Jr.",
+      "birthDate": "1998-02-01",
+      "age": 28,
+      "pos": "2B",
+      "teamIds": [
+        147
+      ],
+      "lastTeamId": 147,
+      "hitting": {
+        "g": 137,
+        "pa": 532,
+        "avg": ".231",
+        "hr": 19,
+        "rbi": 55,
+        "sb": 41,
+        "obp": ".312",
+        "ops": ".711"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "668227": {
+      "name": "Randy Arozarena",
+      "birthDate": "1995-02-28",
+      "age": 31,
+      "pos": "LF",
+      "teamIds": [
+        136
+      ],
+      "lastTeamId": 136,
+      "hitting": {
+        "g": 154,
+        "pa": 670,
+        "avg": ".281",
+        "hr": 26,
+        "rbi": 79,
+        "sb": 26,
+        "obp": ".381",
+        "ops": ".865"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "669373": {
+      "name": "Tarik Skubal",
+      "birthDate": "1996-11-20",
+      "age": 29,
+      "pos": "P",
+      "teamIds": [
+        116,
+        119
+      ],
+      "lastTeamId": 119,
+      "hitting": null,
+      "pitching": {
+        "g": 26,
+        "gs": 26,
+        "w": 12,
+        "l": 7,
+        "sv": 0,
+        "ip": "158.2",
+        "era": "2.72",
+        "so": 186,
+        "bb": 27,
+        "whip": "0.96"
+      },
+      "moves": []
+    },
+    "669432": {
+      "name": "Trevor Rogers",
+      "birthDate": "1997-11-13",
+      "age": 28,
+      "pos": "P",
+      "teamIds": [
+        110
+      ],
+      "lastTeamId": 110,
+      "hitting": null,
+      "pitching": {
+        "g": 30,
+        "gs": 30,
+        "w": 10,
+        "l": 11,
+        "sv": 0,
+        "ip": "169.2",
+        "era": "4.03",
+        "so": 157,
+        "bb": 39,
+        "whip": "1.18"
+      },
+      "moves": []
+    },
+    "670280": {
+      "name": "David Bednar",
+      "birthDate": "1994-10-10",
+      "age": 32,
+      "pos": "P",
+      "teamIds": [
+        147
+      ],
+      "lastTeamId": 147,
+      "hitting": null,
+      "pitching": {
+        "g": 64,
+        "gs": 0,
+        "w": 7,
+        "l": 3,
+        "sv": 35,
+        "ip": "69.1",
+        "era": "2.47",
+        "so": 76,
+        "bb": 20,
+        "whip": "1.04"
+      },
+      "moves": []
+    },
+    "670970": {
+      "name": "Adrian Morejon",
+      "birthDate": "1999-02-27",
+      "age": 27,
+      "pos": "P",
+      "teamIds": [
+        135
+      ],
+      "lastTeamId": 135,
+      "hitting": null,
+      "pitching": {
+        "g": 76,
+        "gs": 0,
+        "w": 9,
+        "l": 3,
+        "sv": 3,
+        "ip": "86.0",
+        "era": "2.83",
+        "so": 107,
+        "bb": 28,
+        "whip": "1.08"
+      },
+      "moves": []
+    },
+    "673513": {
+      "name": "Yuki Matsui",
+      "birthDate": "1995-10-30",
+      "age": 30,
+      "pos": "P",
+      "teamIds": [
+        135
+      ],
+      "lastTeamId": 135,
+      "hitting": null,
+      "pitching": {
+        "g": 54,
+        "gs": 0,
+        "w": 5,
+        "l": 1,
+        "sv": 1,
+        "ip": "64.0",
+        "era": "1.83",
+        "so": 68,
+        "bb": 36,
+        "whip": "1.14"
+      },
+      "moves": []
+    },
+    "673548": {
+      "name": "Seiya Suzuki",
+      "birthDate": "1994-08-18",
+      "age": 32,
+      "pos": "RF",
+      "teamIds": [
+        112
+      ],
+      "lastTeamId": 112,
+      "hitting": {
+        "g": 143,
+        "pa": 634,
+        "avg": ".270",
+        "hr": 26,
+        "rbi": 86,
+        "sb": 3,
+        "obp": ".368",
+        "ops": ".841"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "680777": {
+      "name": "Ryan Jeffers",
+      "birthDate": "1997-06-03",
+      "age": 29,
+      "pos": "C",
+      "teamIds": [
+        142
+      ],
+      "lastTeamId": 142,
+      "hitting": {
+        "g": 92,
+        "pa": 369,
+        "avg": ".256",
+        "hr": 14,
+        "rbi": 56,
+        "sb": 1,
+        "obp": ".353",
+        "ops": ".814"
+      },
+      "pitching": null,
+      "moves": []
+    },
+    "684007": {
+      "name": "Shota Imanaga",
+      "birthDate": "1993-09-01",
+      "age": 33,
+      "pos": "P",
+      "teamIds": [
+        112
+      ],
+      "lastTeamId": 112,
+      "hitting": null,
+      "pitching": {
+        "g": 32,
+        "gs": 32,
+        "w": 11,
+        "l": 10,
+        "sv": 0,
+        "ip": "174.1",
+        "era": "3.77",
+        "so": 174,
+        "bb": 37,
+        "whip": "1.10"
+      },
+      "moves": []
+    },
+    "837227": {
+      "name": "Tatsuya Imai",
+      "birthDate": "1998-05-09",
+      "age": 28,
+      "pos": "P",
+      "teamIds": [
+        117
+      ],
+      "lastTeamId": 117,
+      "hitting": null,
+      "pitching": {
+        "g": 23,
+        "gs": 15,
+        "w": 6,
+        "l": 4,
+        "sv": 0,
+        "ip": "76.2",
+        "era": "4.93",
+        "so": 97,
+        "bb": 51,
+        "whip": "1.42"
+      },
+      "moves": []
+    }
+  }
+}

@@ -27,6 +27,10 @@ export default function PlayerHubNav() {
       <NavLink href="/postseason" className={item}>
         {t('nav.postseason')}
       </NavLink>
+      {/* オフの恒久ハブ（年号なしURL）。11〜2月はここが日本人選手クラスタの入口になる。 */}
+      <NavLink href="/stove-league" className={item}>
+        {t('nav.stoveLeague')}
+      </NavLink>
       <NavLink href="/mvp" className={item}>
         {t('nav.mvp')}
       </NavLink>

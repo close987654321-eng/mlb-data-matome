@@ -1,0 +1,735 @@
+{
+  "season": 2026,
+  "asOf": "2026-10-29",
+  "activeUntil": "2027-03-25",
+  "ranking": {
+    "name": "MLB.com（マーク・ファインサンド記者）",
+    "nameEn": "MLB.com (Mark Feinsand)",
+    "url": "https://www.mlb.com/news/ranking-the-free-agents-for-2026-27-offseason",
+    "date": "2026-10-27"
+  },
+  "qualifyingOffer": {
+    "amountJa": "2315万ドル（約35億円）",
+    "amountEn": "$23.15 million",
+    "source": "https://www.tsn.ca/mlb/article/mlb-qualifying-offer-for-free-agents-rises-to-2315m-up-51-from-last-year-n1-50219765/",
+    "sourceName": "AP（TSN）"
+  },
+  "dates": [
+    {
+      "key": "fa-open",
+      "afterWs": 1,
+      "ja": "FA解禁。契約が満了した選手はワールドシリーズ終了の翌日にFAになる",
+      "en": "Free agency opens the day after the World Series ends",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "options",
+      "afterWs": 5,
+      "ja": "オプトアウト・球団オプションの判断期限で、QO（クオリファイング・オファー）の提示期限。FA選手はこの日から他球団と契約できる",
+      "en": "Deadline for opt-outs, club options and qualifying offers; free agents may sign with any club from this day",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "npb-posting",
+      "date": "2026-11-01",
+      "ja": "NPBのポスティング申請の受付が始まる（12月15日まで）。交渉期間は申請から45日間",
+      "en": "NPB posting filings open (through December 15); each player gets a 45-day negotiating window",
+      "source": "https://www.mlbtraderumors.com/2026/10/hanshin-tigers-agree-to-post-teruaki-sato.html",
+      "sourceName": "MLB Trade Rumors"
+    },
+    {
+      "key": "gm-meetings",
+      "date": "2026-11-09",
+      "end": "2026-11-12",
+      "ja": "GM会議（ラスベガス）",
+      "en": "GM Meetings (Las Vegas)",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "qo-accept",
+      "afterWs": 15,
+      "ja": "QOの受諾期限（提示から10日）。断った選手を獲った球団はドラフト指名権を失う",
+      "en": "Deadline to accept a qualifying offer (10 days after it is made)",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "rule5-protect",
+      "date": "2026-11-17",
+      "ja": "40人枠の登録期限（ルール5ドラフトから若手を守る締め切り）",
+      "en": "Deadline to add players to the 40-man roster ahead of the Rule 5 Draft",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "non-tender",
+      "date": "2026-11-20",
+      "ja": "年俸調停の権利を持つ選手に契約を提示するかの期限（ノンテンダー）",
+      "en": "Non-tender deadline for arbitration-eligible players",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "cba",
+      "date": "2026-12-01",
+      "ja": "労使協定（CBA）の期限（現地時間の午後11時59分）",
+      "en": "The collective bargaining agreement expires at 11:59 p.m. ET",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "lockout",
+      "date": "2026-12-02",
+      "ja": "新しい協定がなければロックアウトに入る見込み。契約・トレードは止まり、球団と選手は連絡も取れなくなる。前回は2021年12月2日から2022年3月10日まで続いた",
+      "en": "Expected start of a lockout if no new deal is reached. Transactions freeze and clubs cannot talk to players. The last one ran from December 2, 2021 to March 10, 2022",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "winter-meetings",
+      "date": "2026-12-07",
+      "end": "2026-12-09",
+      "ja": "ウィンターミーティング（サンディエゴ）。ロックアウトに入れば中止になるとの見方が強い",
+      "en": "Winter Meetings (San Diego), widely expected to be cancelled if a lockout begins",
+      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
+      "sourceName": "Just Baseball"
+    },
+    {
+      "key": "npb-posting-end",
+      "date": "2026-12-15",
+      "ja": "NPBのポスティング申請の受付締め切り",
+      "en": "NPB posting filings close",
+      "source": "https://www.mlbtraderumors.com/2026/10/hanshin-tigers-agree-to-post-teruaki-sato.html",
+      "sourceName": "MLB Trade Rumors"
+    }
+  ],
+  "japanese": [
+    {
+      "slug": "seiya-suzuki",
+      "route": "fa",
+      "asOf": "2026-10-29",
+      "headline": {
+        "ja": "カブスとの5年8500万ドル契約が2026年で終わり、ワールドシリーズ終了の翌日にFAになる。MLB公式のFAランキングでは全体5位。カブス担当記者は、カブスがQOを出し、鈴木は断って複数年契約を狙うとみている。",
+        "en": "His five-year, $85 million deal with the Cubs ends with the 2026 season, making him a free agent the day after the World Series. MLB.com ranks him No. 5 in the class, and the Cubs beat writer expects Chicago to make a qualifying offer that he turns down in search of a multi-year deal."
+      },
+      "window": {
+        "ja": "QOの提示期限はワールドシリーズ終了から5日後で、受諾するかは10日以内に決める。断って他球団と契約すると、その球団はドラフト指名権を失う。12月1日に労使協定が切れてロックアウトに入れば交渉は止まる。MLB公式は、前回の協定切れ（2021年）の直前に大型契約が相次いだ例を挙げている。",
+        "en": "Clubs must make qualifying offers within five days of the World Series, and players have ten days to answer. A club that signs a player who rejected one gives up a draft pick. If the CBA expires on December 1 and a lockout begins, talks freeze; MLB.com points to the flurry of big deals signed right before the last expiration in 2021."
+      },
+      "suitors": [
+        {
+          "ja": "ブルージェイズ",
+          "en": "Blue Jays"
+        }
+      ],
+      "marketValue": [
+        {
+          "ja": "MLB Trade Rumorsは、少なくとも3年・総額7000万〜1億ドルの範囲を見込む（9月のFAパワーランキング最終版で5位）。",
+          "en": "MLB Trade Rumors pegs him in the $70-100 million range on a deal of at least three years (No. 5 in its final free-agent power rankings in September).",
+          "source": "https://www.mlbtraderumors.com/2026/09/2026-27-mlb-free-agent-power-rankings-final-check-in.html",
+          "sourceName": "MLB Trade Rumors"
+        },
+        {
+          "ja": "MLB公式は、外野のFAが手薄なので4年か5年の契約で好条件を得られる可能性があると書いた。",
+          "en": "MLB.com writes that with a thin outfield class, he could do quite well on a four- or five-year contract.",
+          "source": "https://www.mlb.com/news/ranking-the-free-agents-for-2026-27-offseason",
+          "sourceName": "MLB.com"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-10-27",
+          "ja": "MLB公式のFAランキングで全体5位。今季はbWAR5.1・fWAR4.6がともに自己最高で、右翼の守備（OAA+5）と強肩も評価された。",
+          "en": "MLB.com ranks him No. 5 among free agents, citing career highs in bWAR (5.1) and fWAR (4.6) plus his right-field defense (+5 OAA) and arm.",
+          "source": "https://www.mlb.com/news/ranking-the-free-agents-for-2026-27-offseason",
+          "sourceName": "MLB.com"
+        },
+        {
+          "date": "2026-10-11",
+          "ja": "ポストシーズン敗退後の取材で「いい思い出を話したら3時間かかる」「FAは初めてのことで、どうなるか分からない」と語った。カブスでの5年は通算113本塁打。",
+          "en": "After the Cubs' elimination he said recounting the good memories \"is going to take about three hours\" and that free agency is new to him. He hit 113 homers in five seasons with Chicago.",
+          "source": "https://www.mlb.com/news/seiya-suzuki-discusses-time-with-cubs-start-to-his-mlb-career",
+          "sourceName": "MLB.com"
+        },
+        {
+          "date": "2026-10-03",
+          "ja": "カブスのホイヤー編成本部長が、今永昇太・鈴木誠也ら約10人がFAになるとして「全員と再契約するのは難しい」と話した。補強は野手より投手を重視する方針。",
+          "en": "Cubs president Jed Hoyer said about ten players including Shota Imanaga and Suzuki are headed to free agency and \"we can't retain everyone,\" adding that pitching is the priority.",
+          "source": "https://www.nikkei.com/article/DGXZQOKC030CT0T01C26A0000000/",
+          "sourceName": "日本経済新聞（共同）"
+        },
+        {
+          "date": "2026-09-29",
+          "ja": "The Athleticのミッチ・バノン記者が、リーグ関係者の話として、鈴木がFAになればブルージェイズが獲得に動く見込みだと報じた。",
+          "en": "The Athletic's Mitch Bannon, citing a league source, reported that the Blue Jays are expected to pursue Suzuki if he reaches free agency.",
+          "source": "https://www.newsweek.com/sports/mlb/blue-jays-expected-to-pursue-cubs-star-this-offseason-after-bad-year-12498831",
+          "sourceName": "Newsweek（The Athletic）"
+        },
+        {
+          "date": "2026-09-18",
+          "ja": "MLB Trade RumorsのFAパワーランキング最終版で5位。4年連続の20本塁打と、アロザレーナより上の守備・選球眼が評価された。",
+          "en": "No. 5 in MLB Trade Rumors' final free-agent power rankings, credited with a fourth straight 20-homer season and better defense and walk rates than Randy Arozarena.",
+          "source": "https://www.mlbtraderumors.com/2026/09/2026-27-mlb-free-agent-power-rankings-final-check-in.html",
+          "sourceName": "MLB Trade Rumors"
+        }
+      ]
+    },
+    {
+      "slug": "shota-imanaga",
+      "route": "fa",
+      "asOf": "2026-10-29",
+      "headline": {
+        "ja": "昨オフにQOを受け入れて結んだ1年契約が終わり、2年続けてFA市場に出る。QOを一度受けた選手には二度目を出せないため、獲得した球団がドラフト指名権を失うことはない。MLB公式のFAランキングでは25位。",
+        "en": "The one-year deal he took by accepting the Cubs' qualifying offer last winter is up, so he hits the market for a second straight offseason. Because he already accepted a QO, he cannot receive another, so signing him costs no draft pick. MLB.com ranks him No. 25."
+      },
+      "window": {
+        "ja": "QOが付かないので、ワールドシリーズ終了の5日後から全球団と条件なしで交渉・契約できる。12月1日の労使協定の期限が交渉の速さに影響するとみられている。",
+        "en": "With no QO attached, he can sign with any club from the fifth day after the World Series. The December 1 CBA expiration is expected to shape how fast talks move."
+      },
+      "marketValue": [
+        {
+          "ja": "前回のFAでは、カブスが3年5775万ドルの球団オプションを断り、今永も1525万ドルの選手オプションを断ったうえで、QO（2202万5000ドル）を受け入れて残留した。",
+          "en": "Last winter the Cubs declined a three-year, $57.75 million club option, Imanaga declined his $15.25 million player option, and he then accepted the $22.025 million qualifying offer.",
+          "source": "https://www.mlb.com/news/shota-imanaga-accepts-qualifying-offer-from-cubs",
+          "sourceName": "MLB.com"
+        }
+      ],
+      "timeline": [
+        {
+          "date": "2026-10-27",
+          "ja": "MLB公式のFAランキングで25位。カブスでの3年は86先発・防御率3.45。与四球率5.2%はリーグ上位5%に入る一方、通算の被本塁打93が与四球91を上回る点も挙げられた。",
+          "en": "MLB.com ranks him No. 25: a 3.45 ERA over 86 starts in three seasons with the Cubs and a 5.2% walk rate (95th percentile), though he has allowed more homers (93) than walks (91) in his career.",
+          "source": "https://www.mlb.com/news/ranking-the-free-agents-for-2026-27-offseason",
+          "sourceName": "MLB.com"
+        },
+        {
+          "date": "2026-10-03",
+          "ja": "ホイヤー編成本部長が今永・鈴木ら約10人がFAになるとし、「全員と再契約するのは難しい」「話し合うことになる」と話した。",
+          "en": "Jed Hoyer said about ten Cubs, including Imanaga and Seiya Suzuki, are headed to free agency, that the club can't retain everyone, and that it will be in touch with them.",
+          "source": "https://www.nikkei.com/article/DGXZQOKC030CT0T01C26A0000000/",
+          "sourceName": "日本経済新聞（共同）"
+        },
+        {
+          "date": "2025-11-19",
+          "ja": "カブスのQOを受け入れ、2026年の1年契約で残留した。MLB公式は、これで来オフはQOの手続きなしでFAになれると伝えた。",
+          "en": "Accepted the Cubs' qualifying offer for 2026. MLB.com noted that this lets him reach free agency next offseason without going through the QO process again.",
+          "source": "https://www.mlb.com/news/shota-imanaga-accepts-qualifying-offer-from-cubs",
+          "sourceName": "MLB.com"
+        }
+      ]
+    },
+    {
+      "slug": "tomoyuki-sugano",
+      "route": "fa",
+      "asOf": "2026-10-29",
+      "headline": {
+        "ja": "ロッキーズとの1年510万ドル契約が終わり、2年続けてFAになる。来季は37歳のシーズン。MLB公式はロッキーズの注目FAに挙げ、本拠地クアーズ・フィールドで粘った投球を評価する余地があるとした。",
+        "en": "His one-year, $5.1 million deal with the Rockies is done, so he is a free agent for the second straight winter, heading into his age-37 season. MLB.com listed him as Colorado's notable free agent and noted his work at Coors Field."
+      },
+      "timeline": [
+        {
+          "date": "2026-08-10",
+          "ja": "MLB公式が各球団の今オフの注目FAを紹介し、ロッキーズは菅野を選んだ。8月上旬の時点で本拠地10先発の防御率3.93（敵地5.13）。ローテーション後半を担う堅実な投手として見られる可能性があると書いた。",
+          "en": "MLB.com named him the Rockies' key pending free agent, noting a 3.93 ERA in 10 home starts at Coors Field (5.13 on the road) as of early August, and that teams may see him as a steady back-end starter.",
+          "source": "https://news.yahoo.co.jp/articles/49b08ae2f4c9268e3bbf012038840944f536dacc",
+          "sourceName": "J SPORTS（MLB.com）"
+        },
+        {
+          "date": "2026-02-11",
+          "ja": "ロッキーズと1年510万ドルで合意した。オリオールズでの1年目に続く、2年目のMLBシーズン。",
+          "en": "Agreed to a one-year, $5.1 million deal with the Rockies for his second MLB season after a year with the Orioles.",
+          "source": "https://wtop.com/local-sports/2026/02/rockies-and-right-hander-tomoyuki-sugano-agree-to-a-5-1-million-1-year-contract",
+          "sourceName": "AP（WTOP）"
+        }
+      ]
+    },
+    {
+      "slug": "tatsuya-imai",
+      "route": "opt-out",
+      "asOf": "2026-10-29",
+      "headline": {
+        "ja": "アストロズとの3年5400万ドル契約に、2026年と27年のシーズン後に契約を破棄できるオプトアウト権がある（残りは2年3600万ドル）。1年目は7月に先発ローテーションを外れた。MLB公式は、オプトアウトする可能性は低いとみている。",
+        "en": "His three-year, $54 million deal with Houston lets him opt out after 2026 and 2027, with two years and $36 million left. He was pulled from the rotation in July of his first season, and MLB.com considers an opt-out unlikely."
+      },
+      "window": {
+        "ja": "判断の期限はワールドシリーズ終了から5日後。オプトアウトしなければ2027年もアストロズでプレーする。",
+        "en": "The decision is due five days after the World Series. If he stays in, he pitches for Houston in 2027."
+      },
+      "timeline": [
+        {
+          "date": "2026-08-29",
+          "ja": "MLB公式がオプトアウト権を持つ選手をまとめ、今井は米国での生活と野球への適応に苦しんだとして、オプトアウトする可能性は低いと書いた。",
+          "en": "MLB.com's rundown of players with opt-outs said Imai had trouble adapting to life on and off the field in the U.S. and is unlikely to opt out.",
+          "source": "https://www.mlb.com/news/mlb-players-with-opt-out-clauses-player-options-club-options-for-2027",
+          "sourceName": "MLB.com"
+        },
+        {
+          "date": "2026-01-03",
+          "ja": "西武からポスティングでアストロズと3年5400万ドルで合意した。2026年と27年のシーズン後にオプトアウト権が付く。",
+          "en": "Signed a three-year, $54 million deal with the Astros out of Seibu via the posting system, with opt-outs after 2026 and 2027.",
+          "source": "https://www.mlb.com/news/tatsuya-imai-astros-deal",
+          "sourceName": "MLB.com"
+        }
+      ]
+    },
+    {
+      "slug": "yuki-matsui",
+      "route": "opt-out",
+      "asOf": "2026-10-29",
+      "headline": {
+        "ja": "パドレスとの5年2800万ドル契約に、2026年シーズン後のオプトアウト権がある（残りは2年1350万ドル）。今季は自己最高の数字で、MLB公式は、市場に出れば左のリリーフでトップ5に入るとして、オプトアウトしても驚かないと書いた。",
+        "en": "His five-year, $28 million deal with San Diego includes an opt-out after 2026, with two years and $13.5 million left. Coming off his best MLB season, MLB.com called him arguably a top-five lefty reliever on the market and said an opt-out would not be surprising."
+      },
+      "window": {
+        "ja": "判断の期限はワールドシリーズ終了から5日後。オプトアウトしなければ2027年もパドレスでプレーする。",
+        "en": "The decision is due five days after the World Series. If he stays in, he pitches for San Diego in 2027."
+      },
+      "timeline": [
+        {
+          "date": "2026-08-29",
+          "ja": "MLB公式がオプトアウト権を持つ選手をまとめ、松井は空振り率と被ハードヒット率がともに上位3%の一方、与四球率はリーグ下位と分析した。",
+          "en": "MLB.com's opt-out rundown noted his 97th-percentile whiff and hard-hit rates, alongside one of the league's worst walk rates.",
+          "source": "https://www.mlb.com/news/mlb-players-with-opt-out-clauses-player-options-club-options-for-2027",
+          "sourceName": "MLB.com"
+        }
+      ]
+    }
+  ],
+  "board": [
+    {
+      "rank": 1,
+      "mlbId": 669373,
+      "nameEn": "Tarik Skubal",
+      "pos": {
+        "ja": "左投手",
+        "en": "LHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "ア・リーグのサイ・ヤング賞を2年連続で受賞した左腕。今季途中にタイガースからドジャースへ移った。山本由伸の12年3億2500万ドルを超え、投手として史上最高額になるとの見方が強い。",
+        "en": "Two-time reigning AL Cy Young winner, traded from Detroit to the Dodgers during the season. Widely expected to top Yoshinobu Yamamoto's 12-year, $325 million deal as the richest ever for a pitcher."
+      }
+    },
+    {
+      "rank": 2,
+      "mlbId": 650633,
+      "nameEn": "Michael King",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "opt-out",
+      "note": {
+        "ja": "パドレスとの3年7500万ドル契約にオプトアウト権がある。故障の多かった2025年から復活し、行使してより長い契約を狙うとの見方が有力。",
+        "en": "Holds an opt-out in his three-year, $75 million Padres deal. After a healthy bounce-back year, he is widely expected to opt out for a longer contract."
+      }
+    },
+    {
+      "rank": 3,
+      "mlbId": 642547,
+      "nameEn": "Freddy Peralta",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "club-option",
+      "note": {
+        "ja": "メッツで苦しみ、途中移籍したレイズで立て直した。ポストシーズンでも好投し、ア・リーグ優勝決定シリーズのMVPに選ばれた。",
+        "en": "Struggled with the Mets, then turned it around after a midseason trade to Tampa Bay and was named ALCS MVP."
+      }
+    },
+    {
+      "rank": 4,
+      "nameEn": "Teruaki Sato",
+      "nameJa": "佐藤輝明",
+      "prospectSlug": "sato-teruaki",
+      "pos": {
+        "ja": "三塁・外野",
+        "en": "3B/OF"
+      },
+      "team": {
+        "ja": "阪神",
+        "en": "Hanshin"
+      },
+      "route": "posting",
+      "note": {
+        "ja": "セ・リーグ三冠王。阪神がポスティングを認めた。三振の多さから村上宗隆と比べられるが、長打の少ない市場で注目を集めるとみられている。",
+        "en": "Central League Triple Crown winner, cleared by Hanshin to be posted. His strikeouts draw comparisons to Munetaka Murakami, but power is scarce on this market."
+      }
+    },
+    {
+      "rank": 5,
+      "mlbId": 673548,
+      "nameEn": "Seiya Suzuki",
+      "jpSlug": "seiya-suzuki",
+      "pos": {
+        "ja": "外野手",
+        "en": "OF"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "カブスとの5年契約が満了。打撃に加えて右翼守備と強肩も評価され、外野の手薄な市場で4〜5年の契約もあり得るとされる。",
+        "en": "His five-year Cubs deal is up. Valued for his right-field defense and arm as well as his bat, he could land four or five years in a thin outfield market."
+      }
+    },
+    {
+      "rank": 6,
+      "mlbId": 668227,
+      "nameEn": "Randy Arozarena",
+      "pos": {
+        "ja": "外野手",
+        "en": "OF"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "2年続けて25本塁打・25盗塁を超えた。ポストシーズンにも強い外野手。",
+        "en": "A second straight 25-homer, 25-steal season, with a strong postseason track record."
+      }
+    },
+    {
+      "rank": 7,
+      "mlbId": 664040,
+      "nameEn": "Brandon Lowe",
+      "pos": {
+        "ja": "二塁手",
+        "en": "2B"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "パイレーツ移籍1年目で長打を量産し、二塁守備も大きく改善した。",
+        "en": "Power production in his first year in Pittsburgh, with a big defensive turnaround at second base."
+      }
+    },
+    {
+      "rank": 8,
+      "mlbId": 605280,
+      "nameEn": "Clay Holmes",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "opt-out",
+      "note": {
+        "ja": "リリーフから先発に転向して成功した右腕。2027年の1200万ドルを破棄してFAになる見込み。トレード期限にメッツからカブスへ移ったのでQOは付かない。",
+        "en": "A successful convert from closer to starter, expected to opt out of his $12 million 2027 salary. Traded to the Cubs at the deadline, so no QO can be attached."
+      }
+    },
+    {
+      "rank": 9,
+      "mlbId": 670970,
+      "nameEn": "Adrian Morejon",
+      "pos": {
+        "ja": "左投手",
+        "en": "LHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "パドレスの中継ぎ左腕。抑えとして、あるいは先発転向の候補としても見られている。",
+        "en": "Padres lefty setup man seen as a closer option, or even a candidate to start."
+      }
+    },
+    {
+      "rank": 10,
+      "mlbId": 669432,
+      "nameEn": "Trevor Rogers",
+      "pos": {
+        "ja": "左投手",
+        "en": "LHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "2025年に圧倒的な数字を残し、今季は波があった。29歳と若く、複数年の先発候補。",
+        "en": "Dominant in 2025 and up-and-down in 2026; still young for a multi-year rotation deal."
+      }
+    },
+    {
+      "rank": 11,
+      "mlbId": 641343,
+      "nameEn": "Jake Bauers",
+      "pos": {
+        "ja": "一塁・外野",
+        "en": "1B/OF"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "30歳で開花し、ワールドシリーズに進んだブルワーズ打線の中心になった。",
+        "en": "A late breakout at 30 and a key bat for the pennant-winning Brewers."
+      }
+    },
+    {
+      "rank": 12,
+      "mlbId": 650333,
+      "nameEn": "Luis Arraez",
+      "pos": {
+        "ja": "二塁手",
+        "en": "2B"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "首位打者3度の巧打者が復調。トレード期限にジャイアンツからフィリーズへ移り、二塁守備も評価を上げた。",
+        "en": "The three-time batting champ bounced back, moved from the Giants to the Phillies at the deadline, and improved in the field."
+      }
+    },
+    {
+      "rank": 13,
+      "mlbId": 680777,
+      "nameEn": "Ryan Jeffers",
+      "pos": {
+        "ja": "捕手",
+        "en": "C"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "手薄な捕手市場の目玉。開幕から好調だったが、左手の骨折で約2か月離脱した。",
+        "en": "The top catcher in a thin market; hot start interrupted by a broken left hamate."
+      }
+    },
+    {
+      "rank": 14,
+      "mlbId": 543243,
+      "nameEn": "Sonny Gray",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "37歳のシーズンを前にア・リーグ最多勝。長期契約は難しくても複数年の目はある。",
+        "en": "Led the AL in wins at 36; not a long-term deal at his age, but multiple years are in play."
+      }
+    },
+    {
+      "rank": 15,
+      "mlbId": 665862,
+      "nameEn": "Jazz Chisholm Jr.",
+      "pos": {
+        "ja": "二塁手",
+        "en": "2B"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "20代でFAになる数少ない主力。二塁の守備と足が武器。ヤンキースはQOを出さないとの見方。",
+        "en": "One of the few top free agents still in his 20s, with elite defense and speed. The Yankees are seen as unlikely to make a QO."
+      }
+    },
+    {
+      "rank": 16,
+      "mlbId": 641816,
+      "nameEn": "Tyler Mahle",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "ジャイアンツで苦しみ、ブレーブス移籍後に立て直した。",
+        "en": "Rough start with the Giants, strong finish after a trade to Atlanta."
+      }
+    },
+    {
+      "rank": 17,
+      "mlbId": 670280,
+      "nameEn": "David Bednar",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "ヤンキースの抑え。2025年途中の移籍から1年半で評価を立て直した。",
+        "en": "The Yankees' closer, re-established as one of the game's best since his 2025 trade."
+      }
+    },
+    {
+      "rank": 18,
+      "mlbId": 607259,
+      "nameEn": "Nick Martinez",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "元日本ハム・ソフトバンク。36歳で初のオールスターに選ばれ、ワールドシリーズ第1戦の先発も任された。",
+        "en": "Former Nippon-Ham and SoftBank pitcher. Made his first All-Star team at 36 and started Game 1 of the World Series."
+      }
+    },
+    {
+      "rank": 19,
+      "mlbId": 663554,
+      "nameEn": "Casey Mize",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "タイガースで好投し、トレード期限にパドレスへ。移籍後は崩れたが、制球と年齢で買い手は多いとみられる。",
+        "en": "Excellent with Detroit before a deadline deal to San Diego, where he struggled; command and age keep his market broad."
+      }
+    },
+    {
+      "rank": 20,
+      "mlbId": 664023,
+      "nameEn": "Ian Happ",
+      "pos": {
+        "ja": "左翼手",
+        "en": "LF"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "鈴木誠也と同じくカブスからFAに。毎年安定して出場し、ゴールドグラブ4度。",
+        "en": "Like Suzuki, a Cubs free agent; durable and a four-time Gold Glover."
+      }
+    },
+    {
+      "rank": 21,
+      "mlbId": 650402,
+      "nameEn": "Gleyber Torres",
+      "pos": {
+        "ja": "二塁手",
+        "en": "2B"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "昨オフにQOを受け入れてタイガースに残り、2年続けてFAに。今季は脇腹の故障で出場が減った。",
+        "en": "Accepted Detroit's QO last winter and is back on the market; oblique injuries cut into his 2026 season."
+      }
+    },
+    {
+      "rank": 22,
+      "nameEn": "Kaima Taira",
+      "nameJa": "平良海馬",
+      "prospectSlug": "taira-kaima",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "team": {
+        "ja": "西武",
+        "en": "Seibu"
+      },
+      "route": "posting",
+      "note": {
+        "ja": "2027年で海外FA権に届くため、今オフのポスティングが見込まれる。MLB球団が先発と救援のどちらで見るかが焦点。",
+        "en": "Expected to be posted since he would otherwise reach unrestricted free agency after 2027. The question is whether MLB teams see him as a starter or a reliever."
+      }
+    },
+    {
+      "rank": 23,
+      "mlbId": 656492,
+      "nameEn": "Foster Griffin",
+      "pos": {
+        "ja": "左投手",
+        "en": "LHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "元巨人。日本で3年投げてMLBに戻り、ナショナルズで前半戦に好投した。夏にガーディアンズへ移籍。",
+        "en": "Former Yomiuri Giant who returned from three years in Japan, starred for the Nationals in the first half, then was traded to Cleveland."
+      }
+    },
+    {
+      "rank": 24,
+      "mlbId": 592332,
+      "nameEn": "Kevin Gausman",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "引退の可能性も口にしている。続けるならブルージェイズへの復帰も選択肢とされる。",
+        "en": "Has floated retirement; a return to Toronto is an option if he pitches on."
+      }
+    },
+    {
+      "rank": 25,
+      "mlbId": 684007,
+      "nameEn": "Shota Imanaga",
+      "jpSlug": "shota-imanaga",
+      "pos": {
+        "ja": "左投手",
+        "en": "LHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "QOを受け入れた1年契約が満了。二度目のQOは出せないので、獲得球団に補償の負担がない。",
+        "en": "His QO year is done, and since he cannot receive another, he carries no draft-pick cost."
+      }
+    },
+    {
+      "rank": 26,
+      "mlbId": 647336,
+      "nameEn": "Michael Soroka",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "新人時代以来の100投球回超え。キャリア初の複数年契約の可能性がある。",
+        "en": "Topped 100 innings for the first time since his rookie year; a first multi-year deal is possible."
+      }
+    },
+    {
+      "rank": 27,
+      "mlbId": 664034,
+      "nameEn": "Ty France",
+      "pos": {
+        "ja": "一塁手",
+        "en": "1B"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "パドレスとマイナー契約から再起し、一塁守備でも上位の評価。",
+        "en": "Revived his career after a minor league deal with San Diego, with top-tier first-base defense."
+      }
+    },
+    {
+      "rank": 28,
+      "mlbId": 664761,
+      "nameEn": "Alec Bohm",
+      "pos": {
+        "ja": "一塁・三塁",
+        "en": "1B/3B"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "開幕直後の不振から巻き返した。一塁と三塁を守れる右の打点役。",
+        "en": "Recovered from a terrible start; a right-handed run producer who can play first or third."
+      }
+    },
+    {
+      "rank": 29,
+      "mlbId": 628452,
+      "nameEn": "Raisel Iglesias",
+      "pos": {
+        "ja": "右投手",
+        "en": "RHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "ブレーブスの抑えとして初のオールスター。どこかで抑えの座を得るとみられる。",
+        "en": "First All-Star selection as Atlanta's closer; should land a ninth-inning job somewhere."
+      }
+    },
+    {
+      "rank": 30,
+      "mlbId": 592662,
+      "nameEn": "Robbie Ray",
+      "pos": {
+        "ja": "左投手",
+        "en": "LHP"
+      },
+      "route": "fa",
+      "note": {
+        "ja": "2021年オフに結んだ5年1億1500万ドル契約を満了した。2年続けて170回前後を投げている。",
+        "en": "Completed the five-year, $115 million deal he signed in November 2021, and has averaged more than 170 innings the past two years."
+      }
+    }
+  ]
+}

@@ -11,6 +11,8 @@ import { getPitchArsenal } from '@/lib/pitchArsenal';
 import { pickHero, playerShareText } from '@/lib/playerHero';
 import { playerLede } from '@/lib/playerLede';
 import { buildFeed, feedKey } from '@/lib/feed';
+import { getStoveLeague, getStoveStats, getJpStove, stoveActive, rowStatus, ROUTE_LABEL } from '@/lib/stoveLeague';
+import PostingWatch from '@/components/PostingWatch';
 import FeedCard from '@/components/FeedCard';
 import ShareButtons from '@/components/ShareButtons';
 import PlayerHero from '@/components/player/PlayerHero';
@@ -60,6 +62,22 @@ export async function generateMetadata({
     ? `${player.nameEn}${nick ? ` (${nick})` : ''} — ${year} Stats & Fan Reactions`
     : `${player.nameJa}${nick ? `（${nick}）` : ''} ${year}年 成績・現地の評判`;
   const teamCtx = season?.team ? `${season.team}・` : '';
+  // オフ（ストーブリーグの期間）は、FA・オプトアウトを抱える選手だけ title を去就の語に寄せる。
+  // 11〜2月の検索は「{選手} FA」「{選手} 移籍先」に移る一方、「成績」も残るので両方を前に出す。
+  const stove = await stoveMeta(slug, player.mlbId, en);
+  if (stove) {
+    const t = en
+      ? `${player.nameEn} ${stove.en} & ${year} Stats`
+      : `${player.nameJa} ${stove.ja}と${year}年成績`;
+    const d = en ? stove.headline.en : `${stove.headline.ja}${statLine ? `${year}年は${statLine}。` : ''}`;
+    return {
+      title: t,
+      description: d,
+      alternates: localeAlternates(locale, `/player/${slug}`),
+      openGraph: { title: t, description: d, type: 'profile', url: absoluteUrl(locale, `/player/${slug}`) },
+      twitter: { card: 'summary_large_image', title: t, description: d },
+    };
+  }
   const description = en
     ? `${player.nameEn}'s ${year} MLB season stats${season?.team ? ` (${season.team})` : ''} and what overseas fans are saying — Japanese digests of reactions from abroad.${nick ? ` Also known as ${nick}.` : ''}`
     : `${player.nameJa}（${player.nameEn}${nick ? `・現地での愛称は${nick}` : ''}）の${year}年MLB成績${statLine ? `（${statLine}）` : `（${teamCtx}打率・本塁打・防御率・WAR ほか）`}と、海外の反応まとめ記事を一覧。${snap.asOf ? `${snap.asOf}時点。` : ''}`;
@@ -71,6 +89,26 @@ export async function generateMetadata({
     openGraph: { title, description, type: 'profile', url: absoluteUrl(locale, `/player/${slug}`) },
     twitter: { card: 'summary_large_image', title, description },
   };
+}
+
+/**
+ * オフの title の語。決着（契約・残留）したら「◯◯と契約」、未決なら道筋（FA／オプトアウト）。
+ * ストーブリーグの期間（stove-league.json の activeUntil）を過ぎたら null＝通常の「成績」title に戻る。
+ */
+async function stoveMeta(slug: string, mlbId: number, en: boolean) {
+  const [cat, jp] = await Promise.all([getStoveLeague(), getJpStove(slug)]);
+  if (!cat || !jp || !stoveActive(cat)) return null;
+  const s = (await getStoveStats()).players[String(mlbId)];
+  const st = rowStatus(jp.route, jp.outcome, s);
+  if (st.done && st.team) {
+    return {
+      ja: `${st.team.ja}と${st.label.ja}・契約内容`,
+      en: `${st.label.en} with ${st.team.en}`,
+      headline: jp.headline,
+    };
+  }
+  if (jp.route === 'opt-out') return { ja: 'オプトアウトの最新情報', en: 'Opt-Out Decision', headline: jp.headline };
+  return { ja: 'FA・移籍先の最新情報', en: 'Free Agency Tracker', headline: jp.headline };
 }
 
 export default async function PlayerHubPage({
@@ -85,12 +123,15 @@ export default async function PlayerHubPage({
   const t = await getTranslations();
 
   const all = await getAllThreads();
-  const [season, snap, gamelog, warRace, arsenal] = await Promise.all([
+  const [season, snap, gamelog, warRace, arsenal, stoveCat, stove, stoveStats] = await Promise.all([
     getPlayerSeason(player.mlbId),
     getPlayersSnapshot(),
     getGamelog(player.mlbId), // 試合別ログがある選手だけ「徹底分析」セクションを出す（今は大谷）
     getWarRace(), // WARレース（大谷＋ライバル）。focus がレースに居る時だけ出す。
     getPitchArsenal(player.mlbId), // 球種別 徹底分析（投手のみ）。データがある投手だけ出す。
+    getStoveLeague(),
+    getJpStove(slug), // 今オフの去就（FA・オプトアウト）。ストーブリーグに載る日本人だけ。
+    getStoveStats(),
   ]);
 
   // 徹底分析の「海外の反応 融合」: 各試合(ET日付)→ その試合のまとめ記事を索引化して島へ渡す。
@@ -209,6 +250,43 @@ export default async function PlayerHubPage({
   // hero.caption(別指標の最良順位・lg<=5でscope化け)では誤発火/不発火の二重事故になるためここで固定。
   const warRankInfo = warRace ? warRank(warRace, player.mlbId) : null;
 
+  // 今オフの去就。オフの検索（「{選手} FA」「{選手} 移籍先」）に成績より先に答える＝ヒーロー直下に置く。
+  // 表示は NEXT MLB のポスティング最新情報と同じ部品（現在地→日程→相場→報道の時系列）。
+  const stoveStatus = stove ? rowStatus(stove.route, stove.outcome, stoveStats.players[String(player.mlbId)]) : null;
+  const stoveRank = stove && stoveCat?.board.find((b) => b.jpSlug === slug)?.rank;
+  const stoveBlock =
+    stove && stoveStatus && stoveCat && stoveActive(stoveCat) ? (
+      <div id="stove" className="space-y-2">
+        <PostingWatch
+          watch={stove}
+          en={locale === 'en'}
+          heading={locale === 'en' ? 'Offseason tracker' : '今オフの去就（ストーブリーグ）'}
+          levelLabel={
+            locale === 'en'
+              ? `${stoveStatus.label.en}${stoveStatus.team ? `: ${stoveStatus.team.en}` : ''}`
+              : `${stoveStatus.label.ja}${stoveStatus.team ? `：${stoveStatus.team.ja}` : ''}`
+          }
+          routeLabel={
+            stoveRank
+              ? locale === 'en'
+                ? `MLB.com FA ranking No. ${stoveRank}`
+                : `MLB公式FAランキング${stoveRank}位`
+              : locale === 'en'
+                ? ROUTE_LABEL[stove.route].en
+                : ROUTE_LABEL[stove.route].ja
+          }
+          windowLabel={locale === 'en' ? 'What happens next' : 'これからの日程'}
+          suitorsLabel={t('prospects.watchSuitors')}
+          marketLabel={t('prospects.watchMarket')}
+          timelineLabel={t('prospects.watchTimeline')}
+          asOfLabel={locale === 'en' ? `As of ${stove.asOf}` : `${stove.asOf.slice(5).replace('-', '/')}時点`}
+        />
+        <Link href="/stove-league" className="inline-flex min-h-[44px] items-center text-sm text-ink-soft hover:text-ink hover:underline">
+          {locale === 'en' ? 'All free agents and the offseason calendar' : 'FA注目選手と日程をストーブリーグのまとめで見る'} <span aria-hidden className="ml-1">→</span>
+        </Link>
+      </div>
+    ) : null;
+
   return (
     <div className="space-y-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
@@ -224,6 +302,7 @@ export default async function PlayerHubPage({
       {hasStats && season && hero ? (
         <>
           <PlayerHero player={player} season={season} hero={hero} labels={rankLabels} asOf={snap.asOf} year={year} lede={lede} warRank={warRankInfo} />
+          {stoveBlock}
           <PlayerStickyBar
             name={player.nameJa}
             heroLabel={stickyLabel}

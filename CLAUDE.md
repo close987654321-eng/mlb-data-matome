@@ -54,6 +54,7 @@ SSG します。
 │   │   ├── ranking/ + allstar/      # 日本人選手ランキング／オールスター特設
 │   │   ├── mvp/ + cy-young/ + roy/  # 賞レース予測ボード（MVP・サイヤング・新人王）
 │   │   ├── postseason/              # ポストシーズンの恒久ハブ（トーナメント表＋ラウンド別の海外の反応）
+│   │   ├── stove-league/            # ストーブリーグの恒久ハブ（日本人の去就・FA注目選手・日程・海外の反応）
 │   │   ├── prospects/               # NEXT MLB ハブ（NPB 注目株）
 │   │   └── tag/[tag]/ + search/ + columns/ + p/[page]/  # タグ・検索・コラム・ページネーション
 │   ├── components/
@@ -75,6 +76,7 @@ SSG します。
     ├── warm-card-art.mjs       # カード素材（顔写真・ロゴ）を public/media/card-art/ に事前取得（§4.1）
     ├── fetch-npb-stats.mjs     # NEXT MLB（NPB注目株）の成績を NPB公式から取得（§4.1）
     ├── fetch-transactions.mjs  # MLBの移籍・契約レーダー（オフシーズンの記事ネタ・§4.1）
+    ├── fetch-stove-stats.mjs   # ストーブリーグのFA注目選手の今季成績＋オフの契約の動き（§4.1・3時間ごとにCI）
     ├── fetch-game-voices.mjs   # チームLPの「1試合1件の現地の声」を公式ハイライトから取得（§4.1）
     │                           #   refresh-season = 昇格した「今季の声」の生存を取り直す（毎週）
     ├── journal-gaps.mjs        # 選手LPの観測日誌の取りこぼし検出（jp-daily Step 6a）
@@ -294,6 +296,21 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     `※記事あり` は重複記事の防止、末尾の「カタカナ未収録」は `data/player-names-ja.json` の手当て待ち
     ＝**オフの主役は外国人選手**なので、ここを放置すると記事に英語名がそのまま出る。
     運用は **neta-radar スキルの Step 1-E**（記事化はしない＝matome へ委譲）。
+  - **ストーブリーグ（/stove-league・2026-10-29 新設）**: オフの恒久ハブ（年号なしURL・/postseason と同じ型）。
+    狙うクエリは「MLB ストーブリーグ 2026」「MLB FA ランキング」「{日本人選手} FA／移籍先／オプトアウト」「MLB ロックアウト」。
+    担当の割り方は NEXT MLB と同じ＝**編集判断**（載せる選手・状況・出典つきの報道の時系列・ひと言・日程）は
+    `data/stove-league.json`（人が書く・出典URL必須）、**数値と動き**（今季成績・FA宣言・どこと契約したか）は
+    `node scripts/fetch-stove-stats.mjs` が statsapi から `data/stove-league-stats.json` へ（2コール・中身が同じなら書かない）。
+    `.github/workflows/refresh-stove.yml` が**3時間ごと**に回す＝refresh-stats.yml は冬モードで止まるが、FAの契約はオフに起きるため別枠。
+    期間は `activeUntil` まで（過ぎるとCIは何もしない・選手LPの title も通常に戻る）。statsapi に契約の年数・金額は無い＝
+    **報道を見て人が `outcome`（signed / re-signed / stayed）を出典つきで書く**。書くまでは「契約：◯◯」と球団名だけが自動で出る。
+    FA注目選手の並びは MLB.com のFAランキング（`ranking` に出典と日付）＝順位は他社の編集物なので必ず出典を見出し直下に出す。
+    日程の「WS終了の◯日後」は postseason.json の最終戦から自動で実日付に変わる。NPB組（ポスティング）は `npbPlayers.ts` の
+    `postingWatch` をそのまま読む（二重管理しない）。海外の反応は記事のタグ（`STOVE_TAGS`＝ストーブリーグ/FA/オプトアウト/
+    ポスティング/ロックアウト）で自動的に並び、日本人カードの「海外ファンの声」はその選手名タグの記事のフック（無ければハイライト）。
+    **選手LP（/player/{slug}）**はオフの間だけ、ヒーロー直下に「今オフの去就」ブロック（PostingWatch を共用）を出し、
+    title を「{選手} FA・移籍先の最新情報と{年}年成績」（オプトアウト権の選手は「オプトアウトの最新情報」、契約後は「{球団}と契約」）に切り替える。
+    翌オフは `season`・`board`・`japanese`・`dates` を書き直すだけでよい（URL は据え置き）。
   - **試合ごとの現地の声（`data/game-voices.json`）**: `node scripts/fetch-game-voices.mjs [試合日|from..to]` が
     MLB公式ハイライトのコメントから**1試合1件**を取り、`bodyEn`・著者・票数・動画IDを**そのまま書き出す**
     （人も AI も触らない＝捏造が構造的に起きない）。`ja`（訳）だけを後から埋め、**空のあいだはサイトに出ない**

@@ -2,6 +2,15 @@ import SectionHeading from '@/components/SectionHeading';
 import type { NpbProspect } from '@/lib/npbPlayers';
 
 /**
+ * 表示に要る形だけ。NEXT MLB の postingWatch と、ストーブリーグの日本人MLB組（stoveLeague.ts の JpStove）が
+ * 同じブロックで描ける＝「現在地→時期→関心球団→相場→報道の時系列」の読み方をサイト内で1つに揃える。
+ */
+export type WatchReport = Omit<NonNullable<NpbProspect['postingWatch']>, 'level' | 'route' | 'asOf'> & {
+  /** 段階のドット。無ければ確定扱い（塗りつぶし）。 */
+  level?: NonNullable<NpbProspect['postingWatch']>['level'];
+};
+
+/**
  * NEXT MLB 選手LPの「ポスティング最新情報」ブロック。
  *
  * なぜ `posting`（通年の一般論）と別に要るか: オフが近づくと検索意図が
@@ -24,7 +33,7 @@ export default function PostingWatch({
   timelineLabel,
   asOfLabel,
 }: {
-  watch: NonNullable<NpbProspect['postingWatch']>;
+  watch: WatchReport;
   en: boolean;
   heading: string;
   levelLabel: string;
@@ -49,7 +58,7 @@ export default function PostingWatch({
             <span
               aria-hidden
               className={`h-1.5 w-1.5 rounded-full ${
-                watch.level === 'expected'
+                !watch.level || watch.level === 'expected'
                   ? 'bg-ink'
                   : watch.level === 'rumored'
                     ? 'bg-ink-soft'

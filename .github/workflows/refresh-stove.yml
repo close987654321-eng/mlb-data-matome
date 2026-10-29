@@ -1,0 +1,70 @@
+name: ストーブリーグ（FAの動き）自動更新
+
+# /stove-league の「契約の動き」と今季成績を MLB公式 Stats API から取り直し、変化があれば
+# data/stove-league-stats.json をコミット→push（Vercel が自動デプロイ）。
+# refresh-stats.yml は冬モードで止まる（オフは試合が無い）が、FAの契約はまさにオフに起きるので別に回す。
+# 1回の実行で statsapi 2コール（選手まとめて1・取引記録1）。中身が変わらなければスクリプトが書かない＝no-op。
+# 期間は data/stove-league.json の activeUntil まで（過ぎたら何もしない＝翌年のカタログを書くまで休む）。
+
+on:
+  schedule:
+    # 3時間ごと。契約の発表は米国の日中（JST の深夜〜昼）に集中するが、1日のどこで出ても半日以内に載る間隔。
+    - cron: '41 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  # 成績CIと同じ枠で直列にする＝同時に main へ push して競合しない。
+  group: refresh-stats
+  cancel-in-progress: false
+
+jobs:
+  stove:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22 # Node 組み込み＋global fetch のみ。依存インストール不要
+
+      - name: 期間内か（activeUntil を過ぎたら何もしない）
+        id: gate
+        run: |
+          set -euo pipefail
+          TODAY_JST=$(TZ=Asia/Tokyo date +%Y-%m-%d)
+          UNTIL=$(node -e "process.stdout.write(require('./data/stove-league.json').activeUntil ?? '')")
+          if [ -z "$UNTIL" ] || [[ "$TODAY_JST" > "$UNTIL" ]]; then
+            echo "ストーブリーグの期間外（今日 ${TODAY_JST} / 期限 ${UNTIL:-なし}）→ スキップ"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 成績と契約の動きを取得
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          set -euo pipefail
+          node scripts/fetch-stove-stats.mjs
+
+      - name: 変化があればコミット＆push
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/stove-league-stats.json; then
+            echo "変化なし＝コミットしない（no-op）"
+            exit 0
+          fi
+          git config user.name "stats-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/stove-league-stats.json
+          git commit -m "chore(stove): FAの動きを自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
+          for i in 1 2 3 4 5; do
+            if git push; then echo "push成功"; exit 0; fi
+            echo "push競合 → fetch & rebase してリトライ ($i/5)"
+            git pull --rebase origin main
+          done
+          echo "5回リトライしても push できず" >&2
+          exit 1

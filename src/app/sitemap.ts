@@ -18,6 +18,7 @@ import { SERIES } from '@/lib/series';
 import { getCyDetailRows } from '@/lib/cyYoungBoard';
 import { getMvpDetailRows } from '@/lib/mvpBoard';
 import { getPostseason } from '@/lib/postseason';
+import { getStoveLeague, getStoveStats } from '@/lib/stoveLeague';
 import { locales, defaultLocale } from '@/lib/i18n';
 
 // 本番ドメイン。プレビュー等で差し替えたい場合は NEXT_PUBLIC_SITE_URL で上書きする。
@@ -62,7 +63,7 @@ function latestPostseasonArticle(threads: Thread[], season: number): string | un
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows, npb, postseason] = await Promise.all([
+  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows, npb, postseason, stove, stoveStats] = await Promise.all([
     getAllThreads(),
     getAllColumns(),
     getAllTags(),
@@ -73,6 +74,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getMvpDetailRows(),
     getNpbStats(),
     getPostseason(),
+    getStoveLeague(),
+    getStoveStats(),
   ]);
   const npbAsOf = npb.asOf;
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
@@ -134,6 +137,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(postseason ? [entry('/postseason', postseason.asOf ? postseason.asOf.slice(0, 10) : undefined)] : []),
     // 名場面ライブ（/postseason/live）。最終更新＝いちばん新しいポストシーズン記事の公開日。
     ...(postseason ? [entry('/postseason/live', latestPostseasonArticle(threads, postseason.season))] : []),
+    // ストーブリーグの恒久ハブ（年号なしURL）。lastmod は編集の更新日と契約の動きの取得日の新しい方。
+    ...(stove ? [entry('/stove-league', maxDate([stove.asOf, stoveStats.asOf.slice(0, 10)].filter(Boolean)))] : []),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     // 超RIZIN.5 特設ハブ（開催前から育てるイベント観測所。lastmod はコンテンツの最終更新日）。
