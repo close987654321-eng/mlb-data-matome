@@ -15,6 +15,7 @@
   "media": {
     "kind": "video",
     "url": "https://www.youtube.com/watch?v=B4GJazslV4Q",
+    "thumbUrl": "/media/2026-10-29-brewers-vs-rays-ws-g5-og.jpg",
     "credit": "MLB（YouTube公式ハイライト）",
     "publishedAt": "2026-10-29T03:57:56Z",
     "videoTitle": "BREWERS vs. RAYS: World Series Full Game 5 Highlights (October 28) | 2026 MLB Postseason"
@@ -268,15 +269,94 @@
     }
   ],
   "game": {
-    "away": { "ja": "ブルワーズ", "en": "Milwaukee Brewers", "score": 4, "innings": [0, 1, 0, 0, 1, 2, 0, 0, 0], "hits": 8, "errors": 2, "lob": 5 },
-    "home": { "ja": "レイズ", "en": "Tampa Bay Rays", "score": 1, "innings": [0, 0, 0, 0, 0, 0, 0, 0, 1], "hits": 4, "errors": 0, "lob": 6 },
-    "decisions": { "winner": "Jacob Misiorowski", "loser": "Drew Rasmussen" },
+    "away": {
+      "ja": "ブルワーズ",
+      "en": "Milwaukee Brewers",
+      "score": 4,
+      "innings": [
+        0,
+        1,
+        0,
+        0,
+        1,
+        2,
+        0,
+        0,
+        0
+      ],
+      "hits": 8,
+      "errors": 2,
+      "lob": 5
+    },
+    "home": {
+      "ja": "レイズ",
+      "en": "Tampa Bay Rays",
+      "score": 1,
+      "innings": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "hits": 4,
+      "errors": 0,
+      "lob": 6
+    },
+    "decisions": {
+      "winner": "Jacob Misiorowski",
+      "loser": "Drew Rasmussen"
+    },
     "scoring": [
-      { "inning": 2, "top": true, "batterId": 806198, "batter": "Cooper Pratt", "event": "Single", "away": 1, "home": 0 },
-      { "inning": 5, "top": true, "batterId": 666152, "batter": "David Hamilton", "event": "Single", "away": 2, "home": 0 },
-      { "inning": 6, "top": true, "batterId": 661388, "batter": "William Contreras", "event": "Double", "away": 3, "home": 0 },
-      { "inning": 6, "top": true, "batterId": 806198, "batter": "Cooper Pratt", "event": "Sac Fly", "away": 4, "home": 0 },
-      { "inning": 9, "top": false, "batterId": 802415, "batter": "Chandler Simpson", "event": "Double", "away": 4, "home": 1 }
+      {
+        "inning": 2,
+        "top": true,
+        "batterId": 806198,
+        "batter": "Cooper Pratt",
+        "event": "Single",
+        "away": 1,
+        "home": 0
+      },
+      {
+        "inning": 5,
+        "top": true,
+        "batterId": 666152,
+        "batter": "David Hamilton",
+        "event": "Single",
+        "away": 2,
+        "home": 0
+      },
+      {
+        "inning": 6,
+        "top": true,
+        "batterId": 661388,
+        "batter": "William Contreras",
+        "event": "Double",
+        "away": 3,
+        "home": 0
+      },
+      {
+        "inning": 6,
+        "top": true,
+        "batterId": 806198,
+        "batter": "Cooper Pratt",
+        "event": "Sac Fly",
+        "away": 4,
+        "home": 0
+      },
+      {
+        "inning": 9,
+        "top": false,
+        "batterId": 802415,
+        "batter": "Chandler Simpson",
+        "event": "Double",
+        "away": 4,
+        "home": 1
+      }
     ]
   }
 }
