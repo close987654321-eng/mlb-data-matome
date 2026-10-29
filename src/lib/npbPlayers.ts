@@ -395,10 +395,10 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-10-26',
+      asOf: '2026-10-29',
       headline: {
-        ja: 'ポスティングでのMLB移籍を希望し、代理人が西武と交渉している（10月20日）。本人は「最終決定は球団」とし、広池浩司球団本部長は「代わりのいない選手なので複雑」と話した。西武の正式な容認発表はまだない。',
-        en: 'He wants to be posted, and his agent is negotiating with Seibu (October 20). He has said the final call belongs to the club, and club executive Koji Hiroike called it complicated because he is irreplaceable. Seibu has made no formal announcement.',
+        ja: 'ポスティングでのMLB移籍を希望し、代理人が西武と交渉している。広池浩司球団本部長は10月26日、「少しずつ話はまとまりつつある」と話した。本人は「最終決定は球団」としており、西武の正式な容認発表はまだない。',
+        en: 'He wants to be posted, and his agent is negotiating with Seibu. On October 26 club executive Koji Hiroike said things are gradually coming together. Taira has said the final call is the club\u2019s, and Seibu has made no formal announcement yet.',
       },
       route: 'posting',
       window: {
@@ -406,6 +406,12 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'His agent is negotiating with Seibu, and there is no formal approval yet. If approved, NPB accepts filings from November 1 through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The 45-day window freezes if a lockout begins when the CBA expires on December 1.',
       },
       marketValue: [
+        {
+          ja: '東スポWEBは米球界関係者の見立てとして、年平均2000万〜2500万ドル・5〜6年の契約を想定し、条件次第で総額1億5000万ドル（約237億円）規模に達すると報じた。今季複数回視察したスカウトは、先発の3〜4番手として1年あたり2000万ドル規模のオファーになるとみる。',
+          en: 'Tokyo Sports, citing people in the MLB industry, pegs a likely deal at $20MM–$25MM a year over five to six years, reaching about $150MM total depending on terms. A scout who watched him several times this season expects offers in the $20MM-a-year range as a No. 3 or 4 starter.',
+          source: 'https://www.tokyo-sports.co.jp/articles/-/406389',
+          sourceName: '東スポWEB',
+        },
         {
           ja: 'パッサン記者が今オフのFA先発でスクーバルに次ぐ2番手と評価したことを受け、Full-Countは「1億ドル（約154億円）以上は確実」との見立てを伝えた。',
           en: 'After Passan rated him a possible No. 2 free agent starter behind Tarik Skubal, Full-Count reported the read that a deal north of $100MM is all but assured.',
@@ -432,6 +438,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ジャイアンツ', en: 'Giants' },
       ],
       timeline: [
+        {
+          date: '2026-10-26',
+          ja: '西武の広池浩司球団本部長が交渉の現状を説明した。「代理人とは何度も話しています。平良本人とは今のところ話す予定はないですけども、最後決まったときにはどこかで話そうと思っている」「少しずつ話はまとまりつつあるというところ」と述べた。',
+          en: 'Seibu executive Koji Hiroike said the club has spoken with Taira’s agent many times, has no plans to meet Taira himself until a final decision, and that things are gradually coming together.',
+          source: 'https://news.yahoo.co.jp/articles/70efb9bc9f642bd3900aa7afd36ef113ca892981',
+          sourceName: 'スポーツ報知',
+        },
         {
           date: '2026-10-20',
           ja: '代理人が球団と交渉を進めていると本人が明かした。「最終決定は球団」としたうえで、メジャーでは先発で投げたいと話し、「世界最高の選手がそろうところでプレーしたい」と語った。',
@@ -648,12 +661,12 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A right-handed ace for the Chunichi Dragons. Born in 2002 and a 2020 first-round pick, he was part of Japan’s 2023 WBC-winning squad. He misses bats with a high-90s mph fastball and a sharp splitter, and is one of the best starters of his generation.',
     },
     mlbWatch: {
-      ja: '海外メディアは「まだMLBに居ない中で最高クラスの投手」「日本人先発で屈指の伸びしろ」と評する。2024年は防御率1.38とリーグ最高クラスで圧巻だったが2025年は不振と波もある。山本由伸とオフに合同自主トレを組む間柄で、ドジャースの関心も取り沙汰される。',
-      en: 'Overseas outlets call him maybe the best NPB pitcher who hasn’t joined MLB yet, with one of the highest ceilings of any Japanese starter. He was dominant in 2024 (a league-best 1.38 ERA) but uneven in 2025. He trains with Yoshinobu Yamamoto in the offseason, and Dodgers interest has been floated.',
+      ja: '海外メディアは「まだMLBに居ない中で最高クラスの投手」「日本人先発で屈指の伸びしろ」と評する。2024年は防御率1.38とリーグ最高クラスで圧巻だったが、2025年は不振。2026年も5月に一時登録を抹消されたが立て直し、防御率2.62でシーズンを終えた（規定投球回には届かず）。山本由伸とオフに合同自主トレを組む間柄で、ドジャースの関心も取り沙汰される。',
+      en: 'Overseas outlets call him maybe the best NPB pitcher who hasn\u2019t joined MLB yet, with one of the highest ceilings of any Japanese starter. He was dominant in 2024 (a league-best 1.38 ERA) but uneven in 2025. In 2026 he was briefly sent down in May, then rebuilt his season to finish with a 2.62 ERA (short of qualifying). He trains with Yoshinobu Yamamoto in the offseason, and Dodgers interest has been floated.',
     },
     posting: {
-      ja: 'ポスティングやFAでの移籍が2026〜2027年オフに取り沙汰される。正式な公表はまだなく、今後の安定感が鍵。',
-      en: 'A move via the posting system or free agency is discussed for the 2026–27 offseason. Nothing is official yet; regaining consistency is the key.',
+      ja: 'ポスティングやFAでの移籍が取り沙汰されてきたが、2026年オフの具体的な動きは報じられていない。正式な公表はなく、安定感を取り戻せるかが鍵。',
+      en: 'A move via posting or free agency has been floated, but nothing concrete has been reported for the 2026-27 offseason. Nothing is official; regaining consistency is the key.',
     },
     comp: {
       ja: '山本由伸と重ねられることが多い世代の先発右腕。ミッチ・ケラー型との見方も。',
@@ -668,7 +681,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '髙橋宏斗はいつメジャーに行く？', en: 'When will Hiroto Takahashi go to MLB?' },
-        a: { ja: 'ポスティングやFAでの移籍が取り沙汰されてはいるが、正式な発表はない。2026年は5月に防御率が6.85まで悪化して登録を抹消された時期があり、その後立て直した。安定感を取り戻せるかが鍵になる。', en: 'A move via posting or free agency gets discussed, but nothing is official. He was optioned down in 2026 after his May ERA ballooned to 6.85, then rebuilt his season. Regaining consistency is the key.' },
+        a: { ja: 'ポスティングやFAでの移籍が取り沙汰されてはいるが、正式な発表はなく、2026年オフの具体的な動きも報じられていない。2026年は5月に防御率が6.85まで悪化して登録を抹消された時期があり、その後立て直して防御率2.62でシーズンを終えた。安定感を取り戻せるかが鍵になる。', en: 'A move via posting or free agency gets discussed, but nothing is official and nothing concrete has been reported this winter. He was optioned down in 2026 after his May ERA ballooned to 6.85, then rebuilt his season to finish at 2.62. Regaining consistency is the key.' },
       },
     ],
   },
@@ -684,12 +697,12 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A middle-of-the-order infielder for the Yokohama DeNA BayStars. A 2020 second-round pick and 2023 WBC champion, the right-handed second baseman pairs contact and pop (a .295 career average). He helped DeNA to its first Japan Series title in 26 years in 2024.',
     },
     mlbWatch: {
-      ja: '海外スカウトは「NPBで最も総合力の高い打者の一人」と評価。卓越したバットコントロール（三振率15%未満）が武器で、2026年はwRC+165と打ちまくる。一方で四球が極端に少なく（5シーズン中3年で6%未満）、メジャーの精緻な投球への対応が課題。比較対象はジェフ・マクニールや全盛期ダニエル・マーフィー。',
-      en: 'Scouts call him one of the most well-rounded bats in NPB. Elite bat-to-ball skills (a sub-15% strikeout rate) are his calling card, and he has raked to a 165 wRC+ in 2026. The question is a very low walk rate (under 6% in three of five seasons) against big-league pitching. Comps range from Jeff McNeil to prime Daniel Murphy.',
+      ja: '海外スカウトは「NPBで最も総合力の高い打者の一人」と評価。卓越したバットコントロール（三振率15%未満）が武器で、2026年は108試合で30本塁打、長打率はセ・リーグ2位だった。一方で四球が極端に少なく（5シーズン中3年で6%未満）、メジャーの精緻な投球への対応が課題。比較対象はジェフ・マクニールや全盛期ダニエル・マーフィー。',
+      en: 'Scouts call him one of the most well-rounded bats in NPB. Elite bat-to-ball skills (a sub-15% strikeout rate) are his calling card, and in 2026 he hit 30 homers in 108 games, ranking second in the Central League in slugging. The question is a very low walk rate (under 6% in three of five seasons) against big-league pitching. Comps range from Jeff McNeil to prime Daniel Murphy.',
     },
     posting: {
-      ja: '年齢・実績・本人の意思から「早ければ来オフにも渡米しうる最有力候補の一人」と海外メディア。ポスティング/FAは2027年オフが現実的な機会。',
-      en: 'With his age, track record and stated interest, overseas outlets call him one of the most realistic candidates to make the jump as soon as next offseason; 2027 is the realistic window.',
+      ja: '年齢・実績・本人の意思から、海外メディアは早期の渡米候補の一人に挙げてきた。2025年12月に将来的なメジャー挑戦の意向を球団に伝えたが、2026年オフの具体的な動きは報じられていない。ポスティング/FAは2027年オフが現実的な機会とみられる。',
+      en: 'With his age, track record and stated interest, overseas outlets have called him one of the likelier candidates to make the jump. He told DeNA in December 2025 that he wants to try MLB some day, but nothing concrete has been reported for the 2026-27 offseason; 2027 looks like the realistic window.',
     },
     comp: {
       ja: 'バット・ファーストの内野手としてジェフ・マクニール／全盛期ダニエル・マーフィー型。',
@@ -709,7 +722,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '牧秀悟はメジャー挑戦を表明している？', en: 'Has Shugo Maki said he wants to go to MLB?' },
-        a: { ja: '2025年12月の契約更改で、将来的なメジャー挑戦の意向を球団に伝えたと報じられている。「やってみたいなって気持ち」と語った一方、まずはリーグ優勝に全力を注ぐとしている。ポスティングの具体的な動きはまだない。', en: 'He told the club during December 2025 contract talks that he would like to try it some day, while saying his focus is on winning the pennant first. Nothing concrete on a posting yet.' },
+        a: { ja: '2025年12月の契約更改で、将来的なメジャー挑戦の意向を球団に伝えたと報じられている。「やってみたいなって気持ち」と語った一方、まずはリーグ優勝に全力を注ぐとしていた。2026年オフのポスティングの具体的な動きは報じられていない。', en: 'He told the club during December 2025 contract talks that he would like to try it some day, while saying his focus was on winning the pennant first. Nothing concrete on a posting has been reported this winter.' },
       },
     ],
   },
@@ -721,16 +734,38 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     team: { ja: '阪神タイガース', en: 'Hanshin Tigers' },
     pos: { ja: '外野手', en: 'Outfielder' },
     bio: {
-      ja: '阪神タイガースの右の中軸外野手。2022年ドラフト1位。勝負強い打撃と長打力で、若くしてクリーンアップを担う。2026年はキャリア最多の本塁打を積み上げ、チームメートの佐藤輝明と本塁打王を争っている。',
-      en: 'A right-handed middle-of-the-order outfielder for the Hanshin Tigers and a 2022 first-round pick. Clutch hitting and power have him batting cleanup early in his career; he is breaking out in 2026, piling up a career high in homers and chasing teammate Teruaki Sato for the home run crown.',
+      ja: '阪神タイガースの右の中軸外野手。2022年ドラフト1位。勝負強い打撃と長打力で、若くしてクリーンアップを担う。2026年はキャリア最多の35本塁打で、本塁打王の佐藤輝明に次ぐセ・リーグ2位。出塁率はリーグ1位だった。',
+      en: 'A right-handed middle-of-the-order outfielder for the Hanshin Tigers and a 2022 first-round pick. Clutch hitting and power have him batting cleanup early in his career. He broke out in 2026 with a career-high 35 homers, second in the Central League behind home run champion Teruaki Sato, and led the league in on-base percentage.',
     },
     mlbWatch: {
-      ja: '2026年は打棒が爆発し、特に左投手に滅法強い（前年は対左でwRC+181）。海外でも名前が挙がり始めたが、MLB挑戦の具体的な動きはまだなく、現状は「当面は日本に残る」との見立て。今後の積み上げ次第で評価が上がるタイプ。',
-      en: 'He is mashing in 2026, with big damage against lefties (a 181 wRC+ vs. LHP the prior year). His name is starting to come up abroad, but there is no concrete MLB move yet — evaluators currently file him under “likely to stay in Japan.” A profile whose stock can rise with more production.',
+      ja: '2026年は打棒が爆発し、特に左投手に滅法強い（前年は対左でwRC+181）。デイリースポーツによれば、すでに代理人事務所（菅野智之・佐藤輝明と同じVCスポーツグループ）と契約し、将来的なポスティングでのMLB挑戦に向けて準備を進めている。積み上げ次第で評価が上がるタイプ。',
+      en: 'He broke out in 2026 and does real damage against lefties (a 181 wRC+ vs. LHP the prior year). Daily Sports reports he has already signed with an agency \u2014 VC Sports Group, which also represents Tomoyuki Sugano and Teruaki Sato \u2014 and is preparing for an eventual MLB move via the posting system. A profile whose stock can rise with more production.',
     },
     posting: {
-      ja: 'ポスティング等の公表は無し。MLB挑戦が具体化するのはこれから。',
-      en: 'No posting or move has been announced; any MLB push is still down the road.',
+      ja: 'ポスティングの公表はない。代理人事務所と契約済みで、早ければ今オフにも球団へ意向を伝える可能性があると報じられている。球団幹部は「常に誰であろうと、クローズすることはない」としている。',
+      en: 'No posting has been announced. He has signed with an agency and could tell the club of his intentions as soon as this winter, per reports; a front-office figure said the club never closes the door on anyone.',
+    },
+    postingWatch: {
+      level: 'watch',
+      asOf: '2026-10-29',
+      headline: {
+        ja: 'ポスティングの公式な動きはまだない。デイリースポーツは10月、すでに代理人事務所と契約し、早ければ今オフにも球団へ意向を伝える可能性があると報じた。',
+        en: 'No posting has been announced. Daily Sports reported in October that he has already signed with an agency and could tell the club of his intentions as soon as this winter.',
+      },
+      route: 'posting',
+      window: {
+        ja: '早ければ今オフにも球団へ意向を伝える可能性があると報じられている（デイリースポーツ）。海外FA権の取得はまだ先で、MLB挑戦には阪神がポスティングを認める必要がある。',
+        en: 'He could tell the club of his intentions as soon as this winter, per Daily Sports. He is years from international free agency, so an MLB move needs Hanshin to post him.',
+      },
+      timeline: [
+        {
+          date: '2026-10-18',
+          ja: 'デイリースポーツが、森下がすでに代理人事務所（菅野智之・佐藤輝明と同じVCスポーツグループ）と契約し、将来的なポスティングでのメジャー挑戦に向けて準備を進めていると報道。早ければ今オフにも球団へ意向を伝える可能性があるとした。球団幹部は「常に誰であろうと、クローズすることはない」と話した。',
+          en: 'Daily Sports reports Morishita has already signed with VC Sports Group — the agency of Tomoyuki Sugano and Teruaki Sato — and is preparing for an eventual MLB move via the posting system, possibly telling the club as soon as this winter. A front-office figure said the club never closes the door on anyone.',
+          source: 'https://www.daily.co.jp/tigers/2026/10/18/0020941104.shtml',
+          sourceName: 'デイリースポーツ',
+        },
+      ],
     },
     comp: {
       ja: 'ヒットとパワーはあるが守備価値は限定的、というマット・ヴィアリング型との見方。',
@@ -739,12 +774,12 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     sameAs: ['https://ja.wikipedia.org/wiki/森下翔太'],
     contract: {
       debut: { ja: '2022年ドラフト1位（中央大）。2023年から一軍でプレーし、若くしてクリーンアップを担う。', en: 'A 2022 first-round pick out of Chuo University, in the top team since 2023 and batting cleanup early in his career.' },
-      fa: { ja: '海外FA権の取得はまだ先。MLB挑戦の具体的な動きもない。', en: 'International free agency is a long way off, and there is no concrete MLB move.' },
+      fa: { ja: '海外FA権の取得はまだ先。代理人事務所とは契約済みで、MLB挑戦には阪神がポスティングを認める必要がある。', en: 'International free agency is a long way off. He has signed with an agency, but an MLB move would need Hanshin to post him.' },
     },
     faq: [
       {
         q: { ja: '森下翔太はメジャーに行く？', en: 'Is Shota Morishita headed to MLB?' },
-        a: { ja: 'ポスティングや移籍の公表はない。2026年はチームメートの佐藤輝明と本塁打王を争っており、9月9日の広島戦で33号を放って2本差に迫った。積み上げしだいで評価が上がるタイプとされる。', en: 'No posting or move has been announced. In 2026 he is chasing teammate Teruaki Sato for the home run title, closing to within two with his 33rd on September 9. Evaluators see a profile whose stock rises with more production.' },
+        a: { ja: 'ポスティングや移籍の公表はない。ただしデイリースポーツは、すでに代理人事務所と契約し、早ければ今オフにも球団へ意向を伝える可能性があると報じた。2026年はキャリア最多の35本塁打で、本塁打王の佐藤輝明に次ぐリーグ2位だった。', en: 'No posting has been announced, but Daily Sports reports he has signed with an agency and could tell the club of his intentions as soon as this winter. In 2026 he hit a career-high 35 homers, second in the league behind home run champion Teruaki Sato.' },
       },
     ],
   },
@@ -760,8 +795,8 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A right-handed starter for the Hanshin Tigers. From Minami-Awaji, Hyogo, he was the ace of Chiben Gakuen’s 2019 national championship team. In 2023 he became just the third player ever — a Central League first — to win Rookie of the Year and MVP in the same season. Pinpoint command is his calling card. (Not to be confused with slugger Munetaka Murakami.)',
     },
     mlbWatch: {
-      ja: '2026年はセ・リーグの防御率でトップを走る制球派右腕。剛速球ではなく完成度で勝負するタイプで、MLBではミドルローテーション級と見られる。海外での言及はまだ限定的。',
-      en: 'A command right-hander leading the Central League in ERA in 2026. He wins with polish rather than power, projecting as a mid-rotation arm in MLB. Overseas coverage is still limited.',
+      ja: '2026年はセ・リーグの防御率1位でシーズンを終えた制球派右腕。剛速球ではなく完成度で勝負するタイプで、MLBではミドルローテーション級と見られる。海外での言及はまだ限定的。',
+      en: 'A command right-hander who finished 2026 as the Central League ERA leader. He wins with polish rather than power, projecting as a mid-rotation arm in MLB. Overseas coverage is still limited.',
     },
     posting: {
       ja: '2027年オフのポスティングが見込まれるが公式発表はまだ。国際FA資格の取得は今後。',
@@ -779,7 +814,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '村上頌樹はヤクルトの村上宗隆と同じ人？', en: 'Is Shoki Murakami the same person as Munetaka Murakami?' },
-        a: { ja: '別人。村上頌樹は阪神の先発右腕で、2026年はセ・リーグの防御率でトップを走る。村上宗隆はヤクルトからホワイトソックスへ移った長距離砲。', en: 'No. Shoki Murakami is a right-handed starter for Hanshin who leads the Central League in ERA in 2026. Munetaka Murakami is the slugger who moved from the Swallows to the White Sox.' },
+        a: { ja: '別人。村上頌樹は阪神の先発右腕で、2026年はセ・リーグの防御率1位でシーズンを終えた。村上宗隆はヤクルトからホワイトソックスへ移った長距離砲。', en: 'No. Shoki Murakami is a right-handed starter for Hanshin who finished 2026 as the Central League ERA leader. Munetaka Murakami is the slugger who moved from the Swallows to the White Sox.' },
       },
       {
         q: { ja: 'メジャー挑戦の話はある？', en: 'Is there MLB interest?' },
@@ -803,18 +838,29 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'He is highly regarded abroad. After he struck out seven — including Ohtani and Freeman — in a Tokyo Dome game, Dodgers manager Dave Roberts called his stuff "major-league." Giants baseball boss Buster Posey reportedly traveled to Japan to scout him, and MLB.com wrote he would have been "one of the most sought-after free-agent pitchers had Hanshin agreed to post him."',
     },
     posting: {
-      ja: '2025年オフにポスティングを申請したが、球団が主力先発の同時流出を避けるため不承認とした。MLB志向は公言しており、将来的な挑戦の可能性は高い。',
-      en: 'He filed for posting after the 2025 season, but the club declined it to avoid losing two rotation arms at once. He has stated his MLB ambitions, and a future move looks likely.',
+      ja: '2025年オフにポスティングを申請したが、球団が主力先発の同時流出を避けるため不承認とした。2026年オフも本人が直訴したが、球団の方針は変わらず、来季も阪神でプレーする見込みと報じられている。MLB志向は公言している。',
+      en: 'He asked to be posted after the 2025 season, but the club declined to avoid losing two rotation arms at once. He renewed the request after 2026, but the club\u2019s stance is reported to be unchanged and he is expected to stay with Hanshin next season. He has been open about his MLB ambitions.',
     },
     postingWatch: {
-      level: 'rumored',
-      asOf: '2026-09-16',
+      level: 'watch',
+      asOf: '2026-10-29',
       headline: {
-        ja: '2025年オフは球団がポスティングを認めず、渡米は持ち越しになった。28歳でのMLB挑戦を目指すなら今オフの申請が必要になる。2026年はセ・リーグの奪三振でトップを走っており、球団の判断が再び焦点になる。',
-        en: 'Hanshin declined to post him after the 2025 season, pushing the move back. If he wants to reach MLB at 28, he needs to be posted this winter. He leads the Central League in strikeouts in 2026, which puts the club\u2019s decision back in focus.',
+        ja: '今オフも本人が球団にポスティングを直訴したが、阪神の方針は昨年から変わっておらず、来季も残留の見込み（スポニチ、10月18日）。2026年は175奪三振でセ・リーグ最多奪三振のタイトルを獲得した。',
+        en: 'He again asked Hanshin to post him this winter, but the club\u2019s stance is reported unchanged and he is expected to stay for 2027 (Sponichi, October 18). He won the 2026 Central League strikeout title with 175.',
       },
       route: 'posting',
+      window: {
+        ja: '阪神は今オフもポスティングを認めない方針と報じられている（スポニチ）。昨オフは球団が「今年に関しては認めない」と通達していた。',
+        en: 'Hanshin is reported to be declining a posting again this winter (Sponichi). Last winter the club told him it would not allow it that year.',
+      },
       timeline: [
+        {
+          date: '2026-10-18',
+          ja: 'スポニチが、才木が今オフもポスティングでのメジャー移籍を球団に直訴する考えだと報道。2024年12月の契約更改で初めてメジャー挑戦の希望を口にし、昨オフは球団から「今年に関しては認めない」と通達されていた。球団の方針は昨年から変わっておらず、来季も阪神でプレーする可能性が高いとした。',
+          en: 'Sponichi reports Saiki will again ask the club to post him this winter. He first voiced his MLB hopes in December 2024 contract talks and was told last winter that it would not be allowed that year. The club’s stance has not changed, and he is likely to play for Hanshin next season.',
+          source: 'https://topics.smt.docomo.ne.jp/article/sponichi/sports/sponichi-spngoo-20261018-0044',
+          sourceName: 'スポニチアネックス',
+        },
         {
           date: '2026-01-13',
           ja: '東スポWEBは、才木のポスティングが認められなかった背景に、先発のジョン・デュプランティエとの残留交渉が早々に難航したことがあると報じた。主力先発を同時に2枚失えば戦えない、という判断だったという。才木と佐藤輝明を同時に送り出す可能性については、球団幹部が強く否定したとも伝えている。',
@@ -840,11 +886,11 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       strengths: [
         { ja: 'ドジャースのデーブ・ロバーツ監督は、東京ドームの試合で大谷翔平・フリーマンらから7奪三振した才木の球質を「メジャー級」と評した。', en: 'After he struck out seven \u2014 Shohei Ohtani and Freddie Freeman among them \u2014 in a Tokyo Dome game, Dodgers manager Dave Roberts called his stuff major-league.' },
         { ja: 'MLB.com は「阪神がポスティングを認めていれば、最も引く手あまたのFA投手の一人になったはず」と書いた。', en: 'MLB.com wrote he would have been one of the most sought-after free agent pitchers had Hanshin agreed to post him.', sourceName: 'MLB.com' },
-        { ja: '2026年はセ・リーグの奪三振でトップを走る。150キロ台後半の直球と鋭いスプリットが武器。', en: 'He leads the Central League in strikeouts in 2026, working off a high-90s fastball and a sharp splitter.' },
+        { ja: '2026年は175奪三振でセ・リーグ最多奪三振のタイトルを獲得した。150キロ台後半の直球と鋭いスプリットが武器。', en: 'He won the 2026 Central League strikeout title with 175, working off a high-90s fastball and a sharp splitter.' },
       ],
       concerns: [
         { ja: '2020年にトミー・ジョン手術を受け、実戦復帰まで約3年を要した経緯がある。', en: 'He underwent Tommy John surgery in 2020 and needed nearly three years to return to game action.' },
-        { ja: '最大の不確定要素は実力ではなく球団の判断。2025年オフは申請自体が認められなかった。', en: 'The biggest variable is not the arm but the club: his request to be posted was refused outright after the 2025 season.' },
+        { ja: '最大の不確定要素は実力ではなく球団の判断。2025年オフは申請自体が認められず、2026年オフも認めない方針と報じられている。', en: 'The biggest variable is not the arm but the club: his request to be posted was refused outright after the 2025 season, and Hanshin is reported to be holding that line again after 2026.' },
       ],
     },
     contract: {
@@ -858,7 +904,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       },
       {
         q: { ja: '次にチャンスがあるのはいつ？', en: 'When is his next chance?' },
-        a: { ja: '28歳でのMLB挑戦を目指すなら今オフの申請が必要になる。ポスティングは球団の権利のため、判断は再び阪神に委ねられる。', en: 'Reaching MLB at 28 would require a posting this winter. Since posting is the club\u2019s right, the decision again sits with Hanshin.' },
+        a: { ja: '今オフも本人が直訴したが、阪神の方針は昨年から変わらず、来季も阪神でプレーする見込みと報じられている。ポスティングは球団の権利のため、判断は引き続き阪神に委ねられる。', en: 'He asked again this winter, but Hanshin\u2019s stance is reported unchanged and he is expected to play for the Tigers next season. Posting is the club\u2019s right, so the decision stays with Hanshin.' },
       },
     ],
   },
@@ -874,8 +920,8 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'A left-handed starter for the Saitama Seibu Lions. A command-and-secondaries pitcher, he threw 159⅔ innings with a 2.65 ERA in 2025. His changeup and splitter are rated abroad as “arguably double-plus” pitches.',
     },
     mlbWatch: {
-      ja: '2026年は与四球の少なさが際立ち、奪三振は与四球の6倍を超える自己最高の年になっている。FanGraphs によれば2025年も防御率2.59・FIP2.49で、K-BB率17.8%は規定投球回到達者の5位。Just Baseball はチェンジアップとスプリットを「ダブルプラス級（Stuff+ 164）」と評価し、直球の平均球速も自己最速の91.9マイルまで上げたと伝える。ESPN はスカウトが左腕ダニー・クーロムになぞらえると報じた。剛速球ではなく完成度で見せる左腕。',
-      en: 'In 2026 he is striking out more than six batters for every one he walks, the best year of his career. FanGraphs had him at a 2.59 ERA and 2.49 FIP in 2025, with a 17.8% K-BB rate that ranked fifth among qualifiers. Just Baseball grades his changeup and splitter as "arguably double-plus" (a 164 Stuff+) and notes he pushed his average fastball to a career-best 91.9 mph. ESPN says scouts liken him to lefty Danny Coulombe. A polish-over-power southpaw.',
+      ja: '2026年は与四球の少なさが際立ち、148奪三振に対して与四球は21と、奪三振が与四球の7倍を超えた。防御率2.27はパ・リーグ2位。FanGraphs によれば2025年も防御率2.59・FIP2.49で、K-BB率17.8%は規定投球回到達者の5位。Just Baseball はチェンジアップとスプリットを「ダブルプラス級（Stuff+ 164）」と評価し、直球の平均球速も自己最速の91.9マイルまで上げたと伝える。ESPN はスカウトが左腕ダニー・クーロムになぞらえると報じた。剛速球ではなく完成度で見せる左腕。',
+      en: 'In 2026 he struck out 148 against just 21 walks \u2014 better than seven to one \u2014 and his 2.27 ERA ranked second in the Pacific League. FanGraphs had him at a 2.59 ERA and 2.49 FIP in 2025, with a 17.8% K-BB rate that ranked fifth among qualifiers. Just Baseball grades his changeup and splitter as "arguably double-plus" (a 164 Stuff+) and notes he pushed his average fastball to a career-best 91.9 mph. ESPN says scouts liken him to lefty Danny Coulombe. A polish-over-power southpaw.',
     },
     posting: {
       ja: 'ポスティング/FAの公式発表はまだ無く、西武の先発の柱として続投中。2022年ドラフト1位入団で海外FA権の取得はまだ先＝MLB挑戦は球団のポスティング判断しだいになる。',
@@ -883,10 +929,10 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'watch',
-      asOf: '2026-09-13',
+      asOf: '2026-10-29',
       headline: {
-        ja: 'ポスティングの公式な動きはまだ無い。ただ西武は今井達也がアストロズへ移り、平良海馬も今オフの流出が見込まれる＝先発の柱として残るのが隅田で、海外メディアは2026年WBC特集で「MLBの次のスターになりうる」と紹介している。',
-        en: 'No posting has been announced. But Seibu has already lost Tatsuya Imai to the Astros and expects to lose Kaima Taira this winter \u2014 leaving Sumida as the rotation anchor, and overseas outlets have flagged him as a potential next MLB star in their 2026 WBC previews.',
+        ja: 'ポスティングの公式な動きはまだ無い。ただ西武は今井達也がアストロズへ移り、今オフは平良海馬がポスティングを希望して代理人が交渉中、髙橋光成も海外FA権を持つ＝先発の柱として残るのが隅田で、海外メディアは2026年WBC特集で「MLBの次のスターになりうる」と紹介している。',
+        en: 'No posting has been announced. But Seibu has already lost Tatsuya Imai to the Astros, Kaima Taira is seeking a posting this winter with his agent in talks with the club, and Kona Takahashi holds international free agent rights \u2014 leaving Sumida as the rotation anchor, and overseas outlets have flagged him as a potential next MLB star in their 2026 WBC previews.',
       },
       route: 'posting',
       timeline: [
@@ -925,7 +971,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '隅田知一郎はポスティングされる？', en: 'Will Chihiro Sumida be posted?' },
-        a: { ja: '公式な動きはない。西武は今井達也がアストロズへ移り、平良海馬も今オフの流出が見込まれるため、先発の柱として残るのが隅田という構図になっている。', en: 'Nothing has been announced. With Tatsuya Imai gone to the Astros and Kaima Taira expected to leave this winter, Sumida is the arm Seibu keeps at the front of the rotation.' },
+        a: { ja: '公式な動きはない。西武は今井達也がアストロズへ移り、今オフは平良海馬がポスティングを希望し、髙橋光成も海外FA権を持つため、先発の柱として残るのが隅田という構図になっている。', en: 'Nothing has been announced. With Tatsuya Imai gone to the Astros, Kaima Taira seeking a posting this winter and Kona Takahashi holding international free agent rights, Sumida is the arm Seibu keeps at the front of the rotation.' },
       },
       {
         q: { ja: '海外での評価は？', en: 'How is he rated abroad?' },
@@ -949,8 +995,8 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'Just Baseball notes his 4.01 ERA masked much better underlying numbers (a 2.93 FIP and 2.93 SIERA) hurt by poor batted-ball luck and defense; he needs a pitch for righties but keeps dominating lefties. EssentiallySports frames him as a “spiritual successor to Yoshinobu Yamamoto,” and his 2026 WBC selection has raised his overseas profile.',
     },
     posting: {
-      ja: 'ポスティング/FAの公式な見通しはまだ。WBC2026での活躍が評価を押し上げる可能性。',
-      en: 'No posting or free-agency timetable yet; a strong 2026 WBC could lift his stock.',
+      ja: 'ポスティング/FAの公式な見通しはまだない。2026年は14登板にとどまった。',
+      en: 'No posting or free-agency timetable yet; he made only 14 appearances in 2026.',
     },
     comp: {
       ja: '速球とスウィーパーで左を封じる、山本由伸型を目指す先発左腕。',
