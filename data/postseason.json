@@ -1,11 +1,14 @@
 {
-  "asOf": "2026-10-29 10:00",
-  "champion": null,
+  "asOf": "2026-10-29 16:10",
+  "champion": {
+    "id": 158,
+    "nameJa": "ブルワーズ"
+  },
   "dates": {
     "postStart": "2026-09-28",
     "regularEnd": "2026-09-27"
   },
-  "phase": "postseason",
+  "phase": "final",
   "race": {
     "AL": [
       {
@@ -1074,7 +1077,7 @@
         "id": 158,
         "nameJa": "ブルワーズ",
         "seed": 1,
-        "wins": 3
+        "wins": 4
       },
       "games": [
         {
@@ -1152,55 +1155,19 @@
         {
           "away": {
             "id": 158,
-            "score": 1
+            "score": 4
           },
-          "detailed": "In Progress",
+          "detailed": "Final",
           "etDate": "2026-10-28",
           "gamePk": 849799,
           "home": {
             "id": 139,
-            "score": 0
+            "score": 1
           },
           "ifNecessary": false,
           "n": 5,
           "start": "2026-10-29T00:00:00Z",
-          "state": "Live",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 139,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-30",
-          "gamePk": 849801,
-          "home": {
-            "id": 158,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 6,
-          "start": "2026-10-31T00:00:00Z",
-          "state": "Preview",
-          "tbd": false
-        },
-        {
-          "away": {
-            "id": 139,
-            "score": null
-          },
-          "detailed": "Scheduled",
-          "etDate": "2026-10-31",
-          "gamePk": 849800,
-          "home": {
-            "id": 158,
-            "score": null
-          },
-          "ifNecessary": true,
-          "n": 7,
-          "start": "2026-11-01T00:00:00Z",
-          "state": "Preview",
+          "state": "Final",
           "tbd": false
         }
       ],
@@ -1214,7 +1181,7 @@
         "seed": 1,
         "wins": 1
       },
-      "winnerId": null
+      "winnerId": 158
     }
   ]
 }
