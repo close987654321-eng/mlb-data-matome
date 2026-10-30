@@ -322,7 +322,7 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     **毎朝6:00 JST のクラウド定期実行（2026-10-30〜）**が `stove-daily` スキル（`.claude/skills/stove-daily/SKILL.md`）を回す＝
     報道の確認（WebSearch）→ `stove-league.json`／`npbPlayers.ts` の postingWatch を出典つきで更新 → 大きな動きの日だけ Reddit の
     反応記事を1本 → `check-stove-league.mjs` と `build:gate` を通った回だけ公開 → Slack DM。中身が動かない日は `checkedAt`（確認日）
-    だけ進める＝更新日（`asOf`）を毎日進めて新しく見せない。Reddit の取得はクラウド環境の通信許可に `*.reddit.com` が要る。
+    だけ進める＝更新日（`asOf`）を毎日進めて新しく見せない。クラウドからの Reddit は通信許可を足しても Reddit 側が 403 で拒否する（2026-10-31 実測）＝反応記事は通知に挙がった候補を手元のセッションで作る。
   - **試合ごとの現地の声（`data/game-voices.json`）**: `node scripts/fetch-game-voices.mjs [試合日|from..to]` が
     MLB公式ハイライトのコメントから**1試合1件**を取り、`bodyEn`・著者・票数・動画IDを**そのまま書き出す**
     （人も AI も触らない＝捏造が構造的に起きない）。`ja`（訳）だけを後から埋め、**空のあいだはサイトに出ない**

@@ -27,6 +27,8 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
    ただし**公式の動き（手順1）と、時制が古くなった文（手順3の読み直し）は「動き」に数える**＝報道が無い日でも直す。
    2026-10-30 の初回実行は、FA宣言が statsapi に出ていたのに「動きなし」と判断し、
    「ワールドシリーズ終了の翌日にFAになる」（もうFAなのに未来形）を残したまま `checkedAt` だけ進めた。
+   **「動きなし」と書けるのは、手順1の2本が成功し、手順2の最低限の検索を全部やった日だけ**。
+   2026-10-31 の実行は statsapi に届かず（`fetch failed`）、検索も2回だけで「動きなし」とした。
 
 ## 手順
 
@@ -38,6 +40,7 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 ### 1. 公式の動き（機械）
 - `node scripts/fetch-stove-stats.mjs` … 30人＋日本人の FA宣言・契約（球団名）を `data/stove-league-stats.json` に反映。
   出力の「オフの動き」を控える。🚨 statsapi が失敗したら推測で補わず、そのことを最後の通知に書く（手順2以降は続けてよい）。
+  失敗した日の通知は結果を「一部失敗（公式の動きは未確認）」とし、「動きなし」とは書かない。
 - `node scripts/fetch-transactions.mjs <昨日>..<今日>` … 30人以外も含めた大きな動き（日本人は ★★★）。
 - **日本人選手（`japanese[]`）の公式の動きは、報道が無くても手順3で必ず文章に反映する**。
   `data/stove-league-stats.json` の `players[mlbId].moves` を見て、`timeline` にまだ無い動き
@@ -49,19 +52,26 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 
 ### 2. 報道の確認（WebSearch / WebFetch）
 次の順で、**直近48時間**の報道を探す。1人あたり1〜2回の検索で足りる。
-1. MLB組の日本人（`japanese[]`）: `"<英語名>" free agent` / `"<英語名>" signs` / `<日本語名> FA` など。
+
+**最低限の検索（省かない・まとめて1回で済ませない）**。検索した語は通知に並べる。
+1. MLB組の日本人（`japanese[]`）: **1人ずつ** `"<英語名>" free agent` / `"<英語名>" opt out` など＋日本語で `<日本語名> FA` か `<日本語名> 去就`。
    オプトアウト権の選手は「opt out」の決定、FA の選手は QO（クオリファイング・オファー）の提示・受諾、関心球団、契約。
-2. NPB組（ポスティング・海外FA）: 正式な申請（posted）・交渉期限・契約。`npbPlayers.ts` の `postingWatch` を更新する。
-3. FA注目30人: 契約・トレード・QO・オプトアウトの決定（`<名前> signs` / `MLB free agent signings`）。
-4. 制度・日程: 労使交渉（CBA・ロックアウト）、ウィンターミーティングの開催可否。
+2. NPB組（ポスティング・海外FA）: `postingWatch` のある選手を1人ずつ `<日本語名> ポスティング`（海外FA組は `<日本語名> 海外FA`）。
+   正式な申請（posted）・交渉期限・契約。`npbPlayers.ts` の `postingWatch` を更新する。
+3. FA注目30人: `MLB free agent signings` と `qualifying offer` で1回ずつ＋上位10人のうち報道の多い選手を名前で。
+   契約・トレード・QO・オプトアウトの決定。
+4. 制度・日程: `MLB CBA lockout` で1回（労使交渉・ロックアウト・ウィンターミーティングの開催可否）。
 
 WebFetch で本文を開き、**書かれていることだけ**を拾う（見出しだけで判断しない）。
 
-⚠️ クラウドの WebFetch は、実行環境の通信許可（Custom network の許可ドメイン）に載っているサイトにしか届かない
-（2026-10-30 は roundtable.io が `ENOTFOUND`）。届かないときは:
-1. 同じ出来事を報じた別の媒体（MLB.com・MLB Trade Rumors・ESPN・日本のスポーツ紙など）を探して開く。
-2. どれも開けなければ、WebSearch の結果に**引用として出た文**に書かれた事実（誰が・何を・いつ）だけを書き、
-   通知の「書かなかった話／本文未確認」に URL を挙げる。要約文だけを根拠に、年数・金額・球団名を書かない。
+**届く媒体（クラウド・2026-10-31 実測）**: 実行環境の通信許可に、MLB.com・MLB Trade Rumors・ESPN・CBS・SI・NBC・NY Post・
+Yahoo（米国・日本）・日刊スポーツ・スポニチ・報知・サンスポ・デイリー・Full-Count・時事・日経・Newsweek・Just Baseball・NPB が入っている。
+- 日刊スポーツは WebFetch が取得を断る（`unable to fetch`）。`curl -sL -A 'Mozilla/5.0' <URL>` で HTML を取って本文を読む。
+- AP（apnews.com）は AP 側が 403 を返す。同じ出来事を報じた別の媒体を使う。
+- The Athletic など一覧に無い媒体は届かない（`ENOTFOUND`）。そのときは:
+  1. 同じ出来事を報じた、上の一覧の媒体を探して開く。
+  2. どれも開けなければ、WebSearch の結果に**引用として出た文**に書かれた事実（誰が・何を・いつ）だけを書き、
+     通知の「書かなかった話／本文未確認」に URL を挙げる。要約文だけを根拠に、年数・金額・球団名を書かない。
 
 ### 3. データを書き換える（`data/stove-league.json`）
 - `japanese[].timeline`: 新しい報道を**先頭に**足す（`date`・`ja`・`en`・`source`・`sourceName`）。同じ出来事を二重に足さない。
@@ -84,6 +94,11 @@ WebFetch で本文を開き、**書かれていることだけ**を拾う（見�
 
 ### 4. 海外の反応の記事（大きな動きがあった日だけ・1日1本まで）
 **対象**: 日本人（MLB組・NPB組）の契約・QO・オプトアウトの決定・正式なポスティング申請、または FA注目10位以内の契約。無ければこの手順は飛ばす。
+
+⚠️ **クラウドからは Reddit が 403 を返す**（2026-10-31 実測。通信許可は通っているが、Reddit がクラウドの通信元を拒否する。RSS も old.reddit も同じ）。
+最初に `curl -s -o /dev/null -w '%{http_code}' -A 'Mozilla/5.0' 'https://www.reddit.com/r/baseball/.rss'` を**1回だけ**実行し、
+200 以外なら下の 1〜4 を飛ばして 5 へ（rfeed は 403 だと計140秒待ち直すので回さない）。
+
 1. `GAP=20000 node scripts/reddit-rss/rsearch.mjs '|"<英語名>"|week|top' '<関係球団の板>|<姓>|week|top'` でスレを探す。
 2. `GAP=20000 node scripts/reddit-rss/rfeed.mjs '<スレURL>/.rss?limit=100' > /tmp/dump.txt`（2〜4スレ）。
 3. 訳だけ書いた picks.json を作り `node scripts/reddit-rss/pick.mjs picks.json /tmp/dump*.txt > /tmp/comments.json`。
@@ -91,18 +106,21 @@ WebFetch で本文を開き、**書かれていることだけ**を拾う（見�
    15〜30件・`score:0`・各コメントに `sourceUrl`・タグに選手名＋球団名＋`ストーブリーグ`＋`FA`（NPBは`ポスティング`）＋`海外の反応`。
    `fetchedAt` は**いまの実時刻**。ファンが挙げた数字は statsapi で当てて、合わない発言は使わない。
    成績ボックスは `node scripts/fetch-mlb-stats.mjs player <mlbId> --json`。
-5. 🚨 Reddit に届かない（403・接続できない）ときは記事を作らず、候補（出来事と探したスレ）を通知に書く。
+5. 🚨 Reddit に届かない（403・接続できない）ときは記事を作らず、候補（出来事と、探すべき板・検索語）を通知に書く。
+   手元のセッション（村山さんの端末）からは Reddit に届くので、そこで記事にする。
 
 ### 5. 検査と公開
 1. `node scripts/check-stove-league.mjs` が ✓（✗ は直す。直せないものは元に戻す）。
 2. `npm run build:gate`（通常の build はクラウドで EMFILE で落ちる）。通ったときだけ次へ。
+   クラウドでは10分を超える＝Bash の `run_in_background` で起動し、終了の通知を待つ（`sleep` を重ねて待たない）。
 3. `git add -A && git commit -m "chore(stove): ストーブリーグを毎朝更新（<JST日付>）" && git push origin main`
    （クラウドでは push が claude/** ブランチに振り替わり、`cloud-articles-automerge` が main に入れて公開する）。
    競合したら `git pull --rebase origin main` してやり直す（最大5回）。
 
 ### 6. 完了通知（必ず1通）
 Slack の自分宛DM（channel_id `U07D5DRCULF`、失敗時は `slack_search_users` で探す）。日本語で:
-- 実行日（JST）と結果（更新あり／動きなしで確認のみ／失敗）
+- 実行日（JST）と結果（更新あり／動きなしで確認のみ／一部失敗／失敗）
+- 手順1の2本の成否と、手順2で検索した語の一覧（最低限の検索を全部やったかが分かるように）
 - 変えたこと（選手ごとに1行・出典の媒体名）と、`outcome` を入れた契約。時制だけ直した選手もそう書く
 - 書かなかった話（噂だけ・出典が弱い・食い違い）＝人が判断する用
 - 作った記事（URL）か、作らなかった理由（大きな動きなし／Reddit に届かない）
