@@ -376,6 +376,8 @@ export function buildStoveFaq(
   const md = (iso: string) => `${Number(iso.slice(5, 7))}月${Number(iso.slice(8, 10))}日`;
   const mdEn = (iso: string) =>
     new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+  // QO の受諾期限は提示から何日と決まっておらず年ごとにMLBが日付を決める（2026年は提示期限の15日後）＝日程表の実日付を使う。
+  const qoAccept = cat.dates.find((d) => d.key === 'qo-accept' && d.date);
 
   const items: FaqItem[] = [
     {
@@ -395,8 +397,8 @@ export function buildStoveFaq(
     {
       q: { ja: 'クオリファイング・オファー（QO）とは？', en: 'What is a qualifying offer?' },
       a: {
-        ja: `FAになる選手に元の球団が出せる1年契約の提示。今オフの金額は${cat.qualifyingOffer.amountJa}。選手は10日以内に受けるか決め、断って他球団と契約すると、その球団はドラフト指名権を失い、元の球団は補償の指名権を得る。シーズン途中に移籍してきた選手や、一度QOを受けたことがある選手には出せない。`,
-        en: `A one-year offer a club can make to its departing free agent. This winter it is worth ${cat.qualifyingOffer.amountEn}. The player has ten days to accept; if he declines and signs elsewhere, the signing club forfeits a draft pick and the old club gets one. Players traded midseason or who have accepted a QO before cannot receive one.`,
+        ja: `FAになる選手に元の球団が出せる1年契約の提示。今オフの金額は${cat.qualifyingOffer.amountJa}。選手は${qoAccept ? `日本時間${md(qoAccept.date!)}${qoAccept.time?.ja ?? ''}までに` : 'MLBが決めた期限までに'}受けるか決め、断って他球団と契約すると、その球団はドラフト指名権を失い、元の球団は補償の指名権を得る。シーズン途中に移籍してきた選手や、一度QOを受けたことがある選手には出せない。`,
+        en: `A one-year offer a club can make to its departing free agent. This winter it is worth ${cat.qualifyingOffer.amountEn}. The player ${qoAccept ? `has until ${mdEn(qoAccept.date!)}${qoAccept.time ? `, ${qoAccept.time.en}` : ''} Japan time to accept` : 'must answer by a deadline MLB sets'}; if he declines and signs elsewhere, the signing club forfeits a draft pick and the old club gets one. Players traded midseason or who have accepted a QO before cannot receive one.`,
       },
     },
     {

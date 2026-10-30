@@ -11,12 +11,17 @@
  *   node scripts/check-stove-league.mjs --links    # 出典URLの生存も確かめる（手元用・クラウドは通信制限で使わない）
  */
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = process.cwd();
 const LINKS = process.argv.includes('--links');
 const cat = JSON.parse(readFileSync(path.join(ROOT, 'data', 'stove-league.json'), 'utf8'));
+const readJson = (rel) => (existsSync(path.join(ROOT, rel)) ? JSON.parse(readFileSync(path.join(ROOT, rel), 'utf8')) : null);
+const stats = readJson('data/stove-league-stats.json');
+const post = readJson('data/postseason.json');
+/** ワールドシリーズが今季ぶん決着したか（決着後は「WS終了から◯日後」の言い方が古くなる）。 */
+const wsDone = post?.season === cat.season && !!post?.champion;
 
 const errors = [];
 const warns = [];
@@ -30,6 +35,13 @@ const ISO = /^\d{4}-\d{2}-\d{2}$/;
 const slugs = new Set(
   [...readFileSync(path.join(ROOT, 'src/lib/players.ts'), 'utf8').matchAll(/slug:\s*'([^']+)',\s*nameJa:/g)].map((m) => m[1]),
 );
+/** players.ts の slug → mlbId（公式の動きと timeline の突き合わせに使う）。 */
+const mlbIdOf = new Map(
+  [...readFileSync(path.join(ROOT, 'src/lib/players.ts'), 'utf8').matchAll(/slug:\s*'([^']+)',\s*nameJa:[^\n]*?mlbId:\s*(\d+)/g)].map(
+    (m) => [m[1], m[2]],
+  ),
+);
+const dayDiff = (a, b) => Math.abs(Date.parse(`${a}T00:00:00Z`) - Date.parse(`${b}T00:00:00Z`)) / 86400000;
 const prospectSlugs = new Set(
   [...readFileSync(path.join(ROOT, 'src/lib/npbPlayers.ts'), 'utf8').matchAll(/^\s{4}slug:\s*'([^']+)'/gm)].map((m) => m[1]),
 );
@@ -102,6 +114,21 @@ for (const j of cat.japanese ?? []) {
     seen.add(key);
   });
   if (tl[0] && j.asOf < tl[0].date) err(`${w}: asOf（${j.asOf}）が最新の報道（${tl[0].date}）より古い`);
+  // 公式の動き（FA宣言・契約・トレード）が文章に入っていない＝見出しが古いまま残っている合図。
+  // 2026-10-30 の初回の定期実行は、FA宣言が出ていたのに「翌日にFAになる」を残した。statsapi の日付は米国東部なので±1日で照合する。
+  for (const m of stats?.players?.[mlbIdOf.get(j.slug)]?.moves ?? []) {
+    if (!tl.some((t) => dayDiff(t.date, m.date) <= 1)) {
+      err(`${w}: 公式の動き（${m.date} ${m.type}）が timeline に無い＝headline / window もいまの状態に直す`);
+    }
+  }
+  // 決着後に「ワールドシリーズ終了から5日後」のような相対の言い方が残っている（実日付に直す）。
+  if (wsDone) {
+    for (const [k, s] of [['headline', j.headline?.ja], ['window', j.window?.ja]]) {
+      if (s && /ワールドシリーズ終了(から|の)\d+日/.test(s) && !s.includes('日本時間')) {
+        err(`${w}.${k}: ワールドシリーズが終わったのに相対の日付のまま（日本時間の実日付に直す）`);
+      }
+    }
+  }
   if (j.outcome) {
     const o = j.outcome;
     if (!OUTCOMES.has(o.kind)) err(`${w}.outcome: kind が不正（${o.kind}）`);

@@ -24,6 +24,9 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 5. 和文と英数字のあいだに半角スペースを入れない（「5年8500万ドル」「MLB公式」）。「ニキ」は使わない（「海外ファン」）。
 6. コメントは1文字も創作しない。Reddit の原文は `scripts/reddit-rss/pick.mjs` でダンプから機械コピーする（手で写さない）。
 7. 動きが無い日は**事実の欄を書き換えない**。`checkedAt` だけ今日にする（`asOf` は中身が変わった日だけ進める）。
+   ただし**公式の動き（手順1）と、時制が古くなった文（手順3の読み直し）は「動き」に数える**＝報道が無い日でも直す。
+   2026-10-30 の初回実行は、FA宣言が statsapi に出ていたのに「動きなし」と判断し、
+   「ワールドシリーズ終了の翌日にFAになる」（もうFAなのに未来形）を残したまま `checkedAt` だけ進めた。
 
 ## 手順
 
@@ -36,6 +39,13 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 - `node scripts/fetch-stove-stats.mjs` … 30人＋日本人の FA宣言・契約（球団名）を `data/stove-league-stats.json` に反映。
   出力の「オフの動き」を控える。🚨 statsapi が失敗したら推測で補わず、そのことを最後の通知に書く（手順2以降は続けてよい）。
 - `node scripts/fetch-transactions.mjs <昨日>..<今日>` … 30人以外も含めた大きな動き（日本人は ★★★）。
+- **日本人選手（`japanese[]`）の公式の動きは、報道が無くても手順3で必ず文章に反映する**。
+  `data/stove-league-stats.json` の `players[mlbId].moves` を見て、`timeline` にまだ無い動き
+  （`Declared Free Agency`＝FAになった／`Signed Free Agent`＝契約／`Trade`／`Released` など）があれば、
+  `timeline` の先頭に1件足し（出典 `https://www.mlb.com/transactions`・`sourceName`「MLB公式（取引記録）」）、
+  `headline` / `window` を書き直す。statsapi の `date` は米国東部の日付＝そのまま使い、文中では「米国時間10月29日」と書く。
+- ワールドシリーズの決着（`data/postseason.json` の `champion`）、オプトアウト・QO の期限（日程表）を過ぎたかも、ここで確かめる。
+  期限を過ぎたのに結果が分からない選手は、手順2で必ず結果を探す。
 
 ### 2. 報道の確認（WebSearch / WebFetch）
 次の順で、**直近48時間**の報道を探す。1人あたり1〜2回の検索で足りる。
@@ -47,10 +57,23 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 
 WebFetch で本文を開き、**書かれていることだけ**を拾う（見出しだけで判断しない）。
 
+⚠️ クラウドの WebFetch は、実行環境の通信許可（Custom network の許可ドメイン）に載っているサイトにしか届かない
+（2026-10-30 は roundtable.io が `ENOTFOUND`）。届かないときは:
+1. 同じ出来事を報じた別の媒体（MLB.com・MLB Trade Rumors・ESPN・日本のスポーツ紙など）を探して開く。
+2. どれも開けなければ、WebSearch の結果に**引用として出た文**に書かれた事実（誰が・何を・いつ）だけを書き、
+   通知の「書かなかった話／本文未確認」に URL を挙げる。要約文だけを根拠に、年数・金額・球団名を書かない。
+
 ### 3. データを書き換える（`data/stove-league.json`）
 - `japanese[].timeline`: 新しい報道を**先頭に**足す（`date`・`ja`・`en`・`source`・`sourceName`）。同じ出来事を二重に足さない。
 - `japanese[].headline` / `window`: **いまの状態**に書き直す（例: FA になった後に「翌日にFAになる」を残さない／判断期限が過ぎたら結果を書く）。
   `headline` は選手LPの説明文と検索結果にも使う＝1〜2文で「いまどうなっているか」。
+- **毎回、全員の `headline` / `window`（と NPB組の `postingWatch.headline`）を今日の日付で読み直す**（報道の有無に関係なく）。
+  - 過ぎた出来事を未来形で書いていないか（「FAになる」「〜日後に決める」「期限を迎える」）
+  - 「ワールドシリーズ終了から5日後」のような相対の言い方は、決着後は**日本時間の実日付**に直す
+    （日程表の実日付と同じ値。例: 「日本時間11月3日午前7時」。英語は「Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT)」）
+  - 見つけたら直し、その選手の `asOf` を今日にする（中身が変わった扱い）。
+- `dates[]`: 報道で日付・時刻が確定した期限は、`afterWs` から固定の `date`（日本時間）＋`time` に直す
+  （QO の受諾期限は「提示から何日」と決まっておらず、年ごとに MLB が日付を決める＝2026年は米中部11月17日午後3時＝日本時間11月18日午前6時）。
 - `suitors`: 球団名を挙げた報道があれば足す（日本語の球団名は `src/lib/teams.ts` の短縮名）。
 - `marketValue`: 記者・媒体が出した数字だけ（出典つき）。
 - **決着**（契約・残留・再契約）: `outcome`＝`{ kind, date, team:{ja,en}, ja, en, source, sourceName }`。`ja` に年数・金額。
@@ -80,7 +103,7 @@ WebFetch で本文を開き、**書かれていることだけ**を拾う（見�
 ### 6. 完了通知（必ず1通）
 Slack の自分宛DM（channel_id `U07D5DRCULF`、失敗時は `slack_search_users` で探す）。日本語で:
 - 実行日（JST）と結果（更新あり／動きなしで確認のみ／失敗）
-- 変えたこと（選手ごとに1行・出典の媒体名）と、`outcome` を入れた契約
+- 変えたこと（選手ごとに1行・出典の媒体名）と、`outcome` を入れた契約。時制だけ直した選手もそう書く
 - 書かなかった話（噂だけ・出典が弱い・食い違い）＝人が判断する用
 - 作った記事（URL）か、作らなかった理由（大きな動きなし／Reddit に届かない）
 - 検査・build・push の結果（失敗ならエラーの該当行）

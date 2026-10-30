@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "asOf": "2026-10-29",
+  "asOf": "2026-10-30",
   "checkedAt": "2026-10-30",
   "activeUntil": "2027-03-25",
   "ranking": {
@@ -68,8 +68,7 @@
     },
     {
       "key": "qo-accept",
-      "afterWs": 15,
-      "jstShift": 1,
+      "date": "2026-11-18",
       "time": {
         "ja": "午前6時",
         "en": "6 a.m."
@@ -78,10 +77,10 @@
         "ja": "鈴木誠也にQOが出ていれば、受けて残るか断るかの期限",
         "en": "If the Cubs make Seiya Suzuki a QO, this is his deadline to answer"
       },
-      "ja": "QOの受諾期限（提示から10日）。断った選手を獲った球団はドラフト指名権を失う",
-      "en": "Deadline to accept a qualifying offer (10 days after it is made)",
-      "source": "https://www.justbaseball.com/mlb/offseason-schedule-key-dates-lockout/",
-      "sourceName": "Just Baseball"
+      "ja": "QOの受諾期限。受けた選手は1年2315万ドルで残り、断った選手を獲った球団はドラフト指名権を失う",
+      "en": "Deadline to accept a qualifying offer: accept and return on a one-year, $23.15 million deal; a club that signs a player who declined gives up a draft pick",
+      "source": "https://www.mlbtraderumors.com/2026/10/the-2026-27-offseason-begins.html",
+      "sourceName": "MLB Trade Rumors"
     },
     {
       "key": "rule5-protect",
@@ -157,14 +156,14 @@
     {
       "slug": "seiya-suzuki",
       "route": "fa",
-      "asOf": "2026-10-29",
+      "asOf": "2026-10-30",
       "headline": {
-        "ja": "カブスとの5年8500万ドル契約が2026年で終わり、ワールドシリーズ終了の翌日にFAになる。MLB公式のFAランキングでは全体5位。カブス担当記者は、カブスがQOを出し、鈴木は断って複数年契約を狙うとみている。",
-        "en": "His five-year, $85 million deal with the Cubs ends with the 2026 season, making him a free agent the day after the World Series. MLB.com ranks him No. 5 in the class, and the Cubs beat writer expects Chicago to make a qualifying offer that he turns down in search of a multi-year deal."
+        "ja": "カブスとの5年8500万ドル契約を終え、ワールドシリーズ終了の翌日（米国時間10月29日）にFAになった。MLB公式のFAランキングでは全体5位。ニューヨーク・ポストのヘイマン記者は、カブスがQO（1年2315万ドル）を出す見込みだと報じている。",
+        "en": "His five-year, $85 million deal with the Cubs is done, and he became a free agent the day after the World Series (Oct. 29 ET). MLB.com ranks him No. 5 in the class, and the New York Post's Jon Heyman has reported that the Cubs are expected to make him a qualifying offer ($23.15 million for one year)."
       },
       "window": {
-        "ja": "QOの提示期限はワールドシリーズ終了から5日後で、受諾するかは10日以内に決める。断って他球団と契約すると、その球団はドラフト指名権を失う。12月1日に労使協定が切れてロックアウトに入れば交渉は止まる。MLB公式は、前回の協定切れ（2021年）の直前に大型契約が相次いだ例を挙げている。",
-        "en": "Clubs must make qualifying offers within five days of the World Series, and players have ten days to answer. A club that signs a player who rejected one gives up a draft pick. If the CBA expires on December 1 and a lockout begins, talks freeze; MLB.com points to the flurry of big deals signed right before the last expiration in 2021."
+        "ja": "カブスがQOを出すかの期限は日本時間11月3日午前7時で、この時刻から全球団と契約できる。QOが出れば、受けて残るか断るかを11月18日午前6時までに決める。断って他球団と契約すると、その球団はドラフト指名権を失う。日本時間12月2日午後1時59分に労使協定が切れてロックアウトに入れば交渉は止まる。MLB公式は、前回の協定切れ（2021年）の直前に大型契約が相次いだ例を挙げている。",
+        "en": "The Cubs have until Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT) to make a qualifying offer, and he can sign with any club from then. If he gets one, he has until Nov. 18 at 6 a.m. Japan time (Nov. 17, 3 p.m. CT) to accept or decline; a club that signs him after he declines gives up a draft pick. If the CBA expires (Dec. 1, 11:59 p.m. ET) and a lockout begins, talks freeze; MLB.com points to the flurry of big deals signed right before the last expiration in 2021."
       },
       "suitors": [
         {
@@ -188,11 +187,25 @@
       ],
       "timeline": [
         {
+          "date": "2026-10-29",
+          "ja": "ブルワーズの優勝でワールドシリーズが終わった翌日、FAになった（MLB公式の取引記録）。全球団と契約できるのは日本時間11月3日午前7時から。",
+          "en": "Became a free agent the day after the Brewers won the World Series, per MLB's transaction log. He can sign with any club from Nov. 3 at 7 a.m. Japan time.",
+          "source": "https://www.mlb.com/transactions",
+          "sourceName": "MLB公式（取引記録）"
+        },
+        {
           "date": "2026-10-27",
           "ja": "MLB公式のFAランキングで全体5位。今季はbWAR5.1・fWAR4.6がともに自己最高で、右翼の守備（OAA+5）と強肩も評価された。",
           "en": "MLB.com ranks him No. 5 among free agents, citing career highs in bWAR (5.1) and fWAR (4.6) plus his right-field defense (+5 OAA) and arm.",
           "source": "https://www.mlb.com/news/ranking-the-free-agents-for-2026-27-offseason",
           "sourceName": "MLB.com"
+        },
+        {
+          "date": "2026-10-16",
+          "ja": "ニューヨーク・ポストのジョン・ヘイマン記者が、カブスは鈴木にQO（1年2315万ドル）を出す見込みだと報じた。これを伝えたRoundtableの記事は、鈴木は断ってFA市場に出る可能性が高いと書いた。",
+          "en": "The New York Post's Jon Heyman reported that the Cubs are expected to make Suzuki a qualifying offer ($23.15 million for one year). Roundtable, relaying the report, wrote that he is likely to decline it and test the market.",
+          "source": "https://sports.yahoo.com/articles/cubs-expected-extend-qualifying-offer-200833754.html",
+          "sourceName": "Yahoo Sports（Roundtable・ニューヨーク・ポストのヘイマン記者）"
         },
         {
           "date": "2026-10-11",
@@ -227,14 +240,14 @@
     {
       "slug": "shota-imanaga",
       "route": "fa",
-      "asOf": "2026-10-29",
+      "asOf": "2026-10-30",
       "headline": {
-        "ja": "昨オフにQOを受け入れて結んだ1年契約が終わり、2年続けてFA市場に出る。QOを一度受けた選手には二度目を出せないため、獲得した球団がドラフト指名権を失うことはない。MLB公式のFAランキングでは25位。",
-        "en": "The one-year deal he took by accepting the Cubs' qualifying offer last winter is up, so he hits the market for a second straight offseason. Because he already accepted a QO, he cannot receive another, so signing him costs no draft pick. MLB.com ranks him No. 25."
+        "ja": "昨オフにQOを受け入れて結んだ1年契約を終え、ワールドシリーズ終了の翌日（米国時間10月29日）に2年続けてFAになった。QOを一度受けた選手には二度目を出せないため、獲得した球団がドラフト指名権を失うことはない。MLB公式のFAランキングでは25位。",
+        "en": "The one-year deal he took by accepting the Cubs' qualifying offer last winter is done, and he became a free agent for a second straight winter the day after the World Series (Oct. 29 ET). Because he already accepted a QO, he cannot receive another, so signing him costs no draft pick. MLB.com ranks him No. 25."
       },
       "window": {
-        "ja": "QOが付かないので、ワールドシリーズ終了の5日後から全球団と条件なしで交渉・契約できる。12月1日の労使協定の期限が交渉の速さに影響するとみられている。",
-        "en": "With no QO attached, he can sign with any club from the fifth day after the World Series. The December 1 CBA expiration is expected to shape how fast talks move."
+        "ja": "QOが付かないので、日本時間11月3日午前7時から全球団と条件なしで契約できる。日本時間12月2日に労使協定が切れる期限が、交渉の速さに影響するとみられている。",
+        "en": "With no QO attached, he can sign with any club from Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT). The CBA expiration on Dec. 1 (ET) is expected to shape how fast talks move."
       },
       "marketValue": [
         {
@@ -245,6 +258,13 @@
         }
       ],
       "timeline": [
+        {
+          "date": "2026-10-29",
+          "ja": "ワールドシリーズが終わった翌日、FAになった（MLB公式の取引記録）。QOが付かないので、日本時間11月3日午前7時から全球団と条件なしで契約できる。",
+          "en": "Became a free agent the day after the World Series ended, per MLB's transaction log. With no QO attached, he can sign with any club from Nov. 3 at 7 a.m. Japan time.",
+          "source": "https://www.mlb.com/transactions",
+          "sourceName": "MLB公式（取引記録）"
+        },
         {
           "date": "2026-10-27",
           "ja": "MLB公式のFAランキングで25位。カブスでの3年は86先発・防御率3.45。与四球率5.2%はリーグ上位5%に入る一方、通算の被本塁打93が与四球91を上回る点も挙げられた。",
@@ -271,12 +291,23 @@
     {
       "slug": "tomoyuki-sugano",
       "route": "fa",
-      "asOf": "2026-10-29",
+      "asOf": "2026-10-30",
       "headline": {
-        "ja": "ロッキーズとの1年510万ドル契約が終わり、2年続けてFAになる。来季は37歳のシーズン。MLB公式はロッキーズの注目FAに挙げ、本拠地クアーズ・フィールドで粘った投球を評価する余地があるとした。",
-        "en": "His one-year, $5.1 million deal with the Rockies is done, so he is a free agent for the second straight winter, heading into his age-37 season. MLB.com listed him as Colorado's notable free agent and noted his work at Coors Field."
+        "ja": "ロッキーズとの1年510万ドル契約を終え、ワールドシリーズ終了の翌日（米国時間10月29日）に2年続けてFAになった。来季は37歳のシーズン。MLB公式はロッキーズの注目FAに挙げ、本拠地クアーズ・フィールドで粘った投球を評価する余地があるとした。",
+        "en": "His one-year, $5.1 million deal with the Rockies is done, and he became a free agent for the second straight winter the day after the World Series (Oct. 29 ET), heading into his age-37 season. MLB.com listed him as Colorado's notable free agent and noted his work at Coors Field."
+      },
+      "window": {
+        "ja": "日本時間11月3日午前7時から全球団と契約できる。",
+        "en": "He can sign with any club from Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT)."
       },
       "timeline": [
+        {
+          "date": "2026-10-29",
+          "ja": "ワールドシリーズが終わった翌日、FAになった（MLB公式の取引記録）。",
+          "en": "Became a free agent the day after the World Series ended, per MLB's transaction log.",
+          "source": "https://www.mlb.com/transactions",
+          "sourceName": "MLB公式（取引記録）"
+        },
         {
           "date": "2026-08-10",
           "ja": "MLB公式が各球団の今オフの注目FAを紹介し、ロッキーズは菅野を選んだ。8月上旬の時点で本拠地10先発の防御率3.93（敵地5.13）。ローテーション後半を担う堅実な投手として見られる可能性があると書いた。",
@@ -296,14 +327,14 @@
     {
       "slug": "tatsuya-imai",
       "route": "opt-out",
-      "asOf": "2026-10-29",
+      "asOf": "2026-10-30",
       "headline": {
-        "ja": "アストロズとの3年5400万ドル契約に、2026年と27年のシーズン後に契約を破棄できるオプトアウト権がある（残りは2年3600万ドル）。1年目は7月に先発ローテーションを外れた。MLB公式は、オプトアウトする可能性は低いとみている。",
-        "en": "His three-year, $54 million deal with Houston lets him opt out after 2026 and 2027, with two years and $36 million left. He was pulled from the rotation in July of his first season, and MLB.com considers an opt-out unlikely."
+        "ja": "アストロズとの3年5400万ドル契約に、2026年と27年のシーズン後に契約を破棄できるオプトアウト権がある（残りは2年3600万ドル）。使うかどうかの期限は日本時間11月3日午前7時。1年目は7月に先発ローテーションを外れた。MLB公式は、オプトアウトする可能性は低いとみている。",
+        "en": "His three-year, $54 million deal with Houston lets him opt out after 2026 and 2027, with two years and $36 million left, and this year's decision is due Nov. 3 at 7 a.m. Japan time. He was pulled from the rotation in July of his first season, and MLB.com considers an opt-out unlikely."
       },
       "window": {
-        "ja": "判断の期限はワールドシリーズ終了から5日後。オプトアウトしなければ2027年もアストロズでプレーする。",
-        "en": "The decision is due five days after the World Series. If he stays in, he pitches for Houston in 2027."
+        "ja": "判断の期限は日本時間11月3日午前7時（ワールドシリーズ終了の5日後）。オプトアウトしなければ2027年もアストロズでプレーする。",
+        "en": "The decision is due Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT), five days after the World Series. If he stays in, he pitches for Houston in 2027."
       },
       "timeline": [
         {
@@ -325,14 +356,14 @@
     {
       "slug": "yuki-matsui",
       "route": "opt-out",
-      "asOf": "2026-10-29",
+      "asOf": "2026-10-30",
       "headline": {
-        "ja": "パドレスとの5年2800万ドル契約に、2026年シーズン後のオプトアウト権がある（残りは2年1350万ドル）。今季は自己最高の数字で、MLB公式は、市場に出れば左のリリーフでトップ5に入るとして、オプトアウトしても驚かないと書いた。",
-        "en": "His five-year, $28 million deal with San Diego includes an opt-out after 2026, with two years and $13.5 million left. Coming off his best MLB season, MLB.com called him arguably a top-five lefty reliever on the market and said an opt-out would not be surprising."
+        "ja": "パドレスとの5年2800万ドル契約に、2026年シーズン後のオプトアウト権がある（残りは2年1350万ドル）。使うかどうかの期限は日本時間11月3日午前7時。今季は自己最高の数字で、MLB公式は、市場に出れば左のリリーフでトップ5に入るとして、オプトアウトしても驚かないと書いた。",
+        "en": "His five-year, $28 million deal with San Diego includes an opt-out after 2026, with two years and $13.5 million left, and the decision is due Nov. 3 at 7 a.m. Japan time. Coming off his best MLB season, MLB.com called him arguably a top-five lefty reliever on the market and said an opt-out would not be surprising."
       },
       "window": {
-        "ja": "判断の期限はワールドシリーズ終了から5日後。オプトアウトしなければ2027年もパドレスでプレーする。",
-        "en": "The decision is due five days after the World Series. If he stays in, he pitches for San Diego in 2027."
+        "ja": "判断の期限は日本時間11月3日午前7時（ワールドシリーズ終了の5日後）。オプトアウトしなければ2027年もパドレスでプレーする。",
+        "en": "The decision is due Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT), five days after the World Series. If he stays in, he pitches for San Diego in 2027."
       },
       "timeline": [
         {
