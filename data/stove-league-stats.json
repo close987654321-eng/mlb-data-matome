@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-30 11:10",
+  "asOf": "2026-10-31 07:24",
   "season": 2026,
   "movesFrom": "2026-09-29",
   "players": {
@@ -25,7 +25,15 @@
         "bb": 46,
         "whip": "1.15"
       },
-      "moves": []
+      "moves": [
+        {
+          "date": "2026-10-30",
+          "type": "Declared Free Agency",
+          "toTeamId": 111,
+          "fromTeamId": null,
+          "desc": "RHP Sonny Gray elected free agency."
+        }
+      ]
     },
     "592332": {
       "name": "Kevin Gausman",
@@ -409,7 +417,15 @@
         "bb": 70,
         "whip": "1.18"
       },
-      "moves": []
+      "moves": [
+        {
+          "date": "2026-10-30",
+          "type": "Declared Free Agency",
+          "toTeamId": 135,
+          "fromTeamId": null,
+          "desc": "RHP Michael King elected free agency."
+        }
+      ]
     },
     "656492": {
       "name": "Foster Griffin",
