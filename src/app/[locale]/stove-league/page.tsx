@@ -251,6 +251,8 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
       : `ワールドシリーズは${ws.lead.ja}が${ws.lead.wins}勝${ws.trail.wins}敗でリード。${nextGame}${clinch ? `${ws.lead.ja}があと1勝すれば決着し、その翌日にFAが解禁される。` : '決着の翌日にFAが解禁される。'}`;
   })();
   const asOfJa = `${fmtDate(cat.asOf, en)}`;
+  // 確認日は更新日より新しいときだけ出す（同じ日なら「更新」で足りる）。
+  const checkedJa = cat.checkedAt && cat.checkedAt > cat.asOf ? fmtDate(cat.checkedAt, en) : '';
   const statsAsOf = stats.asOf ? `${fmtDate(stats.asOf.slice(0, 10), en)} ${stats.asOf.slice(11, 16).replace(/^0/, '')}` : '';
 
   return (
@@ -277,8 +279,8 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
           </p>
           <p className="mt-1 text-xs text-ink-mute">
             {en
-              ? `Updated ${asOfJa} · signings sync from MLB every 3 hours`
-              : `${asOfJa}更新・契約の動きはMLB公式の記録から3時間ごとに自動で反映`}
+              ? `Updated ${asOfJa}${checkedJa ? ` · checked ${checkedJa}` : ''} · news checked every morning at 6 a.m. JST, signings sync every 3 hours`
+              : `${asOfJa}更新${checkedJa ? `・${checkedJa}確認` : ''}・報道は毎朝6時に確認、契約の動きは3時間ごとに自動で反映`}
           </p>
         </div>
 

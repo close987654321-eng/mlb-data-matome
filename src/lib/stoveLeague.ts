@@ -90,7 +90,13 @@ export type StoveDate = {
 
 export type StoveCatalog = {
   season: number;
+  /** 中身（報道・状況）を最後に書き換えた日（JST）。 */
   asOf: string;
+  /**
+   * 毎朝の定期実行（stove-daily）が報道を確認した日。動きが無い日は中身を変えずにこれだけ進める＝
+   * 「更新日」を毎日進めて新しく見せることはしない（更新と確認を分けて出す）。
+   */
+  checkedAt?: string;
   /** この日を過ぎたら選手LPの title をオフ仕様から戻す（ハブ自体はアーカイブとして残す）。 */
   activeUntil: string;
   ranking: { name: string; nameEn: string; url: string; date: string };

@@ -35,7 +35,7 @@ SSG します。
 ├── CLAUDE.md
 ├── AGENTS.md                    # 他エージェント向けの薄いポインタ（内容はここに複製しない）
 ├── README.md
-├── .claude/skills/              # matome / jp-games / jp-daily / neta-radar / x-post / x-share / kpi-weekly / column / editor-notes（各 SKILL.md + references/）
+├── .claude/skills/              # matome / jp-games / jp-daily / neta-radar / x-post / x-share / kpi-weekly / column / editor-notes / stove-daily（各 SKILL.md + references/）
 ├── data/
 │   └── threads/
 │       ├── mlb/{id}.json        # MLB のまとめ（1スレ1ファイル）
@@ -77,6 +77,8 @@ SSG します。
     ├── fetch-npb-stats.mjs     # NEXT MLB（NPB注目株）の成績を NPB公式から取得（§4.1）
     ├── fetch-transactions.mjs  # MLBの移籍・契約レーダー（オフシーズンの記事ネタ・§4.1）
     ├── fetch-stove-stats.mjs   # ストーブリーグのFA注目選手の今季成績＋オフの契約の動き（§4.1・3時間ごとにCI）
+    ├── check-stove-league.mjs  # stove-league.json の公開前検査（出典URL・未来の日付・表記・slug）
+    ├── reddit-rss/             # Reddit 公開RSSで反応を集める rsearch / rfeed / pick（クラウドからも使う・README）
     ├── fetch-game-voices.mjs   # チームLPの「1試合1件の現地の声」を公式ハイライトから取得（§4.1）
     │                           #   refresh-season = 昇格した「今季の声」の生存を取り直す（毎週）
     ├── journal-gaps.mjs        # 選手LPの観測日誌の取りこぼし検出（jp-daily Step 6a）
@@ -317,6 +319,10 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     日本人に関わる日は `jp` に一言。WS決着まではFAの状況を「FA予定」と出す。入口は `StoveEntry`（TOP・/mlb・
     STOVE_TAGS の記事・今オフ動く NEXT MLB の選手LP）とタグ「ストーブリーグ」（TagList がハブへ送る）。
     外国人FAは選手LPが無いので、その選手名タグ（カタカナの姓でも可）のオフ記事があればそこへリンクする。
+    **毎朝6:00 JST のクラウド定期実行（2026-10-30〜）**が `stove-daily` スキル（`.claude/skills/stove-daily/SKILL.md`）を回す＝
+    報道の確認（WebSearch）→ `stove-league.json`／`npbPlayers.ts` の postingWatch を出典つきで更新 → 大きな動きの日だけ Reddit の
+    反応記事を1本 → `check-stove-league.mjs` と `build:gate` を通った回だけ公開 → Slack DM。中身が動かない日は `checkedAt`（確認日）
+    だけ進める＝更新日（`asOf`）を毎日進めて新しく見せない。Reddit の取得はクラウド環境の通信許可に `*.reddit.com` が要る。
   - **試合ごとの現地の声（`data/game-voices.json`）**: `node scripts/fetch-game-voices.mjs [試合日|from..to]` が
     MLB公式ハイライトのコメントから**1試合1件**を取り、`bodyEn`・著者・票数・動画IDを**そのまま書き出す**
     （人も AI も触らない＝捏造が構造的に起きない）。`ja`（訳）だけを後から埋め、**空のあいだはサイトに出ない**
