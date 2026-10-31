@@ -118,15 +118,15 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-10-26',
+      asOf: '2026-11-01',
       headline: {
-        ja: '阪神が10月19日にポスティング容認を発表した。申請は11月1日から可能で、正式な申請は日本シリーズの終了後になる見込み。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
-        en: 'Hanshin announced on October 19 that it will post him. Filings open on November 1, and the formal posting is expected after the Japan Series. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
+        ja: '阪神が10月19日にポスティング容認を発表した。申請の受付は11月1日に始まった。MLB Trade Rumors によれば正式な申請は日本シリーズの終了後になる見込み。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
+        en: 'Hanshin announced on October 19 that it will post him. Filings opened on November 1, and MLB Trade Rumors says the formal posting is expected after the Japan Series. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
       },
       route: 'posting',
       window: {
-        ja: '阪神は10月19日に容認を発表し、11月1日から申請できる。NPBの申請受付は12月15日までで、MLB Trade Rumors によれば正式な申請は日本シリーズの終了後になる。申請後の交渉期間は45日間で、期間内に契約しなければ2027年は阪神に戻る。12月1日に労使協定が切れてロックアウトに入れば交渉は凍結され、ESPNのジェフ・パッサン記者は佐藤・平良海馬・伊藤大海の3人とも12月1日より前に契約するとみていた。',
-        en: 'Hanshin announced its approval on October 19, and filings open on November 1. NPB accepts postings through December 15, and MLB Trade Rumors says the formal posting will come after the Japan Series. The negotiating window then runs 45 days; if he does not sign, he returns to Hanshin for 2027. A lockout starting when the CBA expires on December 1 would freeze talks, and ESPN\u2019s Jeff Passan had expected Sato, Kaima Taira and Hiromi Itoh all to sign before that date.',
+        ja: '阪神は10月19日に容認を発表し、11月1日から申請できるようになった。NPBの申請受付は12月15日までで、MLB Trade Rumors によれば正式な申請は日本シリーズの終了後になる。申請後の交渉期間は45日間で、期間内に契約しなければ2027年は阪神に戻る。12月1日に労使協定が切れてロックアウトに入れば交渉は凍結され、ESPNのジェフ・パッサン記者は佐藤・平良海馬・伊藤大海の3人とも12月1日より前に契約するとみていた。',
+        en: 'Hanshin announced its approval on October 19, and filings opened on November 1. NPB accepts postings through December 15, and MLB Trade Rumors says the formal posting will come after the Japan Series. The negotiating window then runs 45 days; if he does not sign, he returns to Hanshin for 2027. A lockout starting when the CBA expires on December 1 would freeze talks, and ESPN\u2019s Jeff Passan had expected Sato, Kaima Taira and Hiromi Itoh all to sign before that date.',
       },
       marketValue: [
         {
@@ -268,15 +268,15 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-10-26',
+      asOf: '2026-11-01',
       headline: {
-        ja: 'ポスティングでのMLB挑戦を本人が熟考しており、10月中に決断する意向（10月23日）。日本ハムは本人が移籍の意向を固めれば容認する方針と報じられ、代理人を通じて球団にメジャー挑戦の意思を伝えたとも報じられた。',
-        en: 'He is weighing a posting and plans to decide by the end of October (October 23). Nippon-Ham is reported to approve a move if he commits, and he has reportedly told the club of his MLB ambition through his agent.',
+        ja: 'ポスティングでのMLB挑戦を本人が熟考し、10月中に決断する意向と報じられていた（10月23日）。11月1日朝（日本時間）の時点で、本人の決断や日本ハムの正式な発表の報道は見つかっていない。日本ハムは本人が移籍の意向を固めれば容認する方針と報じられ、代理人を通じて球団にメジャー挑戦の意思を伝えたとも報じられた。',
+        en: 'He was reported to be weighing a posting and planning to decide by the end of October (October 23). As of the morning of November 1 (Japan time), we found no report of his decision or a formal Nippon-Ham announcement. Nippon-Ham is reported to approve a move if he commits, and he has reportedly told the club of his MLB ambition through his agent.',
       },
       route: 'posting',
       window: {
-        ja: '本人は10月中に決断する意向。申請する場合、NPBの受付は11月1日から12月15日まで。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
-        en: 'He plans to decide by the end of October. If posted, NPB accepts filings from November 1 through December 15. The 45-day window freezes if a lockout begins when the CBA expires on December 1. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
+        ja: '本人は10月中に決断する意向だった。申請する場合、NPBの受付は11月1日に始まり12月15日まで。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
+        en: 'He had said he would decide by the end of October. If posted, NPB accepts filings from November 1 (now open) through December 15. The 45-day window freezes if a lockout begins when the CBA expires on December 1. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
       },
       marketValue: [
         {
@@ -395,15 +395,15 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-10-29',
+      asOf: '2026-11-01',
       headline: {
         ja: 'ポスティングでのMLB移籍を希望し、代理人が西武と交渉している。広池浩司球団本部長は10月26日、「少しずつ話はまとまりつつある」と話した。本人は「最終決定は球団」としており、西武の正式な容認発表はまだない。',
         en: 'He wants to be posted, and his agent is negotiating with Seibu. On October 26 club executive Koji Hiroike said things are gradually coming together. Taira has said the final call is the club\u2019s, and Seibu has made no formal announcement yet.',
       },
       route: 'posting',
       window: {
-        ja: '代理人が西武と交渉中で、正式な容認発表はまだない。容認されれば、NPBの申請受付は11月1日から12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。',
-        en: 'His agent is negotiating with Seibu, and there is no formal approval yet. If approved, NPB accepts filings from November 1 through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The 45-day window freezes if a lockout begins when the CBA expires on December 1.',
+        ja: '代理人が西武と交渉中で、正式な容認発表はまだない。容認されれば、NPBの申請受付は11月1日に始まり12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。',
+        en: 'His agent is negotiating with Seibu, and there is no formal approval yet. If approved, NPB accepts filings from November 1 (now open) through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The 45-day window freezes if a lockout begins when the CBA expires on December 1.',
       },
       marketValue: [
         {
@@ -512,7 +512,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '平良海馬はいつポスティングされる？', en: 'When will Kaima Taira be posted?' },
-        a: { ja: '本人がポスティングでの移籍を希望し、代理人が西武と交渉している（10月20日）。西武の正式な容認発表はまだない。容認されればNPBの申請受付は11月1日から12月15日までで、ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。', en: 'He wants to be posted and his agent is negotiating with Seibu (October 20), but the club has not announced a decision. If approved, NPB accepts filings from November 1 through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting.' },
+        a: { ja: '本人がポスティングでの移籍を希望し、代理人が西武と交渉している（10月20日）。西武の正式な容認発表はまだない。容認されればNPBの申請受付は11月1日に始まり12月15日までで、ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。', en: 'He wants to be posted and his agent is negotiating with Seibu (October 20), but the club has not announced a decision. If approved, NPB accepts filings from November 1 (now open) through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting.' },
       },
       {
         q: { ja: 'なぜ今オフなの？', en: 'Why this offseason?' },
