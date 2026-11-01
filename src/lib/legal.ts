@@ -6,7 +6,7 @@ export const OPERATOR_NAME = '「海外の反応まとめ」運営';
 // 問い合わせ用 Google フォーム（about / contact ページの CTA リンク先）。
 export const CONTACT_FORM_URL = 'https://forms.gle/Gh6pjqdCR3ijLJqW8';
 // 最終更新日（ポリシー改定時に手で更新する）。
-export const LEGAL_UPDATED = '2026-08-04';
+export const LEGAL_UPDATED = '2026-11-01';
 
 /** 法務系ページ1本の構造化コンテンツ（見出し＋段落＋箇条書き）。 */
 export type LegalSection = {
@@ -139,6 +139,9 @@ const ABOUT: Record<Locale, LegalDoc> = {
         paragraphs: [
           '各まとめは、海外で実際に反応が集まったスレッド・動画を選び、現地ファンのコメントを抜粋して日本語に翻訳・編集しています。翻訳は発言の意図を保つことを第一とし、存在しない発言やスコアを創作することはありません。',
           '記事には必ず翻訳元のスレッド・動画へのリンクを添え、読者が一次情報を確認できるようにしています。選手の成績・試合結果などの数値は、MLB 公式のデータに基づいて記載します（推測で補いません）。',
+          // AI 補助の開示（2026-11-01・Anthropic 利用ポリシー 11/12 施行に合わせて3号店と同じ趣旨で追加）。
+          // 独立見出しにせず、編集方針の節に1段落だけ（3号店の「案A・目立たなく」と同じ置き方）。
+          'コメントや成績データの取得にはソフトウェアを使い、記事の選定・翻訳・要約・執筆には、運営者が定めて確認するルールのもとでAIの補助も使っています。「中の人メモ」「中の人のひと言」やコラムは運営者自身の編集上の語り口で、別の人物や外部の記者が書いたものではありません。どの段階でも、コメント・数字・事実を創作することはありません。',
           '内容に誤り・不正確な点を見つけられた場合は、お問い合わせフォームよりご指摘ください。確認のうえ速やかに訂正します。',
         ],
       },
@@ -175,6 +178,7 @@ const ABOUT: Record<Locale, LegalDoc> = {
         paragraphs: [
           'Each digest starts from threads and videos that actually drew reactions overseas. We excerpt local fans’ comments and translate and edit them into Japanese, prioritizing the speaker’s intent — we never invent comments or scores that were not there.',
           'Every article links back to the source thread or video so readers can check the original. Figures such as player stats and game results are based on official MLB data (we do not fill gaps with guesses).',
+          'Software fetches the comments and stats; AI assists with selecting, translating, summarizing and writing, under rules the operator sets and reviews. Notes labeled “From the editor” and our columns are the operator’s own editorial voice, not a separate person or an outside reporter. At no stage is a comment, a number or a fact invented.',
           'If you spot an error or inaccuracy, please let us know via the contact form and we will correct it promptly.',
         ],
       },
