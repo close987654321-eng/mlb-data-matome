@@ -120,13 +120,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       level: 'expected',
       asOf: '2026-11-01',
       headline: {
-        ja: '阪神が10月19日にポスティング容認を発表した。申請の受付は11月1日に始まった。MLB Trade Rumors によれば正式な申請は日本シリーズの終了後になる見込み。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
-        en: 'Hanshin announced on October 19 that it will post him. Filings opened on November 1, and MLB Trade Rumors says the formal posting is expected after the Japan Series. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
+        ja: '阪神が10月19日にポスティング容認を発表した。日本シリーズは10月28日に終わり、申請の受付も11月1日に始まった。嶌村聡球団本部長は10月30日、受付初日にも申請書を出す見通しを示した（デイリースポーツ）。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
+        en: 'Hanshin announced on October 19 that it will post him. The Japan Series ended on October 28 and filings opened on November 1; on October 30 club executive Satoshi Shimamura said Hanshin may file as early as the first day (Daily Sports). The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
       },
       route: 'posting',
       window: {
-        ja: '阪神は10月19日に容認を発表し、11月1日から申請できるようになった。NPBの申請受付は12月15日までで、MLB Trade Rumors によれば正式な申請は日本シリーズの終了後になる。申請後の交渉期間は45日間で、期間内に契約しなければ2027年は阪神に戻る。12月1日に労使協定が切れてロックアウトに入れば交渉は凍結され、ESPNのジェフ・パッサン記者は佐藤・平良海馬・伊藤大海の3人とも12月1日より前に契約するとみていた。',
-        en: 'Hanshin announced its approval on October 19, and filings opened on November 1. NPB accepts postings through December 15, and MLB Trade Rumors says the formal posting will come after the Japan Series. The negotiating window then runs 45 days; if he does not sign, he returns to Hanshin for 2027. A lockout starting when the CBA expires on December 1 would freeze talks, and ESPN\u2019s Jeff Passan had expected Sato, Kaima Taira and Hiromi Itoh all to sign before that date.',
+        ja: '阪神は10月19日に容認を発表し、日本シリーズが10月28日に終わって、11月1日から申請できるようになった（NPBの受付は12月15日まで）。交渉期間は通常、MLBの公示の翌日から45日間。ただし中日スポーツ（10月29日）によると、MLB機構はロックアウト中に交渉期間を止める選手会の案を拒否し、ロックアウトに入れば12月1日までに契約する必要があるとの見解を伝えた。2021年の鈴木誠也のときは期間が止まり、ロックアウト明けに契約できた。期間内に契約しなければ2027年は阪神に戻る。',
+        en: 'Hanshin announced its approval on October 19; the Japan Series ended on October 28 and filings opened on November 1 (NPB accepts them through December 15). The window normally runs 45 days from the day after MLB posts him. But Chunichi Sports reported on October 29 that MLB rejected the union\u2019s request to pause posting windows during a lockout, and said posted players would have to sign by December 1 if one begins. In 2021 the window was paused, and Seiya Suzuki signed after the lockout ended. If he does not sign within the window, he returns to Hanshin for 2027.',
       },
       marketValue: [
         {
@@ -150,6 +150,20 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ブルージェイズ', en: 'Blue Jays' },
       ],
       timeline: [
+        {
+          date: '2026-10-30',
+          ja: '嶌村聡球団本部長が、11月1日の受付初日にも申請書を出す見通しを示した。「速やかにしたいな、と」と話し、早く申請する方が本人のためでもあるとした。',
+          en: 'Club executive Satoshi Shimamura said Hanshin may file as early as November 1, the first day filings open. He wants to move quickly and said an early filing is also in Sato\u2019s interest.',
+          source: 'https://www.daily.co.jp/tigers/2026/10/31/0020985458.shtml',
+          sourceName: 'デイリースポーツ',
+        },
+        {
+          date: '2026-10-29',
+          ja: '中日スポーツが、MLB機構はロックアウト中にポスティングの交渉期間を止める選手会の提案を拒否したと報じた（米球界関係者の話）。ロックアウトに入れば12月1日までに契約する必要があるとの見解で、佐藤は11月1日の申請に向けて準備し、11月中の契約を目指しているという。',
+          en: 'Chunichi Sports reported that MLB rejected the union\u2019s proposal to pause posting windows during a lockout, citing a source in the U.S. game. Posted players would have to sign by December 1 if a lockout begins; Sato is preparing to be posted on November 1 and aims to sign in November.',
+          source: 'https://news.yahoo.co.jp/articles/8f003a239554314236492e1318c9a33c38419f5a',
+          sourceName: '中日スポーツ（Yahoo!ニュース）',
+        },
         {
           date: '2026-10-19',
           ja: '阪神がポスティングによるMLB移籍の容認を発表した。嶌村聡球団本部長は「選手の強い要望だけで容認するということはない」としたうえで、2年連続のタイトル獲得や、村上宗隆・岡本和真の活躍でNPBの水準が海外でも証明されつつあることを挙げ、総合的な判断だと説明した。申請手続きは11月1日から。',
@@ -227,7 +241,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     faq: [
       {
         q: { ja: '佐藤輝明はいつメジャーに行く？', en: 'When will Teruaki Sato go to MLB?' },
-        a: { ja: '阪神は10月19日にポスティング容認を発表した。NPBの申請受付は11月1日からで、正式な申請は日本シリーズの終了後の見込み。申請後の交渉期間は45日間だが、12月1日に労使協定が切れてロックアウトに入れば交渉は凍結され、45日以内に契約しなければ2027年は阪神に戻る。', en: 'Hanshin announced on October 19 that it will post him. NPB filings open on November 1, and the formal posting is expected after the Japan Series. The window runs 45 days but freezes if a lockout begins when the CBA expires on December 1, and if he does not sign within it he returns to Hanshin for 2027.' },
+        a: { ja: '阪神は10月19日にポスティング容認を発表した。NPBの申請受付は11月1日に始まり、嶌村聡球団本部長は受付初日にも申請書を出す見通しを示している（10月30日）。交渉期間は通常45日間だが、中日スポーツによるとMLB機構はロックアウト中に期間を止めない方針で、ロックアウトに入れば12月1日までに契約する必要があるとみられる。期間内に契約しなければ2027年は阪神に戻る。', en: 'Hanshin announced on October 19 that it will post him. NPB filings opened on November 1, and club executive Satoshi Shimamura said on October 30 that Hanshin may file as early as the first day. The window normally runs 45 days, but Chunichi Sports reports MLB will not pause it during a lockout, so he would likely need to sign by December 1 if one begins. If he does not sign within the window, he returns to Hanshin for 2027.' },
       },
       {
         q: { ja: '佐藤輝明に興味を示しているMLB球団は？', en: 'Which MLB clubs are interested in Teruaki Sato?' },
@@ -275,8 +289,8 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       },
       route: 'posting',
       window: {
-        ja: '本人は10月中に決断する意向だった。申請する場合、NPBの受付は11月1日に始まり12月15日まで。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
-        en: 'He had said he would decide by the end of October. If posted, NPB accepts filings from November 1 (now open) through December 15. The 45-day window freezes if a lockout begins when the CBA expires on December 1. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
+        ja: '本人は10月中に決断する意向だった。申請する場合、NPBの受付は11月1日に始まり12月15日まで。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
+        en: 'He had said he would decide by the end of October. If posted, NPB accepts filings from November 1 (now open) through December 15. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so a posted player would likely need to sign by December 1 if one begins. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
       },
       marketValue: [
         {
@@ -288,6 +302,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       ],
       suitors: [{ ja: 'ジャイアンツ', en: 'Giants' }],
       timeline: [
+        {
+          date: '2026-10-29',
+          ja: '中日スポーツが、MLB機構はロックアウト中にポスティングの交渉期間を止める選手会の提案を拒否したと報じた。ロックアウトに入れば12月1日までに契約する必要があるとの見解で、伊藤と平良海馬も早めの手続きを迫られるかもしれないとした。',
+          en: 'Chunichi Sports reported that MLB rejected the union\u2019s proposal to pause posting windows during a lockout, so posted players would have to sign by December 1 if one begins, and said Itoh and Kaima Taira may need to move early.',
+          source: 'https://news.yahoo.co.jp/articles/8f003a239554314236492e1318c9a33c38419f5a',
+          sourceName: '中日スポーツ（Yahoo!ニュース）',
+        },
         {
           date: '2026-10-23',
           ja: 'ポスティングでMLB移籍を目指すかどうかを今月中に決断する意向を示し、「人生で一番の悩み。どっちもやりたいことではある。後悔しないように選びたい」と語った。日本ハムは伊藤がメジャー移籍の意向を固めれば容認する方針。',
@@ -402,8 +423,8 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       },
       route: 'posting',
       window: {
-        ja: '代理人が西武と交渉中で、正式な容認発表はまだない。容認されれば、NPBの申請受付は11月1日に始まり12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。申請後の交渉期間は45日間で、12月1日に労使協定が切れてロックアウトに入れば凍結される。',
-        en: 'His agent is negotiating with Seibu, and there is no formal approval yet. If approved, NPB accepts filings from November 1 (now open) through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The 45-day window freezes if a lockout begins when the CBA expires on December 1.',
+        ja: '代理人が西武と交渉中で、正式な容認発表はまだない。容認されれば、NPBの申請受付は11月1日に始まり12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。',
+        en: 'His agent is negotiating with Seibu, and there is no formal approval yet. If approved, NPB accepts filings from November 1 (now open) through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so he would likely need to sign by December 1 if one begins.',
       },
       marketValue: [
         {
@@ -438,6 +459,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ジャイアンツ', en: 'Giants' },
       ],
       timeline: [
+        {
+          date: '2026-10-29',
+          ja: '中日スポーツが、MLB機構はロックアウト中にポスティングの交渉期間を止める選手会の提案を拒否したと報じた。ロックアウトに入れば12月1日までに契約する必要があるとの見解で、平良と伊藤大海も早めの手続きを迫られるかもしれないとした。',
+          en: 'Chunichi Sports reported that MLB rejected the union\u2019s proposal to pause posting windows during a lockout, so posted players would have to sign by December 1 if one begins, and said Taira and Hiromi Itoh may need to move early.',
+          source: 'https://news.yahoo.co.jp/articles/8f003a239554314236492e1318c9a33c38419f5a',
+          sourceName: '中日スポーツ（Yahoo!ニュース）',
+        },
         {
           date: '2026-10-26',
           ja: '西武の広池浩司球団本部長が交渉の現状を説明した。「代理人とは何度も話しています。平良本人とは今のところ話す予定はないですけども、最後決まったときにはどこかで話そうと思っている」「少しずつ話はまとまりつつあるというところ」と述べた。',
