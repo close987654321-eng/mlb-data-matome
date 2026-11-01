@@ -118,10 +118,10 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-01',
+      asOf: '2026-11-02',
       headline: {
-        ja: '阪神が10月19日にポスティング容認を発表した。日本シリーズは10月28日に終わり、申請の受付も11月1日に始まった。嶌村聡球団本部長は10月30日、受付初日にも申請書を出す見通しを示した（デイリースポーツ）。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
-        en: 'Hanshin announced on October 19 that it will post him. The Japan Series ended on October 28 and filings opened on November 1; on October 30 club executive Satoshi Shimamura said Hanshin may file as early as the first day (Daily Sports). The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
+        ja: '阪神が10月19日にポスティング容認を発表し、受付初日の11月1日に申請の手続きを済ませた（デイリースポーツ）。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
+        en: 'Hanshin announced on October 19 that it will post him and completed the filing on November 1, the first day filings opened (Daily Sports). The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
       },
       route: 'posting',
       window: {
@@ -150,6 +150,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ブルージェイズ', en: 'Blue Jays' },
       ],
       timeline: [
+        {
+          date: '2026-11-01',
+          ja: '阪神が佐藤輝明のポスティング申請の手続きを済ませた。交渉期間はMLBが申請を受理した日から45日間。',
+          en: 'Hanshin completed the posting filing for Teruaki Sato. The negotiating window is 45 days from the day the application is accepted.',
+          source: 'https://www.daily.co.jp/tigers/2026/11/02/0020991975.shtml',
+          sourceName: 'デイリースポーツ',
+        },
         {
           date: '2026-10-30',
           ja: '嶌村聡球団本部長が、11月1日の受付初日にも申請書を出す見通しを示した。「速やかにしたいな、と」と話し、早く申請する方が本人のためでもあるとした。',
@@ -282,15 +289,15 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-01',
+      asOf: '2026-11-02',
       headline: {
-        ja: 'ポスティングでのMLB挑戦を本人が熟考し、10月中に決断する意向と報じられていた（10月23日）。11月1日朝（日本時間）の時点で、本人の決断や日本ハムの正式な発表の報道は見つかっていない。日本ハムは本人が移籍の意向を固めれば容認する方針と報じられ、代理人を通じて球団にメジャー挑戦の意思を伝えたとも報じられた。',
-        en: 'He was reported to be weighing a posting and planning to decide by the end of October (October 23). As of the morning of November 1 (Japan time), we found no report of his decision or a formal Nippon-Ham announcement. Nippon-Ham is reported to approve a move if he commits, and he has reportedly told the club of his MLB ambition through his agent.',
+        ja: '日本ハムが11月1日、ポスティングシステムでのメジャー挑戦を承認し、申請手続きを始めたと発表した（Full-Count）。今オフ、佐藤輝明・平良海馬に続く3人目の挑戦になる。交渉期間は受理から45日間。',
+        en: 'Nippon-Ham announced on November 1 that it approved his MLB bid through the posting system and began the filing process (Full-Count). He is the third posting candidate this winter after Teruaki Sato and Kaima Taira. The window is 45 days from acceptance.',
       },
       route: 'posting',
       window: {
-        ja: '本人は10月中に決断する意向だった。申請する場合、NPBの受付は11月1日に始まり12月15日まで。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
-        en: 'He had said he would decide by the end of October. If posted, NPB accepts filings from November 1 (now open) through December 15. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so a posted player would likely need to sign by December 1 if one begins. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
+        ja: '11月1日に日本ハムが申請手続きの開始を発表した。NPBの受付は12月15日まで。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
+        en: 'Nippon-Ham announced on November 1 that the filing process has begun. NPB accepts filings through December 15. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so a posted player would likely need to sign by December 1 if one begins. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
       },
       marketValue: [
         {
@@ -302,6 +309,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       ],
       suitors: [{ ja: 'ジャイアンツ', en: 'Giants' }],
       timeline: [
+        {
+          date: '2026-11-01',
+          ja: '日本ハムが、伊藤大海のポスティングシステムでのメジャー挑戦を承認し、申請手続きを始めたと発表した。交渉期間は受理から45日間。',
+          en: 'Nippon-Ham announced it has approved Hiromi Itoh\u2019s MLB bid through the posting system and begun the filing process. The negotiating window is 45 days from acceptance.',
+          source: 'https://news.yahoo.co.jp/articles/2967e13bd8962a10892f8ba0235797770ffd7584',
+          sourceName: 'Full-Count（Yahoo!ニュース）',
+        },
         {
           date: '2026-10-29',
           ja: '中日スポーツが、MLB機構はロックアウト中にポスティングの交渉期間を止める選手会の提案を拒否したと報じた。ロックアウトに入れば12月1日までに契約する必要があるとの見解で、伊藤と平良海馬も早めの手続きを迫られるかもしれないとした。',
@@ -416,15 +430,15 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-01',
+      asOf: '2026-11-02',
       headline: {
-        ja: 'ポスティングでのMLB移籍を希望し、代理人が西武と交渉している。広池浩司球団本部長は10月26日、「少しずつ話はまとまりつつある」と話した。本人は「最終決定は球団」としており、西武の正式な容認発表はまだない。',
-        en: 'He wants to be posted, and his agent is negotiating with Seibu. On October 26 club executive Koji Hiroike said things are gradually coming together. Taira has said the final call is the club\u2019s, and Seibu has made no formal announcement yet.',
+        ja: '西武が10月30日、今オフのポスティングによるメジャー移籍を容認すると発表した（NHK）。広池浩司球団本部長が明らかにした。申請の受付は11月1日から12月15日までで、代理人はボラス・コーポレーションと報じられている。',
+        en: 'Seibu announced on October 30 that it will approve his move to MLB via the posting system this offseason (NHK), as club executive Koji Hiroike told reporters. Filings are accepted from November 1 through December 15, and he is reported to be represented by the Boras Corporation.',
       },
       route: 'posting',
       window: {
-        ja: '代理人が西武と交渉中で、正式な容認発表はまだない。容認されれば、NPBの申請受付は11月1日に始まり12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。',
-        en: 'His agent is negotiating with Seibu, and there is no formal approval yet. If approved, NPB accepts filings from November 1 (now open) through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so he would likely need to sign by December 1 if one begins.',
+        ja: '西武は10月30日に容認を発表した。NPBの申請受付は11月1日に始まり12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。',
+        en: 'Seibu announced its approval on October 30. NPB accepts filings from November 1 through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so he would likely need to sign by December 1 if one begins.',
       },
       marketValue: [
         {
@@ -459,6 +473,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ジャイアンツ', en: 'Giants' },
       ],
       timeline: [
+        {
+          date: '2026-10-30',
+          ja: '西武が、平良海馬の今オフのポスティングシステムによるメジャー移籍を容認すると発表した。広池浩司球団本部長が報道陣に明らかにした。申請の受付は11月1日から12月15日まで。',
+          en: 'Seibu announced it will approve Kaima Taira\u2019s move to MLB via the posting system this offseason, as club executive Koji Hiroike told reporters. Filings are accepted from November 1 through December 15.',
+          source: 'https://news.web.nhk/newsweb/na/nd-20261030de68501',
+          sourceName: 'NHK',
+        },
         {
           date: '2026-10-29',
           ja: '中日スポーツが、MLB機構はロックアウト中にポスティングの交渉期間を止める選手会の提案を拒否したと報じた。ロックアウトに入れば12月1日までに契約する必要があるとの見解で、平良と伊藤大海も早めの手続きを迫られるかもしれないとした。',
@@ -577,10 +598,10 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'rumored',
-      asOf: '2026-10-26',
+      asOf: '2026-11-02',
       headline: {
-        ja: '10月20日に海外FA権の有資格者として公示された。日刊スポーツは今オフもMLB移籍を模索する考えだと報じ（MLB Trade Rumors経由）、西武は「条件はしっかり出していく」と残留交渉の方針。本人は「いい選択をする準備をしたい」と話している。',
-        en: 'He was listed as eligible for international free agency on October 20. Nikkan Sports reports he is inclined to explore MLB again (via MLB Trade Rumors), while Seibu plans to make a firm offer to keep him. He says he wants to be ready to make a good choice.',
+        ja: 'スポーツニッポンが11月1日、海外FA権を行使することが球界関係者の話で分かり、近日中に意向を表明すると報じた。10月20日に海外FA権の有資格者として公示され、日刊スポーツは今オフもMLB移籍を模索する考えだと報じ（MLB Trade Rumors経由）、西武は「条件はしっかり出していく」と残留交渉の方針。本人は「いい選択をする準備をしたい」と話している。',
+        en: 'Sports Nippon reported on November 1, citing people in baseball, that he will exercise his international free agent rights and announce his intention soon. He was listed as eligible on October 20, Nikkan Sports reports he is inclined to explore MLB again (via MLB Trade Rumors), while Seibu plans to make a firm offer to keep him. He says he wants to be ready to make a good choice.',
       },
       route: 'intl-fa',
       window: {
@@ -588,6 +609,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'Any move comes once this winter\u2019s free agent market opens. International free agency has no 45-day clock and no release fee, unlike a posting, but the market itself freezes if the CBA expires and the lockout starts on December 1.',
       },
       timeline: [
+        {
+          date: '2026-11-02',
+          ja: 'スポーツニッポンが、髙橋が5月に取得した海外FA権を行使することが11月1日に球界関係者の話で分かったと報じた。近日中に意向を表明する。',
+          en: 'Sports Nippon reported that, according to people in baseball, Takahashi will exercise the international free agent rights he earned in May, and will announce his intention soon (reported November 1).',
+          source: 'https://news.yahoo.co.jp/articles/b2e5bdb824640bc1a0f4ce35f0b1438476adcd43',
+          sourceName: 'スポーツニッポン（Yahoo!ニュース）',
+        },
         {
           date: '2026-10-20',
           ja: '海外FA権の有資格者として公示された。選択肢が多いことを踏まえ、本人は「いい選択をする準備をしたい」と語った。',

@@ -1,7 +1,7 @@
 {
   "season": 2026,
-  "asOf": "2026-11-01",
-  "checkedAt": "2026-11-01",
+  "asOf": "2026-11-02",
+  "checkedAt": "2026-11-02",
   "activeUntil": "2027-03-25",
   "ranking": {
     "name": "MLB.com（マーク・ファインサンド記者）",
@@ -49,8 +49,8 @@
         "en": "7 a.m."
       },
       "jp": {
-        "ja": "今井達也・松井裕樹が契約を破棄するかを決める期限。鈴木誠也にQOが出るかもこの時点で決まる",
-        "en": "Tatsuya Imai and Yuki Matsui must decide on their opt-outs; the Cubs must decide on a QO for Seiya Suzuki"
+        "ja": "鈴木誠也にQOが出るかが決まる。今井達也・松井裕樹はすでにオプトアウトしないと報じられた",
+        "en": "The Cubs must decide on a QO for Seiya Suzuki. Tatsuya Imai and Yuki Matsui have both been reported to be staying in"
       },
       "ja": "オプトアウト・球団オプションの判断期限で、QO（クオリファイング・オファー）の提示期限。FA選手はこの日から全球団と契約できる",
       "en": "Deadline for opt-outs, club options and qualifying offers; free agents may sign with any club from here",
@@ -327,16 +327,23 @@
     {
       "slug": "tatsuya-imai",
       "route": "opt-out",
-      "asOf": "2026-10-30",
+      "asOf": "2026-11-02",
       "headline": {
-        "ja": "アストロズとの3年5400万ドル契約に、2026年と27年のシーズン後に契約を破棄できるオプトアウト権がある（残りは2年3600万ドル）。使うかどうかの期限は日本時間11月3日午前7時。1年目は7月に先発ローテーションを外れた。MLB公式は、オプトアウトする可能性は低いとみている。",
-        "en": "His three-year, $54 million deal with Houston lets him opt out after 2026 and 2027, with two years and $36 million left, and this year's decision is due Nov. 3 at 7 a.m. Japan time. He was pulled from the rotation in July of his first season, and MLB.com considers an opt-out unlikely."
+        "ja": "オプトアウトを使わず、アストロズに残る。ニューヨーク・ポストのヘイマン記者が米国時間10月29日に報じ、MLB Trade Rumorsは2027年と28年の年俸が各1800万ドルで、2027年シーズン後にもう一度オプトアウトの機会があると伝えた。1年目は防御率4.93で、7月に先発から外れた。",
+        "en": "He will not opt out and stays with the Astros, Jon Heyman of the New York Post reported on Oct. 29 ET; MLB Trade Rumors adds he will make $18 million in both 2027 and 2028, with another opt-out chance after 2027. His first season ended with a 4.93 ERA and a move out of the rotation in July."
       },
       "window": {
-        "ja": "判断の期限は日本時間11月3日午前7時（ワールドシリーズ終了の5日後）。オプトアウトしなければ2027年もアストロズでプレーする。",
-        "en": "The decision is due Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT), five days after the World Series. If he stays in, he pitches for Houston in 2027."
+        "ja": "今季の判断は終わった。次のオプトアウトの機会は2027年シーズン後。",
+        "en": "This year's decision is made. His next opt-out chance comes after the 2027 season."
       },
       "timeline": [
+        {
+          "date": "2026-10-30",
+          "ja": "ニューヨーク・ポストのヘイマン記者が、今井はオプトアウトせずアストロズに残ると報じた（米国時間10月29日）。MLB Trade Rumorsによると2027年・28年の年俸は各1800万ドルで、2027年シーズン後にもう一度オプトアウトの機会がある。",
+          "en": "Jon Heyman of the New York Post reported Imai will not opt out and stays with the Astros (Oct. 29 ET). MLB Trade Rumors says he will make $18 million in both 2027 and 2028 and has another opt-out chance after 2027.",
+          "source": "https://www.mlbtraderumors.com/2026/10/tatsuya-imai-will-not-opt-out-of-astros-deal.html",
+          "sourceName": "MLB Trade Rumors"
+        },
         {
           "date": "2026-08-29",
           "ja": "MLB公式がオプトアウト権を持つ選手をまとめ、今井は米国での生活と野球への適応に苦しんだとして、オプトアウトする可能性は低いと書いた。",
@@ -351,21 +358,40 @@
           "source": "https://www.mlb.com/news/tatsuya-imai-astros-deal",
           "sourceName": "MLB.com"
         }
-      ]
+      ],
+      "outcome": {
+        "kind": "stayed",
+        "date": "2026-10-30",
+        "team": {
+          "ja": "アストロズ",
+          "en": "Astros"
+        },
+        "ja": "オプトアウトせず残留。2027年・28年の年俸は各1800万ドルで、2027年シーズン後にもう一度オプトアウトの機会がある。",
+        "en": "Did not opt out and stays. He will make $18 million in both 2027 and 2028, with another opt-out chance after 2027.",
+        "source": "https://www.mlbtraderumors.com/2026/10/tatsuya-imai-will-not-opt-out-of-astros-deal.html",
+        "sourceName": "MLB Trade Rumors"
+      }
     },
     {
       "slug": "yuki-matsui",
       "route": "opt-out",
-      "asOf": "2026-10-30",
+      "asOf": "2026-11-02",
       "headline": {
-        "ja": "パドレスとの5年2800万ドル契約に、2026年シーズン後のオプトアウト権がある（残りは2年1350万ドル）。使うかどうかの期限は日本時間11月3日午前7時。今季は自己最高の数字で、MLB公式は、市場に出れば左のリリーフでトップ5に入るとして、オプトアウトしても驚かないと書いた。",
-        "en": "His five-year, $28 million deal with San Diego includes an opt-out after 2026, with two years and $13.5 million left, and the decision is due Nov. 3 at 7 a.m. Japan time. Coming off his best MLB season, MLB.com called him arguably a top-five lefty reliever on the market and said an opt-out would not be surprising."
+        "ja": "オプトアウトを使わず、パドレスに残る。サンディエゴ・ユニオン・トリビューンのアシー記者の情報として、MLB Trade Rumorsが米国時間11月1日に伝えた。今季は54試合で防御率1.83だった。2028年に700万ドルの選手オプションが残る。",
+        "en": "He will not opt out and stays with the Padres, MLB Trade Rumors reported on Nov. 1 ET citing Kevin Acee of the San Diego Union-Tribune. He had a 1.83 ERA over 54 games this year, and a $7 million player option for 2028 remains."
       },
       "window": {
-        "ja": "判断の期限は日本時間11月3日午前7時（ワールドシリーズ終了の5日後）。オプトアウトしなければ2027年もパドレスでプレーする。",
-        "en": "The decision is due Nov. 3 at 7 a.m. Japan time (Nov. 2, 4 p.m. CT), five days after the World Series. If he stays in, he pitches for San Diego in 2027."
+        "ja": "今季の判断は終わった。2028年の700万ドルの選手オプションが残っている（MLB Trade Rumors）。",
+        "en": "This year's decision is made. A $7 million player option for 2028 remains (MLB Trade Rumors)."
       },
       "timeline": [
+        {
+          "date": "2026-11-02",
+          "ja": "サンディエゴ・ユニオン・トリビューンのアシー記者によると、松井はオプトアウトを使わずパドレスに残る（米国時間11月1日）。MLB Trade Rumorsは、2028年に700万ドルの選手オプションが残ると伝えた。",
+          "en": "Per Kevin Acee of the San Diego Union-Tribune, Matsui declined to opt out and stays with the Padres (Nov. 1 ET). MLB Trade Rumors notes a $7 million player option for 2028 remains.",
+          "source": "https://www.mlbtraderumors.com/2026/11/padres-exercise-club-option-on-kyle-hart-yuki-matsui-declines-to-opt-out.html",
+          "sourceName": "MLB Trade Rumors"
+        },
         {
           "date": "2026-08-29",
           "ja": "MLB公式がオプトアウト権を持つ選手をまとめ、松井は空振り率と被ハードヒット率がともに上位3%の一方、与四球率はリーグ下位と分析した。",
@@ -373,7 +399,19 @@
           "source": "https://www.mlb.com/news/mlb-players-with-opt-out-clauses-player-options-club-options-for-2027",
           "sourceName": "MLB.com"
         }
-      ]
+      ],
+      "outcome": {
+        "kind": "stayed",
+        "date": "2026-11-02",
+        "team": {
+          "ja": "パドレス",
+          "en": "Padres"
+        },
+        "ja": "オプトアウトせず残留。2028年に700万ドルの選手オプションが残る。",
+        "en": "Did not opt out and stays. A $7 million player option for 2028 remains.",
+        "source": "https://www.mlbtraderumors.com/2026/11/padres-exercise-club-option-on-kyle-hart-yuki-matsui-declines-to-opt-out.html",
+        "sourceName": "MLB Trade Rumors"
+      }
     }
   ],
   "board": [
@@ -401,8 +439,8 @@
       },
       "route": "opt-out",
       "note": {
-        "ja": "パドレスとの3年7500万ドル契約にオプトアウト権がある。故障の多かった2025年から復活し、行使してより長い契約を狙うとの見方が有力。",
-        "en": "Holds an opt-out in his three-year, $75 million Padres deal. After a healthy bounce-back year, he is widely expected to opt out for a longer contract."
+        "ja": "パドレスとの3年7500万ドル契約のオプトアウトを使い、米国時間10月30日にFAになった。故障の多かった2025年から復活した右腕。",
+        "en": "Used the opt-out in his three-year, $75 million Padres deal and became a free agent on Oct. 30 ET, after a healthy bounce-back year."
       }
     },
     {
@@ -434,8 +472,8 @@
       },
       "route": "posting",
       "note": {
-        "ja": "セ・リーグ三冠王。阪神がポスティングを認めた。三振の多さから村上宗隆と比べられるが、長打の少ない市場で注目を集めるとみられている。",
-        "en": "Central League Triple Crown winner, cleared by Hanshin to be posted. His strikeouts draw comparisons to Munetaka Murakami, but power is scarce on this market."
+        "ja": "セ・リーグ三冠王。阪神がポスティングを認め、11月1日に申請した。三振の多さから村上宗隆と比べられるが、長打の少ない市場で注目を集めるとみられている。",
+        "en": "Central League Triple Crown winner. Hanshin cleared him to be posted and filed on Nov. 1. His strikeouts draw comparisons to Munetaka Murakami, but power is scarce on this market."
       }
     },
     {
@@ -692,8 +730,8 @@
       },
       "route": "posting",
       "note": {
-        "ja": "2027年で海外FA権に届くため、今オフのポスティングが見込まれる。MLB球団が先発と救援のどちらで見るかが焦点。",
-        "en": "Expected to be posted since he would otherwise reach unrestricted free agency after 2027. The question is whether MLB teams see him as a starter or a reliever."
+        "ja": "2027年で海外FA権に届くため、今オフがポスティングの最後の機会。西武が10月30日に容認した。MLB球団が先発と救援のどちらで見るかが焦点。",
+        "en": "He reaches unrestricted free agency after 2027, so this is his last chance to be posted; Seibu approved it on Oct. 30. The question is whether MLB teams see him as a starter or a reliever."
       }
     },
     {
