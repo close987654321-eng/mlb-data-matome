@@ -120,8 +120,8 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       level: 'expected',
       asOf: '2026-11-02',
       headline: {
-        ja: '阪神が10月19日にポスティング容認を発表し、受付初日の11月1日に申請の手続きを済ませた（デイリースポーツ）。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
-        en: 'Hanshin announced on October 19 that it will post him and completed the filing on November 1, the first day filings opened (Daily Sports). The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
+        ja: '阪神が11月2日、ポスティングの申請がMLBに受理されたと発表し、全30球団との交渉が始まった（スポーツ報知）。11月中の決着を目指している。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
+        en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
       },
       route: 'posting',
       window: {
@@ -150,6 +150,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ブルージェイズ', en: 'Blue Jays' },
       ],
       timeline: [
+        {
+          date: '2026-11-02',
+          ja: '阪神が、佐藤輝明のポスティング申請がMLBに受理されたと発表した。全30球団との交渉が始まり、佐藤は11月中の決着を目指す。12月1日に労使協定が切れ、合意がなければロックアウトで移籍市場が止まる。',
+          en: 'Hanshin announced that MLB has accepted its posting application for Teruaki Sato, opening talks with all 30 clubs. Sato aims to settle within November; the CBA expires on December 1 and a lockout would freeze the market.',
+          source: 'https://news.yahoo.co.jp/articles/2bd60c4c202837f0c2abb8e2645d7082ee4c5d4b',
+          sourceName: 'スポーツ報知（Yahoo!ニュース）',
+        },
         {
           date: '2026-11-01',
           ja: '阪神が佐藤輝明のポスティング申請の手続きを済ませた。交渉期間はMLBが申請を受理した日から45日間。',
@@ -432,8 +439,8 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       level: 'expected',
       asOf: '2026-11-02',
       headline: {
-        ja: '西武が10月30日、今オフのポスティングによるメジャー移籍を容認すると発表した（NHK）。広池浩司球団本部長が明らかにした。申請の受付は11月1日から12月15日までで、代理人はボラス・コーポレーションと報じられている。',
-        en: 'Seibu announced on October 30 that it will approve his move to MLB via the posting system this offseason (NHK), as club executive Koji Hiroike told reporters. Filings are accepted from November 1 through December 15, and he is reported to be represented by the Boras Corporation.',
+        ja: '西武が11月2日、ポスティングの申請をNPB経由で出したと発表し、MLB全球団に通知された。交渉は米東部時間11月2日午前8時（日本時間午後10時）に始まった（西スポWEB）。10月30日に容認を発表していた。代理人はボラス・コーポレーションと報じられている。',
+        en: 'Seibu announced on November 2 that it filed his posting through NPB and all MLB clubs were notified; talks began at 8 a.m. ET on Nov. 2 (10 p.m. Japan time), per Nishinippon Sports. Seibu had announced its approval on October 30. He is reported to be represented by the Boras Corporation.',
       },
       route: 'posting',
       window: {
@@ -473,6 +480,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ジャイアンツ', en: 'Giants' },
       ],
       timeline: [
+        {
+          date: '2026-11-02',
+          ja: '西武が平良海馬のポスティングをNPB経由で申請したと発表した。MLB全球団に通知され、交渉は米東部時間11月2日午前8時（日本時間午後10時）に始まった。平良は球団を通じて「長い間、メジャーでプレーしたい思いを持っていた。ようやく一歩踏み出せた」とコメントした。',
+          en: 'Seibu announced it filed Kaima Taira\u2019s posting through NPB. All MLB clubs were notified and talks began at 8 a.m. ET on Nov. 2 (10 p.m. Japan time). Through the club, Taira said he had long wanted to play in the majors and had finally taken the first step.',
+          source: 'https://news.yahoo.co.jp/articles/784199794dc4d64042ce20a4cd2568c73abbc9af',
+          sourceName: '西スポWEB（Yahoo!ニュース）',
+        },
         {
           date: '2026-10-30',
           ja: '西武が、平良海馬の今オフのポスティングシステムによるメジャー移籍を容認すると発表した。広池浩司球団本部長が報道陣に明らかにした。申請の受付は11月1日から12月15日まで。',
