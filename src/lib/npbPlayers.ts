@@ -611,18 +611,25 @@ export const NPB_PROSPECTS: NpbProspect[] = [
       en: 'His route is international free agency, not a posting. The multi-year deal he signed when he stayed in the 2025-26 offseason carried an opt-out designed to let him try MLB again this winter. He was listed as eligible on October 20; whether to exercise the right is his call, and Seibu plans to try to keep him.',
     },
     postingWatch: {
-      level: 'rumored',
-      asOf: '2026-11-02',
+      level: 'expected',
+      asOf: '2026-11-04',
       headline: {
-        ja: 'スポーツニッポンが11月1日、海外FA権を行使することが球界関係者の話で分かり、近日中に意向を表明すると報じた。10月20日に海外FA権の有資格者として公示され、日刊スポーツは今オフもMLB移籍を模索する考えだと報じ（MLB Trade Rumors経由）、西武は「条件はしっかり出していく」と残留交渉の方針。本人は「いい選択をする準備をしたい」と話している。',
-        en: 'Sports Nippon reported on November 1, citing people in baseball, that he will exercise his international free agent rights and announce his intention soon. He was listed as eligible on October 20, Nikkan Sports reports he is inclined to explore MLB again (via MLB Trade Rumors), while Seibu plans to make a firm offer to keep him. He says he wants to be ready to make a good choice.',
+        ja: '西武が11月2日、髙橋光成が海外FA権の行使を表明したと発表した（西武球団・共同通信）。昨オフはポスティングでMLB3球団のオファーを受けながら残留しており、今オフもMLB移籍を模索すると日刊スポーツが報じている（MLB Trade Rumors経由）。国内球団への移籍も選択肢に入れると話しており、ソフトバンクの城島健司CBOは獲得調査を認めている。',
+        en: 'Seibu announced on November 2 that he has exercised his international free agent rights (Seibu club, Kyodo). He passed on MLB offers from three clubs in last winter\u2019s posting, and Nikkan Sports reports he is again exploring MLB (via MLB Trade Rumors). He says domestic clubs are also an option, and SoftBank CBO Kenji Jojima has confirmed the club has scouted him.',
       },
       route: 'intl-fa',
       window: {
-        ja: '権利の行使は今オフのFA市場が開いてから。海外FAはポスティングと違い45日の交渉期限が無く、譲渡金も発生しないが、12月1日に労使協定が切れてロックアウトに入ればFA市場そのものが凍結される。',
-        en: 'Any move comes once this winter\u2019s free agent market opens. International free agency has no 45-day clock and no release fee, unlike a posting, but the market itself freezes if the CBA expires and the lockout starts on December 1.',
+        ja: '11月2日に権利の行使を表明済みで、移籍先はこれから。海外FAはポスティングと違い45日の交渉期限が無く、譲渡金も発生しないが、12月1日に労使協定が切れてロックアウトに入ればFA市場そのものが凍結される。',
+        en: 'He declared on November 2 and no destination is set yet. International free agency has no 45-day clock and no release fee, unlike a posting, but the market itself freezes if the CBA expires and the lockout starts on December 1.',
       },
       timeline: [
+        {
+          date: '2026-11-04',
+          ja: '西武が、髙橋光成が11月2日に海外FA権の行使を表明したと発表した。本人は球団を通じて「自分がどうしたいのかという気持ちを大切にした結果」などとコメントし、国内球団への移籍も選択肢に入れると話した。ソフトバンクの城島健司CBOは獲得調査を認めている。',
+          en: 'Seibu announced that Takahashi declared his international free agent rights on November 2. In a club statement he said the decision came from valuing what he himself wants, and that domestic clubs are also an option. SoftBank CBO Kenji Jojima has confirmed scouting him.',
+          source: 'https://www.seibulions.jp/news/detail/202600740374.html',
+          sourceName: '埼玉西武ライオンズ公式',
+        },
         {
           date: '2026-11-02',
           ja: 'スポーツニッポンが、髙橋が5月に取得した海外FA権を行使することが11月1日に球界関係者の話で分かったと報じた。近日中に意向を表明する。',
