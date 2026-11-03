@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-10-31 07:24",
+  "asOf": "2026-11-03 12:04",
   "season": 2026,
   "movesFrom": "2026-09-29",
   "players": {
@@ -124,7 +124,15 @@
         "bb": 42,
         "whip": "1.19"
       },
-      "moves": []
+      "moves": [
+        {
+          "date": "2026-11-02",
+          "type": "Declared Free Agency",
+          "toTeamId": 112,
+          "fromTeamId": null,
+          "desc": "RHP Clay Holmes elected free agency."
+        }
+      ]
     },
     "607259": {
       "name": "Nick Martinez",
@@ -148,7 +156,15 @@
         "bb": 26,
         "whip": "1.09"
       },
-      "moves": []
+      "moves": [
+        {
+          "date": "2026-11-02",
+          "type": "Declared Free Agency",
+          "toTeamId": 139,
+          "fromTeamId": null,
+          "desc": "RHP Nick Martinez elected free agency."
+        }
+      ]
     },
     "608372": {
       "name": "Tomoyuki Sugano",
@@ -332,7 +348,15 @@
         "bb": 29,
         "whip": "1.09"
       },
-      "moves": []
+      "moves": [
+        {
+          "date": "2026-11-02",
+          "type": "Declared Free Agency",
+          "toTeamId": 109,
+          "fromTeamId": null,
+          "desc": "RHP Michael Soroka elected free agency."
+        }
+      ]
     },
     "650333": {
       "name": "Luis Arraez",
