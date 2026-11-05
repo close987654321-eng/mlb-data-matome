@@ -920,17 +920,31 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'watch',
-      asOf: '2026-10-29',
+      asOf: '2026-11-04',
       headline: {
-        ja: '今オフも本人が球団にポスティングを直訴したが、阪神の方針は昨年から変わっておらず、来季も残留の見込み（スポニチ、10月18日）。2026年は175奪三振でセ・リーグ最多奪三振のタイトルを獲得した。',
-        en: 'He again asked Hanshin to post him this winter, but the club\u2019s stance is reported unchanged and he is expected to stay for 2027 (Sponichi, October 18). He won the 2026 Central League strikeout title with 175.',
+        ja: '阪神の嶌村聡球団本部長が11月3日、才木浩人のポスティング移籍を今オフは認めないと明言した（スポーツ報知・デイリースポーツ）。代理人サイドにも方針を伝えている。2026年は175奪三振でセ・リーグ最多奪三振のタイトルを獲得した。',
+        en: 'Hanshin general manager Satoshi Shimamura said on November 3 that the club will not post Hiroto Saiki this winter (Sports Hochi, Daily Sports), and that his agent has been told. He won the 2026 Central League strikeout title with 175.',
       },
       route: 'posting',
       window: {
-        ja: '阪神は今オフもポスティングを認めない方針と報じられている（スポニチ）。昨オフは球団が「今年に関しては認めない」と通達していた。',
-        en: 'Hanshin is reported to be declining a posting again this winter (Sponichi). Last winter the club told him it would not allow it that year.',
+        ja: '嶌村本部長は「今年のオフに球団として認めない、という方針になっております。当然、球団の権利ですので」と説明し、来オフ以降も「私たちの判断になってくる」と話した（スポーツ報知・デイリースポーツ、11月3日）。',
+        en: 'Shimamura said the club\u2019s policy this winter is not to allow it, calling it the club\u2019s right, and that later winters will also be the club\u2019s call (Sports Hochi, Daily Sports, November 3).',
       },
       timeline: [
+        {
+          date: '2026-11-04',
+          ja: '阪神の嶌村聡球団本部長が秋季キャンプ地の高知・安芸で、才木の今オフのポスティングを認めないと明言した（11月3日）。「選手ごとの個別案件。（容認の）基準などはない」と述べ、才木には来季もローテーションの一角として期待していると伝えた。佐藤輝明の申請は容認済みで、デイリースポーツは、球団が昨オフ時点で佐藤輝と同時に認めることを否定していたと伝えた。',
+          en: 'At the autumn camp in Aki, Kochi, Hanshin general manager Satoshi Shimamura said the club will not post Saiki this winter (Nov. 3). He called each case individual, with no set criteria, and said Saiki is expected to stay in the rotation next season. Teruaki Sato has already been cleared, and Daily Sports notes the club had ruled out posting both at once as of last winter.',
+          source: 'https://www.daily.co.jp/tigers/2026/11/04/0020998092.shtml',
+          sourceName: 'デイリースポーツ',
+        },
+        {
+          date: '2026-11-04',
+          ja: 'スポーツ報知も同じ取材を報じ、嶌村本部長が「今年のオフに球団として認めない、という方針になっております。当然、球団の権利ですので」と説明したと伝えた。すでに才木の代理人サイドに方針を伝えている。',
+          en: 'Sports Hochi reports the same session: Shimamura said the club policy this winter is not to allow it, as it is the club\u2019s right, and that the agent side has already been told.',
+          source: 'https://news.yahoo.co.jp/articles/985c6dbd8a3cc7edc82ca7730e721a188b656b73',
+          sourceName: 'スポーツ報知',
+        },
         {
           date: '2026-10-18',
           ja: 'スポニチが、才木が今オフもポスティングでのメジャー移籍を球団に直訴する考えだと報道。2024年12月の契約更改で初めてメジャー挑戦の希望を口にし、昨オフは球団から「今年に関しては認めない」と通達されていた。球団の方針は昨年から変わっておらず、来季も阪神でプレーする可能性が高いとした。',
