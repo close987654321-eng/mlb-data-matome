@@ -118,7 +118,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-02',
+      asOf: '2026-11-07',
       headline: {
         ja: '阪神が11月2日、ポスティングの申請がMLBに受理されたと発表し、全30球団との交渉が始まった（スポーツ報知）。11月中の決着を目指している。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
         en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
@@ -150,6 +150,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ブルージェイズ', en: 'Blue Jays' },
       ],
       timeline: [
+        {
+          date: '2026-11-05',
+          ja: '米放送局ESPNが11月3日に発表したFA上位50人のランキングで、佐藤は2位（鈴木誠也が5位）。',
+          en: 'In ESPN\u2019s top-50 free agent ranking released Nov. 3, Sato is No. 2 (Seiya Suzuki is No. 5).',
+          source: 'https://news.yahoo.co.jp/articles/bcc7f9be9a43863f39e1e7635a990aa029d0c849',
+          sourceName: 'THE DIGEST（Yahoo!ニュース・ESPN報道の紹介）',
+        },
         {
           date: '2026-11-02',
           ja: '阪神が、佐藤輝明のポスティング申請がMLBに受理されたと発表した。全30球団との交渉が始まり、佐藤は11月中の決着を目指す。12月1日に労使協定が切れ、合意がなければロックアウトで移籍市場が止まる。',
