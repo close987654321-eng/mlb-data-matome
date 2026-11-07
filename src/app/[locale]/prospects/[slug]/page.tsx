@@ -125,11 +125,15 @@ export default async function ProspectPage({
     memberOf: { '@type': 'SportsTeam', name: en ? p.team.en : p.team.ja },
     ...(p.sameAs?.length ? { sameAs: p.sameAs } : {}),
   };
+  // 更新日＝ポスティング報道の更新日と成績の集計日の新しい方（sitemap の lastmod と同じ規則）。
+  // 「{選手} ポスティング 最新」は鮮度で選ばれる問いなのに、ProfilePage に日付が無かった（2026-11-07 の点検）。
+  const modified = [p.postingWatch?.asOf, npb.asOf].filter(Boolean).sort().at(-1);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'ProfilePage',
+        ...(modified ? { dateModified: modified } : {}),
         mainEntity: person,
         ...(threads.length
           ? { relatedLink: threads.slice(0, 25).map((th) => absoluteUrl(locale, `/${th.sport}/${th.id}`)) }

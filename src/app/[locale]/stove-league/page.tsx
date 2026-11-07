@@ -53,10 +53,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
   // layout の template が「｜海外の反応」を足すので、ここで同じ語を重ねない。
   const title = en
     ? `MLB Hot Stove ${off}: Free Agent Tracker & Japanese Players`
-    : `MLBストーブリーグ${off} FA・移籍の最新情報と日本人の去就`;
+    : // 「FA ランキング」系の検索で拾われていなかった（2026-11-07 実測で71位）＝ページの柱の1つを題に出す。
+      `MLBストーブリーグ${off} FAランキングと日本人の去就・移籍の最新情報`;
   const description = en
     ? `Where ${names.map((p) => p!.nameEn).join(', ')} and the top MLB free agents stand this winter: status, 2026 stats, the offseason calendar up to the December 1 CBA deadline, and overseas fan reactions.`
-    : `${names.map((p) => p!.nameJa).join('・')}ら日本人選手の去就と、スクーバルなどFA注目選手${cat.board.length}人の今季成績・現在地。FA解禁から12月1日の労使協定の期限までの日程、海外ファンの反応もまとめて追う（${cat.asOf.slice(5).replace('-', '/')}更新）。`;
+    : `${names.map((p) => p!.nameJa).join('・')}ら日本人選手の去就と、MLB公式のFAランキング上位${cat.board.length}人（スクーバルほか）の今季成績・現在地。FA解禁から12月1日の労使協定の期限までの日程、海外ファンの反応もまとめて追う（${cat.asOf.slice(5).replace('-', '/')}更新）。`;
   return {
     title,
     description,
