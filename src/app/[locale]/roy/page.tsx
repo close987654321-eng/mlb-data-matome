@@ -31,6 +31,7 @@ import {
   SEASON_FINAL_FROM,
   type BoardLeaders,
   awardsMetaPhrase,
+  awardTitleWord,
   boardModified,
   currentAwards,
 } from '@/lib/boardSeo';
@@ -49,7 +50,14 @@ const ROY_TAGS = ['新人王'];
  * 「決まり方と日本人の歴代」「よくある質問」を足した。狙いは表を見た人の次の問い（何日首位か／
  * いつ決まるか／村上は何位か）にページ内で答え切り、翌日また開く理由（前日比▲▼・推移表）を置くこと。
  */
-function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string, awardsLine?: string) {
+function copy(
+  en: boolean,
+  year: number | string,
+  leaders: BoardLeaders,
+  asOf?: string,
+  awardsLine?: string,
+  titleWord = '',
+) {
   // 最終候補が発表された年は、説明文の「受賞者の発表は11月」を「最終候補は誰か・発表はいつか」に差し替え、
   // タイトルにも「最終候補」を足す（発表週は検索の問いが「誰が残った？」に移るため・boardSeo.ts の AWARD_RESULTS）。
   // 確定後（10月以降）は「◯月◯日時点・現在トップ」をやめ「最終成績・1位でシーズンを終えた」に替える（boardSeo.ts）。
@@ -71,7 +79,7 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         lead: `ルーキー資格のある野手と投手を1つの表でスコア化した予測ランキング。WARを役割をまたぐ共通の物差しに置き、野手はwRC+と打席数、投手はFIPと投球回でリーグ内の位置を出しています。${final ? 'シーズン最終盤の順位の推移' : '毎日更新の前日比と順位の推移'}、村上宗隆・岡本和真・今井達也の現在地、新人王の資格や発表時期、海外ファンの反応までこのページで追えます。`,
         // layout が「｜海外の反応」を足すので、ここは25字以内に抑えて SERP で切られないようにする。
         // ア・リーグ/ナ・リーグ のリーグ別クエリはページ内 h2（表の見出し）が受ける。
-        metaTitle: `新人王候補 ${year} ${final && awardsLine ? '最終候補と' : ''}予測ランキング`,
+        metaTitle: `新人王候補 ${year} ${final ? titleWord : ''}予測ランキング`,
         // 先頭に検索語（候補・予測ランキング）、その直後に「いま誰が有力か」を置く＝スニペットの
         // 見える範囲でクエリに答えきる。後半は「いつ決まる／資格」の問い型クエリを受ける語。
         metaDesc: `${year}年MLB新人王候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? `${awardsLine ?? '受賞者の発表は11月。'}` + '村上宗隆・岡本和真ら日本人ルーキーの最終順位' : '村上宗隆・岡本和真ら日本人ルーキーの順位と前日比'}、資格・投票・発表時期、日本人の歴代受賞者まで。`,
@@ -88,6 +96,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     board ? boardLeaders(board, en) : { nl: null, al: null, jp: null },
     board?.asOf,
     board && currentAwards(board.season) ? awardsMetaPhrase('roy', board, en) : undefined,
+    board ? awardTitleWord('roy', board) : '',
   );
   return {
     title: c.metaTitle,
@@ -108,7 +117,7 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
   const en = locale === 'en';
   const leaders = boardLeaders(board, en);
   const awardsLine = currentAwards(board.season) ? awardsMetaPhrase('roy', board, en) : undefined;
-  const c = copy(en, board.season, leaders, board.asOf, awardsLine);
+  const c = copy(en, board.season, leaders, board.asOf, awardsLine, awardTitleWord('roy', board));
 
   const [all, raceColumns, history] = await Promise.all([
     getAllThreads(),

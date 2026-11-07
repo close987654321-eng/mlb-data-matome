@@ -144,6 +144,26 @@ export function winnerRow(
   return id ? (board.leagues[league].find((r) => r.id === id) ?? null) : null;
 }
 
+/** 両リーグの受賞者が登録済みか（発表の夜に両リーグそろって出る）。 */
+export function awardsDecided(
+  kind: AwardKind,
+  board: { season: number | string; leagues: { NL: FinalistRow[]; AL: FinalistRow[] } },
+): boolean {
+  return Boolean(winnerRow(kind, board, 'NL') && winnerRow(kind, board, 'AL'));
+}
+
+/**
+ * 題（meta title）に差す語。最終候補の発表後は「最終候補と」、受賞者の登録後は「受賞者と」。
+ * 登録が無い年は空＝従来どおり「◯◯候補 {年} 予測ランキング」。
+ */
+export function awardTitleWord(
+  kind: AwardKind,
+  board: { season: number | string; leagues: { NL: FinalistRow[]; AL: FinalistRow[] } },
+): string {
+  if (!currentAwards(board.season)) return '';
+  return awardsDecided(kind, board) ? '受賞者と' : '最終候補と';
+}
+
 /** 「いつ発表？」の答え。今年の日程が登録済みならそれを、無ければ前年の実績を言う。 */
 export function awardDatePhrase(kind: AwardKind, en: boolean, season: number | string | undefined): string {
   const aw = currentAwards(season);
@@ -221,8 +241,12 @@ export function finalistsFaqItem(
   const wAL = winnerRow(kind, board, 'AL');
   const winJa = wNL && wAL ? `受賞者はナ・リーグが${wNL.nameJa}、ア・リーグが${wAL.nameJa}です。` : '';
   const winEn = wNL && wAL ? `The winners are ${wNL.nameEn} (NL) and ${wAL.nameEn} (AL). ` : '';
+  // 受賞者の登録後は問いも「受賞者は誰？」に替える（発表の翌日からの検索は「新人王 2026 誰」型になる）。
+  const q = wNL && wAL
+    ? { ja: `${aw.year}年の${label.ja}は誰が受賞した？`, en: `Who won the ${aw.year} ${label.en}?` }
+    : { ja: `${aw.year}年の${label.ja}の最終候補は誰？`, en: `Who are the ${aw.year} ${label.en} finalists?` };
   return {
-    q: { ja: `${aw.year}年の${label.ja}の最終候補は誰？`, en: `Who are the ${aw.year} ${label.en} finalists?` },
+    q,
     a: {
       ja: `${winJa}${aw.finalistsAnnounced.ja}（米国時間）にMLBが発表した最終候補（各リーグ上位3人）は、ナ・リーグが${line('NL', false)}、ア・リーグが${line('AL', false)}です。${jpFinalistsPhrase(kind, board, false)}${awardDatePhrase(kind, false, board.season).replace(/^.*?受賞者の発表は/, '受賞者の発表は')}`,
       en: `${winEn}MLB announced the finalists (top three per league) on ${aw.finalistsAnnounced.en}. NL: ${line('NL', true)}. AL: ${line('AL', true)}. ${jpFinalistsPhrase(kind, board, true)} Winners are announced on ${aw[kind].date.en} ET.`,

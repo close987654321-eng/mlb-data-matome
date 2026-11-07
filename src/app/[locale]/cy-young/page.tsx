@@ -33,6 +33,7 @@ import {
   SEASON_FINAL_FROM,
   type BoardLeaders,
   awardsMetaPhrase,
+  awardTitleWord,
   boardModified,
   currentAwards,
 } from '@/lib/boardSeo';
@@ -55,7 +56,14 @@ function ipToFloat(disp: string): number | null {
  * 「予測」はスコアの性質を説明する語として残し、断定でないことは methodTitle 側で担保する。
  * 説明文には現在のトップと日本人最上位を実データから差し込む（毎日CIで動く＝鮮度も兼ねる）。
  */
-function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string, awardsLine?: string) {
+function copy(
+  en: boolean,
+  year: number | string,
+  leaders: BoardLeaders,
+  asOf?: string,
+  awardsLine?: string,
+  titleWord = '',
+) {
   // 最終候補が発表された年は、説明文の「受賞者の発表は11月」を「最終候補は誰か・発表はいつか」に差し替え、
   // タイトルにも「最終候補」を足す（発表週は検索の問いが「誰が残った？」に移るため・boardSeo.ts の AWARD_RESULTS）。
   // 確定後（10月以降）は「◯月◯日時点・現在トップ」をやめ「最終成績・1位でシーズンを終えた」に替える（boardSeo.ts）。
@@ -77,7 +85,7 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         lead: `規定投球回に到達した先発投手を、ERA・xERA・K-BB%・投球回・WHIP・HR/9をもとにリーグ内でスコア化した予測ランキング。${final ? 'シーズン最終盤の順位の推移、' : '毎日更新の前日比と順位の推移、'}山本由伸・今永昇太・大谷翔平の現在地、投票の仕組みや発表時期、日本人投手の歴代最高順位、海外ファンの反応までこのページで追えます。気になる投手の行をタップすると詳細ページへ。`,
         // layout が「｜海外の反応」を足すので、ここは25字以内に抑えて SERP で切られないようにする。
         // ア・リーグ/ナ・リーグ のリーグ別クエリはページ内 h2（表の見出し）が受ける。
-        metaTitle: `サイ・ヤング賞候補 ${year} ${final && awardsLine ? '最終候補と' : ''}予測ランキング`,
+        metaTitle: `サイ・ヤング賞候補 ${year} ${final ? titleWord : ''}予測ランキング`,
         // 先頭に検索語（候補・予測ランキング）、その直後に「いま誰が有力か」を置く＝スニペットの
         // 見える範囲でクエリに答えきる。指標の列挙は切られてもいい後半に回す。
         metaDesc: `${year}年サイ・ヤング賞候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? `${awardsLine ?? '受賞者の発表は11月。'}` + '山本由伸ら日本人投手の最終順位' : '山本由伸ら日本人投手の順位と前日比'}、投票の仕組み・発表時期、日本人の歴代最高順位まで。`,
@@ -94,6 +102,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     board ? boardLeaders(board, en) : { nl: null, al: null, jp: null },
     board?.asOf,
     board && currentAwards(board.season) ? awardsMetaPhrase('cy', board, en) : undefined,
+    board ? awardTitleWord('cy', board) : '',
   );
   return {
     title: c.metaTitle,
@@ -114,7 +123,7 @@ export default async function CyYoungPage({ params }: { params: Promise<{ locale
   const en = locale === 'en';
   const leaders = boardLeaders(board, en);
   const awardsLine = currentAwards(board.season) ? awardsMetaPhrase('cy', board, en) : undefined;
-  const c = copy(en, board.season, leaders, board.asOf, awardsLine);
+  const c = copy(en, board.season, leaders, board.asOf, awardsLine, awardTitleWord('cy', board));
 
   // サイヤング賞レースの海外の反応（サイ・ヤング賞タグの記事）＝「サイヤング 海外の反応」の中身。
   const [all, raceColumns, history, snap] = await Promise.all([
