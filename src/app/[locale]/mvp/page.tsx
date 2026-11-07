@@ -10,6 +10,7 @@ import MvpRaceNow from '@/components/MvpRaceNow';
 import BoardTrend from '@/components/BoardTrend';
 import MvpGuide from '@/components/MvpGuide';
 import FaqList from '@/components/FaqList';
+import AwardFinalists from '@/components/AwardFinalists';
 import { getBoardHistory, historyThrough, previousDay, rankDeltas } from '@/lib/boardHistory';
 import { buildMvpFaq } from '@/lib/mvpFaq';
 import FeedGrid from '@/components/FeedGrid';
@@ -28,6 +29,8 @@ import {
   seasonFinalNotice,
   SEASON_FINAL_FROM,
   type BoardLeaders,
+  awardsMetaPhrase,
+  currentAwards,
 } from '@/lib/boardSeo';
 import { type Locale } from '@/lib/i18n';
 
@@ -39,7 +42,9 @@ const MVP_TAGS = ['MVP'];
  * 題字・タイトルの主語を「候補」にする理由と、説明文に実データの首位を差し込む狙いは
  * boardSeo.ts（サイヤング側で実測した検索語のズレ）と同じ。ボード2種は改良をパリティ移植する。
  */
-function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string) {
+function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string, awardsLine?: string) {
+  // 最終候補が発表された年は、説明文の「受賞者の発表は11月」を「最終候補は誰か・発表はいつか」に差し替え、
+  // タイトルにも「最終候補」を足す（発表週は検索の問いが「誰が残った？」に移るため・boardSeo.ts の AWARD_RESULTS）。
   // 確定後（10月以降）は「◯月◯日時点・現在トップ」をやめ「最終成績・1位でシーズンを終えた」に替える（boardSeo.ts）。
   const final = isSeasonFinal(year, asOf);
   const when = asOfOrFinal(asOf, en, final);
@@ -50,7 +55,7 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         title: `${year} MVP Candidates & Prediction Board`,
         lead: `Qualified hitters ranked by a blended, within-league score (wRC+ + xwOBA, home runs, baserunning, defense, WAR, with two-way pitching WAR included). ${final ? 'Final regular-season numbers with the late-season trend,' : 'Updated daily with rank changes and a day-by-day trend,'} where Shohei Ohtani, Seiya Suzuki and Japan’s bats stand, how the vote works, Japanese MVP history, and overseas fan reactions. Tap any row for the full breakdown.`,
         metaTitle: `${year} MVP Candidates | AL/NL Hitter Rankings`,
-        metaDesc: `${year} MVP candidates, ranked${when ? ` (${when})` : ''}. ${leadersPhrase(leaders, true, final)} ${jpRankPhrase(leaders, true)} ${final ? 'Winners are announced in November. Final rankings' : 'Daily rank changes'}, how the vote works, when it is announced, and Japanese MVP history.`,
+        metaDesc: `${year} MVP candidates, ranked${when ? ` (${when})` : ''}. ${leadersPhrase(leaders, true, final)} ${jpRankPhrase(leaders, true)} ${final ? `${awardsLine ?? 'Winners are announced in November.'} Final rankings` : 'Daily rank changes'}, how the vote works, when it is announced, and Japanese MVP history.`,
       }
     : {
         crumb: 'MVP予測',
@@ -58,9 +63,9 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         title: `MVP候補 ${year} 予測ランキング`,
         lead: `規定打席に到達した打者を、wRC+・xwOBA・本塁打・走塁・守備・WARをもとにリーグ内でスコア化した予測ランキング（二刀流の大谷翔平は投手WARも合算）。${final ? 'シーズン最終盤の順位の推移、' : '毎日更新の前日比と順位の推移、'}大谷翔平・鈴木誠也ら日本人打者の現在地、投票の仕組みや発表時期、日本人のMVP受賞歴、海外ファンの反応までこのページで追えます。気になる打者の行をタップすると、打球の質・バットスピードまで分かる詳細ページへ。`,
         // cy-young と同じ＝brand 付与後も切られない長さに抑え、リーグ別クエリは h2 に持たせる。
-        metaTitle: `MVP候補 ${year} 予測ランキング`,
+        metaTitle: `MVP候補 ${year} ${final && awardsLine ? '最終候補と' : ''}予測ランキング`,
         // 構成は cy-young と同じ＝検索語→いま誰が有力か→指標（切られてよい）の順。
-        metaDesc: `${year}年MVP候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? '受賞者の発表は11月。大谷翔平・鈴木誠也ら日本人打者の最終順位' : '大谷翔平・鈴木誠也ら日本人打者の順位と前日比'}、投票の仕組み・発表時期、日本人のMVP受賞歴まで。`,
+        metaDesc: `${year}年MVP候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? `${awardsLine ?? '受賞者の発表は11月。'}` + '大谷翔平・鈴木誠也ら日本人打者の最終順位' : '大谷翔平・鈴木誠也ら日本人打者の順位と前日比'}、投票の仕組み・発表時期、日本人のMVP受賞歴まで。`,
       };
 }
 
@@ -73,6 +78,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     board?.season ?? new Date().getFullYear(),
     board ? boardLeaders(board, en) : { nl: null, al: null, jp: null },
     board?.asOf,
+    board && currentAwards(board.season) ? awardsMetaPhrase('mvp', board, en) : undefined,
   );
   return {
     title: c.metaTitle,
@@ -92,7 +98,8 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
   if (!board) notFound();
   const en = locale === 'en';
   const leaders = boardLeaders(board, en);
-  const c = copy(en, board.season, leaders, board.asOf);
+  const awardsLine = currentAwards(board.season) ? awardsMetaPhrase('mvp', board, en) : undefined;
+  const c = copy(en, board.season, leaders, board.asOf, awardsLine);
 
   // MVPレースの海外の反応（MVPタグの記事）＝「MVP 海外の反応」の中身。
   const [all, raceColumns, history] = await Promise.all([
@@ -154,10 +161,13 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{c.title}</h1>
         <p className="mt-2 max-w-prose text-sm text-ink-soft">{c.lead}</p>
         {board.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: board.asOf })}</p>}
-        {final && <p className="mt-3 max-w-prose border-l-2 border-ink pl-3 text-sm leading-relaxed text-ink">{seasonFinalNotice('mvp', en)}</p>}
+        {final && <p className="mt-3 max-w-prose border-l-2 border-ink pl-3 text-sm leading-relaxed text-ink">{seasonFinalNotice('mvp', en, board.season)}</p>}
       </section>
 
       {/* 表の前に「いまのレース」＝首位・日本人の現在地・スコアの内訳。表を読む前に問いへ先に答える。 */}
+      {/* 発表週は「誰が残った？いつ決まる？」が先＝表より前に最終候補（登録が無い年は何も出さない）。 */}
+      {final && <AwardFinalists kind="mvp" board={board} locale={locale} hrefOf={(row) => `/mvp/${row.id}`} />}
+
       <MvpRaceNow board={board} history={hist} locale={locale} final={final} />
 
       <MvpBoard board={board} locale={locale} deltas={deltas} />

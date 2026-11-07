@@ -1,6 +1,6 @@
 import SectionHeading from '@/components/SectionHeading';
 import { ROY_SEASON_END } from '@/lib/royFaq';
-import { PRIOR_AWARD_DATES } from '@/lib/boardSeo';
+import { awardGuideDate } from '@/lib/boardSeo';
 
 /**
  * サイ・ヤング賞レースの「見方」＝日程・決め方・規定投球回・日本人の歴代最高順位。
@@ -42,7 +42,7 @@ export default function CyGuide({
               : 'Everything on this board counts through the final day. Postseason starts do not.',
           },
           { k: 'Ballots due before the postseason', v: 'Two BBWAA writers per club, 30 per league, each rank five pitchers. Points run 7-4-3-2-1.' },
-          { k: 'Winners announced in November', v: `After the World Series (${PRIOR_AWARD_DATES.year}: ${PRIOR_AWARD_DATES.cy.en} ET). One winner per league; starters and relievers compete together.` },
+          { k: 'Winners announced in November', v: `${awardGuideDate('cy', true, season)} One winner per league; starters and relievers compete together.` },
         ],
         qualTitle: 'Innings qualification',
         qual: `One inning per team game (162 for a full season). Mid-season the bar is the games played so far, which is why this board’s line sits around ${qualifyIp} IP right now. Voters are not bound by it; this table is.`,
@@ -59,7 +59,7 @@ export default function CyGuide({
               : 'このボードの成績は最終日まで動きます。ポストシーズンでの投球は評価に入りません。',
           },
           { k: '投票はポストシーズン開幕前に締め切り', v: '全米野球記者協会（BBWAA）の記者が各球団2名×15球団＝リーグ30人。1〜5位の投手を記入し、1位7点・2位4点・3位3点・4位2点・5位1点。' },
-          { k: '発表は11月', v: `ワールドシリーズ終了後に発表（${PRIOR_AWARD_DATES.year}年は${PRIOR_AWARD_DATES.cy.ja}・日本時間${PRIOR_AWARD_DATES.cy.jstJa}の朝）。各リーグ1人で、先発と救援を分けずに選びます。` },
+          { k: '発表は11月', v: `${awardGuideDate('cy', false, season)}各リーグ1人で、先発と救援を分けずに選びます。` },
         ],
         qualTitle: '規定投球回',
         qual: `チームの試合数×1回（シーズン全体で162回）。シーズン途中はその時点の試合数で判定するので、このボードの目安はいま約${qualifyIp}回です。投票する記者は規定に縛られませんが、この順位表は規定到達者だけを比べています。`,

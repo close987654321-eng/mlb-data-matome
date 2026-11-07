@@ -13,6 +13,7 @@ import RoyRaceNow from '@/components/RoyRaceNow';
 import BoardTrend from '@/components/BoardTrend';
 import RoyGuide from '@/components/RoyGuide';
 import FaqList from '@/components/FaqList';
+import AwardFinalists from '@/components/AwardFinalists';
 import BoardColumns from '@/components/BoardColumns';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
@@ -29,6 +30,8 @@ import {
   seasonFinalNotice,
   SEASON_FINAL_FROM,
   type BoardLeaders,
+  awardsMetaPhrase,
+  currentAwards,
 } from '@/lib/boardSeo';
 import { type Locale } from '@/lib/i18n';
 
@@ -45,7 +48,9 @@ const ROY_TAGS = ['新人王'];
  * 「決まり方と日本人の歴代」「よくある質問」を足した。狙いは表を見た人の次の問い（何日首位か／
  * いつ決まるか／村上は何位か）にページ内で答え切り、翌日また開く理由（前日比▲▼・推移表）を置くこと。
  */
-function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string) {
+function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: string, awardsLine?: string) {
+  // 最終候補が発表された年は、説明文の「受賞者の発表は11月」を「最終候補は誰か・発表はいつか」に差し替え、
+  // タイトルにも「最終候補」を足す（発表週は検索の問いが「誰が残った？」に移るため・boardSeo.ts の AWARD_RESULTS）。
   // 確定後（10月以降）は「◯月◯日時点・現在トップ」をやめ「最終成績・1位でシーズンを終えた」に替える（boardSeo.ts）。
   const final = isSeasonFinal(year, asOf);
   const when = asOfOrFinal(asOf, en, final);
@@ -56,7 +61,7 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         title: `${year} Rookie of the Year Candidates & Prediction Board`,
         lead: `Rookie-eligible hitters and pitchers ranked together by a blended score, with WAR as the shared currency across roles plus wRC+/FIP and playing time within each role. ${final ? 'Final regular-season numbers with the late-season trend,' : 'Updated daily with rank changes, a day-by-day trend,'} where Munetaka Murakami, Kazuma Okamoto and Tatsuya Imai stand, how the award is decided, and overseas fan reactions.`,
         metaTitle: `${year} Rookie of the Year Candidates | AL/NL Rankings`,
-        metaDesc: `${year} Rookie of the Year candidates, ranked${when ? ` (${when})` : ''}. ${leadersPhrase(leaders, true, final)} ${jpRankPhrase(leaders, true)} ${final ? 'Winners are announced in November. Final rankings' : 'Daily rank changes'}, eligibility rules, when the award is announced, and past Japanese winners.`,
+        metaDesc: `${year} Rookie of the Year candidates, ranked${when ? ` (${when})` : ''}. ${leadersPhrase(leaders, true, final)} ${jpRankPhrase(leaders, true)} ${final ? `${awardsLine ?? 'Winners are announced in November.'} Final rankings` : 'Daily rank changes'}, eligibility rules, when the award is announced, and past Japanese winners.`,
       }
     : {
         crumb: '新人王予測',
@@ -65,10 +70,10 @@ function copy(en: boolean, year: number | string, leaders: BoardLeaders, asOf?: 
         lead: `ルーキー資格のある野手と投手を1つの表でスコア化した予測ランキング。WARを役割をまたぐ共通の物差しに置き、野手はwRC+と打席数、投手はFIPと投球回でリーグ内の位置を出しています。${final ? 'シーズン最終盤の順位の推移' : '毎日更新の前日比と順位の推移'}、村上宗隆・岡本和真・今井達也の現在地、新人王の資格や発表時期、海外ファンの反応までこのページで追えます。`,
         // layout が「｜海外の反応」を足すので、ここは25字以内に抑えて SERP で切られないようにする。
         // ア・リーグ/ナ・リーグ のリーグ別クエリはページ内 h2（表の見出し）が受ける。
-        metaTitle: `新人王候補 ${year} 予測ランキング`,
+        metaTitle: `新人王候補 ${year} ${final && awardsLine ? '最終候補と' : ''}予測ランキング`,
         // 先頭に検索語（候補・予測ランキング）、その直後に「いま誰が有力か」を置く＝スニペットの
         // 見える範囲でクエリに答えきる。後半は「いつ決まる／資格」の問い型クエリを受ける語。
-        metaDesc: `${year}年MLB新人王候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? '受賞者の発表は11月。村上宗隆・岡本和真ら日本人ルーキーの最終順位' : '村上宗隆・岡本和真ら日本人ルーキーの順位と前日比'}、資格・投票・発表時期、日本人の歴代受賞者まで。`,
+        metaDesc: `${year}年MLB新人王候補の予測ランキング${when ? `（${when}）` : ''}。${leadersPhrase(leaders, false, final)}${jpRankPhrase(leaders, false)}${final ? `${awardsLine ?? '受賞者の発表は11月。'}` + '村上宗隆・岡本和真ら日本人ルーキーの最終順位' : '村上宗隆・岡本和真ら日本人ルーキーの順位と前日比'}、資格・投票・発表時期、日本人の歴代受賞者まで。`,
       };
 }
 
@@ -81,6 +86,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
     board?.season ?? new Date().getFullYear(),
     board ? boardLeaders(board, en) : { nl: null, al: null, jp: null },
     board?.asOf,
+    board && currentAwards(board.season) ? awardsMetaPhrase('roy', board, en) : undefined,
   );
   return {
     title: c.metaTitle,
@@ -100,7 +106,8 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
   if (!board) notFound();
   const en = locale === 'en';
   const leaders = boardLeaders(board, en);
-  const c = copy(en, board.season, leaders, board.asOf);
+  const awardsLine = currentAwards(board.season) ? awardsMetaPhrase('roy', board, en) : undefined;
+  const c = copy(en, board.season, leaders, board.asOf, awardsLine);
 
   const [all, raceColumns, history] = await Promise.all([
     getAllThreads(),
@@ -172,10 +179,13 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
         <h1 className="mt-2 text-3xl font-bold text-ink sm:text-4xl">{c.title}</h1>
         <p className="mt-2 max-w-prose text-sm text-ink-soft">{c.lead}</p>
         {board.asOf && <p className="mt-1 text-xs text-ink-soft">{t('player.asOf', { date: board.asOf })}</p>}
-        {final && <p className="mt-3 max-w-prose border-l-2 border-ink pl-3 text-sm leading-relaxed text-ink">{seasonFinalNotice('roy', en)}</p>}
+        {final && <p className="mt-3 max-w-prose border-l-2 border-ink pl-3 text-sm leading-relaxed text-ink">{seasonFinalNotice('roy', en, board.season)}</p>}
       </section>
 
       {/* 表の前に「いまのレース」＝首位・日本人の現在地・スコアの内訳。表を読む前に問いへ先に答える。 */}
+      {/* 発表週は「誰が残った？いつ決まる？」が先＝表より前に最終候補（登録が無い年は何も出さない）。 */}
+      {final && <AwardFinalists kind="roy" board={board} locale={locale} />}
+
       <RoyRaceNow board={board} history={hist} locale={locale} final={final} />
 
       <RoyBoard board={board} locale={locale} deltas={deltas} />

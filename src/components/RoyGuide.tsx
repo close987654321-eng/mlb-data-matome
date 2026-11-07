@@ -1,6 +1,6 @@
 import SectionHeading from '@/components/SectionHeading';
 import { ROY_SEASON_END } from '@/lib/royFaq';
-import { PRIOR_AWARD_DATES } from '@/lib/boardSeo';
+import { awardGuideDate } from '@/lib/boardSeo';
 
 /**
  * 新人王レースの「見方」＝日程・決め方・日本人の歴代。
@@ -34,7 +34,7 @@ export default function RoyGuide({ locale, season, final = false }: { locale: st
               : 'Everything on this board counts through the final day. October games do not.',
           },
           { k: 'Ballots due before the postseason', v: 'Two BBWAA writers per club, 30 per league, each rank three rookies. 5 points for first, 3 for second, 1 for third.' },
-          { k: 'Winners announced in November', v: `After the World Series (${PRIOR_AWARD_DATES.year}: ${PRIOR_AWARD_DATES.roy.en} ET). One winner per league, hitters and pitchers judged together.` },
+          { k: 'Winners announced in November', v: `${awardGuideDate('roy', true, season)} One winner per league, hitters and pitchers judged together.` },
         ],
         eligTitle: 'Who counts as a rookie',
         elig: 'Fewer than 130 at-bats, fewer than 50 innings and fewer than 45 days on an active roster in prior seasons. Years in NPB or any other league do not affect eligibility.',
@@ -52,7 +52,7 @@ export default function RoyGuide({ locale, season, final = false }: { locale: st
               : 'このボードの成績は最終日まで動きます。10月のポストシーズンの成績は評価に入りません。',
           },
           { k: '投票はポストシーズン開幕前に締め切り', v: '全米野球記者協会（BBWAA）の記者が各球団2名×15球団＝リーグ30人。1〜3位を記入し、1位5点・2位3点・3位1点。' },
-          { k: '発表は11月', v: `ワールドシリーズ終了後に発表（${PRIOR_AWARD_DATES.year}年は${PRIOR_AWARD_DATES.roy.ja}・日本時間${PRIOR_AWARD_DATES.roy.jstJa}の朝）。各リーグ1人で、野手と投手を分けずに選びます。` },
+          { k: '発表は11月', v: `${awardGuideDate('roy', false, season)}各リーグ1人で、野手と投手を分けずに選びます。` },
         ],
         eligTitle: 'ルーキー資格',
         elig: '前年までのメジャーで130打数未満・50投球回未満・アクティブロースター登録45日未満のすべてを満たす選手。NPBなど海外リーグでの年数は資格に影響しません。',

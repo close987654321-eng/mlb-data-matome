@@ -1,5 +1,5 @@
 import type { RoyBoard, RoyRow } from '@/lib/royBoard';
-import { priorAwardDatePhrase, REGULAR_SEASON_END } from '@/lib/boardSeo';
+import { awardDatePhrase, finalistsFaqItem, REGULAR_SEASON_END } from '@/lib/boardSeo';
 
 /**
  * /roy の「よくある質問」。画面（ProspectFaq と同じ <details> 列）と JSON-LD の FAQPage を**同じ配列**から組む。
@@ -97,8 +97,8 @@ export function buildRoyFaq(board: RoyBoard, en: boolean): RoyFaqItem[] {
     {
       q: { ja: `${year}年の新人王はいつ決まる？`, en: `When is the ${year} Rookie of the Year announced?` },
       a: {
-        ja: `レギュラーシーズン最終日は${ROY_SEASON_END.ja}で、記者の投票はポストシーズン開幕前に締め切られます。つまり10月のプレーオフの成績は考慮されません。受賞者の発表はワールドシリーズ終了後の11月です。${priorAwardDatePhrase('roy', false)}`,
-        en: `The regular season ends ${ROY_SEASON_END.en}, and ballots are due before the postseason starts, so October performance does not count. Winners are announced in November after the World Series. ${priorAwardDatePhrase('roy', true)}`,
+        ja: `レギュラーシーズン最終日は${ROY_SEASON_END.ja}で、記者の投票はポストシーズン開幕前に締め切られます。つまり10月のプレーオフの成績は考慮されません。受賞者の発表はワールドシリーズ終了後の11月です。${awardDatePhrase('roy', false, year)}`,
+        en: `The regular season ends ${ROY_SEASON_END.en}, and ballots are due before the postseason starts, so October performance does not count. Winners are announced in November after the World Series. ${awardDatePhrase('roy', true, year)}`,
       },
     },
   ];
@@ -138,5 +138,8 @@ export function buildRoyFaq(board: RoyBoard, en: boolean): RoyFaqItem[] {
       },
     },
   );
+  // 発表週は「最終候補は誰？」が問いの先頭に来る＝登録がある年だけ一番上に置く（boardSeo.ts の AWARD_RESULTS）。
+  const finalists = finalistsFaqItem('roy', board);
+  if (finalists) items.unshift(finalists);
   return items;
 }

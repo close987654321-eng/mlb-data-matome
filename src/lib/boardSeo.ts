@@ -66,6 +66,182 @@ export const PRIOR_AWARD_DATES = {
 
 export type AwardKind = 'roy' | 'cy' | 'mvp';
 
+type AwardDay = { ja: string; en: string; jstJa: string; jstEn: string };
+type AwardBlock = {
+  /** 受賞者の発表日（米国時間）と日本時間の日付。発表は米東部の夜＝日本では翌日。 */
+  date: AwardDay;
+  /** 最終候補（各リーグ上位3人・MLB選手ID）。並びは MLB 公式の掲載順（アルファベット順）。 */
+  finalists: Record<'AL' | 'NL', number[]>;
+  /** 受賞者（MLB選手ID）。発表されたら入れる＝説明文・最終候補欄・FAQ が受賞者の表示に切り替わる。 */
+  winners: Partial<Record<'AL' | 'NL', number>>;
+};
+
+/**
+ * その年の最終候補と受賞発表日（BBWAA）。出典は MLB 公式の発表記事（米国時間11月2日）。
+ * 名前の表記はボードの行（カタカナ表）が正＝ここには MLB 選手IDだけを持ち、表示はボードと突き合わせる。
+ * 2026-11-07 にボードと照合し、18人全員がボードに載っていることと、3ボード×両リーグの1位6人が
+ * 全員最終候補に入っていることを確かめた。年が替わったら year と中身を書き直す
+ * （board.season と year が合わない年は、前年実績の文言＝PRIOR_AWARD_DATES に戻る）。
+ */
+export const AWARD_RESULTS: {
+  year: number;
+  finalistsAnnounced: { ja: string; en: string };
+  source: { label: string; url: string };
+} & Record<AwardKind, AwardBlock> = {
+  year: 2026,
+  finalistsAnnounced: { ja: '11月2日', en: 'Nov. 2' },
+  source: { label: 'MLB.com', url: 'https://www.mlb.com/news/2026-bbwaa-awards-finalists' },
+  roy: {
+    date: { ja: '11月9日', en: 'Nov. 9', jstJa: '11月10日', jstEn: 'Nov. 10' },
+    // AL: マクゴニグル・メシック・トール／NL: ベンジ・スチュワート・ウェザーホルト
+    finalists: { AL: [805808, 800048, 801139], NL: [701807, 701398, 802139] },
+    winners: {},
+  },
+  cy: {
+    date: { ja: '11月11日', en: 'Nov. 11', jstJa: '11月12日', jstEn: 'Nov. 12' },
+    // AL: シース・メシック・シュリットラー／NL: ミシオロウスキー・セール・サンチェス
+    finalists: { AL: [656302, 800048, 693645], NL: [694819, 519242, 650911] },
+    winners: {},
+  },
+  mvp: {
+    date: { ja: '11月12日', en: 'Nov. 12', jstJa: '11月13日', jstEn: 'Nov. 13' },
+    // AL: アルバレス・カミネロ・ウィットJr.／NL: クロウアームストロング・大谷翔平・トゥラング
+    finalists: { AL: [670541, 691406, 677951], NL: [691718, 660271, 668930] },
+    winners: {},
+  },
+};
+
+/** そのシーズンの最終候補・発表日が登録済みか（年が合わなければ null＝前年実績の文言に戻す）。 */
+export function currentAwards(season: number | string | undefined) {
+  return Number(season) === AWARD_RESULTS.year ? AWARD_RESULTS : null;
+}
+
+/** 最終候補欄・説明文で使う行の最小形（ボードの行そのもの）。 */
+export type FinalistRow = BoardSeoRow & { teamJa?: string; teamEn?: string };
+
+/** 最終候補（または受賞者）の ID をボードの行に引き当てる。ボードに居ない ID は落とす。 */
+export function finalistRows(
+  kind: AwardKind,
+  board: { season: number | string; leagues: { NL: FinalistRow[]; AL: FinalistRow[] } },
+  league: 'AL' | 'NL',
+): FinalistRow[] {
+  const aw = currentAwards(board.season);
+  if (!aw) return [];
+  const byId = new Map(board.leagues[league].map((r) => [r.id, r]));
+  return aw[kind].finalists[league].map((id) => byId.get(id)).filter((r): r is FinalistRow => !!r);
+}
+
+/** 受賞者の行（発表前・未登録なら null）。 */
+export function winnerRow(
+  kind: AwardKind,
+  board: { season: number | string; leagues: { NL: FinalistRow[]; AL: FinalistRow[] } },
+  league: 'AL' | 'NL',
+): FinalistRow | null {
+  const id = currentAwards(board.season)?.[kind].winners[league];
+  return id ? (board.leagues[league].find((r) => r.id === id) ?? null) : null;
+}
+
+/** 「いつ発表？」の答え。今年の日程が登録済みならそれを、無ければ前年の実績を言う。 */
+export function awardDatePhrase(kind: AwardKind, en: boolean, season: number | string | undefined): string {
+  const aw = currentAwards(season);
+  if (!aw) return priorAwardDatePhrase(kind, en);
+  const d = aw[kind].date;
+  return en
+    ? `The ${aw.year} finalists (top three in each league) were announced on ${aw.finalistsAnnounced.en}, and the winners are announced on ${d.en} ET (${d.jstEn} in Japan).`
+    : `${aw.year}年は${aw.finalistsAnnounced.ja}（米国時間）に各リーグの最終候補（上位3人）が発表され、受賞者の発表は${d.ja}（日本時間${d.jstJa}）です。`;
+}
+
+/**
+ * 説明文に差す「最終候補は誰か／受賞者は誰か」の一文。登録が無い年は「受賞者の発表は11月。」に戻す。
+ * 検索結果のスニペットで「MVP 最終候補」「新人王 発表」にその場で答えるための実データ文。
+ */
+export function awardsMetaPhrase(
+  kind: AwardKind,
+  board: { season: number | string; leagues: { NL: FinalistRow[]; AL: FinalistRow[] } },
+  en: boolean,
+): string {
+  const aw = currentAwards(board.season);
+  if (!aw) return en ? 'Winners are announced in November.' : '受賞者の発表は11月。';
+  const name = (r: FinalistRow) => (en ? r.nameEn : r.nameJa);
+  const wNL = winnerRow(kind, board, 'NL');
+  const wAL = winnerRow(kind, board, 'AL');
+  if (wNL && wAL) {
+    return en
+      ? `Winners: ${name(wNL)} (NL) and ${name(wAL)} (AL).`
+      : `受賞者はナ・リーグが${name(wNL)}、ア・リーグが${name(wAL)}。`;
+  }
+  const list = (lg: 'AL' | 'NL') => finalistRows(kind, board, lg).map(name);
+  const d = aw[kind].date;
+  return en
+    ? `Finalists: ${list('NL').join(', ')} (NL); ${list('AL').join(', ')} (AL). Winners announced ${d.en} ET.`
+    : `最終候補はナ・リーグが${list('NL').join('、')}。ア・リーグは${list('AL').join('、')}。受賞者の発表は${d.ja}（日本時間${d.jstJa}）。`;
+}
+
+/** 賞の名前（説明文・FAQ・最終候補欄で同じ語を使う）。 */
+export const AWARD_LABEL: Record<AwardKind, { ja: string; en: string }> = {
+  roy: { ja: '新人王', en: 'Rookie of the Year' },
+  cy: { ja: 'サイ・ヤング賞', en: 'Cy Young' },
+  mvp: { ja: 'MVP', en: 'MVP' },
+};
+
+/** 最終候補に入った日本人の一文（居なければ「入らなかった」）。最終候補欄と FAQ で同じ文を使う。 */
+export function jpFinalistsPhrase(
+  kind: AwardKind,
+  board: { season: number | string; leagues: { NL: FinalistRow[]; AL: FinalistRow[] } },
+  en: boolean,
+): string {
+  const jp = (['NL', 'AL'] as const).flatMap((lg) => finalistRows(kind, board, lg)).filter((r) => r.isJp);
+  if (jp.length) {
+    return en
+      ? `Japanese finalist${jp.length > 1 ? 's' : ''}: ${jp.map((r) => r.nameEn).join(', ')}.`
+      : `日本人では${jp.map((r) => r.nameJa).join('・')}が最終候補に入りました。`;
+  }
+  return en ? 'No Japanese player is among the finalists.' : '日本人選手は最終候補に入りませんでした。';
+}
+
+/**
+ * FAQ の「{年}年の◯◯の最終候補は？」。登録が無い年は null（質問ごと出さない）。
+ * 答えはボードの順位を添える＝「この表の何位が残ったか」はこのサイトにしか無い情報。
+ */
+export function finalistsFaqItem(
+  kind: AwardKind,
+  board: { season: number | string; leagues: { NL: FinalistRow[]; AL: FinalistRow[] } },
+): { q: { ja: string; en: string }; a: { ja: string; en: string } } | null {
+  const aw = currentAwards(board.season);
+  if (!aw) return null;
+  const label = AWARD_LABEL[kind];
+  const line = (lg: 'AL' | 'NL', en: boolean) =>
+    finalistRows(kind, board, lg)
+      .map((r) => (en ? `${r.nameEn} (${r.teamEn ?? ''}, No. ${r.rank} here)` : `${r.nameJa}（${r.teamJa ?? ''}・この表で${r.rank}位）`))
+      .join(en ? ', ' : '、');
+  const wNL = winnerRow(kind, board, 'NL');
+  const wAL = winnerRow(kind, board, 'AL');
+  const winJa = wNL && wAL ? `受賞者はナ・リーグが${wNL.nameJa}、ア・リーグが${wAL.nameJa}です。` : '';
+  const winEn = wNL && wAL ? `The winners are ${wNL.nameEn} (NL) and ${wAL.nameEn} (AL). ` : '';
+  return {
+    q: { ja: `${aw.year}年の${label.ja}の最終候補は誰？`, en: `Who are the ${aw.year} ${label.en} finalists?` },
+    a: {
+      ja: `${winJa}${aw.finalistsAnnounced.ja}（米国時間）にMLBが発表した最終候補（各リーグ上位3人）は、ナ・リーグが${line('NL', false)}、ア・リーグが${line('AL', false)}です。${jpFinalistsPhrase(kind, board, false)}${awardDatePhrase(kind, false, board.season).replace(/^.*?受賞者の発表は/, '受賞者の発表は')}`,
+      en: `${winEn}MLB announced the finalists (top three per league) on ${aw.finalistsAnnounced.en}. NL: ${line('NL', true)}. AL: ${line('AL', true)}. ${jpFinalistsPhrase(kind, board, true)} Winners are announced on ${aw[kind].date.en} ET.`,
+    },
+  };
+}
+
+/** 「決まり方」の発表日欄の本文。 */
+export function awardGuideDate(kind: AwardKind, en: boolean, season: number | string | undefined): string {
+  const aw = currentAwards(season);
+  if (!aw) {
+    const p = PRIOR_AWARD_DATES;
+    return en
+      ? `After the World Series (${p.year}: ${p[kind].en} ET).`
+      : `ワールドシリーズ終了後に発表（${p.year}年は${p[kind].ja}・日本時間${p[kind].jstJa}の朝）。`;
+  }
+  const d = aw[kind].date;
+  return en
+    ? `${aw.year}: finalists announced ${aw.finalistsAnnounced.en}, winners on ${d.en} ET.`
+    : `${aw.year}年は${aw.finalistsAnnounced.ja}に最終候補（上位3人）を発表し、受賞者は${d.ja}（日本時間${d.jstJa}）に発表。`;
+}
+
 /** 「いつ発表？」の答えに足す一文（前年の実績日）。FAQ と確定表示の注記で同じ文を使う。 */
 export function priorAwardDatePhrase(kind: AwardKind, en: boolean): string {
   const p = PRIOR_AWARD_DATES;
@@ -79,11 +255,11 @@ export function priorAwardDatePhrase(kind: AwardKind, en: boolean): string {
  * 確定後に題字の下へ出す注記。表の順位が「途中経過」ではなく「最終成績での予測」になったことと、
  * 次に何が起きるか（投票は締め切り済み・発表は11月）を先に言い切る。
  */
-export function seasonFinalNotice(kind: AwardKind, en: boolean): string {
+export function seasonFinalNotice(kind: AwardKind, en: boolean, season?: number | string): string {
   const end = REGULAR_SEASON_END;
   return en
-    ? `The regular season ended ${end.en}. This board now reflects final regular-season numbers, and ballots were due before the postseason, so October does not change it. ${priorAwardDatePhrase(kind, true)}`
-    : `レギュラーシーズンは${end.ja}に全日程を終えました。この表はレギュラーシーズン最終成績での予測で、記者の投票もポストシーズン開幕前に締め切られているため、10月の成績では動きません。${priorAwardDatePhrase(kind, false)}`;
+    ? `The regular season ended ${end.en}. This board now reflects final regular-season numbers, and ballots were due before the postseason, so October does not change it. ${awardDatePhrase(kind, true, season)}`
+    : `レギュラーシーズンは${end.ja}に全日程を終えました。この表はレギュラーシーズン最終成績での予測で、記者の投票もポストシーズン開幕前に締め切られているため、10月の成績では動きません。${awardDatePhrase(kind, false, season)}`;
 }
 
 /** 説明文の括弧書き。確定前は「◯月◯日時点」、確定後は「レギュラーシーズン最終成績」。 */
