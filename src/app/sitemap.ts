@@ -15,10 +15,12 @@ import { standardEventPages } from '@/lib/events';
 import { bdAuditionsFetchedAt } from '@/lib/bdAuditions';
 import { SPORTS } from '@/lib/sports';
 import { SERIES } from '@/lib/series';
-import { getCyDetailRows } from '@/lib/cyYoungBoard';
-import { getMvpDetailRows } from '@/lib/mvpBoard';
+import { getCyDetailRows, getCyYoungBoard } from '@/lib/cyYoungBoard';
+import { getMvpDetailRows, getMvpBoard } from '@/lib/mvpBoard';
+import { getRoyBoard } from '@/lib/royBoard';
+import { currentAwards } from '@/lib/boardSeo';
 import { getPostseason } from '@/lib/postseason';
-import { getStoveLeague, getStoveStats } from '@/lib/stoveLeague';
+import { getStoveLeague, getStoveStats, stoveActive } from '@/lib/stoveLeague';
 import { locales, defaultLocale } from '@/lib/i18n';
 
 // 本番ドメイン。プレビュー等で差し替えたい場合は NEXT_PUBLIC_SITE_URL で上書きする。
@@ -63,7 +65,7 @@ function latestPostseasonArticle(threads: Thread[], season: number): string | un
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows, npb, postseason, stove, stoveStats] = await Promise.all([
+  const [threads, columns, tags, snap, watchAlong, singles, cyRows, mvpRows, npb, postseason, stove, stoveStats, mvpBoard, cyBoard, royBoard] = await Promise.all([
     getAllThreads(),
     getAllColumns(),
     getAllTags(),
@@ -76,6 +78,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getPostseason(),
     getStoveLeague(),
     getStoveStats(),
+    getMvpBoard(),
+    getCyYoungBoard(),
+    getRoyBoard(),
   ]);
   const npbAsOf = npb.asOf;
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
@@ -92,13 +97,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 文字列日付（ISO）の最大＝最新。空なら undefined（Array.prototype.at の lib 依存を避けて index 参照）。
   const maxDate = (arr: string[]): string | undefined =>
     arr.length ? [...arr].sort()[arr.length - 1] : undefined;
+  // オフの間は「今オフの去就」（stove-league.json の選手ごとの asOf）も選手LPの中身。成績スナップショットは
+  // 冬モードで止まるので、これを足さないと去就の見出しを毎朝書き換えても lastmod が春まで動かない
+  // （2026-11-07 の点検で、鈴木誠也の去就は11/7更新なのに lastmod は11/4・今永LPの最終クロールは7/23だった）。
+  const stoveAsOf = new Map(
+    stove && stoveActive(stove) ? stove.japanese.map((j) => [j.slug, j.asOf] as const) : [],
+  );
   const playerEntries = PLAYERS.map((p) => {
     const season = snap.players[String(p.mlbId)];
     if (!hubEligible(p, threads, season)) return null;
     const articleDate = threadsOf(p, threads)[0]?.fetchedAt;
-    const dates = [articleDate, hasMlbStats(season) ? statDate : undefined].filter(Boolean) as string[];
+    const dates = [articleDate, hasMlbStats(season) ? statDate : undefined, stoveAsOf.get(p.slug)].filter(
+      Boolean,
+    ) as string[];
     return entry(`/player/${p.slug}`, maxDate(dates));
   }).filter((e): e is NonNullable<typeof e> => e != null);
+
+  // 賞レースのボードは、レギュラーシーズン確定後は値が動かない＝成績スナップショットの日付で一斉に
+  // lastmod を進めると「中身が変わらないのに更新日だけ動くURL」が200件近くになり、lastmod そのものの
+  // 信頼を下げる。ボード自身の集計日を使い、ハブ（/mvp 等）には最終候補・受賞者を書いた日も足す。
+  const boardDay = (b: { asOf?: string } | null) => (b?.asOf ? b.asOf.slice(0, 10) : undefined);
+  const awardsDay = (b: { season: number } | null) => (b && currentAwards(b.season) ? currentAwards(b.season)!.updatedAt : undefined);
+  const hubDay = (b: { asOf?: string; season: number } | null) =>
+    maxDate([boardDay(b), awardsDay(b)].filter(Boolean) as string[]);
   const playerHubLatest = maxDate(
     playerEntries.map((e) => e.lastModified).filter(Boolean).map(String),
   );
@@ -127,12 +148,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/player', playerHubLatest),
     // 日本人選手 成績ランキング（WAR/本塁打/防御率…の順位づけ面）。lastmod は成績スナップショットの日付。
     entry('/ranking', statDate),
-    // サイ・ヤング賞 予測ボード（規定投手をAL/NL別にスコア化）。lastmod は成績スナップショットの日付。
-    entry('/cy-young', statDate),
-    // MVP 予測ボード（規定打者をAL/NL別にスコア化・二刀流は投手WAR合算）。lastmod は成績スナップショットの日付。
-    entry('/mvp', statDate),
-    // 新人王 予測ボード（ルーキー資格者を野手・投手まとめてAL/NL別にスコア化）。lastmod は成績スナップショットの日付。
-    entry('/roy', statDate),
+    // サイ・ヤング賞 予測ボード（規定投手をAL/NL別にスコア化）。lastmod はボードの集計日と最終候補・受賞者を書いた日の新しい方。
+    entry('/cy-young', hubDay(cyBoard)),
+    // MVP 予測ボード（規定打者をAL/NL別にスコア化・二刀流は投手WAR合算）。lastmod はボードの集計日と最終候補・受賞者を書いた日の新しい方。
+    entry('/mvp', hubDay(mvpBoard)),
+    // 新人王 予測ボード（ルーキー資格者を野手・投手まとめてAL/NL別にスコア化）。lastmod はボードの集計日と最終候補・受賞者を書いた日の新しい方。
+    entry('/roy', hubDay(royBoard)),
     // ポストシーズンの恒久ハブ（年号なしURL・閉幕後は結果のアーカイブとして残る）。
     ...(postseason ? [entry('/postseason', postseason.asOf ? postseason.asOf.slice(0, 10) : undefined)] : []),
     // 名場面ライブ（/postseason/live）。最終更新＝いちばん新しいポストシーズン記事の公開日。
@@ -164,9 +185,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry('/watch/singles', singles[0]?.fetchedAt),
     // 予測ボードの選手別詳細（/cy-young/{id}・/mvp/{id}）。ボードから内部リンクはあるが sitemap には
     // 載っておらず、毎日成績が動くのに lastmod シグナルが無かった（再クロールが遅れる）。
-    // lastmod は成績スナップショットの日付＝ボードの更新日。
-    ...cyRows.map((r) => entry(`/cy-young/${r.id}`, statDate)),
-    ...mvpRows.map((r) => entry(`/mvp/${r.id}`, statDate)),
+    // lastmod はボードの集計日（詳細ページはボードの行だけで組む＝成績スナップショットは読まない）。
+    ...cyRows.map((r) => entry(`/cy-young/${r.id}`, boardDay(cyBoard))),
+    ...mvpRows.map((r) => entry(`/mvp/${r.id}`, boardDay(mvpBoard))),
     // タグ別ページ（SEO の入口）。日本語タグは URL エンコードする。
     // 実質のあるタグ（選手LP／記事3本以上の通常タグ）だけ載せる＝薄い長尾タグLPを sitemap から外す
     // （index 可否の唯一の正は isTagIndexable。タグページ側の robots noindex と一致させる）。

@@ -85,10 +85,13 @@ type AwardBlock = {
  */
 export const AWARD_RESULTS: {
   year: number;
+  /** この登録を最後に書き換えた日（JST）。sitemap の lastmod に足す＝最終候補・受賞者を書いた日が鮮度として伝わる。 */
+  updatedAt: string;
   finalistsAnnounced: { ja: string; en: string };
   source: { label: string; url: string };
 } & Record<AwardKind, AwardBlock> = {
   year: 2026,
+  updatedAt: '2026-11-07',
   finalistsAnnounced: { ja: '11月2日', en: 'Nov. 2' },
   source: { label: 'MLB.com', url: 'https://www.mlb.com/news/2026-bbwaa-awards-finalists' },
   roy: {
