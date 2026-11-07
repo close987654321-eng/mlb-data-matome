@@ -30,6 +30,7 @@ import {
   SEASON_FINAL_FROM,
   type BoardLeaders,
   awardsMetaPhrase,
+  boardModified,
   currentAwards,
 } from '@/lib/boardSeo';
 import { type Locale } from '@/lib/i18n';
@@ -125,7 +126,7 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
         name: c.title,
         description: c.metaDesc,
         url: absoluteUrl(locale, '/mvp'),
-        ...(board.asOf ? { dateModified: board.asOf.slice(0, 10) } : {}),
+        ...(boardModified(board.season, board.asOf) ? { dateModified: boardModified(board.season, board.asOf) } : {}),
       },
       // 「MVP候補 ランキング」型クエリ向け＝このページが順位表であることを機械可読にする（cy-young と同型）。
       boardItemList(board, en, (row) => absoluteUrl(locale, `/mvp/${row.id}`), c.title),

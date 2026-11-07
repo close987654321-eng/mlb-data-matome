@@ -230,6 +230,15 @@ export function finalistsFaqItem(
   };
 }
 
+/**
+ * ボードの更新日（構造化データの dateModified）＝集計日と、最終候補・受賞者を書いた日の新しい方。
+ * 確定後は集計日が動かないので、発表週に中身を足しても「9月29日更新」に見えていた（sitemap の lastmod と同じ規則）。
+ */
+export function boardModified(season: number | string, asOf: string | undefined): string | undefined {
+  const dates = [asOf?.slice(0, 10), currentAwards(season)?.updatedAt].filter(Boolean) as string[];
+  return dates.length ? [...dates].sort()[dates.length - 1] : undefined;
+}
+
 /** 「決まり方」の発表日欄の本文。 */
 export function awardGuideDate(kind: AwardKind, en: boolean, season: number | string | undefined): string {
   const aw = currentAwards(season);

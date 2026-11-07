@@ -31,6 +31,7 @@ import {
   SEASON_FINAL_FROM,
   type BoardLeaders,
   awardsMetaPhrase,
+  boardModified,
   currentAwards,
 } from '@/lib/boardSeo';
 import { type Locale } from '@/lib/i18n';
@@ -136,7 +137,7 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
         name: c.title,
         description: c.metaDesc,
         url: absoluteUrl(locale, '/roy'),
-        ...(board.asOf ? { dateModified: board.asOf.slice(0, 10) } : {}),
+        ...(boardModified(board.season, board.asOf) ? { dateModified: boardModified(board.season, board.asOf) } : {}),
       },
       boardItemList(
         board,
