@@ -18,8 +18,10 @@ import {
   stoveActive,
   rowStatus,
   worldSeriesEnd,
+  buildPlayerStoveFaq,
   ROUTE_LABEL,
 } from '@/lib/stoveLeague';
+import FaqList from '@/components/FaqList';
 import PostingWatch from '@/components/PostingWatch';
 import { fmtDate } from '@/lib/format';
 import FeedCard from '@/components/FeedCard';
@@ -204,18 +206,46 @@ export default async function PlayerHubPage({
     ...(hasStats && season?.team ? { memberOf: { '@type': 'SportsTeam', name: season.team } } : {}),
     ...(player.sameAs.length ? { sameAs: player.sameAs } : {}),
   };
+  // オフの「よくある質問」＝去就ブロックと同じ事実の問い答え（画面と FAQPage を同じ配列から組む）。
+  const stoveOn = Boolean(stove && stoveCat && stoveActive(stoveCat));
+  const stoveFaq =
+    stove && stoveOn
+      ? buildPlayerStoveFaq(
+          stove,
+          { ja: player.nameJa, en: player.nameEn },
+          stoveStats.players[String(player.mlbId)],
+          stoveStats.season,
+          stoveCat?.checkedAt,
+        )
+      : [];
+  // オフは去就の更新日も中身の更新＝成績スナップショット（冬は止まる）より新しければそちらを出す。
+  const pageModified =
+    stove && stoveOn && (!dateModified || stove.asOf > dateModified.slice(0, 10)) ? stove.asOf : dateModified;
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'ProfilePage',
         // 成績スナップショットの更新時刻＝毎時CI更新の鮮度シグナル（記事側 about:Person と双方向化）。
-        ...(dateModified ? { dateModified } : {}),
+        // オフの間は去就の更新日のほうが新しければそれを使う（上の pageModified）。
+        ...(pageModified ? { dateModified: pageModified } : {}),
         mainEntity: person,
         ...(threads.length
           ? { relatedLink: threads.slice(0, 25).map((th) => absoluteUrl(locale, `/${th.sport}/${th.id}`)) }
           : {}),
       },
+      ...(stoveFaq.length
+        ? [
+            {
+              '@type': 'FAQPage',
+              mainEntity: stoveFaq.map((item) => ({
+                '@type': 'Question',
+                name: locale === 'en' ? item.q.en : item.q.ja,
+                acceptedAnswer: { '@type': 'Answer', text: locale === 'en' ? item.a.en : item.a.ja },
+              })),
+            },
+          ]
+        : []),
       {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -487,6 +517,12 @@ export default async function PlayerHubPage({
           )}
         </section>
       )}
+
+      <FaqList
+        faq={stoveFaq}
+        en={locale === 'en'}
+        heading={locale === 'en' ? `${player.nameEn}: offseason FAQ` : `${player.nameJa}の去就についてよくある質問`}
+      />
 
       {related.length > 0 && (
         <section className="pt-2">

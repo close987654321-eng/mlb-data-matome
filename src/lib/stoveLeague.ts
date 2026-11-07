@@ -2,6 +2,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import type { Thread, ThreadComment } from '@/types/thread';
 import type { FaqItem } from '@/components/FaqList';
+import { fmtDate as fmtDay } from './format';
 import { getPostseason, getPostseasonArchive } from './postseason';
 import { getTeamById } from './teams';
 
@@ -430,5 +431,76 @@ export function buildStoveFaq(
       },
     },
   ];
+  return items;
+}
+
+/**
+ * 選手LP（/player/{slug}）のオフの「よくある質問」。ハブの buildStoveFaq の選手版。
+ *
+ * なぜ要るか: オフの検索は「{選手} 移籍先」「{選手} FA いつ決まる」「{選手} 契約 予想」のように問いの形で来る。
+ * 2026-11-07 の点検で、菅野の LP が「菅野智之のロッキーズ退団と今後の移籍先…を教えて」のような長い質問文
+ * （AIモード型）で数百表示を得ていた＝問いと答えが1対1で並ぶほど拾われる。/prospects の選手LPには
+ * FAQ があるのに、MLB組の選手LPには無かった。
+ * 答えは同じページの「今オフの去就」ブロックに載っている事実（見出し・日程・関心球団・相場・決着・成績）の
+ * 言い換えだけ＝新しい断定を作らない。相場は誰の見立てかを必ず添える。
+ */
+export function buildPlayerStoveFaq(
+  jp: JpStove,
+  name: Bi,
+  stats: StovePlayerStats | undefined,
+  season: number,
+  /** ハブ全体を確認した日（stove-daily が毎朝全員を見直す）。選手の asOf より新しければ「◯日時点」はこちら。 */
+  checkedAt?: string,
+): FaqItem[] {
+  const items: FaqItem[] = [];
+  const out = jp.outcome;
+  // 1問目＝いちばん打たれる問い。決着済みなら「去就は？」、FAなら「移籍先は？」、オプトアウトなら「使う？」。
+  const q1: Bi = out
+    ? { ja: `${name.ja}の今オフの去就は？`, en: `What did ${name.en} decide this offseason?` }
+    : jp.route === 'opt-out'
+      ? { ja: `${name.ja}はオプトアウトする？`, en: `Will ${name.en} opt out?` }
+      : jp.route === 'posting'
+        ? { ja: `${name.ja}のポスティングはどうなっている？`, en: `Where does ${name.en}'s posting stand?` }
+        : { ja: `${name.ja}の移籍先はどこ？`, en: `Where will ${name.en} sign?` };
+  const suitors = jp.suitors?.length
+    ? { ja: `関心が報じられている球団は${jp.suitors.map((s) => s.ja).join('・')}。`, en: `Reported interest: ${jp.suitors.map((s) => s.en).join(', ')}.` }
+    : { ja: '', en: '' };
+  // FAで決着も契約の記録も無いうちは、問い（移籍先は？）に最初の一文で答える＝「まだ決まっていない」。
+  // 契約の記録（statsapi）があるのに outcome が未記入の日は言い切らない（ハブの「契約：◯◯」表示と同じ慎重さ）。
+  const undecided = !out && jp.route === 'fa' && !latestSigning(stats);
+  const seen = checkedAt && checkedAt > jp.asOf ? checkedAt : jp.asOf;
+  const day = { ja: fmtDay(seen, false), en: fmtDay(seen, true) };
+  items.push({
+    q: q1,
+    a: {
+      // 決着済みの見出しは決着そのものを書いている（stove-daily の運用）＝決着文を重ねない。
+      ja: `${undecided ? `${day.ja}時点で移籍先は決まっていない。` : ''}${jp.headline.ja}${out ? '' : suitors.ja}`,
+      en: `${undecided ? `As of ${day.en}, he has not signed. ` : ''}${jp.headline.en}${out ? '' : ` ${suitors.en}`}`.trim(),
+    },
+  });
+  if (!out && jp.window) {
+    items.push({
+      q: { ja: `${name.ja}の去就はいつ決まる？`, en: `When will ${name.en}'s future be settled?` },
+      a: { ja: jp.window.ja, en: jp.window.en },
+    });
+  }
+  if (!out && jp.marketValue?.length) {
+    // 相場欄は「誰が言ったか」とセットの欄（予想額だけでなく前回の契約の事実も入る）＝出典名を添えて言い換える。
+    const sources = [...new Set(jp.marketValue.map((m) => m.sourceName))];
+    items.push({
+      q: { ja: `${name.ja}の契約の相場は？`, en: `What is ${name.en}'s market value?` },
+      a: {
+        ja: `${jp.marketValue.map((m) => m.ja).join('')}（出典：${sources.join('・')}。このサイトの予想ではありません）`,
+        en: `${jp.marketValue.map((m) => m.en).join(' ')} (Sources: ${sources.join(', ')}; not our own projection.)`,
+      },
+    });
+  }
+  const line = { ja: statLine(stats, false), en: statLine(stats, true) };
+  if (line.ja) {
+    items.push({
+      q: { ja: `${name.ja}の${season}年の成績は？`, en: `How did ${name.en} do in ${season}?` },
+      a: { ja: `${season}年は${line.ja}（MLB公式の記録）。`, en: `In ${season}: ${line.en} (MLB official stats).` },
+    });
+  }
   return items;
 }
