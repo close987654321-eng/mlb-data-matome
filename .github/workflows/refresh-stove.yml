@@ -1,9 +1,10 @@
 name: ストーブリーグ（FAの動き）自動更新
 
 # /stove-league の「契約の動き」と今季成績を MLB公式 Stats API から取り直し、変化があれば
-# data/stove-league-stats.json をコミット→push（Vercel が自動デプロイ）。
+# data/stove-league-stats.json と data/stove-moves.json をコミット→push（Vercel が自動デプロイ）。
 # refresh-stats.yml は冬モードで止まる（オフは試合が無い）が、FAの契約はまさにオフに起きるので別に回す。
-# 1回の実行で statsapi 2コール（選手まとめて1・取引記録1）。中身が変わらなければスクリプトが書かない＝no-op。
+# 1回の実行で statsapi 3コール前後（選手まとめて1・取引記録2。新しく出てきた選手がいればその成績ぶん）。
+# 中身が変わらなければスクリプトが書かない＝no-op。data/stove-moves.json（移籍情報）も同じ実行で作る。
 # 期間は data/stove-league.json の activeUntil まで（過ぎたら何もしない＝翌年のカタログを書くまで休む）。
 
 on:
@@ -48,18 +49,21 @@ jobs:
         run: |
           set -euo pipefail
           node scripts/fetch-stove-stats.mjs
+          # 移籍情報（/stove-league/moves）と球団LPのオフの欄。取引記録1コール＋新しく出てきた選手の成績だけ。
+          node scripts/fetch-stove-moves.mjs
 
       - name: 変化があればコミット＆push
         if: steps.gate.outputs.run == 'true'
         run: |
           set -euo pipefail
-          if git diff --quiet -- data/stove-league-stats.json; then
+          # stove-moves.json は新規のこともある（git diff は未追跡のファイルを見ない）＝先に add してから比べる。
+          git add data/stove-league-stats.json data/stove-moves.json
+          if git diff --cached --quiet; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0
           fi
           git config user.name "stats-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/stove-league-stats.json
           git commit -m "chore(stove): FAの動きを自動更新 ($(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M JST'))"
           for i in 1 2 3 4 5; do
             if git push; then echo "push成功"; exit 0; fi

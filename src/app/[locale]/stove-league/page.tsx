@@ -23,6 +23,8 @@ import {
   ROUTE_LABEL,
 } from '@/lib/stoveLeague';
 import { buildFaRows, faCounts } from '@/lib/stoveBoard';
+import { getLockout } from '@/lib/lockout';
+import { getStoveMoves, moveCounts } from '@/lib/stoveMoves';
 import { headshotUrl } from '@/lib/teams';
 import StoveJapanese, { StoveSummary, type StoveJpCard } from '@/components/StoveJapanese';
 import StoveBoard from '@/components/StoveBoard';
@@ -76,12 +78,14 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
   if (!cat) notFound();
   const t = await getTranslations();
   const en = locale === 'en';
-  const [stats, npb, all, wsEnd, ws] = await Promise.all([
+  const [stats, npb, all, wsEnd, ws, lockout, movesFile] = await Promise.all([
     getStoveStats(),
     getNpbStats(),
     getAllThreads(),
     worldSeriesEnd(cat.season),
     worldSeriesState(cat.season),
+    getLockout(),
+    getStoveMoves(),
   ]);
   const off = offseasonLabel(cat.season);
   const threads = stoveThreads(all, cat.season);
@@ -281,6 +285,30 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
         ? `${movers.map((p) => p.nameEn).join(', ')}: posting and international free agency, step by step.`
         : `${movers.map((p) => p.nameJa).join('・')}のポスティング・海外FAの現在地。`,
     },
+    ...(movesFile
+      ? [
+          {
+            href: '/stove-league/moves',
+            eyebrow: en ? 'Transactions' : '移籍情報',
+            title: en ? 'Signings and trades by date' : '移籍情報：FA契約・トレードの一覧',
+            body: en
+              ? `${moveCounts(movesFile).signings} signings and ${moveCounts(movesFile).trades} trades so far, synced from MLB's transaction log every 3 hours.`
+              : `FA契約${moveCounts(movesFile).signings}件・トレード${moveCounts(movesFile).trades}件を日付順に。MLB公式の取引記録から3時間ごとに更新。`,
+          },
+        ]
+      : []),
+    ...(lockout
+      ? [
+          {
+            href: '/stove-league/lockout',
+            eyebrow: en ? 'Lockout' : 'ロックアウト',
+            title: en ? 'MLB lockout: when, why and what it means' : 'MLBロックアウト：いつから・なぜ・日本人への影響',
+            body: en
+              ? 'The CBA deadline, the salary cap dispute, and what freezes for free agents and posted players.'
+              : `労使協定の期限${cbaDay?.on ? `（${fmtDate(cbaDay.on, false)}）` : ''}、争点のサラリーキャップ、FAとポスティングの交渉がどうなるか。`,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -411,6 +439,18 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
           {en ? `Free agent rankings ${off}: status of the top ${fa.total}` : `FAランキング${off}：上位${fa.total}人の契約状況`}{' '}
           <span aria-hidden className="ml-1">→</span>
         </Link>
+        {movesFile && (
+          <Link href="/stove-league/moves" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
+            {en ? `MLB transactions ${off}: signings and trades by date` : `MLB移籍情報${off}：FA契約・トレードの一覧`}{' '}
+            <span aria-hidden className="ml-1">→</span>
+          </Link>
+        )}
+        {lockout && (
+          <Link href="/stove-league/lockout" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
+            {en ? `MLB lockout ${off}: when, why and what it means` : `MLBロックアウト${off}：いつから・なぜ・日本人選手への影響`}{' '}
+            <span aria-hidden className="ml-1">→</span>
+          </Link>
+        )}
         <Link href="/prospects" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
           {en ? 'Japanese players heading to MLB (NEXT MLB)' : `メジャー挑戦する日本人選手${cat.season + 1}（NEXT MLB）`}{' '}
           <span aria-hidden className="ml-1">→</span>

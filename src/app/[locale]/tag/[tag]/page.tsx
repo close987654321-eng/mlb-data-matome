@@ -54,6 +54,7 @@ import { getPostseason } from '@/lib/postseason';
 import { teamPostseasonRun, flowVoices, voiceKey, PS_VOICES_PER_GAME, type TeamPsRun } from '@/lib/teamPostseason';
 import { getGameVoices } from '@/lib/gameVoices';
 import { getTeamNotes } from '@/lib/teamNotes';
+import { teamOffseasonBlock, teamOffseasonSentenceJa, type TeamOffseasonBlock } from '@/lib/stoveMoves';
 import { getTeam, headshotUrl, teamLogoUrl, teamOfficialUrl, type TeamInfo } from '@/lib/teams';
 import {
   getStandings,
@@ -74,6 +75,7 @@ import TeamStandings from '@/components/TeamStandings';
 import TeamNow from '@/components/TeamNow';
 import TeamGames from '@/components/TeamGames';
 import TeamPostseason from '@/components/TeamPostseason';
+import TeamOffseason from '@/components/TeamOffseason';
 import SectionHeading from '@/components/SectionHeading';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import { Link } from '@/lib/navigation';
@@ -209,12 +211,15 @@ export async function generateMetadata({
     description = `${fighterHubIntroJa(fighter, feed.length)}${updated ? `最終更新: ${updated}。` : ''}`;
   } else if (teamLp && locale !== 'en') {
     // チームタグLP: 所属日本人選手・地区順位・件数・最終更新入りの短縮文（毎日動く実データ＝鮮度）。
-    const [snap, standing, postseason] = await Promise.all([
+    const [snap, standing, postseason, offBlock] = await Promise.all([
       getPlayersSnapshot(),
       standingOfTeam(teamLp.info.id),
       getPostseason(),
+      teamOffseasonBlock(teamLp.info.id, teamLp.nameJa, locale),
     ]);
     const jp = teamJpPlayers(snap, decoded);
+    // オフの間は「◯◯ 補強 2026」で探す人が多い＝補強の現在地（加入・退団・FAの数）を順位より前に出す。
+    const offSentence = offBlock ? teamOffseasonSentenceJa(offBlock) : '';
     // ポストシーズン中（と閉幕後のオフ）は地区順位より勝ち上がりの現在地のほうが検索者の答えになる。
     const run =
       postseason && postseason.season === seasonYear(snap)
@@ -226,11 +231,9 @@ export async function generateMetadata({
       jp,
       feed.length,
       updated,
-      run
-        ? run.statusJa
-        : standing
-          ? `現在${standingPhraseJa(standing.row, standing.division)}。`
-          : undefined,
+      `${offSentence}${
+        run ? run.statusJa : standing ? `現在${standingPhraseJa(standing.row, standing.division)}。` : ''
+      }` || undefined,
     );
   }
   const url = absoluteUrl(locale, `/tag/${encodeURIComponent(decoded)}`);
@@ -329,6 +332,8 @@ export default async function TagPage({
   // ポストシーズン欄に出した声と試合。下の声ピックアップ・タイムラインで同じ声を2度出さない。
   const psVoiceKeys = new Set<string>();
   const psThreadIds = new Set<string>();
+  // オフの欄（チームLPのみ・オフの間だけ）。今オフの加入・退団・FAになった選手・関心が報じられた選手。
+  let teamOff: TeamOffseasonBlock | null = null;
   if (hub) {
     // 所属は ja/en どちらのLPでも顔写真の横に出すので、導入文（ja のみ）と切り離して取る。
     const [snap, season, gamelog, layer] = await Promise.all([
@@ -367,7 +372,7 @@ export default async function TagPage({
   } else if (teamLp) {
     // タイムラインの声は**全記事**から拾う（タグ絞りのフィードではない）＝日次記事がその試合に
     // 触れていれば、専用記事がまだ無い直近の試合にも現地の声を出せる。
-    const [snap, standing, standings, schedule, notes, allThreads, layer, postseason] = await Promise.all([
+    const [snap, standing, standings, schedule, notes, allThreads, layer, postseason, offBlock] = await Promise.all([
       getPlayersSnapshot(),
       standingOfTeam(teamLp.info.id),
       getStandings(),
@@ -376,7 +381,9 @@ export default async function TagPage({
       getAllThreads(),
       getGameVoices(),
       getPostseason(),
+      teamOffseasonBlock(teamLp.info.id, teamLp.nameJa, locale),
     ]);
+    teamOff = offBlock;
     psRun =
       postseason && postseason.season === seasonYear(snap)
         ? teamPostseasonRun(postseason, teamLp.info.id, allThreads)
@@ -639,6 +646,16 @@ export default async function TagPage({
           着地の第一意図「いま現地はどう言ってる？／どういう状況？」にファーストビューで答える。 */}
       {/* ポストシーズン中（と閉幕後のオフ）は「いま」をポストシーズン欄に差し替える＝地区順位は確定済みで、
           来た人が知りたいのは勝ち上がりの現在地・次の試合・各試合の流れと現地の沸き方（2026-10-06 村山）。 */}
+      {/* オフの間は補強の現在地をいちばん上に＝冬に「◯◯ 補強」で来た人の問いに、試合の振り返りより先に答える。 */}
+      {teamLp && teamOff && (
+        <TeamOffseason
+          name={locale === 'en' ? teamLp.info.nameEn : teamLp.nameJa}
+          off={teamOff.off}
+          data={teamOff.data}
+          side={teamOff.side}
+          locale={locale}
+        />
+      )}
       {teamLp && psRun && (
         <TeamPostseason run={psRun} hub={teamLp} locale={locale} jpPlayers={teamPlayers} notes={teamNotes}>
           {/* 編集部ノートは現在地のすぐ下へ＝「どう見られているか」を試合カードの前に30秒で掴ませる。

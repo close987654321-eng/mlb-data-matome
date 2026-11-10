@@ -173,6 +173,7 @@ export default async function ProspectsPage({
           filed: t('prospects.step.filed'),
           talks: t('prospects.step.talks'),
           signed: t('prospects.step.signed'),
+          until: t('prospects.step.until'),
         }}
         cols={{
           player: t('prospects.boardPlayer'),

@@ -21,6 +21,9 @@ import { getRoyBoard } from '@/lib/royBoard';
 import { currentAwards } from '@/lib/boardSeo';
 import { getPostseason } from '@/lib/postseason';
 import { getStoveLeague, getStoveStats, stoveActive } from '@/lib/stoveLeague';
+import { getLockout } from '@/lib/lockout';
+import { getStoveMoves } from '@/lib/stoveMoves';
+import { getTeam } from '@/lib/teams';
 import { locales, defaultLocale } from '@/lib/i18n';
 
 // 本番ドメイン。プレビュー等で差し替えたい場合は NEXT_PUBLIC_SITE_URL で上書きする。
@@ -82,6 +85,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     getCyYoungBoard(),
     getRoyBoard(),
   ]);
+  const [lockout, stoveMoves] = await Promise.all([getLockout(), getStoveMoves()]);
   const npbAsOf = npb.asOf;
   const latest = threads[0]?.fetchedAt; // 新着順なので先頭が最新
 
@@ -123,6 +127,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const playerHubLatest = maxDate(
     playerEntries.map((e) => e.lastModified).filter(Boolean).map(String),
   );
+  // 球団LPはオフの間、先頭に補強の欄（加入・退団・FAになった選手）を出す＝その球団の最新の取引の日も中身の更新日。
+  // 取り込み日（ファイルの asOf）ではなく**その球団の取引の日付**を使う＝他球団の動きで全30球団の lastmod が進まない。
+  const teamMoveDay = new Map<number, string>();
+  if (stove && stoveActive(stove) && stoveMoves?.season === stove.season) {
+    for (const m of stoveMoves.moves) {
+      for (const id of [m.fromTeamId, m.toTeamId, ...(m.teamIds ?? [])]) {
+        if (typeof id === 'number' && (teamMoveDay.get(id) ?? '') < m.date) teamMoveDay.set(id, m.date);
+      }
+    }
+  }
 
   return [
     entry('', latest), // ホーム（新着が更新されたら lastModified も動く）
@@ -162,6 +176,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(stove ? [entry('/stove-league', maxDate([stove.asOf, stoveStats.asOf.slice(0, 10)].filter(Boolean)))] : []),
     // FAランキングと契約状況（/stove-league/fa）。同じ data の別の面＝更新日も同じ決め方。
     ...(stove ? [entry('/stove-league/fa', maxDate([stove.asOf, stoveStats.asOf.slice(0, 10)].filter(Boolean)))] : []),
+    // ロックアウト（/stove-league/lockout）。更新日は自分の data（stove-lockout.json）の asOf。
+    ...(lockout ? [entry('/stove-league/lockout', lockout.asOf)] : []),
+    // 移籍情報（/stove-league/moves）。更新日は取引記録を取り込んだ日（中身が変わった時だけ進む）。
+    ...(stoveMoves ? [entry('/stove-league/moves', stoveMoves.asOf.slice(0, 10))] : []),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     // 超RIZIN.5 特設ハブ（開催前から育てるイベント観測所。lastmod はコンテンツの最終更新日）。
@@ -214,6 +232,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             [
               threads.find((t) => (t.tags ?? []).includes(tag))?.fetchedAt,
               columns.find((c) => (c.tags ?? []).includes(tag))?.publishedAt,
+              teamMoveDay.get(getTeam(tag)?.id ?? -1),
             ].filter(Boolean) as string[],
           ),
         ),

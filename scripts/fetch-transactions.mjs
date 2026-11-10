@@ -82,7 +82,8 @@ function loadTeams() {
 function loadJpPlayers() {
   const src = readFileSync(path.join(ROOT, 'src/lib/players.ts'), 'utf8');
   const byId = new Map();
-  const re = /nameJa:\s*'([^']+)',\s*nameEn:\s*'[^']+',\s*mlbId:\s*(\d+)/g;
+  // 比較用の外国人（rival: true）は日本人に数えない（ロハスらが「日本人」の★★★に入っていた）。
+  const re = /nameJa:\s*'([^']+)',\s*nameEn:\s*'[^']+',\s*mlbId:\s*(\d+)(?!\d)(?!,\s*rival:\s*true)/g;
   for (const m of src.matchAll(re)) byId.set(Number(m[2]), m[1]);
   if (byId.size === 0) throw new Error('players.ts から日本人選手を1人も読めなかった');
   return byId;

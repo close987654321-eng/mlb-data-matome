@@ -33,14 +33,23 @@ function Item({ t, locale }: { t: Thread; locale: Locale }) {
  * 見出しと出どころだけの一覧にして、日本人の去就のすぐ下に置く＝「誰がどうなるか」を見た人が
  * そのまま「現地はどう見ているか」へ進める。
  */
-export default function StoveReactions({ threads, locale }: { threads: Thread[]; locale: Locale }) {
+export default function StoveReactions({
+  threads,
+  locale,
+  label,
+}: {
+  threads: Thread[];
+  locale: Locale;
+  /** 見出し。省くと「ストーブリーグの海外の反応」（ロックアウトのページは自分の見出しを渡す）。 */
+  label?: { ja: string; en: string };
+}) {
   const en = locale === 'en';
   const head = threads.slice(0, OPEN);
   const rest = threads.slice(OPEN);
   return (
     <section id="reactions">
       <SectionHeading
-        label={en ? 'Overseas reactions' : 'ストーブリーグの海外の反応'}
+        label={label ? (en ? label.en : label.ja) : en ? 'Overseas reactions' : 'ストーブリーグの海外の反応'}
         count={threads.length || undefined}
         lead
       />

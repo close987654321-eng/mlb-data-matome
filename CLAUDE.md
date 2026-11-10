@@ -77,7 +77,8 @@ SSG します。
     ├── fetch-npb-stats.mjs     # NEXT MLB（NPB注目株）の成績を NPB公式から取得（§4.1）
     ├── fetch-transactions.mjs  # MLBの移籍・契約レーダー（オフシーズンの記事ネタ・§4.1）
     ├── fetch-stove-stats.mjs   # ストーブリーグのFA注目選手の今季成績＋オフの契約の動き（§4.1・3時間ごとにCI）
-    ├── check-stove-league.mjs  # stove-league.json の公開前検査（出典URL・未来の日付・表記・slug）
+    ├── fetch-stove-moves.mjs   # 移籍情報（/stove-league/moves）と球団LPの補強の欄の元データを取引記録から（§4.1・3時間ごとにCI）
+    ├── check-stove-league.mjs  # stove-league.json と stove-lockout.json の公開前検査（出典URL・未来の日付・表記・slug）
     ├── reddit-rss/             # Reddit 公開RSSで反応を集める rsearch / rfeed / pick（クラウドからも使う・README）
     ├── fetch-game-voices.mjs   # チームLPの「1試合1件の現地の声」を公式ハイライトから取得（§4.1）
     │                           #   refresh-season = 昇格した「今季の声」の生存を取り直す（毎週）
@@ -341,7 +342,25 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
       （容認→申請→交渉開始／海外FAは権利行使の表明）で段階を並べる。名簿は「今オフの挑戦者」と「来オフ以降の候補」に分ける。
     - 年は「2026-2027」と省かずに書く（`offseasonLabel`）＝入力候補は「移籍 2027」「メジャー挑戦 日本人 2027」と来季の年で来る。
     - 賞レース3ボードの表の直下に `BoardStoveLink`（ボードの選手ID×FAランキングの突き合わせ）＝発表後の読者をFA一覧へ送る。
-    - 第2弾以降（未実装）: `/stove-league/moves`（日付順の移籍情報・statsapi から自動）・`/stove-league/lockout`・球団LPのオフの欄・用語のページ。
+    - `/stove-league/moves`＝移籍情報（「mlb 移籍情報／移籍 一覧／移籍 2027」）。**全部が機械**＝`node scripts/fetch-stove-moves.mjs` が
+      statsapi の `/transactions`（FA解禁日〜今日・1コール）から FA契約・トレード・ウェーバー・自由契約・引退・FA宣言を拾い、
+      `data/stove-moves.json` へ（`refresh-stove.yml` が3時間ごと・中身が同じなら書かない・**人は触らない**）。トレードは選手ごとに
+      1行ずつ返るので日付＋説明文で1件にまとめる。行の文（「カブスが◯◯と契約」）は `src/lib/stoveMoves.ts` が組み、公式の英文を
+      そのまま添える（訳で情報を足さない）。主な動き（トレード・マイナーでない契約・注目選手）だけ開き、残りは日ごとに畳む。
+      注目度 `tier`＝3 日本人（players.ts の rival を除く）／2 FA注目30人か今季成績が大物の水準／1 それ以外。
+      ⚠️ 契約の年数・金額は statsapi に無い＝**FA注目30人だけ** `board[].outcome`（出典つき）から行に添える。日付は米東部（画面に明記）。
+      取引記録の「契約」の行は元の球団を持たない（fromTeam が空）＝退団は「その球団のFA宣言」と「同じ選手の他球団との契約」を突き合わせて組む。
+    - `/stove-league/lockout`＝ロックアウト（「mlb ロックアウト とは／なぜ／いつまで／2027／日本人選手」）。協定の期限（日本時間12月2日）の
+      3週間前に出して先に読ませておく（/rizin5 と同じ育て方）。正は `data/stove-lockout.json`（毎朝の定期実行が出典つきで書く）＝
+      `status`（pending／on／ended）で題と見出しの言い方が変わる・`timeline`（最新の動き）・`what`（何が止まるか）・`issues`（争点）・
+      `japan`（日本人への影響）・`history`（過去）。読み手は `src/lib/lockout.ts`。期限の日時は stove-league.json の `dates`（`cba`）を使う（二重に持たない）。
+    - 球団LP（`/tag/{球団}`）の**オフの欄**（`TeamOffseason`・オフの間だけ・ページの先頭）＝「◯◯の補強2026-2027｜加入・退団と海外の反応」。
+      「ドジャース 補強 2026 最新」のような球団名＋補強の検索を受ける（それまで球団LPからストーブリーグへのリンクは0本だった）。
+      中身は2つの data の並べ替えだけ: 加入・退団＝取引記録（`teamOffseason`）、FAになった主力の状況と、関心が報じられた選手＝
+      FA一覧と去就の `suitors` の逆引き（`teamStoveSide`）。**球団名は teams.ts の短縮名で書く**（ずれるとそのLPに出ない）。
+      題は変えず、説明文の先頭付近に補強の現在地を1文入れる（`teamOffseasonSentenceJa`＝数は取引記録の数え上げだけ）。
+    - `/prospects` の表は `postingWatch.steps.until`（交渉期限・日本時間）も出す＝報道が期限を書いたときだけ入れる。
+    - 第3弾以降（未実装）: 用語のページ（`/stove-league/guide`）・FA上位の外国人の選手ページ・手元の定期実行での反応記事・歴代一覧。
     **毎朝6:00 JST のクラウド定期実行（2026-10-30〜）**が `stove-daily` スキル（`.claude/skills/stove-daily/SKILL.md`）を回す＝
     報道の確認（WebSearch）→ `stove-league.json`／`npbPlayers.ts` の postingWatch を出典つきで更新 → 大きな動きの日だけ Reddit の
     反応記事を1本 → `check-stove-league.mjs` と `build:gate` を通った回だけ公開 → Slack DM。中身が動かない日は `checkedAt`（確認日）

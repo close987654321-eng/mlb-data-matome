@@ -31,7 +31,7 @@ export default function ProspectBoard({
   /** 「ポスティング」「海外FA」の既訳ラベル（表の中で文字列を組み立てない）。 */
   routeLabels: { posting: string; intlFa: string };
   /** 手続きの段階の既訳ラベル（容認・申請・交渉開始・権利行使を表明・契約）。 */
-  stepLabels: Record<StepKey, string>;
+  stepLabels: Record<StepKey | 'until', string>;
   asOfLabel: string;
 }) {
   if (!players.length) return null;
@@ -101,6 +101,12 @@ export default function ProspectBoard({
                             </span>
                           );
                         })}
+                        {/* 交渉期限（ポスティングの45日）。契約が決まったら出さない。 */}
+                        {w?.steps?.until && !w.steps.signed && (
+                          <span className="whitespace-nowrap text-xs text-ink-mute">
+                            {stepLabels.until} <span className="tabular-nums">{md(w.steps.until)}</span>
+                          </span>
+                        )}
                       </span>
                     ) : w?.window ? (
                       shorten(en ? w.window.en : w.window.ja)

@@ -1,16 +1,18 @@
 ---
 name: stove-daily
-description: ストーブリーグ（/stove-league）の毎朝の更新。日本人選手の去就と FA 注目選手の報道を集めて data/stove-league.json を最新にし、大きな動きがあれば Reddit の海外の反応を記事にする。毎朝6:00 JST のクラウド定期実行がこの手順を回す。手元で「ストーブリーグ更新して」「FAの最新情報を反映して」と言われたときも同じ手順。
+description: ストーブリーグ（/stove-league）の毎朝の更新。日本人選手の去就と FA 注目選手の報道を集めて data/stove-league.json を最新にし、労使交渉の動きを data/stove-lockout.json に足し、大きな動きがあれば Reddit の海外の反応を記事にする。毎朝6:00 JST のクラウド定期実行がこの手順を回す。手元で「ストーブリーグ更新して」「FAの最新情報を反映して」と言われたときも同じ手順。
 ---
 
 # ストーブリーグの毎朝更新（stove-daily）
 
-`/stove-league`（オフの入口）・`/stove-league/fa`（FAランキングと契約状況）・`/prospects`（メジャー挑戦する日本人）と、
-日本人選手の選手LP（`/player/{slug}` の「今オフの去就」）を**毎朝その時点の事実**にする。
+`/stove-league`（オフの入口）・`/stove-league/fa`（FAランキングと契約状況）・`/stove-league/lockout`（ロックアウト）・
+`/prospects`（メジャー挑戦する日本人）と、日本人選手の選手LP（`/player/{slug}` の「今オフの去就」）を**毎朝その時点の事実**にする。
+`/stove-league/moves`（移籍情報）と球団LPの「補強」の欄は取引記録から自動で組まれる＝ここでは書かない（契約の年数・金額だけ `board[].outcome` から引く）。
 仕組みの全体は CLAUDE.md §4.1「ストーブリーグ」。ここは毎朝の段取りだけを書く。
 
 **担当の割り方（崩さない）**
 - 成績・FA宣言・どこと契約したか（球団名）＝ `scripts/fetch-stove-stats.mjs` が statsapi から自動で取る（3時間ごとの CI もある）
+- 30球団の契約・トレード・ウェーバー・自由契約の一覧＝ `scripts/fetch-stove-moves.mjs` が同じく自動で取る（`data/stove-moves.json`・**人は触らない**）
 - 報道の時系列・関心球団・相場・契約の中身（年数・金額）・状況の文章＝**この手順で人（エージェント）が書く**。必ず出典URLつき
 - 海外の反応＝記事（`data/threads/`）。タグ `ストーブリーグ` を付ければハブに自動で並ぶ
 
@@ -42,6 +44,8 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 - `node scripts/fetch-stove-stats.mjs` … 30人＋日本人の FA宣言・契約（球団名）を `data/stove-league-stats.json` に反映。
   出力の「オフの動き」を控える。🚨 statsapi が失敗したら推測で補わず、そのことを最後の通知に書く（手順2以降は続けてよい）。
   失敗した日の通知は結果を「一部失敗（公式の動きは未確認）」とし、「動きなし」とは書かない。
+- `node scripts/fetch-stove-moves.mjs` … 移籍情報（`/stove-league/moves`）と球団LPの補強の欄の元データ。中身が同じなら書かない。
+  出力の先頭に並ぶ「注目選手の動き」は、手順2で報道（契約の年数・金額）を探す相手の一覧として使う。
 - `node scripts/fetch-transactions.mjs <昨日>..<今日>` … 30人以外も含めた大きな動き（日本人は ★★★）。
 - **日本人選手（`japanese[]`）の公式の動きは、報道が無くても手順3で必ず文章に反映する**。
   `data/stove-league-stats.json` の `players[mlbId].moves` を見て、`timeline` にまだ無い動き
@@ -66,7 +70,8 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
    正式な申請（posted）・交渉期限・契約。`npbPlayers.ts` の `postingWatch` を更新する。
 3. FA注目30人: `MLB free agent signings` と `qualifying offer` で1回ずつ＋上位10人のうち報道の多い選手を名前で。
    契約・トレード・QO・オプトアウトの決定。
-4. 制度・日程: `MLB CBA lockout` で1回（労使交渉・ロックアウト・ウィンターミーティングの開催可否）。
+4. 制度・日程: `MLB CBA lockout` と `MLB ロックアウト` で1回ずつ（労使交渉・ロックアウト・ウィンターミーティングの開催可否）。
+   拾った動きは手順3の「ロックアウト」の欄へ（`data/stove-lockout.json`）。
 
 WebFetch で本文を開き、**書かれていることだけ**を拾う（見出しだけで判断しない）。
 
@@ -100,6 +105,29 @@ Yahoo（米国・日本）・日刊スポーツ・スポニチ・報知・サン
 - NPB組は `src/lib/npbPlayers.ts` の `postingWatch`（`asOf`・`headline`・`timeline`・`suitors`・`level`）を同じ規律で更新。
   手続きが進んだら **`steps`**（`approved`＝容認／`filed`＝申請／`talks`＝MLBが受理して交渉開始／`declared`＝海外FA権の行使表明／
   `signed`＝契約）に日本時間の日付を足す。`/prospects` の表はこの値で「容認 → 申請 → 交渉開始」を並べる＝timeline に出典がある出来事だけ書く。
+  **`until`＝交渉期限（日本時間の日付）**は、報道が期限の日時を書いたときだけ入れる（「45日」から自分で数えない）。
+  期限を過ぎた朝は結果（契約＝`signed`／不成立）を必ず探し、`headline` を書き直す。
+
+#### ロックアウト（`/stove-league/lockout`・`data/stove-lockout.json`）
+労使協定は**日本時間12月2日午後1時59分**（米東部12月1日午後11時59分）に切れる。そこへ向けて毎朝ここも見る。
+- `timeline`: 新しい動き（提案・声明・交渉の日程・期限の延長・ロックアウト入り・妥結）を**先頭に**足す（`date`＝日本時間・`ja`・`en`・`source`・`sourceName`）。
+  誰が言ったか・何を提案したか・数字を、記事に書かれたとおりに書く。「〜が有力」「〜とみられている」は**媒体がそう書いたとき**だけ、媒体名を主語にして書く。
+- `headline`: いまの状態の1〜2文（題の下・検索結果の説明文・FAQの1問目に使う）。動きがあった日は書き直す。
+- **`status`** は事実が起きた朝に切り替える（題と見出しの言い方が変わる）:
+  `pending`（期限の前）→ `on`（MLBがロックアウトを発表した）→ `ended`（新しい協定で合意した）。
+  期限を過ぎたのに `pending` のままだと検査が警告を出す。期限が延びた・交渉を続けることで合意した、という報道なら `pending` のまま `headline` と `deadlineNote`、日程表の `cba` を直す。
+- `issues`（争点）: 提案の数字が変わったら、その争点の文を書き直す（古い数字は「最初の提案は◯◯だった」と残してよい）。
+- `japan`（日本人選手への影響）: ポスティングの交渉期間・FAの契約・WBCなど、**報道が日本人や制度に触れたとき**だけ直す。自分で影響を推し量って書かない。
+- `history`（過去のロックアウト）: 触らない（年が替わるまで動かない）。
+- 中身を1つでも変えたら `asOf` を今日に。**`checkedAt` は毎回今日**（`stove-league.json` と同じ規律）。
+- ロックアウト中（`status:"on"`）は FA の契約・トレードが止まる＝`fetch-stove-moves.mjs` の新しい行が出なくなるのは正常。
+
+#### 移籍情報（`/stove-league/moves`）と球団LPの補強の欄
+- 行は `data/stove-moves.json`（MLB公式の取引記録）から自動で組まれる＝**このファイルを手で書き換えない**。
+- 契約の年数・金額は取引記録に無い。**FA注目30人の契約は `board[].outcome` に書けば、移籍情報の行にも出典つきで出る**。
+  30人の外の選手は条件を書く欄が無い＝書かない（球団名と「契約」「マイナー契約」だけが自動で出る）。
+- 球団LPの「関心が報じられている選手」は `japanese[].suitors`・`postingWatch.suitors`・`board[].suitors` の球団名から逆引きする＝
+  球団名は必ず `src/lib/teams.ts` の短縮名（「ドジャース」「ブルージェイズ」）で書く。表記がずれるとその球団のLPに出ない。
 
 #### FA一覧（`/stove-league/fa`）の欄（2026-11-10〜）
 FA注目30人の表は専用ページに分かれた。`board[]` の次の欄がその表の中身＝毎朝ここも見る。
@@ -133,6 +161,7 @@ FA注目30人の表は専用ページに分かれた。`board[]` の次の欄が
 
 ### 5. 検査と公開
 1. `node scripts/check-stove-league.mjs` が ✓（✗ は直す。直せないものは元に戻す）。
+   `data/stove-lockout.json` と `postingWatch.steps` の日付も同じコマンドが見る。⚠ の警告は通知に写す。
 2. `npm run build:gate`（通常の build はクラウドで EMFILE で落ちる）。通ったときだけ次へ。
    クラウドでは10分を超える＝Bash の `run_in_background` で起動し、終了の通知を待つ（`sleep` を重ねて待たない）。
 3. `git add -A && git commit -m "chore(stove): ストーブリーグを毎朝更新（<JST日付>）" && git push origin main`
@@ -144,6 +173,7 @@ Slack の自分宛DM（channel_id `U07D5DRCULF`、失敗時は `slack_search_use
 - 実行日（JST）と結果（更新あり／動きなしで確認のみ／一部失敗／失敗）
 - 手順1の2本の成否と、手順2で検索した語の一覧（最低限の検索を全部やったかが分かるように）
 - 変えたこと（選手ごとに1行・出典の媒体名）と、`outcome` を入れた契約。時制だけ直した選手もそう書く
+- ロックアウト（`stove-lockout.json`）に足した動きと、`status` を変えたならその理由（動きなしなら「動きなし」と1行）
 - 書かなかった話（噂だけ・出典が弱い・食い違い）＝人が判断する用
 - 作った記事（URL）か、作らなかった理由（大きな動きなし／Reddit に届かない）
 - 検査・build・push の結果（失敗ならエラーの該当行）

@@ -6,6 +6,10 @@
  * 報道の時系列・関心球団・契約の中身を書き足す。ビルドは JSON の中身の誤りを見ない（未来の日付・出典の無い
  * 記述・存在しない選手の slug でも通る）ので、ここで機械的に落とす。1つでも ✗ があれば終了コード1＝公開しない。
  *
+ * data/stove-lockout.json（/stove-league/lockout の時系列・争点・日本人への影響）も同じ規則で検査する＝
+ * 毎朝の定期実行が書き足す先が2つになっても、公開前に走らせるコマンドは1つのまま。
+ * npbPlayers.ts の postingWatch.steps（申請の段階の日付・交渉期限）も形式だけ見る。
+ *
  * 使い方:
  *   node scripts/check-stove-league.mjs            # 検査
  *   node scripts/check-stove-league.mjs --links    # 出典URLの生存も確かめる（手元用・クラウドは通信制限で使わない）
@@ -211,10 +215,80 @@ for (const b of cat.board ?? []) {
   }
 }
 
+// ── ロックアウト（data/stove-lockout.json）
+const lo = readJson('data/stove-lockout.json');
+if (lo) {
+  const w0 = 'lockout';
+  if (lo.season !== cat.season) err(`${w0}: season（${lo.season}）が stove-league.json（${cat.season}）と違う`);
+  checkDate(`${w0}.asOf`, lo.asOf);
+  if (lo.checkedAt) checkDate(`${w0}.checkedAt`, lo.checkedAt);
+  if (lo.checkedAt && lo.asOf > lo.checkedAt) err(`${w0}: asOf（${lo.asOf}）が checkedAt（${lo.checkedAt}）より新しい`);
+  if (!['pending', 'on', 'ended'].includes(lo.status)) err(`${w0}: status が不正（${lo.status}）`);
+  checkJa(`${w0}.headline`, lo.headline?.ja);
+  if (lo.deadlineNote) checkJa(`${w0}.deadlineNote`, lo.deadlineNote.ja);
+  const tl = lo.timeline ?? [];
+  if (!tl.length) err(`${w0}: timeline が空`);
+  const seen = new Set();
+  tl.forEach((t, i) => {
+    const tw = `${w0}.timeline[${i}]`;
+    checkDate(tw, t.date);
+    checkJa(tw, t.ja);
+    checkSourced(tw, t);
+    if (i > 0 && t.date > tl[i - 1].date) err(`${tw}: 新しい順になっていない（${tl[i - 1].date} の後に ${t.date}）`);
+    const key = `${t.date}|${t.source}`;
+    if (seen.has(key)) err(`${tw}: 同じ日付・同じ出典の重複`);
+    seen.add(key);
+  });
+  if (tl[0] && lo.asOf < tl[0].date) err(`${w0}: asOf（${lo.asOf}）が最新の報道（${tl[0].date}）より古い`);
+  for (const [i, x] of (lo.what?.items ?? []).entries()) checkJa(`${w0}.what.items[${i}]`, x.ja);
+  if (!lo.what?.items?.length) err(`${w0}.what: items が空`);
+  checkJa(`${w0}.what.vsStrike`, lo.what?.vsStrike?.ja);
+  checkSourced(`${w0}.what`, lo.what ?? {});
+  for (const [k, list] of [['issues', lo.issues], ['japan', lo.japan], ['history', lo.history]]) {
+    for (const [i, x] of (list ?? []).entries()) {
+      const xw = `${w0}.${k}[${i}]`;
+      checkJa(`${xw}.title`, (x.title ?? x.label)?.ja);
+      checkJa(xw, x.ja);
+      checkSourced(xw, x);
+      if (x.href && !x.href.startsWith('/')) err(`${xw}: href はサイト内のパス（/ から）で書く（${x.href}）`);
+      if (x.from) checkDate(`${xw}.from`, x.from);
+      if (x.to) checkDate(`${xw}.to`, x.to);
+      if (x.from && x.to && x.from > x.to) err(`${xw}: from が to より後`);
+      // 日数は from/to から数え直せる値だけ（出典の数字と食い違う写し間違いを止める）。
+      // 報道は初日を数に入れる（2021〜22年は「99日間」）ので、両端を含む数え方と含まない数え方のどちらかに合えばよい。
+      if (x.days != null && x.from && x.to) {
+        const n = dayDiff(x.from, x.to);
+        if (x.days !== n && x.days !== n + 1) err(`${xw}: days（${x.days}）が from〜to の日数（${n}〜${n + 1}）と合わない`);
+      }
+    }
+  }
+  // 状態と期限の食い違い: 協定の期限を過ぎたのに「期限の前」のまま＝題と見出しが古い合図。
+  const cba = (cat.dates ?? []).find((d) => d.key === 'cba')?.date;
+  if (lo.status === 'pending' && cba && today > cba) {
+    warn(`${w0}: 協定の期限（${cba}）を過ぎたのに status が pending のまま＝on（ロックアウト入り）か ended（妥結）に直し、headline も書き直す`);
+  }
+}
+
+// ── NEXT MLB の申請の段階（npbPlayers.ts の postingWatch.steps）
+{
+  const src = readFileSync(path.join(ROOT, 'src/lib/npbPlayers.ts'), 'utf8');
+  for (const m of src.matchAll(/steps:\s*\{([^}]*)\}/g)) {
+    for (const [, key, d] of m[1].matchAll(/(\w+):\s*'([^']*)'/g)) {
+      // until（交渉期限）だけは先の日付でよい。それ以外は起きた日＝未来なら書き間違い。
+      checkDate(`npbPlayers.steps.${key}`, d, { future: key === 'until' });
+    }
+  }
+}
+
 // ── 出典URLの生存（手元用）
 if (LINKS) {
   const urls = new Set();
   const add = (u) => u && urls.add(u);
+  if (lo) {
+    for (const t of lo.timeline ?? []) add(t.source);
+    add(lo.what?.source);
+    for (const x of [...(lo.issues ?? []), ...(lo.japan ?? []), ...(lo.history ?? [])]) add(x.source);
+  }
   add(cat.ranking?.url);
   add(cat.qualifyingOffer?.source);
   for (const d of cat.dates ?? []) add(d.source);
@@ -249,4 +323,8 @@ if (errors.length) {
   console.log(`\n✗ ${errors.length}件の問題＝公開しない`);
   process.exit(1);
 }
-console.log(`✓ stove-league.json OK（日本人${cat.japanese.length}人・FA${cat.board.length}人・日程${cat.dates.length}件・今日 ${today}）`);
+console.log(
+  `✓ stove-league.json OK（日本人${cat.japanese.length}人・FA${cat.board.length}人・日程${cat.dates.length}件・今日 ${today}）${
+    lo ? `／stove-lockout.json OK（時系列${lo.timeline.length}件・status=${lo.status}）` : ''
+  }`,
+);
