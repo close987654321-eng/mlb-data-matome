@@ -133,10 +133,10 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-07',
+      asOf: '2026-11-11',
       headline: {
-        ja: '阪神が11月2日、ポスティングの申請がMLBに受理されたと発表し、全30球団との交渉が始まった（スポーツ報知）。11月中の決着を目指している。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズの関心が報じられている。',
-        en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
+        ja: '阪神が11月2日、ポスティングの申請がMLBに受理されたと発表し、全30球団との交渉が始まった（スポーツ報知）。11月中の決着を目指している。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズ・パドレスの関心が報じられている。',
+        en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies, Blue Jays and Padres have all been linked.',
       },
       route: 'posting',
       steps: { approved: '2026-10-19', filed: '2026-11-01', talks: '2026-11-02', until: '2026-12-17' },
@@ -164,8 +164,16 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ドジャース', en: 'Dodgers' },
         { ja: 'フィリーズ', en: 'Phillies' },
         { ja: 'ブルージェイズ', en: 'Blue Jays' },
+        { ja: 'パドレス', en: 'Padres' },
       ],
       timeline: [
+        {
+          date: '2026-11-11',
+          ja: 'ジ・アスレチックのデニス・リン記者が、パドレスが佐藤輝明に関心を持っていると報じた（米国時間11月10日・MLB Trade Rumors経由）。MLB Trade Rumorsは5年8000万ドルの契約を予想し、ロックアウトでも45日の交渉期間は止まらないため、ロックアウト前に契約するとみている。',
+          en: 'The Athletic\'s Dennis Lin reported that the Padres have interest in Teruaki Sato (Nov. 10 ET, via MLB Trade Rumors). MLB Trade Rumors predicts a five-year, $80MM deal and expects him to sign before a lockout, since his 45-day window will not be paused.',
+          source: 'https://www.mlbtraderumors.com/2026/11/padres-interested-in-seiya-suzuki-teruaki-sato-shota-imanaga.html',
+          sourceName: 'MLB Trade Rumors（The Athletic・デニス・リン記者の報道）',
+        },
         {
           date: '2026-11-05',
           ja: '米放送局ESPNが11月3日に発表したFA上位50人のランキングで、佐藤は2位（鈴木誠也が5位）。',
