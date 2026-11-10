@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-10 14:10",
+ "asOf": "2026-11-11 06:25",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -673,6 +673,11 @@
    "pos": "LF",
    "big": false
   },
+  "657675": {
+   "nameEn": "Rudy Martin Jr.",
+   "pos": "RF",
+   "big": false
+  },
   "660162": {
    "nameEn": "Yoán Moncada",
    "pos": "3B",
@@ -1165,6 +1170,18 @@
   }
  },
  "moves": [
+  {
+   "id": "949952",
+   "kind": "signing",
+   "date": "2026-11-10",
+   "playerId": 657675,
+   "nameEn": "Rudy Martin Jr.",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent RF Rudy Martin Jr. to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
   {
    "id": "949904",
    "kind": "signing",
