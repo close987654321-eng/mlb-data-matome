@@ -32,7 +32,7 @@
     "eyebrow": "NEXT MLB",
     "indexTitle": "NEXT MLB",
     "indexLead": "MLB挑戦が注目される、NPBの逸材たち。海外スカウトが見るポイントと、現地の反応をまとめます。",
-    "rosterTitle": "注目選手",
+    "rosterTitle": "今オフの挑戦者",
     "mlbWatch": "MLB注目ポイント",
     "posting": "ポスティング／FAの見通し",
     "comp": "タイプの近いMLB選手",
@@ -69,14 +69,24 @@
     "contractFa": "FA権",
     "contractSalary": "年俸・契約",
     "faq": "よくある質問",
-    "boardTitle": "今オフ動く可能性が報じられている選手",
+    "boardTitle": "{season}年オフにメジャー挑戦へ動いている選手",
     "boardPlayer": "選手",
     "boardTeam": "所属",
     "boardRoute": "移籍の道筋",
-    "boardTiming": "時期（報道ベース）",
+    "boardTiming": "いまの段階",
     "boardStats": "今季の成績",
     "systemTitle": "ポスティング制度の基礎知識",
-    "systemSource": "制度の要点は次の記事の記述に基づく:"
+    "systemSource": "制度の要点は次の記事の記述に基づく:",
+    "rosterNext": "来オフ以降の候補（{year}年以降にメジャー挑戦が取り沙汰される選手）",
+    "h1": "メジャー挑戦する日本人選手 {year}",
+    "lead": "{season}年オフにポスティング・海外FAでメジャー挑戦へ動いている日本人選手の、いまの段階と報道の時系列。来オフ以降の候補と、海外スカウトの評価・現地の反応もまとめます。",
+    "step": {
+      "approved": "容認",
+      "filed": "申請",
+      "talks": "交渉開始",
+      "declared": "権利行使を表明",
+      "signed": "契約"
+    }
   },
   "legal": {
     "updated": "最終更新日"

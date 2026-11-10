@@ -160,6 +160,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(postseason ? [entry('/postseason/live', latestPostseasonArticle(threads, postseason.season))] : []),
     // ストーブリーグの恒久ハブ（年号なしURL）。lastmod は編集の更新日と契約の動きの取得日の新しい方。
     ...(stove ? [entry('/stove-league', maxDate([stove.asOf, stoveStats.asOf.slice(0, 10)].filter(Boolean)))] : []),
+    // FAランキングと契約状況（/stove-league/fa）。同じ data の別の面＝更新日も同じ決め方。
+    ...(stove ? [entry('/stove-league/fa', maxDate([stove.asOf, stoveStats.asOf.slice(0, 10)].filter(Boolean)))] : []),
     // 期間限定 オールスター特設ハブ（会期後は allstar.ts の enabled=false で自動的に外れる）。
     ...(ALLSTAR.enabled ? [entry('/allstar', statDate)] : []),
     // 超RIZIN.5 特設ハブ（開催前から育てるイベント観測所。lastmod はコンテンツの最終更新日）。
@@ -171,7 +173,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...playerEntries,
     // next メジャーリーガー（NPB注目株ハブ）＝MLBハブと並走する選手クラスタ。
     // ピラーの lastmod は配下で最も新しい成績時点（手キュレーションなので他に動く日付が無い）。
-    entry('/prospects', maxDate(NPB_PROSPECTS.map((p) => prospectAsOf(p, npbAsOf)).filter(Boolean) as string[])),
+    // オフの間は題・見出し・表（手続きの段階）がストーブリーグの data にも依る＝その更新日も足す。
+    entry(
+      '/prospects',
+      maxDate(
+        [
+          ...NPB_PROSPECTS.map((p) => prospectAsOf(p, npbAsOf)),
+          stove && stoveActive(stove) ? stove.asOf : undefined,
+        ].filter(Boolean) as string[],
+      ),
+    ),
     // 個別は手入力した成績の集計時点(season.asOf)を lastmod にする（無い選手は undefined）。
     ...NPB_PROSPECTS.map((p) => entry(`/prospects/${p.slug}`, prospectAsOf(p, npbAsOf))),
     // コラム一覧ページは廃止（競技ページに統合）。記事個別ページは残す。

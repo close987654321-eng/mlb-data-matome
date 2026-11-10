@@ -328,6 +328,20 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
     日本人に関わる日は `jp` に一言。WS決着まではFAの状況を「FA予定」と出す。入口は `StoveEntry`（TOP・/mlb・
     STOVE_TAGS の記事・今オフ動く NEXT MLB の選手LP）とタグ「ストーブリーグ」（TagList がハブへ送る）。
     外国人FAは選手LPが無いので、その選手名タグ（カタカナの姓でも可）のオフ記事があればそこへリンクする。
+    **語ごとのページ群（2026-11-10〜）**: 1枚で5種類の検索
+    （ストーブリーグ・FAランキング・移籍情報・制度・日本人の去就）を受けていて、どれも中位か圏外だった＝賞レースのボードが勝った型
+    （1ページ＝1つの問い＋毎日動く表）に合わせて持ち場を分ける。**1つのURLが1つの語を持つ**＝同じ語を2つの題で取り合わない。
+    - `/stove-league`＝入口（「mlb ストーブリーグ」）。先頭に日付順の「最新の動き」（各選手の timeline の再表示・同じ日と出典は1件に）、
+      日本人の一覧、各ページへの札（`StoveDoors`）、「ストーブリーグとは・いつからいつまで」。FA30人の表は置かない（上位5人と日本人だけ）。
+    - `/stove-league/fa`＝FAランキングと契約状況（「mlb fa ランキング／一覧／未契約」）。行は `src/lib/stoveBoard.ts` の `buildFaRows`
+      （入口の抜粋と同じ行）。`board[]` に `espnRank`（もう1つの順位）・`projection`（予想契約＝年数と百万ドル）・`qo`（提示／受諾／拒否）・
+      `suitors`、`outcome` に `years`/`usdM`。**順位と予想契約は他社の数字**＝出どころ（`ranking`・`altRanking`・`projection`）を見出しの下に
+      必ず出し、数字だけ載せる（寸評は写さない）。絞り込み（未契約・日本人・投手・野手・QO）だけクライアント（`StoveFaList`）。
+    - `/prospects`＝メジャー挑戦（「メジャー挑戦 日本人 2027／一覧」）。オフの間は題と h1 を来季の年で書き、表は `postingWatch.steps`
+      （容認→申請→交渉開始／海外FAは権利行使の表明）で段階を並べる。名簿は「今オフの挑戦者」と「来オフ以降の候補」に分ける。
+    - 年は「2026-2027」と省かずに書く（`offseasonLabel`）＝入力候補は「移籍 2027」「メジャー挑戦 日本人 2027」と来季の年で来る。
+    - 賞レース3ボードの表の直下に `BoardStoveLink`（ボードの選手ID×FAランキングの突き合わせ）＝発表後の読者をFA一覧へ送る。
+    - 第2弾以降（未実装）: `/stove-league/moves`（日付順の移籍情報・statsapi から自動）・`/stove-league/lockout`・球団LPのオフの欄・用語のページ。
     **毎朝6:00 JST のクラウド定期実行（2026-10-30〜）**が `stove-daily` スキル（`.claude/skills/stove-daily/SKILL.md`）を回す＝
     報道の確認（WebSearch）→ `stove-league.json`／`npbPlayers.ts` の postingWatch を出典つきで更新 → 大きな動きの日だけ Reddit の
     反応記事を1本 → `check-stove-league.mjs` と `build:gate` を通った回だけ公開 → Slack DM。中身が動かない日は `checkedAt`（確認日）

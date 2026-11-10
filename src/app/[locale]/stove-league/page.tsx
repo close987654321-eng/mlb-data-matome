@@ -3,8 +3,7 @@ import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { getAllThreads } from '@/lib/data';
 import { getPlayer } from '@/lib/players';
-import { playerLabel } from '@/lib/playerNames';
-import { prospectsOnTheMove, NPB_PROSPECTS } from '@/lib/npbPlayers';
+import { prospectsOnTheMove } from '@/lib/npbPlayers';
 import { getNpbStats, headlineStats } from '@/lib/npbStats';
 import {
   getStoveLeague,
@@ -14,19 +13,24 @@ import {
   resolveDates,
   stoveThreads,
   voiceFor,
-  articleFor,
   rowStatus,
   teamPath,
   statLine,
   fmtDate,
   buildStoveFaq,
+  latestNews,
+  offseasonLabel,
   ROUTE_LABEL,
 } from '@/lib/stoveLeague';
+import { buildFaRows, faCounts } from '@/lib/stoveBoard';
 import { headshotUrl } from '@/lib/teams';
 import StoveJapanese, { StoveSummary, type StoveJpCard } from '@/components/StoveJapanese';
-import StoveBoard, { type StoveBoardRow } from '@/components/StoveBoard';
+import StoveBoard from '@/components/StoveBoard';
 import StoveDates from '@/components/StoveDates';
 import StoveReactions from '@/components/StoveReactions';
+import StoveNews from '@/components/StoveNews';
+import StoveDoors from '@/components/StoveDoors';
+import SectionHeading from '@/components/SectionHeading';
 import ShareButtons from '@/components/ShareButtons';
 import FaqList from '@/components/FaqList';
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -39,25 +43,23 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-/** 「2026-27」＝米国の呼び方。日本の検索は「ストーブリーグ 2026」が主流なので title は前年側の年も前に出す。 */
-const offseasonLabel = (season: number) => `${season}-${String((season + 1) % 100).padStart(2, '0')}`;
-
 export async function generateMetadata({ params }: { params: Promise<{ locale: Locale }> }): Promise<Metadata> {
   const { locale } = await params;
   const cat = await getStoveLeague();
   if (!cat) return {};
   const en = locale === 'en';
+  // 年は「2026-2027」と省かずに書く＝検索は「ストーブリーグ 2026」でも「移籍 2027」（来季）でも来る
+  // （2026-11-10 に入力候補を採取: メジャー挑戦 日本人 2027／mlb 移籍 2027／mlb fa 2027）。
   const off = offseasonLabel(cat.season);
   const names = cat.japanese.filter((j) => !j.outcome).map((j) => getPlayer(j.slug)).filter(Boolean);
-  // title の語順は検索語の順に合わせる（「MLB ストーブリーグ 2026」「MLB FA 2026」「MLB 移籍」）。
   // layout の template が「｜海外の反応」を足すので、ここで同じ語を重ねない。
+  // 「FAランキング」は専用ページ（/stove-league/fa）の題に譲る＝同じ語を2つの題で取り合わない。
   const title = en
-    ? `MLB Hot Stove ${off}: Free Agent Tracker & Japanese Players`
-    : // 「FA ランキング」系の検索で拾われていなかった（2026-11-07 実測で71位）＝ページの柱の1つを題に出す。
-      `MLBストーブリーグ${off} FAランキングと日本人の去就・移籍の最新情報`;
+    ? `MLB Hot Stove ${off}: Japanese Players, Free Agents & Trades`
+    : `MLBストーブリーグ${off}｜日本人の去就・FA・移籍の最新まとめ`;
   const description = en
-    ? `Where ${names.map((p) => p!.nameEn).join(', ')} and the top MLB free agents stand this winter: status, 2026 stats, the offseason calendar up to the December 1 CBA deadline, and overseas fan reactions.`
-    : `${names.map((p) => p!.nameJa).join('・')}ら日本人選手の去就と、MLB公式のFAランキング上位${cat.board.length}人（スクーバルほか）の今季成績・現在地。FA解禁から12月1日の労使協定の期限までの日程、海外ファンの反応もまとめて追う（${cat.asOf.slice(5).replace('-', '/')}更新）。`;
+    ? `Where ${names.map((p) => p!.nameEn).join(', ')} and the top MLB free agents stand this winter: the latest moves, status, 2026 stats, the offseason calendar up to the December 1 CBA deadline, and overseas fan reactions.`
+    : `${cat.season}年オフ（${cat.season + 1}年シーズンに向けた）MLBのストーブリーグ。${names.map((p) => p!.nameJa).join('・')}ら日本人選手の去就と最新の動き、FA注目選手の契約状況、FA解禁から12月の労使協定の期限までの日程、海外ファンの反応をまとめて追う（${cat.asOf.slice(5).replace('-', '/')}更新）。`;
   return {
     title,
     description,
@@ -98,6 +100,7 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
     const v = voiceFor(threads, nameJa);
     return v ? { ja: v.comment.bodyJa, author: v.comment.author, href: `/${v.thread.sport}/${v.thread.id}` } : undefined;
   };
+  const movers = prospectsOnTheMove();
 
   // ── 日本人（MLB組）
   const mlbCards: StoveJpCard[] = cat.japanese.flatMap((j) => {
@@ -126,7 +129,7 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
   });
 
   // ── 日本人（NPB組）＝ NEXT MLB のカタログをそのまま使う（ポスティング報道の正は npbPlayers.ts）
-  const npbCards: StoveJpCard[] = prospectsOnTheMove().map((p) => {
+  const npbCards: StoveJpCard[] = movers.map((p) => {
     const w = p.postingWatch!;
     return {
       anchor: `jp-${p.slug}`,
@@ -144,40 +147,30 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
   });
   const jpCards = [...mlbCards, ...npbCards];
 
-  // ── FA注目選手（MLB.com の順位順）
-  const rows: StoveBoardRow[] = await Promise.all(
-    cat.board.map(async (b) => {
-      const s = b.mlbId ? stats.players[String(b.mlbId)] : undefined;
-      const prospect = b.prospectSlug ? NPB_PROSPECTS.find((p) => p.slug === b.prospectSlug) : undefined;
-      const jp = b.jpSlug ? getPlayer(b.jpSlug) : undefined;
-      // 記事のタグは日本語＝en ページでも日本語表記で引く。
-      const labelJa = jp || prospect ? null : (await playerLabel(b.nameEn, { locale: 'ja', mlbId: b.mlbId })).label;
-      const label = jp || prospect ? null : await playerLabel(b.nameEn, { locale, mlbId: b.mlbId });
-      const article = labelJa ? articleFor(threads, labelJa) : null;
-      const name = jp
-        ? en ? jp.nameEn : jp.nameJa
-        : prospect
-          ? en ? prospect.nameEn : prospect.nameJa
-          : label!.label;
-      return {
-        rank: b.rank,
-        name,
-        nameSub: en ? undefined : b.nameEn,
-        href: jp ? `/player/${jp.slug}` : prospect ? `/prospects/${prospect.slug}` : article ? `/${article.sport}/${article.id}` : undefined,
-        hrefIsArticle: !jp && !prospect && Boolean(article),
-        photo: b.mlbId ? headshotUrl(b.mlbId, 'spot') : undefined,
-        japanese: Boolean(jp || prospect),
-        pos: b.pos,
-        team: teamPath(b, s),
-        status: rowStatus(b.route, b.outcome, s, faOpen),
-        statLine: s ? statLine(s, en) : prospect ? npbLine(prospect.slug) : '',
-        note: b.note,
-      };
-    }),
+  // ── 最新の動き（各選手の報道の時系列をまたいで日付順に。MLB組→NPB組の順で同じ日を並べる）
+  const news = latestNews(
+    [
+      ...cat.japanese.flatMap((j) => {
+        const p = getPlayer(j.slug);
+        return p ? [{ name: { ja: p.nameJa, en: p.nameEn }, href: `/player/${p.slug}`, timeline: j.timeline }] : [];
+      }),
+      ...movers.map((p) => ({
+        name: { ja: p.nameJa, en: p.nameEn },
+        href: `/prospects/${p.slug}`,
+        timeline: p.postingWatch!.timeline,
+      })),
+    ],
+    9,
   );
+
+  // ── FA注目選手（MLB.com の順位順）。全員ぶんの表は /stove-league/fa＝ここは上位5人と日本人だけ。
+  const faRows = await buildFaRows({ cat, stats, threads, npbLine, locale, faOpen });
+  const fa = faCounts(faRows);
+  const boardRows = faRows.filter((r) => r.rank <= 5 || r.japanese);
 
   const dates = resolveDates(cat, wsEnd);
   const next = dates.find((d) => !d.past);
+  const dateOf = (key: string) => dates.find((d) => d.key === key);
   const faq = buildStoveFaq(
     cat,
     Object.fromEntries(
@@ -187,7 +180,7 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
       }),
     ),
     wsEnd,
-    prospectsOnTheMove().map((p) => ({ ja: p.nameJa, en: p.nameEn })),
+    movers.map((p) => ({ ja: p.nameJa, en: p.nameEn })),
   );
 
   const title = en ? `MLB Hot Stove ${off}` : `MLBストーブリーグ ${off}`;
@@ -200,19 +193,11 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
         name: title,
         url,
         dateModified: `${cat.asOf}T00:00:00+09:00`,
+        // FA一覧（ItemList）は専用ページが持つ＝同じ一覧を2つのURLで宣言しない。
+        hasPart: [{ '@type': 'CollectionPage', url: absoluteUrl(locale, '/stove-league/fa') }],
         ...(threads.length
           ? { relatedLink: threads.slice(0, 20).map((th) => absoluteUrl(locale, `/${th.sport}/${th.id}`)) }
           : {}),
-      },
-      {
-        '@type': 'ItemList',
-        name: en ? 'Top MLB free agents' : 'MLBのFA注目選手',
-        itemListElement: rows.map((r) => ({
-          '@type': 'ListItem',
-          position: r.rank,
-          name: r.name,
-          ...(r.href && !r.hrefIsArticle ? { url: absoluteUrl(locale, r.href) } : {}),
-        })),
       },
       {
         '@type': 'FAQPage',
@@ -254,7 +239,49 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
   const asOfJa = `${fmtDate(cat.asOf, en)}`;
   // 確認日は更新日より新しいときだけ出す（同じ日なら「更新」で足りる）。
   const checkedJa = cat.checkedAt && cat.checkedAt > cat.asOf ? fmtDate(cat.checkedAt, en) : '';
-  const statsAsOf = stats.asOf ? `${fmtDate(stats.asOf.slice(0, 10), en)} ${stats.asOf.slice(11, 16).replace(/^0/, '')}` : '';
+
+  // 見出しの下の「いまの状況」。数はFA一覧からの数え上げ、日本人は去就が決まっていない人数。
+  const jpOpen = jpCards.filter((c) => !c.status.done).length;
+  const nowLine = faOpen
+    ? en
+      ? `${fa.open} of the top ${fa.total} free agents are unsigned, and ${jpOpen} Japanese players are still undecided.`
+      : `${fa.done ? `FA注目${fa.total}人のうち${fa.open}人が未契約。` : `FA注目${fa.total}人は、まだ誰も契約を決めていない。`}日本人選手は${jpCards.length}人のうち${jpOpen}人の行き先が決まっていない。`
+    : '';
+
+  // 「ストーブリーグとは・今オフはいつからいつまで」。日付はすべて日程表（出典つき）の値。
+  const faOpenDay = dateOf('fa-open');
+  const qoDay = dateOf('qo-accept');
+  const cbaDay = dateOf('cba');
+  const wmDay = dateOf('winter-meetings');
+  const about = {
+    ja: `ストーブリーグは、シーズンが終わってから翌年のキャンプが始まるまでの、FA契約とトレードが動く期間のこと。寒い季節にファンがストーブを囲んで補強の話をしたことから、こう呼ばれる。MLBではワールドシリーズ終了の翌日にFAが解禁され、翌年2月中旬のキャンプインまで続く。`,
+    en: `The hot stove is the stretch between the end of the season and spring training, when free agents sign and trades happen. In MLB it starts when free agency opens the day after the World Series and runs until camps open in mid-February.`,
+  };
+  const thisYear = [
+    faOpenDay?.on ? { ja: `${fmtDate(faOpenDay.on, false)}にFAが解禁された`, en: `free agency opened on ${fmtDate(faOpenDay.on, true)}` } : null,
+    qoDay?.on ? { ja: `${fmtDate(qoDay.on, false)}がクオリファイング・オファーの回答期限`, en: `qualifying offer answers are due ${fmtDate(qoDay.on, true)}` } : null,
+    cbaDay?.on ? { ja: `${fmtDate(cbaDay.on, false)}が労使協定の期限（まとまらなければロックアウト）`, en: `the CBA expires on ${fmtDate(cbaDay.on, true)} (a lockout follows without a deal)` } : null,
+    wmDay?.on ? { ja: `${fmtDate(wmDay.on, false)}からウィンターミーティング`, en: `the Winter Meetings start on ${fmtDate(wmDay.on, true)}` } : null,
+  ].filter((x): x is { ja: string; en: string } => Boolean(x));
+
+  const doors = [
+    {
+      href: '/stove-league/fa',
+      eyebrow: en ? 'Free agents' : 'FAランキング',
+      title: en ? `Top ${fa.total} free agents: status and projections` : `FAランキングと契約状況（上位${fa.total}人）`,
+      body: en
+        ? `${fa.open} unsigned, ${fa.done} settled. Contract projections and qualifying offer decisions.`
+        : `${fa.done ? `未契約${fa.open}人・決着${fa.done}人。` : `${fa.total}人ともまだ未契約。`}予想契約と、QOを提示された${fa.qoAll}人の回答。`,
+    },
+    {
+      href: '/prospects',
+      eyebrow: en ? 'From NPB' : 'メジャー挑戦',
+      title: en ? `Japanese players heading to MLB in ${cat.season + 1}` : `メジャー挑戦する日本人選手${cat.season + 1}`,
+      body: en
+        ? `${movers.map((p) => p.nameEn).join(', ')}: posting and international free agency, step by step.`
+        : `${movers.map((p) => p.nameJa).join('・')}のポスティング・海外FAの現在地。`,
+    },
+  ];
 
   return (
     <div className="space-y-12">
@@ -276,18 +303,21 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
           <p className="mt-2 max-w-prose text-sm leading-relaxed text-ink-soft">
             {en
               ? 'Where the Japanese players land this winter, the top free agents, and what overseas fans are saying.'
-              : '日本人選手の去就、FA注目選手の現在地、海外ファンの反応を1ページで追います。'}
+              : '日本人選手の去就、FA・移籍の動き、海外ファンの反応を1ページで追います。'}
           </p>
+          {nowLine && <p className="mt-2 max-w-prose text-[15px] font-semibold leading-relaxed text-ink">{nowLine}</p>}
           <p className="mt-1 text-xs text-ink-mute">
             {en
               ? `Updated ${asOfJa}${checkedJa ? ` · checked ${checkedJa}` : ''} · news checked every morning at 6 a.m. JST, signings sync every 3 hours`
               : `${asOfJa}更新${checkedJa ? `・${checkedJa}確認` : ''}・報道は毎朝6時に確認、契約の動きは3時間ごとに自動で反映`}
           </p>
         </div>
-
       </section>
 
-      {/* 第一の問い「日本人は誰が、どうなるのか」に、見出しのすぐ下で答える。 */}
+      {/* 「きょうまでに何が起きたか」を日付順で。選手別の並びより先に置く＝最新を探して来た人への答え。 */}
+      <StoveNews items={news} en={en} />
+
+      {/* 第一の問い「日本人は誰が、どうなるのか」に答える一覧。 */}
       <StoveSummary cards={jpCards} en={en} rankSource={en ? 'MLB.com' : 'MLB公式'} />
 
       <div className="space-y-4">
@@ -310,11 +340,16 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
           </div>
         )}
 
+        {/* 語ごとに分けたページへの入口（FAランキング／メジャー挑戦）。 */}
+        <StoveDoors doors={doors} label={en ? 'More on the hot stove' : 'ストーブリーグの各ページ'} />
+
         <nav aria-label={en ? 'On this page' : 'このページの内容'} className="-mx-4 flex gap-x-5 overflow-x-auto whitespace-nowrap border-y border-line px-4 text-sm sm:mx-0 sm:px-0">
           {[
+            { href: '#news', ja: '最新の動き', en: 'Latest' },
             { href: '#japanese', ja: '日本人選手の去就', en: 'Japanese players' },
             { href: '#reactions', ja: '海外の反応', en: 'Reactions' },
             { href: '#ranking', ja: 'FA注目選手', en: 'Top free agents' },
+            { href: '#about', ja: 'ストーブリーグとは', en: 'What it is' },
             { href: '#dates', ja: '日程・ロックアウト', en: 'Calendar' },
             { href: '#faq', ja: 'よくある質問', en: 'FAQ' },
           ].map((l) => (
@@ -334,12 +369,31 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
       <StoveJapanese cards={jpCards} en={en} rankSource={en ? 'MLB.com' : 'MLB公式'} />
 
       <StoveBoard
-        rows={rows}
+        rows={boardRows}
+        total={fa.total}
+        signed={fa.done}
+        moreHref="/stove-league/fa"
         en={en}
         source={{ name: en ? cat.ranking.nameEn : cat.ranking.name, url: cat.ranking.url }}
         sourceDate={fmtDate(cat.ranking.date, en)}
         statsAsOf={stats.asOf ? fmtDate(stats.asOf.slice(0, 10), en) : ''}
       />
+
+      {/* 「mlb ストーブリーグ とは／いつから／いつまで／期間」への答え。定義1段落＋今オフの実日付。 */}
+      <section id="about" className="space-y-3">
+        <SectionHeading
+          label={en ? 'What the hot stove is, and when it runs' : 'ストーブリーグとは｜今オフはいつからいつまで'}
+          lead
+        />
+        <p className="max-w-prose text-[15px] leading-[1.8] text-ink">{en ? about.en : about.ja}</p>
+        {thisYear.length > 0 && (
+          <p className="max-w-prose text-[15px] leading-[1.8] text-ink">
+            {en
+              ? `This winter (${off}): ${thisYear.map((x) => x.en).join('; ')}. All dates are Japan time.`
+              : `今オフ（${off}）は、${thisYear.map((x) => x.ja).join('。')}。日付はすべて日本時間。`}
+          </p>
+        )}
+      </section>
 
       <StoveDates dates={dates} en={en} />
 
@@ -353,8 +407,13 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
       />
 
       <div className="flex flex-col text-sm">
+        <Link href="/stove-league/fa" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
+          {en ? `Free agent rankings ${off}: status of the top ${fa.total}` : `FAランキング${off}：上位${fa.total}人の契約状況`}{' '}
+          <span aria-hidden className="ml-1">→</span>
+        </Link>
         <Link href="/prospects" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
-          {en ? 'NPB posting candidates (NEXT MLB)' : 'NEXT MLB：ポスティング候補のNPB選手'} <span aria-hidden className="ml-1">→</span>
+          {en ? 'Japanese players heading to MLB (NEXT MLB)' : `メジャー挑戦する日本人選手${cat.season + 1}（NEXT MLB）`}{' '}
+          <span aria-hidden className="ml-1">→</span>
         </Link>
         <Link href="/player" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
           {en ? 'Japanese MLB players: stats hub' : '日本人メジャーリーガーの成績一覧'} <span aria-hidden className="ml-1">→</span>

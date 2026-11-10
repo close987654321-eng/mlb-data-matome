@@ -56,6 +56,13 @@ export type NpbProspect = {
      * - intl-fa … 海外FA権を取得済み＝本人の意思だけで市場に出られる
      */
     route: 'posting' | 'intl-fa';
+    /**
+     * 手続きの進み具合（日付は日本時間・timeline に出典がある出来事だけ）。
+     * /prospects の表で「容認 → 申請 → 交渉開始」と段階を並べるための値＝文章（headline/window）から
+     * 段階を読み取らせない。approved＝球団の容認／filed＝申請／talks＝MLBが受理して交渉開始／
+     * declared＝海外FA権の行使を表明／signed＝契約。まだ起きていない段階は書かない。
+     */
+    steps?: { approved?: string; filed?: string; talks?: string; declared?: string; signed?: string };
     /** 申請・交渉の予定（報じられた範囲だけ）。「いつ動くのか」に answer box で答える枠。 */
     window?: { ja: string; en: string };
     /** 関心が「報じられた」球団だけ（推測で足さない）。 */
@@ -124,6 +131,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies and Blue Jays have all been linked.',
       },
       route: 'posting',
+      steps: { approved: '2026-10-19', filed: '2026-11-01', talks: '2026-11-02' },
       window: {
         ja: '阪神は10月19日に容認を発表し、日本シリーズが10月28日に終わって、11月1日から申請できるようになった（NPBの受付は12月15日まで）。交渉期間は通常、MLBの公示の翌日から45日間。ただし中日スポーツ（10月29日）によると、MLB機構はロックアウト中に交渉期間を止める選手会の案を拒否し、ロックアウトに入れば12月1日までに契約する必要があるとの見解を伝えた。2021年の鈴木誠也のときは期間が止まり、ロックアウト明けに契約できた。期間内に契約しなければ2027年は阪神に戻る。',
         en: 'Hanshin announced its approval on October 19; the Japan Series ended on October 28 and filings opened on November 1 (NPB accepts them through December 15). The window normally runs 45 days from the day after MLB posts him. But Chunichi Sports reported on October 29 that MLB rejected the union\u2019s request to pause posting windows during a lockout, and said posted players would have to sign by December 1 if one begins. In 2021 the window was paused, and Seiya Suzuki signed after the lockout ended. If he does not sign within the window, he returns to Hanshin for 2027.',
@@ -309,6 +317,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'Nippon-Ham announced on November 1 that it approved his MLB bid through the posting system and began the filing process (Full-Count). He is the third posting candidate this winter after Teruaki Sato and Kaima Taira. The window is 45 days from acceptance.',
       },
       route: 'posting',
+      steps: { approved: '2026-11-01', filed: '2026-11-01' },
       window: {
         ja: '11月1日に日本ハムが申請手続きの開始を発表した。NPBの受付は12月15日まで。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。ESPNのジェフ・パッサン記者は佐藤輝明・平良海馬とともに11月上旬の申請を見込んでいた。',
         en: 'Nippon-Ham announced on November 1 that the filing process has begun. NPB accepts filings through December 15. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so a posted player would likely need to sign by December 1 if one begins. ESPN\u2019s Jeff Passan had expected him to be posted in early November along with Teruaki Sato and Kaima Taira.',
@@ -450,6 +459,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'Seibu announced on November 2 that it filed his posting through NPB and all MLB clubs were notified; talks began at 8 a.m. ET on Nov. 2 (10 p.m. Japan time), per Nishinippon Sports. Seibu had announced its approval on October 30. He is reported to be represented by the Boras Corporation.',
       },
       route: 'posting',
+      steps: { approved: '2026-10-30', filed: '2026-11-02', talks: '2026-11-02' },
       window: {
         ja: '西武は10月30日に容認を発表した。NPBの申請受付は11月1日に始まり12月15日まで。ESPNのジェフ・パッサン記者は11月上旬の申請を見込んでいた。交渉期間は通常45日間だが、中日スポーツ（10月29日）によると、MLB機構はロックアウト中に期間を止める案を拒否しており、ロックアウトに入れば12月1日までに契約する必要があるとみられる。',
         en: 'Seibu announced its approval on October 30. NPB accepts filings from November 1 through December 15; ESPN\u2019s Jeff Passan had expected an early-November posting. The window normally runs 45 days, but Chunichi Sports reported on October 29 that MLB rejected pausing it during a lockout, so he would likely need to sign by December 1 if one begins.',
@@ -625,6 +635,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'Seibu announced on November 2 that he has exercised his international free agent rights (Seibu club, Kyodo). He passed on MLB offers from three clubs in last winter\u2019s posting, and Nikkan Sports reports he is again exploring MLB (via MLB Trade Rumors). He says domestic clubs are also an option, and SoftBank CBO Kenji Jojima has confirmed the club has scouted him.',
       },
       route: 'intl-fa',
+      steps: { declared: '2026-11-02' },
       window: {
         ja: '11月2日に権利の行使を表明済みで、移籍先はこれから。海外FAはポスティングと違い45日の交渉期限が無く、譲渡金も発生しないが、12月1日に労使協定が切れてロックアウトに入ればFA市場そのものが凍結される。',
         en: 'He declared on November 2 and no destination is set yet. International free agency has no 45-day clock and no release fee, unlike a posting, but the market itself freezes if the CBA expires and the lockout starts on December 1.',

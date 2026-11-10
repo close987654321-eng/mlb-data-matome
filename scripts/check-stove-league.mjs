@@ -136,12 +136,29 @@ for (const j of cat.japanese ?? []) {
     checkDate(`${w}.outcome`, o.date);
     checkJa(`${w}.outcome`, o.ja);
     checkSourced(`${w}.outcome`, o);
+    checkTerms(`${w}.outcome`, o);
   }
 }
 
 // ── FA注目選手
 const ranks = new Set();
 const ids = new Set();
+const QO = new Set(['offered', 'accepted', 'declined']);
+/** 決着を japanese[] 側に書いた日本人（board の同じ選手に outcome が無くても警告しない）。 */
+const jpOutcome = new Set((cat.japanese ?? []).filter((j) => j.outcome).map((j) => j.slug));
+/** 契約の年数・総額（百万ドル）。書くなら数値で、桁の取り違え（万ドルを入れる等）を止める。 */
+function checkTerms(where, x) {
+  if (x.years != null && (!Number.isInteger(x.years) || x.years < 1 || x.years > 15)) err(`${where}: years が不正（${x.years}）`);
+  if (x.usdM != null && (typeof x.usdM !== 'number' || x.usdM <= 0 || x.usdM > 1000)) {
+    err(`${where}: usdM は百万ドル単位の数値（例: 4年1億500万ドル → 105）。${x.usdM}`);
+  }
+}
+if (cat.altRanking) checkSourced('altRanking', { source: cat.altRanking.url, sourceName: cat.altRanking.name });
+if (cat.projection) checkSourced('projection', { source: cat.projection.url, sourceName: cat.projection.name });
+if (cat.qualifyingOffer?.offered) {
+  checkDate('qualifyingOffer.offered', cat.qualifyingOffer.offered.date);
+  checkSourced('qualifyingOffer.offered', cat.qualifyingOffer.offered);
+}
 for (const b of cat.board ?? []) {
   const w = `board#${b.rank}(${b.nameEn})`;
   if (ranks.has(b.rank)) err(`${w}: 順位の重複`);
@@ -162,6 +179,35 @@ for (const b of cat.board ?? []) {
     checkDate(`${w}.outcome`, o.date);
     checkJa(`${w}.outcome`, o.ja);
     checkSourced(`${w}.outcome`, o);
+    checkTerms(`${w}.outcome`, o);
+  }
+  // FA一覧（/stove-league/fa）の欄。順位と予想契約は他社の数字＝出どころ（カタログ側）が無ければ出さない。
+  if (b.espnRank != null) {
+    if (!Number.isInteger(b.espnRank) || b.espnRank < 1) err(`${w}: espnRank が正の整数でない（${b.espnRank}）`);
+    if (!cat.altRanking?.url) err(`${w}: espnRank があるのに altRanking（出典）が無い`);
+  }
+  if (b.projection) {
+    checkTerms(`${w}.projection`, b.projection);
+    if (b.projection.years == null || b.projection.usdM == null) err(`${w}.projection: years と usdM の両方が要る`);
+    if (b.projection.note) checkJa(`${w}.projection.note`, b.projection.note.ja);
+    if (!cat.projection?.url) err(`${w}: projection があるのに出どころ（カタログの projection）が無い`);
+  }
+  if (b.qo) {
+    if (!QO.has(b.qo.status)) err(`${w}.qo: status が不正（${b.qo.status}）`);
+    if (!cat.qualifyingOffer?.offered?.source) err(`${w}.qo: 提示の出典（qualifyingOffer.offered）が無い`);
+    // 受諾・拒否は選手ごとの報道＝日付と出典が要る（提示は一斉なのでカタログ側の出典で足りる）。
+    if (b.qo.status !== 'offered') {
+      checkDate(`${w}.qo`, b.qo.date);
+      checkSourced(`${w}.qo`, b.qo);
+    }
+    // QO を受諾したのに決着が無い＝一覧の「決着」の数と契約内容が食い違う。
+    if (b.qo.status === 'accepted' && !b.outcome && !jpOutcome.has(b.jpSlug)) {
+      warn(`${w}: QO を受諾したのに outcome（再契約の内容）が無い`);
+    }
+  }
+  for (const [i, s] of (b.suitors ?? []).entries()) {
+    checkJa(`${w}.suitors[${i}]`, s.ja);
+    checkSourced(`${w}.suitors[${i}]`, s);
   }
 }
 
@@ -177,7 +223,14 @@ if (LINKS) {
     for (const m of j.marketValue ?? []) add(m.source);
     add(j.outcome?.source);
   }
-  for (const b of cat.board ?? []) add(b.outcome?.source);
+  for (const b of cat.board ?? []) {
+    add(b.outcome?.source);
+    add(b.qo?.source);
+    for (const x of b.suitors ?? []) add(x.source);
+  }
+  add(cat.altRanking?.url);
+  add(cat.projection?.url);
+  add(cat.qualifyingOffer?.offered?.source);
   for (const u of urls) {
     try {
       const res = await fetch(u, { method: 'GET', redirect: 'follow', headers: { 'user-agent': 'Mozilla/5.0' } });

@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "asOf": "2026-11-07",
+  "asOf": "2026-11-10",
   "checkedAt": "2026-11-10",
   "activeUntil": "2027-03-25",
   "ranking": {
@@ -9,11 +9,28 @@
     "url": "https://www.mlb.com/news/ranking-the-free-agents-for-2026-27-offseason",
     "date": "2026-10-27"
   },
+  "altRanking": {
+    "name": "ESPN（カイリー・マクダニエル記者）",
+    "nameEn": "ESPN (Kiley McDaniel)",
+    "url": "https://www.espn.com/mlb/story/_/id/50359247/rankings-contract-projections-top-mlb-free-agents",
+    "date": "2026-11-03"
+  },
+  "projection": {
+    "name": "MLB Trade Rumors",
+    "nameEn": "MLB Trade Rumors",
+    "url": "https://www.mlbtraderumors.com/2026/11/2026-27-top-50-free-agents-with-predictions.html",
+    "date": "2026-11-03"
+  },
   "qualifyingOffer": {
     "amountJa": "2315万ドル（約35億円）",
     "amountEn": "$23.15 million",
     "source": "https://www.tsn.ca/mlb/article/mlb-qualifying-offer-for-free-agents-rises-to-2315m-up-51-from-last-year-n1-50219765/",
-    "sourceName": "AP（TSN）"
+    "sourceName": "AP（TSN）",
+    "offered": {
+      "date": "2026-11-03",
+      "source": "https://www.mlbtraderumors.com/2026/11/eight-players-receive-qualifying-offers.html",
+      "sourceName": "MLB Trade Rumors（ニューヨーク・ポストのシャーマン記者）"
+    }
   },
   "dates": [
     {
@@ -74,8 +91,8 @@
         "en": "6 a.m."
       },
       "jp": {
-        "ja": "鈴木誠也にQOが出ていれば、受けて残るか断るかの期限",
-        "en": "If the Cubs make Seiya Suzuki a QO, this is his deadline to answer"
+        "ja": "鈴木誠也が、カブスのQO（1年2315万ドル）を受けるか断るかを答える期限",
+        "en": "Seiya Suzuki's deadline to accept or decline the Cubs' qualifying offer (one year, $23.15 million)"
       },
       "ja": "QOの受諾期限。受けた選手は1年2315万ドルで残り、断った選手を獲った球団はドラフト指名権を失う",
       "en": "Deadline to accept a qualifying offer: accept and return on a one-year, $23.15 million deal; a club that signs a player who declined gives up a draft pick",
@@ -448,6 +465,11 @@
       "note": {
         "ja": "ア・リーグのサイ・ヤング賞を2年連続で受賞した左腕。今季途中にタイガースからドジャースへ移った。山本由伸の12年3億2500万ドルを超え、投手として史上最高額になるとの見方が強い。",
         "en": "Two-time reigning AL Cy Young winner, traded from Detroit to the Dodgers during the season. Widely expected to top Yoshinobu Yamamoto's 12-year, $325 million deal as the richest ever for a pitcher."
+      },
+      "espnRank": 1,
+      "projection": {
+        "years": 9,
+        "usdM": 425
       }
     },
     {
@@ -462,6 +484,11 @@
       "note": {
         "ja": "パドレスとの3年7500万ドル契約のオプトアウトを使い、米国時間10月30日にFAになった。故障の多かった2025年から復活した右腕。",
         "en": "Used the opt-out in his three-year, $75 million Padres deal and became a free agent on Oct. 30 ET, after a healthy bounce-back year."
+      },
+      "espnRank": 9,
+      "projection": {
+        "years": 4,
+        "usdM": 92
       }
     },
     {
@@ -476,6 +503,11 @@
       "note": {
         "ja": "メッツで苦しみ、途中移籍したレイズで立て直した。ポストシーズンでも好投し、ア・リーグ優勝決定シリーズのMVPに選ばれた。",
         "en": "Struggled with the Mets, then turned it around after a midseason trade to Tampa Bay and was named ALCS MVP."
+      },
+      "espnRank": 3,
+      "projection": {
+        "years": 5,
+        "usdM": 110
       }
     },
     {
@@ -495,6 +527,11 @@
       "note": {
         "ja": "セ・リーグ三冠王。阪神がポスティングを認め、11月2日にMLBが申請を受理した。三振の多さから村上宗隆と比べられるが、長打の少ない市場で注目を集めるとみられている。",
         "en": "Central League Triple Crown winner. Hanshin cleared him to be posted and MLB accepted the filing on Nov. 2. His strikeouts draw comparisons to Munetaka Murakami, but power is scarce on this market."
+      },
+      "espnRank": 2,
+      "projection": {
+        "years": 5,
+        "usdM": 80
       }
     },
     {
@@ -510,6 +547,14 @@
       "note": {
         "ja": "カブスから1年2315万ドルのQOを提示された（MLB公式）。拒否の見込みで、打撃に加えて右翼守備と強肩も評価され、外野の手薄な市場で4〜5年の契約もあり得るとされる。",
         "en": "The Cubs extended him a one-year, $23.15 million QO (MLB.com) and he is expected to decline. Valued for his right-field defense and arm as well as his bat, he could land four or five years in a thin outfield market."
+      },
+      "espnRank": 5,
+      "projection": {
+        "years": 4,
+        "usdM": 105
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -524,6 +569,14 @@
       "note": {
         "ja": "2年続けて25本塁打・25盗塁を超えた。ポストシーズンにも強い外野手。",
         "en": "A second straight 25-homer, 25-steal season, with a strong postseason track record."
+      },
+      "espnRank": 4,
+      "projection": {
+        "years": 4,
+        "usdM": 100
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -538,6 +591,14 @@
       "note": {
         "ja": "パイレーツ移籍1年目で長打を量産し、二塁守備も大きく改善した。",
         "en": "Power production in his first year in Pittsburgh, with a big defensive turnaround at second base."
+      },
+      "espnRank": 8,
+      "projection": {
+        "years": 3,
+        "usdM": 69
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -550,8 +611,13 @@
       },
       "route": "opt-out",
       "note": {
-        "ja": "リリーフから先発に転向して成功した右腕。2027年の1200万ドルを破棄してFAになる見込み。トレード期限にメッツからカブスへ移ったのでQOは付かない。",
-        "en": "A successful convert from closer to starter, expected to opt out of his $12 million 2027 salary. Traded to the Cubs at the deadline, so no QO can be attached."
+        "ja": "リリーフから先発に転向して成功した右腕。2027年の1200万ドルを破棄するオプトアウトを使い、米国時間11月2日にFAになった。トレード期限にメッツからカブスへ移ったのでQOは付かない。",
+        "en": "A successful convert from closer to starter. He opted out of his $12 million 2027 salary and became a free agent on Nov. 2 ET. Traded to the Cubs at the deadline, so no QO could be attached."
+      },
+      "espnRank": 23,
+      "projection": {
+        "years": 3,
+        "usdM": 45
       }
     },
     {
@@ -566,6 +632,14 @@
       "note": {
         "ja": "パドレスの中継ぎ左腕。抑えとして、あるいは先発転向の候補としても見られている。",
         "en": "Padres lefty setup man seen as a closer option, or even a candidate to start."
+      },
+      "espnRank": 6,
+      "projection": {
+        "years": 5,
+        "usdM": 80
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -578,8 +652,16 @@
       },
       "route": "fa",
       "note": {
-        "ja": "2025年に圧倒的な数字を残し、今季は波があった。29歳と若く、複数年の先発候補。",
+        "ja": "2025年に圧倒的な数字を残し、今季は波があった。来季29歳と若く、複数年の先発候補。",
         "en": "Dominant in 2025 and up-and-down in 2026; still young for a multi-year rotation deal."
+      },
+      "espnRank": 10,
+      "projection": {
+        "years": 5,
+        "usdM": 115
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -594,6 +676,18 @@
       "note": {
         "ja": "30歳で開花し、ワールドシリーズに進んだブルワーズ打線の中心になった。",
         "en": "A late breakout at 30 and a key bat for the pennant-winning Brewers."
+      },
+      "espnRank": 13,
+      "projection": {
+        "years": 1,
+        "usdM": 23.15,
+        "note": {
+          "ja": "QOを受諾するとの予想",
+          "en": "i.e. accepting the qualifying offer"
+        }
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -608,6 +702,11 @@
       "note": {
         "ja": "首位打者3度の巧打者が復調。トレード期限にジャイアンツからフィリーズへ移り、二塁守備も評価を上げた。",
         "en": "The three-time batting champ bounced back, moved from the Giants to the Phillies at the deadline, and improved in the field."
+      },
+      "espnRank": 12,
+      "projection": {
+        "years": 3,
+        "usdM": 48
       }
     },
     {
@@ -622,6 +721,14 @@
       "note": {
         "ja": "手薄な捕手市場の目玉。開幕から好調だったが、左手の骨折で約2か月離脱した。",
         "en": "The top catcher in a thin market; hot start interrupted by a broken left hamate."
+      },
+      "espnRank": 14,
+      "projection": {
+        "years": 4,
+        "usdM": 75
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -636,6 +743,11 @@
       "note": {
         "ja": "37歳のシーズンを前にア・リーグ最多勝。長期契約は難しくても複数年の目はある。",
         "en": "Led the AL in wins at 36; not a long-term deal at his age, but multiple years are in play."
+      },
+      "espnRank": 20,
+      "projection": {
+        "years": 2,
+        "usdM": 55
       }
     },
     {
@@ -648,8 +760,17 @@
       },
       "route": "fa",
       "note": {
-        "ja": "20代でFAになる数少ない主力。二塁の守備と足が武器。ヤンキースはQOを出さないとの見方。",
-        "en": "One of the few top free agents still in his 20s, with elite defense and speed. The Yankees are seen as unlikely to make a QO."
+        "ja": "20代でFAになる数少ない主力。二塁の守備と足が武器。ヤンキースはQOを出さなかった。",
+        "en": "One of the few top free agents still in his 20s, with elite defense and speed. The Yankees did not make him a qualifying offer."
+      },
+      "espnRank": 18,
+      "projection": {
+        "years": 2,
+        "usdM": 40,
+        "note": {
+          "ja": "オプトアウトつき",
+          "en": "with an opt-out"
+        }
       }
     },
     {
@@ -664,6 +785,11 @@
       "note": {
         "ja": "ジャイアンツで苦しみ、ブレーブス移籍後に立て直した。",
         "en": "Rough start with the Giants, strong finish after a trade to Atlanta."
+      },
+      "espnRank": 16,
+      "projection": {
+        "years": 3,
+        "usdM": 54
       }
     },
     {
@@ -678,6 +804,14 @@
       "note": {
         "ja": "ヤンキースの抑え。2025年途中の移籍から1年半で評価を立て直した。",
         "en": "The Yankees' closer, re-established as one of the game's best since his 2025 trade."
+      },
+      "espnRank": 11,
+      "projection": {
+        "years": 4,
+        "usdM": 68
+      },
+      "qo": {
+        "status": "offered"
       }
     },
     {
@@ -692,6 +826,11 @@
       "note": {
         "ja": "元日本ハム・ソフトバンク。36歳で初のオールスターに選ばれ、ワールドシリーズ第1戦の先発も任された。",
         "en": "Former Nippon-Ham and SoftBank pitcher. Made his first All-Star team at 36 and started Game 1 of the World Series."
+      },
+      "espnRank": 32,
+      "projection": {
+        "years": 2,
+        "usdM": 42
       }
     },
     {
@@ -706,6 +845,15 @@
       "note": {
         "ja": "タイガースで好投し、トレード期限にパドレスへ。移籍後は崩れたが、制球と年齢で買い手は多いとみられる。",
         "en": "Excellent with Detroit before a deadline deal to San Diego, where he struggled; command and age keep his market broad."
+      },
+      "espnRank": 36,
+      "projection": {
+        "years": 2,
+        "usdM": 28,
+        "note": {
+          "ja": "オプトアウトつき",
+          "en": "with an opt-out"
+        }
       }
     },
     {
@@ -720,6 +868,11 @@
       "note": {
         "ja": "鈴木誠也と同じくカブスからFAに。毎年安定して出場し、ゴールドグラブ4度。",
         "en": "Like Suzuki, a Cubs free agent; durable and a four-time Gold Glover."
+      },
+      "espnRank": 17,
+      "projection": {
+        "years": 3,
+        "usdM": 45
       }
     },
     {
@@ -734,7 +887,8 @@
       "note": {
         "ja": "昨オフにQOを受け入れてタイガースに残り、2年続けてFAに。今季は脇腹の故障で出場が減った。",
         "en": "Accepted Detroit's QO last winter and is back on the market; oblique injuries cut into his 2026 season."
-      }
+      },
+      "espnRank": 41
     },
     {
       "rank": 22,
@@ -753,6 +907,15 @@
       "note": {
         "ja": "2027年で海外FA権に届くため、今オフがポスティングの最後の機会。西武が10月30日に容認し、11月2日に申請した。MLB球団が先発と救援のどちらで見るかが焦点。",
         "en": "He reaches unrestricted free agency after 2027, so this is his last chance to be posted; Seibu approved it on Oct. 30 and filed on Nov. 2. The question is whether MLB teams see him as a starter or a reliever."
+      },
+      "espnRank": 7,
+      "projection": {
+        "years": 4,
+        "usdM": 72,
+        "note": {
+          "ja": "オプトアウトが1つ以上つく",
+          "en": "with at least one opt-out"
+        }
       }
     },
     {
@@ -767,6 +930,11 @@
       "note": {
         "ja": "元巨人。日本で3年投げてMLBに戻り、ナショナルズで前半戦に好投した。夏にガーディアンズへ移籍。",
         "en": "Former Yomiuri Giant who returned from three years in Japan, starred for the Nationals in the first half, then was traded to Cleveland."
+      },
+      "espnRank": 24,
+      "projection": {
+        "years": 3,
+        "usdM": 39
       }
     },
     {
@@ -781,6 +949,11 @@
       "note": {
         "ja": "引退の可能性も口にしている。続けるならブルージェイズへの復帰も選択肢とされる。",
         "en": "Has floated retirement; a return to Toronto is an option if he pitches on."
+      },
+      "espnRank": 15,
+      "projection": {
+        "years": 2,
+        "usdM": 44
       }
     },
     {
@@ -796,6 +969,11 @@
       "note": {
         "ja": "QOを受け入れた1年契約が満了。二度目のQOは出せないので、獲得球団に補償の負担がない。",
         "en": "His QO year is done, and since he cannot receive another, he carries no draft-pick cost."
+      },
+      "espnRank": 21,
+      "projection": {
+        "years": 2,
+        "usdM": 40
       }
     },
     {
@@ -810,6 +988,15 @@
       "note": {
         "ja": "新人時代以来の100投球回超え。キャリア初の複数年契約の可能性がある。",
         "en": "Topped 100 innings for the first time since his rookie year; a first multi-year deal is possible."
+      },
+      "espnRank": 28,
+      "projection": {
+        "years": 2,
+        "usdM": 26,
+        "note": {
+          "ja": "オプトアウトつき",
+          "en": "with an opt-out"
+        }
       }
     },
     {
@@ -824,6 +1011,11 @@
       "note": {
         "ja": "パドレスとマイナー契約から再起し、一塁守備でも上位の評価。",
         "en": "Revived his career after a minor league deal with San Diego, with top-tier first-base defense."
+      },
+      "espnRank": 40,
+      "projection": {
+        "years": 2,
+        "usdM": 32
       }
     },
     {
@@ -838,7 +1030,8 @@
       "note": {
         "ja": "開幕直後の不振から巻き返した。一塁と三塁を守れる右の打点役。",
         "en": "Recovered from a terrible start; a right-handed run producer who can play first or third."
-      }
+      },
+      "espnRank": 43
     },
     {
       "rank": 29,
@@ -852,6 +1045,11 @@
       "note": {
         "ja": "ブレーブスの抑えとして初のオールスター。どこかで抑えの座を得るとみられる。",
         "en": "First All-Star selection as Atlanta's closer; should land a ninth-inning job somewhere."
+      },
+      "espnRank": 38,
+      "projection": {
+        "years": 1,
+        "usdM": 17
       }
     },
     {
@@ -866,6 +1064,10 @@
       "note": {
         "ja": "2021年オフに結んだ5年1億1500万ドル契約を満了した。2年続けて170回前後を投げている。",
         "en": "Completed the five-year, $115 million deal he signed in November 2021, and has averaged more than 170 innings the past two years."
+      },
+      "projection": {
+        "years": 1,
+        "usdM": 12
       }
     }
   ]

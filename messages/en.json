@@ -32,7 +32,7 @@
     "eyebrow": "Next from NPB",
     "indexTitle": "Next Major Leaguers",
     "indexLead": "NPB stars MLB scouts are watching — what makes them intriguing, plus reactions from overseas.",
-    "rosterTitle": "Players to watch",
+    "rosterTitle": "This winter's movers",
     "mlbWatch": "Why MLB is watching",
     "posting": "Posting / FA outlook",
     "comp": "Comparable MLB player",
@@ -69,14 +69,24 @@
     "contractFa": "Free agency",
     "contractSalary": "Salary and contract",
     "faq": "Frequently asked",
-    "boardTitle": "Players reported to be on the move this winter",
+    "boardTitle": "On the move this winter ({season})",
     "boardPlayer": "Player",
     "boardTeam": "Team",
     "boardRoute": "Route",
-    "boardTiming": "Timing (as reported)",
+    "boardTiming": "Where it stands",
     "boardStats": "2026 line",
     "systemTitle": "How the posting system works",
-    "systemSource": "The mechanics above follow the description in:"
+    "systemSource": "The mechanics above follow the description in:",
+    "rosterNext": "Next in line ({year} and beyond)",
+    "h1": "Japanese Players Heading to MLB in {year}",
+    "lead": "Where each Japanese player moving to MLB after the {season} season stands — posting or international free agency — with sourced timelines, scouting views and overseas reactions, plus the names to watch for later winters.",
+    "step": {
+      "approved": "Approved",
+      "filed": "Filed",
+      "talks": "Talks open",
+      "declared": "Declared",
+      "signed": "Signed"
+    }
   },
   "legal": {
     "updated": "Last updated"

@@ -35,6 +35,29 @@ export type StoveOutcome = Sourced & {
   kind: 'signed' | 're-signed' | 'stayed' | 'retired';
   date: string;
   team?: Bi;
+  /**
+   * 契約の年数と総額（百万ドル）。文章（ja/en）と同じ報道の数字を数値でも持つ＝FA一覧の集計
+   * （契約総額の合計・予想との差）に使う。報道に無い年は書かない。
+   */
+  years?: number;
+  usdM?: number;
+};
+
+/**
+ * 他社が出した予想契約（年数・総額＝百万ドル）。**このサイトの予想ではない**＝どの媒体の数字かは
+ * カタログの `projection`（出典）で1か所に持ち、画面では必ず媒体名とセットで出す。
+ */
+export type StoveProjection = { years: number; usdM: number; note?: Bi };
+
+/**
+ * クオリファイング・オファー（QO）。提示は一斉（カタログの `qualifyingOffer.offered` が出典）、
+ * 受諾・拒否は選手ごとに報道が出る＝その2つは日付と出典を必ず持つ。
+ */
+export type StoveQo = {
+  status: 'offered' | 'accepted' | 'declined';
+  date?: string;
+  source?: string;
+  sourceName?: string;
 };
 
 /** 日本人選手の「今オフの現在地」。表示は PostingWatch（NEXT MLB と共用）に渡す形に揃える。 */
@@ -65,6 +88,12 @@ export type BoardRow = {
   route: StoveRoute;
   note: Bi;
   outcome?: StoveOutcome;
+  /** 別の媒体（altRanking）での順位。圏外なら持たない。 */
+  espnRank?: number;
+  projection?: StoveProjection;
+  qo?: StoveQo;
+  /** 関心が「報じられた」球団（外国人選手用・出典つき）。日本人は japanese[] / postingWatch 側が正。 */
+  suitors?: Sourced[];
 };
 
 export type StoveDate = {
@@ -101,7 +130,18 @@ export type StoveCatalog = {
   /** この日を過ぎたら選手LPの title をオフ仕様から戻す（ハブ自体はアーカイブとして残す）。 */
   activeUntil: string;
   ranking: { name: string; nameEn: string; url: string; date: string };
-  qualifyingOffer: { amountJa: string; amountEn: string; source: string; sourceName: string };
+  /** 並べて見せるもう1つのFAランキング（board[].espnRank の出どころ）。 */
+  altRanking?: { name: string; nameEn: string; url: string; date: string };
+  /** 予想契約（board[].projection）の出どころ。 */
+  projection?: { name: string; nameEn: string; url: string; date: string };
+  qualifyingOffer: {
+    amountJa: string;
+    amountEn: string;
+    source: string;
+    sourceName: string;
+    /** 提示された選手の一覧の出どころと、提示の日（日本時間）。 */
+    offered?: { date: string; source: string; sourceName: string };
+  };
   dates: StoveDate[];
   japanese: JpStove[];
   board: BoardRow[];
@@ -348,11 +388,91 @@ export function rowStatus(
     const same = sign.toTeamId === s?.lastTeamId;
     return { label: OUTCOME_LABEL[same ? 're-signed' : 'signed'], done: true, team: teamBi(sign.toTeamId) };
   }
-  if (route === 'opt-out' && s?.moves.some((m) => m.type === 'Declared Free Agency')) {
+  const declared = s?.moves.some((m) => m.type === 'Declared Free Agency');
+  if (route === 'opt-out' && declared) {
     return { label: { ja: 'オプトアウトしてFA', en: 'Opted out' }, done: false };
   }
+  // 球団オプションを断られて（か、相互オプションが成立せず）FAになった選手。公式のFA宣言が出たら
+  // 「球団オプション」のままにしない（ペラルタは10月29日にFA宣言済みなのに道筋の表示が残っていた）。
+  if (route === 'club-option' && declared) return { label: ROUTE_LABEL.fa, done: false };
   if (route === 'fa' && !faOpen) return { label: { ja: 'FA予定', en: 'Pending FA' }, done: false };
   return { label: ROUTE_LABEL[route], done: false };
+}
+
+// ───────────────────────────────────────────── FA一覧（/stove-league/fa）
+
+/** 「2026-2027」。検索は「2026」でも「2027」（来季）でも来るので、両方の年を省かずに書く。 */
+export function offseasonLabel(season: number): string {
+  return `${season}-${season + 1}`;
+}
+
+/** 百万ドルの数値を日本語の「◯億◯万ドル」に（425 → 4億2500万ドル／23.15 → 2315万ドル）。 */
+export function fmtUsdM(usdM: number, en: boolean): string {
+  if (en) return `$${usdM} million`;
+  const man = Math.round(usdM * 100); // 1百万ドル＝100万ドル
+  const oku = Math.floor(man / 10000);
+  const rest = man % 10000;
+  return `${oku ? `${oku}億` : ''}${rest ? `${rest}万` : ''}ドル`;
+}
+
+export function projectionText(p: StoveProjection, en: boolean): string {
+  const note = p.note ? (en ? ` (${p.note.en})` : `（${p.note.ja}）`) : '';
+  return en
+    ? `${p.years} ${p.years === 1 ? 'year' : 'years'}, ${fmtUsdM(p.usdM, true)}${note}`
+    : `${p.years}年${fmtUsdM(p.usdM, false)}${note}`;
+}
+
+/** 一覧の絞り込みに使う区分。done＝決着（契約・残留・QO受諾）／qo＝QOの回答待ち／posting／open＝未契約。 */
+export type FaStatusKey = 'done' | 'qo' | 'posting' | 'open';
+
+/**
+ * FA一覧の「状況」。rowStatus に QO の現在地を重ねる（提示中・受諾・拒否は日本の読者が
+ * 「鈴木誠也はどうなった？」で最初に知りたい点）。QO の受諾は元の球団への残留＝決着として扱う。
+ */
+export function faStatus(
+  b: BoardRow,
+  s: StovePlayerStats | undefined,
+  faOpen = true,
+): { key: FaStatusKey; label: Bi; done: boolean; team?: Bi; terms?: Sourced } {
+  const base = rowStatus(b.route, b.outcome, s, faOpen);
+  if (base.done) return { key: 'done', ...base };
+  if (b.qo?.status === 'accepted') {
+    return { key: 'done', label: { ja: 'QO受諾', en: 'Accepted QO' }, done: true, team: teamBi(s?.lastTeamId) };
+  }
+  if (b.route === 'posting') return { key: 'posting', label: { ja: 'ポスティング', en: 'Posted' }, done: false };
+  if (b.qo?.status === 'offered') {
+    return { key: 'qo', label: { ja: '未契約・QO提示中', en: 'Unsigned · QO pending' }, done: false };
+  }
+  if (b.qo?.status === 'declined') {
+    return { key: 'open', label: { ja: '未契約・QO拒否', en: 'Unsigned · declined QO' }, done: false };
+  }
+  return { key: 'open', label: { ja: '未契約', en: 'Unsigned' }, done: false };
+}
+
+/** 「いちばん新しい動き」1件ぶん。日本人選手の報道の時系列（MLB組・NPB組）をまたいで日付順に並べる材料。 */
+export type StoveNewsItem = Sourced & { date: string; name: Bi; href: string };
+
+/**
+ * 日本人選手の最新の動き（入口ページの「きょうまでの動き」）。
+ * 中身は各選手の timeline の再表示だけ＝ここで新しい事実は作らない。同じ日は並びの上の選手（MLB組）を先に。
+ */
+export function latestNews(
+  groups: { name: Bi; href: string; timeline: (Sourced & { date: string })[] }[],
+  limit = 6,
+): StoveNewsItem[] {
+  const seen = new Set<string>();
+  return groups
+    .flatMap((g) => g.timeline.map((t) => ({ ...t, name: g.name, href: g.href })))
+    .sort((a, b) => b.date.localeCompare(a.date))
+    // 同じ日・同じ出典の出来事は1件にまとめる（ESPNのランキング発表は鈴木誠也と佐藤輝明の両方の
+    // 時系列に入っている＝一覧に同じ話が2行並ぶ）。先に来た選手の行を残す。
+    .filter((n) => {
+      const key = `${n.date}|${n.source}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, limit);
 }
 
 // ───────────────────────────────────────────── FAQ（画面と FAQPage JSON-LD が同じ配列を使う）
@@ -372,7 +492,6 @@ export function buildStoveFaq(
     rows.map((r) => (en ? names[r.slug]?.en : names[r.slug]?.ja) ?? r.slug).join(en ? ', ' : '・');
   const fa = jp('fa');
   const opt = jp('opt-out');
-  const offseason = `${cat.season}-${String((cat.season + 1) % 100).padStart(2, '0')}`;
   const faOpen = wsEnd ? addDays(wsEnd, 1) : null;
   const md = (iso: string) => `${Number(iso.slice(5, 7))}月${Number(iso.slice(8, 10))}日`;
   const mdEn = (iso: string) =>
@@ -380,9 +499,29 @@ export function buildStoveFaq(
   // QO の受諾期限は提示から何日と決まっておらず年ごとにMLBが日付を決める（2026年は提示期限の15日後）＝日程表の実日付を使う。
   const qoAccept = cat.dates.find((d) => d.key === 'qo-accept' && d.date);
 
+  const cba = cat.dates.find((d) => d.key === 'cba' && d.date);
+
   const items: FaqItem[] = [
+    // 「mlb ストーブリーグ とは／いつから／いつまで／期間」は入力候補の上位＝問いの形のまま先頭に置く。
     {
-      q: { ja: `${offseason}年のオフにFAになる日本人選手は誰？`, en: `Which Japanese players are free agents this ${offseason} offseason?` },
+      q: { ja: 'MLBのストーブリーグとは？', en: 'What is the MLB hot stove?' },
+      a: {
+        ja: 'シーズンが終わってから翌年のキャンプが始まるまでの、FA契約とトレードが動く期間のこと。寒い季節にファンがストーブを囲んで補強の話をしたことから、こう呼ばれる（英語では hot stove league）。',
+        en: 'The stretch between the end of the season and spring training, when free agents sign and trades happen. The name comes from fans talking baseball around a hot stove in winter.',
+      },
+    },
+    {
+      q: { ja: 'MLBのストーブリーグはいつからいつまで？', en: 'When does the MLB hot stove start and end?' },
+      a: {
+        ja: `ワールドシリーズ終了の翌日にFAが解禁されて始まり、翌年2月中旬のキャンプインまで続く。${faOpen ? `今オフは現地${md(faOpen)}に始まった。` : ''}${cba ? `日本時間${md(cba.date!)}に労使協定の期限があり、新しい協定がまとまらなければロックアウトで契約とトレードが止まる。` : ''}`,
+        en: `It starts when free agency opens the day after the World Series and runs until camps open in mid-February.${faOpen ? ` This winter it began on ${mdEn(faOpen)}.` : ''}${cba ? ` The CBA expires on ${mdEn(cba.date!)} Japan time, and without a new deal a lockout would freeze signings and trades.` : ''}`,
+      },
+    },
+    {
+      q: {
+        ja: `${cat.season}年オフにFAになる日本人選手は誰？`,
+        en: `Which Japanese players are free agents after the ${cat.season} season?`,
+      },
       a: {
         ja: `契約が終わってFAになるのは${list(fa, false)}。${opt.length ? `${list(opt, false)}は契約を途中で破棄できるオプトアウト権を持ち、ワールドシリーズ終了から5日以内に市場に出るか決める。` : ''}${npbPosting.length ? `NPBからは${npbPosting.map((n) => n.ja).join('・')}がポスティングなどでMLB挑戦を目指している。` : ''}`,
         en: `Players whose contracts are up: ${list(fa, true)}.${opt.length ? ` ${list(opt, true)} hold opt-outs and must decide within five days of the World Series.` : ''}${npbPosting.length ? ` From NPB, ${npbPosting.map((n) => n.en).join(', ')} are pursuing MLB moves.` : ''}`,

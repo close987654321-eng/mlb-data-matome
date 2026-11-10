@@ -11,6 +11,7 @@ import BoardTrend from '@/components/BoardTrend';
 import MvpGuide from '@/components/MvpGuide';
 import FaqList from '@/components/FaqList';
 import AwardFinalists from '@/components/AwardFinalists';
+import BoardStoveLink from '@/components/BoardStoveLink';
 import { getBoardHistory, historyThrough, previousDay, rankDeltas } from '@/lib/boardHistory';
 import { buildMvpFaq } from '@/lib/mvpFaq';
 import FeedGrid from '@/components/FeedGrid';
@@ -181,6 +182,9 @@ export default async function MvpPage({ params }: { params: Promise<{ locale: Lo
       <MvpRaceNow board={board} history={hist} locale={locale} final={final} />
 
       <MvpBoard board={board} locale={locale} deltas={deltas} />
+
+      {/* 賞の発表が終わると、来た人の次の関心は「この選手は来年どこでプレーするか」＝表の直下からFA一覧へ送る（オフの間だけ出る）。 */}
+      <BoardStoveLink board={board} locale={locale} />
 
       {/* 日次履歴（7月9日から）＝首位の在位・日本人の昇降が見える唯一の面。直近12日を列に出す。 */}
       <BoardTrend board={board} history={hist} locale={locale} />

@@ -113,13 +113,15 @@ async function stoveMeta(slug: string, mlbId: number, en: boolean) {
   const st = rowStatus(jp.route, jp.outcome, s);
   if (st.done && st.team) {
     return {
-      ja: `${st.team.ja}と${st.label.ja}・契約内容`,
+      // 残留は「◯◯と残留」と言わない（「アストロズ残留・契約内容」）。
+      ja: jp.outcome?.kind === 'stayed' ? `${st.team.ja}残留・契約内容` : `${st.team.ja}と${st.label.ja}・契約内容`,
       en: `${st.label.en} with ${st.team.en}`,
       headline: jp.headline,
     };
   }
   if (jp.route === 'opt-out') return { ja: 'オプトアウトの最新情報', en: 'Opt-Out Decision', headline: jp.headline };
-  return { ja: 'FA・移籍先の最新情報', en: 'Free Agency Tracker', headline: jp.headline };
+  // 入力候補は「鈴木誠也 移籍／契約／fa」の3語＝3つとも題に入れる（2026-11-10 採取）。
+  return { ja: 'FA・移籍先・契約の最新情報', en: 'Free Agency Tracker', headline: jp.headline };
 }
 
 export default async function PlayerHubPage({

@@ -20,6 +20,7 @@ export default function ProspectBoard({
   heading,
   cols,
   routeLabels,
+  stepLabels,
   asOfLabel,
 }: {
   players: NpbProspect[];
@@ -29,10 +30,13 @@ export default function ProspectBoard({
   cols: { player: string; team: string; route: string; timing: string; stats: string };
   /** 「ポスティング」「海外FA」の既訳ラベル（表の中で文字列を組み立てない）。 */
   routeLabels: { posting: string; intlFa: string };
+  /** 手続きの段階の既訳ラベル（容認・申請・交渉開始・権利行使を表明・契約）。 */
+  stepLabels: Record<StepKey, string>;
   asOfLabel: string;
 }) {
   if (!players.length) return null;
   const en = locale === 'en';
+  const md = (iso: string) => `${Number(iso.slice(5, 7))}/${Number(iso.slice(8, 10))}`;
   return (
     <section>
       <div className="mb-3">
@@ -63,6 +67,9 @@ export default function ProspectBoard({
                     .join(' · ')
                 : '';
               const w = p.postingWatch;
+              // 進んだ段階を日付つきで順に並べる（容認 10/19 → 申請 11/1 → 交渉開始 11/2）。
+              // 同じ日に2つ進んだら日付は後ろの1回だけ出す。
+              const done = STEP_ORDER.filter((k) => w?.steps?.[k]).map((k) => ({ k, on: w!.steps![k]! }));
               return (
                 <tr key={p.slug}>
                   <th scope="row" className="whitespace-nowrap px-3 py-3 text-left font-semibold">
@@ -76,9 +83,30 @@ export default function ProspectBoard({
                   <td className="whitespace-nowrap px-3 py-3 text-ink-soft">
                     {w ? (w.route === 'intl-fa' ? routeLabels.intlFa : routeLabels.posting) : '−'}
                   </td>
-                  {/* 「いつ」は表の主役。報じられた時期をそのまま短く出す（無ければ空欄にする＝推測しない）。 */}
+                  {/* 「いまどこまで進んだか」が表の主役。段階の日付がある選手はそれを、無ければ報じられた
+                      時期を短く出す（どちらも無ければ空欄＝推測しない）。 */}
                   <td className="px-3 py-3 text-ink-soft">
-                    {w?.window ? shorten(en ? w.window.en : w.window.ja) : '−'}
+                    {done.length ? (
+                      <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                        {done.map((d, i) => {
+                          const last = i === done.length - 1;
+                          const sameAsNext = !last && done[i + 1].on === d.on;
+                          return (
+                            <span key={d.k} className="inline-flex items-center gap-x-1.5 whitespace-nowrap">
+                              <span className={last ? 'border border-ink px-1.5 py-0.5 text-[11px] font-semibold text-ink' : ''}>
+                                {stepLabels[d.k]}
+                              </span>
+                              {!sameAsNext && <span className="text-xs tabular-nums text-ink-mute">{md(d.on)}</span>}
+                              {!last && <span aria-hidden className="text-ink-mute">→</span>}
+                            </span>
+                          );
+                        })}
+                      </span>
+                    ) : w?.window ? (
+                      shorten(en ? w.window.en : w.window.ja)
+                    ) : (
+                      '−'
+                    )}
                   </td>
                   <td className="whitespace-nowrap px-3 py-3 tabular-nums text-ink">{line || '−'}</td>
                 </tr>
@@ -87,10 +115,14 @@ export default function ProspectBoard({
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-xs text-ink-soft">{asOfLabel}</p>
+      {asOfLabel && <p className="mt-2 text-xs text-ink-soft">{asOfLabel}</p>}
     </section>
   );
 }
+
+type StepKey = 'declared' | 'approved' | 'filed' | 'talks' | 'signed';
+/** 手続きが進む順。海外FA（declared）とポスティング（approved→filed→talks）のどちらも最後は signed。 */
+const STEP_ORDER: StepKey[] = ['declared', 'approved', 'filed', 'talks', 'signed'];
 
 /** 表のセルに入る長さへ。1文目だけを取る（丸ごと入れると表が縦に伸びて比較にならない）。 */
 function shorten(s: string): string {

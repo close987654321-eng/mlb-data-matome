@@ -14,6 +14,7 @@ import BoardTrend from '@/components/BoardTrend';
 import RoyGuide from '@/components/RoyGuide';
 import FaqList from '@/components/FaqList';
 import AwardFinalists from '@/components/AwardFinalists';
+import BoardStoveLink from '@/components/BoardStoveLink';
 import BoardColumns from '@/components/BoardColumns';
 import FeedGrid from '@/components/FeedGrid';
 import SectionHeading from '@/components/SectionHeading';
@@ -199,6 +200,9 @@ export default async function RoyPage({ params }: { params: Promise<{ locale: Lo
       <RoyRaceNow board={board} history={hist} locale={locale} final={final} />
 
       <RoyBoard board={board} locale={locale} deltas={deltas} />
+
+      {/* 賞の発表が終わると、来た人の次の関心は「この選手は来年どこでプレーするか」＝表の直下からFA一覧へ送る（オフの間だけ出る）。 */}
+      <BoardStoveLink board={board} locale={locale} />
 
       {/* 日次履歴が2日以上あるときだけ出る（首位の交代・日本人の昇降が見える唯一の面）。 */}
       <BoardTrend board={board} history={hist} locale={locale} />

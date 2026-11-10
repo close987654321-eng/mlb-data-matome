@@ -20,9 +20,6 @@ export type StoveBoardRow = {
   note: Bi;
 };
 
-/** 最初に開いておく人数。残りは <details> に畳む（HTML には全員載る＝検索・読み上げからは見える）。 */
-const OPEN = 10;
-
 function Row({ r, en }: { r: StoveBoardRow; en: boolean }) {
   return (
     <li className="grid grid-cols-[2rem_1fr] gap-x-3 border-b border-line py-4">
@@ -81,21 +78,29 @@ function Row({ r, en }: { r: StoveBoardRow; en: boolean }) {
 }
 
 /**
- * FA注目選手の一覧（MLB.com の順位順）。
+ * FA注目選手の抜粋（入口ページ用）。全員ぶんの表は専用ページ（/stove-league/fa）にある。
  *
  * 順位は MLB.com の記者が出したもの＝出典を見出しの直下に必ず出す（編集部の予想に見せない）。
  * 成績は statsapi の値（scripts/fetch-stove-stats.mjs）、状況は人の決着＞公式の契約記録＞道筋。
- * 30人を全部開くとスマホで約7画面になり、下の日程・海外の反応が埋もれる（2026-10-29 のレビュー）ので、
- * 上位10人だけ開いて残りは畳む。PC では2列にして縦の長さを半分にする。
+ * 以前はここに30人を並べ（上位10人を開いて残りを畳む）ていたが、2026-11-10 に一覧を専用ページへ分けた。
+ * 「FAランキング」の検索はそちらが受ける＝ここは上位と日本人だけを見せて、一覧へ送る。
  */
 export default function StoveBoard({
   rows,
+  total,
+  signed,
+  moreHref,
   en,
   source,
   sourceDate,
   statsAsOf,
 }: {
+  /** ここに出す行（上位と日本人）。 */
   rows: StoveBoardRow[];
+  /** ランキング全体の人数と、そのうち決着した人数（一覧への送り文に使う）。 */
+  total: number;
+  signed: number;
+  moreHref: string;
   en: boolean;
   source: { name: string; url: string };
   /** 「10月27日」形式に整えた日付。 */
@@ -103,13 +108,14 @@ export default function StoveBoard({
   statsAsOf: string;
 }) {
   if (!rows.length) return null;
-  const signed = rows.filter((r) => r.status.done).length;
-  const head = rows.slice(0, OPEN);
-  const rest = rows.slice(OPEN);
-  const listCls = 'grid border-t border-line lg:grid-cols-2 lg:gap-x-10';
   return (
     <section id="ranking">
-      <SectionHeading label={en ? 'Top free agents' : 'FA注目選手ランキング'} count={rows.length} lead />
+      <SectionHeading
+        label={en ? 'Top free agents' : 'FA注目選手（上位と日本人）'}
+        seeAllHref={moreHref}
+        seeAllLabel={en ? `All ${total}` : `${total}人の一覧`}
+        lead
+      />
       <p className="mt-1.5 max-w-prose text-sm text-ink-soft">
         {en ? (
           <>
@@ -118,7 +124,7 @@ export default function StoveBoard({
               {source.name}
             </a>{' '}
             ({sourceDate}). Stats are the 2026 regular season from MLB&apos;s official data ({statsAsOf}).
-            {signed > 0 && ` ${signed} have signed so far.`}
+            {signed > 0 && ` ${signed} of the top ${total} have settled so far.`}
           </>
         ) : (
           <>
@@ -127,31 +133,25 @@ export default function StoveBoard({
               {source.name}
             </a>
             のFAランキング（{sourceDate}付）。成績は2026年レギュラーシーズン（MLB公式・{statsAsOf}時点）。
-            {signed > 0 && `すでに${signed}人が契約を決めた。`}
+            {signed > 0 && `上位${total}人のうち${signed}人が決着した。`}
           </>
         )}
       </p>
 
-      <ol className={`mt-4 ${listCls}`}>
-        {head.map((r) => (
+      <ol className="mt-4 grid border-t border-line lg:grid-cols-2 lg:gap-x-10">
+        {rows.map((r) => (
           <Row key={`${r.rank}-${r.name}`} r={r} en={en} />
         ))}
       </ol>
-      {rest.length > 0 && (
-        <details className="group">
-          <summary className="flex min-h-[48px] cursor-pointer list-none items-center justify-center gap-2 border-b border-line text-sm font-semibold text-ink hover:bg-ink/[0.02] [&::-webkit-details-marker]:hidden">
-            <span className="group-open:hidden">
-              {en ? `Show ${rest.length} more (No. ${OPEN + 1}–${rows.length})` : `残り${rest.length}人を表示（${OPEN + 1}〜${rows.length}位）`}
-            </span>
-            <span className="hidden group-open:inline">{en ? 'Show fewer' : '閉じる'}</span>
-          </summary>
-          <ol start={OPEN + 1} className={listCls}>
-            {rest.map((r) => (
-              <Row key={`${r.rank}-${r.name}`} r={r} en={en} />
-            ))}
-          </ol>
-        </details>
-      )}
+      <Link
+        href={moreHref}
+        className="flex min-h-[52px] items-center justify-center gap-2 border-b border-line text-sm font-semibold text-ink transition-colors hover:bg-ink/[0.02]"
+      >
+        {en
+          ? `All ${total}: status, projections and qualifying offers`
+          : `${total}人の契約状況・予想契約・QOの回答を一覧で見る`}
+        <span aria-hidden>→</span>
+      </Link>
     </section>
   );
 }

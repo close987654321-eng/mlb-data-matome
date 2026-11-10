@@ -58,13 +58,19 @@ export async function generateMetadata({
   // 一度断られた選手ほど「今年はどうなのか」で探される）。watch=公式な動きが無い選手だけ一般の看板にする。
   const posted = watch?.level === 'expected' || watch?.level === 'rumored';
   const faRoute = watch?.route === 'intl-fa';
+  const moving = Boolean(watch?.steps && Object.keys(watch.steps).length);
   const title = en
     ? `${p.nameEn} — ${posted ? 'MLB Posting Watch' : faRoute ? 'MLB Free Agency Watch' : 'NPB Player on the MLB Radar'}`
-    : faRoute
-      ? `${p.nameJa} 海外FA・メジャー移籍の最新情報と${npbSeason}年成績`
-      : posted
-        ? `${p.nameJa} ポスティング最新情報と${npbSeason}年成績`
-        : `${p.nameJa} — ポスティング・MLB挑戦が注目されるNPBの逸材`;
+    : moving
+      ? // 手続きが実際に動いた選手（容認・申請・権利行使の表明）は「メジャー」「移籍先」を題に入れる。
+        // 2026-11-10 の入力候補は「佐藤輝明 メジャー／メジャー どこ」「平良海馬 メジャー」＝
+        // 「ポスティング」より「メジャー」で探されている。
+        `${p.nameJa} メジャー移籍先・${faRoute ? '海外FA' : 'ポスティング'}の最新情報と${npbSeason}年成績`
+      : faRoute
+        ? `${p.nameJa} 海外FA・メジャー移籍の最新情報と${npbSeason}年成績`
+        : posted
+          ? `${p.nameJa} ポスティング最新情報と${npbSeason}年成績`
+          : `${p.nameJa} — ポスティング・MLB挑戦が注目されるNPBの逸材`;
   // ポスティングの現在地（報道ベース）を説明文の前方へ。オフに跳ねる「{選手名} ポスティング」で
   // 来た読者が SERP の時点で答えを受け取れる＝タイトルと合わせて意図一致させる。
   const watchStr = watch ? (en ? watch.headline.en : watch.headline.ja) : '';

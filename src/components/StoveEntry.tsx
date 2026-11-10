@@ -1,6 +1,6 @@
 import { Link } from '@/lib/navigation';
 import { getPlayer } from '@/lib/players';
-import { getStoveLeague, stoveActive } from '@/lib/stoveLeague';
+import { getStoveLeague, stoveActive, offseasonLabel } from '@/lib/stoveLeague';
 import type { Locale } from '@/lib/i18n';
 
 /**
@@ -20,7 +20,7 @@ export default async function StoveEntry({ locale, className = '' }: { locale: L
     .filter((p): p is NonNullable<typeof p> => Boolean(p))
     .slice(0, 3)
     .map((p) => (en ? p.nameEn : p.nameJa));
-  const off = `${cat.season}-${String((cat.season + 1) % 100).padStart(2, '0')}`;
+  const off = offseasonLabel(cat.season);
   return (
     <Link
       href="/stove-league"
@@ -32,8 +32,8 @@ export default async function StoveEntry({ locale, className = '' }: { locale: L
         </span>
         <span className="mt-1 block text-sm font-semibold leading-snug text-ink">
           {en
-            ? `${names.join(', ')}: where the Japanese players go, the top 30 free agents and the calendar`
-            : `${names.join('・')}らの去就、FA注目選手${cat.board.length}人、日程と海外の反応`}
+            ? `${names.join(', ')}: where the Japanese players go, the top ${cat.board.length} free agents and the calendar`
+            : `${names.join('・')}らの去就と最新の動き、FAランキング${cat.board.length}人の契約状況、日程と海外の反応`}
         </span>
       </span>
       <span aria-hidden className="shrink-0 text-ink-mute transition-transform group-hover:translate-x-1">

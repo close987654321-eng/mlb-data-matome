@@ -5,7 +5,8 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 
 # ストーブリーグの毎朝更新（stove-daily）
 
-`/stove-league`（オフの恒久ハブ）と、日本人選手の選手LP（`/player/{slug}` の「今オフの去就」）を**毎朝その時点の事実**にする。
+`/stove-league`（オフの入口）・`/stove-league/fa`（FAランキングと契約状況）・`/prospects`（メジャー挑戦する日本人）と、
+日本人選手の選手LP（`/player/{slug}` の「今オフの去就」）を**毎朝その時点の事実**にする。
 仕組みの全体は CLAUDE.md §4.1「ストーブリーグ」。ここは毎朝の段取りだけを書く。
 
 **担当の割り方（崩さない）**
@@ -93,9 +94,25 @@ Yahoo（米国・日本）・日刊スポーツ・スポニチ・報知・サン
 - `marketValue`: 記者・媒体が出した数字だけ（出典つき）。
 - **決着**（契約・残留・再契約）: `outcome`＝`{ kind, date, team:{ja,en}, ja, en, source, sourceName }`。`ja` に年数・金額。
   `board[]` の同じ選手にも同じ `outcome` を入れる。オプトアウトせず残る選手は `kind:"stayed"`。
-- `board[].note`: 状況が変わった選手だけ1文直す（契約したら契約内容に）。
+- `board[].note`: 状況が変わった選手だけ1文直す（契約したら契約内容に）。**全員の note も今日の日付で読み直す**
+  （「FAになる見込み」「QOを出さないとの見方」のように、結果が出た後も予定の言い方が残りやすい）。
 - 中身を変えた選手は `japanese[].asOf` を今日に。何か1つでも変えたらトップの `asOf` を今日に。**`checkedAt` は毎回今日**。
 - NPB組は `src/lib/npbPlayers.ts` の `postingWatch`（`asOf`・`headline`・`timeline`・`suitors`・`level`）を同じ規律で更新。
+  手続きが進んだら **`steps`**（`approved`＝容認／`filed`＝申請／`talks`＝MLBが受理して交渉開始／`declared`＝海外FA権の行使表明／
+  `signed`＝契約）に日本時間の日付を足す。`/prospects` の表はこの値で「容認 → 申請 → 交渉開始」を並べる＝timeline に出典がある出来事だけ書く。
+
+#### FA一覧（`/stove-league/fa`）の欄（2026-11-10〜）
+FA注目30人の表は専用ページに分かれた。`board[]` の次の欄がその表の中身＝毎朝ここも見る。
+- **QOの回答**（`board[].qo`）: 提示は `{"status":"offered"}`。受諾・拒否が報じられたら
+  `{"status":"accepted"|"declined","date":"<日本時間>","source":"<URL>","sourceName":"<媒体>"}` に書き換える。
+  回答期限（日程表の `qo-accept`）を過ぎた朝は、**全員の回答を必ず探して埋める**（`offered` のまま残さない）。
+  受諾した選手は元の球団に1年契約で残る＝`outcome`（`kind:"re-signed"`・`years:1`・`usdM:<QOの額>`）も入れる。
+- **契約**（`board[].outcome`）: 文章（`ja`/`en`）に加えて、**年数 `years` と総額 `usdM`（百万ドル単位の数値。4年1億500万ドル → `105`）**を入れる。
+  報道に年数・金額が無いときは `years`/`usdM` を書かない（球団名だけの決着でよい）。日本人は `japanese[].outcome` にも同じものを入れる。
+- **関心球団**（外国人は `board[].suitors`＝`{ja,en,source,sourceName}` の配列）: 記事が球団名を挙げて関心・交渉を報じたときだけ。
+  日本人の関心球団は従来どおり `japanese[].suitors` / `postingWatch.suitors`（表はそちらを読む）。
+- **予想契約と別の順位**（`board[].projection`・`espnRank`）は発表時の値＝**書き換えない**（MLB Trade Rumors と ESPN が11月3日に出した数字。
+  出どころはカタログの `projection`・`altRanking`）。契約が決まっても消さない＝あとで「予想と実際の差」を出すための記録。
 
 ### 4. 海外の反応の記事（大きな動きがあった日だけ・1日1本まで）
 **対象**: 日本人（MLB組・NPB組）の契約・QO・オプトアウトの決定・正式なポスティング申請、または FA注目10位以内の契約。無ければこの手順は飛ばす。
