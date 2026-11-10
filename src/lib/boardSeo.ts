@@ -91,14 +91,14 @@ export const AWARD_RESULTS: {
   source: { label: string; url: string };
 } & Record<AwardKind, AwardBlock> = {
   year: 2026,
-  updatedAt: '2026-11-07',
+  updatedAt: '2026-11-10',
   finalistsAnnounced: { ja: '11月2日', en: 'Nov. 2' },
   source: { label: 'MLB.com', url: 'https://www.mlb.com/news/2026-bbwaa-awards-finalists' },
   roy: {
     date: { ja: '11月9日', en: 'Nov. 9', jstJa: '11月10日', jstEn: 'Nov. 10' },
     // AL: マクゴニグル・メシック・トール／NL: ベンジ・スチュワート・ウェザーホルト
     finalists: { AL: [805808, 800048, 801139], NL: [701807, 701398, 802139] },
-    winners: {},
+    winners: { AL: 805808, NL: 701398 },
   },
   cy: {
     date: { ja: '11月11日', en: 'Nov. 11', jstJa: '11月12日', jstEn: 'Nov. 12' },
