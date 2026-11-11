@@ -1,0 +1,933 @@
+{
+ "season": 2026,
+ "days": [
+  {
+   "date": "2026-10-29",
+   "players": {
+    "543243": {
+     "name": "Sonny Gray",
+     "rank": 14,
+     "s": "open"
+    },
+    "592332": {
+     "name": "Kevin Gausman",
+     "rank": 24,
+     "s": "open"
+    },
+    "592662": {
+     "name": "Robbie Ray",
+     "rank": 30,
+     "s": "open"
+    },
+    "605280": {
+     "name": "Clay Holmes",
+     "rank": 8,
+     "s": "opt-out"
+    },
+    "607259": {
+     "name": "Nick Martinez",
+     "rank": 18,
+     "s": "open"
+    },
+    "628452": {
+     "name": "Raisel Iglesias",
+     "rank": 29,
+     "s": "open"
+    },
+    "641343": {
+     "name": "Jake Bauers",
+     "rank": 11,
+     "s": "open"
+    },
+    "641816": {
+     "name": "Tyler Mahle",
+     "rank": 16,
+     "s": "open"
+    },
+    "642547": {
+     "name": "Freddy Peralta",
+     "rank": 3,
+     "s": "club-option"
+    },
+    "647336": {
+     "name": "Michael Soroka",
+     "rank": 26,
+     "s": "open"
+    },
+    "650333": {
+     "name": "Luis Arraez",
+     "rank": 12,
+     "s": "open"
+    },
+    "650402": {
+     "name": "Gleyber Torres",
+     "rank": 21,
+     "s": "open"
+    },
+    "650633": {
+     "name": "Michael King",
+     "rank": 2,
+     "s": "opt-out"
+    },
+    "656492": {
+     "name": "Foster Griffin",
+     "rank": 23,
+     "s": "open"
+    },
+    "663554": {
+     "name": "Casey Mize",
+     "rank": 19,
+     "s": "open"
+    },
+    "664023": {
+     "name": "Ian Happ",
+     "rank": 20,
+     "s": "open"
+    },
+    "664034": {
+     "name": "Ty France",
+     "rank": 27,
+     "s": "open"
+    },
+    "664040": {
+     "name": "Brandon Lowe",
+     "rank": 7,
+     "s": "open"
+    },
+    "664761": {
+     "name": "Alec Bohm",
+     "rank": 28,
+     "s": "open"
+    },
+    "665862": {
+     "name": "Jazz Chisholm Jr.",
+     "rank": 15,
+     "s": "open"
+    },
+    "668227": {
+     "name": "Randy Arozarena",
+     "rank": 6,
+     "s": "open"
+    },
+    "669373": {
+     "name": "Tarik Skubal",
+     "rank": 1,
+     "s": "open"
+    },
+    "669432": {
+     "name": "Trevor Rogers",
+     "rank": 10,
+     "s": "open"
+    },
+    "670280": {
+     "name": "David Bednar",
+     "rank": 17,
+     "s": "open"
+    },
+    "670970": {
+     "name": "Adrian Morejon",
+     "rank": 9,
+     "s": "open"
+    },
+    "673548": {
+     "name": "Seiya Suzuki",
+     "rank": 5,
+     "s": "open",
+     "slug": "seiya-suzuki",
+     "suitors": [
+      "Blue Jays"
+     ]
+    },
+    "680777": {
+     "name": "Ryan Jeffers",
+     "rank": 13,
+     "s": "open"
+    },
+    "684007": {
+     "name": "Shota Imanaga",
+     "rank": 25,
+     "s": "open",
+     "slug": "shota-imanaga"
+    },
+    "sato-teruaki": {
+     "name": "Teruaki Sato",
+     "rank": 4,
+     "s": "posting"
+    },
+    "taira-kaima": {
+     "name": "Kaima Taira",
+     "rank": 22,
+     "s": "posting"
+    },
+    "tomoyuki-sugano": {
+     "slug": "tomoyuki-sugano",
+     "s": "open"
+    },
+    "tatsuya-imai": {
+     "slug": "tatsuya-imai",
+     "s": "opt-out"
+    },
+    "yuki-matsui": {
+     "slug": "yuki-matsui",
+     "s": "opt-out"
+    }
+   }
+  },
+  {
+   "date": "2026-11-02",
+   "players": {
+    "543243": {
+     "name": "Sonny Gray",
+     "rank": 14,
+     "s": "open"
+    },
+    "592332": {
+     "name": "Kevin Gausman",
+     "rank": 24,
+     "s": "open"
+    },
+    "592662": {
+     "name": "Robbie Ray",
+     "rank": 30,
+     "s": "open"
+    },
+    "605280": {
+     "name": "Clay Holmes",
+     "rank": 8,
+     "s": "opt-out"
+    },
+    "607259": {
+     "name": "Nick Martinez",
+     "rank": 18,
+     "s": "open"
+    },
+    "628452": {
+     "name": "Raisel Iglesias",
+     "rank": 29,
+     "s": "open"
+    },
+    "641343": {
+     "name": "Jake Bauers",
+     "rank": 11,
+     "s": "open"
+    },
+    "641816": {
+     "name": "Tyler Mahle",
+     "rank": 16,
+     "s": "open"
+    },
+    "642547": {
+     "name": "Freddy Peralta",
+     "rank": 3,
+     "s": "club-option"
+    },
+    "647336": {
+     "name": "Michael Soroka",
+     "rank": 26,
+     "s": "open"
+    },
+    "650333": {
+     "name": "Luis Arraez",
+     "rank": 12,
+     "s": "open"
+    },
+    "650402": {
+     "name": "Gleyber Torres",
+     "rank": 21,
+     "s": "open"
+    },
+    "650633": {
+     "name": "Michael King",
+     "rank": 2,
+     "s": "opt-out"
+    },
+    "656492": {
+     "name": "Foster Griffin",
+     "rank": 23,
+     "s": "open"
+    },
+    "663554": {
+     "name": "Casey Mize",
+     "rank": 19,
+     "s": "open"
+    },
+    "664023": {
+     "name": "Ian Happ",
+     "rank": 20,
+     "s": "open"
+    },
+    "664034": {
+     "name": "Ty France",
+     "rank": 27,
+     "s": "open"
+    },
+    "664040": {
+     "name": "Brandon Lowe",
+     "rank": 7,
+     "s": "open"
+    },
+    "664761": {
+     "name": "Alec Bohm",
+     "rank": 28,
+     "s": "open"
+    },
+    "665862": {
+     "name": "Jazz Chisholm Jr.",
+     "rank": 15,
+     "s": "open"
+    },
+    "668227": {
+     "name": "Randy Arozarena",
+     "rank": 6,
+     "s": "open"
+    },
+    "669373": {
+     "name": "Tarik Skubal",
+     "rank": 1,
+     "s": "open"
+    },
+    "669432": {
+     "name": "Trevor Rogers",
+     "rank": 10,
+     "s": "open"
+    },
+    "670280": {
+     "name": "David Bednar",
+     "rank": 17,
+     "s": "open"
+    },
+    "670970": {
+     "name": "Adrian Morejon",
+     "rank": 9,
+     "s": "open"
+    },
+    "673548": {
+     "name": "Seiya Suzuki",
+     "rank": 5,
+     "s": "open",
+     "slug": "seiya-suzuki",
+     "suitors": [
+      "Blue Jays"
+     ]
+    },
+    "680777": {
+     "name": "Ryan Jeffers",
+     "rank": 13,
+     "s": "open"
+    },
+    "684007": {
+     "name": "Shota Imanaga",
+     "rank": 25,
+     "s": "open",
+     "slug": "shota-imanaga"
+    },
+    "sato-teruaki": {
+     "name": "Teruaki Sato",
+     "rank": 4,
+     "s": "posting"
+    },
+    "taira-kaima": {
+     "name": "Kaima Taira",
+     "rank": 22,
+     "s": "posting"
+    },
+    "tomoyuki-sugano": {
+     "slug": "tomoyuki-sugano",
+     "s": "open"
+    },
+    "tatsuya-imai": {
+     "slug": "tatsuya-imai",
+     "s": "stayed",
+     "team": "Astros"
+    },
+    "yuki-matsui": {
+     "slug": "yuki-matsui",
+     "s": "stayed",
+     "team": "Padres"
+    }
+   }
+  },
+  {
+   "date": "2026-11-10",
+   "players": {
+    "543243": {
+     "name": "Sonny Gray",
+     "rank": 14,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 55
+     }
+    },
+    "592332": {
+     "name": "Kevin Gausman",
+     "rank": 24,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 44
+     }
+    },
+    "592662": {
+     "name": "Robbie Ray",
+     "rank": 30,
+     "s": "open",
+     "proj": {
+      "y": 1,
+      "m": 12
+     }
+    },
+    "605280": {
+     "name": "Clay Holmes",
+     "rank": 8,
+     "s": "opt-out",
+     "proj": {
+      "y": 3,
+      "m": 45
+     }
+    },
+    "607259": {
+     "name": "Nick Martinez",
+     "rank": 18,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 42
+     }
+    },
+    "628452": {
+     "name": "Raisel Iglesias",
+     "rank": 29,
+     "s": "open",
+     "proj": {
+      "y": 1,
+      "m": 17
+     }
+    },
+    "641343": {
+     "name": "Jake Bauers",
+     "rank": 11,
+     "s": "qo-offered",
+     "proj": {
+      "y": 1,
+      "m": 23.15
+     }
+    },
+    "641816": {
+     "name": "Tyler Mahle",
+     "rank": 16,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 54
+     }
+    },
+    "642547": {
+     "name": "Freddy Peralta",
+     "rank": 3,
+     "s": "club-option",
+     "proj": {
+      "y": 5,
+      "m": 110
+     }
+    },
+    "647336": {
+     "name": "Michael Soroka",
+     "rank": 26,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 26
+     }
+    },
+    "650333": {
+     "name": "Luis Arraez",
+     "rank": 12,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 48
+     }
+    },
+    "650402": {
+     "name": "Gleyber Torres",
+     "rank": 21,
+     "s": "open"
+    },
+    "650633": {
+     "name": "Michael King",
+     "rank": 2,
+     "s": "opt-out",
+     "proj": {
+      "y": 4,
+      "m": 92
+     }
+    },
+    "656492": {
+     "name": "Foster Griffin",
+     "rank": 23,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 39
+     }
+    },
+    "663554": {
+     "name": "Casey Mize",
+     "rank": 19,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 28
+     }
+    },
+    "664023": {
+     "name": "Ian Happ",
+     "rank": 20,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 45
+     }
+    },
+    "664034": {
+     "name": "Ty France",
+     "rank": 27,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 32
+     }
+    },
+    "664040": {
+     "name": "Brandon Lowe",
+     "rank": 7,
+     "s": "qo-offered",
+     "proj": {
+      "y": 3,
+      "m": 69
+     }
+    },
+    "664761": {
+     "name": "Alec Bohm",
+     "rank": 28,
+     "s": "open"
+    },
+    "665862": {
+     "name": "Jazz Chisholm Jr.",
+     "rank": 15,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 40
+     }
+    },
+    "668227": {
+     "name": "Randy Arozarena",
+     "rank": 6,
+     "s": "qo-offered",
+     "proj": {
+      "y": 4,
+      "m": 100
+     }
+    },
+    "669373": {
+     "name": "Tarik Skubal",
+     "rank": 1,
+     "s": "open",
+     "proj": {
+      "y": 9,
+      "m": 425
+     }
+    },
+    "669432": {
+     "name": "Trevor Rogers",
+     "rank": 10,
+     "s": "qo-offered",
+     "proj": {
+      "y": 5,
+      "m": 115
+     }
+    },
+    "670280": {
+     "name": "David Bednar",
+     "rank": 17,
+     "s": "qo-offered",
+     "proj": {
+      "y": 4,
+      "m": 68
+     }
+    },
+    "670970": {
+     "name": "Adrian Morejon",
+     "rank": 9,
+     "s": "qo-offered",
+     "proj": {
+      "y": 5,
+      "m": 80
+     }
+    },
+    "673548": {
+     "name": "Seiya Suzuki",
+     "rank": 5,
+     "s": "qo-offered",
+     "proj": {
+      "y": 4,
+      "m": 105
+     },
+     "slug": "seiya-suzuki",
+     "suitors": [
+      "Blue Jays"
+     ]
+    },
+    "680777": {
+     "name": "Ryan Jeffers",
+     "rank": 13,
+     "s": "qo-offered",
+     "proj": {
+      "y": 4,
+      "m": 75
+     }
+    },
+    "684007": {
+     "name": "Shota Imanaga",
+     "rank": 25,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 40
+     },
+     "slug": "shota-imanaga"
+    },
+    "sato-teruaki": {
+     "name": "Teruaki Sato",
+     "rank": 4,
+     "s": "posting",
+     "proj": {
+      "y": 5,
+      "m": 80
+     }
+    },
+    "taira-kaima": {
+     "name": "Kaima Taira",
+     "rank": 22,
+     "s": "posting",
+     "proj": {
+      "y": 4,
+      "m": 72
+     }
+    },
+    "tomoyuki-sugano": {
+     "slug": "tomoyuki-sugano",
+     "s": "open"
+    },
+    "tatsuya-imai": {
+     "slug": "tatsuya-imai",
+     "s": "stayed",
+     "team": "Astros"
+    },
+    "yuki-matsui": {
+     "slug": "yuki-matsui",
+     "s": "stayed",
+     "team": "Padres"
+    }
+   }
+  },
+  {
+   "date": "2026-11-11",
+   "players": {
+    "543243": {
+     "name": "Sonny Gray",
+     "rank": 14,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 55
+     }
+    },
+    "592332": {
+     "name": "Kevin Gausman",
+     "rank": 24,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 44
+     }
+    },
+    "592662": {
+     "name": "Robbie Ray",
+     "rank": 30,
+     "s": "open",
+     "proj": {
+      "y": 1,
+      "m": 12
+     }
+    },
+    "605280": {
+     "name": "Clay Holmes",
+     "rank": 8,
+     "s": "opt-out",
+     "proj": {
+      "y": 3,
+      "m": 45
+     }
+    },
+    "607259": {
+     "name": "Nick Martinez",
+     "rank": 18,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 42
+     }
+    },
+    "628452": {
+     "name": "Raisel Iglesias",
+     "rank": 29,
+     "s": "open",
+     "proj": {
+      "y": 1,
+      "m": 17
+     }
+    },
+    "641343": {
+     "name": "Jake Bauers",
+     "rank": 11,
+     "s": "qo-offered",
+     "proj": {
+      "y": 1,
+      "m": 23.15
+     }
+    },
+    "641816": {
+     "name": "Tyler Mahle",
+     "rank": 16,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 54
+     }
+    },
+    "642547": {
+     "name": "Freddy Peralta",
+     "rank": 3,
+     "s": "club-option",
+     "proj": {
+      "y": 5,
+      "m": 110
+     }
+    },
+    "647336": {
+     "name": "Michael Soroka",
+     "rank": 26,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 26
+     }
+    },
+    "650333": {
+     "name": "Luis Arraez",
+     "rank": 12,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 48
+     }
+    },
+    "650402": {
+     "name": "Gleyber Torres",
+     "rank": 21,
+     "s": "open"
+    },
+    "650633": {
+     "name": "Michael King",
+     "rank": 2,
+     "s": "opt-out",
+     "proj": {
+      "y": 4,
+      "m": 92
+     }
+    },
+    "656492": {
+     "name": "Foster Griffin",
+     "rank": 23,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 39
+     }
+    },
+    "663554": {
+     "name": "Casey Mize",
+     "rank": 19,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 28
+     }
+    },
+    "664023": {
+     "name": "Ian Happ",
+     "rank": 20,
+     "s": "open",
+     "proj": {
+      "y": 3,
+      "m": 45
+     }
+    },
+    "664034": {
+     "name": "Ty France",
+     "rank": 27,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 32
+     }
+    },
+    "664040": {
+     "name": "Brandon Lowe",
+     "rank": 7,
+     "s": "qo-offered",
+     "proj": {
+      "y": 3,
+      "m": 69
+     }
+    },
+    "664761": {
+     "name": "Alec Bohm",
+     "rank": 28,
+     "s": "open"
+    },
+    "665862": {
+     "name": "Jazz Chisholm Jr.",
+     "rank": 15,
+     "s": "open",
+     "proj": {
+      "y": 2,
+      "m": 40
+     }
+    },
+    "668227": {
+     "name": "Randy Arozarena",
+     "rank": 6,
+     "s": "qo-offered",
+     "proj": {
+      "y": 4,
+      "m": 100
+     }
+    },
+    "669373": {
+     "name": "Tarik Skubal",
+     "rank": 1,
+     "s": "open",
+     "proj": {
+      "y": 9,
+      "m": 425
+     },
+     "slug": "tarik-skubal",
+     "suitors": [
+      "Cubs",
+      "Dodgers",
+      "Mets"
+     ]
+    },
+    "669432": {
+     "name": "Trevor Rogers",
+     "rank": 10,
+     "s": "qo-offered",
+     "proj": {
+      "y": 5,
+      "m": 115
+     }
+    },
+    "670280": {
+     "name": "David Bednar",
+     "rank": 17,
+     "s": "qo-offered",
+     "proj": {
+      "y": 4,
+      "m": 68
+     }
+    },
+    "670970": {
+     "name": "Adrian Morejon",
+     "rank": 9,
+     "s": "qo-offered",
+     "proj": {
+      "y": 5,
+      "m": 80
+     }
+    },
+    "673548": {
+     "name": "Seiya Suzuki",
+     "rank": 5,
+     "s": "qo-offered",
+     "suitors": [
+      "Blue Jays",
+      "Padres"
+     ],
+     "proj": {
+      "y": 4,
+      "m": 105
+     },
+     "slug": "seiya-suzuki"
+    },
+    "680777": {
+     "name": "Ryan Jeffers",
+     "rank": 13,
+     "s": "qo-offered",
+     "proj": {
+      "y": 4,
+      "m": 75
+     }
+    },
+    "684007": {
+     "name": "Shota Imanaga",
+     "rank": 25,
+     "s": "open",
+     "suitors": [
+      "Padres"
+     ],
+     "proj": {
+      "y": 2,
+      "m": 40
+     },
+     "slug": "shota-imanaga"
+    },
+    "sato-teruaki": {
+     "name": "Teruaki Sato",
+     "rank": 4,
+     "s": "posting",
+     "proj": {
+      "y": 5,
+      "m": 80
+     }
+    },
+    "taira-kaima": {
+     "name": "Kaima Taira",
+     "rank": 22,
+     "s": "posting",
+     "proj": {
+      "y": 4,
+      "m": 72
+     }
+    },
+    "tomoyuki-sugano": {
+     "slug": "tomoyuki-sugano",
+     "s": "open"
+    },
+    "tatsuya-imai": {
+     "slug": "tatsuya-imai",
+     "s": "stayed",
+     "team": "Astros"
+    },
+    "yuki-matsui": {
+     "slug": "yuki-matsui",
+     "s": "stayed",
+     "team": "Padres"
+    }
+   }
+  }
+ ]
+}

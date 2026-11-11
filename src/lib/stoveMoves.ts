@@ -334,12 +334,18 @@ export async function teamStoveSide(opts: {
     const p = getPlayer(j.slug);
     if (p) linked.push({ name: en ? p.nameEn : p.nameJa, href: `/player/${p.slug}` });
   }
+  for (const j of cat.stars ?? []) {
+    if (j.outcome || !hit(j.suitors)) continue;
+    const p = getPlayer(j.slug);
+    if (p) linked.push({ name: en ? p.nameEn : p.nameJa, href: `/player/${p.slug}` });
+  }
   for (const p of prospectsOnTheMove()) {
     if (p.postingWatch?.steps?.signed || !hit(p.postingWatch?.suitors)) continue;
     linked.push({ name: en ? p.nameEn : p.nameJa, href: `/prospects/${p.slug}` });
   }
   for (const b of cat.board) {
     if (b.jpSlug || b.prospectSlug || b.outcome || !hit(b.suitors)) continue;
+    if (cat.stars?.some((s) => getPlayer(s.slug)?.mlbId === b.mlbId)) continue; // stars[] で出した選手を重ねない
     const n = await nameOf(b.nameEn, b.mlbId ?? 0, locale);
     linked.push({ name: n.name, href: n.href ?? '/stove-league/fa' });
   }

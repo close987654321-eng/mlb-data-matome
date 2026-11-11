@@ -122,6 +122,7 @@ const RIVAL_NAMES = {
   571970: 'マックス・マンシー', // Muncy
   500743: 'ミゲル・ロハス', // M.Rojas
   680736: 'ジャスティン・ロブレスキー', // Wrobleski (P)
+  669373: 'タリク・スクーバル', // Skubal (P・2026年途中からドジャース／今オフFAの主役＝/player で去就を追う)
 };
 const RIVAL_IDS = Object.keys(RIVAL_NAMES).map(Number);
 

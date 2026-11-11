@@ -144,6 +144,12 @@ export type StoveCatalog = {
   };
   dates: StoveDate[];
   japanese: JpStove[];
+  /**
+   * 外国人の主役（今オフは FA1位のスクーバル）。型は日本人と同じ＝選手LP（/player/{slug}）の「今オフの去就」に出す。
+   * japanese[] と分けて持つ＝入口の「日本人の一覧」や「日本人◯人」の数え上げに混ざらないように。
+   * 増やすのは動きが出た選手だけ（30人ぶんの薄いページは作らない）。slug は players.ts の rival。
+   */
+  stars?: JpStove[];
   board: BoardRow[];
 };
 
@@ -189,9 +195,10 @@ export async function getStoveStats(): Promise<StoveStats> {
   return statsCache;
 }
 
+/** 選手LPに出す「今オフの去就」。日本人（japanese[]）と外国人の主役（stars[]）の両方から引く。 */
 export async function getJpStove(slug: string): Promise<JpStove | null> {
   const cat = await getStoveLeague();
-  return cat?.japanese.find((j) => j.slug === slug) ?? null;
+  return cat?.japanese.find((j) => j.slug === slug) ?? cat?.stars?.find((j) => j.slug === slug) ?? null;
 }
 
 /** 選手LPの title をオフ仕様にしてよい期間か（JST の今日で判定）。 */

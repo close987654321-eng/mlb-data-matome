@@ -135,7 +135,8 @@ export default async function LockoutPage({ params }: { params: Promise<{ locale
       <section>
         <span className="text-xs font-medium uppercase tracking-[0.2em] text-ink-mute">Lockout</span>
         <h1 className="mt-2 text-3xl font-bold leading-tight text-ink sm:text-4xl">
-          MLB<span className="inline-block">{en ? ' Lockout' : 'ロックアウト'}</span>{' '}
+          MLB{en ? ' ' : ''}
+          <span className="inline-block">{en ? 'Lockout' : 'ロックアウト'}</span>{' '}
           <span className="inline-block">{off}</span>
         </h1>
         {/* 第一の問い「いまどうなっているのか」に、題のすぐ下で答える。 */}
@@ -273,6 +274,10 @@ export default async function LockoutPage({ params }: { params: Promise<{ locale
         </Link>
         <Link href="/stove-league/fa" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
           {en ? 'Free agent rankings: who has signed, who is left' : 'FAランキング：誰が決まり、誰が残っているか'}{' '}
+          <span aria-hidden className="ml-1">→</span>
+        </Link>
+        <Link href="/stove-league/guide" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
+          {en ? 'Offseason terms: luxury tax, qualifying offers and more' : 'オフの用語：ぜいたく税・クオリファイングオファーとは'}{' '}
           <span aria-hidden className="ml-1">→</span>
         </Link>
         <Link href="/prospects" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">

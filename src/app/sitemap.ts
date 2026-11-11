@@ -105,7 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 冬モードで止まるので、これを足さないと去就の見出しを毎朝書き換えても lastmod が春まで動かない
   // （2026-11-07 の点検で、鈴木誠也の去就は11/7更新なのに lastmod は11/4・今永LPの最終クロールは7/23だった）。
   const stoveAsOf = new Map(
-    stove && stoveActive(stove) ? stove.japanese.map((j) => [j.slug, j.asOf] as const) : [],
+    stove && stoveActive(stove) ? [...stove.japanese, ...(stove.stars ?? [])].map((j) => [j.slug, j.asOf] as const) : [],
   );
   const playerEntries = PLAYERS.map((p) => {
     const season = snap.players[String(p.mlbId)];
@@ -176,6 +176,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...(stove ? [entry('/stove-league', maxDate([stove.asOf, stoveStats.asOf.slice(0, 10)].filter(Boolean)))] : []),
     // FAランキングと契約状況（/stove-league/fa）。同じ data の別の面＝更新日も同じ決め方。
     ...(stove ? [entry('/stove-league/fa', maxDate([stove.asOf, stoveStats.asOf.slice(0, 10)].filter(Boolean)))] : []),
+    // オフの用語（/stove-league/guide）。定義は動かないが、実例（QOの回答・期限）は stove-league.json に依る。
+    ...(stove ? [entry('/stove-league/guide', stove.asOf)] : []),
     // ロックアウト（/stove-league/lockout）。更新日は自分の data（stove-lockout.json）の asOf。
     ...(lockout ? [entry('/stove-league/lockout', lockout.asOf)] : []),
     // 移籍情報（/stove-league/moves）。更新日は取引記録を取り込んだ日（中身が変わった時だけ進む）。

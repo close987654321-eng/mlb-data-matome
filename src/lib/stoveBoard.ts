@@ -74,14 +74,26 @@ export async function buildFaRows(opts: {
       const st = faStatus(b, s, faOpen);
       // 関心球団は日本人なら去就の正（japanese[] / postingWatch）、外国人は board の出典つきの欄。
       const jpStove = b.jpSlug ? cat.japanese.find((j) => j.slug === b.jpSlug) : undefined;
-      const suitors = jpStove?.suitors ?? prospect?.postingWatch?.suitors ?? b.suitors?.map((x) => ({ ja: x.ja, en: x.en }));
+      // 選手LPを持つ外国人（stars[]）も、関心球団は去就の欄が正（board 側と二重に書かない）。
+      const star = b.mlbId ? cat.stars?.find((s) => getPlayer(s.slug)?.mlbId === b.mlbId) : undefined;
+      const suitors =
+        jpStove?.suitors ?? star?.suitors ?? prospect?.postingWatch?.suitors ?? b.suitors?.map((x) => ({ ja: x.ja, en: x.en }));
       return {
         rank: b.rank,
         espnRank: b.espnRank,
         name,
         nameSub: en ? undefined : b.nameEn,
-        href: jp ? `/player/${jp.slug}` : prospect ? `/prospects/${prospect.slug}` : article ? `/${article.sport}/${article.id}` : undefined,
-        hrefIsArticle: !jp && !prospect && Boolean(article),
+        // 選手LPがある外国人（stars[]）は記事でなく選手LPへ＝去就の欄と成績がそこにある。
+        href: jp
+          ? `/player/${jp.slug}`
+          : star
+            ? `/player/${star.slug}`
+            : prospect
+              ? `/prospects/${prospect.slug}`
+              : article
+                ? `/${article.sport}/${article.id}`
+                : undefined,
+        hrefIsArticle: !jp && !star && !prospect && Boolean(article),
         photo: b.mlbId ? headshotUrl(b.mlbId, 'spot') : undefined,
         japanese: Boolean(jp || prospect),
         pitcher: /HP$/.test(b.pos.en),

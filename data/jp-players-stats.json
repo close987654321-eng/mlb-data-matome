@@ -1329,6 +1329,61 @@
       "sprintSpeed": 27.2,
       "team": "ドジャース"
     },
+    "669373": {
+      "fielding": {
+        "assists": 13,
+        "doublePlays": 0,
+        "errors": 0,
+        "fielding": "1.000",
+        "gamesPlayed": 26,
+        "gamesStarted": 26,
+        "innings": "158.2",
+        "position": "投手",
+        "putOuts": 1
+      },
+      "hitting": null,
+      "league": "NL",
+      "pitching": {
+        "avg": ".217",
+        "baseOnBalls": 27,
+        "earnedRuns": 48,
+        "era": "2.72",
+        "gamesPlayed": 26,
+        "gamesStarted": 26,
+        "hits": 126,
+        "holds": 0,
+        "homeRuns": 14,
+        "homeRunsPer9": "0.79",
+        "inningsPitched": "158.2",
+        "losses": 7,
+        "runs": 52,
+        "saves": 0,
+        "strikeOuts": 186,
+        "strikeoutWalkRatio": "6.89",
+        "strikeoutsPer9Inn": "10.55",
+        "walksPer9Inn": "1.53",
+        "whip": "0.96",
+        "winPercentage": ".632",
+        "wins": 12
+      },
+      "ranks": {
+        "pitching": {
+          "inningsPitched": {
+            "mlb": 50
+          },
+          "strikeOuts": {
+            "mlb": 17
+          },
+          "wins": {
+            "mlb": 20
+          }
+        }
+      },
+      "saber": {
+        "pit": 5.2086
+      },
+      "team": "ドジャース"
+    },
     "672960": {
       "fielding": {
         "arm": 83.6,

@@ -298,7 +298,7 @@ export default async function PlayerHubPage({
   const stoveStatus = stove
     ? rowStatus(stove.route, stove.outcome, stoveStats.players[String(player.mlbId)], Boolean(stoveWsEnd))
     : null;
-  const stoveRank = stove && stoveCat?.board.find((b) => b.jpSlug === slug)?.rank;
+  const stoveRank = stove && stoveCat?.board.find((b) => b.jpSlug === slug || b.mlbId === player.mlbId)?.rank;
   // ヒーローに出す去就の1行（オフの間だけ）。順位があれば順位、無ければ道筋の一言。
   const stoveHero =
     stove && stoveStatus && stoveCat && stoveActive(stoveCat)

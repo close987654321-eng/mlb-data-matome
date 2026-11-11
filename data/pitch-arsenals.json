@@ -4317,6 +4317,237 @@
       "totalPitches": 2961,
       "xera": 3.63
     },
+    "669373": {
+      "era": 2.72,
+      "hrAllowed": {
+        "byPitch": {
+          "カーブ": 1,
+          "スライダー": 2,
+          "チェンジアップ": 4,
+          "フォーシーム": 7
+        },
+        "list": [
+          {
+            "angle": 28,
+            "d": "2026-09-19",
+            "dist": 425,
+            "ev": 107,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.9
+          },
+          {
+            "angle": 31,
+            "d": "2026-09-08",
+            "dist": 444,
+            "ev": 109.4,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 87.5
+          },
+          {
+            "angle": 17,
+            "d": "2026-08-10",
+            "dist": 410,
+            "ev": 110.8,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 91.5
+          },
+          {
+            "angle": 34,
+            "d": "2026-08-04",
+            "dist": 401,
+            "ev": 102.8,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 96.6
+          },
+          {
+            "angle": 37,
+            "d": "2026-07-07",
+            "dist": 411,
+            "ev": 107.8,
+            "name": "Slider",
+            "nameJa": "スライダー",
+            "type": "SL",
+            "velo": 88
+          },
+          {
+            "angle": 28,
+            "d": "2026-06-30",
+            "dist": 395,
+            "ev": 102.3,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 94.9
+          },
+          {
+            "angle": 32,
+            "d": "2026-06-24",
+            "dist": 382,
+            "ev": 101.2,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 86.4
+          },
+          {
+            "angle": 30,
+            "d": "2026-06-24",
+            "dist": 427,
+            "ev": 104.9,
+            "name": "Curveball",
+            "nameJa": "カーブ",
+            "type": "CU",
+            "velo": 80
+          },
+          {
+            "angle": 31,
+            "d": "2026-06-24",
+            "dist": 372,
+            "ev": 95.2,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.7
+          },
+          {
+            "angle": 21,
+            "d": "2026-06-19",
+            "dist": 375,
+            "ev": 101.6,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 88.2
+          },
+          {
+            "angle": 27,
+            "d": "2026-06-19",
+            "dist": 420,
+            "ev": 102.2,
+            "name": "Changeup",
+            "nameJa": "チェンジアップ",
+            "type": "CH",
+            "velo": 89.1
+          },
+          {
+            "angle": 36,
+            "d": "2026-06-13",
+            "dist": 417,
+            "ev": 105.9,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 98.3
+          },
+          {
+            "angle": 24,
+            "d": "2026-04-29",
+            "dist": 400,
+            "ev": 102.1,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 95.7
+          },
+          {
+            "angle": 23,
+            "d": "2026-04-01",
+            "dist": 410,
+            "ev": 106.8,
+            "name": "4-Seam Fastball",
+            "nameJa": "フォーシーム",
+            "type": "FF",
+            "velo": 97.3
+          }
+        ],
+        "total": 14
+      },
+      "league": "NL",
+      "nameJa": "タリク・スクーバル",
+      "pitches": [
+        {
+          "ba": 0.218,
+          "hardHit": 40,
+          "hr": 7,
+          "nameJa": "フォーシーム",
+          "putAway": 23.3,
+          "rv100": 1.2,
+          "type": "FF",
+          "usage": 38,
+          "velo": 96.8,
+          "whiff": 26.1,
+          "woba": 0.278,
+          "xwoba": 0.276
+        },
+        {
+          "ba": 0.192,
+          "hardHit": 28.4,
+          "hr": 4,
+          "nameJa": "チェンジアップ",
+          "putAway": 25.9,
+          "rv100": 0.9,
+          "type": "CH",
+          "usage": 25.6,
+          "velo": 87.7,
+          "whiff": 46.9,
+          "woba": 0.241,
+          "xwoba": 0.231
+        },
+        {
+          "ba": 0.27,
+          "hardHit": 34.3,
+          "hr": 0,
+          "nameJa": "シンカー",
+          "putAway": 19.8,
+          "rv100": 0.8,
+          "type": "SI",
+          "usage": 17.5,
+          "velo": 96.7,
+          "whiff": 18.5,
+          "woba": 0.327,
+          "xwoba": 0.309
+        },
+        {
+          "ba": 0.24,
+          "hardHit": 35,
+          "hr": 2,
+          "nameJa": "スライダー",
+          "putAway": 24.3,
+          "rv100": 1.4,
+          "type": "SL",
+          "usage": 13.9,
+          "velo": 89.7,
+          "whiff": 28.8,
+          "woba": 0.299,
+          "xwoba": 0.275
+        },
+        {
+          "ba": 0.138,
+          "hardHit": 26.7,
+          "hr": 1,
+          "nameJa": "カーブ",
+          "putAway": 34.1,
+          "rv100": -0.5,
+          "type": "CU",
+          "usage": 5,
+          "velo": 80.4,
+          "whiff": 38.8,
+          "woba": 0.208,
+          "xwoba": 0.225
+        }
+      ],
+      "team": "ドジャース",
+      "totalPitches": 2356,
+      "xera": 2.94
+    },
     "671737": {
       "era": 3.73,
       "hrAllowed": {

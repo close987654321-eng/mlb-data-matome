@@ -51,13 +51,16 @@ jobs:
           node scripts/fetch-stove-stats.mjs
           # 移籍情報（/stove-league/moves）と球団LPのオフの欄。取引記録1コール＋新しく出てきた選手の成績だけ。
           node scripts/fetch-stove-moves.mjs
+          # 日ごとの状態（関心球団・QOの回答・契約）を履歴に積む。前回と同じなら書かない＝毎朝の定期実行が
+          # stove-league.json を書き換えた後の最初の実行で1件増える。
+          node scripts/stove-history.mjs
 
       - name: 変化があればコミット＆push
         if: steps.gate.outputs.run == 'true'
         run: |
           set -euo pipefail
           # stove-moves.json は新規のこともある（git diff は未追跡のファイルを見ない）＝先に add してから比べる。
-          git add data/stove-league-stats.json data/stove-moves.json
+          git add data/stove-league-stats.json data/stove-moves.json data/stove-history.json
           if git diff --cached --quiet; then
             echo "変化なし＝コミットしない（no-op）"
             exit 0

@@ -92,8 +92,14 @@ for (const d of cat.dates ?? []) {
 // ── 日本人選手
 const OUTCOMES = new Set(['signed', 're-signed', 'stayed', 'retired']);
 const ROUTES = new Set(['fa', 'opt-out', 'club-option', 'posting']);
-for (const j of cat.japanese ?? []) {
-  const w = `japanese.${j.slug}`;
+// 外国人の主役（stars[]）も同じ型＝同じ検査。slug は players.ts の rival（日本人の欄に外国人を、主役の欄に日本人を書かない）。
+const rivalSlugs = new Set(
+  [...readFileSync(path.join(ROOT, 'src/lib/players.ts'), 'utf8').matchAll(/slug:\s*'([^']+)',\s*nameJa:[^\n]*?rival:\s*true/g)].map((m) => m[1]),
+);
+for (const j of cat.japanese ?? []) if (rivalSlugs.has(j.slug)) err(`japanese.${j.slug}: 外国人（rival）は stars[] に書く`);
+for (const j of cat.stars ?? []) if (!rivalSlugs.has(j.slug)) err(`stars.${j.slug}: players.ts の rival に無い slug`);
+for (const j of [...(cat.japanese ?? []), ...(cat.stars ?? [])]) {
+  const w = `${rivalSlugs.has(j.slug) ? 'stars' : 'japanese'}.${j.slug}`;
   if (!slugs.has(j.slug)) err(`${w}: players.ts に無い slug`);
   if (!ROUTES.has(j.route)) err(`${w}: route が不正（${j.route}）`);
   checkDate(`${w}.asOf`, j.asOf);
@@ -292,7 +298,7 @@ if (LINKS) {
   add(cat.ranking?.url);
   add(cat.qualifyingOffer?.source);
   for (const d of cat.dates ?? []) add(d.source);
-  for (const j of cat.japanese ?? []) {
+  for (const j of [...(cat.japanese ?? []), ...(cat.stars ?? [])]) {
     for (const t of j.timeline ?? []) add(t.source);
     for (const m of j.marketValue ?? []) add(m.source);
     add(j.outcome?.source);

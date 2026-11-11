@@ -195,6 +195,11 @@ export const PLAYERS: Player[] = [
   { slug: 'justin-wrobleski', nameJa: 'ジャスティン・ロブレスキー', nameEn: 'Justin Wrobleski', mlbId: 680736, rival: true,
     bio: '先発もこなすドジャースの若手左腕。',
     aliases: ['ロブレスキー'], sameAs: [mlb('justin-wrobleski', 680736)] },
+  // 今オフのFA市場の主役（rival・投手）。2026年途中にタイガースからドジャースへ移り、オフにFA。
+  // 「スクーバル 移籍先／契約／FA」の受け皿＝去就は stove-league.json の stars[] に持つ（日本人の japanese[] と同じ型）。
+  { slug: 'tarik-skubal', nameJa: 'タリク・スクーバル', nameEn: 'Tarik Skubal', mlbId: 669373, rival: true,
+    bio: 'ア・リーグのサイ・ヤング賞を2年連続（2024・2025年）で受賞した先発左腕。',
+    aliases: ['スクーバル'], sameAs: [mlb('tarik-skubal', 669373)] },
 ];
 
 const BY_SLUG = new Map(PLAYERS.map((p) => [p.slug, p]));

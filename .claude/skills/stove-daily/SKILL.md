@@ -7,6 +7,8 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 
 `/stove-league`（オフの入口）・`/stove-league/fa`（FAランキングと契約状況）・`/stove-league/lockout`（ロックアウト）・
 `/prospects`（メジャー挑戦する日本人）と、日本人選手の選手LP（`/player/{slug}` の「今オフの去就」）を**毎朝その時点の事実**にする。
+外国人の主役（`stars[]`＝今オフはスクーバル）の選手LPも同じ欄で追う。`/stove-league/guide`（用語）の「今オフの実例」は
+`board[].qo`・`outcome`・`dates[]` の再表示＝ここを正しく保てば用語のページも合う。
 `/stove-league/moves`（移籍情報）と球団LPの「補強」の欄は取引記録から自動で組まれる＝ここでは書かない（契約の年数・金額だけ `board[].outcome` から引く）。
 仕組みの全体は CLAUDE.md §4.1「ストーブリーグ」。ここは毎朝の段取りだけを書く。
 
@@ -66,6 +68,9 @@ description: ストーブリーグ（/stove-league）の毎朝の更新。日本
 取りこぼして「新しい報道なし」とした。結果に直近48時間の記事が出たら、見出しで済ませず本文を開く。
 1. MLB組の日本人（`japanese[]`）: **1人ずつ** `"<英語名>" free agent` / `"<英語名>" opt out` など＋日本語で `<日本語名> FA` か `<日本語名> 去就`。
    オプトアウト権の選手は「opt out」の決定、FA の選手は QO（クオリファイング・オファー）の提示・受諾、関心球団、契約。
+   **外国人の主役（`stars[]`）も同じ扱いで1人ずつ**（`"Tarik Skubal" free agent`＋`スクーバル FA`）。欄の書き方は `japanese[]` と同じ
+   （`timeline` 先頭に追加・`headline` / `window` をいまの状態に・`suitors` は球団名を挙げた報道だけ・決着は `outcome`＋`board[]` の同じ選手にも）。
+   `stars[]` に選手を足すのは人の判断（選手LPと成績データが要る）＝定期実行では増やさない。
 2. NPB組（ポスティング・海外FA）: `postingWatch` のある選手を1人ずつ `<日本語名> ポスティング`（海外FA組は `<日本語名> 海外FA`）。
    正式な申請（posted）・交渉期限・契約。`npbPlayers.ts` の `postingWatch` を更新する。
 3. FA注目30人: `MLB free agent signings` と `qualifying offer` で1回ずつ＋上位10人のうち報道の多い選手を名前で。
@@ -101,7 +106,7 @@ Yahoo（米国・日本）・日刊スポーツ・スポニチ・報知・サン
   `board[]` の同じ選手にも同じ `outcome` を入れる。オプトアウトせず残る選手は `kind:"stayed"`。
 - `board[].note`: 状況が変わった選手だけ1文直す（契約したら契約内容に）。**全員の note も今日の日付で読み直す**
   （「FAになる見込み」「QOを出さないとの見方」のように、結果が出た後も予定の言い方が残りやすい）。
-- 中身を変えた選手は `japanese[].asOf` を今日に。何か1つでも変えたらトップの `asOf` を今日に。**`checkedAt` は毎回今日**。
+- 中身を変えた選手は `japanese[].asOf`（外国人の主役は `stars[].asOf`）を今日に。何か1つでも変えたらトップの `asOf` を今日に。**`checkedAt` は毎回今日**。
 - NPB組は `src/lib/npbPlayers.ts` の `postingWatch`（`asOf`・`headline`・`timeline`・`suitors`・`level`）を同じ規律で更新。
   手続きが進んだら **`steps`**（`approved`＝容認／`filed`＝申請／`talks`＝MLBが受理して交渉開始／`declared`＝海外FA権の行使表明／
   `signed`＝契約）に日本時間の日付を足す。`/prospects` の表はこの値で「容認 → 申請 → 交渉開始」を並べる＝timeline に出典がある出来事だけ書く。

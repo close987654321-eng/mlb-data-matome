@@ -78,6 +78,7 @@ SSG します。
     ├── fetch-transactions.mjs  # MLBの移籍・契約レーダー（オフシーズンの記事ネタ・§4.1）
     ├── fetch-stove-stats.mjs   # ストーブリーグのFA注目選手の今季成績＋オフの契約の動き（§4.1・3時間ごとにCI）
     ├── fetch-stove-moves.mjs   # 移籍情報（/stove-league/moves）と球団LPの補強の欄の元データを取引記録から（§4.1・3時間ごとにCI）
+    ├── stove-history.mjs       # ストーブリーグの日ごとの状態（関心球団・QOの回答・契約）を履歴に積む（§4.1・3時間ごとにCI）
     ├── check-stove-league.mjs  # stove-league.json と stove-lockout.json の公開前検査（出典URL・未来の日付・表記・slug）
     ├── reddit-rss/             # Reddit 公開RSSで反応を集める rsearch / rfeed / pick（クラウドからも使う・README）
     ├── fetch-game-voices.mjs   # チームLPの「1試合1件の現地の声」を公式ハイライトから取得（§4.1）
@@ -360,7 +361,22 @@ X（Twitter）への配信は **`x-post` スキル**（ポスト本文＝中の�
       FA一覧と去就の `suitors` の逆引き（`teamStoveSide`）。**球団名は teams.ts の短縮名で書く**（ずれるとそのLPに出ない）。
       題は変えず、説明文の先頭付近に補強の現在地を1文入れる（`teamOffseasonSentenceJa`＝数は取引記録の数え上げだけ）。
     - `/prospects` の表は `postingWatch.steps.until`（交渉期限・日本時間）も出す＝報道が期限を書いたときだけ入れる。
-    - 第3弾以降（未実装）: 用語のページ（`/stove-league/guide`）・FA上位の外国人の選手ページ・手元の定期実行での反応記事・歴代一覧。
+    - `/stove-league/guide`＝オフの用語（「クオリファイングオファーとは／オプトアウトとは／ノンテンダーとは／ぜいたく税」）。定義の正は
+      `src/lib/stoveGuide.ts`＝**MLB公式の用語集（mlb.com/glossary）に書かれた決まりだけ**を1か所に置く（選手LPや一覧の文中に説明を重ねない）。
+      用語ごとにページは割らず（薄いページを増やさない）、定義の下に**今オフの実例**（QOを提示された選手と回答・オプトアウトの結果・
+      各期限の日本時間＝`stove-league.json` の再表示）を置く。ポスティングは /prospects、ロックアウトは /stove-league/lockout へ送るだけ。
+      ⚠️ 用語集は WebFetch だと 406 で読めない＝読み直すときはブラウザで開く。労使協定が替わったら決まりも変わりうる＝読み直して書き直す。
+    - **外国人の主役の選手LP**（今オフは `/player/tarik-skubal`）: `stove-league.json` の `stars[]`（型は `japanese[]` と同じ）に去就を持ち、
+      選手LPに日本人と同じ「今オフの去就」・題（「タリク・スクーバル FA・移籍先・契約の最新情報と2026年成績」）・FAQ が出る。
+      `japanese[]` と分けるのは、入口の日本人の一覧や人数の数え上げに混ぜないため。選手は `players.ts` の rival と
+      `fetch-mlb-stats.mjs` の `RIVAL_NAMES` に足し、成績（snapshot・gamelog・arsenal）を取る。増やすのは動きの大きい選手だけ
+      （30人ぶんの薄いページは作らない）。FA一覧・移籍情報・球団LPの名前は、カタログにある選手なら自動で選手LPへリンクする。
+      ⚠️ 冬に snapshot を回すと全選手の `asOf` が進む＝新しい選手のぶんだけを既存のJSONに足す（中身が同じなのに更新日だけ動かさない）。
+      シーズン途中にリーグをまたいで移った選手は、リーグ内順位（`ranks.*.lg`）が在籍分だけの数え方になる＝持たない。
+    - **日ごとの履歴** `data/stove-history.json`＝`node scripts/stove-history.mjs` が、選手ごとの状態（未契約／QOの回答／契約と球団・年数・総額）・
+      関心が報じられた球団・他社の予想契約を、**変わった日だけ**1件積む（`refresh-stove.yml`・10/29〜は git から遡って埋めた）。
+      いまは積むだけ＝契約が出そろった後に「報じられた球団と実際」「予想と実額の差」を出す材料。
+    - 第4弾以降（未実装）: 手元の定期実行での反応記事（Reddit）・契約1件ごとの現地の声・歴代一覧。
     **毎朝6:00 JST のクラウド定期実行（2026-10-30〜）**が `stove-daily` スキル（`.claude/skills/stove-daily/SKILL.md`）を回す＝
     報道の確認（WebSearch）→ `stove-league.json`／`npbPlayers.ts` の postingWatch を出典つきで更新 → 大きな動きの日だけ Reddit の
     反応記事を1本 → `check-stove-league.mjs` と `build:gate` を通った回だけ公開 → Slack DM。中身が動かない日は `checkedAt`（確認日）

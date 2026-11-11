@@ -163,6 +163,11 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
         href: `/prospects/${p.slug}`,
         timeline: p.postingWatch!.timeline,
       })),
+      // 外国人の主役（stars[]）は日本人の後ろ＝同じ日・同じ出典なら日本人の行が残る。
+      ...(cat.stars ?? []).flatMap((j) => {
+        const p = getPlayer(j.slug);
+        return p ? [{ name: { ja: p.nameJa, en: p.nameEn }, href: `/player/${p.slug}`, timeline: j.timeline }] : [];
+      }),
     ],
     9,
   );
@@ -297,6 +302,14 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
           },
         ]
       : []),
+    {
+      href: '/stove-league/guide',
+      eyebrow: en ? 'Glossary' : '用語',
+      title: en ? 'Offseason terms explained' : 'オフの用語：QO・オプトアウト・ノンテンダーとは',
+      body: en
+        ? 'Qualifying offers, opt-outs, non-tenders, arbitration, the Rule 5 Draft and the luxury tax, with this winter’s examples.'
+        : 'クオリファイングオファー・オプトアウト・ノンテンダー・年俸調停・ルール5ドラフト・ぜいたく税を、今オフの実例つきで。',
+    },
     ...(lockout
       ? [
           {
@@ -445,6 +458,10 @@ export default async function StoveLeaguePage({ params }: { params: Promise<{ lo
             <span aria-hidden className="ml-1">→</span>
           </Link>
         )}
+        <Link href="/stove-league/guide" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
+          {en ? 'Offseason terms: qualifying offers, opt-outs and non-tenders explained' : 'オフの用語：クオリファイングオファー・オプトアウト・ノンテンダーとは'}{' '}
+          <span aria-hidden className="ml-1">→</span>
+        </Link>
         {lockout && (
           <Link href="/stove-league/lockout" className="inline-flex min-h-[44px] items-center text-ink-soft transition-colors hover:text-ink hover:underline">
             {en ? `MLB lockout ${off}: when, why and what it means` : `MLBロックアウト${off}：いつから・なぜ・日本人選手への影響`}{' '}
