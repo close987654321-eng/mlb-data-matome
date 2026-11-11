@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-11 20:27",
+ "asOf": "2026-11-12 04:52",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1172,20 +1172,14 @@
    "nameEn": "Enmanuel Nunez",
    "pos": "P",
    "big": false
+  },
+  "845214": {
+   "nameEn": "Woo-jin Cho",
+   "pos": "P",
+   "big": false
   }
  },
  "moves": [
-  {
-   "id": "950007",
-   "kind": "signing",
-   "date": "2026-11-11",
-   "playerId": 680802,
-   "nameEn": "Ryan Weiss",
-   "fromTeamId": null,
-   "toTeamId": 135,
-   "desc": "San Diego Padres signed free agent RHP Ryan Weiss.",
-   "tier": 1
-  },
   {
    "id": "949952",
    "kind": "signing",
@@ -1196,6 +1190,17 @@
    "toTeamId": 141,
    "minor": true,
    "desc": "Toronto Blue Jays signed free agent RF Rudy Martin Jr. to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
+  {
+   "id": "950007",
+   "kind": "signing",
+   "date": "2026-11-10",
+   "playerId": 680802,
+   "nameEn": "Ryan Weiss",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "desc": "San Diego Padres signed free agent RHP Ryan Weiss.",
    "tier": 1
   },
   {
@@ -1231,6 +1236,18 @@
    "fromTeamId": 121,
    "toTeamId": 119,
    "desc": "Los Angeles Dodgers claimed SS Christian Cairo off waivers from New York Mets.",
+   "tier": 1
+  },
+  {
+   "id": "950009",
+   "kind": "signing",
+   "date": "2026-11-09",
+   "playerId": 845214,
+   "nameEn": "Woo-jin Cho",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent RHP Woo-jin Cho to a minor league contract.",
    "tier": 1
   },
   {
