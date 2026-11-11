@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-11 06:25",
+ "asOf": "2026-11-11 20:27",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -983,6 +983,11 @@
    "pos": "C",
    "big": true
   },
+  "680802": {
+   "nameEn": "Ryan Weiss",
+   "pos": "P",
+   "big": false
+  },
   "681252": {
    "nameEn": "Jack Anderson",
    "pos": "P",
@@ -1170,6 +1175,17 @@
   }
  },
  "moves": [
+  {
+   "id": "950007",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 680802,
+   "nameEn": "Ryan Weiss",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "desc": "San Diego Padres signed free agent RHP Ryan Weiss.",
+   "tier": 1
+  },
   {
    "id": "949952",
    "kind": "signing",
