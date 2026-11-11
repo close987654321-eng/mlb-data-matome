@@ -133,7 +133,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-11',
+      asOf: '2026-11-12',
       headline: {
         ja: '阪神が11月2日、ポスティングの申請がMLBに受理されたと発表し、全30球団との交渉が始まった（スポーツ報知）。11月中の決着を目指している。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズ・パドレスの関心が報じられている。',
         en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies, Blue Jays and Padres have all been linked.',
@@ -167,6 +167,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'パドレス', en: 'Padres' },
       ],
       timeline: [
+        {
+          date: '2026-11-12',
+          ja: 'フィリーズのドンブロウスキー編成本部長が、ラスベガスのGM会議（米国時間11月10日）で佐藤輝明に強い関心を示した。三塁の補強は今オフの優先事項で、「われわれも彼のプレーを何度も見ている」と話した（サンケイスポーツ）。',
+          en: 'Phillies president of baseball operations Dave Dombrowski showed strong interest in Sato at the GM Meetings in Las Vegas (Nov. 10 ET), calling third base a priority and saying the club has watched him play many times (Sankei Sports).',
+          source: 'https://news.yahoo.co.jp/articles/d649e504e738541c6f7cce7d5207af2a7784eb76',
+          sourceName: 'サンケイスポーツ（Yahoo!ニュース）',
+        },
         {
           date: '2026-11-11',
           ja: 'ジ・アスレチックのデニス・リン記者が、パドレスが佐藤輝明に関心を持っていると報じた（米国時間11月10日・MLB Trade Rumors経由）。MLB Trade Rumorsは5年8000万ドルの契約を予想し、ロックアウトでも45日の交渉期間は止まらないため、ロックアウト前に契約するとみている。',
@@ -659,7 +666,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-04',
+      asOf: '2026-11-12',
       headline: {
         ja: '西武が11月2日、髙橋光成が海外FA権の行使を表明したと発表した（西武球団・共同通信）。昨オフはポスティングでMLB3球団のオファーを受けながら残留しており、今オフもMLB移籍を模索すると日刊スポーツが報じている（MLB Trade Rumors経由）。国内球団への移籍も選択肢に入れると話しており、ソフトバンクの城島健司CBOは獲得調査を認めている。',
         en: 'Seibu announced on November 2 that he has exercised his international free agent rights (Seibu club, Kyodo). He passed on MLB offers from three clubs in last winter\u2019s posting, and Nikkan Sports reports he is again exploring MLB (via MLB Trade Rumors). He says domestic clubs are also an option, and SoftBank CBO Kenji Jojima has confirmed the club has scouted him.',
@@ -671,6 +678,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         en: 'He declared on November 2 and no destination is set yet. International free agency has no 45-day clock and no release fee, unlike a posting, but the market itself freezes if the CBA expires and the lockout starts on December 1.',
       },
       timeline: [
+        {
+          date: '2026-11-12',
+          ja: '代理人のジョエル・ウルフ氏が、ラスベガスのGM会議（米国時間11月11日）で、複数のメジャー球団が関心を示していると明らかにした。今年メジャー球団と契約できる可能性は昨年より「ずっと高い」と話す一方、12月1日までに納得のいく契約が得られなければ日本球界に戻る可能性が高いと説明した（Full-Count）。具体的な球団名は挙がっていない。',
+          en: 'Agent Joel Wolf said at the GM Meetings in Las Vegas (Nov. 11 ET) that several MLB clubs have shown interest and that a deal this year is far more likely than last year, but that he would likely return to Japan if no satisfactory contract is reached by December 1 (Full-Count). No clubs were named.',
+          source: 'https://news.yahoo.co.jp/articles/8e86f4b6bbea32f769167e4559c8071577d95ea7',
+          sourceName: 'Full-Count（Yahoo!ニュース）',
+        },
         {
           date: '2026-11-04',
           ja: '西武が、髙橋光成が11月2日に海外FA権の行使を表明したと発表した。本人は球団を通じて「自分がどうしたいのかという気持ちを大切にした結果」などとコメントし、国内球団への移籍も選択肢に入れると話した。ソフトバンクの城島健司CBOは獲得調査を認めている。',
