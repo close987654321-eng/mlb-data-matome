@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-12 04:52",
+ "asOf": "2026-11-12 20:50",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -973,6 +973,11 @@
    "pos": "P",
    "big": false
   },
+  "679525": {
+   "nameEn": "Alec Marsh",
+   "pos": "P",
+   "big": false
+  },
   "680730": {
    "nameEn": "Mitchell Parker",
    "pos": "P",
@@ -1003,6 +1008,11 @@
    "pos": "P",
    "big": false
   },
+  "681673": {
+   "nameEn": "Kohl Franklin",
+   "pos": "P",
+   "big": false
+  },
   "681911": {
    "nameEn": "Alex Vesia",
    "pos": "P",
@@ -1026,6 +1036,16 @@
   "686551": {
    "nameEn": "Christian Cairo",
    "pos": "SS",
+   "big": false
+  },
+  "686844": {
+   "nameEn": "Ben Wereski",
+   "pos": "P",
+   "big": false
+  },
+  "687071": {
+   "nameEn": "Shane Sasaki",
+   "pos": "CF",
    "big": false
   },
   "687134": {
@@ -1088,6 +1108,11 @@
    "pos": "3B",
    "big": false
   },
+  "694484": {
+   "nameEn": "Max Wagner",
+   "pos": "2B",
+   "big": false
+  },
   "694633": {
    "nameEn": "Chase Hampton",
    "pos": "P",
@@ -1133,8 +1158,18 @@
    "pos": "P",
    "big": false
   },
+  "805321": {
+   "nameEn": "Trevor Kuncl",
+   "pos": "P",
+   "big": false
+  },
   "830467": {
    "nameEn": "Juan García",
+   "pos": "P",
+   "big": false
+  },
+  "832560": {
+   "nameEn": "Ben Moore",
    "pos": "P",
    "big": false
   },
@@ -1180,6 +1215,90 @@
   }
  },
  "moves": [
+  {
+   "id": "950041",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 681673,
+   "nameEn": "Kohl Franklin",
+   "fromTeamId": null,
+   "toTeamId": 109,
+   "minor": true,
+   "desc": "Arizona Diamondbacks signed free agent RHP Kohl Franklin to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950043",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 805321,
+   "nameEn": "Trevor Kuncl",
+   "fromTeamId": null,
+   "toTeamId": 113,
+   "minor": true,
+   "desc": "Cincinnati Reds signed free agent RHP Trevor Kuncl to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950045",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 687071,
+   "nameEn": "Shane Sasaki",
+   "fromTeamId": null,
+   "toTeamId": 113,
+   "minor": true,
+   "desc": "Cincinnati Reds signed free agent CF Shane Sasaki to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950047",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 686844,
+   "nameEn": "Ben Wereski",
+   "fromTeamId": null,
+   "toTeamId": 113,
+   "minor": true,
+   "desc": "Cincinnati Reds signed free agent LHP Ben Wereski to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950049",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 679525,
+   "nameEn": "Alec Marsh",
+   "fromTeamId": null,
+   "toTeamId": 145,
+   "minor": true,
+   "desc": "Chicago White Sox signed free agent RHP Alec Marsh to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
+  {
+   "id": "950054",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 832560,
+   "nameEn": "Ben Moore",
+   "fromTeamId": null,
+   "toTeamId": 158,
+   "minor": true,
+   "desc": "Milwaukee Brewers signed free agent LHP Ben Moore to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950057",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 694484,
+   "nameEn": "Max Wagner",
+   "fromTeamId": null,
+   "toTeamId": 140,
+   "minor": true,
+   "desc": "Texas Rangers signed free agent 2B Max Wagner to a minor league contract.",
+   "tier": 1
+  },
   {
    "id": "949952",
    "kind": "signing",
