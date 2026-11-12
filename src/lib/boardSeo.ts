@@ -91,7 +91,7 @@ export const AWARD_RESULTS: {
   source: { label: string; url: string };
 } & Record<AwardKind, AwardBlock> = {
   year: 2026,
-  updatedAt: '2026-11-10',
+  updatedAt: '2026-11-12',
   finalistsAnnounced: { ja: '11月2日', en: 'Nov. 2' },
   source: { label: 'MLB.com', url: 'https://www.mlb.com/news/2026-bbwaa-awards-finalists' },
   roy: {
@@ -104,7 +104,7 @@ export const AWARD_RESULTS: {
     date: { ja: '11月11日', en: 'Nov. 11', jstJa: '11月12日', jstEn: 'Nov. 12' },
     // AL: シース・メシック・シュリットラー／NL: ミシオロウスキー・セール・サンチェス
     finalists: { AL: [656302, 800048, 693645], NL: [694819, 519242, 650911] },
-    winners: {},
+    winners: { AL: 693645, NL: 694819 },
   },
   mvp: {
     date: { ja: '11月12日', en: 'Nov. 12', jstJa: '11月13日', jstEn: 'Nov. 13' },
