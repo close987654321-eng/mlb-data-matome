@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-13 20:33",
+ "asOf": "2026-11-14 05:02",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -813,6 +813,11 @@
    "pos": "1B",
    "big": false
   },
+  "665048": {
+   "nameEn": "Hobie Harris",
+   "pos": "P",
+   "big": false
+  },
   "665665": {
    "nameEn": "Reiver Sanmartin",
    "pos": "P",
@@ -1103,6 +1108,11 @@
    "pos": "SS",
    "big": false
   },
+  "692401": {
+   "nameEn": "Gerardo Salas",
+   "pos": "P",
+   "big": false
+  },
   "693312": {
    "nameEn": "Kyle Nicolas",
    "pos": "P",
@@ -1216,6 +1226,11 @@
   "845214": {
    "nameEn": "Woo-jin Cho",
    "pos": "P",
+   "big": false
+  },
+  "845218": {
+   "nameEn": "Omar Guerra",
+   "pos": "IF",
    "big": false
   }
  },
@@ -1397,6 +1412,18 @@
    "tier": 1
   },
   {
+   "id": "950100",
+   "kind": "signing",
+   "date": "2026-11-07",
+   "playerId": 665048,
+   "nameEn": "Hobie Harris",
+   "fromTeamId": null,
+   "toTeamId": 118,
+   "minor": true,
+   "desc": "Kansas City Royals signed free agent RHP Hobie Harris to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "949807",
    "kind": "released",
    "date": "2026-11-06",
@@ -1416,6 +1443,18 @@
    "fromTeamId": 120,
    "toTeamId": 114,
    "desc": "Cleveland Guardians claimed DH José Tena off waivers from Washington Nationals.",
+   "tier": 1
+  },
+  {
+   "id": "950114",
+   "kind": "signing",
+   "date": "2026-11-06",
+   "playerId": 692401,
+   "nameEn": "Gerardo Salas",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent RHP Gerardo Salas to a minor league contract.",
    "tier": 1
   },
   {
@@ -2152,6 +2191,18 @@
    "fromTeamId": 110,
    "toTeamId": null,
    "desc": "RHP Albert Suárez elected free agency.",
+   "tier": 1
+  },
+  {
+   "id": "950104",
+   "kind": "signing",
+   "date": "2026-10-31",
+   "playerId": 845218,
+   "nameEn": "Omar Guerra",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent IF Omar Guerra to a minor league contract.",
    "tier": 1
   },
   {
