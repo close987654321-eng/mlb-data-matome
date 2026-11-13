@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-12 20:50",
+ "asOf": "2026-11-13 20:33",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1103,6 +1103,11 @@
    "pos": "SS",
    "big": false
   },
+  "693312": {
+   "nameEn": "Kyle Nicolas",
+   "pos": "P",
+   "big": false
+  },
   "694376": {
    "nameEn": "Shay Whitcomb",
    "pos": "3B",
@@ -1215,6 +1220,28 @@
   }
  },
  "moves": [
+  {
+   "id": "950098",
+   "kind": "released",
+   "date": "2026-11-12",
+   "playerId": 693312,
+   "nameEn": "Kyle Nicolas",
+   "fromTeamId": 120,
+   "toTeamId": null,
+   "desc": "Washington Nationals released RHP Kyle Nicolas.",
+   "tier": 1
+  },
+  {
+   "id": "950099",
+   "kind": "signing",
+   "date": "2026-11-12",
+   "playerId": 623465,
+   "nameEn": "Evan Phillips",
+   "fromTeamId": null,
+   "toTeamId": 144,
+   "desc": "Atlanta Braves signed free agent RHP Evan Phillips.",
+   "tier": 1
+  },
   {
    "id": "950041",
    "kind": "signing",
