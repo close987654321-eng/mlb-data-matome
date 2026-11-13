@@ -91,7 +91,7 @@ export const AWARD_RESULTS: {
   source: { label: string; url: string };
 } & Record<AwardKind, AwardBlock> = {
   year: 2026,
-  updatedAt: '2026-11-12',
+  updatedAt: '2026-11-13',
   finalistsAnnounced: { ja: '11月2日', en: 'Nov. 2' },
   source: { label: 'MLB.com', url: 'https://www.mlb.com/news/2026-bbwaa-awards-finalists' },
   roy: {
@@ -110,7 +110,7 @@ export const AWARD_RESULTS: {
     date: { ja: '11月12日', en: 'Nov. 12', jstJa: '11月13日', jstEn: 'Nov. 13' },
     // AL: アルバレス・カミネロ・ウィットJr.／NL: クロウアームストロング・大谷翔平・トゥラング
     finalists: { AL: [670541, 691406, 677951], NL: [691718, 660271, 668930] },
-    winners: {},
+    winners: { AL: 670541, NL: 691718 },
   },
 };
 
