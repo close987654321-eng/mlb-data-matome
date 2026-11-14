@@ -490,7 +490,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-02',
+      asOf: '2026-11-15',
       headline: {
         ja: '西武が11月2日、ポスティングの申請をNPB経由で出したと発表し、MLB全球団に通知された。交渉は米東部時間11月2日午前8時（日本時間午後10時）に始まった（西スポWEB）。10月30日に容認を発表していた。代理人はボラス・コーポレーションと報じられている。',
         en: 'Seibu announced on November 2 that it filed his posting through NPB and all MLB clubs were notified; talks began at 8 a.m. ET on Nov. 2 (10 p.m. Japan time), per Nishinippon Sports. Seibu had announced its approval on October 30. He is reported to be represented by the Boras Corporation.',
@@ -534,6 +534,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ジャイアンツ', en: 'Giants' },
       ],
       timeline: [
+        {
+          date: '2026-11-14',
+          ja: 'MLB Trade Rumorsが米国時間11月13日、日本人選手と縁のあるカブス・ホワイトソックス・パドレスの3球団が平良に関心を示していると報じた。シカゴのラジオ局670 The Scoreによると、カブスとホワイトソックスは今週ボラス氏と面談する予定で、サンディエゴ・ユニオン・トリビューンはパドレスが平良に照準を合わせていると伝えた。平良は渡米せず、複数球団とオンラインで面談を重ねているという（スポーツ報知）。',
+          en: 'MLB Trade Rumors reported on Nov. 13 ET that the Cubs, White Sox and Padres, all with ties to Japanese players, are interested in Taira. Chicago radio station 670 The Score says the Cubs and White Sox were set to meet with agent Scott Boras this week, and the San Diego Union-Tribune says the Padres are focused on Taira. He is not traveling to the U.S. and is meeting several clubs online (Sports Hochi).',
+          source: 'https://news.yahoo.co.jp/articles/cc261f3860fe5e81f5eb738dd0366224610abf6a',
+          sourceName: 'スポーツ報知（Yahoo!ニュース）',
+        },
         {
           date: '2026-11-02',
           ja: '西武が平良海馬のポスティングをNPB経由で申請したと発表した。MLB全球団に通知され、交渉は米東部時間11月2日午前8時（日本時間午後10時）に始まった。平良は球団を通じて「長い間、メジャーでプレーしたい思いを持っていた。ようやく一歩踏み出せた」とコメントした。',
