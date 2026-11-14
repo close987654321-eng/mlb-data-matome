@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-14 05:02",
+ "asOf": "2026-11-14 10:47",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -928,6 +928,11 @@
    "pos": "P",
    "big": true
   },
+  "671111": {
+   "nameEn": "Sammy Peralta",
+   "pos": "P",
+   "big": false
+  },
   "673357": {
    "nameEn": "Luis Robert Jr.",
    "pos": "CF",
@@ -1235,6 +1240,18 @@
   }
  },
  "moves": [
+  {
+   "id": "950119",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 671111,
+   "nameEn": "Sammy Peralta",
+   "fromTeamId": null,
+   "toTeamId": 108,
+   "minor": true,
+   "desc": "Los Angeles Angels signed free agent LHP Sammy Peralta to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
   {
    "id": "950098",
    "kind": "released",
