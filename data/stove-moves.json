@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-14 10:47",
+ "asOf": "2026-11-14 19:55",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -448,6 +448,11 @@
    "pos": "1B",
    "big": true
   },
+  "641386": {
+   "nameEn": "Ben Bowden",
+   "pos": "P",
+   "big": false
+  },
   "641482": {
    "nameEn": "Nestor Cortes",
    "pos": "P",
@@ -788,6 +793,11 @@
    "pos": "P",
    "big": false
   },
+  "664129": {
+   "nameEn": "Geoff Hartlieb",
+   "pos": "P",
+   "big": false
+  },
   "664141": {
    "nameEn": "JT Brubaker",
    "pos": "P",
@@ -933,6 +943,16 @@
    "pos": "P",
    "big": false
   },
+  "671289": {
+   "nameEn": "Tyler Freeman",
+   "pos": "RF",
+   "big": false
+  },
+  "672712": {
+   "nameEn": "Luis Palacios",
+   "pos": "P",
+   "big": false
+  },
   "673357": {
    "nameEn": "Luis Robert Jr.",
    "pos": "CF",
@@ -1038,6 +1058,11 @@
    "pos": "P",
    "big": false
   },
+  "682868": {
+   "nameEn": "Bryan Ramos",
+   "pos": "3B",
+   "big": false
+  },
   "684007": {
    "nameEn": "Shota Imanaga",
    "pos": "P",
@@ -1103,6 +1128,11 @@
    "pos": "P",
    "big": false
   },
+  "691263": {
+   "nameEn": "Esmerlin Vinicio",
+   "pos": "P",
+   "big": false
+  },
   "691769": {
    "nameEn": "Philip Abner",
    "pos": "P",
@@ -1163,6 +1193,11 @@
    "pos": "P",
    "big": false
   },
+  "800690": {
+   "nameEn": "John Armstrong",
+   "pos": "P",
+   "big": false
+  },
   "801128": {
    "nameEn": "Robert Cranz",
    "pos": "P",
@@ -1178,9 +1213,19 @@
    "pos": "P",
    "big": false
   },
+  "805097": {
+   "nameEn": "Angel Hernandez",
+   "pos": "P",
+   "big": false
+  },
   "805321": {
    "nameEn": "Trevor Kuncl",
    "pos": "P",
+   "big": false
+  },
+  "808220": {
+   "nameEn": "Raimundo De Los Santos",
+   "pos": "SS",
    "big": false
   },
   "830467": {
@@ -1250,6 +1295,114 @@
    "toTeamId": 108,
    "minor": true,
    "desc": "Los Angeles Angels signed free agent LHP Sammy Peralta to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
+  {
+   "id": "950188",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 641386,
+   "nameEn": "Ben Bowden",
+   "fromTeamId": null,
+   "toTeamId": 133,
+   "minor": true,
+   "desc": "Athletics signed free agent LHP Ben Bowden to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950191",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 671289,
+   "nameEn": "Tyler Freeman",
+   "fromTeamId": null,
+   "toTeamId": 144,
+   "minor": true,
+   "desc": "Atlanta Braves signed free agent RF Tyler Freeman to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950193",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 672712,
+   "nameEn": "Luis Palacios",
+   "fromTeamId": null,
+   "toTeamId": 146,
+   "minor": true,
+   "desc": "Miami Marlins signed free agent LHP Luis Palacios to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950195",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 664129,
+   "nameEn": "Geoff Hartlieb",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent RHP Geoff Hartlieb to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950197",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 682868,
+   "nameEn": "Bryan Ramos",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent 3B Bryan Ramos to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950199",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 691263,
+   "nameEn": "Esmerlin Vinicio",
+   "fromTeamId": null,
+   "toTeamId": 137,
+   "minor": true,
+   "desc": "San Francisco Giants signed free agent LHP Esmerlin Vinicio to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950204",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 805097,
+   "nameEn": "Angel Hernandez",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent RHP Angel Hernandez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950206",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 808220,
+   "nameEn": "Raimundo De Los Santos",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent SS Raimundo De Los Santos to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950208",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 800690,
+   "nameEn": "John Armstrong",
+   "fromTeamId": null,
+   "toTeamId": 140,
+   "minor": true,
+   "desc": "Texas Rangers signed free agent RHP John Armstrong to a minor league contract.",
    "tier": 1
   },
   {
