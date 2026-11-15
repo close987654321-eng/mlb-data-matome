@@ -1,7 +1,7 @@
 {
   "season": 2026,
-  "asOf": "2026-11-15",
-  "checkedAt": "2026-11-15",
+  "asOf": "2026-11-16",
+  "checkedAt": "2026-11-16",
   "activeUntil": "2027-03-25",
   "ranking": {
     "name": "MLB.com（マーク・ファインサンド記者）",
@@ -524,7 +524,7 @@
     {
       "slug": "tarik-skubal",
       "route": "fa",
-      "asOf": "2026-11-12",
+      "asOf": "2026-11-16",
       "headline": {
         "ja": "ドジャースからFAになり、まだどの球団とも契約していない。SportsNet LAのバセギ記者は、関心が最も強いのはドジャース・メッツ・カブスだと伝えている。ESPNのパッサン記者は、12月の労使協定の期限より前に契約するとの見通しを示した。",
         "en": "A free agent after finishing the season with the Dodgers, he has not signed. SportsNet LA's David Vassegh says the Dodgers, Mets and Cubs have the strongest interest, and ESPN's Jeff Passan expects him to sign before the CBA expires in December."
@@ -576,6 +576,13 @@
         }
       ],
       "timeline": [
+        {
+          "date": "2026-11-12",
+          "ja": "ジ・アスレチックのケイティ・ウー記者は、ドジャースの関心はスクーバルが短期契約に前向きかどうかしだいで、長期の大型契約は誰にも出しにくい状況だと伝えた。一方ESPNのパッサン記者は、スクーバル本人は短期契約に関心がなく長期契約を狙っていると書き、レッドソックスとホワイトソックスは関与していないとも報じた（米国時間11月11日・MLB Trade Rumors経由）。",
+          "en": "The Athletic's Katie Woo reports the Dodgers' interest in Skubal depends on whether he is open to a short-term deal, and that they are unlikely to make a lucrative long-term offer to anyone. ESPN's Jeff Passan writes that Skubal has no interest in a short-term arrangement and is targeting a long-term deal, and that the Red Sox and White Sox are not involved (Nov. 11 ET, via MLB Trade Rumors).",
+          "source": "https://www.mlbtraderumors.com/2026/11/dodgers-reportedly-prefer-short-term-deal-in-skubal-bidding.html",
+          "sourceName": "MLB Trade Rumors（ジ・アスレチック・ESPN報道）"
+        },
         {
           "date": "2026-11-12",
           "ja": "MLB.comが米国時間11月11日、ブルージェイズ・メッツ・ドジャース・パドレスを含む6球団がスクーバルと面談する予定だと伝えた。ジョン・ヘイマン記者（NYポスト）はメッツとの面談が来週にあると報じ、ブルージェイズも面談する球団に挙げた。ドジャースのゴメスGMはGM会議で「こちらの陣営と連絡を取っており、いずれ面談する見込み」と話した。",
@@ -857,7 +864,24 @@
         }
       },
       "qo": {
-        "status": "offered"
+        "status": "declined",
+        "date": "2026-11-16",
+        "source": "https://www.mlbtraderumors.com/2026/11/red-sox-sign-jake-bauers.html",
+        "sourceName": "MLB Trade Rumors"
+      },
+      "outcome": {
+        "kind": "signed",
+        "date": "2026-11-16",
+        "team": {
+          "ja": "レッドソックス",
+          "en": "Red Sox"
+        },
+        "ja": "ESPNのパッサン記者によると、レッドソックスと4年5800万ドルで合意した。QOを断ったため、ブルワーズは補償の指名権を得る。",
+        "en": "ESPN's Jeff Passan reports he agreed to a four-year, $58 million deal with the Red Sox. Having turned down the qualifying offer, he leaves the Brewers with a compensatory pick.",
+        "years": 4,
+        "usdM": 58,
+        "source": "https://www.mlbtraderumors.com/2026/11/red-sox-sign-jake-bauers.html",
+        "sourceName": "MLB Trade Rumors（ESPN報道）"
       }
     },
     {

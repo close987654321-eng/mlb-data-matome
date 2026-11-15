@@ -334,7 +334,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-10',
+      asOf: '2026-11-16',
       headline: {
         ja: '佐藤輝明・平良海馬とともに米国時間11月2日にポスティングで公示され、MLB全30球団との交渉が始まった（AP）。交渉期限は日本時間12月17日午前7時（米東部時間12月16日午後5時）。日本ハムは11月1日にメジャー挑戦を承認し、申請手続きを始めていた。',
         en: 'He was posted on Nov. 2 ET along with Teruaki Sato and Kaima Taira, opening talks with all 30 MLB clubs (AP). The window closes at 5 p.m. ET on Dec. 16 (7 a.m. Dec. 17 Japan time). Nippon-Ham had approved his MLB bid and begun the filing process on Nov. 1.',
@@ -353,8 +353,18 @@ export const NPB_PROSPECTS: NpbProspect[] = [
           sourceName: 'MLB Trade Rumors',
         },
       ],
-      suitors: [{ ja: 'ジャイアンツ', en: 'Giants' }],
+      suitors: [
+        { ja: 'ジャイアンツ', en: 'Giants' },
+        { ja: 'ホワイトソックス', en: 'White Sox' },
+      ],
       timeline: [
+        {
+          date: '2026-11-16',
+          ja: 'MLB Trade Rumorsが、ホワイトソックスが伊藤大海に関心を持つと伝えた（米国時間11月15日）。BeisbolFR.comのフランシス・ロメロ記者によると、同球団は8〜9月にスカウトを送って伊藤と平良海馬を視察していた。MLB Trade Rumorsは、ホワイトソックスは伊藤の獲得を目指す球団の1つになるとみている。同サイトは交渉期間がロックアウト中も止まらないため実質30日で、15日時点で残りは2週間余りと書いている。',
+          en: 'MLB Trade Rumors reports the White Sox are interested in Itoh (Nov. 15 ET). Francys Romero of BeisbolFR.com says the club sent scouts to watch Itoh and Kaima Taira in August and September, and MLB Trade Rumors expects Chicago to be among his suitors. It notes the window does not pause in a lockout, making it effectively 30 days, with a little over two weeks left as of Nov. 15.',
+          source: 'https://www.mlbtraderumors.com/2026/11/white-sox-interested-in-hiromi-itoh.html',
+          sourceName: 'MLB Trade Rumors（BeisbolFR.com報道）',
+        },
         {
           date: '2026-11-06',
           ja: 'スポーティングニュース日本版が、佐藤輝明・伊藤大海・平良海馬の通常の交渉期限は日本時間12月17日午前7時（米東部時間16日午後5時）だと伝えた。USA TODAYのナイチンゲール記者は、MLB側はロックアウト中も交渉期間を止めない方針だと報じており、12月2日にロックアウトが始まれば、それより前に契約をまとめる必要が出てくる。',
