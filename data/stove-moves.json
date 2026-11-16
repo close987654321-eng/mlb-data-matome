@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-16 16:16",
+ "asOf": "2026-11-17 04:51",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1073,6 +1073,11 @@
    "pos": "P",
    "big": false
   },
+  "685329": {
+   "nameEn": "Carlos Peña",
+   "pos": "P",
+   "big": false
+  },
   "686551": {
    "nameEn": "Christian Cairo",
    "pos": "SS",
@@ -1153,6 +1158,11 @@
    "pos": "P",
    "big": false
   },
+  "692416": {
+   "nameEn": "Christian Cerda",
+   "pos": "C",
+   "big": false
+  },
   "693312": {
    "nameEn": "Kyle Nicolas",
    "pos": "P",
@@ -1181,6 +1191,11 @@
   "695391": {
    "nameEn": "Brett Harris",
    "pos": "3B",
+   "big": false
+  },
+  "699304": {
+   "nameEn": "Juan Arnaud",
+   "pos": "P",
    "big": false
   },
   "700183": {
@@ -1301,6 +1316,18 @@
  },
  "moves": [
   {
+   "id": "950298",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 676480,
+   "nameEn": "José Barrero",
+   "fromTeamId": null,
+   "toTeamId": 110,
+   "minor": true,
+   "desc": "Baltimore Orioles signed free agent SS José Barrero to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "trade-950283",
    "kind": "trade",
    "date": "2026-11-15",
@@ -1328,6 +1355,25 @@
    "teamIds": [
     137,
     158
+   ],
+   "tier": 1
+  },
+  {
+   "id": "trade-950296",
+   "kind": "trade",
+   "date": "2026-11-14",
+   "desc": "New York Mets traded RHP Juan Arnaud to Texas Rangers.",
+   "players": [
+    {
+     "id": 699304,
+     "nameEn": "Juan Arnaud",
+     "fromTeamId": 121,
+     "toTeamId": 140
+    }
+   ],
+   "teamIds": [
+    121,
+    140
    ],
    "tier": 1
   },
@@ -1581,6 +1627,18 @@
    "tier": 1
   },
   {
+   "id": "950291",
+   "kind": "signing",
+   "date": "2026-11-10",
+   "playerId": 692416,
+   "nameEn": "Christian Cerda",
+   "fromTeamId": null,
+   "toTeamId": 119,
+   "minor": true,
+   "desc": "Los Angeles Dodgers signed free agent C Christian Cerda to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "949904",
    "kind": "signing",
    "date": "2026-11-09",
@@ -1625,6 +1683,18 @@
    "toTeamId": 141,
    "minor": true,
    "desc": "Toronto Blue Jays signed free agent RHP Woo-jin Cho to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950293",
+   "kind": "signing",
+   "date": "2026-11-08",
+   "playerId": 685329,
+   "nameEn": "Carlos Peña",
+   "fromTeamId": null,
+   "toTeamId": 119,
+   "minor": true,
+   "desc": "Los Angeles Dodgers signed free agent LHP Carlos Peña to a minor league contract.",
    "tier": 1
   },
   {
