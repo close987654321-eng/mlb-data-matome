@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-14 19:55",
+ "asOf": "2026-11-16 16:16",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -973,6 +973,11 @@
    "pos": "P",
    "big": false
   },
+  "676254": {
+   "nameEn": "Ryan Walker",
+   "pos": "P",
+   "big": false
+  },
   "676480": {
    "nameEn": "José Barrero",
    "pos": "SS",
@@ -1178,6 +1183,11 @@
    "pos": "3B",
    "big": false
   },
+  "700183": {
+   "nameEn": "Blake Holub",
+   "pos": "P",
+   "big": false
+  },
   "700842": {
    "nameEn": "Eduardo Rivera",
    "pos": "P",
@@ -1226,6 +1236,11 @@
   "808220": {
    "nameEn": "Raimundo De Los Santos",
    "pos": "SS",
+   "big": false
+  },
+  "815132": {
+   "nameEn": "Gavin Perry",
+   "pos": "P",
    "big": false
   },
   "830467": {
@@ -1285,6 +1300,37 @@
   }
  },
  "moves": [
+  {
+   "id": "trade-950283",
+   "kind": "trade",
+   "date": "2026-11-15",
+   "desc": "San Francisco Giants traded RHP Ryan Walker to Milwaukee Brewers for RHP Blake Holub and RHP Gavin Perry.",
+   "players": [
+    {
+     "id": 676254,
+     "nameEn": "Ryan Walker",
+     "fromTeamId": 137,
+     "toTeamId": 158
+    },
+    {
+     "id": 700183,
+     "nameEn": "Blake Holub",
+     "fromTeamId": 158,
+     "toTeamId": 137
+    },
+    {
+     "id": 815132,
+     "nameEn": "Gavin Perry",
+     "fromTeamId": 158,
+     "toTeamId": 137
+    }
+   ],
+   "teamIds": [
+    137,
+    158
+   ],
+   "tier": 1
+  },
   {
    "id": "950119",
    "kind": "signing",
