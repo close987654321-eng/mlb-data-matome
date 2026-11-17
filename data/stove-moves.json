@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-17 13:10",
+ "asOf": "2026-11-18 06:08",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -843,6 +843,11 @@
    "pos": "2B",
    "big": false
   },
+  "665998": {
+   "nameEn": "Ismael Munguia",
+   "pos": "OF",
+   "big": false
+  },
   "666158": {
    "nameEn": "Gavin Lux",
    "pos": "LF",
@@ -918,6 +923,11 @@
    "pos": "2B",
    "big": false
   },
+  "670103": {
+   "nameEn": "Raymond Burgos",
+   "pos": "P",
+   "big": false
+  },
   "670167": {
    "nameEn": "John Schreiber",
    "pos": "P",
@@ -948,6 +958,11 @@
    "pos": "RF",
    "big": false
   },
+  "671382": {
+   "nameEn": "Cameron Foster",
+   "pos": "P",
+   "big": false
+  },
   "672712": {
    "nameEn": "Luis Palacios",
    "pos": "P",
@@ -967,6 +982,11 @@
    "nameEn": "Seiya Suzuki",
    "pos": "RF",
    "big": true
+  },
+  "675448": {
+   "nameEn": "Blake Hunt",
+   "pos": "C",
+   "big": false
   },
   "676130": {
    "nameEn": "José Buttó",
@@ -1001,6 +1021,11 @@
   "677588": {
    "nameEn": "José Tena",
    "pos": "DH",
+   "big": false
+  },
+  "677956": {
+   "nameEn": "Rece Hinds",
+   "pos": "RF",
    "big": false
   },
   "679358": {
@@ -1063,9 +1088,19 @@
    "pos": "P",
    "big": false
   },
+  "682785": {
+   "nameEn": "Angel Bastardo",
+   "pos": "P",
+   "big": false
+  },
   "682868": {
    "nameEn": "Bryan Ramos",
    "pos": "3B",
+   "big": false
+  },
+  "683681": {
+   "nameEn": "Jose Gonzalez",
+   "pos": "P",
    "big": false
   },
   "684007": {
@@ -1198,6 +1233,11 @@
    "pos": "3B",
    "big": false
   },
+  "695761": {
+   "nameEn": "Kenya Huggins",
+   "pos": "P",
+   "big": false
+  },
   "699304": {
    "nameEn": "Juan Arnaud",
    "pos": "P",
@@ -1231,6 +1271,11 @@
   "801128": {
    "nameEn": "Robert Cranz",
    "pos": "P",
+   "big": false
+  },
+  "801442": {
+   "nameEn": "Jack Pineda",
+   "pos": "SS",
    "big": false
   },
   "801501": {
@@ -1321,6 +1366,133 @@
  },
  "moves": [
   {
+   "id": "950346",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 641343,
+   "nameEn": "Jake Bauers",
+   "fromTeamId": null,
+   "toTeamId": 111,
+   "desc": "Boston Red Sox signed free agent 1B Jake Bauers.",
+   "tier": 2
+  },
+  {
+   "id": "950321",
+   "kind": "released",
+   "date": "2026-11-17",
+   "playerId": 677956,
+   "nameEn": "Rece Hinds",
+   "fromTeamId": 110,
+   "toTeamId": null,
+   "desc": "Baltimore Orioles released RF Rece Hinds.",
+   "tier": 1
+  },
+  {
+   "id": "950344",
+   "kind": "waiver",
+   "date": "2026-11-17",
+   "playerId": 691769,
+   "nameEn": "Philip Abner",
+   "fromTeamId": 110,
+   "toTeamId": 120,
+   "desc": "Washington Nationals claimed LHP Philip Abner off waivers from Baltimore Orioles.",
+   "tier": 1
+  },
+  {
+   "id": "950365",
+   "kind": "waiver",
+   "date": "2026-11-17",
+   "playerId": 671382,
+   "nameEn": "Cameron Foster",
+   "fromTeamId": 110,
+   "toTeamId": 144,
+   "desc": "Atlanta Braves claimed RHP Cameron Foster off waivers from Baltimore Orioles.",
+   "tier": 1
+  },
+  {
+   "id": "950366",
+   "kind": "waiver",
+   "date": "2026-11-17",
+   "playerId": 694633,
+   "nameEn": "Chase Hampton",
+   "fromTeamId": 110,
+   "toTeamId": 147,
+   "desc": "New York Yankees claimed RHP Chase Hampton off waivers from Baltimore Orioles.",
+   "tier": 1
+  },
+  {
+   "id": "950367",
+   "kind": "waiver",
+   "date": "2026-11-17",
+   "playerId": 687985,
+   "nameEn": "Josh White",
+   "fromTeamId": 110,
+   "toTeamId": 140,
+   "desc": "Texas Rangers claimed RHP Josh White off waivers from Baltimore Orioles.",
+   "tier": 1
+  },
+  {
+   "id": "950369",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 641941,
+   "nameEn": "Emilio Pagán",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "desc": "Detroit Tigers signed free agent RHP Emilio Pagán.",
+   "tier": 1
+  },
+  {
+   "id": "trade-950348",
+   "kind": "trade",
+   "date": "2026-11-17",
+   "desc": "Boston Red Sox traded LHP Raymond Burgos to Athletics for RHP Kenya Huggins.",
+   "players": [
+    {
+     "id": 670103,
+     "nameEn": "Raymond Burgos",
+     "fromTeamId": 111,
+     "toTeamId": 133
+    },
+    {
+     "id": 695761,
+     "nameEn": "Kenya Huggins",
+     "fromTeamId": 133,
+     "toTeamId": 111
+    }
+   ],
+   "teamIds": [
+    111,
+    133
+   ],
+   "tier": 1
+  },
+  {
+   "id": "trade-950357",
+   "kind": "trade",
+   "date": "2026-11-17",
+   "desc": "Boston Red Sox traded RHP Angel Bastardo to Kansas City Royals for SS Jack Pineda.",
+   "players": [
+    {
+     "id": 682785,
+     "nameEn": "Angel Bastardo",
+     "fromTeamId": 111,
+     "toTeamId": 118
+    },
+    {
+     "id": 801442,
+     "nameEn": "Jack Pineda",
+     "fromTeamId": 118,
+     "toTeamId": 111
+    }
+   ],
+   "teamIds": [
+    111,
+    118
+   ],
+   "tier": 1
+  },
+  {
    "id": "950298",
    "kind": "signing",
    "date": "2026-11-16",
@@ -1330,6 +1502,66 @@
    "toTeamId": 110,
    "minor": true,
    "desc": "Baltimore Orioles signed free agent SS José Barrero to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950329",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 665998,
+   "nameEn": "Ismael Munguia",
+   "fromTeamId": null,
+   "toTeamId": 109,
+   "minor": true,
+   "desc": "Arizona Diamondbacks signed free agent OF Ismael Munguia to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950333",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 687830,
+   "nameEn": "Sawyer Gipson-Long",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "minor": true,
+   "desc": "Detroit Tigers signed free agent RHP Sawyer Gipson-Long to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950335",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 690544,
+   "nameEn": "Bailey Horn",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "minor": true,
+   "desc": "Detroit Tigers signed free agent LHP Bailey Horn to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950338",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 683681,
+   "nameEn": "Jose Gonzalez",
+   "fromTeamId": null,
+   "toTeamId": 117,
+   "minor": true,
+   "desc": "Houston Astros signed free agent RHP Jose Gonzalez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950340",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 675448,
+   "nameEn": "Blake Hunt",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent C Blake Hunt to a minor league contract.",
    "tier": 1
   },
   {
