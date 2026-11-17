@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-17 04:51",
+ "asOf": "2026-11-17 13:10",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1143,6 +1143,11 @@
    "pos": "P",
    "big": false
   },
+  "691602": {
+   "nameEn": "Stiven Cruz",
+   "pos": "P",
+   "big": false
+  },
   "691769": {
    "nameEn": "Philip Abner",
    "pos": "P",
@@ -1356,6 +1361,18 @@
     137,
     158
    ],
+   "tier": 1
+  },
+  {
+   "id": "950300",
+   "kind": "signing",
+   "date": "2026-11-14",
+   "playerId": 691602,
+   "nameEn": "Stiven Cruz",
+   "fromTeamId": null,
+   "toTeamId": 158,
+   "minor": true,
+   "desc": "Milwaukee Brewers signed free agent RHP Stiven Cruz to a minor league contract and invited him to spring training.",
    "tier": 1
   },
   {
