@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-18 06:08",
+ "asOf": "2026-11-18 10:18",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1243,6 +1243,11 @@
    "pos": "P",
    "big": false
   },
+  "700072": {
+   "nameEn": "Yaqui Rivera",
+   "pos": "P",
+   "big": false
+  },
   "700183": {
    "nameEn": "Blake Holub",
    "pos": "P",
@@ -1301,6 +1306,11 @@
   "808220": {
    "nameEn": "Raimundo De Los Santos",
    "pos": "SS",
+   "big": false
+  },
+  "812559": {
+   "nameEn": "Josiah Romeo",
+   "pos": "P",
    "big": false
   },
   "815132": {
@@ -1374,6 +1384,28 @@
    "fromTeamId": null,
    "toTeamId": 111,
    "desc": "Boston Red Sox signed free agent 1B Jake Bauers.",
+   "tier": 2
+  },
+  {
+   "id": "950380",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 680777,
+   "nameEn": "Ryan Jeffers",
+   "fromTeamId": null,
+   "toTeamId": 142,
+   "desc": "Minnesota Twins signed free agent C Ryan Jeffers.",
+   "tier": 2
+  },
+  {
+   "id": "950408",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 670280,
+   "nameEn": "David Bednar",
+   "fromTeamId": null,
+   "toTeamId": 147,
+   "desc": "New York Yankees signed free agent RHP David Bednar.",
    "tier": 2
   },
   {
@@ -1489,6 +1521,31 @@
    "teamIds": [
     111,
     118
+   ],
+   "tier": 1
+  },
+  {
+   "id": "trade-950463",
+   "kind": "trade",
+   "date": "2026-11-17",
+   "desc": "Baltimore Orioles traded RHP Yaqui Rivera to Athletics for RHP Josiah Romeo.",
+   "players": [
+    {
+     "id": 700072,
+     "nameEn": "Yaqui Rivera",
+     "fromTeamId": 110,
+     "toTeamId": 133
+    },
+    {
+     "id": 812559,
+     "nameEn": "Josiah Romeo",
+     "fromTeamId": 133,
+     "toTeamId": 110
+    }
+   ],
+   "teamIds": [
+    110,
+    133
    ],
    "tier": 1
   },
