@@ -1,7 +1,7 @@
 {
   "season": 2026,
-  "asOf": "2026-11-18",
-  "checkedAt": "2026-11-18",
+  "asOf": "2026-11-19",
+  "checkedAt": "2026-11-19",
   "activeUntil": "2027-03-25",
   "ranking": {
     "name": "MLB.com（マーク・ファインサンド記者）",
@@ -763,7 +763,10 @@
         "usdM": 100
       },
       "qo": {
-        "status": "offered"
+        "status": "declined",
+        "date": "2026-11-18",
+        "source": "https://www.mlbtraderumors.com/2026/11/five-players-reject-qualifying-offer.html",
+        "sourceName": "MLB Trade Rumors（ESPNのゴンザレス記者の報道）"
       }
     },
     {
@@ -785,7 +788,10 @@
         "usdM": 69
       },
       "qo": {
-        "status": "offered"
+        "status": "declined",
+        "date": "2026-11-18",
+        "source": "https://www.mlbtraderumors.com/2026/11/five-players-reject-qualifying-offer.html",
+        "sourceName": "MLB Trade Rumors（ESPNのゴンザレス記者の報道）"
       }
     },
     {
@@ -851,7 +857,10 @@
         "usdM": 115
       },
       "qo": {
-        "status": "offered"
+        "status": "declined",
+        "date": "2026-11-18",
+        "source": "https://www.mlbtraderumors.com/2026/11/five-players-reject-qualifying-offer.html",
+        "sourceName": "MLB Trade Rumors（ESPNのゴンザレス記者の報道）"
       }
     },
     {
@@ -965,13 +974,27 @@
       },
       "route": "fa",
       "note": {
-        "ja": "37歳のシーズンを前にア・リーグ最多勝。長期契約は難しくても複数年の目はある。",
-        "en": "Led the AL in wins at 36; not a long-term deal at his age, but multiple years are in play."
+        "ja": "ツインズと2年5500万ドル（1年目終了後にオプトアウト可）で合意。レッドソックスでは169イニング、防御率2.72だった。",
+        "en": "Agreed to two years and $55 million with the Twins (opt-out after year one) after a 2.72 ERA over 169 innings with Boston."
       },
       "espnRank": 20,
       "projection": {
         "years": 2,
         "usdM": 55
+      },
+      "outcome": {
+        "kind": "signed",
+        "date": "2026-11-19",
+        "team": {
+          "ja": "ツインズ",
+          "en": "Twins"
+        },
+        "years": 2,
+        "usdM": 55,
+        "ja": "ツインズと2年5500万ドルで合意した（1年目終了後にオプトアウトできる）。ESPNのパッサン記者が報じた。今季はレッドソックスで防御率2.72だった。",
+        "en": "Agreed to a two-year, $55 million deal with the Twins that includes an opt-out after the first season, ESPN's Jeff Passan reports. He posted a 2.72 ERA with Boston this year.",
+        "source": "https://www.espn.com/mlb/story/_/id/50523817/twins-sign-veteran-right-hander-sonny-gray-two-year-deal",
+        "sourceName": "ESPN（パッサン記者の報道）"
       }
     },
     {
@@ -1026,8 +1049,8 @@
       },
       "route": "fa",
       "note": {
-        "ja": "ヤンキースの抑え。2025年途中の移籍から1年半で評価を立て直した。",
-        "en": "The Yankees' closer, re-established as one of the game's best since his 2025 trade."
+        "ja": "ヤンキースのQO（1年2315万ドル）を受け入れて残留。2025年途中の移籍から1年半で評価を立て直した抑え。",
+        "en": "Accepted the Yankees' one-year, $23.15 million QO; the closer re-established himself after his 2025 trade."
       },
       "espnRank": 11,
       "projection": {
@@ -1035,7 +1058,24 @@
         "usdM": 68
       },
       "qo": {
-        "status": "offered"
+        "status": "accepted",
+        "date": "2026-11-18",
+        "source": "https://www.mlbtraderumors.com/2026/11/five-players-reject-qualifying-offer.html",
+        "sourceName": "MLB Trade Rumors"
+      },
+      "outcome": {
+        "kind": "re-signed",
+        "date": "2026-11-18",
+        "team": {
+          "ja": "ヤンキース",
+          "en": "Yankees"
+        },
+        "years": 1,
+        "usdM": 23.15,
+        "ja": "ヤンキースのQO（1年2315万ドル）を受け入れて残留する。リリーフ投手の年俸としては史上最高になるとMLB Trade Rumorsは伝えている。",
+        "en": "He accepted the Yankees' one-year, $23.15 million QO, which MLB Trade Rumors says is the highest single-season AAV for a reliever.",
+        "source": "https://www.mlbtraderumors.com/2026/11/five-players-reject-qualifying-offer.html",
+        "sourceName": "MLB Trade Rumors"
       }
     },
     {
