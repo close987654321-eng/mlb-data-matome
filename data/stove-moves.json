@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-19 05:53",
+ "asOf": "2026-11-19 11:48",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1078,6 +1078,11 @@
    "pos": "P",
    "big": false
   },
+  "678577": {
+   "nameEn": "Junior Perez",
+   "pos": "OF",
+   "big": false
+  },
   "678606": {
    "nameEn": "José A. Ferrer",
    "pos": "P",
@@ -1276,6 +1281,11 @@
   "691907": {
    "nameEn": "Tsung-Che Cheng",
    "pos": "SS",
+   "big": false
+  },
+  "692024": {
+   "nameEn": "Alex Carrillo",
+   "pos": "P",
    "big": false
   },
   "692137": {
@@ -1495,6 +1505,41 @@
    "toTeamId": 142,
    "desc": "Minnesota Twins signed free agent RHP Sonny Gray.",
    "tier": 2
+  },
+  {
+   "id": "950614",
+   "kind": "signing",
+   "date": "2026-11-18",
+   "playerId": 678577,
+   "nameEn": "Junior Perez",
+   "fromTeamId": null,
+   "toTeamId": 110,
+   "minor": true,
+   "desc": "Baltimore Orioles signed free agent OF Junior Perez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950616",
+   "kind": "signing",
+   "date": "2026-11-18",
+   "playerId": 692024,
+   "nameEn": "Alex Carrillo",
+   "fromTeamId": null,
+   "toTeamId": 110,
+   "minor": true,
+   "desc": "Baltimore Orioles signed free agent RHP Alex Carrillo to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950619",
+   "kind": "signing",
+   "date": "2026-11-18",
+   "playerId": 669160,
+   "nameEn": "Dustin May",
+   "fromTeamId": null,
+   "toTeamId": 145,
+   "desc": "Chicago White Sox signed free agent RHP Dustin May.",
+   "tier": 1
   },
   {
    "id": "trade-950608",
