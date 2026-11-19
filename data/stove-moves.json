@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-19 11:48",
+ "asOf": "2026-11-20 05:58",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -313,6 +313,11 @@
    "pos": "P",
    "big": true
   },
+  "607455": {
+   "nameEn": "Anthony Banda",
+   "pos": "P",
+   "big": false
+  },
   "607536": {
    "nameEn": "Kyle Freeland",
    "pos": "P",
@@ -426,6 +431,11 @@
   "624641": {
    "nameEn": "Edmundo Sosa",
    "pos": "SS",
+   "big": false
+  },
+  "625510": {
+   "nameEn": "Erick Mejia",
+   "pos": "P",
    "big": false
   },
   "628452": {
@@ -778,6 +788,11 @@
    "pos": "C",
    "big": false
   },
+  "663897": {
+   "nameEn": "Luke Williams",
+   "pos": "SS",
+   "big": false
+  },
   "663903": {
    "nameEn": "Brady Singer",
    "pos": "P",
@@ -876,6 +891,11 @@
   "666158": {
    "nameEn": "Gavin Lux",
    "pos": "LF",
+   "big": false
+  },
+  "666768": {
+   "nameEn": "Anderson Pilar",
+   "pos": "P",
    "big": false
   },
   "666969": {
@@ -1168,6 +1188,11 @@
    "pos": "3B",
    "big": false
   },
+  "683522": {
+   "nameEn": "Michael Arias",
+   "pos": "P",
+   "big": false
+  },
   "683681": {
    "nameEn": "Jose Gonzalez",
    "pos": "P",
@@ -1263,6 +1288,11 @@
    "pos": "P",
    "big": false
   },
+  "691369": {
+   "nameEn": "Allan Castro",
+   "pos": "OF",
+   "big": false
+  },
   "691602": {
    "nameEn": "Stiven Cruz",
    "pos": "P",
@@ -1290,6 +1320,11 @@
   },
   "692137": {
    "nameEn": "L.P. Langevin",
+   "pos": "P",
+   "big": false
+  },
+  "692329": {
+   "nameEn": "Darlin Pinales",
    "pos": "P",
    "big": false
   },
@@ -1403,6 +1438,11 @@
    "pos": "P",
    "big": false
   },
+  "804556": {
+   "nameEn": "Braden Nett",
+   "pos": "P",
+   "big": false
+  },
   "805097": {
    "nameEn": "Angel Hernandez",
    "pos": "P",
@@ -1492,9 +1532,25 @@
    "nameEn": "Eric Vasquez",
    "pos": "P",
    "big": false
+  },
+  "845223": {
+   "nameEn": "Julio Chivilli",
+   "pos": "P",
+   "big": false
   }
  },
  "moves": [
+  {
+   "id": "950669",
+   "kind": "waiver",
+   "date": "2026-11-19",
+   "playerId": 804556,
+   "nameEn": "Braden Nett",
+   "fromTeamId": 133,
+   "toTeamId": 110,
+   "desc": "Baltimore Orioles claimed RHP Braden Nett off waivers from Athletics.",
+   "tier": 1
+  },
   {
    "id": "950613",
    "kind": "signing",
@@ -1902,6 +1958,18 @@
    "tier": 1
   },
   {
+   "id": "950657",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 666768,
+   "nameEn": "Anderson Pilar",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "minor": true,
+   "desc": "Detroit Tigers signed free agent RHP Anderson Pilar to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "trade-950348",
    "kind": "trade",
    "date": "2026-11-17",
@@ -2046,6 +2114,54 @@
    "toTeamId": 143,
    "minor": true,
    "desc": "Philadelphia Phillies signed free agent C Blake Hunt to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950648",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 692329,
+   "nameEn": "Darlin Pinales",
+   "fromTeamId": null,
+   "toTeamId": 144,
+   "minor": true,
+   "desc": "Atlanta Braves signed free agent RHP Darlin Pinales to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950650",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 663897,
+   "nameEn": "Luke Williams",
+   "fromTeamId": null,
+   "toTeamId": 144,
+   "minor": true,
+   "desc": "Atlanta Braves signed free agent SS Luke Williams to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950653",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 683522,
+   "nameEn": "Michael Arias",
+   "fromTeamId": null,
+   "toTeamId": 111,
+   "minor": true,
+   "desc": "Boston Red Sox signed free agent RHP Michael Arias to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950662",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 625510,
+   "nameEn": "Erick Mejia",
+   "fromTeamId": null,
+   "toTeamId": 137,
+   "minor": true,
+   "desc": "San Francisco Giants signed free agent RHP Erick Mejia to a minor league contract.",
    "tier": 1
   },
   {
@@ -2228,6 +2344,18 @@
    "toTeamId": 140,
    "minor": true,
    "desc": "Texas Rangers signed free agent RHP John Armstrong to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950660",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 691369,
+   "nameEn": "Allan Castro",
+   "fromTeamId": null,
+   "toTeamId": 147,
+   "minor": true,
+   "desc": "New York Yankees signed free agent OF Allan Castro to a minor league contract.",
    "tier": 1
   },
   {
@@ -2545,6 +2673,18 @@
    "toTeamId": 141,
    "minor": true,
    "desc": "Toronto Blue Jays signed free agent RHP Feremi Suriel to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950664",
+   "kind": "signing",
+   "date": "2026-11-03",
+   "playerId": 845223,
+   "nameEn": "Julio Chivilli",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent RHP Julio Chivilli to a minor league contract.",
    "tier": 1
   },
   {
@@ -3368,6 +3508,17 @@
    "toTeamId": 141,
    "minor": true,
    "desc": "Toronto Blue Jays signed free agent RHP Nurberto German to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950666",
+   "kind": "fa",
+   "date": "2026-10-30",
+   "playerId": 607455,
+   "nameEn": "Anthony Banda",
+   "fromTeamId": 142,
+   "toTeamId": null,
+   "desc": "LHP Anthony Banda elected free agency.",
    "tier": 1
   },
   {
