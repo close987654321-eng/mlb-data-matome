@@ -133,7 +133,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-12',
+      asOf: '2026-11-21',
       headline: {
         ja: '阪神が11月2日、ポスティングの申請がMLBに受理されたと発表し、全30球団との交渉が始まった（スポーツ報知）。11月中の決着を目指している。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズ・パドレスの関心が報じられている。',
         en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies, Blue Jays and Padres have all been linked.',
@@ -167,6 +167,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'パドレス', en: 'Padres' },
       ],
       timeline: [
+        {
+          date: '2026-11-20',
+          ja: 'MLB公式の11月19日のまとめによると、ジ・アスレチックのパトリック・ムーニー記者は、カブスが佐藤輝明を「入念に視察してきた」と報じた（米国時間11月19日）。',
+          en: 'MLB.com\u2019s Nov. 19 rumors roundup says The Athletic\u2019s Patrick Mooney reported (Nov. 19 ET) that the Cubs have \u201cextensively scouted\u201d Teruaki Sato.',
+          source: 'https://www.mlb.com/news/mlb-rumors-and-2026-27-free-agent-news-november-19',
+          sourceName: 'MLB公式（ジ・アスレチック・ムーニー記者の報道）',
+        },
         {
           date: '2026-11-12',
           ja: 'フィリーズのドンブロウスキー編成本部長が、ラスベガスのGM会議（米国時間11月10日）で佐藤輝明に強い関心を示した。三塁の補強は今オフの優先事項で、「われわれも彼のプレーを何度も見ている」と話した（サンケイスポーツ）。',
@@ -500,7 +507,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-15',
+      asOf: '2026-11-21',
       headline: {
         ja: '西武が11月2日、ポスティングの申請をNPB経由で出したと発表し、MLB全球団に通知された。交渉は米東部時間11月2日午前8時（日本時間午後10時）に始まった（西スポWEB）。10月30日に容認を発表していた。代理人はボラス・コーポレーションと報じられている。',
         en: 'Seibu announced on November 2 that it filed his posting through NPB and all MLB clubs were notified; talks began at 8 a.m. ET on Nov. 2 (10 p.m. Japan time), per Nishinippon Sports. Seibu had announced its approval on October 30. He is reported to be represented by the Boras Corporation.',
@@ -544,6 +551,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ジャイアンツ', en: 'Giants' },
       ],
       timeline: [
+        {
+          date: '2026-11-19',
+          ja: 'MLB公式の11月19日のまとめによると、ジョン・ヘイマン記者（NYポスト）は米国時間11月18日、メッツが平良とオンラインで面談する予定だと報じた。多くの球団は平良を先発として見ているという。',
+          en: 'MLB.com\u2019s Nov. 19 rumors roundup says the New York Post\u2019s Jon Heyman reported (Nov. 18 ET) that the Mets plan a video meeting with Taira, whom most clubs view as a starter.',
+          source: 'https://www.mlb.com/news/mlb-rumors-and-2026-27-free-agent-news-november-19',
+          sourceName: 'MLB公式（ヘイマン記者の報道）',
+        },
         {
           date: '2026-11-14',
           ja: 'MLB Trade Rumorsが米国時間11月13日、日本人選手と縁のあるカブス・ホワイトソックス・パドレスの3球団が平良に関心を示していると報じた。シカゴのラジオ局670 The Scoreによると、カブスとホワイトソックスは今週ボラス氏と面談する予定で、サンディエゴ・ユニオン・トリビューンはパドレスが平良に照準を合わせていると伝えた。平良は渡米せず、複数球団とオンラインで面談を重ねているという（スポーツ報知）。',
