@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-20 11:36",
+ "asOf": "2026-11-21 05:43",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -733,6 +733,11 @@
    "pos": "P",
    "big": false
   },
+  "661531": {
+   "nameEn": "Brian Serven",
+   "pos": "C",
+   "big": false
+  },
   "662139": {
    "nameEn": "Daulton Varsho",
    "pos": "CF",
@@ -1068,6 +1073,11 @@
    "pos": "P",
    "big": false
   },
+  "676249": {
+   "nameEn": "Adisyn Coffey",
+   "pos": "P",
+   "big": false
+  },
   "676254": {
    "nameEn": "Ryan Walker",
    "pos": "P",
@@ -1203,6 +1213,11 @@
    "pos": "3B",
    "big": false
   },
+  "682897": {
+   "nameEn": "Steven Pérez",
+   "pos": "P",
+   "big": false
+  },
   "683522": {
    "nameEn": "Michael Arias",
    "pos": "P",
@@ -1333,6 +1348,11 @@
    "pos": "P",
    "big": false
   },
+  "692044": {
+   "nameEn": "Luis Suisbel",
+   "pos": "3B",
+   "big": false
+  },
   "692137": {
    "nameEn": "L.P. Langevin",
    "pos": "P",
@@ -1361,6 +1381,11 @@
   "694376": {
    "nameEn": "Shay Whitcomb",
    "pos": "3B",
+   "big": false
+  },
+  "694395": {
+   "nameEn": "Dylan MacLean",
+   "pos": "P",
    "big": false
   },
   "694484": {
@@ -1493,6 +1518,16 @@
    "pos": "P",
    "big": false
   },
+  "821594": {
+   "nameEn": "Celso Lopez",
+   "pos": "P",
+   "big": false
+  },
+  "825652": {
+   "nameEn": "Enmanuel Mendoza",
+   "pos": "C",
+   "big": false
+  },
   "830467": {
    "nameEn": "Juan García",
    "pos": "P",
@@ -1553,6 +1588,11 @@
    "pos": "P",
    "big": false
   },
+  "845217": {
+   "nameEn": "Idan Maita",
+   "pos": "P",
+   "big": false
+  },
   "845218": {
    "nameEn": "Omar Guerra",
    "pos": "IF",
@@ -1566,6 +1606,71 @@
   "845223": {
    "nameEn": "Julio Chivilli",
    "pos": "P",
+   "big": false
+  },
+  "845226": {
+   "nameEn": "Chen-Lung Tsai",
+   "pos": "P",
+   "big": false
+  },
+  "845227": {
+   "nameEn": "Luis Pinto",
+   "pos": "P",
+   "big": false
+  },
+  "845228": {
+   "nameEn": "Eliud Yndriago",
+   "pos": "P",
+   "big": false
+  },
+  "845229": {
+   "nameEn": "Antonio Hernandez",
+   "pos": "P",
+   "big": false
+  },
+  "845230": {
+   "nameEn": "Roniel Ruiz",
+   "pos": "P",
+   "big": false
+  },
+  "845231": {
+   "nameEn": "Geomar Santana",
+   "pos": "P",
+   "big": false
+  },
+  "845232": {
+   "nameEn": "Pedro Holguin",
+   "pos": "P",
+   "big": false
+  },
+  "845233": {
+   "nameEn": "Anderson Castillo",
+   "pos": "P",
+   "big": false
+  },
+  "845234": {
+   "nameEn": "Raymer Moreno",
+   "pos": "P",
+   "big": false
+  },
+  "845235": {
+   "nameEn": "Jhonaiker Matute",
+   "pos": "P",
+   "big": false
+  },
+  "845236": {
+   "nameEn": "Juan Ventura",
+   "pos": "P",
+   "big": false
+  },
+  "845237": {
+   "nameEn": "Gilbert De La Cruz",
+   "pos": "P",
+   "big": false
+  },
+  "845238": {
+   "nameEn": "Enexis Antunez",
+   "pos": "OF",
    "big": false
   }
  },
@@ -1612,6 +1717,66 @@
    "fromTeamId": 139,
    "toTeamId": null,
    "desc": "Tampa Bay Rays released RHP Jesse Scholtens.",
+   "tier": 1
+  },
+  {
+   "id": "950737",
+   "kind": "signing",
+   "date": "2026-11-19",
+   "playerId": 661531,
+   "nameEn": "Brian Serven",
+   "fromTeamId": null,
+   "toTeamId": 133,
+   "minor": true,
+   "desc": "Athletics signed free agent C Brian Serven to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950739",
+   "kind": "signing",
+   "date": "2026-11-19",
+   "playerId": 694395,
+   "nameEn": "Dylan MacLean",
+   "fromTeamId": null,
+   "toTeamId": 146,
+   "minor": true,
+   "desc": "Miami Marlins signed free agent LHP Dylan MacLean to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950742",
+   "kind": "signing",
+   "date": "2026-11-19",
+   "playerId": 692044,
+   "nameEn": "Luis Suisbel",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent 3B Luis Suisbel to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950744",
+   "kind": "signing",
+   "date": "2026-11-19",
+   "playerId": 682897,
+   "nameEn": "Steven Pérez",
+   "fromTeamId": null,
+   "toTeamId": 138,
+   "minor": true,
+   "desc": "St. Louis Cardinals signed free agent LHP Steven Pérez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950746",
+   "kind": "signing",
+   "date": "2026-11-19",
+   "playerId": 676249,
+   "nameEn": "Adisyn Coffey",
+   "fromTeamId": null,
+   "toTeamId": 139,
+   "minor": true,
+   "desc": "Tampa Bay Rays signed free agent RHP Adisyn Coffey to a minor league contract.",
    "tier": 1
   },
   {
@@ -2265,6 +2430,66 @@
    "tier": 1
   },
   {
+   "id": "950749",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 825652,
+   "nameEn": "Enmanuel Mendoza",
+   "fromTeamId": null,
+   "toTeamId": 115,
+   "minor": true,
+   "desc": "Colorado Rockies signed free agent C Enmanuel Mendoza to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950750",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 821594,
+   "nameEn": "Celso Lopez",
+   "fromTeamId": null,
+   "toTeamId": 112,
+   "minor": true,
+   "desc": "Chicago Cubs signed free agent RHP Celso Lopez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950761",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 845233,
+   "nameEn": "Anderson Castillo",
+   "fromTeamId": null,
+   "toTeamId": 112,
+   "minor": true,
+   "desc": "Chicago Cubs signed free agent RHP Anderson Castillo to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950768",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 845238,
+   "nameEn": "Enexis Antunez",
+   "fromTeamId": null,
+   "toTeamId": 115,
+   "minor": true,
+   "desc": "Colorado Rockies signed free agent OF Enexis Antunez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950755",
+   "kind": "signing",
+   "date": "2026-11-15",
+   "playerId": 845228,
+   "nameEn": "Eliud Yndriago",
+   "fromTeamId": null,
+   "toTeamId": 115,
+   "minor": true,
+   "desc": "Colorado Rockies signed free agent RHP Eliud Yndriago to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "trade-950283",
    "kind": "trade",
    "date": "2026-11-15",
@@ -2305,6 +2530,18 @@
    "toTeamId": 158,
    "minor": true,
    "desc": "Milwaukee Brewers signed free agent RHP Stiven Cruz to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
+  {
+   "id": "950759",
+   "kind": "signing",
+   "date": "2026-11-14",
+   "playerId": 845217,
+   "nameEn": "Idan Maita",
+   "fromTeamId": null,
+   "toTeamId": 133,
+   "minor": true,
+   "desc": "Athletics signed free agent RHP Idan Maita to a minor league contract.",
    "tier": 1
   },
   {
@@ -2459,6 +2696,42 @@
    "tier": 1
   },
   {
+   "id": "950758",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 845231,
+   "nameEn": "Geomar Santana",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent RHP Geomar Santana to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950765",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 845237,
+   "nameEn": "Gilbert De La Cruz",
+   "fromTeamId": null,
+   "toTeamId": 142,
+   "minor": true,
+   "desc": "Minnesota Twins signed free agent RHP Gilbert De La Cruz to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950766",
+   "kind": "signing",
+   "date": "2026-11-13",
+   "playerId": 845237,
+   "nameEn": "Gilbert De La Cruz",
+   "fromTeamId": null,
+   "toTeamId": 142,
+   "minor": true,
+   "desc": "Minnesota Twins signed free agent RHP Gilbert De La Cruz to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "950098",
    "kind": "released",
    "date": "2026-11-12",
@@ -2478,6 +2751,18 @@
    "fromTeamId": null,
    "toTeamId": 144,
    "desc": "Atlanta Braves signed free agent RHP Evan Phillips.",
+   "tier": 1
+  },
+  {
+   "id": "950757",
+   "kind": "signing",
+   "date": "2026-11-12",
+   "playerId": 845230,
+   "nameEn": "Roniel Ruiz",
+   "fromTeamId": null,
+   "toTeamId": 134,
+   "minor": true,
+   "desc": "Pittsburgh Pirates signed free agent RHP Roniel Ruiz to a minor league contract.",
    "tier": 1
   },
   {
@@ -2562,6 +2847,42 @@
    "toTeamId": 140,
    "minor": true,
    "desc": "Texas Rangers signed free agent 2B Max Wagner to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950760",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 845232,
+   "nameEn": "Pedro Holguin",
+   "fromTeamId": null,
+   "toTeamId": 119,
+   "minor": true,
+   "desc": "Los Angeles Dodgers signed free agent RHP Pedro Holguin to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950763",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 845235,
+   "nameEn": "Jhonaiker Matute",
+   "fromTeamId": null,
+   "toTeamId": 111,
+   "minor": true,
+   "desc": "Boston Red Sox signed free agent RHP Jhonaiker Matute to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950764",
+   "kind": "signing",
+   "date": "2026-11-11",
+   "playerId": 845236,
+   "nameEn": "Juan Ventura",
+   "fromTeamId": null,
+   "toTeamId": 134,
+   "minor": true,
+   "desc": "Pittsburgh Pirates signed free agent LHP Juan Ventura to a minor league contract.",
    "tier": 1
   },
   {
@@ -2705,6 +3026,18 @@
    "tier": 1
   },
   {
+   "id": "950756",
+   "kind": "signing",
+   "date": "2026-11-06",
+   "playerId": 845229,
+   "nameEn": "Antonio Hernandez",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent LHP Antonio Hernandez to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "trade-949789",
    "kind": "trade",
    "date": "2026-11-06",
@@ -2730,6 +3063,30 @@
    "tier": 1
   },
   {
+   "id": "950753",
+   "kind": "signing",
+   "date": "2026-11-05",
+   "playerId": 845226,
+   "nameEn": "Chen-Lung Tsai",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent RHP Chen-Lung Tsai to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950762",
+   "kind": "signing",
+   "date": "2026-11-05",
+   "playerId": 845234,
+   "nameEn": "Raymer Moreno",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent LHP Raymer Moreno to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "948748",
    "kind": "signing",
    "date": "2026-11-04",
@@ -2750,6 +3107,18 @@
    "fromTeamId": 120,
    "toTeamId": null,
    "desc": "Washington Nationals released RHP Zak Kent.",
+   "tier": 1
+  },
+  {
+   "id": "950754",
+   "kind": "signing",
+   "date": "2026-11-04",
+   "playerId": 845227,
+   "nameEn": "Luis Pinto",
+   "fromTeamId": null,
+   "toTeamId": 108,
+   "minor": true,
+   "desc": "Los Angeles Angels signed free agent LHP Luis Pinto to a minor league contract.",
    "tier": 1
   },
   {
