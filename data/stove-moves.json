@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-20 06:10",
+ "asOf": "2026-11-20 11:36",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -398,6 +398,11 @@
    "pos": "LF",
    "big": false
   },
+  "622491": {
+   "nameEn": "Luis Castillo",
+   "pos": "P",
+   "big": false
+  },
   "622608": {
    "nameEn": "Antonio Senzatela",
    "pos": "P",
@@ -738,6 +743,11 @@
    "pos": "P",
    "big": false
   },
+  "663436": {
+   "nameEn": "Davis Martin",
+   "pos": "P",
+   "big": false
+  },
   "663460": {
    "nameEn": "Kris Bubic",
    "pos": "P",
@@ -966,6 +976,11 @@
   "669720": {
    "nameEn": "Austin Hays",
    "pos": "LF",
+   "big": false
+  },
+  "669947": {
+   "nameEn": "Jesse Scholtens",
+   "pos": "P",
    "big": false
   },
   "670032": {
@@ -1358,6 +1373,11 @@
    "pos": "P",
    "big": false
   },
+  "694646": {
+   "nameEn": "Chayce McDermott",
+   "pos": "P",
+   "big": false
+  },
   "694820": {
    "nameEn": "Braxton Roxby",
    "pos": "P",
@@ -1453,6 +1473,11 @@
    "pos": "P",
    "big": false
   },
+  "807743": {
+   "nameEn": "Sean Sullivan",
+   "pos": "P",
+   "big": false
+  },
   "808220": {
    "nameEn": "Raimundo De Los Santos",
    "pos": "SS",
@@ -1486,6 +1511,11 @@
   "837078": {
    "nameEn": "Jareth Rayo",
    "pos": "P",
+   "big": false
+  },
+  "837624": {
+   "nameEn": "Douglas Veliz",
+   "pos": "C",
    "big": false
   },
   "837879": {
@@ -1560,6 +1590,65 @@
    "fromTeamId": 119,
    "toTeamId": 141,
    "desc": "Toronto Blue Jays claimed SS Christian Cairo off waivers from Los Angeles Dodgers.",
+   "tier": 1
+  },
+  {
+   "id": "950686",
+   "kind": "waiver",
+   "date": "2026-11-19",
+   "playerId": 694646,
+   "nameEn": "Chayce McDermott",
+   "fromTeamId": 121,
+   "toTeamId": 112,
+   "desc": "Chicago Cubs claimed RHP Chayce McDermott off waivers from New York Mets.",
+   "tier": 1
+  },
+  {
+   "id": "950687",
+   "kind": "released",
+   "date": "2026-11-19",
+   "playerId": 669947,
+   "nameEn": "Jesse Scholtens",
+   "fromTeamId": 139,
+   "toTeamId": null,
+   "desc": "Tampa Bay Rays released RHP Jesse Scholtens.",
+   "tier": 1
+  },
+  {
+   "id": "trade-950733",
+   "kind": "trade",
+   "date": "2026-11-19",
+   "desc": "Chicago White Sox traded RHP Luis Castillo and RHP Davis Martin to Colorado Rockies for LHP Sean Sullivan and C Douglas Veliz.",
+   "players": [
+    {
+     "id": 622491,
+     "nameEn": "Luis Castillo",
+     "fromTeamId": 145,
+     "toTeamId": 115
+    },
+    {
+     "id": 663436,
+     "nameEn": "Davis Martin",
+     "fromTeamId": 145,
+     "toTeamId": 115
+    },
+    {
+     "id": 807743,
+     "nameEn": "Sean Sullivan",
+     "fromTeamId": 115,
+     "toTeamId": 145
+    },
+    {
+     "id": 837624,
+     "nameEn": "Douglas Veliz",
+     "fromTeamId": 115,
+     "toTeamId": 145
+    }
+   ],
+   "teamIds": [
+    115,
+    145
+   ],
    "tier": 1
   },
   {
