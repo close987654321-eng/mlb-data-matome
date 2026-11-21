@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-21 11:50",
+ "asOf": "2026-11-22 04:47",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -748,8 +748,8 @@
    "pos": "RF",
    "big": false
   },
-  "657746": {
-   "nameEn": "Joe Ryan",
+  "659381": {
+   "nameEn": "Justin King",
    "pos": "P",
    "big": false
   },
@@ -958,18 +958,8 @@
    "pos": "P",
    "big": false
   },
-  "665019": {
-   "nameEn": "Kody Clemens",
-   "pos": "2B",
-   "big": true
-  },
   "665048": {
    "nameEn": "Hobie Harris",
-   "pos": "P",
-   "big": false
-  },
-  "665152": {
-   "nameEn": "Dean Kremer",
    "pos": "P",
    "big": false
   },
@@ -996,6 +986,11 @@
   "666158": {
    "nameEn": "Gavin Lux",
    "pos": "LF",
+   "big": false
+  },
+  "666194": {
+   "nameEn": "Cooper Johnson",
+   "pos": "C",
    "big": false
   },
   "666211": {
@@ -1043,6 +1038,11 @@
    "pos": "LF",
    "big": false
   },
+  "668766": {
+   "nameEn": "Dylan File",
+   "pos": "P",
+   "big": false
+  },
   "668820": {
    "nameEn": "Max Kranick",
    "pos": "P",
@@ -1070,6 +1070,16 @@
   },
   "669211": {
    "nameEn": "Keegan Akin",
+   "pos": "P",
+   "big": false
+  },
+  "669270": {
+   "nameEn": "Joel Kuhnel",
+   "pos": "P",
+   "big": false
+  },
+  "669298": {
+   "nameEn": "TJ Shook",
    "pos": "P",
    "big": false
   },
@@ -1165,11 +1175,6 @@
   },
   "671382": {
    "nameEn": "Cameron Foster",
-   "pos": "P",
-   "big": false
-  },
-  "671737": {
-   "nameEn": "Taj Bradley",
    "pos": "P",
    "big": false
   },
@@ -1293,6 +1298,11 @@
    "pos": "P",
    "big": false
   },
+  "678316": {
+   "nameEn": "Omar Cruz",
+   "pos": "P",
+   "big": false
+  },
   "678576": {
    "nameEn": "Wilkin Ramos",
    "pos": "P",
@@ -1305,6 +1315,11 @@
   },
   "678606": {
    "nameEn": "José A. Ferrer",
+   "pos": "P",
+   "big": false
+  },
+  "678789": {
+   "nameEn": "Julio Robaina",
    "pos": "P",
    "big": false
   },
@@ -1335,6 +1350,11 @@
   },
   "680802": {
    "nameEn": "Ryan Weiss",
+   "pos": "P",
+   "big": false
+  },
+  "681006": {
+   "nameEn": "Josh Simpson",
    "pos": "P",
    "big": false
   },
@@ -1398,6 +1418,11 @@
    "pos": "P",
    "big": false
   },
+  "682645": {
+   "nameEn": "Jerming Rosario",
+   "pos": "P",
+   "big": false
+  },
   "682674": {
    "nameEn": "Victor Bericoto",
    "pos": "LF",
@@ -1453,6 +1478,11 @@
    "pos": "P",
    "big": false
   },
+  "685332": {
+   "nameEn": "Carlos Mendoza",
+   "pos": "2B",
+   "big": false
+  },
   "686551": {
    "nameEn": "Christian Cairo",
    "pos": "SS",
@@ -1480,6 +1510,11 @@
   },
   "687134": {
    "nameEn": "Bradley Blalock",
+   "pos": "P",
+   "big": false
+  },
+  "687190": {
+   "nameEn": "Adam Leverett",
    "pos": "P",
    "big": false
   },
@@ -1613,9 +1648,19 @@
    "pos": "C",
    "big": false
   },
+  "692447": {
+   "nameEn": "Bryan Magdaleno",
+   "pos": "P",
+   "big": false
+  },
   "693312": {
    "nameEn": "Kyle Nicolas",
    "pos": "P",
+   "big": false
+  },
+  "693850": {
+   "nameEn": "Kala'i Rosario",
+   "pos": "OF",
    "big": false
   },
   "694376": {
@@ -1971,17 +2016,6 @@
  },
  "moves": [
   {
-   "id": "950803",
-   "kind": "fa",
-   "date": "2026-11-20",
-   "playerId": 665019,
-   "nameEn": "Kody Clemens",
-   "fromTeamId": 142,
-   "toTeamId": null,
-   "desc": "2B Kody Clemens elected free agency.",
-   "tier": 2
-  },
-  {
    "id": "950771",
    "kind": "fa",
    "date": "2026-11-20",
@@ -2232,39 +2266,6 @@
    "fromTeamId": 116,
    "toTeamId": null,
    "desc": "CF Matt Vierling elected free agency.",
-   "tier": 1
-  },
-  {
-   "id": "950800",
-   "kind": "fa",
-   "date": "2026-11-20",
-   "playerId": 671737,
-   "nameEn": "Taj Bradley",
-   "fromTeamId": 142,
-   "toTeamId": null,
-   "desc": "RHP Taj Bradley elected free agency.",
-   "tier": 1
-  },
-  {
-   "id": "950801",
-   "kind": "fa",
-   "date": "2026-11-20",
-   "playerId": 665152,
-   "nameEn": "Dean Kremer",
-   "fromTeamId": 142,
-   "toTeamId": null,
-   "desc": "RHP Dean Kremer elected free agency.",
-   "tier": 1
-  },
-  {
-   "id": "950802",
-   "kind": "fa",
-   "date": "2026-11-20",
-   "playerId": 657746,
-   "nameEn": "Joe Ryan",
-   "fromTeamId": 142,
-   "toTeamId": null,
-   "desc": "RHP Joe Ryan elected free agency.",
    "tier": 1
   },
   {
@@ -2863,6 +2864,54 @@
    "tier": 1
   },
   {
+   "id": "950858",
+   "kind": "signing",
+   "date": "2026-11-18",
+   "playerId": 669298,
+   "nameEn": "TJ Shook",
+   "fromTeamId": null,
+   "toTeamId": 115,
+   "minor": true,
+   "desc": "Colorado Rockies signed free agent RHP TJ Shook to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950871",
+   "kind": "signing",
+   "date": "2026-11-18",
+   "playerId": 681006,
+   "nameEn": "Josh Simpson",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent LHP Josh Simpson to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950877",
+   "kind": "signing",
+   "date": "2026-11-18",
+   "playerId": 668766,
+   "nameEn": "Dylan File",
+   "fromTeamId": null,
+   "toTeamId": 140,
+   "minor": true,
+   "desc": "Texas Rangers signed free agent RHP Dylan File to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950881",
+   "kind": "signing",
+   "date": "2026-11-18",
+   "playerId": 666194,
+   "nameEn": "Cooper Johnson",
+   "fromTeamId": null,
+   "toTeamId": 140,
+   "minor": true,
+   "desc": "Texas Rangers signed free agent C Cooper Johnson to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "trade-950608",
    "kind": "trade",
    "date": "2026-11-18",
@@ -3235,6 +3284,78 @@
    "tier": 1
   },
   {
+   "id": "950860",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 692447,
+   "nameEn": "Bryan Magdaleno",
+   "fromTeamId": null,
+   "toTeamId": 117,
+   "minor": true,
+   "desc": "Houston Astros signed free agent LHP Bryan Magdaleno to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950862",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 687190,
+   "nameEn": "Adam Leverett",
+   "fromTeamId": null,
+   "toTeamId": 146,
+   "minor": true,
+   "desc": "Miami Marlins signed free agent RHP Adam Leverett to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950864",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 659381,
+   "nameEn": "Justin King",
+   "fromTeamId": null,
+   "toTeamId": 121,
+   "minor": true,
+   "desc": "New York Mets signed free agent LHP Justin King to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950868",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 682645,
+   "nameEn": "Jerming Rosario",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent RHP Jerming Rosario to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950873",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 693850,
+   "nameEn": "Kala'i Rosario",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent OF Kala'i Rosario to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950875",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 678789,
+   "nameEn": "Julio Robaina",
+   "fromTeamId": null,
+   "toTeamId": 139,
+   "minor": true,
+   "desc": "Tampa Bay Rays signed free agent LHP Julio Robaina to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "trade-950348",
    "kind": "trade",
    "date": "2026-11-17",
@@ -3475,6 +3596,42 @@
    "toTeamId": 115,
    "minor": true,
    "desc": "Colorado Rockies signed free agent OF Enexis Antunez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950866",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 669270,
+   "nameEn": "Joel Kuhnel",
+   "fromTeamId": null,
+   "toTeamId": 121,
+   "minor": true,
+   "desc": "New York Mets signed free agent RHP Joel Kuhnel to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950883",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 678316,
+   "nameEn": "Omar Cruz",
+   "fromTeamId": null,
+   "toTeamId": 120,
+   "minor": true,
+   "desc": "Washington Nationals signed free agent LHP Omar Cruz to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950884",
+   "kind": "signing",
+   "date": "2026-11-16",
+   "playerId": 685332,
+   "nameEn": "Carlos Mendoza",
+   "fromTeamId": null,
+   "toTeamId": 120,
+   "minor": true,
+   "desc": "Washington Nationals signed free agent 2B Carlos Mendoza to a minor league contract.",
    "tier": 1
   },
   {
