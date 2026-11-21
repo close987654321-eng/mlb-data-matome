@@ -341,7 +341,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-16',
+      asOf: '2026-11-22',
       headline: {
         ja: '佐藤輝明・平良海馬とともに米国時間11月2日にポスティングで公示され、MLB全30球団との交渉が始まった（AP）。交渉期限は日本時間12月17日午前7時（米東部時間12月16日午後5時）。日本ハムは11月1日にメジャー挑戦を承認し、申請手続きを始めていた。',
         en: 'He was posted on Nov. 2 ET along with Teruaki Sato and Kaima Taira, opening talks with all 30 MLB clubs (AP). The window closes at 5 p.m. ET on Dec. 16 (7 a.m. Dec. 17 Japan time). Nippon-Ham had approved his MLB bid and begun the filing process on Nov. 1.',
@@ -365,6 +365,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'ホワイトソックス', en: 'White Sox' },
       ],
       timeline: [
+        {
+          date: '2026-11-21',
+          ja: 'MLB公式のまとめによると、伊藤大海は米国時間11月20日にシカゴを訪れた（ESPNのロジャース記者・カスティーヨ記者）。カブスとホワイトソックスのどちらと会ったかは分かっていない。ホワイトソックスが関心を持つとBeisbolFR.comのフランシス・ロメロ記者が伝えている。',
+          en: 'MLB.com\u2019s roundup says Itoh visited Chicago on Nov. 20 ET (ESPN\u2019s Jesse Rogers and Jorge Castillo). It is not known whether he met the Cubs or the White Sox. BeisbolFR.com\u2019s Francys Romero reports the White Sox are interested.',
+          source: 'https://www.mlb.com/news/mlb-rumors-and-2026-27-free-agent-news-november-21',
+          sourceName: 'MLB公式（ESPN・BeisbolFR.com報道）',
+        },
         {
           date: '2026-11-16',
           ja: 'MLB Trade Rumorsが、ホワイトソックスが伊藤大海に関心を持つと伝えた（米国時間11月15日）。BeisbolFR.comのフランシス・ロメロ記者によると、同球団は8〜9月にスカウトを送って伊藤と平良海馬を視察していた。MLB Trade Rumorsは、ホワイトソックスは伊藤の獲得を目指す球団の1つになるとみている。同サイトは交渉期間がロックアウト中も止まらないため実質30日で、15日時点で残りは2週間余りと書いている。',
