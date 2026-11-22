@@ -133,7 +133,7 @@ export const NPB_PROSPECTS: NpbProspect[] = [
     },
     postingWatch: {
       level: 'expected',
-      asOf: '2026-11-21',
+      asOf: '2026-11-23',
       headline: {
         ja: '阪神が11月2日、ポスティングの申請がMLBに受理されたと発表し、全30球団との交渉が始まった（スポーツ報知）。11月中の決着を目指している。交渉期間は受理から45日間。メッツ・ヤンキース・ドジャース・フィリーズ・ブルージェイズ・パドレスの関心が報じられている。',
         en: 'Hanshin announced on November 2 that MLB has accepted its posting application, opening talks with all 30 clubs (Sports Hochi). He aims to settle within November. The window is 45 days from acceptance. The Mets, Yankees, Dodgers, Phillies, Blue Jays and Padres have all been linked.',
@@ -167,6 +167,13 @@ export const NPB_PROSPECTS: NpbProspect[] = [
         { ja: 'パドレス', en: 'Padres' },
       ],
       timeline: [
+        {
+          date: '2026-11-23',
+          ja: 'スポニチアネックスによると、佐藤輝明はフィリーズ、メッツ、ヤンキースなど7球団と面談を終えたことが11月22日に分かった。紙面は、フィリーズとメッツがすでにオファーを出したとみられると伝え、事実上の交渉期限は米国時間12月1日（日本時間2日）で、早ければ米国の感謝祭（26日）より前に契約がまとまる可能性があると書いた。',
+          en: 'Sponichi Annex reports that Sato has met with seven clubs, including the Phillies, Mets and Yankees (learned Nov. 22 Japan time). The paper says the Phillies and Mets are believed to have already made offers, and that with the effective deadline at Dec. 1 ET (Dec. 2 Japan time) a deal could come as early as before U.S. Thanksgiving (Nov. 26).',
+          source: 'https://news.yahoo.co.jp/articles/38ae2729f84170a6e7a33292aeda2da4fef8d67d',
+          sourceName: 'スポニチアネックス（Yahoo!ニュース）',
+        },
         {
           date: '2026-11-20',
           ja: 'MLB公式の11月19日のまとめによると、ジ・アスレチックのパトリック・ムーニー記者は、カブスが佐藤輝明を「入念に視察してきた」と報じた（米国時間11月19日）。',
