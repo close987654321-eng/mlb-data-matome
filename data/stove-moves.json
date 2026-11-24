@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-22 04:47",
+ "asOf": "2026-11-24 11:34",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1453,6 +1453,11 @@
    "pos": "P",
    "big": false
   },
+  "683568": {
+   "nameEn": "Jairo Iriarte",
+   "pos": "P",
+   "big": false
+  },
   "683681": {
    "nameEn": "Jose Gonzalez",
    "pos": "P",
@@ -1540,6 +1545,11 @@
   },
   "687830": {
    "nameEn": "Sawyer Gipson-Long",
+   "pos": "P",
+   "big": false
+  },
+  "687847": {
+   "nameEn": "Marc Church",
    "pos": "P",
    "big": false
   },
@@ -2015,6 +2025,53 @@
   }
  },
  "moves": [
+  {
+   "id": "950946",
+   "kind": "signing",
+   "date": "2026-11-23",
+   "playerId": 683568,
+   "nameEn": "Jairo Iriarte",
+   "fromTeamId": null,
+   "toTeamId": 114,
+   "minor": true,
+   "desc": "Cleveland Guardians signed free agent RHP Jairo Iriarte to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
+  {
+   "id": "950949",
+   "kind": "signing",
+   "date": "2026-11-23",
+   "playerId": 687847,
+   "nameEn": "Marc Church",
+   "fromTeamId": null,
+   "toTeamId": 120,
+   "minor": true,
+   "desc": "Washington Nationals signed free agent RHP Marc Church to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
+  {
+   "id": "950951",
+   "kind": "signing",
+   "date": "2026-11-23",
+   "playerId": 688692,
+   "nameEn": "Jared Simpson",
+   "fromTeamId": null,
+   "toTeamId": 120,
+   "minor": true,
+   "desc": "Washington Nationals signed free agent LHP Jared Simpson to a minor league contract and invited him to spring training.",
+   "tier": 1
+  },
+  {
+   "id": "950954",
+   "kind": "signing",
+   "date": "2026-11-23",
+   "playerId": 573204,
+   "nameEn": "Caleb Thielbar",
+   "fromTeamId": null,
+   "toTeamId": 118,
+   "desc": "Kansas City Royals signed free agent LHP Caleb Thielbar.",
+   "tier": 1
+  },
   {
    "id": "950771",
    "kind": "fa",
