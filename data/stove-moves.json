@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-25 18:08",
+ "asOf": "2026-11-26 04:35",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -1953,6 +1953,11 @@
    "pos": "C",
    "big": false
   },
+  "827271": {
+   "nameEn": "Alan Rambalde",
+   "pos": "OF",
+   "big": false
+  },
   "830467": {
    "nameEn": "Juan García",
    "pos": "P",
@@ -1965,6 +1970,11 @@
   },
   "833136": {
    "nameEn": "Many Ramirez",
+   "pos": "P",
+   "big": false
+  },
+  "833248": {
+   "nameEn": "Eury Saldana",
    "pos": "P",
    "big": false
   },
@@ -2107,9 +2117,91 @@
    "nameEn": "Raider Sanchez",
    "pos": "OF",
    "big": false
+  },
+  "845257": {
+   "nameEn": "Yonerson Garcia",
+   "pos": "P",
+   "big": false
+  },
+  "845258": {
+   "nameEn": "Kleiwer Rodriguez",
+   "pos": "P",
+   "big": false
+  },
+  "845259": {
+   "nameEn": "Yeremy De Leon",
+   "pos": "P",
+   "big": false
+  },
+  "845260": {
+   "nameEn": "Luis Moncion",
+   "pos": "P",
+   "big": false
+  },
+  "845261": {
+   "nameEn": "Diego Rincones",
+   "pos": "P",
+   "big": false
   }
  },
  "moves": [
+  {
+   "id": "951113",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 502671,
+   "nameEn": "Paul Goldschmidt",
+   "fromTeamId": null,
+   "toTeamId": 121,
+   "desc": "New York Mets signed free agent 1B Paul Goldschmidt.",
+   "tier": 1
+  },
+  {
+   "id": "951115",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 827271,
+   "nameEn": "Alan Rambalde",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent OF Alan Rambalde to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951117",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 845259,
+   "nameEn": "Yeremy De Leon",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent LHP Yeremy De Leon to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951121",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 663460,
+   "nameEn": "Kris Bubic",
+   "fromTeamId": null,
+   "toTeamId": 114,
+   "desc": "Cleveland Guardians signed free agent LHP Kris Bubic.",
+   "tier": 1
+  },
+  {
+   "id": "951122",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 622608,
+   "nameEn": "Antonio Senzatela",
+   "fromTeamId": null,
+   "toTeamId": 158,
+   "desc": "Milwaukee Brewers signed free agent RHP Antonio Senzatela.",
+   "tier": 1
+  },
   {
    "id": "950958",
    "kind": "signing",
@@ -2324,6 +2416,18 @@
    "tier": 1
   },
   {
+   "id": "951119",
+   "kind": "signing",
+   "date": "2026-11-24",
+   "playerId": 833248,
+   "nameEn": "Eury Saldana",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent RHP Eury Saldana to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "950946",
    "kind": "signing",
    "date": "2026-11-23",
@@ -2368,6 +2472,30 @@
    "fromTeamId": null,
    "toTeamId": 118,
    "desc": "Kansas City Royals signed free agent LHP Caleb Thielbar.",
+   "tier": 1
+  },
+  {
+   "id": "951114",
+   "kind": "signing",
+   "date": "2026-11-23",
+   "playerId": 845257,
+   "nameEn": "Yonerson Garcia",
+   "fromTeamId": null,
+   "toTeamId": 147,
+   "minor": true,
+   "desc": "New York Yankees signed free agent LHP Yonerson Garcia to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951120",
+   "kind": "signing",
+   "date": "2026-11-23",
+   "playerId": 845261,
+   "nameEn": "Diego Rincones",
+   "fromTeamId": null,
+   "toTeamId": 147,
+   "minor": true,
+   "desc": "New York Yankees signed free agent LHP Diego Rincones to a minor league contract.",
    "tier": 1
   },
   {
@@ -2897,6 +3025,18 @@
    "fromTeamId": 120,
    "toTeamId": null,
    "desc": "LHP Jared Simpson elected free agency.",
+   "tier": 1
+  },
+  {
+   "id": "951116",
+   "kind": "signing",
+   "date": "2026-11-20",
+   "playerId": 845258,
+   "nameEn": "Kleiwer Rodriguez",
+   "fromTeamId": null,
+   "toTeamId": 113,
+   "minor": true,
+   "desc": "Cincinnati Reds signed free agent RHP Kleiwer Rodriguez to a minor league contract.",
    "tier": 1
   },
   {
@@ -3744,6 +3884,18 @@
    "toTeamId": 115,
    "minor": true,
    "desc": "Colorado Rockies signed free agent RHP Jesus Rios to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951118",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 845260,
+   "nameEn": "Luis Moncion",
+   "fromTeamId": null,
+   "toTeamId": 158,
+   "minor": true,
+   "desc": "Milwaukee Brewers signed free agent LHP Luis Moncion to a minor league contract.",
    "tier": 1
   },
   {
