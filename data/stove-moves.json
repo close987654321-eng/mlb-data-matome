@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-24 11:34",
+ "asOf": "2026-11-25 09:06",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -2022,9 +2022,52 @@
    "nameEn": "Enexis Antunez",
    "pos": "OF",
    "big": false
+  },
+  "845254": {
+   "nameEn": "Jesus Rios",
+   "pos": "P",
+   "big": false
+  },
+  "845255": {
+   "nameEn": "Raider Sanchez",
+   "pos": "OF",
+   "big": false
   }
  },
  "moves": [
+  {
+   "id": "950958",
+   "kind": "signing",
+   "date": "2026-11-24",
+   "playerId": 608718,
+   "nameEn": "Brent Suter",
+   "fromTeamId": null,
+   "toTeamId": 147,
+   "desc": "New York Yankees signed free agent LHP Brent Suter.",
+   "tier": 2
+  },
+  {
+   "id": "950970",
+   "kind": "signing",
+   "date": "2026-11-24",
+   "playerId": 642547,
+   "nameEn": "Freddy Peralta",
+   "fromTeamId": null,
+   "toTeamId": 110,
+   "desc": "Baltimore Orioles signed free agent RHP Freddy Peralta.",
+   "tier": 2
+  },
+  {
+   "id": "950957",
+   "kind": "signing",
+   "date": "2026-11-24",
+   "playerId": 657612,
+   "nameEn": "Tim Hill",
+   "fromTeamId": null,
+   "toTeamId": 147,
+   "desc": "New York Yankees signed free agent LHP Tim Hill.",
+   "tier": 1
+  },
   {
    "id": "950946",
    "kind": "signing",
@@ -2070,6 +2113,18 @@
    "fromTeamId": null,
    "toTeamId": 118,
    "desc": "Kansas City Royals signed free agent LHP Caleb Thielbar.",
+   "tier": 1
+  },
+  {
+   "id": "950967",
+   "kind": "signing",
+   "date": "2026-11-21",
+   "playerId": 678184,
+   "nameEn": "Garrett Hawkins",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent RHP Garrett Hawkins to a minor league contract.",
    "tier": 1
   },
   {
@@ -2838,6 +2893,18 @@
    "tier": 1
   },
   {
+   "id": "950997",
+   "kind": "signing",
+   "date": "2026-11-19",
+   "playerId": 845255,
+   "nameEn": "Raider Sanchez",
+   "fromTeamId": null,
+   "toTeamId": 138,
+   "minor": true,
+   "desc": "St. Louis Cardinals signed free agent OF Raider Sanchez to a minor league contract.",
+   "tier": 1
+  },
+  {
    "id": "trade-950733",
    "kind": "trade",
    "date": "2026-11-19",
@@ -3410,6 +3477,18 @@
    "toTeamId": 139,
    "minor": true,
    "desc": "Tampa Bay Rays signed free agent LHP Julio Robaina to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "950987",
+   "kind": "signing",
+   "date": "2026-11-17",
+   "playerId": 845254,
+   "nameEn": "Jesus Rios",
+   "fromTeamId": null,
+   "toTeamId": 115,
+   "minor": true,
+   "desc": "Colorado Rockies signed free agent RHP Jesus Rios to a minor league contract.",
    "tier": 1
   },
   {
