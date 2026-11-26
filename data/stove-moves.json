@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-26 04:35",
+ "asOf": "2026-11-26 12:46",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -631,6 +631,11 @@
   "650333": {
    "nameEn": "Luis Arraez",
    "pos": "2B",
+   "big": false
+  },
+  "650382": {
+   "nameEn": "Darwinzon Hernández",
+   "pos": "P",
    "big": false
   },
   "650402": {
@@ -1963,6 +1968,11 @@
    "pos": "P",
    "big": false
   },
+  "831664": {
+   "nameEn": "Teruaki Sato",
+   "pos": "3B",
+   "big": false
+  },
   "832560": {
    "nameEn": "Ben Moore",
    "pos": "P",
@@ -2146,6 +2156,28 @@
  },
  "moves": [
   {
+   "id": "951126",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 669432,
+   "nameEn": "Trevor Rogers",
+   "fromTeamId": null,
+   "toTeamId": 112,
+   "desc": "Chicago Cubs signed free agent LHP Trevor Rogers.",
+   "tier": 2
+  },
+  {
+   "id": "951128",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 669373,
+   "nameEn": "Tarik Skubal",
+   "fromTeamId": null,
+   "toTeamId": 121,
+   "desc": "New York Mets signed free agent LHP Tarik Skubal.",
+   "tier": 2
+  },
+  {
    "id": "951113",
    "kind": "signing",
    "date": "2026-11-25",
@@ -2200,6 +2232,50 @@
    "fromTeamId": null,
    "toTeamId": 158,
    "desc": "Milwaukee Brewers signed free agent RHP Antonio Senzatela.",
+   "tier": 1
+  },
+  {
+   "id": "951124",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 663886,
+   "nameEn": "Tyler Stephenson",
+   "fromTeamId": null,
+   "toTeamId": 113,
+   "desc": "Cincinnati Reds signed free agent C Tyler Stephenson.",
+   "tier": 1
+  },
+  {
+   "id": "951125",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 642528,
+   "nameEn": "Jonathan Loáisiga",
+   "fromTeamId": null,
+   "toTeamId": 147,
+   "desc": "New York Yankees signed free agent RHP Jonathan Loáisiga.",
+   "tier": 1
+  },
+  {
+   "id": "951127",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 831664,
+   "nameEn": "Teruaki Sato",
+   "fromTeamId": null,
+   "toTeamId": 112,
+   "desc": "Chicago Cubs signed free agent 3B Teruaki Sato.",
+   "tier": 1
+  },
+  {
+   "id": "951129",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 650382,
+   "nameEn": "Darwinzon Hernández",
+   "fromTeamId": null,
+   "toTeamId": 121,
+   "desc": "New York Mets signed free agent LHP Darwinzon Hernández.",
    "tier": 1
   },
   {
