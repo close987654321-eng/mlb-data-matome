@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-26 12:46",
+ "asOf": "2026-11-27 02:18",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -623,6 +623,11 @@
    "pos": "P",
    "big": true
   },
+  "647378": {
+   "nameEn": "Andy Yerzy",
+   "pos": "C",
+   "big": false
+  },
   "649966": {
    "nameEn": "Luis Urías",
    "pos": "2B",
@@ -1118,6 +1123,11 @@
    "pos": "P",
    "big": true
   },
+  "669422": {
+   "nameEn": "Matt Sauer",
+   "pos": "P",
+   "big": false
+  },
   "669432": {
    "nameEn": "Trevor Rogers",
    "pos": "P",
@@ -1288,6 +1298,11 @@
    "pos": "SS",
    "big": false
   },
+  "676572": {
+   "nameEn": "Eric Wagaman",
+   "pos": "1B",
+   "big": false
+  },
   "676664": {
    "nameEn": "JP Sears",
    "pos": "P",
@@ -1358,6 +1373,16 @@
    "pos": "P",
    "big": false
   },
+  "678883": {
+   "nameEn": "Yeuris Jimenez",
+   "pos": "P",
+   "big": false
+  },
+  "678894": {
+   "nameEn": "Liover Peguero",
+   "pos": "SS",
+   "big": false
+  },
   "679358": {
    "nameEn": "Eric Orze",
    "pos": "P",
@@ -1378,6 +1403,11 @@
    "pos": "P",
    "big": false
   },
+  "680737": {
+   "nameEn": "Michael Helman",
+   "pos": "CF",
+   "big": false
+  },
   "680777": {
    "nameEn": "Ryan Jeffers",
    "pos": "C",
@@ -1388,8 +1418,18 @@
    "pos": "P",
    "big": false
   },
+  "680933": {
+   "nameEn": "Joander Suarez",
+   "pos": "P",
+   "big": false
+  },
   "681006": {
    "nameEn": "Josh Simpson",
+   "pos": "P",
+   "big": false
+  },
+  "681168": {
+   "nameEn": "Luis Curvelo",
    "pos": "P",
    "big": false
   },
@@ -1488,6 +1528,11 @@
    "pos": "P",
    "big": false
   },
+  "682992": {
+   "nameEn": "Erik Rivera",
+   "pos": "P",
+   "big": false
+  },
   "683232": {
    "nameEn": "Nick Mears",
    "pos": "P",
@@ -1536,6 +1581,16 @@
   "685332": {
    "nameEn": "Carlos Mendoza",
    "pos": "2B",
+   "big": false
+  },
+  "685716": {
+   "nameEn": "Nelson Quiroz",
+   "pos": "C",
+   "big": false
+  },
+  "685744": {
+   "nameEn": "Kenedy Corona",
+   "pos": "CF",
    "big": false
   },
   "686544": {
@@ -1588,6 +1643,11 @@
    "pos": "P",
    "big": false
   },
+  "687308": {
+   "nameEn": "Ryan Harvey",
+   "pos": "P",
+   "big": false
+  },
   "687529": {
    "nameEn": "Grant McCray",
    "pos": "CF",
@@ -1636,6 +1696,11 @@
   "688692": {
    "nameEn": "Jared Simpson",
    "pos": "P",
+   "big": false
+  },
+  "689041": {
+   "nameEn": "Rhylan Thomas",
+   "pos": "LF",
    "big": false
   },
   "690291": {
@@ -1730,6 +1795,11 @@
   },
   "692447": {
    "nameEn": "Bryan Magdaleno",
+   "pos": "P",
+   "big": false
+  },
+  "693311": {
+   "nameEn": "Tink Hence",
    "pos": "P",
    "big": false
   },
@@ -2156,6 +2226,17 @@
  },
  "moves": [
   {
+   "id": "951223",
+   "kind": "signing",
+   "date": "2026-11-26",
+   "playerId": 640462,
+   "nameEn": "A.J. Puk",
+   "fromTeamId": null,
+   "toTeamId": 120,
+   "desc": "Washington Nationals signed free agent LHP A.J. Puk.",
+   "tier": 1
+  },
+  {
    "id": "951126",
    "kind": "signing",
    "date": "2026-11-25",
@@ -2276,6 +2357,270 @@
    "fromTeamId": null,
    "toTeamId": 121,
    "desc": "New York Mets signed free agent LHP Darwinzon Hernández.",
+   "tier": 1
+  },
+  {
+   "id": "951173",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 680737,
+   "nameEn": "Michael Helman",
+   "fromTeamId": null,
+   "toTeamId": 144,
+   "minor": true,
+   "desc": "Atlanta Braves signed free agent CF Michael Helman to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951175",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 699114,
+   "nameEn": "Leo Balcazar",
+   "fromTeamId": null,
+   "toTeamId": 113,
+   "minor": true,
+   "desc": "Cincinnati Reds signed free agent SS Leo Balcazar to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951177",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 647378,
+   "nameEn": "Andy Yerzy",
+   "fromTeamId": null,
+   "toTeamId": 114,
+   "minor": true,
+   "desc": "Cleveland Guardians signed free agent C Andy Yerzy to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951179",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 805725,
+   "nameEn": "Jake Miller",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "minor": true,
+   "desc": "Detroit Tigers signed free agent LHP Jake Miller to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951181",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 700242,
+   "nameEn": "Trey Sweeney",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "minor": true,
+   "desc": "Detroit Tigers signed free agent SS Trey Sweeney to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951183",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 687308,
+   "nameEn": "Ryan Harvey",
+   "fromTeamId": null,
+   "toTeamId": 142,
+   "minor": true,
+   "desc": "Minnesota Twins signed free agent RHP Ryan Harvey to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951185",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 669422,
+   "nameEn": "Matt Sauer",
+   "fromTeamId": null,
+   "toTeamId": 117,
+   "minor": true,
+   "desc": "Houston Astros signed free agent RHP Matt Sauer to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951188",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 680933,
+   "nameEn": "Joander Suarez",
+   "fromTeamId": null,
+   "toTeamId": 117,
+   "minor": true,
+   "desc": "Houston Astros signed free agent RHP Joander Suarez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951190",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 693311,
+   "nameEn": "Tink Hence",
+   "fromTeamId": null,
+   "toTeamId": 119,
+   "minor": true,
+   "desc": "Los Angeles Dodgers signed free agent RHP Tink Hence to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951192",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 676572,
+   "nameEn": "Eric Wagaman",
+   "fromTeamId": null,
+   "toTeamId": 119,
+   "minor": true,
+   "desc": "Los Angeles Dodgers signed free agent 1B Eric Wagaman to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951194",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 663584,
+   "nameEn": "Hayden Senger",
+   "fromTeamId": null,
+   "toTeamId": 121,
+   "minor": true,
+   "desc": "New York Mets signed free agent C Hayden Senger to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951196",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 685716,
+   "nameEn": "Nelson Quiroz",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "minor": true,
+   "desc": "San Diego Padres signed free agent C Nelson Quiroz to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951199",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 678894,
+   "nameEn": "Liover Peguero",
+   "fromTeamId": null,
+   "toTeamId": 136,
+   "minor": true,
+   "desc": "Seattle Mariners signed free agent SS Liover Peguero to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951201",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 691330,
+   "nameEn": "Moisés Chace",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent RHP Moisés Chace to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951203",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 695391,
+   "nameEn": "Brett Harris",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent 3B Brett Harris to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951205",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 694851,
+   "nameEn": "Andrew Hoffmann",
+   "fromTeamId": null,
+   "toTeamId": 143,
+   "minor": true,
+   "desc": "Philadelphia Phillies signed free agent RHP Andrew Hoffmann to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951208",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 681168,
+   "nameEn": "Luis Curvelo",
+   "fromTeamId": null,
+   "toTeamId": 120,
+   "minor": true,
+   "desc": "Washington Nationals signed free agent RHP Luis Curvelo to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951210",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 678883,
+   "nameEn": "Yeuris Jimenez",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent RHP Yeuris Jimenez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951212",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 689041,
+   "nameEn": "Rhylan Thomas",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "minor": true,
+   "desc": "Toronto Blue Jays signed free agent LF Rhylan Thomas to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951214",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 682674,
+   "nameEn": "Victor Bericoto",
+   "fromTeamId": null,
+   "toTeamId": 137,
+   "minor": true,
+   "desc": "San Francisco Giants signed free agent LF Victor Bericoto to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951217",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 685744,
+   "nameEn": "Kenedy Corona",
+   "fromTeamId": null,
+   "toTeamId": 137,
+   "minor": true,
+   "desc": "San Francisco Giants signed free agent CF Kenedy Corona to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951219",
+   "kind": "signing",
+   "date": "2026-11-25",
+   "playerId": 682992,
+   "nameEn": "Erik Rivera",
+   "fromTeamId": null,
+   "toTeamId": 137,
+   "minor": true,
+   "desc": "San Francisco Giants signed free agent LHP Erik Rivera to a minor league contract.",
    "tier": 1
   },
   {
