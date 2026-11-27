@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-27 02:18",
+ "asOf": "2026-11-28 08:43",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -723,6 +723,11 @@
    "pos": "CF",
    "big": false
   },
+  "656786": {
+   "nameEn": "Parker Mushinski",
+   "pos": "P",
+   "big": false
+  },
   "656794": {
    "nameEn": "Sean Newcomb",
    "pos": "P",
@@ -1413,6 +1418,11 @@
    "pos": "C",
    "big": true
   },
+  "680779": {
+   "nameEn": "Henry Davis",
+   "pos": "C",
+   "big": false
+  },
   "680802": {
    "nameEn": "Ryan Weiss",
    "pos": "P",
@@ -1823,6 +1833,11 @@
    "pos": "P",
    "big": false
   },
+  "694374": {
+   "nameEn": "Tim Tawa",
+   "pos": "1B",
+   "big": false
+  },
   "694376": {
    "nameEn": "Shay Whitcomb",
    "pos": "3B",
@@ -2073,6 +2088,11 @@
    "pos": "P",
    "big": false
   },
+  "838343": {
+   "nameEn": "Kaima Taira",
+   "pos": "P",
+   "big": false
+  },
   "845123": {
    "nameEn": "Nurberto German",
    "pos": "P",
@@ -2225,6 +2245,86 @@
   }
  },
  "moves": [
+  {
+   "id": "951257",
+   "kind": "signing",
+   "date": "2026-11-27",
+   "playerId": 664761,
+   "nameEn": "Alec Bohm",
+   "fromTeamId": null,
+   "toTeamId": 118,
+   "desc": "Kansas City Royals signed free agent 3B Alec Bohm.",
+   "tier": 2
+  },
+  {
+   "id": "951260",
+   "kind": "signing",
+   "date": "2026-11-27",
+   "playerId": 668941,
+   "nameEn": "JoJo Romero",
+   "fromTeamId": null,
+   "toTeamId": 135,
+   "desc": "San Diego Padres signed free agent LHP JoJo Romero.",
+   "tier": 1
+  },
+  {
+   "id": "951269",
+   "kind": "signing",
+   "date": "2026-11-27",
+   "playerId": 838343,
+   "nameEn": "Kaima Taira",
+   "fromTeamId": null,
+   "toTeamId": 141,
+   "desc": "Toronto Blue Jays signed free agent RHP Kaima Taira.",
+   "tier": 1
+  },
+  {
+   "id": "951280",
+   "kind": "signing",
+   "date": "2026-11-27",
+   "playerId": 673490,
+   "nameEn": "Ha-Seong Kim",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "desc": "Detroit Tigers signed free agent SS Ha-Seong Kim.",
+   "tier": 1
+  },
+  {
+   "id": "951281",
+   "kind": "signing",
+   "date": "2026-11-27",
+   "playerId": 661563,
+   "nameEn": "Luis Gil",
+   "fromTeamId": null,
+   "toTeamId": 116,
+   "desc": "Detroit Tigers signed free agent RHP Luis Gil.",
+   "tier": 1
+  },
+  {
+   "id": "trade-951271",
+   "kind": "trade",
+   "date": "2026-11-27",
+   "desc": "Pittsburgh Pirates traded C Henry Davis to Arizona Diamondbacks for 1B Tim Tawa.",
+   "players": [
+    {
+     "id": 680779,
+     "nameEn": "Henry Davis",
+     "fromTeamId": 134,
+     "toTeamId": 109
+    },
+    {
+     "id": 694374,
+     "nameEn": "Tim Tawa",
+     "fromTeamId": 109,
+     "toTeamId": 134
+    }
+   ],
+   "teamIds": [
+    109,
+    134
+   ],
+   "tier": 1
+  },
   {
    "id": "951223",
    "kind": "signing",
@@ -3718,6 +3818,18 @@
    "toTeamId": 138,
    "minor": true,
    "desc": "St. Louis Cardinals signed free agent OF Raider Sanchez to a minor league contract.",
+   "tier": 1
+  },
+  {
+   "id": "951255",
+   "kind": "signing",
+   "date": "2026-11-19",
+   "playerId": 656786,
+   "nameEn": "Parker Mushinski",
+   "fromTeamId": null,
+   "toTeamId": 144,
+   "minor": true,
+   "desc": "Atlanta Braves signed free agent LHP Parker Mushinski to a minor league contract.",
    "tier": 1
   },
   {
