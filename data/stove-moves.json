@@ -1,5 +1,5 @@
 {
- "asOf": "2026-11-28 08:43",
+ "asOf": "2026-11-28 17:27",
  "season": 2026,
  "from": "2026-10-29",
  "players": {
@@ -2246,6 +2246,17 @@
  },
  "moves": [
   {
+   "id": "951331",
+   "kind": "signing",
+   "date": "2026-11-28",
+   "playerId": 656464,
+   "nameEn": "Kevin Ginkel",
+   "fromTeamId": null,
+   "toTeamId": 142,
+   "desc": "Minnesota Twins signed free agent RHP Kevin Ginkel.",
+   "tier": 1
+  },
+  {
    "id": "951257",
    "kind": "signing",
    "date": "2026-11-27",
@@ -2298,6 +2309,17 @@
    "fromTeamId": null,
    "toTeamId": 116,
    "desc": "Detroit Tigers signed free agent RHP Luis Gil.",
+   "tier": 1
+  },
+  {
+   "id": "951315",
+   "kind": "signing",
+   "date": "2026-11-27",
+   "playerId": 656849,
+   "nameEn": "David Peterson",
+   "fromTeamId": null,
+   "toTeamId": 115,
+   "desc": "Colorado Rockies signed free agent LHP David Peterson.",
    "tier": 1
   },
   {
